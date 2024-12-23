@@ -1,9 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
 
 export const makeStore = () => {
-    return configureStore({
-        reducer: {},
-    });
+  return configureStore({
+    reducer: {},
+  });
 };
 
 // Infer the type of makeStore
@@ -13,6 +13,6 @@ export type RootState = ReturnType<AppStore["getState"]>;
 export type AppDispatch = AppStore["dispatch"];
 
 export type ReduxStore = {
-    getState: () => RootState;
-    dispatch: AppDispatch;
+  getState: () => RootState;
+  dispatch: AppDispatch;
 };
