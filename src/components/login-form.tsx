@@ -75,9 +75,9 @@ export function LoginForm({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader className="text-center">
-          <CardTitle className="text-xl">Welcome back</CardTitle>
+          <CardTitle className="text-xl">Chào mừng trở lại</CardTitle>
           <CardDescription>
-            Login with your Apple or Google account
+            Đăng nhập bằng tài khoản Apple hoặc Google của bạn
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -96,7 +96,7 @@ export function LoginForm({
                         fill="currentColor"
                       />
                     </svg>
-                    Login with Apple
+                    Đăng nhập bằng Apple
                   </Button>
                   <Button type="button" variant="outline" className="w-full">
                     <svg
@@ -109,12 +109,12 @@ export function LoginForm({
                         fill="currentColor"
                       />
                     </svg>
-                    Login with Google
+                    Đăng nhập bằng Google
                   </Button>
                 </div>
                 <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
                   <span className="relative z-10 bg-background px-2 text-muted-foreground">
-                    Or continue with
+                    Hoặc tiếp tục với email
                   </span>
                 </div>
                 <div className="grid gap-6">
@@ -127,7 +127,7 @@ export function LoginForm({
                           <FormLabel>Email</FormLabel>
                           <FormControl>
                             <Input
-                              placeholder="m@example.com"
+                              placeholder="Email đăng nhập"
                               className={cn(
                                 form.formState.errors.email && "border-red-500",
                               )}
@@ -146,11 +146,12 @@ export function LoginForm({
                       name="password"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Password</FormLabel>
+                          <FormLabel htmlFor="pwd">Mật khẩu</FormLabel>
                           <FormControl>
                             <div className="relative">
                               <Input
-                                placeholder="your password"
+                                id="pwd"
+                                placeholder="Mật khẩu"
                                 type={showPassword ? "text" : "password"}
                                 className={cn(
                                   form.formState.errors.password &&
@@ -167,9 +168,9 @@ export function LoginForm({
                                 onClick={() => setShowPassword(!showPassword)}
                               >
                                 {showPassword ? (
-                                  <EyeOff className="h-4 w-4" />
-                                ) : (
                                   <Eye className="h-4 w-4" />
+                                ) : (
+                                  <EyeOff className="h-4 w-4" />
                                 )}
                               </Button>
                             </div>
@@ -184,7 +185,7 @@ export function LoginForm({
                       href="#"
                       className="text-sm text-muted-foreground underline-offset-4 hover:underline"
                     >
-                      Forgot password?
+                      Quên mật khẩu?
                     </a>
                   </div>
                   <Button
@@ -192,7 +193,7 @@ export function LoginForm({
                     className="w-full"
                     disabled={isSubmitting}
                   >
-                    {isSubmitting ? "Logging in..." : "Login"}
+                    {isSubmitting ? "Đang đăng nhập..." : "Đăng nhập"}
                   </Button>
                 </div>
               </div>
@@ -201,8 +202,9 @@ export function LoginForm({
         </CardContent>
       </Card>
       <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-        and <a href="#">Privacy Policy</a>.
+        Bằng cách nhấp vào tiếp tục, bạn đồng ý với chúng tôi{" "}
+        <a href="#">Điều khoản dịch vụ</a> and{" "}
+        <a href="#">Chính sách bảo mật</a>.
       </div>
     </div>
   );
