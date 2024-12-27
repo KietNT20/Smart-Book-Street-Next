@@ -1,36 +1,36 @@
-"use client"
+"use client";
 
-import * as React from "react"
 import {
   AudioWaveform,
+  Book,
   BookOpen,
-  Bot,
   Command,
   Frame,
   GalleryVerticalEnd,
+  LibraryBig,
   Map,
   PieChart,
   Settings2,
-  SquareTerminal,
-} from "lucide-react"
+} from "lucide-react";
+import * as React from "react";
 
-import { NavMain } from "@/components/nav-main"
-import { NavProjects } from "@/components/nav-projects"
-import { NavUser } from "@/components/nav-user"
-import { TeamSwitcher } from "@/components/team-switcher"
+import { NavMain } from "@/components/nav-main";
+import { NavProjects } from "@/components/nav-projects";
+import { NavUser } from "@/components/nav-user";
+import { TeamSwitcher } from "@/components/team-switcher";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
 
 // This is sample data.
 const data = {
   user: {
-    name: "shadcn",
-    email: "m@example.com",
+    name: "John Doe",
+    email: "johndoe@example.com",
     avatar: "/avatars/shadcn.jpg",
   },
   teams: [
@@ -52,29 +52,29 @@ const data = {
   ],
   navMain: [
     {
-      title: "Playground",
+      title: "Đường sách",
       url: "#",
-      icon: SquareTerminal,
+      icon: LibraryBig,
       isActive: true,
       items: [
         {
-          title: "History",
+          title: "Thông tin",
           url: "#",
         },
         {
-          title: "Starred",
+          title: "Khu vực",
           url: "#",
         },
         {
-          title: "Settings",
+          title: "Kiosks",
           url: "#",
         },
       ],
     },
     {
-      title: "Models",
+      title: "Sách",
       url: "#",
-      icon: Bot,
+      icon: Book,
       items: [
         {
           title: "Genesis",
@@ -139,22 +139,23 @@ const data = {
   ],
   projects: [
     {
+      name: "Dashboard",
+      url: "#",
+      icon: PieChart,
+    },
+    {
       name: "Design Engineering",
       url: "#",
       icon: Frame,
     },
-    {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
-    },
+
     {
       name: "Travel",
       url: "#",
       icon: Map,
     },
   ],
-}
+};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -171,5 +172,5 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }
