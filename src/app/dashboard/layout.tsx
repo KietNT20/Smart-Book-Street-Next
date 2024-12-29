@@ -47,10 +47,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 </div>
               </div>
             </header>
-
-            <main className="flex-1 w-full overflow-auto">
-              <div className="w-full p-6">{children}</div>
-            </main>
+            <main className="p-4">{children}</main>
           </div>
         </SidebarInset>
       </div>

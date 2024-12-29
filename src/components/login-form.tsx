@@ -51,7 +51,7 @@ export function LoginForm({
   const onSubmit = async (data: LoginFormValues) => {
     try {
       setIsSubmitting(true);
-      console.log("Form data:", data);
+      // console.log("Form data:", data);
       if (externalSubmit) {
         await externalSubmit(data);
       }

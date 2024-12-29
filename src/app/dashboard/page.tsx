@@ -8,7 +8,7 @@ export default function Page() {
         <Skeleton className="aspect-video rounded-xl" />
         <Skeleton className="aspect-video rounded-xl" />
       </div>
-      <Skeleton className="w-full h-full rounded-xl md:min-h-min" />
+      <Skeleton className="w-full h-96 mt-3 rounded-xl md:min-h-min" />
     </>
   );
 }
