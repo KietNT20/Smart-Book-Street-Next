@@ -1,9 +1,9 @@
 import { ThemeProvider } from '@/components/theme-provider';
+import StoreProvider from '@/providers/StoreProvider';
 import type { Metadata } from 'next';
 import { Roboto } from 'next/font/google';
 import './globals.css';
-import StoreProvider from '@/providers/StoreProvider';
-import QueryProviders from '@/providers/QueryProvider';
+import QueryProvider from '@/providers/QueryProvider';
 
 const roboto = Roboto({
   subsets: ['vietnamese'],
@@ -24,7 +24,7 @@ export default function RootLayout({
     <html lang='en'>
       <body className={`${roboto.className} antialiased`}>
         <StoreProvider>
-          <QueryProviders>
+          <QueryProvider>
             <ThemeProvider
               attribute='class'
               defaultTheme='system'
@@ -33,7 +33,7 @@ export default function RootLayout({
             >
               {children}
             </ThemeProvider>
-          </QueryProviders>
+          </QueryProvider>
         </StoreProvider>
       </body>
     </html>
