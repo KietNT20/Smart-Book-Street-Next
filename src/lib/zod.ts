@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+export type LoginFormValues = z.infer<typeof loginSchema>;
+
 export const loginSchema = z.object({
   email: z
     .string()
@@ -21,5 +23,3 @@ export const loginSchema = z.object({
       message: 'Mật khẩu cần ít nhất 1 kí tự đặc biệt',
     }),
 });
-
-export type LoginFormValues = z.infer<typeof loginSchema>;

@@ -1,6 +1,6 @@
 'use server';
 
-import { type LoginFormValues, loginSchema } from './schemas/schemas';
+import { LoginFormValues, loginSchema } from '@/lib/zod';
 
 export async function loginUser(data: LoginFormValues) {
   const result = loginSchema.safeParse(data);
