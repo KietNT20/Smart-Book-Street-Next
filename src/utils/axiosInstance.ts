@@ -1,16 +1,16 @@
-import { BASE_URL } from "@/constant/environment";
+import { BASE_URL } from '@/constant/environment';
 import axios, {
   AxiosError,
   AxiosInstance,
   AxiosResponse,
   InternalAxiosRequestConfig,
-} from "axios";
-import tokenMethod from "./token";
+} from 'axios';
+import tokenMethod from './token';
 
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: BASE_URL,
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
 });
 // Add a request interceptor
@@ -23,7 +23,7 @@ axiosInstance.interceptors.request.use(
   (error: AxiosError) => {
     // Do something with request error
     return Promise.reject(error);
-  },
+  }
 );
 
 // Add a response interceptor
@@ -34,17 +34,17 @@ axiosInstance.interceptors.response.use(
     return response.data as Promise<AxiosResponse>;
   },
   async (error: AxiosError) => {
-    console.log("error", error);
+    console.log('error', error);
     const originalRequest = error.config;
 
     // If the error code is 403 or 401 and the request does not contain the _retry key
     if (
       (error.response?.status === 403 || error.response?.status === 401) &&
-      !originalRequest?.url?.includes("/user/refresh")
+      !originalRequest?.url?.includes('/user/refresh')
     ) {
       try {
         // Call the refresh token API
-        const res = await axiosInstance.put("/user/refresh", {
+        const res = await axiosInstance.put('/user/refresh', {
           refreshToken: tokenMethod.get()?.refreshToken,
         });
         const { token: accessToken, refreshToken } = res.data?.data || {};
@@ -70,7 +70,7 @@ axiosInstance.interceptors.response.use(
 
     // If the error is not 403 or 401, return the original error
     return Promise.reject(error);
-  },
+  }
 );
 
 export default axiosInstance;

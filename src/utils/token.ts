@@ -1,47 +1,63 @@
-import { STORAGE } from "@/constant/storage";
+import { STORAGE } from '@/constant/storage';
+import { cookies } from 'next/headers';
 
 interface TokenData {
   accessToken: string;
   refreshToken: string;
 }
 
-type localTokenType = {
+type TokenType = {
   get: () => TokenData;
   set: (token: TokenData) => void;
   remove: () => void;
 };
-// LocalStorage
-const localToken: localTokenType = {
-  get: () => JSON.parse(localStorage.getItem(STORAGE.token) || "{}"),
-  set: (token) => localStorage.setItem(STORAGE.token, JSON.stringify(token)),
-  remove: () => localStorage.removeItem(STORAGE.token),
-};
 
-// Cookies
-// export const cookieToken = {
-//     get: () =>
-//         JSON.parse(
-//             Cookies.get(STORAGE.token) !== undefined
-//                 ? Cookies.get(STORAGE.token)
-//                 : null,
-//         ),
-//     set: (token) => Cookies.set(STORAGE.token, JSON.stringify(token)),
-//     remove: () => Cookies.remove(STORAGE.token),
+const cookieStore = cookies();
+
+// LocalStorage
+// const localToken: TokenType = {
+//   get: () => JSON.parse(localStorage.getItem(STORAGE.token) || '{}'),
+//   set: (token) => localStorage.setItem(STORAGE.token, JSON.stringify(token)),
+//   remove: () => localStorage.removeItem(STORAGE.token),
 // };
 
-const tokenMethod: localTokenType = {
+// Cookies
+const cookieToken: TokenType = {
+  get: () =>
+    JSON.parse(
+      cookieStore.get(STORAGE.token)
+        ? cookieStore.get(STORAGE.token)!.value
+        : '{}'
+    ),
+
+  set: (token) => {
+    cookieStore.set(STORAGE.token, JSON.stringify(token), {
+      path: '/',
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      httpOnly: true,
+      maxAge: 60 * 60 * 24 * 7,
+    });
+  },
+
+  remove: () => {
+    cookieStore.delete(STORAGE.token);
+  },
+};
+
+const tokenMethod: TokenType = {
   get: () => {
-    return localToken.get();
-    // return cookieToken.get();
+    // return localToken.get();
+    return cookieToken.get();
   },
   set: (token) => {
-    console.log("token", token);
-    localToken.set(token);
-    // cookieToken.set(token);
+    console.log('token', token);
+    // localToken.set(token);
+    cookieToken.set(token);
   },
-  remove: (): void => {
-    localToken.remove();
-    // cookieToken.remove();
+  remove: () => {
+    // localToken.remove();
+    cookieToken.remove();
   },
 };
 
