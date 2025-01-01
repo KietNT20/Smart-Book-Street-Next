@@ -1,6 +1,5 @@
 'use client';
 
-import { LoginFormValues, loginSchema } from '@/app/login/schemas/schemas';
 import {
   Card,
   CardContent,
@@ -10,6 +9,7 @@ import {
 } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
+import { LoginFormValues, loginSchema } from '@/lib/zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff } from 'lucide-react';
 import { useState } from 'react';
