@@ -1,9 +1,10 @@
 import { ThemeProvider } from '@/components/theme-provider';
+import NextAuthProvider from '@/providers/NextAuthProvider';
+import QueryProvider from '@/providers/QueryProvider';
 import StoreProvider from '@/providers/StoreProvider';
 import type { Metadata } from 'next';
 import { Roboto } from 'next/font/google';
 import './globals.css';
-import QueryProvider from '@/providers/QueryProvider';
 
 const roboto = Roboto({
   subsets: ['vietnamese'],
@@ -25,14 +26,16 @@ export default function RootLayout({
       <body className={`${roboto.className} antialiased`}>
         <StoreProvider>
           <QueryProvider>
-            <ThemeProvider
-              attribute='class'
-              defaultTheme='system'
-              enableSystem
-              disableTransitionOnChange
-            >
-              {children}
-            </ThemeProvider>
+            <NextAuthProvider>
+              <ThemeProvider
+                attribute='class'
+                defaultTheme='system'
+                enableSystem
+                disableTransitionOnChange
+              >
+                {children}
+              </ThemeProvider>
+            </NextAuthProvider>
           </QueryProvider>
         </StoreProvider>
       </body>
