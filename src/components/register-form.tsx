@@ -27,7 +27,7 @@ import { Input } from './ui/input';
 
 // Define props interface
 
-export function LoginForm({
+export function RegisterForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<'div'>) {
