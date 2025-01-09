@@ -176,6 +176,12 @@ export function LoginForm({
                     {isSubmitting ? 'Đang đăng nhập...' : 'Đăng nhập'}
                   </Button>
                 </div>
+                <div className='text-center text-sm'>
+                  Bạn chưa có tài khoản?{' '}
+                  <a href='#' className='underline underline-offset-4'>
+                    Đăng ký ngay
+                  </a>
+                </div>
               </div>
             </form>
           </Form>

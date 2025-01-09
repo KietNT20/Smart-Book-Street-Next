@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
-import { LoginFormValues, loginSchema } from '@/lib/zod';
+import { RegisterFormValues, registerSchema } from '@/lib/zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff } from 'lucide-react';
 import React, { useState } from 'react';
@@ -36,15 +36,16 @@ export function RegisterForm({
 
   const { toast } = useToast();
 
-  const form = useForm<LoginFormValues>({
-    resolver: zodResolver(loginSchema),
+  const form = useForm<RegisterFormValues>({
+    resolver: zodResolver(registerSchema),
     defaultValues: {
+      fullname: '',
       email: '',
       password: '',
     },
   });
 
-  const onSubmit = async (values: LoginFormValues) => {
+  const onSubmit = async (values: RegisterFormValues) => {
     try {
       setIsSubmitting(true);
       console.log('Form values:', values);
@@ -98,6 +99,31 @@ export function RegisterForm({
                   </span>
                 </div>
                 <div className='grid gap-6'>
+                  {/* Fullname input */}
+                  <div className='grid gap-2'>
+                    <FormField
+                      control={form.control}
+                      name='fullname'
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Họ và tên</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder='Họ và tên'
+                              className={cn(
+                                form.formState.errors.fullname &&
+                                  'border-red-500'
+                              )}
+                              aria-invalid={!!form.formState.errors.fullname}
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  {/* Email input */}
                   <div className='grid gap-2'>
                     <FormField
                       control={form.control}
@@ -120,6 +146,7 @@ export function RegisterForm({
                       )}
                     />
                   </div>
+                  {/* Password input */}
                   <div className='grid gap-2'>
                     <FormField
                       control={form.control}
@@ -175,6 +202,12 @@ export function RegisterForm({
                   >
                     {isSubmitting ? 'Đang đăng nhập...' : 'Đăng nhập'}
                   </Button>
+                </div>
+                <div className='text-center text-sm'>
+                  Bạn đã có tài khoản?{' '}
+                  <a href='#' className='underline underline-offset-4'>
+                    Đăng nhập ngay
+                  </a>
                 </div>
               </div>
             </form>
