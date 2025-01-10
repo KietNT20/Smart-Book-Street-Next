@@ -69,7 +69,7 @@
     }
   },
   "lint-staged": {
-    "*.{ts,tsx,js,jsx}": [
+    "src/app/**/*.{ts,tsx,js,jsx}": [
       "npm run format",
       "npm run lint"
     ]

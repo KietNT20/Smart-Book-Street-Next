@@ -102,12 +102,13 @@ export function LoginForm({
                 <div className="grid gap-6">
                   <div className="grid gap-2">
                     <FormField
-                      control={form.control}
+                                                control={form.control}
                       name="usernameOrEmail"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Email</FormLabel>
+                                                  <FormLabel>Email</FormLabel>
                           <FormControl>
+                    
                             <Input
                               placeholder="Tài khoản hoặc email"
                               className={cn(
