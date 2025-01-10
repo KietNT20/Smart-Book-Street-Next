@@ -19,7 +19,7 @@ import {
 
 export default function VerifyOTP() {
   const [otp, setOtp] = useState('');
-  const [timeLeft, setTimeLeft] = useState(120); 
+  const [timeLeft, setTimeLeft] = useState(120);
   const [isVerifying, setIsVerifying] = useState(false);
 
   useEffect(() => {
@@ -52,14 +52,14 @@ export default function VerifyOTP() {
   };
 
   return (
-    <div className='flex min-h-screen items-center justify-center bg-gray-100'>
-      <Card className='w-[350px]'>
+    <div className="flex min-h-screen items-center justify-center bg-gray-100">
+      <Card className="w-[350px]">
         <CardHeader>
           <CardTitle>Verify Your Email</CardTitle>
           <CardDescription>Enter the OTP sent to your email</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className='mb-4 flex justify-center'>
+          <div className="mb-4 flex justify-center">
             <InputOTP
               value={otp}
               onChange={(value) => setOtp(value)}
@@ -75,16 +75,16 @@ export default function VerifyOTP() {
               </InputOTPGroup>
             </InputOTP>
           </div>
-          <div className='mt-4'>
-            <Progress value={(timeLeft / 120) * 100} className='w-full' />
-            <p className='mt-2 text-center text-sm text-gray-500'>
+          <div className="mt-4">
+            <Progress value={(timeLeft / 120) * 100} className="w-full" />
+            <p className="mt-2 text-center text-sm text-gray-500">
               Time remaining: {formatTime(timeLeft)}
             </p>
           </div>
         </CardContent>
-        <CardFooter className='flex justify-between'>
+        <CardFooter className="flex justify-between">
           <Button
-            variant='outline'
+            variant="outline"
             onClick={handleResend}
             disabled={timeLeft > 0}
           >

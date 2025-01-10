@@ -72,48 +72,48 @@ export function RegisterForm({
   return (
     <div className={cn('flex flex-col gap-6', className)} {...props}>
       <Card>
-        <CardHeader className='text-center'>
-          <CardTitle className='text-xl'>Chào mừng đến với SBS</CardTitle>
+        <CardHeader className="text-center">
+          <CardTitle className="text-xl">Chào mừng đến với SBS</CardTitle>
           <CardDescription>
             Đăng ký bằng tài khoản Google của bạn
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
-              <div className='grid gap-6'>
-                <div className='flex flex-col gap-4'>
-                  <Button type='button' variant='outline' className='w-full'>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <div className="grid gap-6">
+                <div className="flex flex-col gap-4">
+                  <Button type="button" variant="outline" className="w-full">
                     <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      viewBox='0 0 24 24'
-                      className='mr-2 h-5 w-5'
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      className="mr-2 h-5 w-5"
                     >
                       <path
-                        d='M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z'
-                        fill='currentColor'
+                        d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"
+                        fill="currentColor"
                       />
                     </svg>
                     Đăng ký bằng Google
                   </Button>
                 </div>
-                <div className='relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border'>
-                  <span className='relative z-10 bg-background px-2 text-muted-foreground'>
+                <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
+                  <span className="relative z-10 bg-background px-2 text-muted-foreground">
                     Đăng ký tài khoản
                   </span>
                 </div>
-                <div className='grid gap-6'>
+                <div className="grid gap-6">
                   {/* Fullname input */}
-                  <div className='grid gap-2'>
+                  <div className="grid gap-2">
                     <FormField
                       control={form.control}
-                      name='username'
+                      name="username"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Tên tài khoản</FormLabel>
                           <FormControl>
                             <Input
-                              placeholder='Tên tài khoản'
+                              placeholder="Tên tài khoản"
                               className={cn(
                                 form.formState.errors.username &&
                                   'border-red-500'
@@ -128,16 +128,16 @@ export function RegisterForm({
                     />
                   </div>
                   {/* Email input */}
-                  <div className='grid gap-2'>
+                  <div className="grid gap-2">
                     <FormField
                       control={form.control}
-                      name='email'
+                      name="email"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Email</FormLabel>
                           <FormControl>
                             <Input
-                              placeholder='Email đăng nhập'
+                              placeholder="Email đăng nhập"
                               className={cn(
                                 form.formState.errors.email && 'border-red-500'
                               )}
@@ -151,22 +151,22 @@ export function RegisterForm({
                     />
                   </div>
                   {/* Role select */}
-                  <div className='grid gap-2'>
+                  <div className="grid gap-2">
                     <FormField
                       control={form.control}
-                      name='roles'
+                      name="roles"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Vai trò</FormLabel>
                           <FormControl>
-                            <RadioGroup defaultValue='comfortable' {...field}>
-                              <div className='flex items-center space-x-2'>
-                                <RadioGroupItem value='default' id='r1' />
-                                <Label htmlFor='r1'>Quản lý thương hiệu</Label>
+                            <RadioGroup defaultValue="comfortable" {...field}>
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="default" id="r1" />
+                                <Label htmlFor="r1">Quản lý thương hiệu</Label>
                               </div>
-                              <div className='flex items-center space-x-2'>
-                                <RadioGroupItem value='comfortable' id='r2' />
-                                <Label htmlFor='r2'>Quản lý cửa hàng</Label>
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="comfortable" id="r2" />
+                                <Label htmlFor="r2">Quản lý cửa hàng</Label>
                               </div>
                             </RadioGroup>
                           </FormControl>
@@ -176,18 +176,18 @@ export function RegisterForm({
                     />
                   </div>
                   {/* Password input */}
-                  <div className='grid gap-2'>
+                  <div className="grid gap-2">
                     <FormField
                       control={form.control}
-                      name='password'
+                      name="password"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel htmlFor='pwd'>Mật khẩu</FormLabel>
+                          <FormLabel htmlFor="pwd">Mật khẩu</FormLabel>
                           <FormControl>
-                            <div className='relative'>
+                            <div className="relative">
                               <Input
-                                id='pwd'
-                                placeholder='Mật khẩu'
+                                id="pwd"
+                                placeholder="Mật khẩu"
                                 type={showPassword ? 'text' : 'password'}
                                 className={cn(
                                   form.formState.errors.password &&
@@ -197,16 +197,16 @@ export function RegisterForm({
                                 {...field}
                               />
                               <Button
-                                type='button'
-                                variant='ghost'
-                                size='sm'
-                                className='absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent'
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                                 onClick={() => setShowPassword(!showPassword)}
                               >
                                 {showPassword ? (
-                                  <Eye className='h-4 w-4' />
+                                  <Eye className="h-4 w-4" />
                                 ) : (
-                                  <EyeOff className='h-4 w-4' />
+                                  <EyeOff className="h-4 w-4" />
                                 )}
                               </Button>
                             </div>
@@ -216,27 +216,27 @@ export function RegisterForm({
                       )}
                     />
                   </div>
-                  <div className='text-right'>
+                  <div className="text-right">
                     <a
-                      href='#'
-                      className='text-sm text-muted-foreground underline-offset-4 hover:underline'
+                      href="#"
+                      className="text-sm text-muted-foreground underline-offset-4 hover:underline"
                     >
                       Quên mật khẩu?
                     </a>
                   </div>
                   <Button
-                    type='submit'
-                    className='w-full'
+                    type="submit"
+                    className="w-full"
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? 'Đang đăng nhập...' : 'Đăng nhập'}
                   </Button>
                 </div>
-                <div className='text-center text-sm'>
+                <div className="text-center text-sm">
                   Bạn đã có tài khoản?{' '}
                   <Link
                     href={PATH.LOGIN}
-                    className='underline underline-offset-4 duration-200 hover:text-primary'
+                    className="underline underline-offset-4 duration-200 hover:text-primary"
                   >
                     Đăng nhập ngay
                   </Link>
@@ -246,10 +246,10 @@ export function RegisterForm({
           </Form>
         </CardContent>
       </Card>
-      <div className='text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary'>
+      <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary">
         Bằng cách nhấp vào tiếp tục, bạn đồng ý với chúng tôi{' '}
-        <a href='#'>Điều khoản dịch vụ</a> and{' '}
-        <a href='#'>Chính sách bảo mật</a>.
+        <a href="#">Điều khoản dịch vụ</a> and{' '}
+        <a href="#">Chính sách bảo mật</a>.
       </div>
     </div>
   );
