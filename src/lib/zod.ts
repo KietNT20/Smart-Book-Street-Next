@@ -5,9 +5,9 @@ import * as z from 'zod';
 export type LoginFormValues = z.infer<typeof loginSchema>;
 
 export const loginSchema = z.object({
-  email: z
+  usernameOrEmail: z
     .string()
-    .min(1, { message: 'Vui lòng nhập email' })
+    .min(1, { message: 'Vui lòng nhập tài khoản hoặc email' })
     .email({ message: 'Email không hợp lệ' }),
   password: z
     .string()

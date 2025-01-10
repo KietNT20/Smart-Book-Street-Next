@@ -41,7 +41,7 @@ export function LoginForm({
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: '',
+      usernameOrEmail: '',
       password: '',
     },
   });
@@ -103,17 +103,20 @@ export function LoginForm({
                   <div className="grid gap-2">
                     <FormField
                       control={form.control}
-                      name="email"
+                      name="usernameOrEmail"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Email</FormLabel>
                           <FormControl>
                             <Input
-                              placeholder="Email đăng nhập"
+                              placeholder="Tài khoản hoặc email"
                               className={cn(
-                                form.formState.errors.email && 'border-red-500'
+                                form.formState.errors.usernameOrEmail &&
+                                  'border-red-500'
                               )}
-                              aria-invalid={!!form.formState.errors.email}
+                              aria-invalid={
+                                !!form.formState.errors.usernameOrEmail
+                              }
                               {...field}
                             />
                           </FormControl>
