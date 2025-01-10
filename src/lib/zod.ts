@@ -1,5 +1,5 @@
 import { REGEX } from '@/constant/regex';
-import { Roles } from '@/constant/roles';
+import { Role } from '@/constant/roles';
 import * as z from 'zod';
 
 export type LoginFormValues = z.infer<typeof loginSchema>;
@@ -48,6 +48,6 @@ export const registerSchema = z.object({
     .regex(REGEX.SPECIAL_CHAR, {
       message: 'Mật khẩu cần ít nhất 1 kí tự đặc biệt',
     }),
-  fullname: z.string().min(1, { message: 'Vui lòng nhập tên' }),
-  role: z.enum([Roles.BRAND_MANAGER, Roles.STORE_MANAGER]),
+  username: z.string().min(1, { message: 'Vui lòng nhập tên đăng nhập' }),
+  roles: z.enum([Role.BRAND_MANAGER, Role.STORE_MANAGER]),
 });

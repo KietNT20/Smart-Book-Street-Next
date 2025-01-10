@@ -7,11 +7,13 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { PATH } from '@/constant/path';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { RegisterFormValues, registerSchema } from '@/lib/zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff } from 'lucide-react';
+import Link from 'next/link';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from './ui/button';
@@ -24,6 +26,8 @@ import {
   FormMessage,
 } from './ui/form';
 import { Input } from './ui/input';
+import { Label } from './ui/label';
+import { RadioGroup, RadioGroupItem } from './ui/radio-group';
 
 // Define props interface
 
@@ -39,7 +43,7 @@ export function RegisterForm({
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      fullname: '',
+      username: '',
       email: '',
       password: '',
     },
@@ -69,9 +73,9 @@ export function RegisterForm({
     <div className={cn('flex flex-col gap-6', className)} {...props}>
       <Card>
         <CardHeader className='text-center'>
-          <CardTitle className='text-xl'>Chào mừng trở lại</CardTitle>
+          <CardTitle className='text-xl'>Chào mừng đến với SBS</CardTitle>
           <CardDescription>
-            Đăng nhập bằng tài khoản Google của bạn
+            Đăng ký bằng tài khoản Google của bạn
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -90,12 +94,12 @@ export function RegisterForm({
                         fill='currentColor'
                       />
                     </svg>
-                    Đăng nhập bằng Google
+                    Đăng ký bằng Google
                   </Button>
                 </div>
                 <div className='relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border'>
                   <span className='relative z-10 bg-background px-2 text-muted-foreground'>
-                    Hoặc tiếp tục với email
+                    Đăng ký tài khoản
                   </span>
                 </div>
                 <div className='grid gap-6'>
@@ -103,18 +107,18 @@ export function RegisterForm({
                   <div className='grid gap-2'>
                     <FormField
                       control={form.control}
-                      name='fullname'
+                      name='username'
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Họ và tên</FormLabel>
+                          <FormLabel>Tên tài khoản</FormLabel>
                           <FormControl>
                             <Input
-                              placeholder='Họ và tên'
+                              placeholder='Tên tài khoản'
                               className={cn(
-                                form.formState.errors.fullname &&
+                                form.formState.errors.username &&
                                   'border-red-500'
                               )}
-                              aria-invalid={!!form.formState.errors.fullname}
+                              aria-invalid={!!form.formState.errors.username}
                               {...field}
                             />
                           </FormControl>
@@ -140,6 +144,31 @@ export function RegisterForm({
                               aria-invalid={!!form.formState.errors.email}
                               {...field}
                             />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  {/* Role select */}
+                  <div className='grid gap-2'>
+                    <FormField
+                      control={form.control}
+                      name='roles'
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Vai trò</FormLabel>
+                          <FormControl>
+                            <RadioGroup defaultValue='comfortable' {...field}>
+                              <div className='flex items-center space-x-2'>
+                                <RadioGroupItem value='default' id='r1' />
+                                <Label htmlFor='r1'>Quản lý thương hiệu</Label>
+                              </div>
+                              <div className='flex items-center space-x-2'>
+                                <RadioGroupItem value='comfortable' id='r2' />
+                                <Label htmlFor='r2'>Quản lý cửa hàng</Label>
+                              </div>
+                            </RadioGroup>
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -205,9 +234,12 @@ export function RegisterForm({
                 </div>
                 <div className='text-center text-sm'>
                   Bạn đã có tài khoản?{' '}
-                  <a href='#' className='underline underline-offset-4'>
+                  <Link
+                    href={PATH.LOGIN}
+                    className='underline underline-offset-4 duration-200 hover:text-primary'
+                  >
                     Đăng nhập ngay
-                  </a>
+                  </Link>
                 </div>
               </div>
             </form>

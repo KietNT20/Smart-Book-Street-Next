@@ -7,11 +7,13 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { PATH } from '@/constant/path';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { LoginFormValues, loginSchema } from '@/lib/zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff } from 'lucide-react';
+import Link from 'next/link';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from './ui/button';
@@ -178,9 +180,12 @@ export function LoginForm({
                 </div>
                 <div className='text-center text-sm'>
                   Bạn chưa có tài khoản?{' '}
-                  <a href='#' className='underline underline-offset-4'>
+                  <Link
+                    href={PATH.REGISTER}
+                    className='underline underline-offset-4 duration-200 hover:text-primary'
+                  >
                     Đăng ký ngay
-                  </a>
+                  </Link>
                 </div>
               </div>
             </form>
