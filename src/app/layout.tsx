@@ -22,14 +22,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en'>
+    <html lang="en">
       <body className={`${roboto.className} antialiased`}>
         <StoreProvider>
           <QueryProvider>
             <NextAuthProvider>
               <ThemeProvider
-                attribute='class'
-                defaultTheme='system'
+                attribute="class"
+                defaultTheme="system"
                 enableSystem
                 disableTransitionOnChange
               >

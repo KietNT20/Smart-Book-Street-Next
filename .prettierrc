@@ -3,5 +3,6 @@
   "semi": true,
   "tabWidth": 2,
   "singleQuote": true,
+  "useTabs": false,
   "plugins": ["prettier-plugin-tailwindcss"]
 }

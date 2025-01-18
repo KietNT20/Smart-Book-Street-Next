@@ -1,51 +1,67 @@
-import NextAuth from 'next-auth';
+import NextAuth, { type Session } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import Google from 'next-auth/providers/google';
+import { API_ENDPOINT } from './constant/api-url';
 import { PATH } from './constant/path';
-import { IUser } from './types/next-auth';
+import { LoginResponse } from './types/auth.types';
+import axiosInstance from './utils/axiosInstance';
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
+export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
-    Google,
+    Google({
+      clientId: process.env.AUTH_GOOGLE_ID,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET,
+    }),
     Credentials({
-      // You can specify which fields should be submitted, by adding keys to the `credentials` object.
-      // e.g. domain, username, password, 2FA token, etc.
+      name: 'Credentials',
       credentials: {
-        email: {},
+        usernameOrEmail: {},
         password: {},
       },
       authorize: async (credentials) => {
-        console.log('>>> credentials', credentials);
-        let user = null;
+        try {
+          const response = await axiosInstance.post(
+            `${API_ENDPOINT.USERS.LOGIN}`,
+            credentials
+          );
 
-        // Add logic here to look up the user from the credentials supplied
-        user = { id: '123', name: 'John Doe', email: 'john@gmail.com' };
+          const data: LoginResponse = await response.data;
 
-        if (!user) {
-          // No user found, so this is their first attempt to login
-          // Optionally, this is also the place you could do a user registration
-          throw new Error('Invalid credentials.');
+          if (data.isSuccess && data.token) {
+            return {
+              id: data.result.id,
+              name: data.result.fullName,
+              email: data.result.email,
+              username: data.result.userName,
+              roles: (data.result.userRoles ?? []).map((role) => role.roleId),
+              accessToken: data.token,
+            };
+          }
+
+          return null;
+        } catch (error) {
+          console.error('Auth error:', error);
+          return null;
         }
-
-        // return user object with their profile data
-        return user;
       },
     }),
   ],
   pages: {
     signIn: PATH.LOGIN,
   },
+  session: { strategy: 'jwt' },
   callbacks: {
-    jwt({ token, user }) {
+    async jwt({ token, user }) {
       if (user) {
-        // User is available during sign-in
-        token.user = user as IUser;
+        token.accessToken = user.accessToken;
       }
       return token;
     },
-    session({ session, token }) {
-      (session.user as IUser) = token.user;
-      return session;
+    async session({ session, token }) {
+      return {
+        ...session,
+        accessToken: token.accessToken,
+      } as Session;
     },
     authorized: async ({ auth }) => {
       // Logged in users are authenticated,
