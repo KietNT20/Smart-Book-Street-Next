@@ -1,22 +1,22 @@
 export interface LoginResponse {
   result: {
-    id: string;
     userName: string;
     email: string;
-    fullName?: string;
-    dob?: string;
-    address?: string;
-    phone?: string;
-    gender?: string;
-    userRoles?: string[];
+    fullName: string;
+    id: string;
+    userRoles?: {
+      userId: string;
+      roleId: string;
+    }[];
+    // Add other fields as needed
   };
   token: string;
-  expiration: number;
+  expiration: string;
   isSuccess: boolean;
   message: string;
 }
 
-export interface LoginRequest {
+export interface LoginCredentials {
   usernameOrEmail: string;
   password: string;
 }

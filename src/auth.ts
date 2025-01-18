@@ -1,72 +1,67 @@
-import NextAuth, { CredentialsSignin, User } from 'next-auth';
+import NextAuth, { type Session } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import Google from 'next-auth/providers/google';
+import { API_ENDPOINT } from './constant/api-url';
 import { PATH } from './constant/path';
 import { LoginResponse } from './types/auth.types';
+import axiosInstance from './utils/axiosInstance';
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
+export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
-    Google,
+    Google({
+      clientId: process.env.AUTH_GOOGLE_ID,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET,
+    }),
     Credentials({
-      // You can specify which fields should be submitted, by adding keys to the `credentials` object.
-      // e.g. domain, username, password, 2FA token, etc.
+      name: 'Credentials',
       credentials: {
         usernameOrEmail: {},
         password: {},
       },
       authorize: async (credentials) => {
-        console.log('>>> credentials', credentials);
-        const usernameOrEmail = credentials.usernameOrEmail as
-          | string
-          | undefined;
-        const password = credentials.password as string | undefined;
+        try {
+          const response = await axiosInstance.post(
+            `${API_ENDPOINT.USERS.LOGIN}`,
+            credentials
+          );
 
-        if (!usernameOrEmail || !password) {
-          throw new CredentialsSignin('Please provide both email & password');
+          const data: LoginResponse = await response.data;
+
+          if (data.isSuccess && data.token) {
+            return {
+              id: data.result.id,
+              name: data.result.fullName,
+              email: data.result.email,
+              username: data.result.userName,
+              roles: (data.result.userRoles ?? []).map((role) => role.roleId),
+              accessToken: data.token,
+            };
+          }
+
+          return null;
+        } catch (error) {
+          console.error('Auth error:', error);
+          return null;
         }
-
-        // Call your API endpoint to validate the user
-        const res = await fetch('https://your-api-endpoint/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ usernameOrEmail, password }),
-        });
-
-        const data: LoginResponse = await res.json();
-
-        if (data) {
-          // Return user data if login is successful
-          return {
-            id: data.result.id,
-            userName: data.result.userName,
-            email: data.result.email,
-            fullName: data.result.fullName,
-          };
-        }
-
-        // Return null if login fails
-        return null;
       },
     }),
   ],
   pages: {
     signIn: PATH.LOGIN,
   },
+  session: { strategy: 'jwt' },
   callbacks: {
-    jwt({ token, user }) {
+    async jwt({ token, user }) {
       if (user) {
-        console.log('>>> user', user);
-        // User is available during sign-in
-        token.user = user as User;
+        token.accessToken = user.accessToken;
       }
       return token;
     },
-    session({ session, token }) {
-      if (token) {
-        session.user.id = token.id as string;
-        session.user.email = token.email as string;
-      }
-      return session;
+    async session({ session, token }) {
+      return {
+        ...session,
+        accessToken: token.accessToken,
+      } as Session;
     },
     authorized: async ({ auth }) => {
       // Logged in users are authenticated,

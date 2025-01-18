@@ -1,3 +1,4 @@
+'use server';
 import { STORAGE } from '@/constant/storage';
 import { cookies } from 'next/headers';
 
@@ -13,6 +14,7 @@ type TokenType = {
 };
 
 const cookieStore = cookies();
+console.log(cookieStore);
 
 // LocalStorage
 // const localToken: TokenType = {

@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { PATH } from '@/constant/path';
-import { useToast } from '@/hooks/use-toast';
+import { useLogin } from '@/hooks/use-auth';
 import { cn } from '@/lib/utils';
 import { LoginFormValues, loginSchema } from '@/lib/zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -33,10 +33,9 @@ export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<'div'>) {
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const { toast } = useToast();
+  const login = useLogin();
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -47,23 +46,7 @@ export function LoginForm({
   });
 
   const onSubmit = async (values: LoginFormValues) => {
-    try {
-      setIsSubmitting(true);
-      console.log('Form values:', values);
-      toast({
-        title: 'Success',
-        description: 'Đăng nhập thành công',
-      });
-    } catch (error) {
-      toast({
-        title: 'Error',
-        description:
-          error instanceof Error ? error.message : 'Something went wrong',
-        variant: 'destructive',
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
+    await login.mutateAsync(values);
   };
 
   return (
@@ -176,9 +159,9 @@ export function LoginForm({
                   <Button
                     type="submit"
                     className="w-full"
-                    disabled={isSubmitting}
+                    disabled={login.isPending}
                   >
-                    {isSubmitting ? 'Đang đăng nhập...' : 'Đăng nhập'}
+                    {login.isPending ? 'Đang đăng nhập...' : 'Đăng nhập'}
                   </Button>
                 </div>
                 <div className="text-center text-sm">
