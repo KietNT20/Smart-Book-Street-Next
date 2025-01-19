@@ -1,4 +1,4 @@
-import NextAuth, { type Session } from 'next-auth';
+import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import Google from 'next-auth/providers/google';
 import { API_ENDPOINT } from './constant/api-url';
@@ -20,24 +20,25 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
       authorize: async (credentials) => {
         try {
+          console.log('credentials', credentials);
           const response = await axiosInstance.post(
             `${API_ENDPOINT.USERS.LOGIN}`,
             credentials
           );
 
-          const data: LoginResponse = await response.data;
+          const data: LoginResponse = await response?.data;
+          console.log('data', data);
 
-          if (data.isSuccess && data.token) {
+          if (data?.isSuccess && data?.token) {
             return {
-              id: data.result.id,
-              name: data.result.fullName,
-              email: data.result.email,
-              username: data.result.userName,
-              roles: (data.result.userRoles ?? []).map((role) => role.roleId),
-              accessToken: data.token,
+              id: data?.result.id,
+              fullName: data?.result.fullName,
+              email: data?.result.email,
+              userName: data?.result.userName,
+              userRoles: data?.result.userRoles || [],
+              accessToken: data?.token,
             };
           }
-
           return null;
         } catch (error) {
           console.error('Auth error:', error);
@@ -53,15 +54,18 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.accessToken = user.accessToken;
+        token = { ...token, ...user };
       }
       return token;
     },
     async session({ session, token }) {
-      return {
-        ...session,
-        accessToken: token.accessToken,
-      } as Session;
+      console.log('token session', token);
+      session.user.id = token.id;
+      session.user.name = token.fullName;
+      session.user.userName = token.userName;
+      session.user.accessToken = token.accessToken;
+      console.log('session', session);
+      return session;
     },
     authorized: async ({ auth }) => {
       // Logged in users are authenticated,

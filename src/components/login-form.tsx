@@ -11,6 +11,7 @@ import { PATH } from '@/constant/path';
 import { useLogin } from '@/hooks/use-auth';
 import { cn } from '@/lib/utils';
 import { LoginFormValues, loginSchema } from '@/lib/zod';
+import { AuthError } from '@/types/auth.types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff } from 'lucide-react';
 import Link from 'next/link';
@@ -46,7 +47,21 @@ export function LoginForm({
   });
 
   const onSubmit = async (values: LoginFormValues) => {
-    await login.mutateAsync(values);
+    try {
+      await login.mutateAsync(values);
+    } catch (error: any) {
+      if ((error as AuthError)?.type === 'CredentialsSignin') {
+        // Set error cho cả 2 field
+        form.setError('usernameOrEmail', {
+          type: 'manual',
+          message: 'Tài khoản hoặc mật khẩu không chính xác',
+        });
+        form.setError('password', {
+          type: 'manual',
+          message: 'Tài khoản hoặc mật khẩu không chính xác',
+        });
+      }
+    }
   };
 
   return (
@@ -93,6 +108,7 @@ export function LoginForm({
                           <FormControl>
                             <Input
                               placeholder="Tài khoản hoặc email"
+                              disabled={login.isPending}
                               className={cn(
                                 form.formState.errors.usernameOrEmail &&
                                   'border-red-500'
@@ -121,6 +137,7 @@ export function LoginForm({
                                 id="pwd"
                                 placeholder="Mật khẩu"
                                 type={showPassword ? 'text' : 'password'}
+                                disabled={login.isPending}
                                 className={cn(
                                   form.formState.errors.password &&
                                     'border-red-500'

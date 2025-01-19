@@ -1,4 +1,5 @@
 import { ThemeProvider } from '@/components/theme-provider';
+import { Toaster } from '@/components/ui/toaster';
 import NextAuthProvider from '@/providers/NextAuthProvider';
 import QueryProvider from '@/providers/QueryProvider';
 import StoreProvider from '@/providers/StoreProvider';
@@ -38,6 +39,7 @@ export default function RootLayout({
             </NextAuthProvider>
           </QueryProvider>
         </StoreProvider>
+        <Toaster />
       </body>
     </html>
   );

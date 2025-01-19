@@ -12,6 +12,7 @@ const axiosInstance: AxiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   async (config) => {
     const session = await auth();
+    console.log('session axios', session);
     // Do something before request is sent
     if (session?.user.accessToken) {
       config.headers.Authorization = `Bearer ${session.user.accessToken}`;

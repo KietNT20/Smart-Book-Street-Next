@@ -1,9 +1,7 @@
-import { auth } from '@/auth';
 import { PATH } from '@/constant/path';
 import { useToast } from '@/hooks/use-toast';
-import { LoginCredentials } from '@/types/auth.types';
-import axiosInstance from '@/utils/axiosInstance';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { AuthError, LoginCredentials } from '@/types/auth.types';
+import { useMutation } from '@tanstack/react-query';
 import { signIn, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
@@ -12,6 +10,7 @@ export function useLogin() {
   const { toast } = useToast();
 
   return useMutation({
+    mutationKey: ['login'],
     mutationFn: async (credentials: LoginCredentials) => {
       const result = await signIn('credentials', {
         ...credentials,
@@ -19,23 +18,33 @@ export function useLogin() {
       });
 
       if (result?.error) {
-        throw new Error(result.error);
+        const error: AuthError = {
+          type: 'CredentialsSignin',
+          message: 'Tài khoản hoặc mật khẩu không chính xác',
+        };
+        throw error;
       }
-
       return result;
     },
     onSuccess: () => {
       toast({
         title: 'Success',
         description: 'Đăng nhập thành công',
+        variant: 'success',
       });
       router.push(PATH.DASHBOARD);
       router.refresh();
     },
-    onError: (error) => {
+    onError: (error: any) => {
+      let errorMessage = 'Đã có lỗi xảy ra';
+
+      if (error?.type === 'CredentialsSignin') {
+        errorMessage = error.message;
+      }
+
       toast({
         title: 'Error',
-        description: error.message || 'Đăng nhập thất bại',
+        description: errorMessage,
         variant: 'destructive',
       });
     },
@@ -47,11 +56,13 @@ export function useLogout() {
   const { toast } = useToast();
 
   return useMutation({
+    mutationKey: ['logout'],
     mutationFn: () => signOut({ redirect: false }),
     onSuccess: () => {
       toast({
         title: 'Success',
         description: 'Đăng xuất thành công',
+        variant: 'success',
       });
       router.push(PATH.LOGIN);
       router.refresh();
@@ -59,12 +70,38 @@ export function useLogout() {
   });
 }
 
-// Hook để fetch user profile
-export function useProfile() {
-  return useQuery({
-    queryKey: ['profile'],
-    queryFn: () => axiosInstance.get('/users/me').then((res) => res.data),
-    // Chỉ fetch khi có session
-    enabled: !!auth(),
+export function useRegister() {
+  const router = useRouter();
+  const { toast } = useToast();
+
+  return useMutation({
+    mutationKey: ['register'],
+    mutationFn: async (credentials: LoginCredentials) => {
+      const result = await signIn('credentials', {
+        ...credentials,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        throw new Error(result.error);
+      }
+      return result;
+    },
+    onSuccess: () => {
+      toast({
+        title: 'Success',
+        description: 'Đăng ký thành công',
+        variant: 'success',
+      });
+      router.push(PATH.DASHBOARD);
+      router.refresh();
+    },
+    onError: (error) => {
+      toast({
+        title: 'Error',
+        description: error.message || 'Đăng ký thất bại',
+        variant: 'destructive',
+      });
+    },
   });
 }
