@@ -36,17 +36,7 @@ export function useLogin() {
       router.refresh();
     },
     onError: (error: any) => {
-      let errorMessage = 'Đã có lỗi xảy ra';
-
-      if (error?.type === 'CredentialsSignin') {
-        errorMessage = error.message;
-      }
-
-      toast({
-        title: 'Error',
-        description: errorMessage,
-        variant: 'destructive',
-      });
+      console.log('Error login', error);
     },
   });
 }

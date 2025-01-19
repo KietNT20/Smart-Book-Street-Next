@@ -18,7 +18,7 @@ export interface LoginResponse {
     dob: string;
     address: string;
     phone: string;
-    userRoles?: UserRole[];
+    userRoles: UserRole[];
     id: string;
     createdBy?: string;
     createdDate?: string;

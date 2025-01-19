@@ -20,13 +20,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
       authorize: async (credentials) => {
         try {
-          console.log('credentials', credentials);
-          const response = await axiosInstance.post(
+          const response = await axiosInstance.post<LoginResponse>(
             `${API_ENDPOINT.USERS.LOGIN}`,
             credentials
           );
 
-          const data: LoginResponse = await response?.data;
+          const data = response?.data;
           console.log('data', data);
 
           if (data?.isSuccess && data?.token) {
@@ -59,12 +58,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return token;
     },
     async session({ session, token }) {
-      console.log('token session', token);
+      // console.log('token session', token);
       session.user.id = token.id;
       session.user.name = token.fullName;
       session.user.userName = token.userName;
       session.user.accessToken = token.accessToken;
-      console.log('session', session);
+      // console.log('session', session);
       return session;
     },
     authorized: async ({ auth }) => {
