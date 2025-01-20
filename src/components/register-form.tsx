@@ -8,10 +8,12 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { PATH } from '@/constant/path';
+import { Gender } from '@/enums/gender-enums';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { RegisterFormValues, registerSchema } from '@/lib/zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { format } from 'date-fns';
 import { Eye, EyeOff } from 'lucide-react';
 import Link from 'next/link';
 import React, { useState } from 'react';
@@ -29,8 +31,6 @@ import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { RadioGroup, RadioGroupItem } from './ui/radio-group';
 
-// Define props interface
-
 export function RegisterForm({
   className,
   ...props
@@ -43,9 +43,14 @@ export function RegisterForm({
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      username: '',
+      userName: '',
       email: '',
       password: '',
+      fullName: '',
+      dob: new Date(),
+      address: '',
+      phone: '',
+      gender: Gender.Male,
     },
   });
 
@@ -55,7 +60,7 @@ export function RegisterForm({
       console.log('Form values:', values);
       toast({
         title: 'Success',
-        description: 'Đăng nhập thành công',
+        description: 'Đăng ký thành công',
       });
     } catch (error) {
       toast({
@@ -73,9 +78,9 @@ export function RegisterForm({
     <div className={cn('flex flex-col gap-6', className)} {...props}>
       <Card>
         <CardHeader className="text-center">
-          <CardTitle className="text-xl">Chào mừng đến với SBS</CardTitle>
+          <CardTitle className="text-xl">Đăng ký tài khoản</CardTitle>
           <CardDescription>
-            Đăng ký bằng tài khoản Google của bạn
+            Đăng ký bằng tài khoản Google hoặc điền thông tin
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -97,141 +102,263 @@ export function RegisterForm({
                     Đăng ký bằng Google
                   </Button>
                 </div>
+
                 <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
                   <span className="relative z-10 bg-background px-2 text-muted-foreground">
-                    Đăng ký tài khoản
+                    Hoặc đăng ký bằng thông tin
                   </span>
                 </div>
-                <div className="grid gap-6">
-                  {/* Fullname input */}
-                  <div className="grid gap-2">
-                    <FormField
-                      control={form.control}
-                      name="username"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Tên tài khoản</FormLabel>
-                          <FormControl>
+
+                <div className="grid gap-4">
+                  {/* Username input */}
+                  <FormField
+                    control={form.control}
+                    name="userName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Tên tài khoản</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Tên tài khoản"
+                            className={cn(
+                              form.formState.errors.userName && 'border-red-500'
+                            )}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Full name input */}
+                  <FormField
+                    control={form.control}
+                    name="fullName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Họ và tên</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Họ và tên"
+                            className={cn(
+                              form.formState.errors.fullName && 'border-red-500'
+                            )}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Email input */}
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Email"
+                            type="email"
+                            className={cn(
+                              form.formState.errors.email && 'border-red-500'
+                            )}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Password input */}
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Mật khẩu</FormLabel>
+                        <FormControl>
+                          <div className="relative">
                             <Input
-                              placeholder="Tên tài khoản"
+                              placeholder="Mật khẩu"
+                              type={showPassword ? 'text' : 'password'}
                               className={cn(
-                                form.formState.errors.username &&
+                                form.formState.errors.password &&
                                   'border-red-500'
                               )}
-                              aria-invalid={!!form.formState.errors.username}
                               {...field}
                             />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  {/* Email input */}
-                  <div className="grid gap-2">
-                    <FormField
-                      control={form.control}
-                      name="email"
-                      render={({ field }) => (
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                              onClick={() => setShowPassword(!showPassword)}
+                            >
+                              {showPassword ? (
+                                <Eye className="h-4 w-4" />
+                              ) : (
+                                <EyeOff className="h-4 w-4" />
+                              )}
+                            </Button>
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Date of birth input */}
+                  <FormField
+                    control={form.control}
+                    name="dob"
+                    render={({ field }) => {
+                      return (
                         <FormItem>
-                          <FormLabel>Email</FormLabel>
+                          <FormLabel>Ngày sinh</FormLabel>
                           <FormControl>
                             <Input
-                              placeholder="Email đăng nhập"
-                              className={cn(
-                                form.formState.errors.email && 'border-red-500'
-                              )}
-                              aria-invalid={!!form.formState.errors.email}
-                              {...field}
+                              placeholder="DD/MM/YYYY"
+                              value={
+                                field.value
+                                  ? format(new Date(field.value), 'dd/MM/yyyy')
+                                  : field.value
+                              }
+                              onChange={(e) => {
+                                const inputValue = e.target.value;
+                                const numbers = inputValue.replace(/\D/g, '');
+
+                                // Format display value while typing
+                                let formattedValue = numbers;
+                                if (numbers.length >= 2) {
+                                  formattedValue =
+                                    numbers.slice(0, 2) +
+                                    '/' +
+                                    numbers.slice(2);
+                                }
+                                if (numbers.length >= 4) {
+                                  formattedValue =
+                                    formattedValue.slice(0, 5) +
+                                    '/' +
+                                    formattedValue.slice(5);
+                                }
+
+                                // Update input display
+                                e.target.value = formattedValue;
+
+                                // Try to create Date object when have enough numbers
+                                if (numbers.length === 8) {
+                                  const day = numbers.slice(0, 2);
+                                  const month = numbers.slice(2, 4);
+                                  const year = numbers.slice(4);
+
+                                  try {
+                                    const date = new Date(
+                                      `${year}-${month}-${day}`
+                                    );
+                                    if (!isNaN(date.getTime())) {
+                                      field.onChange(date);
+                                    }
+                                  } catch {
+                                    field.onChange(null);
+                                  }
+                                } else {
+                                  field.onChange(null);
+                                }
+                              }}
                             />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
-                      )}
-                    />
-                  </div>
-                  {/* Role select */}
-                  <div className="grid gap-2">
-                    <FormField
-                      control={form.control}
-                      name="roles"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Vai trò</FormLabel>
-                          <FormControl>
-                            <RadioGroup defaultValue="comfortable" {...field}>
-                              <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="default" id="r1" />
-                                <Label htmlFor="r1">Quản lý thương hiệu</Label>
-                              </div>
-                              <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="comfortable" id="r2" />
-                                <Label htmlFor="r2">Quản lý cửa hàng</Label>
-                              </div>
-                            </RadioGroup>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  {/* Password input */}
-                  <div className="grid gap-2">
-                    <FormField
-                      control={form.control}
-                      name="password"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel htmlFor="pwd">Mật khẩu</FormLabel>
-                          <FormControl>
-                            <div className="relative">
-                              <Input
-                                id="pwd"
-                                placeholder="Mật khẩu"
-                                type={showPassword ? 'text' : 'password'}
-                                className={cn(
-                                  form.formState.errors.password &&
-                                    'border-red-500'
-                                )}
-                                aria-invalid={!!form.formState.errors.password}
-                                {...field}
-                              />
-                              <Button
-                                type="button"
-                                variant="ghost"
-                                size="sm"
-                                className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                                onClick={() => setShowPassword(!showPassword)}
-                              >
-                                {showPassword ? (
-                                  <Eye className="h-4 w-4" />
-                                ) : (
-                                  <EyeOff className="h-4 w-4" />
-                                )}
-                              </Button>
+                      );
+                    }}
+                  />
+
+                  {/* Phone input */}
+                  <FormField
+                    control={form.control}
+                    name="phone"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Số điện thoại</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Số điện thoại"
+                            className={cn(
+                              form.formState.errors.phone && 'border-red-500'
+                            )}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Address input */}
+                  <FormField
+                    control={form.control}
+                    name="address"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Địa chỉ</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Địa chỉ"
+                            className={cn(
+                              form.formState.errors.address && 'border-red-500'
+                            )}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Gender select */}
+                  <FormField
+                    control={form.control}
+                    name="gender"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Giới tính</FormLabel>
+                        <FormControl>
+                          <RadioGroup
+                            onValueChange={field.onChange}
+                            className="flex gap-4"
+                          >
+                            <div className="flex items-center space-x-2">
+                              <RadioGroupItem value={Gender.Male} id="male" />
+                              <Label htmlFor="male">Nam</Label>
                             </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div className="text-right">
-                    <a
-                      href="#"
-                      className="text-sm text-muted-foreground underline-offset-4 hover:underline"
-                    >
-                      Quên mật khẩu?
-                    </a>
-                  </div>
-                  <Button
-                    type="submit"
-                    className="w-full"
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? 'Đang đăng nhập...' : 'Đăng nhập'}
-                  </Button>
+                            <div className="flex items-center space-x-2">
+                              <RadioGroupItem
+                                value={Gender.Female}
+                                id="female"
+                              />
+                              <Label htmlFor="female">Nữ</Label>
+                            </div>
+                          </RadioGroup>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
+
+                <Button
+                  type="submit"
+                  className="w-full"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? 'Đang xử lý...' : 'Đăng ký'}
+                </Button>
+
                 <div className="text-center text-sm">
                   Bạn đã có tài khoản?{' '}
                   <Link
@@ -248,8 +375,8 @@ export function RegisterForm({
       </Card>
       <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary">
         Bằng cách nhấp vào tiếp tục, bạn đồng ý với chúng tôi{' '}
-        <a href="#">Điều khoản dịch vụ</a> and{' '}
-        <a href="#">Chính sách bảo mật</a>.
+        <a href="#">Điều khoản dịch vụ</a> và <a href="#">Chính sách bảo mật</a>
+        .
       </div>
     </div>
   );

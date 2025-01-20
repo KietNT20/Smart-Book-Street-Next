@@ -18,13 +18,7 @@ export interface LoginResponse {
     dob: string;
     address: string;
     phone: string;
-    userRoles: UserRole[];
     id: string;
-    createdBy?: string;
-    createdDate?: string;
-    lastUpdatedBy?: string;
-    lastUpdatedDate?: string;
-    isDeleted?: boolean;
   };
   token: string;
   expiration: string;

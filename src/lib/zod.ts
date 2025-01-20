@@ -1,5 +1,5 @@
 import { REGEX } from '@/constant/regex';
-import { Role } from '@/constant/roles';
+import { Gender } from '@/enums/gender-enums';
 import * as z from 'zod';
 
 export type LoginFormValues = z.infer<typeof loginSchema>;
@@ -27,6 +27,7 @@ export const loginSchema = z.object({
 export type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export const registerSchema = z.object({
+  userName: z.string().min(1, { message: 'Vui lòng nhập tên đăng nhập' }),
   email: z
     .string()
     .min(1, { message: 'Vui lòng nhập email' })
@@ -46,6 +47,22 @@ export const registerSchema = z.object({
     .regex(REGEX.SPECIAL_CHAR, {
       message: 'Mật khẩu cần ít nhất 1 kí tự đặc biệt',
     }),
-  username: z.string().min(1, { message: 'Vui lòng nhập tên đăng nhập' }),
-  roles: z.enum([Role.BRAND_MANAGER, Role.STORE_MANAGER]),
+  fullName: z.string().min(1, { message: 'Vui lòng nhập họ và tên' }),
+  // dob: z.date().refine(
+  //   (value) => {
+  //     const now = new Date();
+  //     return now.getFullYear() - value.getFullYear() >= 18;
+  //   },
+  //   { message: 'Tuổi phải lớn hơn hoặc bằng 18' }
+  // ),
+  dob: z.date(),
+  address: z.string().min(1, { message: 'Vui lòng nhập địa chỉ' }),
+  phone: z
+    .string()
+    .regex(REGEX.PHONE_VN, {
+      message: 'Số điện thoại không hợp lệ',
+    })
+    .min(1, { message: 'Vui lòng nhập số điện thoại' }),
+  gender: z.enum([Gender.Male, Gender.Female]),
+  // roles: z.enum([UserRole.PUBLISHER_MANAGER, UserRole.STORE_MANAGER]),
 });

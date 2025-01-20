@@ -5,4 +5,4 @@ export const PATH = {
   DASHBOARD: '/dashboard',
   PROFILE: '/profile',
   BRAND: '/brand',
-};
+} as const;

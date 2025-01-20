@@ -19,9 +19,7 @@ import {
 } from '@/components/ui/sidebar';
 import Link from 'next/link';
 
-export function NavMain({
-  items,
-}: {
+type Props = {
   items: {
     title: string;
     url: string;
@@ -32,7 +30,9 @@ export function NavMain({
       url: string;
     }[];
   }[];
-}) {
+};
+
+export function NavMain({ items }: Props) {
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Quản lý</SidebarGroupLabel>
