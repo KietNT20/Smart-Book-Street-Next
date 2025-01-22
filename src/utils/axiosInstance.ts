@@ -29,7 +29,7 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   async (error: AxiosError) => {
-    console.log('error', error);
+    console.log('AxiosError', error);
     // If the error code is 403 or 401
     // If the error is not 403 or 401, return the original error
     return Promise.reject(error);
