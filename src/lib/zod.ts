@@ -10,10 +10,9 @@ export const loginSchema = z.object({
     .min(1, { message: 'Vui lòng nhập tài khoản hoặc email' })
     .refine(
       (value) => {
-        // Check if it's a valid email
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        // Check if it's a valid username (you can adjust these requirements)
-        const usernameRegex = /^[a-zA-Z0-9_-]{3,20}$/;
+        // Check if it's a valid email or username
+        const emailRegex = REGEX.EMAIL;
+        const usernameRegex = REGEX.USERNAME;
 
         return emailRegex.test(value) || usernameRegex.test(value);
       },
@@ -27,7 +26,7 @@ export const loginSchema = z.object({
 export type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export const registerSchema = z.object({
-  userName: z.string().min(1, { message: 'Vui lòng nhập tên đăng nhập' }),
+  userName: z.string().min(1, { message: 'Vui lòng nghĩ tên đăng nhập' }),
   email: z
     .string()
     .min(1, { message: 'Vui lòng nhập email' })
@@ -48,21 +47,17 @@ export const registerSchema = z.object({
       message: 'Mật khẩu cần ít nhất 1 kí tự đặc biệt',
     }),
   fullName: z.string().min(1, { message: 'Vui lòng nhập họ và tên' }),
-  // dob: z.date().refine(
-  //   (value) => {
-  //     const now = new Date();
-  //     return now.getFullYear() - value.getFullYear() >= 18;
-  //   },
-  //   { message: 'Tuổi phải lớn hơn hoặc bằng 18' }
-  // ),
-  dob: z.date(),
-  address: z.string().min(1, { message: 'Vui lòng nhập địa chỉ' }),
   phone: z
     .string()
-    .regex(REGEX.PHONE_VN, {
-      message: 'Số điện thoại không hợp lệ',
-    })
-    .min(1, { message: 'Vui lòng nhập số điện thoại' }),
-  gender: z.enum([Gender.Male, Gender.Female]),
-  // roles: z.enum([UserRole.PUBLISHER_MANAGER, UserRole.STORE_MANAGER]),
+    .refine(
+      (val) => {
+        if (!val) return true;
+        return REGEX.PHONE_VN.test(val);
+      },
+      {
+        message: 'Số điện thoại không hợp lệ',
+      }
+    )
+    .optional(),
+  gender: z.enum([Gender.Male, Gender.Female]).optional(),
 });

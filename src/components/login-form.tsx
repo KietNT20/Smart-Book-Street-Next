@@ -14,7 +14,7 @@ import { LoginFormValues, loginSchema } from '@/lib/zod';
 import { AuthError } from '@/types/auth.types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import GoogleButton from './google-button/google-button';
@@ -38,7 +38,6 @@ export function LoginForm({
   const [showPassword, setShowPassword] = useState(false);
 
   const login = useLogin();
-  const router = useRouter();
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -78,7 +77,7 @@ export function LoginForm({
         <CardContent>
           <div className="grid gap-6">
             <div className="flex flex-col gap-4">
-              <GoogleButton />
+              <GoogleButton signIn />
             </div>
             <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
               <span className="relative z-10 bg-background px-2 text-muted-foreground">
@@ -175,13 +174,12 @@ export function LoginForm({
                 </div>
                 <div className="text-center text-sm">
                   Bạn chưa có tài khoản?{' '}
-                  <button
-                    type="button"
-                    onClick={() => router.push(PATH.REGISTER)}
+                  <Link
+                    href={PATH.REGISTER}
                     className="px-3 underline underline-offset-4 duration-200 hover:text-primary"
                   >
                     Đăng ký ngay
-                  </button>
+                  </Link>
                 </div>
               </div>
             </form>

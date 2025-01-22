@@ -1,6 +1,7 @@
 import { PATH } from '@/constant/path';
 import { useToast } from '@/hooks/use-toast';
-import { AuthError, LoginCredentials } from '@/types/auth.types';
+import { userService } from '@/services/userService';
+import { LoginCredentials, RegisterRequestBody } from '@/types/auth.types';
 import { useMutation } from '@tanstack/react-query';
 import { signIn, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -16,24 +17,22 @@ export function useLogin() {
         ...credentials,
         redirect: false,
       });
-
-      if (result?.error) {
-        const error: AuthError = {
-          type: 'CredentialsSignin',
-          message: 'Tài khoản hoặc mật khẩu không chính xác',
-        };
-        throw error;
+      if (!result?.ok) {
+        throw new Error('Đăng nhập thất bại');
       }
       return result;
     },
-    onSuccess: () => {
-      toast({
-        title: 'Success',
-        description: 'Đăng nhập thành công',
-        variant: 'success',
-      });
-      router.push(PATH.DASHBOARD);
-      router.refresh();
+    onSuccess: (data) => {
+      if (data?.ok) {
+        toast({
+          title: 'Success',
+          description: 'Đăng nhập thành công',
+          variant: 'success',
+          duration: 3000,
+        });
+        router.refresh();
+        router.push(PATH.DASHBOARD);
+      }
     },
     onError: (error: any) => {
       console.log('Error login', error);
@@ -42,20 +41,20 @@ export function useLogin() {
 }
 
 export function useLogout() {
-  const router = useRouter();
   const { toast } = useToast();
-
+  const router = useRouter();
   return useMutation({
     mutationKey: ['logout'],
-    mutationFn: () => signOut({ redirect: false }),
+    mutationFn: async () => await signOut({ redirect: false }),
     onSuccess: () => {
       toast({
         title: 'Success',
         description: 'Đăng xuất thành công',
         variant: 'success',
+        duration: 3000,
       });
-      router.push(PATH.LOGIN);
       router.refresh();
+      router.push(PATH.LOGIN);
     },
   });
 }
@@ -66,25 +65,18 @@ export function useRegister() {
 
   return useMutation({
     mutationKey: ['register'],
-    mutationFn: async (credentials: LoginCredentials) => {
-      const result = await signIn('credentials', {
-        ...credentials,
-        redirect: false,
-      });
-
-      if (result?.error) {
-        throw new Error(result.error);
+    mutationFn: async (payload: RegisterRequestBody) =>
+      await userService.register(payload),
+    onSuccess: (data) => {
+      if (data) {
+        toast({
+          title: 'Success',
+          description: 'Đăng ký thành công',
+          variant: 'success',
+        });
+        router.refresh();
+        router.push(PATH.LOGIN);
       }
-      return result;
-    },
-    onSuccess: () => {
-      toast({
-        title: 'Success',
-        description: 'Đăng ký thành công',
-        variant: 'success',
-      });
-      router.push(PATH.DASHBOARD);
-      router.refresh();
     },
     onError: (error) => {
       toast({

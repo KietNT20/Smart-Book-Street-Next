@@ -1,10 +1,9 @@
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import Google from 'next-auth/providers/google';
-import { API_ENDPOINT } from './constant/api-url';
 import { PATH } from './constant/path';
-import { LoginResponse } from './types/auth.types';
-import axiosInstance from './utils/axiosInstance';
+import { userService } from './services/userService';
+import { LoginCredentials } from './types/auth.types';
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
@@ -13,20 +12,16 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       clientSecret: process.env.AUTH_GOOGLE_SECRET,
     }),
     Credentials({
-      name: 'Credentials',
       credentials: {
         usernameOrEmail: {},
         password: {},
       },
       authorize: async (credentials) => {
         try {
-          const response = await axiosInstance.post<LoginResponse>(
-            `${API_ENDPOINT.USERS.LOGIN}`,
-            credentials
+          const response = await userService.login(
+            credentials as LoginCredentials
           );
-
           const data = response?.data;
-          console.log('data', data);
 
           if (data?.isSuccess && data?.token) {
             return {
@@ -34,7 +29,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
               fullName: data?.result.fullName,
               email: data?.result.email,
               userName: data?.result.userName,
-              accessToken: data?.token,
+              token: data?.token,
+              expiration: data?.expiration,
             };
           }
           return null;
@@ -52,17 +48,18 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token = { ...token, ...user };
+        token.sub = user.id;
+        token.userName = user.userName;
+        token.token = user.token;
+        token.expiration = user.expiration;
       }
       return token;
     },
     async session({ session, token }) {
-      // console.log('token session', token);
-      session.user.id = token.id;
-      session.user.name = token.fullName;
+      session.userId = token.sub as string;
       session.user.userName = token.userName;
-      session.user.accessToken = token.accessToken;
-      // console.log('session', session);
+      session.user.token = token.token;
+      // session.expires = token.expiration;
       return session;
     },
     authorized: async ({ auth }) => {

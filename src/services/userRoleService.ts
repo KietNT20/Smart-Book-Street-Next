@@ -5,12 +5,12 @@ export const userRoleService = {
   getAll() {
     return axiosInstance.get(`${API_ENDPOINT.USER_ROLES.GET_ALL}`);
   },
-  getByRoleId(roleId: string) {
+  getByRole(roleId: string) {
     return axiosInstance.get(
       `${API_ENDPOINT.USER_ROLES.GET_BY_ROLE_ID}/${roleId}`
     );
   },
-  getByUserId(userId: string) {
+  getByUser(userId: string) {
     return axiosInstance.get(
       `${API_ENDPOINT.USER_ROLES.GET_BY_USER_ID}/${userId}`
     );

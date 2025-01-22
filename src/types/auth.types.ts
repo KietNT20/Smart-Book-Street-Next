@@ -1,3 +1,5 @@
+import { Gender } from '@/enums/gender-enums';
+
 export interface UserRole {
   userId: string;
   roleId: string;
@@ -34,4 +36,13 @@ export interface LoginCredentials {
 export interface AuthError {
   type: 'CredentialsSignin' | 'NetworkError' | 'ServerError' | 'Default';
   message: string;
+}
+
+export interface RegisterRequestBody {
+  userName: string;
+  email: string;
+  password: string;
+  fullName: string;
+  phone?: string;
+  gender?: Gender;
 }

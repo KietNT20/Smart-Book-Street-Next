@@ -4,17 +4,14 @@ import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
 
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
 });
 // Add a request interceptor
 axiosInstance.interceptors.request.use(
   async (config) => {
     const session = await auth();
     // Do something before request is sent
-    if (session?.user.accessToken) {
-      config.headers.Authorization = `Bearer ${session.user.accessToken}`;
+    if (session?.user?.token) {
+      config.headers.Authorization = `Bearer ${session?.user?.token}`;
     }
     return config;
   },

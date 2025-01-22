@@ -1,11 +1,12 @@
 import { API_ENDPOINT } from '@/constant/api-url';
+import { LoginCredentials, RegisterRequestBody } from '@/types/auth.types';
 import axiosInstance from '@/utils/axiosInstance';
 
 export const userService = {
-  login(payload = {}) {
+  login(payload: LoginCredentials) {
     return axiosInstance.post(`${API_ENDPOINT.USERS.LOGIN}`, payload);
   },
-  register(payload = {}) {
+  register(payload: RegisterRequestBody) {
     return axiosInstance.post(`${API_ENDPOINT.USERS.REGISTER}`, payload);
   },
   getAll() {

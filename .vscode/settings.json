@@ -33,6 +33,7 @@
     "nextjs",
     "ngay",
     "ngày",
+    "nghĩ",
     "nghĩa",
     "nhấp",
     "nhập",
@@ -55,5 +56,6 @@
     "Tuổi",
     "viên",
     "xuất"
-  ]
+  ],
+  "typescript.tsdk": "node_modules\\typescript\\lib"
 }

@@ -1,7 +1,10 @@
 import { loginGoogleAction } from '@/app/(guest)/auth/login/_lib/action';
 import { Button } from '../ui/button';
 
-const GoogleButton = () => {
+type Props = {
+  signIn?: boolean;
+};
+const GoogleButton = ({ signIn = false }: Props) => {
   return (
     <form action={loginGoogleAction}>
       <Button type="submit" variant="outline" className="w-full">
@@ -15,7 +18,7 @@ const GoogleButton = () => {
             fill="currentColor"
           />
         </svg>
-        Đăng nhập bằng Google
+        Đăng {signIn ? 'nhập' : 'ký'} bằng Google
       </Button>
     </form>
   );
