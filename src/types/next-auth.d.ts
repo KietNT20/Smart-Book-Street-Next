@@ -1,8 +1,10 @@
+import { RoleEnums } from '@/enums/role-enums';
 import { DefaultSession } from 'next-auth';
 import 'next-auth/jwt';
 
 declare module 'next-auth' {
   interface Session {
+    expires: Date | string;
     user: {
       userName: string;
     } & DefaultSession['user'];
@@ -11,7 +13,12 @@ declare module 'next-auth' {
   interface User {
     userName: string;
     token: string;
-    expiration: string;
+    expires_at: number;
+    userRoles: {
+      role: {
+        roleName: RoleEnums;
+      };
+    }[];
   }
 }
 
@@ -20,6 +27,11 @@ declare module 'next-auth/jwt' {
     userName: string;
     fullName: string;
     token: string;
-    expiration: string;
+    exp: number;
+    userRoles: {
+      role: {
+        roleName: RoleEnums;
+      };
+    }[];
   }
 }

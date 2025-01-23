@@ -1,11 +1,7 @@
-export interface Role {
-  id: string;
-  roleName: string;
+import { RoleEnums } from '@/enums/role-enums';
+import { BaseEntity } from './common-types';
+
+export interface Role extends BaseEntity {
+  roleName: RoleEnums;
   description: string;
-  userRoles?: [];
-  createdBy?: string;
-  createdDate?: string;
-  lastUpdatedBy?: string;
-  lastUpdatedDate?: string;
-  isDeleted?: boolean;
 }

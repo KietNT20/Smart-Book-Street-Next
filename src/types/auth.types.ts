@@ -1,14 +1,12 @@
 import { Gender } from '@/enums/gender-enums';
+import { BaseEntity } from './common-types';
+import { Role } from './user-types';
 
-export interface UserRole {
+export interface UserRoles extends BaseEntity {
   userId: string;
   roleId: string;
-  id: string;
-  createdBy?: string;
-  createdDate?: string;
-  lastUpdatedBy?: string;
-  lastUpdatedDate?: string;
-  isDeleted?: boolean;
+  assignedAt?: string;
+  role: Role;
 }
 
 export interface LoginResponse {
@@ -38,7 +36,7 @@ export interface AuthError {
   message: string;
 }
 
-export interface RegisterRequestBody {
+export interface RegisterRequestBody extends Omit<BaseEntity, 'id'> {
   userName: string;
   email: string;
   password: string;

@@ -3,7 +3,7 @@ import Credentials from 'next-auth/providers/credentials';
 import Google from 'next-auth/providers/google';
 import { PATH } from './constant/path';
 import { userService } from './services/userService';
-import { LoginCredentials } from './types/auth.types';
+import { LoginCredentials, UserRoles } from './types/auth.types';
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
@@ -24,13 +24,17 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           const data = response?.data;
 
           if (data?.isSuccess && data?.token) {
+            const expiresAt = new Date(data.expiration).getTime() / 1000;
             return {
               id: data?.result.id,
               fullName: data?.result.fullName,
               email: data?.result.email,
               userName: data?.result.userName,
               token: data?.token,
-              expiration: data?.expiration,
+              expires_at: expiresAt,
+              userRoles: data?.result.userRoles.map(
+                (role: UserRoles) => role.role.roleName
+              ),
             };
           }
           return null;
@@ -51,7 +55,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.sub = user.id;
         token.userName = user.userName;
         token.token = user.token;
-        token.expiration = user.expiration;
+        token.exp = user.expires_at;
+        token.userRoles = user.userRoles;
       }
       return token;
     },
@@ -59,7 +64,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       session.userId = token.sub as string;
       session.user.userName = token.userName;
       session.user.token = token.token;
-      // session.expires = token.expiration;
+      session.user.userRoles = token.userRoles;
+      session.expires = new Date(token.exp * 1000);
       return session;
     },
     authorized: async ({ auth }) => {
