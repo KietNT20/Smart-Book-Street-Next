@@ -101,12 +101,10 @@ export const createColumns = ({
   {
     accessorKey: 'languages',
     header: 'Ngôn ngữ',
-    filterFn: 'includesString',
   },
   {
     accessorKey: 'status',
     header: 'Tình trạng',
-    filterFn: 'includesString',
   },
   {
     accessorKey: 'publicationDate',
