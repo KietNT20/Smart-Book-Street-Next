@@ -1,8 +1,8 @@
 export interface BaseEntity {
-  id: string;
-  createdBy?: string | null;
-  createdDate?: string | null;
-  lastUpdatedBy?: string | null;
+  id?: string;
+  createdBy?: string;
+  createdDate?: string;
+  lastUpdatedBy?: string;
   lastUpdatedDate?: string;
   isDeleted?: boolean;
 }
@@ -11,5 +11,5 @@ export type PaginationSchema = {
   pageNumber: number;
   pageSize: number;
   sortField?: string;
-  sortOrder?: number;
+  sortOrder?: -1 | 0 | 1;
 };

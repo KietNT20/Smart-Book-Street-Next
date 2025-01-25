@@ -1,40 +1,36 @@
 'use client';
-import {
-  getAllBooks,
-  getAllBooksPagination,
-  getBookById,
-} from '@/services/bookService';
-import { PaginationSchema } from '@/types/common-types';
-import { useQuery } from '@tanstack/react-query';
 
-export function useGetAllBooks() {
-  return useQuery({
-    queryKey: ['books'],
-    queryFn: getAllBooks,
+import { BookFormValues } from '@/lib/zod';
+import { bookService } from '@/services/bookService';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
+export const useBookMutations = () => {
+  const queryClient = useQueryClient();
+
+  const createBookMutation = useMutation({
+    mutationFn: (data: BookFormValues) => bookService.create(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['books'] });
+    },
   });
-}
 
-export function useGetBookById(id: string) {
-  return useQuery({
-    queryKey: ['books', id],
-    queryFn: () => getBookById(id),
+  const updateBookMutation = useMutation({
+    mutationFn: (data: BookFormValues) => bookService.update(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['books'] });
+    },
   });
-}
 
-export function useGetBooksPagination({
-  pageNumber,
-  pageSize,
-  sortField,
-  sortOrder,
-}: PaginationSchema) {
-  return useQuery({
-    queryKey: [
-      'books-pagination',
-      { pageNumber, pageSize, sortField, sortOrder },
-    ],
-    queryFn: () =>
-      getAllBooksPagination({ pageNumber, pageSize, sortField, sortOrder }),
+  const deleteBookMutation = useMutation({
+    mutationFn: (id: string) => bookService.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['books'] });
+    },
   });
-}
 
-export function useBookSearch() {}
+  return {
+    createBookMutation,
+    updateBookMutation,
+    deleteBookMutation,
+  };
+};

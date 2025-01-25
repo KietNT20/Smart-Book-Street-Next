@@ -61,3 +61,25 @@ export const registerSchema = z.object({
     .optional(),
   gender: z.enum([Gender.Male, Gender.Female]).optional(),
 });
+
+export const bookSchema = z.object({
+  id: z.string().optional(),
+  code: z.string().min(1, { message: 'Mã sách không được để trống' }),
+  title: z.string().min(1, { message: 'Tên sách không được để trống' }),
+  publicationDate: z.string(),
+  price: z.number().min(0, { message: 'Giá không được âm' }),
+  languages: z.string().min(1, { message: 'Ngôn ngữ không được để trống' }),
+  description: z.string().optional(),
+  size: z.string().optional(),
+  status: z.string().min(1, { message: 'Trạng thái không được để trống' }),
+  publisherId: z
+    .string()
+    .min(1, { message: 'ID nhà xuất bản không được để trống' }),
+  createdBy: z.string().optional(),
+  createdDate: z.string().optional(),
+  lastUpdatedBy: z.string().optional(),
+  lastUpdatedDate: z.string().optional(),
+  isDeleted: z.boolean().optional(),
+});
+
+export type BookFormValues = z.infer<typeof bookSchema>;

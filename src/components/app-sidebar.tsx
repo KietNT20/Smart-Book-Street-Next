@@ -28,11 +28,6 @@ import {
 
 // This is sample data.
 const data = {
-  user: {
-    name: 'John Doe',
-    email: 'johndoe@example.com',
-    avatar: '/avatars/shadcn.jpg',
-  },
   teams: [
     {
       name: 'Acme Inc',
@@ -81,12 +76,12 @@ const data = {
           url: '/dashboard/books',
         },
         {
-          title: 'Explorer',
-          url: '#',
+          title: 'Thương hiệu',
+          url: '/dashboard/books/brands',
         },
         {
-          title: 'Quantum',
-          url: '#',
+          title: 'Cửa hàng',
+          url: '/dashboard/books/stores',
         },
       ],
     },
@@ -140,7 +135,7 @@ const data = {
   projects: [
     {
       name: 'Dashboard',
-      url: '#',
+      url: '/dashboard',
       icon: PieChart,
     },
     {
@@ -168,7 +163,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

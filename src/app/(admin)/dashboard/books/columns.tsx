@@ -1,12 +1,34 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { formatDate } from '@/lib/utils';
 import { Book } from '@/types/book-types';
 import { ColumnDef } from '@tanstack/react-table';
-import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react';
+import {
+  ArrowDown,
+  ArrowUp,
+  ArrowUpDown,
+  MoreHorizontal,
+  Pen,
+  Trash,
+} from 'lucide-react';
 
-export const columns: ColumnDef<Book>[] = [
+interface ColumnHandlers {
+  onEdit: (book: Book) => void;
+  onDelete: (id?: string) => void;
+}
+
+export const createColumns = ({
+  onEdit,
+  onDelete,
+}: ColumnHandlers): ColumnDef<Book>[] => [
   {
     accessorKey: 'code',
     header: ({ column }) => (
@@ -17,11 +39,11 @@ export const columns: ColumnDef<Book>[] = [
       >
         Mã sách
         {column.getIsSorted() === 'asc' ? (
-          <ArrowUp />
+          <ArrowUp className="ml-2 h-4 w-4" />
         ) : column.getIsSorted() === 'desc' ? (
-          <ArrowDown />
+          <ArrowDown className="ml-2 h-4 w-4" />
         ) : (
-          <ArrowUpDown />
+          <ArrowUpDown className="ml-2 h-4 w-4" />
         )}
       </Button>
     ),
@@ -37,11 +59,11 @@ export const columns: ColumnDef<Book>[] = [
       >
         Tên sách
         {column.getIsSorted() === 'asc' ? (
-          <ArrowUp />
+          <ArrowUp className="ml-2 h-4 w-4" />
         ) : column.getIsSorted() === 'desc' ? (
-          <ArrowDown />
+          <ArrowDown className="ml-2 h-4 w-4" />
         ) : (
-          <ArrowUpDown />
+          <ArrowUpDown className="ml-2 h-4 w-4" />
         )}
       </Button>
     ),
@@ -57,11 +79,11 @@ export const columns: ColumnDef<Book>[] = [
       >
         Giá (VND)
         {column.getIsSorted() === 'asc' ? (
-          <ArrowUp />
+          <ArrowUp className="ml-2 h-4 w-4" />
         ) : column.getIsSorted() === 'desc' ? (
-          <ArrowDown />
+          <ArrowDown className="ml-2 h-4 w-4" />
         ) : (
-          <ArrowUpDown />
+          <ArrowUpDown className="ml-2 h-4 w-4" />
         )}
       </Button>
     ),
@@ -96,11 +118,11 @@ export const columns: ColumnDef<Book>[] = [
       >
         Ngày xuất bản
         {column.getIsSorted() === 'asc' ? (
-          <ArrowUp />
+          <ArrowUp className="ml-2 h-4 w-4" />
         ) : column.getIsSorted() === 'desc' ? (
-          <ArrowDown />
+          <ArrowDown className="ml-2 h-4 w-4" />
         ) : (
-          <ArrowUpDown />
+          <ArrowUpDown className="ml-2 h-4 w-4" />
         )}
       </Button>
     ),
@@ -116,14 +138,42 @@ export const columns: ColumnDef<Book>[] = [
       >
         Ngày tạo
         {column.getIsSorted() === 'asc' ? (
-          <ArrowUp />
+          <ArrowUp className="ml-2 h-4 w-4" />
         ) : column.getIsSorted() === 'desc' ? (
-          <ArrowDown />
+          <ArrowDown className="ml-2 h-4 w-4" />
         ) : (
-          <ArrowUpDown />
+          <ArrowUpDown className="ml-2 h-4 w-4" />
         )}
       </Button>
     ),
     cell: ({ row }) => formatDate(row.getValue('createdDate')),
+  },
+  {
+    id: 'actions',
+    header: 'Thao tác',
+    cell: ({ row }) => {
+      const book = row.original;
+
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
+            <DropdownMenuItem onClick={() => onEdit(book)}>
+              <Pen className="mr-2 h-4 w-4" />
+              Sửa
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => onDelete(book.id)}>
+              <Trash className="mr-2 h-4 w-4" />
+              Xóa
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    },
   },
 ];

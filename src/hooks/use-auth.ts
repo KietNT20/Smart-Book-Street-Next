@@ -41,21 +41,9 @@ export function useLogin() {
 }
 
 export function useLogout() {
-  const { toast } = useToast();
-  const router = useRouter();
   return useMutation({
     mutationKey: ['logout'],
-    mutationFn: async () => await signOut({ redirect: false }),
-    onSuccess: () => {
-      toast({
-        title: 'Success',
-        description: 'Đăng xuất thành công',
-        variant: 'success',
-        duration: 3000,
-      });
-      router.refresh();
-      router.push(PATH.LOGIN);
-    },
+    mutationFn: async () => await signOut(),
   });
 }
 
