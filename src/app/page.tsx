@@ -4,7 +4,6 @@ import { redirect } from 'next/navigation';
 
 const Page = async () => {
   const session = await auth();
-  console.log('session homepage', session);
   if (session) {
     redirect(PATH.DASHBOARD);
   } else {

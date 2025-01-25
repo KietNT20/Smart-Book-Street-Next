@@ -5,6 +5,7 @@ import 'next-auth/jwt';
 declare module 'next-auth' {
   interface Session {
     expires: Date | string;
+    accessToken: string;
     user: {
       userName: string;
     } & DefaultSession['user'];
@@ -12,8 +13,8 @@ declare module 'next-auth' {
 
   interface User {
     userName: string;
-    token: string;
     expires_at: number;
+    token: string;
     userRoles: {
       role: {
         roleName: RoleEnums;
@@ -26,8 +27,8 @@ declare module 'next-auth/jwt' {
   interface JWT {
     userName: string;
     fullName: string;
-    token: string;
     exp: number;
+    accessToken: string;
     userRoles: {
       role: {
         roleName: RoleEnums;

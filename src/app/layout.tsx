@@ -25,9 +25,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${roboto.className} antialiased`}>
-        <StoreProvider>
-          <QueryProvider>
-            <NextAuthProvider>
+        <QueryProvider>
+          <NextAuthProvider>
+            <StoreProvider>
               <ThemeProvider
                 attribute="class"
                 defaultTheme="system"
@@ -36,9 +36,9 @@ export default function RootLayout({
               >
                 {children}
               </ThemeProvider>
-            </NextAuthProvider>
-          </QueryProvider>
-        </StoreProvider>
+            </StoreProvider>
+          </NextAuthProvider>
+        </QueryProvider>
         <Toaster />
       </body>
     </html>

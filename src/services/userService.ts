@@ -1,5 +1,6 @@
 import { API_ENDPOINT } from '@/constant/api-url';
 import { LoginCredentials, RegisterRequestBody } from '@/types/auth.types';
+import { PaginationSchema } from '@/types/common-types';
 import axiosInstance from '@/utils/axiosInstance';
 
 export const userService = {
@@ -12,7 +13,7 @@ export const userService = {
   getAll() {
     return axiosInstance.get(`${API_ENDPOINT.USERS.GET_ALL}`);
   },
-  getAllPagination(payload = {}) {
+  getAllPagination(payload: PaginationSchema) {
     return axiosInstance.post(
       `${API_ENDPOINT.USERS.GET_ALL_PAGINATION}`,
       payload

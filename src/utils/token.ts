@@ -1,66 +1,36 @@
-'use server';
 import { STORAGE } from '@/constant/storage';
-import { cookies } from 'next/headers';
-
-interface TokenData {
-  accessToken: string;
-  refreshToken: string;
-}
 
 type TokenType = {
-  get: () => TokenData;
-  set: (token: TokenData) => void;
+  get: () => any;
+  set: (token: string) => void;
   remove: () => void;
 };
 
-const cookieStore = cookies();
-console.log(cookieStore);
-
-// LocalStorage
-// const localToken: TokenType = {
-//   get: () => JSON.parse(localStorage.getItem(STORAGE.token) || '{}'),
-//   set: (token) => localStorage.setItem(STORAGE.token, JSON.stringify(token)),
-//   remove: () => localStorage.removeItem(STORAGE.token),
-// };
-
-// Cookies
-const cookieToken: TokenType = {
-  get: () =>
-    JSON.parse(
-      cookieStore.get(STORAGE.token)
-        ? cookieStore.get(STORAGE.token)!.value
-        : '{}'
-    ),
-
-  set: (token) => {
-    cookieStore.set(STORAGE.token, JSON.stringify(token), {
-      path: '/',
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      httpOnly: true,
-      maxAge: 60 * 60 * 24 * 7,
-    });
+const localToken: TokenType = {
+  get: () => {
+    if (typeof window === 'undefined') return null;
+    const token = localStorage.getItem(STORAGE.token);
+    return token ? JSON.parse(token) : null;
   },
-
+  set: (token) => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(STORAGE.token, JSON.stringify(token));
+    }
+  },
   remove: () => {
-    cookieStore.delete(STORAGE.token);
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem(STORAGE.token);
+    }
   },
 };
 
 const tokenMethod: TokenType = {
-  get: () => {
-    // return localToken.get();
-    return cookieToken.get();
-  },
+  get: () => localToken.get(),
   set: (token) => {
     console.log('token', token);
-    // localToken.set(token);
-    cookieToken.set(token);
+    localToken.set(token);
   },
-  remove: () => {
-    // localToken.remove();
-    cookieToken.remove();
-  },
+  remove: () => localToken.remove(),
 };
 
 export default tokenMethod;

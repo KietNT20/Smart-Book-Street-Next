@@ -73,12 +73,12 @@ const data = {
     },
     {
       title: 'Sách',
-      url: '#',
+      url: '/dashboard/books',
       icon: Book,
       items: [
         {
-          title: 'Genesis',
-          url: '#',
+          title: 'Danh sách',
+          url: '/dashboard/books',
         },
         {
           title: 'Explorer',
