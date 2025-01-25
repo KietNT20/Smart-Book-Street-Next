@@ -114,3 +114,4 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+@import 'react-day-picker/dist/style.css';
