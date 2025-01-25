@@ -1,8 +1,32 @@
-import { z } from 'zod';
+import { REGEX } from '@/constant/regex';
+import { Gender } from '@/enums/gender-enums';
+import * as z from 'zod';
 
 export type LoginFormValues = z.infer<typeof loginSchema>;
 
 export const loginSchema = z.object({
+  usernameOrEmail: z
+    .string()
+    .min(1, { message: 'Vui lòng nhập tài khoản hoặc email' })
+    .refine(
+      (value) => {
+        // Check if it's a valid email or username
+        const emailRegex = REGEX.EMAIL;
+        const usernameRegex = REGEX.USERNAME;
+
+        return emailRegex.test(value) || usernameRegex.test(value);
+      },
+      {
+        message: 'Vui lòng nhập email hoặc tên đăng nhập hợp lệ',
+      }
+    ),
+  password: z.string().min(1, { message: 'Vui lòng nhập mật khẩu' }),
+});
+
+export type RegisterFormValues = z.infer<typeof registerSchema>;
+
+export const registerSchema = z.object({
+  userName: z.string().min(1, { message: 'Vui lòng nghĩ tên đăng nhập' }),
   email: z
     .string()
     .min(1, { message: 'Vui lòng nhập email' })
@@ -19,7 +43,43 @@ export const loginSchema = z.object({
     .regex(/[0-9]/, {
       message: 'Mật khẩu cần ít nhất 1 số',
     })
-    .regex(/[!@#$%^&*()_+\-=\[\]{}|;:,.<>?/]/, {
+    .regex(REGEX.SPECIAL_CHAR, {
       message: 'Mật khẩu cần ít nhất 1 kí tự đặc biệt',
     }),
+  fullName: z.string().min(1, { message: 'Vui lòng nhập họ và tên' }),
+  phone: z
+    .string()
+    .refine(
+      (val) => {
+        if (!val) return true;
+        return REGEX.PHONE_VN.test(val);
+      },
+      {
+        message: 'Số điện thoại không hợp lệ',
+      }
+    )
+    .optional(),
+  gender: z.enum([Gender.Male, Gender.Female]).optional(),
 });
+
+export const bookSchema = z.object({
+  id: z.string().optional(),
+  code: z.string().min(1, { message: 'Mã sách không được để trống' }),
+  title: z.string().min(1, { message: 'Tên sách không được để trống' }),
+  publicationDate: z.string(),
+  price: z.number().min(0, { message: 'Giá không được âm' }),
+  languages: z.string().min(1, { message: 'Ngôn ngữ không được để trống' }),
+  description: z.string().optional(),
+  size: z.string().optional(),
+  status: z.string().min(1, { message: 'Trạng thái không được để trống' }),
+  publisherId: z
+    .string()
+    .min(1, { message: 'ID nhà xuất bản không được để trống' }),
+  createdBy: z.string().optional(),
+  createdDate: z.string().optional(),
+  lastUpdatedBy: z.string().optional(),
+  lastUpdatedDate: z.string().optional(),
+  isDeleted: z.boolean().optional(),
+});
+
+export type BookFormValues = z.infer<typeof bookSchema>;

@@ -1,8 +1,14 @@
 {
   "extends": [
+    "eslint:recommended",
     "next/core-web-vitals",
     "next/typescript",
     "plugin:@tanstack/query/recommended",
     "prettier"
-  ]
+  ],
+  "plugins": ["prettier"],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "off",
+    "prettier/prettier": "off"
+  }
 }

@@ -16,38 +16,42 @@ import {
   SidebarTrigger,
 } from '@/components/ui/sidebar';
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <SidebarProvider>
-      <div className='flex min-h-screen w-full bg-background'>
+      <div className="flex min-h-screen w-full bg-background">
         <AppSidebar />
         <SidebarInset>
-          <div className='flex flex-1 flex-col'>
-            <header className='flex h-16 shrink-0 items-center border-b border-border px-4'>
-              <div className='flex flex-1 items-center gap-4'>
-                <SidebarTrigger className='-ml-2 h-8 w-8' />
-                <Separator orientation='vertical' className='h-6' />
+          <div className="flex flex-1 flex-col">
+            <header className="flex h-16 shrink-0 items-center border-b border-border px-4">
+              <div className="flex flex-1 items-center gap-4">
+                <SidebarTrigger className="-ml-2 h-8 w-8" />
+                <Separator orientation="vertical" className="h-6" />
 
                 <Breadcrumb>
                   <BreadcrumbList>
-                    <BreadcrumbItem className='hidden md:block'>
-                      <BreadcrumbLink href='#'>
+                    <BreadcrumbItem className="hidden md:block">
+                      <BreadcrumbLink href="#">
                         Building Your Application
                       </BreadcrumbLink>
                     </BreadcrumbItem>
-                    <BreadcrumbSeparator className='hidden md:block' />
+                    <BreadcrumbSeparator className="hidden md:block" />
                     <BreadcrumbItem>
                       <BreadcrumbPage>Data Fetching</BreadcrumbPage>
                     </BreadcrumbItem>
                   </BreadcrumbList>
                 </Breadcrumb>
 
-                <div className='ml-auto flex items-center gap-4'>
+                <div className="ml-auto flex items-center gap-4">
                   <ModeToggle />
                 </div>
               </div>
             </header>
-            <main className='p-4'>{children}</main>
+            <main className="p-4">{children}</main>
           </div>
         </SidebarInset>
       </div>

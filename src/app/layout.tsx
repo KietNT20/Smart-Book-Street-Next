@@ -1,4 +1,5 @@
 import { ThemeProvider } from '@/components/theme-provider';
+import { Toaster } from '@/components/ui/toaster';
 import NextAuthProvider from '@/providers/NextAuthProvider';
 import QueryProvider from '@/providers/QueryProvider';
 import StoreProvider from '@/providers/StoreProvider';
@@ -22,22 +23,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en'>
+    <html lang="en">
       <body className={`${roboto.className} antialiased`}>
-        <StoreProvider>
-          <QueryProvider>
-            <NextAuthProvider>
+        <QueryProvider>
+          <NextAuthProvider>
+            <StoreProvider>
               <ThemeProvider
-                attribute='class'
-                defaultTheme='system'
+                attribute="class"
+                defaultTheme="system"
                 enableSystem
                 disableTransitionOnChange
               >
                 {children}
               </ThemeProvider>
-            </NextAuthProvider>
-          </QueryProvider>
-        </StoreProvider>
+            </StoreProvider>
+          </NextAuthProvider>
+        </QueryProvider>
+        <Toaster />
       </body>
     </html>
   );
