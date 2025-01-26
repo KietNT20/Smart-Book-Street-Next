@@ -2,141 +2,68 @@
 
 import { ConfirmModal } from '@/components/confirm-modal';
 import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
-import { useBookSearch } from '@/hooks/use-book-search';
-import { useBookMutations } from '@/hooks/use-books';
-import { useToast } from '@/hooks/use-toast';
-import { BookFormValues } from '@/lib/zod';
-import { Book, BookSearchCriteria } from '@/types/book-types';
+import { BookSearchCriteria } from '@/types/book-types';
 import { Plus, Search, X } from 'lucide-react';
-import { useState } from 'react';
+import { BookDialog } from './_components/book-dialog';
 import { BookForm } from './_components/book-form';
 import { SearchBookModal } from './_components/search-book-modal';
+import { useBookOperations } from './_lib/use-book-operations';
+import { useBookPageState } from './_lib/use-book-page-state';
 import { createColumns } from './columns';
-import { BookTableState, DataTable } from './data-table';
+import { DataTable } from './data-table';
 
 export default function BooksPage() {
-  // Pagination state
-  const [pagination, setPagination] = useState<BookTableState>({
-    pageIndex: 1,
-    pageSize: 10,
-    sortField: 'createdDate',
-    sortOrder: 1,
+  const {
+    pagination,
+    setPagination,
+    searchCriteria,
+    setSearchCriteria,
+    modalState,
+    setModalState,
+    selectedBook,
+    setSelectedBook,
+    deleteId,
+    setDeleteId,
+    resetAllFilters,
+  } = useBookPageState();
+
+  const {
+    bookData,
+    isLoadingBooks,
+    handleSubmit,
+    handleDelete,
+    createBookMutation,
+    updateBookMutation,
+    deleteBookMutation,
+  } = useBookOperations({
+    pagination,
+    searchCriteria,
+    onSuccess: () => {
+      setModalState({ type: 'none' });
+      setSelectedBook(undefined);
+    },
   });
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [searchCriteria, setSearchCriteria] = useState<
-    Partial<BookSearchCriteria>
-  >({});
-
-  // Dialog states
-  const [selectedBook, setSelectedBook] = useState<Book | undefined>();
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [deleteId, setDeleteId] = useState<string | null>(null);
-
-  // Toast
-  const { toast } = useToast();
-
-  // Queries and mutations
-  const { data, isLoading: isLoadingBooks } = useBookSearch({
-    pageNumber: pagination.pageIndex,
-    pageSize: pagination.pageSize,
-    sortField: pagination.sortField,
-    sortOrder: pagination.sortOrder,
-    result: searchCriteria,
-  });
-
-  const { createBookMutation, updateBookMutation, deleteBookMutation } =
-    useBookMutations();
 
   // Create table columns
   const columns = createColumns({
-    onEdit: (book) => {
+    _onEdit: (book) => {
       setSelectedBook(book);
-      setIsDialogOpen(true);
+      setModalState({ type: 'form' });
     },
-    onDelete: (id?: string) => {
-      if (id) setDeleteId(id);
+    _onDelete: (id?: string) => {
+      setDeleteId(id || null);
     },
   });
-
-  // Handlers
-  const handleSubmit = async (data: BookFormValues) => {
-    try {
-      if (selectedBook) {
-        await updateBookMutation.mutateAsync(data);
-        toast({
-          title: 'Cập nhật thành công',
-          description: 'Sách đã được cập nhật',
-          variant: 'success',
-        });
-      } else {
-        await createBookMutation.mutateAsync(data);
-        toast({
-          title: 'Thêm mới thành công',
-          description: 'Sách đã được thêm vào hệ thống',
-          variant: 'success',
-        });
-      }
-      setIsDialogOpen(false);
-      setSelectedBook(undefined);
-    } catch (error) {
-      toast({
-        title: 'Có lỗi xảy ra',
-        description: 'Không thể lưu thông tin sách. Vui lòng thử lại',
-        variant: 'destructive',
-      });
-      console.error('Error:', error);
-    }
-  };
-
-  const handleConfirmDelete = async () => {
-    if (!deleteId) return;
-
-    try {
-      await deleteBookMutation.mutateAsync(deleteId);
-      toast({
-        title: 'Xóa thành công',
-        description: 'Sách đã được xóa khỏi hệ thống',
-      });
-    } catch (error) {
-      toast({
-        title: 'Có lỗi xảy ra',
-        description: 'Không thể xóa sách. Vui lòng thử lại',
-        variant: 'destructive',
-      });
-      console.error('Error deleting book:', error);
-    } finally {
-      setDeleteId(null);
-    }
-  };
 
   const handleSearch = (criteria: Partial<BookSearchCriteria>) => {
     setSearchCriteria(criteria);
     setPagination((prev) => ({ ...prev, pageIndex: 1 }));
   };
 
-  const hasFilters = () => {
-    return (
-      Object.keys(searchCriteria).length > 0 ||
-      pagination.sortField !== 'createdDate' ||
-      pagination.sortOrder !== 1
-    );
-  };
-
-  const handleResetAll = () => {
-    setPagination({
-      pageIndex: 1,
-      pageSize: 10,
-      sortField: 'createdDate',
-      sortOrder: 1,
-    });
-    setSearchCriteria({});
-  };
+  const hasFilters = () =>
+    Object.keys(searchCriteria).length > 0 ||
+    pagination.sortField !== 'createdDate' ||
+    pagination.sortOrder !== 1;
 
   return (
     <div className="space-y-4">
@@ -146,21 +73,24 @@ export default function BooksPage() {
           {hasFilters() && (
             <Button
               variant="outline"
-              onClick={handleResetAll}
+              onClick={resetAllFilters}
               className="gap-2"
             >
               <X className="h-4 w-4" />
               Đặt lại bộ lọc
             </Button>
           )}
-          <Button variant="outline" onClick={() => setIsSearchOpen(true)}>
+          <Button
+            variant="outline"
+            onClick={() => setModalState({ type: 'search' })}
+          >
             <Search className="mr-2 h-4 w-4" />
             Tìm kiếm
           </Button>
           <Button
             onClick={() => {
               setSelectedBook(undefined);
-              setIsDialogOpen(true);
+              setModalState({ type: 'form' });
             }}
           >
             <Plus className="mr-2 h-4 w-4" /> Thêm sách
@@ -170,51 +100,49 @@ export default function BooksPage() {
 
       <DataTable
         columns={columns}
-        data={data?.results || []}
-        pageCount={data?.totalPages}
+        data={bookData?.results || []}
+        pageCount={bookData?.totalPages}
         state={pagination}
         onStateChange={setPagination}
         isLoading={isLoadingBooks}
       />
 
-      {/* Form Dialog */}
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-3xl">
-          <DialogHeader>
-            <DialogTitle>
-              {selectedBook ? 'Cập nhật sách' : 'Thêm sách mới'}
-            </DialogTitle>
-          </DialogHeader>
-          <div className="p-1">
-            <BookForm
-              book={selectedBook}
-              onSubmit={handleSubmit}
-              onCancel={() => setIsDialogOpen(false)}
-              isLoading={
-                createBookMutation.isPending || updateBookMutation.isPending
-              }
-            />
-          </div>
-        </DialogContent>
-      </Dialog>
+      <BookDialog
+        isOpen={modalState.type === 'form'}
+        onClose={() => setModalState({ type: 'none' })}
+        title={selectedBook ? 'Cập nhật sách' : 'Thêm sách mới'}
+      >
+        <BookForm
+          book={selectedBook}
+          onSubmit={handleSubmit}
+          onCancel={() => setModalState({ type: 'none' })}
+          isLoading={
+            createBookMutation.isPending || updateBookMutation.isPending
+          }
+        />
+      </BookDialog>
 
-      {/* Confirm Delete Dialog */}
+      <SearchBookModal
+        isOpen={modalState.type === 'search'}
+        onClose={() => setModalState({ type: 'none' })}
+        onSearch={handleSearch}
+      />
+
       <ConfirmModal
         isOpen={!!deleteId}
         onClose={() => setDeleteId(null)}
-        onConfirm={handleConfirmDelete}
+        onConfirm={() => {
+          if (deleteId) {
+            handleDelete(deleteId);
+            setDeleteId(null);
+          }
+        }}
         title="Xóa sách"
         description="Bạn có chắc chắn muốn xóa sách này? Hành động này không thể hoàn tác."
         confirmText="Xóa"
         cancelText="Hủy"
         variant="destructive"
         isLoading={deleteBookMutation.isPending}
-      />
-
-      <SearchBookModal
-        isOpen={isSearchOpen}
-        onClose={() => setIsSearchOpen(false)}
-        onSearch={handleSearch}
       />
     </div>
   );

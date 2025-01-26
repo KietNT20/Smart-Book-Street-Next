@@ -1,5 +1,3 @@
-'use client';
-
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -20,14 +18,14 @@ import {
   Trash,
 } from 'lucide-react';
 
-interface ColumnHandlers {
-  onEdit: (book: Book) => void;
-  onDelete: (id?: string) => void;
-}
+type ColumnHandlers = {
+  _onEdit: (book: Book) => void;
+  _onDelete: (id?: string) => void;
+};
 
 export const createColumns = ({
-  onEdit,
-  onDelete,
+  _onEdit,
+  _onDelete,
 }: ColumnHandlers): ColumnDef<Book>[] => [
   {
     accessorKey: 'code',
@@ -161,11 +159,11 @@ export const createColumns = ({
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => onEdit(book)}>
+            <DropdownMenuItem onClick={() => _onEdit(book)}>
               <Pen className="mr-2 h-4 w-4" />
               Sửa
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onDelete(book.id)}>
+            <DropdownMenuItem onClick={() => _onDelete(book?.id)}>
               <Trash className="mr-2 h-4 w-4" />
               Xóa
             </DropdownMenuItem>
