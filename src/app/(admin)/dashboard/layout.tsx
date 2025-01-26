@@ -1,20 +1,12 @@
-// app/dashboard/layout.tsx
 import { AppSidebar } from '@/components/app-sidebar';
 import { ModeToggle } from '@/components/model-toggle';
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
 import { Separator } from '@/components/ui/separator';
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
+import BreadcrumbComp from './_components/breadcrumb-comp';
 
 export default function DashboardLayout({
   children,
@@ -32,19 +24,7 @@ export default function DashboardLayout({
                 <SidebarTrigger className="-ml-2 h-8 w-8" />
                 <Separator orientation="vertical" className="h-6" />
 
-                <Breadcrumb>
-                  <BreadcrumbList>
-                    <BreadcrumbItem className="hidden md:block">
-                      <BreadcrumbLink href="#">
-                        Building Your Application
-                      </BreadcrumbLink>
-                    </BreadcrumbItem>
-                    <BreadcrumbSeparator className="hidden md:block" />
-                    <BreadcrumbItem>
-                      <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                    </BreadcrumbItem>
-                  </BreadcrumbList>
-                </Breadcrumb>
+                <BreadcrumbComp />
 
                 <div className="ml-auto flex items-center gap-4">
                   <ModeToggle />

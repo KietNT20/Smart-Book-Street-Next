@@ -6,6 +6,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { PATH } from '@/constant/path';
 import { formatDate } from '@/lib/utils';
 import { Book } from '@/types/book-types';
 import { ColumnDef } from '@tanstack/react-table';
@@ -13,10 +14,12 @@ import {
   ArrowDown,
   ArrowUp,
   ArrowUpDown,
+  Eye,
   MoreHorizontal,
   Pen,
   Trash,
 } from 'lucide-react';
+import Link from 'next/link';
 
 type ColumnHandlers = {
   _onEdit: (book: Book) => void;
@@ -159,6 +162,12 @@ export const createColumns = ({
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
+            <DropdownMenuItem asChild>
+              <Link href={`${PATH.BOOKS}/${book.id}`}>
+                <Eye className="mr-2 h-4 w-4" />
+                Xem chi tiết
+              </Link>
+            </DropdownMenuItem>
             <DropdownMenuItem onClick={() => _onEdit(book)}>
               <Pen className="mr-2 h-4 w-4" />
               Sửa

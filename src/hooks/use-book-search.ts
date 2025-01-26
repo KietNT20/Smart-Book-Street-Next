@@ -1,3 +1,4 @@
+// hooks/use-book-search.ts
 'use client';
 
 import { bookService } from '@/services/bookService';
@@ -8,5 +9,12 @@ export const useBookSearch = (params: BookSearchPayload) => {
   return useQuery({
     queryKey: ['books', params],
     queryFn: () => bookService.search(params),
+  });
+};
+
+export const useBookSearchById = (id: string) => {
+  return useQuery({
+    queryKey: ['books', id],
+    queryFn: () => bookService.getByID(id),
   });
 };

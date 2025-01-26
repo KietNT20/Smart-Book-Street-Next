@@ -25,6 +25,7 @@ import {
   SidebarHeader,
   SidebarRail,
 } from '@/components/ui/sidebar';
+import { PATH } from '@/constant/path';
 
 // This is sample data.
 const data = {
@@ -68,12 +69,12 @@ const data = {
     },
     {
       title: 'Sách',
-      url: '/dashboard/books',
+      url: '#',
       icon: Book,
       items: [
         {
           title: 'Danh sách',
-          url: '/dashboard/books',
+          url: `${PATH.BOOKS}`,
         },
         {
           title: 'Thương hiệu',

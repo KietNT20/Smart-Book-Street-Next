@@ -2,7 +2,7 @@
 
 import { ConfirmModal } from '@/components/confirm-modal';
 import { Button } from '@/components/ui/button';
-import { BookSearchCriteria } from '@/types/book-types';
+import { Book, BookSearchCriteria } from '@/types/book-types';
 import { Plus, Search, X } from 'lucide-react';
 import { BookDialog } from './_components/book-dialog';
 import { BookForm } from './_components/book-form';
@@ -100,7 +100,9 @@ export default function BooksPage() {
 
       <DataTable
         columns={columns}
-        data={bookData?.results || []}
+        data={(bookData?.results || []).filter(
+          (book: Book) => !book.isDeleted === true
+        )}
         pageCount={bookData?.totalPages}
         state={pagination}
         onStateChange={setPagination}

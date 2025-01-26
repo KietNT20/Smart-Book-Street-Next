@@ -4,6 +4,13 @@ import { BookSearchPayload } from '@/types/book-types';
 import axiosInstance from '@/utils/axiosInstance';
 
 export const bookService = {
+  getByID: async (id: string) => {
+    const res = await axiosInstance.get(
+      `${API_ENDPOINT.BOOKS.GET_BY_ID}/${id}`
+    );
+    return res.data;
+  },
+
   search: async (payload: BookSearchPayload) => {
     const res = await axiosInstance.post(API_ENDPOINT.BOOKS.SEARCH, payload);
     return res.data;
