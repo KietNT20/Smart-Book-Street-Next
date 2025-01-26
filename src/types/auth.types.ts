@@ -19,6 +19,7 @@ export interface LoginResponse {
     address: string;
     phone: string;
     id: string;
+    userRoles: UserRoles[];
   };
   token: string;
   expiration: string;

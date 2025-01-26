@@ -72,12 +72,14 @@ export default function BooksPage() {
         toast({
           title: 'Cập nhật thành công',
           description: 'Sách đã được cập nhật',
+          variant: 'success',
         });
       } else {
         await createBookMutation.mutateAsync(data);
         toast({
           title: 'Thêm mới thành công',
           description: 'Sách đã được thêm vào hệ thống',
+          variant: 'success',
         });
       }
       setIsDialogOpen(false);

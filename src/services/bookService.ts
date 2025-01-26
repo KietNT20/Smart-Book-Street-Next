@@ -15,16 +15,13 @@ export const bookService = {
   },
 
   update: async (data: BookFormValues) => {
-    const res = await axiosInstance.put(
-      `${API_ENDPOINT.BOOKS.UPDATE}/${data.id}`,
-      data
-    );
+    const res = await axiosInstance.put(`${API_ENDPOINT.BOOKS.UPDATE}`, data);
     return res.data;
   },
 
   delete: async (id: string) => {
-    const res = await axiosInstance.delete(
-      `${API_ENDPOINT.BOOKS.DELETE}/${id}`
+    const res = await axiosInstance.put(
+      `${API_ENDPOINT.BOOKS.DELETE}?id=${id}`
     );
     return res.data;
   },
