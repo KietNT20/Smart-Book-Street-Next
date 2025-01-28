@@ -2,6 +2,7 @@
 
 import { ConfirmModal } from '@/components/confirm-modal';
 import { Button } from '@/components/ui/button';
+import { BookFormValues } from '@/lib/zod';
 import { Book, BookSearchCriteria } from '@/types/book-types';
 import { Plus, Search, X } from 'lucide-react';
 import { BookDialog } from './_components/book-dialog';
@@ -30,7 +31,7 @@ export default function BooksPage() {
   const {
     bookData,
     isLoadingBooks,
-    handleSubmit,
+    handleSubmit: handleBookSubmit,
     handleDelete,
     createBookMutation,
     updateBookMutation,
@@ -64,6 +65,10 @@ export default function BooksPage() {
     Object.keys(searchCriteria).length > 0 ||
     pagination.sortField !== 'createdDate' ||
     pagination.sortOrder !== 1;
+
+  const handleFormSubmit = async (data: BookFormValues) => {
+    await handleBookSubmit(data, selectedBook);
+  };
 
   return (
     <div className="space-y-4">
@@ -116,7 +121,7 @@ export default function BooksPage() {
       >
         <BookForm
           book={selectedBook}
-          onSubmit={handleSubmit}
+          onSubmit={handleFormSubmit}
           onCancel={() => setModalState({ type: 'none' })}
           isLoading={
             createBookMutation.isPending || updateBookMutation.isPending

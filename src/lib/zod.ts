@@ -83,3 +83,28 @@ export const bookSchema = z.object({
 });
 
 export type BookFormValues = z.infer<typeof bookSchema>;
+
+export const searchBookSchema = z
+  .object({
+    code: z.string().optional(),
+    title: z.string().optional(),
+    status: z.string().optional(),
+    languages: z.string().optional(),
+    price: z.number().min(0, { message: 'Giá không được âm' }).optional(),
+    startDate: z.date().optional(),
+    endDate: z.date().optional(),
+  })
+  .refine(
+    (data) => {
+      if (data.startDate && data.endDate) {
+        return data.endDate >= data.startDate;
+      }
+      return true;
+    },
+    {
+      message: 'Ngày kết thúc phải sau ngày bắt đầu',
+      path: ['endDate'],
+    }
+  );
+
+export type SearchBookFormValues = z.infer<typeof searchBookSchema>;

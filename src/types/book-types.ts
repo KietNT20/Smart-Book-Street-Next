@@ -52,7 +52,9 @@ export interface BookSearchResult {
 export interface BookSearchCriteria {
   code?: string;
   title?: string;
-  publicationDate?: string;
+  // publicationDate?: string;
+  startDate?: string;
+  endDate?: string;
   price?: number;
   languages?: string;
   size?: string;

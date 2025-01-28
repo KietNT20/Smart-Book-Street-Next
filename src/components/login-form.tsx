@@ -29,8 +29,6 @@ import {
 } from './ui/form';
 import { Input } from './ui/input';
 
-// Define props interface
-
 export function LoginForm({
   className,
   ...props

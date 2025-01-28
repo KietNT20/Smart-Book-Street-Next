@@ -1,6 +1,8 @@
 import { BASE_URL } from '@/constant/environment';
+import { PATH } from '@/constant/path';
 import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 import { getSession } from 'next-auth/react';
+import { redirect } from 'next/navigation';
 
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -32,6 +34,11 @@ axiosInstance.interceptors.response.use(
   function (error) {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
+    if (typeof window !== 'undefined') {
+      if (error.response?.status === 401 || error.response?.status === 403) {
+        redirect(PATH.LOGIN);
+      }
+    }
     return Promise.reject(error);
   }
 );

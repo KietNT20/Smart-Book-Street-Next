@@ -1,3 +1,4 @@
+import { DatePickerCompVN } from '@/components/date-input/date-picker-custom';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -30,7 +31,7 @@ export function BookForm({
     defaultValues: book || {
       code: '',
       title: '',
-      publicationDate: new Date().toISOString(),
+      publicationDate: '',
       price: 0,
       languages: '',
       description: '',
@@ -39,6 +40,26 @@ export function BookForm({
       publisherId: '',
     },
   });
+
+  const handleDateChange = (date: Date, onChange: (value: string) => void) => {
+    try {
+      // Đảm bảo date là valid
+      if (!date || isNaN(date.getTime())) {
+        onChange('');
+        return;
+      }
+
+      // Tạo date ở timezone local
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const formattedDate = `${year}-${month}-${day}`;
+      onChange(formattedDate);
+    } catch (error) {
+      console.error('Error formatting date:', error);
+      onChange('');
+    }
+  };
 
   return (
     <Form {...form}>
@@ -79,18 +100,16 @@ export function BookForm({
               <FormItem>
                 <FormLabel>Ngày xuất bản</FormLabel>
                 <FormControl>
-                  <Input
-                    type="date"
-                    {...field}
-                    value={
-                      field.value
-                        ? new Date(field.value).toISOString().split('T')[0]
-                        : ''
-                    }
-                    onChange={(e) =>
-                      field.onChange(new Date(e.target.value).toISOString())
-                    }
-                  />
+                  <div className="block">
+                    <DatePickerCompVN
+                      startYear={1900}
+                      endYear={new Date().getFullYear() + 10}
+                      value={field.value ? new Date(field.value) : undefined}
+                      onChange={(date) =>
+                        handleDateChange(date, field.onChange)
+                      }
+                    />
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -105,7 +124,7 @@ export function BookForm({
                 <FormLabel>Giá (VNĐ)</FormLabel>
                 <FormControl>
                   <Input
-                    type="number"
+                    type="text"
                     {...field}
                     onChange={(e) => field.onChange(Number(e.target.value))}
                   />
