@@ -18,10 +18,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
       authorize: async (credentials) => {
         try {
-          const response = await userService.login(
-            credentials as LoginCredentials
-          );
-          const data = response?.data;
+          const data = await userService.login(credentials as LoginCredentials);
 
           if (data?.isSuccess && data?.token) {
             return {

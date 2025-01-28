@@ -23,7 +23,7 @@ export function useLogin() {
       return result;
     },
     onSuccess: (data) => {
-      if (data?.ok) {
+      if (data.status === 200 && data.ok) {
         toast({
           title: 'Success',
           description: 'Đăng nhập thành công',
@@ -56,7 +56,7 @@ export function useRegister() {
     mutationFn: async (payload: RegisterRequestBody) =>
       await userService.register(payload),
     onSuccess: (data) => {
-      if (data) {
+      if (data?.status === 200) {
         toast({
           title: 'Success',
           description: 'Đăng ký thành công',

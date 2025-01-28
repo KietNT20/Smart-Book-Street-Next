@@ -4,37 +4,59 @@ import { PaginationSchema } from '@/types/common-types';
 import axiosInstance from '@/utils/axiosInstance';
 
 export const userService = {
-  login(payload: LoginCredentials) {
-    return axiosInstance.post(`${API_ENDPOINT.USERS.LOGIN}`, payload);
+  login: async (payload: LoginCredentials) => {
+    const res = await axiosInstance.post(
+      `${API_ENDPOINT.USERS.LOGIN}`,
+      payload
+    );
+    return res.data;
   },
   register(payload: RegisterRequestBody) {
     return axiosInstance.post(`${API_ENDPOINT.USERS.REGISTER}`, payload);
   },
-  getAll() {
-    return axiosInstance.get(`${API_ENDPOINT.USERS.GET_ALL}`);
+  getAll: async () => {
+    const res = await axiosInstance.get(`${API_ENDPOINT.USERS.GET_ALL}`);
+    return res.data;
   },
-  getAllPagination(payload: PaginationSchema) {
-    return axiosInstance.post(
+  getAllPagination: async (payload: PaginationSchema) => {
+    const res = await axiosInstance.post(
       `${API_ENDPOINT.USERS.GET_ALL_PAGINATION}`,
       payload
     );
+    return res.data;
   },
-  getById(id: string) {
-    return axiosInstance.get(`${API_ENDPOINT.USERS.GET_BY_ID}/${id}`);
+  getById: async (id: string) => {
+    const res = await axiosInstance.get(
+      `${API_ENDPOINT.USERS.GET_BY_ID}/${id}`
+    );
+    return res.data;
   },
-  getByEmail(email: string) {
-    return axiosInstance.get(`${API_ENDPOINT.USERS.GET_BY_EMAIL}/${email}`);
+  getByEmail: async (email: string) => {
+    const res = await axiosInstance.get(
+      `${API_ENDPOINT.USERS.GET_BY_EMAIL}/${email}`
+    );
+    return res.data;
   },
-  search(payload = {}) {
-    return axiosInstance.post(`${API_ENDPOINT.USERS.SEARCH}`, payload);
+  search: async (payload = {}) => {
+    const res = await axiosInstance.post(
+      `${API_ENDPOINT.USERS.SEARCH}`,
+      payload
+    );
+    return res.data;
   },
-  add(payload = {}) {
-    return axiosInstance.post(`${API_ENDPOINT.USERS.ADD}`, payload);
+  add: async (payload = {}) => {
+    const res = await axiosInstance.post(`${API_ENDPOINT.USERS.ADD}`, payload);
+    return res.data;
   },
-  update(payload = {}) {
-    return axiosInstance.put(`${API_ENDPOINT.USERS.UPDATE}`, payload);
+  update: async (payload = {}) => {
+    const res = await axiosInstance.put(
+      `${API_ENDPOINT.USERS.UPDATE}`,
+      payload
+    );
+    return res.data;
   },
-  delete(id: string) {
-    return axiosInstance.put(`${API_ENDPOINT.USERS.DELETE}/${id}`);
+  delete: async (id: string) => {
+    const res = await axiosInstance.put(`${API_ENDPOINT.USERS.DELETE}/${id}`);
+    return res.data;
   },
 };
