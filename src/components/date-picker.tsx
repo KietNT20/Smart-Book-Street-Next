@@ -14,7 +14,7 @@ import {
 import { vi } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
 
-export function DatePickerDemo() {
+export function DatePicker() {
   const [date, setDate] = React.useState<Date>();
 
   return (

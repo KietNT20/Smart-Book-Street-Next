@@ -3,10 +3,10 @@ import { BaseEntity } from './common-types';
 import { Role } from './user-types';
 
 export interface UserRoles extends BaseEntity {
-  userId: string;
-  roleId: string;
+  userId?: string;
+  roleId?: string;
   assignedAt?: string;
-  role: Role;
+  role?: Role;
 }
 
 export interface LoginResponse {

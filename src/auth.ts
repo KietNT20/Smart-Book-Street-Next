@@ -29,7 +29,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
               token: data?.token,
               expiration: data?.expiration,
               userRoles: data?.result.userRoles.map(
-                (role: UserRoles) => role.role.roleName
+                (role: UserRoles) => role?.role?.roleName
               ),
             };
           }

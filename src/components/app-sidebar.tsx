@@ -78,11 +78,11 @@ const data = {
         },
         {
           title: 'Thương hiệu',
-          url: '/dashboard/books/brands',
+          url: `${PATH.BOOKS}/brands`,
         },
         {
           title: 'Cửa hàng',
-          url: '/dashboard/books/stores',
+          url: `${PATH.BOOKS}/stores`,
         },
       ],
     },
