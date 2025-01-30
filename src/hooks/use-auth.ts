@@ -53,8 +53,7 @@ export function useRegister() {
 
   return useMutation({
     mutationKey: ['register'],
-    mutationFn: async (payload: RegisterRequestBody) =>
-      await userService.register(payload),
+    mutationFn: (payload: RegisterRequestBody) => userService.register(payload),
     onSuccess: (data) => {
       if (data?.status === 200) {
         toast({

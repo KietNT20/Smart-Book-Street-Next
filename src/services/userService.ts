@@ -11,8 +11,12 @@ export const userService = {
     );
     return res.data;
   },
-  register(payload: RegisterRequestBody) {
-    return axiosInstance.post(`${API_ENDPOINT.USERS.REGISTER}`, payload);
+  register: async (payload: RegisterRequestBody) => {
+    const res = await axiosInstance.post(
+      `${API_ENDPOINT.USERS.REGISTER}`,
+      payload
+    );
+    return res.data;
   },
   getAll: async () => {
     const res = await axiosInstance.get(`${API_ENDPOINT.USERS.GET_ALL}`);

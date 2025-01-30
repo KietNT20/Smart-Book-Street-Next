@@ -1,11 +1,11 @@
-export interface BaseEntity {
+export type BaseEntity = {
   id?: string;
   createdBy?: string;
   createdDate?: string;
   lastUpdatedBy?: string;
   lastUpdatedDate?: string;
   isDeleted?: boolean;
-}
+};
 
 export type PaginationSchema = {
   pageNumber: number;

@@ -1,6 +1,7 @@
 import { useBookSearch } from '@/hooks/use-book-search';
 import { useBookMutations } from '@/hooks/use-books';
 import { useToast } from '@/hooks/use-toast';
+import useDebounce from '@/hooks/useDebounce';
 import { BookFormValues } from '@/lib/zod';
 import { Book, BookSearchCriteria } from '@/types/book-types';
 
@@ -45,13 +46,15 @@ export function useBookOperations({
 }: UseBookOperationsProps) {
   const { toast } = useToast();
 
-  const { data: bookData, isLoading: isLoadingBooks } = useBookSearch({
+  const { data: bookData, isLoading } = useBookSearch({
     pageNumber: pagination.pageIndex,
     pageSize: pagination.pageSize,
     sortField: pagination.sortField,
     sortOrder: pagination.sortOrder,
     result: searchCriteria,
   });
+
+  const isLoadingBooks = useDebounce(isLoading, 300);
 
   const { createBookMutation, updateBookMutation, deleteBookMutation } =
     useBookMutations();

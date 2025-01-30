@@ -11,3 +11,8 @@ export type UserRolePayload = {
   roleId: string;
   assignedAt: string;
 };
+
+export type RolePayload = {
+  roleName: RoleEnums;
+  description: string;
+};

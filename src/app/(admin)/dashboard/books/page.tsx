@@ -2,6 +2,7 @@
 
 import { ConfirmModal } from '@/components/confirm-modal';
 import { Button } from '@/components/ui/button';
+import useDebounce from '@/hooks/useDebounce';
 import { BookFormValues } from '@/lib/zod';
 import { Book, BookSearchCriteria } from '@/types/book-types';
 import { Plus, Search, X } from 'lucide-react';
@@ -44,6 +45,10 @@ export default function BooksPage() {
       setSelectedBook(undefined);
     },
   });
+
+  const createdLoading = useDebounce(createBookMutation.isPending, 300);
+  const updatedLoading = useDebounce(updateBookMutation.isPending, 300);
+  const deletedLoading = useDebounce(deleteBookMutation.isPending, 300);
 
   // Create table columns
   const columns = createColumns({
@@ -123,9 +128,7 @@ export default function BooksPage() {
           book={selectedBook}
           onSubmit={handleFormSubmit}
           onCancel={() => setModalState({ type: 'none' })}
-          isLoading={
-            createBookMutation.isPending || updateBookMutation.isPending
-          }
+          isLoading={createdLoading || updatedLoading}
         />
       </BookDialog>
 
@@ -149,7 +152,7 @@ export default function BooksPage() {
         confirmText="Xóa"
         cancelText="Hủy"
         variant="destructive"
-        isLoading={deleteBookMutation.isPending}
+        isLoading={deletedLoading}
       />
     </div>
   );
