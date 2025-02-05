@@ -1,6 +1,6 @@
 'use client';
 
-import { useAddImage } from '@/hooks/use-images';
+import { useImagesMutation } from '@/hooks/use-images';
 import {
   CldUploadWidget,
   CloudinaryUploadWidgetInfo,
@@ -14,18 +14,18 @@ type ImageUploaderProps = {
 
 const ImageUploader = ({ entityId }: ImageUploaderProps) => {
   const [uploading, setUploading] = useState(false);
-  const { mutate: addImgmutate } = useAddImage();
+  const { addImageMutation } = useImagesMutation();
 
   const handleUpload = async (result: CloudinaryUploadWidgetResults) => {
-    // Kiểm tra nếu upload thành công
+    // Check if the upload is successful
     if (result.event !== 'success') return;
-    // Kiểm tra nếu kết quả trả về không phải là object
+    // Check if not have result info or result info is string
     if (!result.info || typeof result.info === 'string') return;
     setUploading(true);
     try {
       const imageInfo: CloudinaryUploadWidgetInfo = result.info;
 
-      // Tạo payload cho backend
+      // Prepare image payload
       const imagePayload = [
         {
           url: imageInfo.secure_url,
@@ -35,8 +35,8 @@ const ImageUploader = ({ entityId }: ImageUploaderProps) => {
         },
       ];
 
-      // Lưu thông tin ảnh vào backend
-      addImgmutate(imagePayload);
+      // Save image
+      addImageMutation.mutate(imagePayload);
     } catch (error) {
       console.error('Failed to save image:', error);
     } finally {
@@ -56,7 +56,7 @@ const ImageUploader = ({ entityId }: ImageUploaderProps) => {
             disabled={uploading}
             className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 disabled:bg-gray-400"
           >
-            {uploading ? 'Đang xử lý...' : 'Upload ảnh'}
+            {uploading ? 'Đang xử lý...' : 'Tải ảnh'}
           </button>
         )}
       </CldUploadWidget>

@@ -1,21 +1,52 @@
 'use client';
+import { ConfirmModal } from '@/components/confirm-modal';
 import ImageUploader from '@/components/image-upload/image-uploader';
 import SpinLoading from '@/components/spin/spin-loading';
 import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
 import { PATH } from '@/enums/path';
 import { useBookSearchById } from '@/hooks/use-book-search';
 import { useGetImageByTypeAndEntityID } from '@/hooks/use-images';
 import useDebounce from '@/hooks/useDebounce';
 import { formatDate, formatPrice } from '@/lib/utils';
+import { BookFormValues } from '@/lib/zod';
 import { ImageResArr } from '@/types/image-types';
-import Image from 'next/image';
 import Link from 'next/link';
+import { BookDialog } from '../_components/book-dialog';
+import { BookForm } from '../_components/book-form';
+import { useBookOperations } from '../_lib/use-book-operations';
+import { useBookPageState } from '../_lib/use-book-page-state';
+import ImageCard from './_components/image-card';
 
 export default function BooksDetailPage({
   params,
 }: {
   params: { id: string };
 }) {
+  const {
+    pagination,
+    searchCriteria,
+    modalState,
+    setModalState,
+    selectedBook,
+    setSelectedBook,
+    deleteId,
+    setDeleteId,
+  } = useBookPageState();
+
+  const {
+    handleSubmit: handleBookSubmit,
+    handleDelete,
+    updateBookMutation,
+    deleteBookMutation,
+  } = useBookOperations({
+    pagination,
+    searchCriteria,
+    onSuccess: () => {
+      setModalState({ type: 'none' });
+      setSelectedBook(undefined);
+    },
+  });
   const { data: bookDetailData, isLoading: bookDetailLoading } =
     useBookSearchById(params.id);
   const { data: imageUrlBook, isLoading: imageBookLoading } =
@@ -25,6 +56,21 @@ export default function BooksDetailPage({
   const book = bookDetailData?.result;
   const imageContent: ImageResArr = imageUrlBook?.results;
   const apiLoading = useDebounce(bookDetailLoading || imageBookLoading, 300);
+  const updatedLoading = useDebounce(updateBookMutation.isPending, 300);
+  const deletedLoading = useDebounce(deleteBookMutation.isPending, 300);
+
+  const handleFormSubmit = async (data: BookFormValues) => {
+    await handleBookSubmit(data, selectedBook);
+  };
+
+  const handleEditBook = () => {
+    setSelectedBook(book);
+    setModalState({ type: 'form' });
+  };
+
+  const handleDeleteBook = () => {
+    setDeleteId(book?.id);
+  };
 
   if (apiLoading) {
     return <SpinLoading />;
@@ -38,19 +84,24 @@ export default function BooksDetailPage({
           <Button variant="outline">Quay lại</Button>
         </Link>
       </div>
-
-      {/* {!imageContent?.length && <ImageUploader entityId={params.id} />} */}
-      <ImageUploader entityId={params.id} />
-
+      <Separator />
       <div className="flex gap-4">
-        <div className="grid gap-4 md:grid-cols-3">
-          {imageContent?.map((image, index: number) => {
-            return (
-              <div key={image.id || index} className="relative h-72 w-52">
-                <Image src={image.url} alt={image.altText} fill />
-              </div>
-            );
-          })}
+        <ImageUploader entityId={params.id} />
+        <Button variant={'default'} onClick={handleEditBook}>
+          Sửa thông tin sách
+        </Button>
+        <Button variant={'destructive'} onClick={handleDeleteBook}>
+          Xóa thông tin sách
+        </Button>
+      </div>
+      <Separator />
+      <div className="flex gap-4">
+        <div className="max-w-[40vw]">
+          <div className="grid gap-4 md:grid-flow-col">
+            {imageContent?.map((image, index: number) => {
+              return <ImageCard key={image.id || index} {...image} />;
+            })}
+          </div>
         </div>
         <div className="">
           <div className="mb-4 space-y-2">
@@ -78,6 +129,34 @@ export default function BooksDetailPage({
           </div>
         </div>
       </div>
+      <BookDialog
+        isOpen={modalState.type === 'form'}
+        onClose={() => setModalState({ type: 'none' })}
+        title={selectedBook ? 'Cập nhật sách' : 'Thêm sách mới'}
+      >
+        <BookForm
+          book={selectedBook}
+          onSubmit={handleFormSubmit}
+          onCancel={() => setModalState({ type: 'none' })}
+          isLoading={updatedLoading}
+        />
+      </BookDialog>
+      <ConfirmModal
+        isOpen={!!deleteId}
+        onClose={() => setDeleteId(null)}
+        onConfirm={() => {
+          if (deleteId) {
+            handleDelete(deleteId);
+            setDeleteId(null);
+          }
+        }}
+        title="Xóa sách"
+        description="Bạn có chắc chắn muốn xóa sách này? Hành động này không thể hoàn tác."
+        confirmText="Xóa"
+        cancelText="Hủy"
+        variant="destructive"
+        isLoading={deletedLoading}
+      />
     </div>
   );
 }

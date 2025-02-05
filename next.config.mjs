@@ -3,13 +3,13 @@ const nextConfig = {
   output: 'standalone',
   images: {
     domains: ['res.cloudinary.com'],
-    // remotePatterns: [
-    //   {
-    //     protocol: 'https',
-    //     hostname: 'res.cloudinary.com',
-    //     pathname: '/your-cloud-name/**',
-    //   },
-    // ],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+        pathname: '/deza97c4p/**',
+      },
+    ],
   },
 };
 
