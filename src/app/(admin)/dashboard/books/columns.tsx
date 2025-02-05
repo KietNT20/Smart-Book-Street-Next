@@ -6,7 +6,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { PATH } from '@/constant/path';
+import { PATH } from '@/enums/path';
 import { formatDate } from '@/lib/utils';
 import { Book } from '@/types/book-types';
 import { ColumnDef } from '@tanstack/react-table';
@@ -162,17 +162,23 @@ export const createColumns = ({
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
-            <DropdownMenuItem asChild>
+            <DropdownMenuItem asChild className="cursor-pointer">
               <Link href={`${PATH.BOOKS}/${book.id}`}>
                 <Eye className="mr-2 h-4 w-4" />
                 Xem chi tiết
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => _onEdit(book)}>
+            <DropdownMenuItem
+              onClick={() => _onEdit(book)}
+              className="cursor-pointer"
+            >
               <Pen className="mr-2 h-4 w-4" />
               Sửa
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => _onDelete(book?.id)}>
+            <DropdownMenuItem
+              onClick={() => _onDelete(book?.id)}
+              className="cursor-pointer"
+            >
               <Trash className="mr-2 h-4 w-4" />
               Xóa
             </DropdownMenuItem>

@@ -8,7 +8,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
-import { PATH } from '@/constant/path';
+import { PATH } from '@/enums/path';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React from 'react';

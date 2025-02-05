@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { auth } from './auth';
-import { PATH } from './constant/path';
+import { PATH } from './enums/path';
 
 const publicRoutes = ['/', PATH.LOGIN, PATH.REGISTER];
 

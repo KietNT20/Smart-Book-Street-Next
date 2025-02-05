@@ -1,5 +1,5 @@
 import { BASE_URL } from '@/constant/environment';
-import { PATH } from '@/constant/path';
+import { PATH } from '@/enums/path';
 import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 import { getSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';

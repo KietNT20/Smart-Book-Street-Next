@@ -1,6 +1,6 @@
 import { auth } from '@/auth';
 import { LoginForm } from '@/components/login-form';
-import { PATH } from '@/constant/path';
+import { PATH } from '@/enums/path';
 import { GalleryVerticalEnd } from 'lucide-react';
 import { redirect } from 'next/navigation';
 

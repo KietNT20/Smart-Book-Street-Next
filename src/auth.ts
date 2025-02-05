@@ -1,9 +1,9 @@
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import Google from 'next-auth/providers/google';
-import { PATH } from './constant/path';
 import { userService } from './services/userService';
 import { LoginCredentials, UserRoles } from './types/auth.types';
+import { PATH } from './enums/path';
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
@@ -46,7 +46,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
   session: {
     strategy: 'jwt',
-    maxAge: 5 * 60 * 60,
+    maxAge: 5 * 60 * 60, // 5 hours,
   },
   callbacks: {
     async jwt({ token, user }) {

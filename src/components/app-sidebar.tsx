@@ -25,7 +25,7 @@ import {
   SidebarHeader,
   SidebarRail,
 } from '@/components/ui/sidebar';
-import { PATH } from '@/constant/path';
+import { PATH } from '@/enums/path';
 
 // This is sample data.
 const data = {

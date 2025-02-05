@@ -1,4 +1,4 @@
-import { PATH } from '@/constant/path';
+import { PATH } from '@/enums/path';
 import { useToast } from '@/hooks/use-toast';
 import { userService } from '@/services/userService';
 import { LoginCredentials, RegisterRequestBody } from '@/types/auth.types';
@@ -6,7 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 import { signIn, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
-export function useLogin() {
+export const useLogin = () => {
   const router = useRouter();
   const { toast } = useToast();
 
@@ -38,16 +38,16 @@ export function useLogin() {
       console.log('Error login', error);
     },
   });
-}
+};
 
-export function useLogout() {
+export const useLogout = () => {
   return useMutation({
     mutationKey: ['logout'],
     mutationFn: async () => await signOut(),
   });
-}
+};
 
-export function useRegister() {
+export const useRegister = () => {
   const router = useRouter();
   const { toast } = useToast();
 
@@ -73,4 +73,4 @@ export function useRegister() {
       });
     },
   });
-}
+};

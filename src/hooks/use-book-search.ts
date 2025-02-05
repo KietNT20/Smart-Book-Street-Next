@@ -1,6 +1,3 @@
-// hooks/use-book-search.ts
-'use client';
-
 import { bookService } from '@/services/bookService';
 import { BookSearchPayload } from '@/types/book-types';
 import { useQuery } from '@tanstack/react-query';

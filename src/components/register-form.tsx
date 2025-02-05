@@ -7,7 +7,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { PATH } from '@/constant/path';
 import { Gender } from '@/enums/gender-enums';
 import { useRegister } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
@@ -32,6 +31,7 @@ import {
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { RadioGroup, RadioGroupItem } from './ui/radio-group';
+import { PATH } from '@/enums/path';
 
 export function RegisterForm({
   className,

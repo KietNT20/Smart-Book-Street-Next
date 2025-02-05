@@ -1,5 +1,5 @@
 import { auth } from '@/auth';
-import { PATH } from '@/constant/path';
+import { PATH } from '@/enums/path';
 import { redirect } from 'next/navigation';
 
 const Page = async () => {
