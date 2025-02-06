@@ -1,9 +1,9 @@
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import Google from 'next-auth/providers/google';
-import { userService } from './services/userService';
-import { LoginCredentials, UserRoles } from './types/auth.types';
+import { API_ENDPOINT } from './constant/api-url';
 import { PATH } from './enums/path';
+import { LoginCredentials, UserRoles } from './types/auth.types';
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
@@ -18,22 +18,31 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
       authorize: async (credentials) => {
         try {
-          const data = await userService.login(credentials as LoginCredentials);
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/${API_ENDPOINT.USERS.LOGIN}`,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(credentials as LoginCredentials),
+            }
+          );
 
-          if (data?.isSuccess && data?.token) {
-            return {
-              id: data?.result.id,
-              fullName: data?.result.fullName,
-              email: data?.result.email,
-              userName: data?.result.userName,
-              token: data?.token,
-              expiration: data?.expiration,
-              userRoles: data?.result.userRoles.map(
-                (role: UserRoles) => role?.role?.roleName
-              ),
-            };
-          }
-          return null;
+          const data = await res.json();
+
+          if (!data) return null;
+
+          return {
+            id: data.result.id,
+            fullName: data.result.fullName,
+            email: data.result.email,
+            userName: data.result.userName,
+            token: data.token,
+            userRoles: data.result.userRoles.map(
+              (role: UserRoles) => role.role?.roleName
+            ),
+          };
         } catch (error) {
           console.error('Auth error:', error);
           return null;
@@ -53,7 +62,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (user) {
         token.sub = user.id;
         token.userName = user.userName;
-        token.expiration = user.expiration;
         token.userRoles = user.userRoles;
         token.accessToken = user.token;
       }
@@ -64,7 +72,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       session.user.userName = token.userName;
       session.user.userRoles = token.userRoles;
       session.accessToken = token.accessToken;
-      session.expires = new Date(token.expiration) as Date & string;
       return session;
     },
     authorized: async ({ auth }) => {

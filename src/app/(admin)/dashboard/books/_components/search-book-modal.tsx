@@ -30,11 +30,11 @@ import { vi } from 'date-fns/locale';
 import { CalendarIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 
-interface SearchModalProps {
+type SearchModalProps = {
   isOpen: boolean;
   onClose: () => void;
   onSearch: (criteria: Partial<BookSearchCriteria>) => void;
-}
+};
 
 export function SearchBookModal({
   isOpen,

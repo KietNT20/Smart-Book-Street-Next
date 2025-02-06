@@ -16,14 +16,14 @@ export interface Book extends BaseEntity {
   // bookCategories?: any[];
 }
 
-export interface GetAllBooksResponse {
+export type GetAllBooksResponse = {
   results: Book[];
   totalRecords: number;
   isSuccess: boolean;
   message: string;
-}
+};
 
-export interface GetAllBooksPaginationResponse {
+export type GetAllBooksPaginationResponse = {
   results: Book[];
   totalPages: number;
   totalRecordsPerPage: number;
@@ -34,9 +34,9 @@ export interface GetAllBooksPaginationResponse {
   sortOrder?: number | string | null;
   isSuccess?: true;
   message?: string;
-}
+};
 
-export interface BookSearchResult {
+export type BookSearchResult = {
   results: Book[];
   totalPages: number;
   totalRecordsPerPage: number;
@@ -47,9 +47,9 @@ export interface BookSearchResult {
   sortOrder: number | null;
   isSuccess: boolean;
   message: string;
-}
+};
 
-export interface BookSearchCriteria {
+export type BookSearchCriteria = {
   code?: string;
   title?: string;
   // publicationDate?: string;
@@ -59,12 +59,12 @@ export interface BookSearchCriteria {
   languages?: string;
   size?: string;
   status?: string;
-}
+};
 
-export interface BookSearchPayload {
+export type BookSearchPayload = {
   pageNumber: number;
   pageSize: number;
   sortField?: string;
   sortOrder?: number;
   result?: Partial<BookSearchCriteria>;
-}
+};

@@ -17,25 +17,26 @@ export const useLogin = () => {
         ...credentials,
         redirect: false,
       });
-      if (!result?.ok) {
-        throw new Error('Đăng nhập thất bại');
-      }
       return result;
     },
     onSuccess: (data) => {
-      if (data.status === 200 && data.ok) {
+      if (data?.status === 200 && data?.ok) {
+        router.push(PATH.DASHBOARD);
         toast({
-          title: 'Success',
-          description: 'Đăng nhập thành công',
+          title: 'Đăng nhập thành công',
+          description: '',
           variant: 'success',
           duration: 3000,
         });
-        router.refresh();
-        router.push(PATH.DASHBOARD);
       }
     },
     onError: (error: any) => {
       console.log('Error login', error);
+      toast({
+        title: 'Error',
+        description: 'Đăng nhập thất bại',
+        variant: 'destructive',
+      });
     },
   });
 };
@@ -55,20 +56,27 @@ export const useRegister = () => {
     mutationKey: ['register'],
     mutationFn: (payload: RegisterRequestBody) => userService.register(payload),
     onSuccess: (data) => {
-      if (data?.status === 200) {
+      if (!data.isSuccess) {
         toast({
-          title: 'Success',
-          description: 'Đăng ký thành công',
+          title: 'Đăng ký thất bại',
+          description: 'Tên tài khoản hoặc email đã tồn tại',
+          variant: 'destructive',
+        });
+      }
+      if (data.isSuccess) {
+        toast({
+          title: 'Đăng ký thành công',
+          description: '',
           variant: 'success',
         });
-        router.refresh();
         router.push(PATH.LOGIN);
       }
     },
     onError: (error) => {
+      console.log('Error register', error);
       toast({
         title: 'Error',
-        description: error.message || 'Đăng ký thất bại',
+        description: 'Đăng ký thất bại',
         variant: 'destructive',
       });
     },

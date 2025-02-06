@@ -6,12 +6,12 @@ import {
 } from '@/components/ui/dialog';
 import { ReactNode } from 'react';
 
-interface BookDialogProps {
+type BookDialogProps = {
   isOpen: boolean;
   onClose: () => void;
   title: string;
   children: ReactNode;
-}
+};
 
 export function BookDialog({
   isOpen,

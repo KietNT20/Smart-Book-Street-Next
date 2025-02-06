@@ -9,7 +9,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 
-interface ConfirmModalProps {
+type ConfirmModalProps = {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
@@ -19,7 +19,7 @@ interface ConfirmModalProps {
   cancelText?: string;
   variant?: 'default' | 'destructive';
   isLoading?: boolean;
-}
+};
 
 export const ConfirmModal = ({
   isOpen,

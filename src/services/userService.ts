@@ -1,16 +1,9 @@
 import { API_ENDPOINT } from '@/constant/api-url';
-import { LoginCredentials, RegisterRequestBody } from '@/types/auth.types';
+import { RegisterRequestBody } from '@/types/auth.types';
 import { PaginationSchema } from '@/types/common-types';
 import axiosInstance from '@/utils/axiosInstance';
 
 export const userService = {
-  login: async (payload: LoginCredentials) => {
-    const res = await axiosInstance.post(
-      `${API_ENDPOINT.USERS.LOGIN}`,
-      payload
-    );
-    return res.data;
-  },
   register: async (payload: RegisterRequestBody) => {
     const res = await axiosInstance.post(
       `${API_ENDPOINT.USERS.REGISTER}`,

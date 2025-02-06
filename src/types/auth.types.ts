@@ -9,7 +9,7 @@ export interface UserRoles extends BaseEntity {
   role?: Role;
 }
 
-export interface LoginResponse {
+export type LoginResponse = {
   result: {
     userName: string;
     email: string;
@@ -25,17 +25,17 @@ export interface LoginResponse {
   expiration: string;
   isSuccess: boolean;
   message: string;
-}
+};
 
-export interface LoginCredentials {
+export type LoginCredentials = {
   usernameOrEmail: string;
   password: string;
-}
+};
 
-export interface AuthError {
+export type AuthError = {
   type: 'CredentialsSignin' | 'NetworkError' | 'ServerError' | 'Default';
   message: string;
-}
+};
 
 export interface RegisterRequestBody extends Omit<BaseEntity, 'id'> {
   userName: string;
