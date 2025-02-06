@@ -20,9 +20,7 @@ export const imageService = {
     return res.data;
   },
   delete: async (id: string) => {
-    const res = await axiosInstance.delete(
-      `${API_ENDPOINT.IMAGES.DELETE}/${id}`
-    );
+    const res = await axiosInstance.put(`${API_ENDPOINT.IMAGES.DELETE}/${id}`);
     return res.data;
   },
 };

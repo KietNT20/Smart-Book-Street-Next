@@ -73,12 +73,12 @@ const data = {
       icon: Book,
       items: [
         {
-          title: 'Danh sách',
+          title: 'Quản lý',
           url: `${PATH.BOOKS}`,
         },
         {
-          title: 'Thương hiệu',
-          url: `${PATH.BOOKS}/brands`,
+          title: 'Tác giả',
+          url: `${PATH.AUTHORS}`,
         },
         {
           title: 'Cửa hàng',

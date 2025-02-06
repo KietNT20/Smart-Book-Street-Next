@@ -1,6 +1,6 @@
 export type AuthorPayload = {
   AuthorName: string;
-  DOB?: Date;
+  DOB?: Date | string;
   Nationality?: string;
   Biography?: string;
 };

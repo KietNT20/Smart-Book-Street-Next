@@ -74,7 +74,7 @@ export const bookSchema = z.object({
   status: z.string().min(1, { message: 'Trạng thái không được để trống' }),
   publisherId: z
     .string()
-    .min(1, { message: 'ID nhà xuất bản không được để trống' }),
+    .min(1, { message: 'Nhà xuất bản không được để trống' }),
   createdBy: z.string().optional(),
   createdDate: z.string().optional(),
   lastUpdatedBy: z.string().optional(),

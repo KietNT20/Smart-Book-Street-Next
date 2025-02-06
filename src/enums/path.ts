@@ -6,4 +6,5 @@ export enum PATH {
   PROFILE = '/profile',
   BRAND = '/brand',
   BOOKS = '/dashboard/books',
+  AUTHORS = '/dashboard/authors',
 }

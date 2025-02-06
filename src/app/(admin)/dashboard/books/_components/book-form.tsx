@@ -13,6 +13,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { BookFormValues, bookSchema } from '@/lib/zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { PublisherCombobox } from './combobox-publisher';
 
 type BookFormProps = {
   book?: BookFormValues;
@@ -44,13 +45,13 @@ export function BookForm({
 
   const handleDateChange = (date: Date, onChange: (value: string) => void) => {
     try {
-      // Đảm bảo date là valid
+      // Make sure date is valid
       if (!date || isNaN(date.getTime())) {
         onChange('');
         return;
       }
 
-      // Tạo date ở timezone local
+      // Format date to YYYY-MM-DD
       const year = date.getFullYear();
       const month = String(date.getMonth() + 1).padStart(2, '0');
       const day = String(date.getDate()).padStart(2, '0');
@@ -177,19 +178,7 @@ export function BookForm({
             )}
           />
 
-          <FormField
-            control={form.control}
-            name="publisherId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>ID nhà xuất bản</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <PublisherCombobox name="publisherId" />
         </div>
 
         <FormField
@@ -212,11 +201,12 @@ export function BookForm({
             variant="outline"
             disabled={isLoading}
             onClick={onCancel}
+            className="px-7"
           >
             Hủy
           </Button>
-          <Button disabled={isLoading} type="submit">
-            {book ? 'Cập nhật' : 'Thêm'}
+          <Button disabled={isLoading} type="submit" className="px-7">
+            {book ? 'Cập nhật' : 'Thêm mới'}
           </Button>
         </div>
       </form>

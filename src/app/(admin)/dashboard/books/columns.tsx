@@ -22,12 +22,10 @@ import {
 import Link from 'next/link';
 
 type ColumnHandlers = {
-  _onEdit: (book: Book) => void;
   _onDelete: (id?: string) => void;
 };
 
 export const createColumns = ({
-  _onEdit,
   _onDelete,
 }: ColumnHandlers): ColumnDef<Book>[] => [
   {
@@ -168,12 +166,11 @@ export const createColumns = ({
                 Xem chi tiết
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => _onEdit(book)}
-              className="cursor-pointer"
-            >
-              <Pen className="mr-2 h-4 w-4" />
-              Sửa
+            <DropdownMenuItem asChild className="cursor-pointer">
+              <Link href={`${PATH.BOOKS}/${book.id}/edit`}>
+                <Pen className="mr-2 h-4 w-4" />
+                Sửa
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => _onDelete(book?.id)}
