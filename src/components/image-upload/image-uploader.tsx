@@ -10,9 +10,10 @@ import { useState } from 'react';
 
 type ImageUploaderProps = {
   entityId?: string;
+  folder?: string;
 };
 
-const ImageUploader = ({ entityId }: ImageUploaderProps) => {
+const ImageUploader = ({ entityId, folder }: ImageUploaderProps) => {
   const [uploading, setUploading] = useState(false);
   const { addImageMutation } = useImagesMutation();
 
@@ -24,19 +25,19 @@ const ImageUploader = ({ entityId }: ImageUploaderProps) => {
     setUploading(true);
     try {
       const imageInfo: CloudinaryUploadWidgetInfo = result.info;
-
-      // Prepare image payload
-      const imagePayload = [
-        {
-          url: imageInfo.secure_url,
-          type: imageInfo.resource_type,
-          altText: imageInfo.original_filename,
-          entityId: entityId ?? '',
-        },
-      ];
-
-      // Save image
-      addImageMutation.mutate(imagePayload);
+      if (imageInfo) {
+        // Prepare image payload
+        const imagePayload = [
+          {
+            url: imageInfo.secure_url,
+            type: imageInfo.resource_type,
+            altText: imageInfo.original_filename,
+            entityId: entityId ?? '',
+          },
+        ];
+        // Save image to database
+        await addImageMutation.mutateAsync(imagePayload);
+      }
     } catch (error) {
       console.error('Failed to save image:', error);
     } finally {
@@ -44,11 +45,17 @@ const ImageUploader = ({ entityId }: ImageUploaderProps) => {
     }
   };
 
+  const uploadOptions = {
+    folder,
+    maxFiles: 4,
+  };
+
   return (
     <div>
       <CldUploadWidget
         signatureEndpoint="/api/sign-cloudinary-params"
         onSuccess={handleUpload}
+        options={uploadOptions}
       >
         {({ open }) => (
           <button

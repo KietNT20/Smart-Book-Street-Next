@@ -23,6 +23,7 @@ export const useImagesMutation = () => {
   const addImageMutation = useMutation({
     mutationFn: (payload: Array<ImagePayload>) => imageService.add(payload),
     onSuccess: (data) => {
+      console.log('data', data);
       if (data?.isSuccess) {
         toast({
           title: 'Success',

@@ -42,6 +42,7 @@ export function useBookList({ pagination, searchCriteria }: UseBookListProps) {
       toast({
         title: 'Xóa thành công',
         description: 'Sách đã được xóa khỏi hệ thống',
+        variant: 'success',
       });
     } catch (error) {
       toast({

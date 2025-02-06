@@ -53,6 +53,11 @@ export const useBookMutations = () => {
   const deleteBookMutation = useMutation({
     mutationFn: (id: string) => bookService.delete(id),
     onSuccess: () => {
+      toast({
+        title: 'Xóa thành công',
+        description: 'Sách đã được xóa khỏi hệ thống',
+        variant: 'success',
+      });
       queryClient.invalidateQueries({ queryKey: ['books'] });
     },
   });

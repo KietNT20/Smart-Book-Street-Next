@@ -50,7 +50,7 @@ export default function CreateBookPage() {
             Quay lại
           </Button>
         </div>
-        <div className="rounded-lg border-2 bg-white px-20 py-4">
+        <div className="rounded-lg border-2 bg-sidebar px-20 py-4">
           <h3 className="text-2xl font-bold">Thêm sách mới</h3>
           <Separator className="my-4" />
           <div className="">
