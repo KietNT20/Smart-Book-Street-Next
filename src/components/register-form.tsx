@@ -7,10 +7,9 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { PATH } from '@/constant/path';
 import { Gender } from '@/enums/gender-enums';
+import { PATH } from '@/enums/path';
 import { useRegister } from '@/hooks/use-auth';
-import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { RegisterFormValues, registerSchema } from '@/lib/zod';
 import { RegisterRequestBody } from '@/types/auth.types';
@@ -39,7 +38,6 @@ export function RegisterForm({
 }: React.ComponentPropsWithoutRef<'div'>) {
   const [showPassword, setShowPassword] = useState(false);
 
-  const { toast } = useToast();
   const registerMutation = useRegister();
 
   const form = useForm<RegisterFormValues>({
@@ -55,24 +53,15 @@ export function RegisterForm({
   });
 
   const onSubmit = async (values: RegisterFormValues) => {
-    try {
-      const requestData: RegisterRequestBody = {
-        userName: values.userName,
-        email: values.email,
-        password: values.password,
-        fullName: values.fullName,
-        ...(values.phone && values.phone !== '' && { phone: values.phone }),
-        ...(values.gender && { gender: values.gender }),
-      };
-      await registerMutation.mutateAsync(requestData);
-    } catch (error) {
-      toast({
-        title: 'Error',
-        description:
-          error instanceof Error ? error.message : 'Something went wrong',
-        variant: 'destructive',
-      });
-    }
+    const requestData: RegisterRequestBody = {
+      userName: values.userName,
+      email: values.email,
+      password: values.password,
+      fullName: values.fullName,
+      ...(values.phone && values.phone !== '' && { phone: values.phone }),
+      ...(values.gender && { gender: values.gender }),
+    };
+    await registerMutation.mutateAsync(requestData);
   };
 
   return (

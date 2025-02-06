@@ -1,102 +1,67 @@
 'use client';
 
-import { Upload } from 'lucide-react';
+import { useImagesMutation } from '@/hooks/use-images';
 import {
   CldUploadWidget,
+  CloudinaryUploadWidgetInfo,
   CloudinaryUploadWidgetResults,
 } from 'next-cloudinary';
-import Image from 'next/image';
 import { useState } from 'react';
 
-export default function ImageUploader() {
-  const [imageUrl, setImageUrl] = useState<string>('');
-  const [isUploading, setIsUploading] = useState(false);
-  const [error, setError] = useState<string>('');
+type ImageUploaderProps = {
+  entityId?: string;
+};
 
-  const handleUploadSuccess = async (result: CloudinaryUploadWidgetResults) => {
+const ImageUploader = ({ entityId }: ImageUploaderProps) => {
+  const [uploading, setUploading] = useState(false);
+  const { addImageMutation } = useImagesMutation();
+
+  const handleUpload = async (result: CloudinaryUploadWidgetResults) => {
+    // Check if the upload is successful
+    if (result.event !== 'success') return;
+    // Check if not have result info or result info is string
+    if (!result.info || typeof result.info === 'string') return;
+    setUploading(true);
     try {
-      setIsUploading(true);
-      setError('');
+      const imageInfo: CloudinaryUploadWidgetInfo = result.info;
 
-      if (!result?.info || typeof result.info === 'string') {
-        throw new Error('Invalid upload result');
-      }
-
-      const secureUrl = result.info.secure_url;
-      const originalFilename = result.info.original_filename;
-
-      if (!secureUrl || !originalFilename) {
-        throw new Error('Missing upload information');
-      }
-
-      const response = await fetch('/api/uploadImage', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      // Prepare image payload
+      const imagePayload = [
+        {
+          url: imageInfo.secure_url,
+          type: imageInfo.resource_type,
+          altText: imageInfo.original_filename,
+          entityId: entityId ?? '',
         },
-        body: JSON.stringify({
-          url: secureUrl,
-          filename: originalFilename,
-        }),
-      });
+      ];
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to save image');
-      }
-
-      setImageUrl(secureUrl);
+      // Save image
+      addImageMutation.mutate(imagePayload);
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Upload failed');
-      setImageUrl('');
+      console.error('Failed to save image:', error);
     } finally {
-      setIsUploading(false);
+      setUploading(false);
     }
   };
 
   return (
-    <div className="mx-auto w-full max-w-xl p-4">
+    <div>
       <CldUploadWidget
-        uploadPreset="my-uploads"
-        onSuccess={handleUploadSuccess}
+        signatureEndpoint="/api/sign-cloudinary-params"
+        onSuccess={handleUpload}
       >
         {({ open }) => (
-          <div className="rounded-lg border-2 border-dashed border-gray-300 p-6">
-            <button
-              onClick={() => open()}
-              className="w-full focus:outline-none"
-              disabled={isUploading}
-            >
-              <div className="flex h-40 flex-col items-center justify-center">
-                {imageUrl ? (
-                  <div className="relative h-full w-full">
-                    <Image
-                      src={imageUrl}
-                      alt="Uploaded image"
-                      width={400}
-                      height={300}
-                      className="h-full w-full object-contain"
-                      priority
-                    />
-                  </div>
-                ) : (
-                  <>
-                    <Upload className="h-12 w-12 text-gray-400" />
-                    <p className="mt-2 text-sm text-gray-500">
-                      {isUploading
-                        ? 'Uploading...'
-                        : 'Click to upload or drag and drop'}
-                    </p>
-                  </>
-                )}
-              </div>
-            </button>
-          </div>
+          <button
+            onClick={() => open()}
+            disabled={uploading}
+            className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 disabled:bg-gray-400"
+          >
+            {uploading ? 'Đang xử lý...' : 'Tải ảnh'}
+          </button>
         )}
       </CldUploadWidget>
-
-      {error && <div className="mt-4 text-sm text-red-500">{error}</div>}
     </div>
   );
-}
+};
+
+export default ImageUploader;

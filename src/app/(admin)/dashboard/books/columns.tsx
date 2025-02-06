@@ -1,5 +1,3 @@
-'use client';
-
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -8,6 +6,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { PATH } from '@/enums/path';
 import { formatDate } from '@/lib/utils';
 import { Book } from '@/types/book-types';
 import { ColumnDef } from '@tanstack/react-table';
@@ -15,19 +14,21 @@ import {
   ArrowDown,
   ArrowUp,
   ArrowUpDown,
+  Eye,
   MoreHorizontal,
   Pen,
   Trash,
 } from 'lucide-react';
+import Link from 'next/link';
 
-interface ColumnHandlers {
-  onEdit: (book: Book) => void;
-  onDelete: (id?: string) => void;
-}
+type ColumnHandlers = {
+  _onEdit: (book: Book) => void;
+  _onDelete: (id?: string) => void;
+};
 
 export const createColumns = ({
-  onEdit,
-  onDelete,
+  _onEdit,
+  _onDelete,
 }: ColumnHandlers): ColumnDef<Book>[] => [
   {
     accessorKey: 'code',
@@ -161,11 +162,23 @@ export const createColumns = ({
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => onEdit(book)}>
+            <DropdownMenuItem asChild className="cursor-pointer">
+              <Link href={`${PATH.BOOKS}/${book.id}`}>
+                <Eye className="mr-2 h-4 w-4" />
+                Xem chi tiết
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => _onEdit(book)}
+              className="cursor-pointer"
+            >
               <Pen className="mr-2 h-4 w-4" />
               Sửa
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onDelete(book.id)}>
+            <DropdownMenuItem
+              onClick={() => _onDelete(book?.id)}
+              className="cursor-pointer"
+            >
               <Trash className="mr-2 h-4 w-4" />
               Xóa
             </DropdownMenuItem>

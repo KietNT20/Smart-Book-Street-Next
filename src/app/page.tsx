@@ -1,12 +1,13 @@
 import { auth } from '@/auth';
-import { PATH } from '@/constant/path';
+import { PATH } from '@/enums/path';
 import { redirect } from 'next/navigation';
 
 const Page = async () => {
-  const session = await auth();
-  if (session) {
-    redirect(PATH.DASHBOARD);
-  } else {
+  try {
+    const session = await auth();
+    redirect(session ? PATH.DASHBOARD : PATH.LOGIN);
+  } catch (error) {
+    console.error('Auth check error:', error);
     redirect(PATH.LOGIN);
   }
 };

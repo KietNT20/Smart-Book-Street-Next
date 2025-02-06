@@ -81,7 +81,7 @@ export const API_ENDPOINT = {
     UPDATE: `${IMAGE}/update`,
     DELETE: `${IMAGE}/delete`,
     GET_BY_ID: `${IMAGE}/get-by-id`,
-    GET_BY_TYPE_AND_ENTITY_ID: `${IMAGE}/get-by-type-and-entityId`,
+    GET_BY_TYPE_AND_ENTITY_ID: `${IMAGE}/get-by-type-and-entityID`,
   },
   INVENTORIES: {
     ADD: `${INVENTORY}/add`,

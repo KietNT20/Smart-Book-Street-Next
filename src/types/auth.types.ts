@@ -3,13 +3,13 @@ import { BaseEntity } from './common-types';
 import { Role } from './user-types';
 
 export interface UserRoles extends BaseEntity {
-  userId: string;
-  roleId: string;
+  userId?: string;
+  roleId?: string;
   assignedAt?: string;
-  role: Role;
+  role?: Role;
 }
 
-export interface LoginResponse {
+export type LoginResponse = {
   result: {
     userName: string;
     email: string;
@@ -19,22 +19,23 @@ export interface LoginResponse {
     address: string;
     phone: string;
     id: string;
+    userRoles: UserRoles[];
   };
   token: string;
   expiration: string;
   isSuccess: boolean;
   message: string;
-}
+};
 
-export interface LoginCredentials {
+export type LoginCredentials = {
   usernameOrEmail: string;
   password: string;
-}
+};
 
-export interface AuthError {
+export type AuthError = {
   type: 'CredentialsSignin' | 'NetworkError' | 'ServerError' | 'Default';
   message: string;
-}
+};
 
 export interface RegisterRequestBody extends Omit<BaseEntity, 'id'> {
   userName: string;

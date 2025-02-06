@@ -1,10 +1,9 @@
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import Google from 'next-auth/providers/google';
-import { PATH } from './constant/path';
-import { userService } from './services/userService';
+import { API_ENDPOINT } from './constant/api-url';
+import { PATH } from './enums/path';
 import { LoginCredentials, UserRoles } from './types/auth.types';
-import tokenMethod from './utils/token';
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
@@ -19,27 +18,31 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
       authorize: async (credentials) => {
         try {
-          const response = await userService.login(
-            credentials as LoginCredentials
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/${API_ENDPOINT.USERS.LOGIN}`,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(credentials as LoginCredentials),
+            }
           );
-          const data = response?.data;
 
-          if (data?.isSuccess && data?.token) {
-            const expiresAt = new Date(data.expiration).getTime() / 1000;
-            tokenMethod.set(data.token);
-            return {
-              id: data?.result.id,
-              fullName: data?.result.fullName,
-              email: data?.result.email,
-              userName: data?.result.userName,
-              token: data?.token,
-              expires_at: expiresAt,
-              userRoles: data?.result.userRoles.map(
-                (role: UserRoles) => role.role.roleName
-              ),
-            };
-          }
-          return null;
+          const data = await res.json();
+
+          if (!data) return null;
+
+          return {
+            id: data.result.id,
+            fullName: data.result.fullName,
+            email: data.result.email,
+            userName: data.result.userName,
+            token: data.token,
+            userRoles: data.result.userRoles.map(
+              (role: UserRoles) => role.role?.roleName
+            ),
+          };
         } catch (error) {
           console.error('Auth error:', error);
           return null;
@@ -50,13 +53,15 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   pages: {
     signIn: PATH.LOGIN,
   },
-  session: { strategy: 'jwt' },
+  session: {
+    strategy: 'jwt',
+    maxAge: 5 * 60 * 60, // 5 hours,
+  },
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
         token.sub = user.id;
         token.userName = user.userName;
-        token.exp = user.expires_at;
         token.userRoles = user.userRoles;
         token.accessToken = user.token;
       }
@@ -67,7 +72,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       session.user.userName = token.userName;
       session.user.userRoles = token.userRoles;
       session.accessToken = token.accessToken;
-      session.expires = new Date(token.exp * 1000);
       return session;
     },
     authorized: async ({ auth }) => {

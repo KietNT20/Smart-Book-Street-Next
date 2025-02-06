@@ -12,3 +12,26 @@ export function formatDate(dateString: string) {
     day: '2-digit',
   });
 }
+
+export const formatPrice = (
+  price: number | string,
+  options?: {
+    withSymbol?: boolean;
+    compact?: boolean;
+  }
+) => {
+  const numPrice = typeof price === 'string' ? parseFloat(price) : price;
+
+  if (isNaN(numPrice)) {
+    return '0 ₫';
+  }
+
+  const formatter = new Intl.NumberFormat('vi-VN', {
+    style: options?.withSymbol === false ? 'decimal' : 'currency',
+    currency: 'VND',
+    notation: options?.compact ? 'compact' : 'standard',
+    maximumFractionDigits: 0,
+  });
+
+  return formatter.format(numPrice);
+};

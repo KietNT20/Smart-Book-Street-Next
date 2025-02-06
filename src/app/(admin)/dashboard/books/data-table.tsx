@@ -101,7 +101,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex justify-end py-4">
+      <div className="mb-3 flex justify-end">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="sm">

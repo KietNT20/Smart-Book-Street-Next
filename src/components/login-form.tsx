@@ -7,7 +7,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { PATH } from '@/constant/path';
 import { useLogin } from '@/hooks/use-auth';
 import { cn } from '@/lib/utils';
 import { LoginFormValues, loginSchema } from '@/lib/zod';
@@ -28,8 +27,7 @@ import {
   FormMessage,
 } from './ui/form';
 import { Input } from './ui/input';
-
-// Define props interface
+import { PATH } from '@/enums/path';
 
 export function LoginForm({
   className,

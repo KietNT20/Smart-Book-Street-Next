@@ -1,24 +1,34 @@
 import { API_ENDPOINT } from '@/constant/api-url';
+import { UserRolePayload } from '@/types/user-types';
 import axiosInstance from '@/utils/axiosInstance';
 
 export const userRoleService = {
-  getAll() {
-    return axiosInstance.get(`${API_ENDPOINT.USER_ROLES.GET_ALL}`);
+  getAll: async () => {
+    const res = await axiosInstance.get(`${API_ENDPOINT.USER_ROLES.GET_ALL}`);
+    return res.data;
   },
-  getByRole(roleId: string) {
+  getByRole: async (roleId: string) => {
     return axiosInstance.get(
       `${API_ENDPOINT.USER_ROLES.GET_BY_ROLE_ID}/${roleId}`
     );
   },
-  getByUser(userId: string) {
-    return axiosInstance.get(
+  getByUser: async (userId: string) => {
+    const res = await axiosInstance.get(
       `${API_ENDPOINT.USER_ROLES.GET_BY_USER_ID}/${userId}`
     );
+    return res.data;
   },
-  add(payload = {}) {
-    return axiosInstance.post(`${API_ENDPOINT.USER_ROLES.ADD}`, payload);
+  add: async (payload: UserRolePayload) => {
+    const res = await axiosInstance.post(
+      `${API_ENDPOINT.USER_ROLES.ADD}`,
+      payload
+    );
+    return res.data;
   },
-  delete(payload = {}) {
-    return axiosInstance.put(`${API_ENDPOINT.USER_ROLES.DELETE}`, payload);
+  delete: async ({ userId, roleId }: { userId: string; roleId: string }) => {
+    const res = await axiosInstance.put(
+      `${API_ENDPOINT.USER_ROLES.DELETE}?idUser=${userId}&idRole=${roleId}`
+    );
+    return res.data;
   },
 };
