@@ -7,4 +7,8 @@ export const authorService = {
     const res = await axiosInstance.post(API_ENDPOINT.AUTHORS.ADD, payload);
     return res.data;
   },
+  delete: async (id: string) => {
+    const res = await axiosInstance.put(`${API_ENDPOINT.AUTHORS.DELETE}/${id}`);
+    return res.data;
+  },
 };

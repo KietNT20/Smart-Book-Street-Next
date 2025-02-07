@@ -1,4 +1,5 @@
 'use client';
+import BackButton from '@/components/back-btn/back-button';
 import { ConfirmModal } from '@/components/confirm-modal';
 import ImageUploader from '@/components/image-upload/image-uploader';
 import SpinLoading from '@/components/spin/spin-loading';
@@ -11,7 +12,6 @@ import { useGetImageByTypeAndEntityID } from '@/hooks/use-images';
 import useDebounce from '@/hooks/useDebounce';
 import { formatDate, formatPrice } from '@/lib/utils';
 import { ImageResArr } from '@/types/image-types';
-import { ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import ImageCard from './_components/image-card';
@@ -50,20 +50,18 @@ export default function BooksDetailPage({
 
   return (
     <div className="space-y-6">
-      <Button
-        variant="ghost"
-        className="gap-2"
-        onClick={() => router.push(PATH.BOOKS)}
-      >
-        <ArrowLeft className="h-4 w-4" />
-        Quay lại
-      </Button>
-
+      <BackButton />
       <Separator />
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold">Chi tiết sách</h2>
         <div className="flex gap-4">
           <ImageUploader entityId={params.id} folder={`books/${book.code}`} />
+          <Button
+            variant={'default'}
+            onClick={() => router.push(`${PATH.BOOKS}/${params.id}/edit`)}
+          >
+            Sửa thông tin sách
+          </Button>
           <Button
             variant={'destructive'}
             onClick={() => setIsDeleteModalOpen(true)}

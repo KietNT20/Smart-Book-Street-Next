@@ -37,15 +37,7 @@ export const useBookMutations = () => {
 
   const updateBookMutation = useMutation({
     mutationFn: (data: BookFormValues) => bookService.update(data),
-    onSuccess: (data) => {
-      if (data?.isSuccess) {
-        toast({
-          title: 'Cập nhật thành công',
-          description: 'Thông tin sách đã được cập nhật',
-          variant: 'success',
-        });
-        router.push(`${PATH.BOOKS}`);
-      }
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['books'] });
     },
   });

@@ -98,10 +98,12 @@ export const createColumns = ({
     },
   },
   {
+    id: 'languages',
     accessorKey: 'languages',
     header: 'Ngôn ngữ',
   },
   {
+    id: 'status',
     accessorKey: 'status',
     header: 'Tình trạng',
   },

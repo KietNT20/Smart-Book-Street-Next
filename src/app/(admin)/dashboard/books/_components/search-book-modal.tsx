@@ -274,20 +274,11 @@ export function SearchBookModal({
                 Ngôn ngữ
               </Label>
               <div className="col-span-3">
-                <Select
-                  value={form.watch('languages')}
-                  onValueChange={(value) => form.setValue('languages', value)}
-                >
-                  <SelectTrigger
-                    className={cn(errors.languages && 'border-red-500')}
-                  >
-                    <SelectValue placeholder="Chọn ngôn ngữ" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="vi">Tiếng Việt</SelectItem>
-                    <SelectItem value="en">Tiếng Anh</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Input
+                  id="languages"
+                  {...form.register('languages')}
+                  className={cn(errors.languages && 'border-red-500')}
+                />
                 {errors.languages && (
                   <span className="text-sm text-red-500">
                     {errors.languages.message}

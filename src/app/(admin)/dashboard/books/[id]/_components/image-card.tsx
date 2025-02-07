@@ -59,17 +59,18 @@ const ImageCard = ({ id, url, altText }: ImageCardProps) => {
 
   return (
     <Card className="group relative transform-gpu overflow-hidden">
-      <div className="relative h-72 w-52">
-        <Image
-          src={url}
-          alt={altText}
-          fill
-          className="object-cover transition-transform duration-300 group-hover:scale-105"
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          priority
-        />
-      </div>
-
+      <Image
+        src={url}
+        alt={altText}
+        style={{
+          width: '100%',
+          height: 'auto',
+        }}
+        width={500}
+        height={300}
+        sizes="100vw"
+        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+      />
       <div className="absolute inset-0 flex items-end justify-center bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity group-hover:opacity-100">
         <Button
           variant="destructive"
