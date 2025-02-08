@@ -4,37 +4,25 @@ import BackButton from '@/components/back-btn/back-button';
 import { Separator } from '@/components/ui/separator';
 import { PATH } from '@/enums/path';
 import { useBookSearchById } from '@/hooks/use-book-search';
-import { useBookMutations } from '@/hooks/use-books';
-import { useToast } from '@/hooks/use-toast';
+import useDebounce from '@/hooks/useDebounce';
 import { BookFormValues } from '@/lib/zod';
 import { useParams, useRouter } from 'next/navigation';
 import { BookForm } from '../../_components/book-form';
+import { useUpdateBook } from '../../_lib/use-book-operations';
 
 export default function EditBookPage() {
   const router = useRouter();
   const params = useParams();
-  const { toast } = useToast();
   const bookId = params.id as string;
 
   const { data: book } = useBookSearchById(bookId);
-  const { updateBookMutation } = useBookMutations();
+  const { handleUpdate, isLoading } = useUpdateBook({
+    _onSuccess: () => router.push(`${PATH.BOOKS}/${bookId}`),
+  });
+  const apiLoading = useDebounce(isLoading, 300);
 
-  const handleSubmit = async (data: BookFormValues) => {
-    await updateBookMutation.mutateAsync(
-      { id: bookId, ...data },
-      {
-        onSuccess: (data) => {
-          if (data?.isSuccess) {
-            router.back();
-            toast({
-              title: 'Cập nhật thành công',
-              description: 'Thông tin sách đã được cập nhật',
-              variant: 'success',
-            });
-          }
-        },
-      }
-    );
+  const handleSubmit = (data: BookFormValues) => {
+    handleUpdate({ ...data, id: bookId });
   };
 
   return (
@@ -52,7 +40,7 @@ export default function EditBookPage() {
                 book={book?.result}
                 onSubmit={handleSubmit}
                 onCancel={() => router.push(PATH.BOOKS)}
-                isLoading={updateBookMutation.isPending}
+                isLoading={apiLoading}
               />
             )}
           </div>

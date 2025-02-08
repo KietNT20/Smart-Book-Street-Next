@@ -61,10 +61,12 @@ export function PublisherCombobox({
       name={name}
       render={({ field }) => (
         <FormItem>
-          <FormLabel>{label}</FormLabel>
+          <FormLabel>
+            {label} <span className="text-red-400">*</span>
+          </FormLabel>
           <Popover open={open} onOpenChange={setOpen}>
-            <PopoverTrigger asChild className="w-full">
-              <FormControl className="">
+            <PopoverTrigger asChild>
+              <FormControl>
                 <Button
                   variant="outline"
                   role="combobox"

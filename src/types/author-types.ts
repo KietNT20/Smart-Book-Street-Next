@@ -4,3 +4,8 @@ export type AuthorPayload = {
   Nationality?: string;
   Biography?: string;
 };
+
+export interface Author extends AuthorPayload {
+  id: string;
+  images: any[];
+}

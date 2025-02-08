@@ -52,7 +52,6 @@ export type BookSearchResult = {
 export type BookSearchCriteria = {
   code?: string;
   title?: string;
-  // publicationDate?: string;
   startDate?: string;
   endDate?: string;
   price?: number;

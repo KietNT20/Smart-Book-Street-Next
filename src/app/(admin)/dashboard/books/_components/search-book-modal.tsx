@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
 import {
   Dialog,
   DialogContent,
@@ -9,11 +8,6 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
 import {
   Select,
   SelectContent,
@@ -25,9 +19,6 @@ import { cn } from '@/lib/utils';
 import { searchBookSchema, type SearchBookFormValues } from '@/lib/zod';
 import { BookSearchCriteria } from '@/types/book-types';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { endOfDay, format, startOfDay } from 'date-fns';
-import { vi } from 'date-fns/locale';
-import { CalendarIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 
 type SearchModalProps = {
@@ -49,8 +40,8 @@ export function SearchBookModal({
       status: '',
       languages: '',
       price: 0,
-      startDate: undefined,
-      endDate: undefined,
+      startDate: '',
+      endDate: '',
     },
   });
 
@@ -65,8 +56,12 @@ export function SearchBookModal({
       title: values.title || undefined,
       status: values.status,
       languages: values.languages,
-      startDate: values.startDate?.toISOString(),
-      endDate: values.endDate?.toISOString(),
+      startDate: values.startDate
+        ? new Date(values.startDate).toISOString()
+        : undefined,
+      endDate: values.endDate
+        ? new Date(values.endDate).toISOString()
+        : undefined,
       price: values.price,
     };
 
@@ -139,46 +134,12 @@ export function SearchBookModal({
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label className="text-right">Ngày bắt đầu</Label>
                 <div className="col-span-3">
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className={cn(
-                          'w-full justify-start text-left font-normal',
-                          !form.watch('startDate') && 'text-muted-foreground',
-                          errors.startDate && 'border-red-500'
-                        )}
-                        type="button"
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {(() => {
-                          const date = form.watch('startDate');
-                          return date ? (
-                            format(date, 'PPP', { locale: vi })
-                          ) : (
-                            <span>Chọn ngày</span>
-                          );
-                        })()}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent
-                      className="pointer-events-auto w-auto p-0"
-                      align="start"
-                    >
-                      <Calendar
-                        mode="single"
-                        locale={vi}
-                        selected={form.watch('startDate')}
-                        onSelect={(date) =>
-                          form.setValue(
-                            'startDate',
-                            date ? startOfDay(date) : undefined
-                          )
-                        }
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
+                  <Input
+                    id="startDate"
+                    type="date"
+                    {...form.register('startDate')}
+                    className={cn(errors.startDate && 'border-red-500')}
+                  />
                   {errors.startDate && (
                     <span className="text-sm text-red-500">
                       {errors.startDate.message}
@@ -191,46 +152,12 @@ export function SearchBookModal({
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label className="text-right">Ngày kết thúc</Label>
                 <div className="col-span-3">
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className={cn(
-                          'w-full justify-start text-left font-normal',
-                          !form.watch('endDate') && 'text-muted-foreground',
-                          errors.endDate && 'border-red-500'
-                        )}
-                        type="button"
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {(() => {
-                          const date = form.watch('endDate');
-                          return date ? (
-                            format(date, 'PPP', { locale: vi })
-                          ) : (
-                            <span>Chọn ngày</span>
-                          );
-                        })()}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent
-                      className="pointer-events-auto w-auto p-0"
-                      align="start"
-                    >
-                      <Calendar
-                        mode="single"
-                        locale={vi}
-                        selected={form.watch('endDate')}
-                        onSelect={(date) =>
-                          form.setValue(
-                            'endDate',
-                            date ? endOfDay(date) : undefined
-                          )
-                        }
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
+                  <Input
+                    id="endDate"
+                    type="date"
+                    {...form.register('endDate')}
+                    className={cn(errors.endDate && 'border-red-500')}
+                  />
                   {errors.endDate && (
                     <span className="text-sm text-red-500">
                       {errors.endDate.message}

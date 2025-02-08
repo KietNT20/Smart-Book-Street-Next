@@ -5,32 +5,23 @@ import { BookFormValues } from '@/lib/zod';
 import { bookService } from '@/services/bookService';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { useToast } from './use-toast';
+import { toast } from 'sonner';
 
 export const useBookMutations = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
-  const { toast } = useToast();
 
   const createBookMutation = useMutation({
     mutationFn: (data: BookFormValues) => bookService.create(data),
     onSuccess: (data) => {
       if (data?.isSuccess) {
-        toast({
-          title: 'Thêm mới thành công',
-          description: 'Sách đã được thêm vào hệ thống',
-          variant: 'success',
-        });
+        toast.success('Thêm sách thành công');
         router.push(PATH.BOOKS);
       }
       queryClient.invalidateQueries({ queryKey: ['books'] });
     },
     onError: (error) => {
-      toast({
-        title: 'Có lỗi xảy ra',
-        description: 'Không thể lưu thông tin sách. Vui lòng thử lại',
-        variant: 'destructive',
-      });
+      toast.error('Đã xảy ra lỗi khi thêm sách');
       console.error('Error:', error);
     },
   });
@@ -45,11 +36,7 @@ export const useBookMutations = () => {
   const deleteBookMutation = useMutation({
     mutationFn: (id: string) => bookService.delete(id),
     onSuccess: () => {
-      toast({
-        title: 'Xóa thành công',
-        description: 'Sách đã được xóa khỏi hệ thống',
-        variant: 'success',
-      });
+      toast.success('Đã xóa sách');
       queryClient.invalidateQueries({ queryKey: ['books'] });
     },
   });

@@ -1,10 +1,10 @@
 // hooks/use-book-operations.ts
 import { useBookSearch } from '@/hooks/use-book-search';
 import { useBookMutations } from '@/hooks/use-books';
-import { useToast } from '@/hooks/use-toast';
 import useDebounce from '@/hooks/useDebounce';
 import { BookFormValues } from '@/lib/zod';
 import { BookSearchCriteria } from '@/types/book-types';
+import { toast } from 'sonner';
 
 type UseBookListProps = {
   pagination: BookTableState;
@@ -12,7 +12,7 @@ type UseBookListProps = {
 };
 
 type UseBookMutationProps = {
-  onSuccess?: () => void;
+  _onSuccess?: () => void;
 };
 
 type BookTableState = {
@@ -23,7 +23,6 @@ type BookTableState = {
 };
 
 export function useBookList({ pagination, searchCriteria }: UseBookListProps) {
-  const { toast } = useToast();
   const { data: bookData, isLoading } = useBookSearch({
     pageNumber: pagination.pageIndex,
     pageSize: pagination.pageSize,
@@ -39,17 +38,9 @@ export function useBookList({ pagination, searchCriteria }: UseBookListProps) {
   const handleDelete = async (id: string) => {
     try {
       await deleteBookMutation.mutateAsync(id);
-      toast({
-        title: 'Xóa thành công',
-        description: 'Sách đã được xóa khỏi hệ thống',
-        variant: 'success',
-      });
+      toast.success('Đã xóa sách');
     } catch (error) {
-      toast({
-        title: 'Có lỗi xảy ra',
-        description: 'Không thể xóa sách. Vui lòng thử lại',
-        variant: 'destructive',
-      });
+      toast.error('Đã xảy ra lỗi khi xóa sách');
       console.error('Error deleting book:', error);
     }
   };
@@ -63,25 +54,14 @@ export function useBookList({ pagination, searchCriteria }: UseBookListProps) {
 }
 
 // Hook for create and update book
-export function useCreateBook({ onSuccess }: UseBookMutationProps = {}) {
-  const { toast } = useToast();
+export function useCreateBook({ _onSuccess }: UseBookMutationProps = {}) {
   const { createBookMutation } = useBookMutations();
 
   const handleCreate = async (data: BookFormValues) => {
     try {
       await createBookMutation.mutateAsync(data);
-      toast({
-        title: 'Thêm mới thành công',
-        description: 'Sách đã được thêm vào hệ thống',
-        variant: 'success',
-      });
-      onSuccess?.();
+      _onSuccess?.();
     } catch (error) {
-      toast({
-        title: 'Có lỗi xảy ra',
-        description: 'Không thể lưu thông tin sách. Vui lòng thử lại',
-        variant: 'destructive',
-      });
       console.error('Error:', error);
     }
   };
@@ -92,25 +72,21 @@ export function useCreateBook({ onSuccess }: UseBookMutationProps = {}) {
   };
 }
 
-export function useUpdateBook({ onSuccess }: UseBookMutationProps = {}) {
-  const { toast } = useToast();
+export function useUpdateBook({ _onSuccess }: UseBookMutationProps = {}) {
   const { updateBookMutation } = useBookMutations();
 
   const handleUpdate = async (data: BookFormValues) => {
     try {
-      await updateBookMutation.mutateAsync(data);
-      toast({
-        title: 'Cập nhật thành công',
-        description: 'Sách đã được cập nhật',
-        variant: 'success',
+      await updateBookMutation.mutateAsync(data, {
+        onSuccess: () => {
+          toast.success('Cập nhật sách thành công');
+          _onSuccess?.();
+        },
+        onError: () => {
+          toast.error('Đã xảy ra lỗi khi cập nhật sách');
+        },
       });
-      onSuccess?.();
     } catch (error) {
-      toast({
-        title: 'Có lỗi xảy ra',
-        description: 'Không thể lưu thông tin sách. Vui lòng thử lại',
-        variant: 'destructive',
-      });
       console.error('Error:', error);
     }
   };

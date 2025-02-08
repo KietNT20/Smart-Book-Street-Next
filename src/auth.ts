@@ -58,7 +58,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     maxAge: 5 * 60 * 60, // 5 hours,
   },
   callbacks: {
-    async jwt({ token, user }) {
+    jwt({ token, user }) {
       if (user) {
         token.sub = user.id;
         token.userName = user.userName;
@@ -67,7 +67,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
       return token;
     },
-    async session({ session, token }) {
+    session({ session, token }) {
       session.userId = token.sub as string;
       session.user.userName = token.userName;
       session.user.userRoles = token.userRoles;

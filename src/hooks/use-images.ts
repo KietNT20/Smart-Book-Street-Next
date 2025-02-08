@@ -1,7 +1,7 @@
 import { imageService } from '@/services/imageService';
 import { ImagePayload } from '@/types/image-types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useToast } from './use-toast';
+import { toast } from 'sonner';
 
 export const useGetImageByTypeAndEntityID = ({
   type,
@@ -18,27 +18,18 @@ export const useGetImageByTypeAndEntityID = ({
 
 export const useImagesMutation = () => {
   const queryClient = useQueryClient();
-  const { toast } = useToast();
 
   const addImageMutation = useMutation({
     mutationFn: (payload: Array<ImagePayload>) => imageService.add(payload),
     onSuccess: (data) => {
       console.log('data', data);
       if (data?.isSuccess) {
-        toast({
-          title: 'Success',
-          description: 'Thêm ảnh thành công',
-          variant: 'success',
-        });
+        toast.success('Thêm ảnh thành công');
       }
       queryClient.invalidateQueries({ queryKey: ['images'] });
     },
     onError: () => {
-      toast({
-        title: 'Error',
-        description: 'Thêm ảnh thất bại',
-        variant: 'destructive',
-      });
+      toast.error('Thêm ảnh thất bại');
     },
   });
 
@@ -46,18 +37,10 @@ export const useImagesMutation = () => {
     mutationFn: (id: string) => imageService.delete(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['images'] });
-      toast({
-        title: 'Success',
-        description: 'Xóa ảnh thành công',
-        variant: 'success',
-      });
+      toast.success('Xóa ảnh thành công');
     },
     onError: () => {
-      toast({
-        title: 'Error',
-        description: 'Xóa ảnh thất bại',
-        variant: 'destructive',
-      });
+      toast.error('Xóa ảnh thất bại');
     },
   });
 

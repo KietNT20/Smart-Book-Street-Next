@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { cn } from '@/lib/utils';
 import { BookFormValues, bookSchema } from '@/lib/zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -67,40 +68,37 @@ export function BookForm({
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
+          {/* Book Code */}
           <FormField
             control={form.control}
             name="code"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Mã sách</FormLabel>
+                <FormLabel>
+                  Mã sách <span className="text-red-400">*</span>
+                </FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input
+                    className={cn(
+                      form.formState.errors.code && 'border-red-500'
+                    )}
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
 
-          <FormField
-            control={form.control}
-            name="title"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Tên sách</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
+          {/* Publication Date */}
           <FormField
             control={form.control}
             name="publicationDate"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Ngày xuất bản</FormLabel>
+                <FormLabel>
+                  Ngày xuất bản <span className="text-red-400">*</span>
+                </FormLabel>
                 <FormControl>
                   <div className="block">
                     <DatePickerCompVN
@@ -118,6 +116,32 @@ export function BookForm({
             )}
           />
 
+          {/* Book Title */}
+          <FormField
+            control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Tên sách <span className="text-red-400">*</span>
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    className={cn(
+                      form.formState.errors.title && 'border-red-500'
+                    )}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {/* Choose Publisher */}
+          <PublisherCombobox name="publisherId" />
+
+          {/* Prices */}
           <FormField
             control={form.control}
             name="price"
@@ -127,6 +151,9 @@ export function BookForm({
                 <FormControl>
                   <Input
                     type="text"
+                    className={cn(
+                      form.formState.errors.price && 'border-red-500'
+                    )}
                     {...field}
                     onChange={(e) => field.onChange(Number(e.target.value))}
                   />
@@ -136,20 +163,29 @@ export function BookForm({
             )}
           />
 
+          {/* Lang */}
           <FormField
             control={form.control}
             name="languages"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Ngôn ngữ</FormLabel>
+                <FormLabel>
+                  Ngôn ngữ <span className="text-red-400">*</span>
+                </FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input
+                    className={cn(
+                      form.formState.errors.languages && 'border-red-500'
+                    )}
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
 
+          {/* Size */}
           <FormField
             control={form.control}
             name="size"
@@ -157,30 +193,42 @@ export function BookForm({
               <FormItem>
                 <FormLabel>Kích thước</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input
+                    className={cn(
+                      form.formState.errors.size && 'border-red-500'
+                    )}
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
 
+          {/* Status */}
           <FormField
             control={form.control}
             name="status"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Trạng thái</FormLabel>
+                <FormLabel>
+                  Trạng thái <span className="text-red-400">*</span>
+                </FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input
+                    className={cn(
+                      form.formState.errors.status && 'border-red-500'
+                    )}
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-
-          <PublisherCombobox name="publisherId" />
         </div>
 
+        {/* Description */}
         <FormField
           control={form.control}
           name="description"

@@ -3,9 +3,9 @@
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { useImagesMutation } from '@/hooks/use-images';
-import { useToast } from '@/hooks/use-toast';
 import { Loader2, Trash2 } from 'lucide-react';
 import Image from 'next/image';
+import { toast } from 'sonner';
 import { getPublicIdFromUrl } from '../_lib/action';
 
 type ImageCardProps = {
@@ -16,7 +16,6 @@ type ImageCardProps = {
 
 const ImageCard = ({ id, url, altText }: ImageCardProps) => {
   const { deleteImageMutation } = useImagesMutation();
-  const { toast } = useToast();
   const deleteFromCloudinary = async (publicId: string) => {
     const response = await fetch('/api/sign-cloudinary-params', {
       method: 'DELETE',
@@ -42,18 +41,10 @@ const ImageCard = ({ id, url, altText }: ImageCardProps) => {
       await deleteFromCloudinary(publicId);
       await deleteImageMutation.mutateAsync(id);
 
-      toast({
-        title: 'Thành công',
-        description: 'Đã xóa ảnh',
-        variant: 'success',
-      });
+      toast.success('Đã xóa ảnh');
     } catch (error) {
       console.error('Error deleting image:', error);
-      toast({
-        title: 'Lỗi',
-        description: 'Không thể xóa ảnh. Vui lòng thử lại',
-        variant: 'destructive',
-      });
+      toast.error('Đã xảy ra lỗi khi xóa ảnh');
     }
   };
 
