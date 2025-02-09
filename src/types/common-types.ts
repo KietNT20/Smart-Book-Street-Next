@@ -1,9 +1,9 @@
 export type BaseEntity = {
   id?: string;
   createdBy?: string;
-  createdDate?: string;
+  createdDate?: Date | string;
   lastUpdatedBy?: string;
-  lastUpdatedDate?: string;
+  lastUpdatedDate?: Date | string;
   isDeleted?: boolean;
 };
 

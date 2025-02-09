@@ -5,7 +5,6 @@ import { Card } from '@/components/ui/card';
 import { useImagesMutation } from '@/hooks/use-images';
 import { Loader2, Trash2 } from 'lucide-react';
 import Image from 'next/image';
-import { toast } from 'sonner';
 import { getPublicIdFromUrl } from '../_lib/action';
 
 type ImageCardProps = {
@@ -40,11 +39,8 @@ const ImageCard = ({ id, url, altText }: ImageCardProps) => {
       }
       await deleteFromCloudinary(publicId);
       await deleteImageMutation.mutateAsync(id);
-
-      toast.success('Đã xóa ảnh');
     } catch (error) {
       console.error('Error deleting image:', error);
-      toast.error('Đã xảy ra lỗi khi xóa ảnh');
     }
   };
 

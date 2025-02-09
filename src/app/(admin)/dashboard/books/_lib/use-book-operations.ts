@@ -4,6 +4,7 @@ import { useBookMutations } from '@/hooks/use-books';
 import useDebounce from '@/hooks/useDebounce';
 import { BookFormValues } from '@/lib/zod';
 import { BookSearchCriteria } from '@/types/book-types';
+import { getSession } from 'next-auth/react';
 import { toast } from 'sonner';
 
 type UseBookListProps = {
@@ -58,8 +59,13 @@ export function useCreateBook({ _onSuccess }: UseBookMutationProps = {}) {
   const { createBookMutation } = useBookMutations();
 
   const handleCreate = async (data: BookFormValues) => {
+    const session = await getSession();
     try {
-      await createBookMutation.mutateAsync(data);
+      await createBookMutation.mutateAsync({
+        ...data,
+        createdBy: session?.user?.email || '',
+        createdDate: new Date().toISOString(),
+      });
       _onSuccess?.();
     } catch (error) {
       console.error('Error:', error);

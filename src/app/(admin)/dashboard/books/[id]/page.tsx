@@ -11,7 +11,9 @@ import { useBookMutations } from '@/hooks/use-books';
 import { useGetImageByTypeAndEntityID } from '@/hooks/use-images';
 import useDebounce from '@/hooks/useDebounce';
 import { formatDate, formatPrice } from '@/lib/utils';
+import { authorService } from '@/services/authorService';
 import { ImageResArr } from '@/types/image-types';
+import { useQueries } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import ImageCard from './_components/image-card';
@@ -33,7 +35,20 @@ export default function BooksDetailPage({
   const deletedLoading = useDebounce(deleteBookMutation.isPending, 300);
   const router = useRouter();
   const book = bookDetailData?.result;
-  const imageContent: ImageResArr = imageUrlBook?.results;
+  const bookAuthorsRes = useQueries({
+    queries: (
+      (book?.bookAuthors as { bookId: string; authorId: string }[]) || []
+    )?.map((bookAuth, index: number) => ({
+      queryKey: ['author', index],
+      queryFn: () => authorService.getById(bookAuth.authorId),
+    })),
+    combine: (results) => {
+      return {
+        data: results.map((result) => result.data),
+        pending: results.some((result) => result.isPending),
+      };
+    },
+  });
 
   const handleDeleteBook = async () => {
     try {
@@ -74,19 +89,35 @@ export default function BooksDetailPage({
       <div className="flex gap-4">
         <div className="max-w-[40vw]">
           <div className="grid gap-4 md:grid-flow-col">
-            {imageContent?.map((image, index: number) => {
-              return <ImageCard key={image.id || index} {...image} />;
-            })}
+            {((imageUrlBook?.results as ImageResArr) || [])?.map(
+              (image, index: number) => {
+                return <ImageCard key={image.id || index} {...image} />;
+              }
+            )}
           </div>
         </div>
         <div className="">
           <div className="mb-4 space-y-2">
-            <h3 className="text-xl font-semibold">Thông tin cơ bản</h3>
+            <h3 className="text-2xl">Thông tin cơ bản</h3>
             <p className="flex items-center gap-2 font-medium">
               Mã sách: <span className="font-semibold">{book.code}</span>
             </p>
             <p className="flex items-center gap-2 font-medium">
               Tên sách: <span className="font-semibold">{book.title}</span>
+            </p>
+            <p className="flex items-center gap-2 font-medium">
+              Tác giả:{' '}
+              <span className="font-semibold">
+                {bookAuthorsRes.data
+                  ?.map((author) => author?.result?.authorName)
+                  .join(', ')}
+              </span>
+            </p>{' '}
+            <p className="flex items-center gap-2 font-medium">
+              Nhà xuất bản:{' '}
+              <span className="font-semibold">
+                {book.publisher.publisherName}
+              </span>
             </p>
             <p className="flex items-center gap-2 font-medium">
               Giá:{' '}
@@ -95,7 +126,7 @@ export default function BooksDetailPage({
               </span>
             </p>
             <p className="flex items-center gap-2 font-medium">
-              Ngôn ngữ: <span className="font-semibold">{book.languages}</span>
+              Ngôn ngữ: {book.languages}
             </p>
             <p className="flex items-center gap-2 font-medium">
               Tình trạng: <span className="text-blue-500">{book.status}</span>

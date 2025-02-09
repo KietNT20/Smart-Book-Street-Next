@@ -175,6 +175,7 @@ export function BookForm({
                 <FormControl>
                   <Input
                     className={cn(
+                      'w-full',
                       form.formState.errors.languages && 'border-red-500'
                     )}
                     {...field}

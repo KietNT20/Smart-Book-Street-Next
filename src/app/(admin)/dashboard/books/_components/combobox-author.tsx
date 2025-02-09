@@ -23,37 +23,36 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { usePublisherQuery } from '@/hooks/use-publisher';
+import { useGetAllAuthors } from '@/hooks/use-author';
 import useDebounce from '@/hooks/useDebounce';
 import { cn } from '@/lib/utils';
-import { Publisher } from '@/types/publisher-types';
+import { Author } from '@/types/author-types';
 
-type PublisherComboboxProps = {
+type AuthorComboboxProps = {
   name: string;
   label?: string;
 };
 
-export function PublisherCombobox({
+export function AuthorCombobox({
   name,
-  label = 'Nhà xuất bản',
-}: PublisherComboboxProps) {
+  label = 'Tác giả',
+}: AuthorComboboxProps) {
   const [open, setOpen] = React.useState(false);
   const [inputValue, setInputValue] = React.useState<string>('');
   const debouncedInput = useDebounce<string>(inputValue, 300);
 
   const form = useFormContext();
-  const { getAllPublishers } = usePublisherQuery();
-  const { data: resAllPublishers, isLoading, error } = getAllPublishers;
-  const publishers: Publisher[] = resAllPublishers?.results;
+  const { data: resAllAuthors, isLoading, error } = useGetAllAuthors();
+  const authors: Author[] = resAllAuthors?.results;
 
-  const filteredPublishers = React.useMemo(() => {
-    const search = debouncedInput.toLowerCase();
-    return publishers?.filter(
-      (publisher: Publisher) =>
-        publisher.publisherName.toLowerCase()?.includes(search) ||
-        (publisher.email && publisher.email.toLowerCase().includes(search))
+  const filteredAuthors = React.useMemo(() => {
+    if (!authors) return [];
+
+    const search = debouncedInput?.toLowerCase() || '';
+    return authors.filter((author: Author) =>
+      author?.authorName?.toLowerCase()?.includes(search)
     );
-  }, [publishers, debouncedInput]);
+  }, [authors, debouncedInput]);
 
   return (
     <FormField
@@ -79,10 +78,9 @@ export function PublisherCombobox({
                   {isLoading
                     ? 'Đang tải...'
                     : field.value
-                      ? publishers?.find(
-                          (publisher) => publisher.id === field.value
-                        )?.publisherName
-                      : 'Chọn nhà xuất bản'}
+                      ? authors?.find((author) => author.id === field.value)
+                          ?.authorName
+                      : 'Chọn Tác giả'}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
               </FormControl>
@@ -93,21 +91,21 @@ export function PublisherCombobox({
             >
               <Command shouldFilter={false}>
                 <CommandInput
-                  placeholder="Tìm theo tên hoặc email..."
+                  placeholder="Tìm theo tên tác giả..."
                   value={inputValue}
                   onValueChange={setInputValue}
                 />
                 <CommandList>
                   {error ? (
                     <CommandEmpty>Có lỗi xảy ra khi tải dữ liệu</CommandEmpty>
-                  ) : filteredPublishers?.length === 0 ? (
-                    <CommandEmpty>Không tìm thấy nhà xuất bản</CommandEmpty>
+                  ) : filteredAuthors?.length === 0 ? (
+                    <CommandEmpty>Không tìm thấy tác giả</CommandEmpty>
                   ) : (
                     <CommandGroup className="max-h-[300px] overflow-y-auto">
-                      {filteredPublishers?.map((publisher: Publisher) => (
+                      {filteredAuthors?.map((author: Author) => (
                         <CommandItem
-                          key={publisher.id}
-                          value={publisher.id}
+                          key={author.id}
+                          value={author.id}
                           onSelect={(currentValue) => {
                             field.onChange(
                               currentValue === field.value ? '' : currentValue
@@ -118,19 +116,12 @@ export function PublisherCombobox({
                           <Check
                             className={cn(
                               'mr-2 h-4 w-4',
-                              field.value === publisher.id
+                              field.value === author.id
                                 ? 'opacity-100'
                                 : 'opacity-0'
                             )}
                           />
-                          <div className="flex flex-col">
-                            <span>{publisher.publisherName}</span>
-                            {publisher.email && (
-                              <span className="text-sm text-muted-foreground">
-                                {publisher.email}
-                              </span>
-                            )}
-                          </div>
+                          <p>{author.authorName}</p>
                         </CommandItem>
                       ))}
                     </CommandGroup>

@@ -2,7 +2,7 @@ import { PATH } from '@/enums/path';
 import { userService } from '@/services/userService';
 import { LoginCredentials, RegisterRequestBody } from '@/types/auth.types';
 import { useMutation } from '@tanstack/react-query';
-import { signIn, signOut } from 'next-auth/react';
+import { getSession, signIn, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
@@ -18,9 +18,9 @@ export const useLogin = () => {
       });
       return result;
     },
-    onSuccess: (data) => {
-      console.log('data', data);
-      if (data?.status === 200 && data?.ok) {
+    onSuccess: async () => {
+      const session = await getSession();
+      if (session?.user) {
         router.push(PATH.DASHBOARD);
         toast.success('Đăng nhập thành công');
       }
