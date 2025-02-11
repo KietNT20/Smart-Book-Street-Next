@@ -1,6 +1,6 @@
 import { PATH } from '@/enums/path';
 import { userService } from '@/services/userService';
-import { LoginCredentials, RegisterRequestBody } from '@/types/auth.types';
+import { LoginCredentials, RegisterRequestBody } from '@/types/auth-types';
 import { useMutation } from '@tanstack/react-query';
 import { getSession, signIn, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';

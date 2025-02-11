@@ -7,10 +7,11 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { PATH } from '@/enums/path';
 import { useLogin } from '@/hooks/use-auth';
 import { cn } from '@/lib/utils';
 import { LoginFormValues, loginSchema } from '@/lib/zod';
-import { AuthError } from '@/types/auth.types';
+import { AuthError } from '@/types/auth-types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff } from 'lucide-react';
 import Link from 'next/link';
@@ -27,7 +28,6 @@ import {
   FormMessage,
 } from './ui/form';
 import { Input } from './ui/input';
-import { PATH } from '@/enums/path';
 
 export function LoginForm({
   className,

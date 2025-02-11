@@ -3,7 +3,7 @@ import Credentials from 'next-auth/providers/credentials';
 import Google from 'next-auth/providers/google';
 import { API_ENDPOINT } from './constant/api-url';
 import { PATH } from './enums/path';
-import { LoginCredentials, UserRoles } from './types/auth.types';
+import { LoginCredentials, UserRoles } from './types/auth-types';
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [

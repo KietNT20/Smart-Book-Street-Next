@@ -3,16 +3,13 @@ import { ImagePayload } from '@/types/image-types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
-export const useGetImageByTypeAndEntityID = ({
-  type,
-  entityID,
-}: {
+export const useGetImageByTypeOrEntityID = (payload: {
   type?: string;
-  entityID?: string;
+  entityId?: string;
 }) => {
   return useQuery({
-    queryKey: ['images', type, entityID],
-    queryFn: () => imageService.getByTypeAndEntityID(type, entityID),
+    queryKey: ['images', payload],
+    queryFn: () => imageService.getByTypeOrEntityID(payload),
   });
 };
 

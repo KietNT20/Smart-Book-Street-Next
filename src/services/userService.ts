@@ -1,5 +1,5 @@
 import { API_ENDPOINT } from '@/constant/api-url';
-import { RegisterRequestBody } from '@/types/auth.types';
+import { RegisterRequestBody } from '@/types/auth-types';
 import { PaginationSchema } from '@/types/common-types';
 import axiosInstance from '@/utils/axiosInstance';
 

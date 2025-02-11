@@ -77,6 +77,12 @@ export const bookSchema = z.object({
   publisherId: z
     .string()
     .min(1, { message: 'Nhà xuất bản không được để trống' }),
+  authorIds: z
+    .array(z.string())
+    .min(1, { message: 'Tác giả không được để trống' }),
+  categoryIds: z
+    .array(z.string())
+    .min(1, { message: 'Thể loại không được để trống' }),
   createdBy: z.string().optional(),
   createdDate: z.string().optional(),
   lastUpdatedBy: z.string().optional(),

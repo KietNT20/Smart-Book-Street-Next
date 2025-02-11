@@ -6,7 +6,7 @@ import { PATH } from '@/enums/path';
 import useDebounce from '@/hooks/useDebounce';
 import { Book, BookSearchCriteria } from '@/types/book-types';
 import { Plus, Search, X } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { SearchBookModal } from './_components/search-book-modal';
 import { useBookList } from './_lib/use-book-operations';
 import { useBookPageState } from './_lib/use-book-page-state';
@@ -14,8 +14,6 @@ import { createColumns } from './columns';
 import { DataTable } from './data-table';
 
 export default function BooksPage() {
-  const router = useRouter();
-
   const {
     pagination,
     setPagination,
@@ -74,9 +72,11 @@ export default function BooksPage() {
             <Search className="mr-2 h-4 w-4" />
             Tìm kiếm
           </Button>
-          <Button onClick={() => router.push(`${PATH.BOOKS}/create`)}>
-            <Plus className="mr-2 h-4 w-4" /> Thêm sách
-          </Button>
+          <Link href={`${PATH.BOOKS}/create`}>
+            <Button>
+              <Plus className="mr-2 h-4 w-4" /> Thêm sách
+            </Button>
+          </Link>
         </div>
       </div>
 

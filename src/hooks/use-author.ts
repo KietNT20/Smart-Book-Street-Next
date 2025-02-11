@@ -3,15 +3,22 @@ import { Author, AuthorPayload } from '@/types/author-types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
-export const useGetAllAuthors = () => {
+export const useGetAuthorById = (id: string) => {
   return useQuery({
-    queryKey: ['authors'],
-    queryFn: authorService.getAllActive,
+    queryKey: ['author', id],
+    queryFn: () => authorService.getById(id),
   });
 };
 
 export const useAuthorMutation = () => {
   const queryClient = useQueryClient();
+
+  const searchAuthorName = useMutation({
+    mutationKey: ['search-author-name'],
+    mutationFn: (payload: { authorName: string }) =>
+      authorService.search(payload),
+  });
+
   const createAuthor = useMutation({
     mutationFn: (payload: AuthorPayload) => authorService.add(payload),
     onSuccess: (data) => {
@@ -24,6 +31,7 @@ export const useAuthorMutation = () => {
       console.error('Error Add Author:', error);
     },
   });
+
   const updateAuthor = useMutation({
     mutationFn: (payload: Omit<Author, 'images'>) =>
       authorService.update(payload),
@@ -34,6 +42,7 @@ export const useAuthorMutation = () => {
       console.error('Error Update Author:', error);
     },
   });
+
   const deleteAuthor = useMutation({
     mutationFn: (id: string) => authorService.delete(id),
     onSuccess: () => {
@@ -43,9 +52,11 @@ export const useAuthorMutation = () => {
       console.error('Error Delete Author:', error);
     },
   });
+
   return {
     createAuthor,
     updateAuthor,
     deleteAuthor,
+    searchAuthorName,
   };
 };

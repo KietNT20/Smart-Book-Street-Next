@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 export const useBookSearch = (params: BookSearchPayload) => {
   return useQuery({
     queryKey: ['books', params],
-    queryFn: () => bookService.search(params),
+    queryFn: () => bookService.searchPagination(params),
   });
 };
 

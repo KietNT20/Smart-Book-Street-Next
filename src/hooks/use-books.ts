@@ -12,7 +12,7 @@ export const useBookMutations = () => {
   const router = useRouter();
 
   const createBookMutation = useMutation({
-    mutationFn: (data: BookFormValues) => bookService.create(data),
+    mutationFn: (payload: BookFormValues) => bookService.create(payload),
     onSuccess: (data) => {
       if (data?.isSuccess) {
         toast.success('Thêm sách thành công');
@@ -27,7 +27,7 @@ export const useBookMutations = () => {
   });
 
   const updateBookMutation = useMutation({
-    mutationFn: (data: BookFormValues) => bookService.update(data),
+    mutationFn: (payload: BookFormValues) => bookService.update(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['books'] });
     },

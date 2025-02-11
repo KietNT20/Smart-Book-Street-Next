@@ -11,18 +11,24 @@ export const bookService = {
     return res.data;
   },
 
-  search: async (payload: BookSearchPayload) => {
-    const res = await axiosInstance.post(API_ENDPOINT.BOOKS.SEARCH, payload);
+  searchPagination: async (payload: BookSearchPayload) => {
+    const res = await axiosInstance.post(
+      API_ENDPOINT.BOOKS.SEARCH_PAGINATION,
+      payload
+    );
     return res.data;
   },
 
-  create: async (data: BookFormValues) => {
-    const res = await axiosInstance.post(API_ENDPOINT.BOOKS.ADD, data);
+  create: async (payload: BookFormValues) => {
+    const res = await axiosInstance.post(API_ENDPOINT.BOOKS.ADD, payload);
     return res.data;
   },
 
-  update: async (data: BookFormValues) => {
-    const res = await axiosInstance.put(`${API_ENDPOINT.BOOKS.UPDATE}`, data);
+  update: async (payload: BookFormValues) => {
+    const res = await axiosInstance.put(
+      `${API_ENDPOINT.BOOKS.UPDATE}`,
+      payload
+    );
     return res.data;
   },
 

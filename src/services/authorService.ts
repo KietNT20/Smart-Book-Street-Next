@@ -3,14 +3,14 @@ import { Author, AuthorPayload } from '@/types/author-types';
 import axiosInstance from '@/utils/axiosInstance';
 
 export const authorService = {
-  getAllActive: async () => {
-    const res = await axiosInstance.get(API_ENDPOINT.AUTHORS.GET_ALL_ACTIVE);
-    return res.data;
-  },
   getById: async (id: string) => {
     const res = await axiosInstance.get(
       `${API_ENDPOINT.AUTHORS.GET_BY_ID}/${id}`
     );
+    return res.data;
+  },
+  search: async (payload: { authorName: string }) => {
+    const res = await axiosInstance.post(API_ENDPOINT.AUTHORS.SEARCH, payload);
     return res.data;
   },
   add: async (payload: AuthorPayload) => {
