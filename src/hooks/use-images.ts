@@ -19,13 +19,13 @@ export const useImagesMutation = () => {
   const addImageMutation = useMutation({
     mutationFn: (payload: Array<ImagePayload>) => imageService.add(payload),
     onSuccess: (data) => {
-      console.log('data', data);
       if (data?.isSuccess) {
         toast.success('Thêm ảnh thành công');
       }
       queryClient.invalidateQueries({ queryKey: ['images'] });
     },
-    onError: () => {
+    onError: (error: Error) => {
+      console.log('Error add image', error);
       toast.error('Thêm ảnh thất bại');
     },
   });

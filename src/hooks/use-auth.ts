@@ -25,7 +25,7 @@ export const useLogin = () => {
         toast.success('Đăng nhập thành công');
       }
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       console.log('Error login', error);
       toast.error('Đăng nhập thất bại');
     },
@@ -46,16 +46,16 @@ export const useRegister = () => {
     mutationKey: ['register'],
     mutationFn: (payload: RegisterRequestBody) => userService.register(payload),
     onSuccess: (data) => {
-      if (!data.isSuccess) {
+      if (!data?.isSuccess) {
         toast.error('Đăng ký thất bại');
         console.log('Error register', data);
       }
-      if (data.isSuccess) {
+      if (data?.isSuccess) {
         toast.success('Đăng ký thành công');
         router.push(PATH.LOGIN);
       }
     },
-    onError: (error) => {
+    onError: (error: Error) => {
       console.log('Error register', error);
       toast.error('Đăng ký thất bại');
     },

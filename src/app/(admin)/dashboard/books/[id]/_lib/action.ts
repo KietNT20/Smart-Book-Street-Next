@@ -8,6 +8,7 @@ export const getPublicIdFromUrl = async (url: string) => {
     if (match && match[1]) {
       return match[1].replace(/\.[^/.]+$/, '');
     }
+
     return null;
   } catch (error) {
     console.error('Error extracting public ID:', error);

@@ -20,7 +20,7 @@ export const useBookMutations = () => {
       }
       queryClient.invalidateQueries({ queryKey: ['books'] });
     },
-    onError: (error) => {
+    onError: (error: Error) => {
       toast.error('Đã xảy ra lỗi khi thêm sách');
       console.error('Error:', error);
     },

@@ -27,7 +27,7 @@ export const useAuthorMutation = () => {
       }
       queryClient.invalidateQueries({ queryKey: ['authors'] });
     },
-    onError: (error) => {
+    onError: (error: Error) => {
       console.error('Error Add Author:', error);
     },
   });
@@ -38,7 +38,7 @@ export const useAuthorMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['authors'] });
     },
-    onError: (error) => {
+    onError: (error: Error) => {
       console.error('Error Update Author:', error);
     },
   });
@@ -48,7 +48,7 @@ export const useAuthorMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['authors'] });
     },
-    onError: (error) => {
+    onError: (error: Error) => {
       console.error('Error Delete Author:', error);
     },
   });
