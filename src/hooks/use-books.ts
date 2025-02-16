@@ -12,7 +12,7 @@ export const useBookMutations = () => {
   const router = useRouter();
 
   const createBookMutation = useMutation({
-    mutationFn: (data: BookFormValues) => bookService.create(data),
+    mutationFn: (payload: BookFormValues) => bookService.create(payload),
     onSuccess: (data) => {
       if (data?.isSuccess) {
         toast.success('Thêm sách thành công');
@@ -20,14 +20,14 @@ export const useBookMutations = () => {
       }
       queryClient.invalidateQueries({ queryKey: ['books'] });
     },
-    onError: (error) => {
+    onError: (error: Error) => {
       toast.error('Đã xảy ra lỗi khi thêm sách');
       console.error('Error:', error);
     },
   });
 
   const updateBookMutation = useMutation({
-    mutationFn: (data: BookFormValues) => bookService.update(data),
+    mutationFn: (payload: BookFormValues) => bookService.update(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['books'] });
     },

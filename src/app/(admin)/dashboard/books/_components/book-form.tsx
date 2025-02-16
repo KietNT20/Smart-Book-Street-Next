@@ -14,34 +14,57 @@ import { cn } from '@/lib/utils';
 import { BookFormValues, bookSchema } from '@/lib/zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import AuthorCombobox from '../../_components/author-combobox';
+import CategoryCombobox from '../../_components/category-combobox';
 import { PublisherCombobox } from './combobox-publisher';
 
-type BookFormProps = {
+export type BookAuthorIds = {
+  id: string;
+  authorId: string;
+  bookId: string;
+};
+
+export type BookCategoryIds = {
+  id: string;
+  categoryId: string;
+  bookId: string;
+};
+
+type Props = {
   book?: BookFormValues;
   onSubmit: (data: BookFormValues) => void;
   onCancel: () => void;
   isLoading?: boolean;
 };
 
-export function BookForm({
-  book,
-  isLoading,
-  onSubmit,
-  onCancel,
-}: BookFormProps) {
+const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
   const form = useForm<BookFormValues>({
     resolver: zodResolver(bookSchema),
-    defaultValues: book || {
-      code: '',
-      title: '',
-      publicationDate: '',
-      price: 0,
-      languages: '',
-      description: '',
-      size: '',
-      status: '',
-      publisherId: '',
-    },
+    defaultValues: book
+      ? {
+          ...book,
+          authorIds:
+            (book as any).bookAuthors?.map(
+              (ba: BookAuthorIds) => ba.authorId
+            ) || [],
+          categoryIds:
+            (book as any).bookCategories?.map(
+              (bc: BookCategoryIds) => bc.categoryId
+            ) || [],
+        }
+      : {
+          code: '',
+          title: '',
+          publicationDate: '',
+          price: 0,
+          languages: '',
+          description: '',
+          size: '',
+          status: '',
+          publisherId: '',
+          authorIds: [],
+          categoryIds: [],
+        },
   });
 
   const handleDateChange = (date: Date, onChange: (value: string) => void) => {
@@ -163,6 +186,9 @@ export function BookForm({
             )}
           />
 
+          {/* Choose Authors */}
+          <AuthorCombobox name="authorIds" control={form.control} />
+
           {/* Lang */}
           <FormField
             control={form.control}
@@ -175,6 +201,7 @@ export function BookForm({
                 <FormControl>
                   <Input
                     className={cn(
+                      'w-full',
                       form.formState.errors.languages && 'border-red-500'
                     )}
                     {...field}
@@ -184,6 +211,9 @@ export function BookForm({
               </FormItem>
             )}
           />
+
+          {/* Choose Categories */}
+          <CategoryCombobox name="categoryIds" control={form.control} />
 
           {/* Size */}
           <FormField
@@ -260,4 +290,5 @@ export function BookForm({
       </form>
     </Form>
   );
-}
+};
+export default BookForm;

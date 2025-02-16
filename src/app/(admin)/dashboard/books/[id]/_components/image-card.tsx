@@ -5,16 +5,15 @@ import { Card } from '@/components/ui/card';
 import { useImagesMutation } from '@/hooks/use-images';
 import { Loader2, Trash2 } from 'lucide-react';
 import Image from 'next/image';
-import { toast } from 'sonner';
 import { getPublicIdFromUrl } from '../_lib/action';
 
-type ImageCardProps = {
+type Props = {
   id: string;
   url: string;
   altText: string;
 };
 
-const ImageCard = ({ id, url, altText }: ImageCardProps) => {
+const ImageCard = ({ id, url, altText }: Props) => {
   const { deleteImageMutation } = useImagesMutation();
   const deleteFromCloudinary = async (publicId: string) => {
     const response = await fetch('/api/sign-cloudinary-params', {
@@ -40,11 +39,8 @@ const ImageCard = ({ id, url, altText }: ImageCardProps) => {
       }
       await deleteFromCloudinary(publicId);
       await deleteImageMutation.mutateAsync(id);
-
-      toast.success('Đã xóa ảnh');
     } catch (error) {
       console.error('Error deleting image:', error);
-      toast.error('Đã xảy ra lỗi khi xóa ảnh');
     }
   };
 
@@ -59,7 +55,6 @@ const ImageCard = ({ id, url, altText }: ImageCardProps) => {
         }}
         width={500}
         height={300}
-        sizes="100vw"
         className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
       />
       <div className="absolute inset-0 flex items-end justify-center bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity group-hover:opacity-100">

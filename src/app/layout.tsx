@@ -1,10 +1,10 @@
 import { ThemeProvider } from '@/components/theme-provider';
+import { Toaster } from '@/components/ui/sonner';
 import NextAuthProvider from '@/providers/NextAuthProvider';
 import QueryProvider from '@/providers/QueryProvider';
 import type { Metadata } from 'next';
 import { Roboto } from 'next/font/google';
 import './globals.css';
-import { Toaster } from '@/components/ui/sonner';
 
 const roboto = Roboto({
   subsets: ['vietnamese'],

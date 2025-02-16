@@ -3,16 +3,13 @@ import { ImagePayload } from '@/types/image-types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
-export const useGetImageByTypeAndEntityID = ({
-  type,
-  entityID,
-}: {
+export const useGetImageByTypeOrEntityID = (payload: {
   type?: string;
-  entityID?: string;
+  entityId?: string;
 }) => {
   return useQuery({
-    queryKey: ['images', type, entityID],
-    queryFn: () => imageService.getByTypeAndEntityID(type, entityID),
+    queryKey: ['images', payload],
+    queryFn: () => imageService.getByTypeOrEntityID(payload),
   });
 };
 
@@ -22,13 +19,13 @@ export const useImagesMutation = () => {
   const addImageMutation = useMutation({
     mutationFn: (payload: Array<ImagePayload>) => imageService.add(payload),
     onSuccess: (data) => {
-      console.log('data', data);
       if (data?.isSuccess) {
         toast.success('Thêm ảnh thành công');
       }
       queryClient.invalidateQueries({ queryKey: ['images'] });
     },
-    onError: () => {
+    onError: (error: Error) => {
+      console.log('Error add image', error);
       toast.error('Thêm ảnh thất bại');
     },
   });

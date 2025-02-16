@@ -12,7 +12,7 @@ import { PATH } from '@/enums/path';
 import { useRegister } from '@/hooks/use-auth';
 import { cn } from '@/lib/utils';
 import { RegisterFormValues, registerSchema } from '@/lib/zod';
-import { RegisterRequestBody } from '@/types/auth.types';
+import { RegisterRequestBody } from '@/types/auth-types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff } from 'lucide-react';
 import Link from 'next/link';

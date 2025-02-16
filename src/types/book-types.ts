@@ -10,6 +10,8 @@ export interface Book extends BaseEntity {
   size?: string;
   status: string;
   publisherId: string;
+  authorIds: string[];
+  categoryIds: string[];
   // publisher?: any | null;
   // bookAuthors?: any[];
   // inventories?: any[];

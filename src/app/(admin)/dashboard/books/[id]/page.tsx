@@ -8,12 +8,17 @@ import { Separator } from '@/components/ui/separator';
 import { PATH } from '@/enums/path';
 import { useBookSearchById } from '@/hooks/use-book-search';
 import { useBookMutations } from '@/hooks/use-books';
-import { useGetImageByTypeAndEntityID } from '@/hooks/use-images';
+import { useGetImageByTypeOrEntityID } from '@/hooks/use-images';
 import useDebounce from '@/hooks/useDebounce';
 import { formatDate, formatPrice } from '@/lib/utils';
+import { authorService } from '@/services/authorService';
+import { categoryService } from '@/services/categoryService';
 import { ImageResArr } from '@/types/image-types';
+import { useQueries } from '@tanstack/react-query';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { BookAuthorIds, BookCategoryIds } from '../_components/book-form';
 import ImageCard from './_components/image-card';
 
 export default function BooksDetailPage({
@@ -22,18 +27,46 @@ export default function BooksDetailPage({
   params: { id: string };
 }) {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const router = useRouter();
   const { data: bookDetailData, isLoading: bookDetailLoading } =
     useBookSearchById(params.id);
-  const { data: imageUrlBook, isLoading: imageBookLoading } =
-    useGetImageByTypeAndEntityID({
-      entityID: params.id,
+  const { data: imageUrlBook, isLoading: getImagePending } =
+    useGetImageByTypeOrEntityID({
+      entityId: params.id,
     });
   const { deleteBookMutation } = useBookMutations();
-  const apiLoading = useDebounce(bookDetailLoading || imageBookLoading, 300);
+  const apiLoading = useDebounce(bookDetailLoading || getImagePending, 300);
   const deletedLoading = useDebounce(deleteBookMutation.isPending, 300);
-  const router = useRouter();
   const book = bookDetailData?.result;
-  const imageContent: ImageResArr = imageUrlBook?.results;
+  const bookAuthorsRes = useQueries({
+    queries: ((book?.bookAuthors as BookAuthorIds[]) || [])?.map(
+      (bookAuth, index: number) => ({
+        queryKey: ['author', index],
+        queryFn: () => authorService.getById(bookAuth.authorId),
+      })
+    ),
+    combine: (results) => {
+      return {
+        data: results.map((result) => result.data),
+        pending: results.some((result) => result.isPending),
+      };
+    },
+  });
+
+  const bookCategoriesRes = useQueries({
+    queries: ((book?.bookCategories as BookCategoryIds[]) || [])?.map(
+      (bookCategory, index: number) => ({
+        queryKey: ['category', index],
+        queryFn: () => categoryService.getById(bookCategory.categoryId),
+      })
+    ),
+    combine: (results) => {
+      return {
+        data: results.map((result) => result.data),
+        pending: results.some((result) => result.isPending),
+      };
+    },
+  });
 
   const handleDeleteBook = async () => {
     try {
@@ -56,12 +89,9 @@ export default function BooksDetailPage({
         <h2 className="text-2xl font-bold">Chi tiết sách</h2>
         <div className="flex gap-4">
           <ImageUploader entityId={params.id} folder={`books/${book.code}`} />
-          <Button
-            variant={'default'}
-            onClick={() => router.push(`${PATH.BOOKS}/${params.id}/edit`)}
-          >
-            Sửa thông tin sách
-          </Button>
+          <Link href={`${PATH.BOOKS}/${params.id}/edit`}>
+            <Button>Sửa thông tin sách</Button>
+          </Link>
           <Button
             variant={'destructive'}
             onClick={() => setIsDeleteModalOpen(true)}
@@ -74,19 +104,43 @@ export default function BooksDetailPage({
       <div className="flex gap-4">
         <div className="max-w-[40vw]">
           <div className="grid gap-4 md:grid-flow-col">
-            {imageContent?.map((image, index: number) => {
-              return <ImageCard key={image.id || index} {...image} />;
-            })}
+            {((imageUrlBook?.results as ImageResArr) || [])?.map(
+              (image, index: number) => {
+                return <ImageCard key={image.id || index} {...image} />;
+              }
+            )}
           </div>
         </div>
         <div className="">
           <div className="mb-4 space-y-2">
-            <h3 className="text-xl font-semibold">Thông tin cơ bản</h3>
+            <h3 className="text-2xl">Thông tin cơ bản</h3>
             <p className="flex items-center gap-2 font-medium">
               Mã sách: <span className="font-semibold">{book.code}</span>
             </p>
             <p className="flex items-center gap-2 font-medium">
               Tên sách: <span className="font-semibold">{book.title}</span>
+            </p>
+            <p className="flex items-center gap-2 font-medium">
+              Tác giả:{' '}
+              <span className="font-semibold">
+                {bookAuthorsRes.data
+                  ?.map((author) => author?.result?.authorName)
+                  .join(', ')}
+              </span>
+            </p>{' '}
+            <p className="flex items-center gap-2 font-medium">
+              Danh mục:{' '}
+              <span className="font-semibold">
+                {bookCategoriesRes.data
+                  ?.map((cate) => cate?.result?.categoryName)
+                  .join(', ')}
+              </span>
+            </p>{' '}
+            <p className="flex items-center gap-2 font-medium">
+              Nhà xuất bản:{' '}
+              <span className="font-semibold">
+                {book.publisher.publisherName}
+              </span>
             </p>
             <p className="flex items-center gap-2 font-medium">
               Giá:{' '}
@@ -95,7 +149,7 @@ export default function BooksDetailPage({
               </span>
             </p>
             <p className="flex items-center gap-2 font-medium">
-              Ngôn ngữ: <span className="font-semibold">{book.languages}</span>
+              Ngôn ngữ: {book.languages}
             </p>
             <p className="flex items-center gap-2 font-medium">
               Tình trạng: <span className="text-blue-500">{book.status}</span>

@@ -1,7 +1,7 @@
 'use server';
 
 import { signIn } from '@/auth';
-import { LoginCredentials } from '@/types/auth.types';
+import { LoginCredentials } from '@/types/auth-types';
 import { AuthError } from 'next-auth';
 
 export async function handleCredentialsLogin(formData: FormData) {
