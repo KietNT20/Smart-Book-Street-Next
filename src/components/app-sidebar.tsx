@@ -4,8 +4,8 @@ import {
   AudioWaveform,
   Book,
   BookOpen,
+  ChartNoAxesCombined,
   Command,
-  Frame,
   GalleryVerticalEnd,
   LibraryBig,
   Map,
@@ -140,13 +140,13 @@ const data = {
       icon: PieChart,
     },
     {
-      name: 'Design Engineering',
+      name: 'Statistics',
       url: '#',
-      icon: Frame,
+      icon: ChartNoAxesCombined,
     },
 
     {
-      name: 'Travel',
+      name: 'Visitors',
       url: '#',
       icon: Map,
     },

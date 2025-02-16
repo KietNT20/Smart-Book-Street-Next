@@ -21,7 +21,9 @@ export const useLogin = () => {
       const session = await getSession();
       if (session?.user) {
         router.push(PATH.DASHBOARD);
-        toast.success('Đăng nhập thành công');
+        toast.success('Đăng nhập thành công', {
+          description: 'Vui lòng chờ trong giây lát',
+        });
       }
     },
     onError: (error: Error) => {

@@ -31,7 +31,7 @@ export default function DashboardLayout({
                 </div>
               </div>
             </header>
-            <main className="px-0 py-2 sm:px-6 sm:py-4">{children}</main>
+            <main className="p-4">{children}</main>
           </div>
         </SidebarInset>
       </div>
