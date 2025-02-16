@@ -8,7 +8,6 @@ import { toast } from 'sonner';
 
 export const useLogin = () => {
   const router = useRouter();
-
   return useMutation({
     mutationKey: ['login'],
     mutationFn: async (credentials: LoginCredentials) => {

@@ -1,12 +1,21 @@
-import { loginGoogleAction } from '@/app/(guest)/auth/login/_lib/action';
+import { userService } from '@/services/userService';
 import { Button } from '../ui/button';
 
 type Props = {
   signIn?: boolean;
 };
 const GoogleButton = ({ signIn = false }: Props) => {
+  const handleSignIn = async () => {
+    try {
+      const res = await userService.googleLogin();
+      console.log('Google auth response:', res);
+    } catch (error) {
+      console.error('Google auth error:', error);
+    }
+  };
+
   return (
-    <form action={loginGoogleAction}>
+    <form action={handleSignIn}>
       <Button type="submit" variant="outline" className="w-full">
         <svg
           xmlns="http://www.w3.org/2000/svg"

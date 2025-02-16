@@ -118,6 +118,8 @@ export const API_ENDPOINT = {
   },
   USERS: {
     LOGIN: `${USER}/login`,
+    GOOGLE_LOGIN: `${USER}/google-login`,
+    GOOGLE_RESPONSE: `${USER}/google-response`,
     REGISTER: `${USER}/register`,
     GET_ALL: `${USER}/get-all`,
     GET_ALL_PAGINATION: `${USER}/get-all-pagination`,

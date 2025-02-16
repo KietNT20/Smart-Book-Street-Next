@@ -9,7 +9,7 @@ import {
 import { useState } from 'react';
 
 type ImageUploaderProps = {
-  entityId?: string;
+  entityId: string;
   folder?: string;
 };
 
@@ -32,7 +32,7 @@ const ImageUploader = ({ entityId, folder }: ImageUploaderProps) => {
             url: imageInfo.secure_url,
             type: imageInfo.resource_type,
             altText: imageInfo.original_filename,
-            entityId: entityId ?? '',
+            entityId: entityId,
           },
         ];
         // Save image to database
