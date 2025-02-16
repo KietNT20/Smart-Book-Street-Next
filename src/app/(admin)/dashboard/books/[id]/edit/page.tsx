@@ -7,8 +7,8 @@ import { useBookSearchById } from '@/hooks/use-book-search';
 import useDebounce from '@/hooks/useDebounce';
 import { BookFormValues } from '@/lib/zod';
 import { useParams, useRouter } from 'next/navigation';
-import { BookForm } from '../../_components/book-form';
 import { useUpdateBook } from '../../_lib/use-book-operations';
+import BookForm from '../../_components/book-form';
 
 export default function EditBookPage() {
   const router = useRouter();

@@ -21,17 +21,13 @@ import { BookSearchCriteria } from '@/types/book-types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
-type SearchModalProps = {
+type Props = {
   isOpen: boolean;
   onClose: () => void;
   onSearch: (criteria: Partial<BookSearchCriteria>) => void;
 };
 
-export function SearchBookModal({
-  isOpen,
-  onClose,
-  onSearch,
-}: SearchModalProps) {
+export function SearchBookModal({ isOpen, onClose, onSearch }: Props) {
   const form = useForm<SearchBookFormValues>({
     resolver: zodResolver(searchBookSchema),
     defaultValues: {

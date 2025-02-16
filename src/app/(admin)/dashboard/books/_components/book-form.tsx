@@ -30,19 +30,14 @@ export type BookCategoryIds = {
   bookId: string;
 };
 
-type BookFormProps = {
+type Props = {
   book?: BookFormValues;
   onSubmit: (data: BookFormValues) => void;
   onCancel: () => void;
   isLoading?: boolean;
 };
 
-export function BookForm({
-  book,
-  isLoading,
-  onSubmit,
-  onCancel,
-}: BookFormProps) {
+const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
   const form = useForm<BookFormValues>({
     resolver: zodResolver(bookSchema),
     defaultValues: book
@@ -295,4 +290,5 @@ export function BookForm({
       </form>
     </Form>
   );
-}
+};
+export default BookForm;

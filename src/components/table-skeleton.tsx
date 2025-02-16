@@ -1,11 +1,11 @@
 import { TableCell, TableRow } from './ui/table';
 
-type TableSkeletonProps = {
+type Props = {
   columns: number;
   rows: number;
 };
 
-export function TableSkeleton({ columns, rows }: TableSkeletonProps) {
+export function TableSkeleton({ columns, rows }: Props) {
   return (
     <>
       {Array.from({ length: rows }).map((_, rowIndex) => (

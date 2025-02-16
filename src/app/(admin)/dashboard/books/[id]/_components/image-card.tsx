@@ -7,13 +7,13 @@ import { Loader2, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import { getPublicIdFromUrl } from '../_lib/action';
 
-type ImageCardProps = {
+type Props = {
   id: string;
   url: string;
   altText: string;
 };
 
-const ImageCard = ({ id, url, altText }: ImageCardProps) => {
+const ImageCard = ({ id, url, altText }: Props) => {
   const { deleteImageMutation } = useImagesMutation();
   const deleteFromCloudinary = async (publicId: string) => {
     const response = await fetch('/api/sign-cloudinary-params', {

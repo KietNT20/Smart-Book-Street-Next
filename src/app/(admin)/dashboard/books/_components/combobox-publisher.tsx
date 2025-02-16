@@ -28,15 +28,12 @@ import useDebounce from '@/hooks/useDebounce';
 import { cn } from '@/lib/utils';
 import { Publisher } from '@/types/publisher-types';
 
-type PublisherComboboxProps = {
+type Props = {
   name: string;
   label?: string;
 };
 
-export function PublisherCombobox({
-  name,
-  label = 'Nhà xuất bản',
-}: PublisherComboboxProps) {
+export function PublisherCombobox({ name, label = 'Nhà xuất bản' }: Props) {
   const [open, setOpen] = React.useState(false);
   const [inputValue, setInputValue] = React.useState<string>('');
   const debouncedInput = useDebounce<string>(inputValue, 300);
