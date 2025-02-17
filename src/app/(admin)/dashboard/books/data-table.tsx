@@ -54,6 +54,11 @@ export function DataTable<TData, TValue>({
   const table = useReactTable({
     data,
     columns,
+    defaultColumn: {
+      size: 200, //starting column size
+      minSize: 50, //enforced during column resizing
+      maxSize: 500, //enforced during column resizing
+    },
     pageCount: pageCount ?? -1,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -199,7 +204,7 @@ export function DataTable<TData, TValue>({
                 onStateChange({
                   ...state,
                   pageSize: Number(e.target.value),
-                  pageIndex: 1, // Reset về trang 1 khi đổi pageSize
+                  pageIndex: 1,
                 });
               }}
               className="h-8 rounded-md border border-input bg-background px-2"

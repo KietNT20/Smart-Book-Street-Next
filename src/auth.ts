@@ -3,7 +3,7 @@ import Credentials from 'next-auth/providers/credentials';
 import Google from 'next-auth/providers/google';
 import { API_ENDPOINT } from './constant/api-url';
 import { PATH } from './enums/path';
-import { LoginCredentials, UserRoles } from './types/auth.types';
+import { LoginCredentials, UserRoles } from './types/auth-types';
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
@@ -58,7 +58,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     maxAge: 5 * 60 * 60, // 5 hours,
   },
   callbacks: {
-    async jwt({ token, user }) {
+    jwt({ token, user, account }) {
+      console.log('account', account);
       if (user) {
         token.sub = user.id;
         token.userName = user.userName;
@@ -67,7 +68,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
       return token;
     },
-    async session({ session, token }) {
+    session({ session, token }) {
       session.userId = token.sub as string;
       session.user.userName = token.userName;
       session.user.userRoles = token.userRoles;

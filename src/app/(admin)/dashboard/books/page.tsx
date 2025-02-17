@@ -2,14 +2,13 @@
 
 import { ConfirmModal } from '@/components/confirm-modal';
 import { Button } from '@/components/ui/button';
+import { PATH } from '@/enums/path';
 import useDebounce from '@/hooks/useDebounce';
-import { BookFormValues } from '@/lib/zod';
 import { Book, BookSearchCriteria } from '@/types/book-types';
 import { Plus, Search, X } from 'lucide-react';
-import { BookDialog } from './_components/book-dialog';
-import { BookForm } from './_components/book-form';
+import Link from 'next/link';
 import { SearchBookModal } from './_components/search-book-modal';
-import { useBookOperations } from './_lib/use-book-operations';
+import { useBookList } from './_lib/use-book-operations';
 import { useBookPageState } from './_lib/use-book-page-state';
 import { createColumns } from './columns';
 import { DataTable } from './data-table';
@@ -22,40 +21,20 @@ export default function BooksPage() {
     setSearchCriteria,
     modalState,
     setModalState,
-    selectedBook,
-    setSelectedBook,
     deleteId,
     setDeleteId,
     resetAllFilters,
   } = useBookPageState();
 
-  const {
-    bookData,
-    isLoadingBooks,
-    handleSubmit: handleBookSubmit,
-    handleDelete,
-    createBookMutation,
-    updateBookMutation,
-    deleteBookMutation,
-  } = useBookOperations({
-    pagination,
-    searchCriteria,
-    onSuccess: () => {
-      setModalState({ type: 'none' });
-      setSelectedBook(undefined);
-    },
-  });
+  const { bookData, isLoadingBooks, handleDelete, deleteBookMutation } =
+    useBookList({
+      pagination,
+      searchCriteria,
+    });
 
-  const createdLoading = useDebounce(createBookMutation.isPending, 300);
-  const updatedLoading = useDebounce(updateBookMutation.isPending, 300);
   const deletedLoading = useDebounce(deleteBookMutation.isPending, 300);
 
-  // Create table columns
   const columns = createColumns({
-    _onEdit: (book) => {
-      setSelectedBook(book);
-      setModalState({ type: 'form' });
-    },
     _onDelete: (id?: string) => {
       setDeleteId(id || null);
     },
@@ -69,11 +48,7 @@ export default function BooksPage() {
   const hasFilters = () =>
     Object.keys(searchCriteria).length > 0 ||
     pagination.sortField !== 'createdDate' ||
-    pagination.sortOrder !== 1;
-
-  const handleFormSubmit = async (data: BookFormValues) => {
-    await handleBookSubmit(data, selectedBook);
-  };
+    pagination.sortOrder !== -1;
 
   return (
     <div className="space-y-4">
@@ -97,14 +72,11 @@ export default function BooksPage() {
             <Search className="mr-2 h-4 w-4" />
             Tìm kiếm
           </Button>
-          <Button
-            onClick={() => {
-              setSelectedBook(undefined);
-              setModalState({ type: 'form' });
-            }}
-          >
-            <Plus className="mr-2 h-4 w-4" /> Thêm sách
-          </Button>
+          <Link href={`${PATH.BOOKS}/create`}>
+            <Button>
+              <Plus className="mr-2 h-4 w-4" /> Thêm sách
+            </Button>
+          </Link>
         </div>
       </div>
 
@@ -118,19 +90,6 @@ export default function BooksPage() {
         onStateChange={setPagination}
         isLoading={isLoadingBooks}
       />
-
-      <BookDialog
-        isOpen={modalState.type === 'form'}
-        onClose={() => setModalState({ type: 'none' })}
-        title={selectedBook ? 'Cập nhật sách' : 'Thêm sách mới'}
-      >
-        <BookForm
-          book={selectedBook}
-          onSubmit={handleFormSubmit}
-          onCancel={() => setModalState({ type: 'none' })}
-          isLoading={createdLoading || updatedLoading}
-        />
-      </BookDialog>
 
       <SearchBookModal
         isOpen={modalState.type === 'search'}

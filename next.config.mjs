@@ -8,6 +8,10 @@ const nextConfig = {
         hostname: 'res.cloudinary.com',
         pathname: '/deza97c4p/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'th.bing.com',
+      },
     ],
   },
 };

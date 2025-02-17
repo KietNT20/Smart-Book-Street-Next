@@ -4,8 +4,8 @@ import {
   AudioWaveform,
   Book,
   BookOpen,
+  ChartNoAxesCombined,
   Command,
-  Frame,
   GalleryVerticalEnd,
   LibraryBig,
   Map,
@@ -54,15 +54,15 @@ const data = {
       isActive: true,
       items: [
         {
-          title: 'Thông tin',
-          url: '#',
-        },
-        {
           title: 'Khu vực',
           url: '#',
         },
         {
-          title: 'Kiosks',
+          title: 'Nhà xuất bản',
+          url: '#',
+        },
+        {
+          title: 'Cửa hàng',
           url: '#',
         },
       ],
@@ -73,16 +73,16 @@ const data = {
       icon: Book,
       items: [
         {
-          title: 'Danh sách',
+          title: 'Quản lý',
           url: `${PATH.BOOKS}`,
         },
         {
-          title: 'Thương hiệu',
-          url: `${PATH.BOOKS}/brands`,
+          title: 'Tác giả',
+          url: `${PATH.AUTHORS}`,
         },
         {
-          title: 'Cửa hàng',
-          url: `${PATH.BOOKS}/stores`,
+          title: 'Danh mục',
+          url: `${PATH.CATEGORIES}`,
         },
       ],
     },
@@ -140,13 +140,13 @@ const data = {
       icon: PieChart,
     },
     {
-      name: 'Design Engineering',
+      name: 'Statistics',
       url: '#',
-      icon: Frame,
+      icon: ChartNoAxesCombined,
     },
 
     {
-      name: 'Travel',
+      name: 'Visitors',
       url: '#',
       icon: Map,
     },

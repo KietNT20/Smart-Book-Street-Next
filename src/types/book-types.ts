@@ -10,6 +10,8 @@ export interface Book extends BaseEntity {
   size?: string;
   status: string;
   publisherId: string;
+  authorIds: string[];
+  categoryIds: string[];
   // publisher?: any | null;
   // bookAuthors?: any[];
   // inventories?: any[];
@@ -52,7 +54,6 @@ export type BookSearchResult = {
 export type BookSearchCriteria = {
   code?: string;
   title?: string;
-  // publicationDate?: string;
   startDate?: string;
   endDate?: string;
   price?: number;

@@ -17,7 +17,9 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
+import { cn } from '@/lib/utils';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 type Props = {
   items: {
@@ -33,6 +35,7 @@ type Props = {
 };
 
 export function NavMain({ items }: Props) {
+  const pathname = usePathname();
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Quản lý</SidebarGroupLabel>
@@ -57,7 +60,14 @@ export function NavMain({ items }: Props) {
                   {item.items?.map((subItem) => (
                     <SidebarMenuSubItem key={subItem.title}>
                       <SidebarMenuSubButton asChild>
-                        <Link href={subItem.url}>
+                        <Link
+                          href={subItem.url}
+                          className={cn(
+                            pathname === subItem.url
+                              ? 'bg-yellow-400 text-zinc-800'
+                              : ''
+                          )}
+                        >
                           <span>{subItem.title}</span>
                         </Link>
                       </SidebarMenuSubButton>

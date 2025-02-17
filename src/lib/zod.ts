@@ -66,7 +66,9 @@ export const bookSchema = z.object({
   id: z.string().optional(),
   code: z.string().min(1, { message: 'Mã sách không được để trống' }),
   title: z.string().min(1, { message: 'Tên sách không được để trống' }),
-  publicationDate: z.string(),
+  publicationDate: z
+    .string()
+    .min(1, { message: 'Vui lòng chọn ngày xuất bản' }),
   price: z.number().min(0, { message: 'Giá không được âm' }),
   languages: z.string().min(1, { message: 'Ngôn ngữ không được để trống' }),
   description: z.string().optional(),
@@ -74,7 +76,13 @@ export const bookSchema = z.object({
   status: z.string().min(1, { message: 'Trạng thái không được để trống' }),
   publisherId: z
     .string()
-    .min(1, { message: 'ID nhà xuất bản không được để trống' }),
+    .min(1, { message: 'Nhà xuất bản không được để trống' }),
+  authorIds: z
+    .array(z.string())
+    .min(1, { message: 'Tác giả không được để trống' }),
+  categoryIds: z
+    .array(z.string())
+    .min(1, { message: 'Thể loại không được để trống' }),
   createdBy: z.string().optional(),
   createdDate: z.string().optional(),
   lastUpdatedBy: z.string().optional(),
@@ -91,8 +99,8 @@ export const searchBookSchema = z
     status: z.string().optional(),
     languages: z.string().optional(),
     price: z.number().min(0, { message: 'Giá không được âm' }).optional(),
-    startDate: z.date().optional(),
-    endDate: z.date().optional(),
+    startDate: z.string().optional(),
+    endDate: z.string().optional(),
   })
   .refine(
     (data) => {
@@ -108,3 +116,12 @@ export const searchBookSchema = z
   );
 
 export type SearchBookFormValues = z.infer<typeof searchBookSchema>;
+
+export const authorSchema = z.object({
+  authorName: z.string().min(1, { message: 'Tên tác giả không được để trống' }),
+  dob: z.string().optional(),
+  nationality: z.string().optional(),
+  biography: z.string().optional(),
+});
+
+export type AuthorFormValues = z.infer<typeof authorSchema>;

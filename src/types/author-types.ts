@@ -1,6 +1,10 @@
-export type AuthorPayload = {
-  AuthorName: string;
-  DOB?: Date;
-  Nationality?: string;
-  Biography?: string;
+export type Author = {
+  id: string;
+  authorName: string;
+  dob?: Date | string;
+  nationality?: string;
+  biography?: string;
+  images: any[];
 };
+
+export type AuthorPayload = Omit<Author, 'id'>;

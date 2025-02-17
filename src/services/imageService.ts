@@ -7,21 +7,19 @@ export const imageService = {
     const res = await axiosInstance.post(`${API_ENDPOINT.IMAGES.ADD}`, payload);
     return res.data;
   },
-  getByTypeAndEntityID: async (type?: string, entityID?: string) => {
-    if (!type) {
-      const res = await axiosInstance.get(
-        `${API_ENDPOINT.IMAGES.GET_BY_TYPE_AND_ENTITY_ID}?entityID=${entityID}`
-      );
-      return res.data;
-    }
-    const res = await axiosInstance.get(
-      `${API_ENDPOINT.IMAGES.GET_BY_TYPE_AND_ENTITY_ID}?type=${type}&entityID=${entityID}`
+  getByTypeOrEntityID: async (payload: {
+    type?: string;
+    entityId?: string;
+  }) => {
+    const res = await axiosInstance.post(
+      `${API_ENDPOINT.IMAGES.GET_BY_TYPE_OR_ENTITY_ID}`,
+      payload
     );
     return res.data;
   },
   delete: async (id: string) => {
-    const res = await axiosInstance.delete(
-      `${API_ENDPOINT.IMAGES.DELETE}/${id}`
+    const res = await axiosInstance.put(
+      `${API_ENDPOINT.IMAGES.DELETE}?id=${id}`
     );
     return res.data;
   },

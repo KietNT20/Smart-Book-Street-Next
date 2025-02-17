@@ -6,19 +6,14 @@ import {
 } from '@/components/ui/dialog';
 import { ReactNode } from 'react';
 
-type BookDialogProps = {
+type Props = {
   isOpen: boolean;
   onClose: () => void;
   title: string;
   children: ReactNode;
 };
 
-export function BookDialog({
-  isOpen,
-  onClose,
-  title,
-  children,
-}: BookDialogProps) {
+export function BookDialog({ isOpen, onClose, title, children }: Props) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-3xl">
