@@ -10,16 +10,15 @@ export const useLogin = () => {
   const router = useRouter();
   return useMutation({
     mutationKey: ['login'],
-    mutationFn: async (credentials: LoginCredentials) => {
-      const result = await signIn('credentials', {
-        ...credentials,
+    mutationFn: async ({ usernameOrEmail, password }: LoginCredentials) =>
+      await signIn('credentials', {
+        usernameOrEmail,
+        password,
         redirect: false,
-      });
-      return result;
-    },
+      }),
     onSuccess: async () => {
       const session = await getSession();
-      if (session?.user) {
+      if (session && session.user) {
         router.push(PATH.DASHBOARD);
         toast.success('Đăng nhập thành công', {
           description: 'Vui lòng chờ trong giây lát',
