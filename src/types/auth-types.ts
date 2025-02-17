@@ -45,3 +45,28 @@ export interface RegisterRequestBody extends Omit<BaseEntity, 'id'> {
   phone?: string;
   gender?: Gender;
 }
+
+export type GoogleLoginResponse = {
+  result: {
+    userName: string;
+    email: string;
+    fullName: string;
+    dob: string;
+    address: string;
+    phone: string;
+    gender: string;
+    bookStore: string;
+    publisher: string;
+    userRoles: UserRoles[];
+    id: string;
+    createdBy: string;
+    createdDate: string;
+    lastUpdatedBy: string;
+    lastUpdatedDate: string;
+    isDeleted: boolean;
+  };
+  token: string;
+  expiration: string;
+  isSuccess: boolean;
+  message: string;
+};
