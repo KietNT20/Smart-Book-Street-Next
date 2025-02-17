@@ -1,10 +1,8 @@
-import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/sonner';
-import NextAuthProvider from '@/providers/NextAuthProvider';
-import QueryProvider from '@/providers/QueryProvider';
 import type { Metadata } from 'next';
 import { Roboto } from 'next/font/google';
 import './globals.css';
+import Provider from '@/providers/provider';
 
 const roboto = Roboto({
   subsets: ['vietnamese'],
@@ -24,18 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${roboto.className} antialiased`}>
-        <QueryProvider>
-          <NextAuthProvider>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-            >
-              {children}
-            </ThemeProvider>
-          </NextAuthProvider>
-        </QueryProvider>
+        <Provider>{children}</Provider>
         <Toaster richColors />
       </body>
     </html>
