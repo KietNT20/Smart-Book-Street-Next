@@ -1,14 +1,14 @@
 'use client';
 
 import { ThemeProvider } from '@/components/theme-provider';
+import { SessionProvider } from 'next-auth/react';
 import React from 'react';
-import NextAuthProvider from './NextAuthProvider';
 import QueryProvider from './QueryProvider';
 
 const Provider = ({ children }: Readonly<{ children: React.ReactNode }>) => {
   return (
     <QueryProvider>
-      <NextAuthProvider>
+      <SessionProvider>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -17,7 +17,7 @@ const Provider = ({ children }: Readonly<{ children: React.ReactNode }>) => {
         >
           {children}
         </ThemeProvider>
-      </NextAuthProvider>
+      </SessionProvider>
     </QueryProvider>
   );
 };
