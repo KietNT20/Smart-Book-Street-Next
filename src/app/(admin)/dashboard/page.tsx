@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { BookOpen, Clock, UserCheck, Users } from 'lucide-react';
 import ChartsSection from './_components/dashboard/charts-section';
+import VisitorChartSection from './_components/dashboard/visitor-chart-section';
 
 export default function DashboardPage() {
   return (
@@ -66,6 +67,9 @@ export default function DashboardPage() {
       </div>
       <div className="mt-4">
         <ChartsSection />
+      </div>
+      <div className="mt-4">
+        <VisitorChartSection />
       </div>
     </>
   );

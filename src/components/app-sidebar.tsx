@@ -54,15 +54,15 @@ const data = {
       isActive: true,
       items: [
         {
-          title: 'Thông tin',
-          url: '#',
-        },
-        {
           title: 'Khu vực',
           url: '#',
         },
         {
-          title: 'Kiosks',
+          title: 'Nhà xuất bản',
+          url: '#',
+        },
+        {
+          title: 'Cửa hàng',
           url: '#',
         },
       ],
@@ -81,8 +81,8 @@ const data = {
           url: `${PATH.AUTHORS}`,
         },
         {
-          title: 'Cửa hàng',
-          url: `${PATH.BOOKS}/stores`,
+          title: 'Danh mục',
+          url: `${PATH.CATEGORIES}`,
         },
       ],
     },
