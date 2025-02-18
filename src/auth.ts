@@ -65,8 +65,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     maxAge: 5 * 60 * 60, // 5 hours,
   },
   callbacks: {
-    jwt({ token, user, account }) {
-      console.log('account', account);
+    jwt({ token, user }) {
       if (user) {
         token.sub = user.id;
         token.userName = user.userName;

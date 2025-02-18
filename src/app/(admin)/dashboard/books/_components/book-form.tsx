@@ -30,6 +30,11 @@ export type BookCategoryIds = {
   bookId: string;
 };
 
+interface BookWithRelations extends BookFormValues {
+  bookAuthors?: BookAuthorIds[];
+  bookCategories?: BookCategoryIds[];
+}
+
 type Props = {
   book?: BookFormValues;
   onSubmit: (data: BookFormValues) => void;
@@ -44,11 +49,11 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
       ? {
           ...book,
           authorIds:
-            (book as any).bookAuthors?.map(
+            (book as BookWithRelations).bookAuthors?.map(
               (ba: BookAuthorIds) => ba.authorId
             ) || [],
           categoryIds:
-            (book as any).bookCategories?.map(
+            (book as BookWithRelations).bookCategories?.map(
               (bc: BookCategoryIds) => bc.categoryId
             ) || [],
         }

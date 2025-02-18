@@ -78,7 +78,7 @@ const VisitorChartSection = () => {
     useState<TimeRangeLong>('this-month');
 
   return (
-    <div className="flex gap-4">
+    <div className="gap-4 md:flex">
       {/* Biểu đồ số lượng khách theo giờ */}
       <Card className="flex-1">
         <CardHeader>
@@ -140,7 +140,7 @@ const VisitorChartSection = () => {
       </Card>
 
       {/* Biểu đồ phân bố độ tuổi và giới tính */}
-      <Card className="flex-1">
+      <Card className="mt-4 flex-1 md:mt-0">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
