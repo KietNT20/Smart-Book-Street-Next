@@ -78,11 +78,11 @@ const VisitorChartSection = () => {
     useState<TimeRangeLong>('this-month');
 
   return (
-    <div className="gap-4 md:flex">
+    <div className='gap-4 md:flex'>
       {/* Biểu đồ số lượng khách theo giờ */}
-      <Card className="flex-1">
+      <Card className='flex-1'>
         <CardHeader>
-          <div className="flex items-center justify-between">
+          <div className='flex items-center justify-between'>
             <div>
               <CardTitle>Lượt khách theo giờ</CardTitle>
               <CardDescription>
@@ -95,54 +95,54 @@ const VisitorChartSection = () => {
                 setHourlyTimeRange(value)
               }
             >
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Chọn thời gian" />
+              <SelectTrigger className='w-[180px]'>
+                <SelectValue placeholder='Chọn thời gian' />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>Thời gian</SelectLabel>
-                  <SelectItem value="today">Hôm nay</SelectItem>
-                  <SelectItem value="yesterday">Hôm qua</SelectItem>
-                  <SelectItem value="this-week">Tuần này</SelectItem>
-                  <SelectItem value="last-week">Tuần trước</SelectItem>
+                  <SelectItem value='today'>Hôm nay</SelectItem>
+                  <SelectItem value='yesterday'>Hôm qua</SelectItem>
+                  <SelectItem value='this-week'>Tuần này</SelectItem>
+                  <SelectItem value='last-week'>Tuần trước</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>
           </div>
         </CardHeader>
         <CardContent>
-          <div className="h-[300px]">
-            <ResponsiveContainer width="100%" height="100%">
+          <div className='h-[300px]'>
+            <ResponsiveContainer width='100%' height='100%'>
               <LineChart data={hourlyData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="hour" />
+                <CartesianGrid strokeDasharray='3 3' />
+                <XAxis dataKey='hour' />
                 <YAxis />
                 <Tooltip />
                 <Legend />
                 <Line
-                  type="monotone"
-                  dataKey="visitors"
-                  stroke="hsl(var(--chart-1))"
-                  name="Số lượng khách"
+                  type='monotone'
+                  dataKey='visitors'
+                  stroke='hsl(var(--chart-1))'
+                  name='Số lượng khách'
                 />
               </LineChart>
             </ResponsiveContainer>
           </div>
         </CardContent>
-        <CardFooter className="flex-col gap-2 text-sm">
-          <div className="flex items-center gap-2 font-medium leading-none">
-            Giờ cao điểm: 14:00 - 16:00 <TrendingUp className="h-4 w-4" />
+        <CardFooter className='flex-col gap-2 text-sm'>
+          <div className='flex items-center gap-2 font-medium leading-none'>
+            Giờ cao điểm: 14:00 - 16:00 <TrendingUp className='h-4 w-4' />
           </div>
-          <div className="leading-none text-muted-foreground">
+          <div className='leading-none text-muted-foreground'>
             Trung bình 175 khách/giờ
           </div>
         </CardFooter>
       </Card>
 
       {/* Biểu đồ phân bố độ tuổi và giới tính */}
-      <Card className="mt-4 flex-1 md:mt-0">
+      <Card className='mt-4 flex-1 md:mt-0'>
         <CardHeader>
-          <div className="flex items-center justify-between">
+          <div className='flex items-center justify-between'>
             <div>
               <CardTitle>Phân bố độ tuổi và giới tính</CardTitle>
               <CardDescription>
@@ -155,41 +155,41 @@ const VisitorChartSection = () => {
                 setDemographicsTimeRange(value)
               }
             >
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Chọn thời gian" />
+              <SelectTrigger className='w-[180px]'>
+                <SelectValue placeholder='Chọn thời gian' />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>Thời gian</SelectLabel>
-                  <SelectItem value="this-month">Tháng này</SelectItem>
-                  <SelectItem value="last-month">Tháng trước</SelectItem>
-                  <SelectItem value="this-quarter">Quý này</SelectItem>
-                  <SelectItem value="last-quarter">Quý trước</SelectItem>
+                  <SelectItem value='this-month'>Tháng này</SelectItem>
+                  <SelectItem value='last-month'>Tháng trước</SelectItem>
+                  <SelectItem value='this-quarter'>Quý này</SelectItem>
+                  <SelectItem value='last-quarter'>Quý trước</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>
           </div>
         </CardHeader>
         <CardContent>
-          <div className="h-[300px]">
-            <ResponsiveContainer width="100%" height="100%">
+          <div className='h-[300px]'>
+            <ResponsiveContainer width='100%' height='100%'>
               <BarChart data={demographicsData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="ageGroup" />
+                <CartesianGrid strokeDasharray='3 3' />
+                <XAxis dataKey='ageGroup' />
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="male" name="Nam" fill="hsl(var(--chart-1))" />
-                <Bar dataKey="female" name="Nữ" fill="hsl(var(--chart-2))" />
+                <Bar dataKey='male' name='Nam' fill='hsl(var(--chart-1))' />
+                <Bar dataKey='female' name='Nữ' fill='hsl(var(--chart-2))' />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </CardContent>
-        <CardFooter className="flex-col gap-2 text-sm">
-          <div className="flex items-center gap-2 font-medium leading-none">
-            Độ tuổi phổ biến nhất: 19-24 <TrendingUp className="h-4 w-4" />
+        <CardFooter className='flex-col gap-2 text-sm'>
+          <div className='flex items-center gap-2 font-medium leading-none'>
+            Độ tuổi phổ biến nhất: 19-24 <TrendingUp className='h-4 w-4' />
           </div>
-          <div className="leading-none text-muted-foreground">
+          <div className='leading-none text-muted-foreground'>
             Tỷ lệ Nam/Nữ: 45%/55%
           </div>
         </CardFooter>

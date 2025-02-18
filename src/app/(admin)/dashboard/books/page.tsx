@@ -51,30 +51,30 @@ export default function BooksPage() {
     pagination.sortOrder !== -1;
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold">Quản lý sách</h2>
-        <div className="flex items-center gap-2">
+    <div className='space-y-4'>
+      <div className='flex items-center justify-between'>
+        <h2 className='text-2xl font-bold'>Quản lý sách</h2>
+        <div className='flex items-center gap-2'>
           {hasFilters() && (
             <Button
-              variant="outline"
+              variant='outline'
               onClick={resetAllFilters}
-              className="gap-2"
+              className='gap-2'
             >
-              <X className="h-4 w-4" />
+              <X className='h-4 w-4' />
               Đặt lại bộ lọc
             </Button>
           )}
           <Button
-            variant="outline"
+            variant='outline'
             onClick={() => setModalState({ type: 'search' })}
           >
-            <Search className="mr-2 h-4 w-4" />
+            <Search className='mr-2 h-4 w-4' />
             Tìm kiếm
           </Button>
           <Link href={`${PATH.BOOKS}/create`}>
             <Button>
-              <Plus className="mr-2 h-4 w-4" /> Thêm sách
+              <Plus className='mr-2 h-4 w-4' /> Thêm sách
             </Button>
           </Link>
         </div>
@@ -106,11 +106,11 @@ export default function BooksPage() {
             setDeleteId(null);
           }
         }}
-        title="Xóa sách"
-        description="Bạn có chắc chắn muốn xóa sách này? Hành động này không thể hoàn tác."
-        confirmText="Xóa"
-        cancelText="Hủy"
-        variant="destructive"
+        title='Xóa sách'
+        description='Bạn có chắc chắn muốn xóa sách này? Hành động này không thể hoàn tác.'
+        confirmText='Xóa'
+        cancelText='Hủy'
+        variant='destructive'
         isLoading={deletedLoading}
       />
     </div>

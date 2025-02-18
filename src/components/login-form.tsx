@@ -66,37 +66,37 @@ export function LoginForm({
   return (
     <div className={cn('flex flex-col gap-6', className)} {...props}>
       <Card>
-        <CardHeader className="text-center">
-          <CardTitle className="text-xl">Chào mừng trở lại</CardTitle>
+        <CardHeader className='text-center'>
+          <CardTitle className='text-xl'>Chào mừng trở lại</CardTitle>
           <CardDescription>
             Đăng nhập bằng tài khoản Google của bạn
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-6">
-            <div className="flex flex-col gap-4">
+          <div className='grid gap-6'>
+            <div className='flex flex-col gap-4'>
               <GoogleBtn />
             </div>
-            <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
-              <span className="relative z-10 bg-background px-2 text-muted-foreground">
+            <div className='relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border'>
+              <span className='relative z-10 bg-background px-2 text-muted-foreground'>
                 Hoặc tiếp tục với email
               </span>
             </div>
           </div>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <div className="grid gap-6">
-                <div className="grid gap-6">
-                  <div className="grid gap-2">
+            <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
+              <div className='grid gap-6'>
+                <div className='grid gap-6'>
+                  <div className='grid gap-2'>
                     <FormField
                       control={form.control}
-                      name="usernameOrEmail"
+                      name='usernameOrEmail'
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Email</FormLabel>
                           <FormControl>
                             <Input
-                              placeholder="Tài khoản hoặc email"
+                              placeholder='Tài khoản hoặc email'
                               disabled={login.isPending}
                               className={cn(
                                 form.formState.errors.usernameOrEmail &&
@@ -113,18 +113,18 @@ export function LoginForm({
                       )}
                     />
                   </div>
-                  <div className="grid gap-2">
+                  <div className='grid gap-2'>
                     <FormField
                       control={form.control}
-                      name="password"
+                      name='password'
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel htmlFor="pwd">Mật khẩu</FormLabel>
+                          <FormLabel htmlFor='pwd'>Mật khẩu</FormLabel>
                           <FormControl>
-                            <div className="relative">
+                            <div className='relative'>
                               <Input
-                                id="pwd"
-                                placeholder="Mật khẩu"
+                                id='pwd'
+                                placeholder='Mật khẩu'
                                 type={showPassword ? 'text' : 'password'}
                                 disabled={login.isPending}
                                 className={cn(
@@ -135,16 +135,16 @@ export function LoginForm({
                                 {...field}
                               />
                               <Button
-                                type="button"
-                                variant="ghost"
-                                size="sm"
-                                className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                                type='button'
+                                variant='ghost'
+                                size='sm'
+                                className='absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent'
                                 onClick={() => setShowPassword(!showPassword)}
                               >
                                 {showPassword ? (
-                                  <Eye className="h-4 w-4" />
+                                  <Eye className='h-4 w-4' />
                                 ) : (
-                                  <EyeOff className="h-4 w-4" />
+                                  <EyeOff className='h-4 w-4' />
                                 )}
                               </Button>
                             </div>
@@ -154,27 +154,27 @@ export function LoginForm({
                       )}
                     />
                   </div>
-                  <div className="text-right">
+                  <div className='text-right'>
                     <a
-                      href="#"
-                      className="text-sm text-muted-foreground underline-offset-4 hover:underline"
+                      href='#'
+                      className='text-sm text-muted-foreground underline-offset-4 hover:underline'
                     >
                       Quên mật khẩu?
                     </a>
                   </div>
                   <Button
-                    type="submit"
-                    className="w-full"
+                    type='submit'
+                    className='w-full'
                     disabled={login.isPending}
                   >
                     {login.isPending ? 'Đang đăng nhập...' : 'Đăng nhập'}
                   </Button>
                 </div>
-                <div className="text-center text-sm">
+                <div className='text-center text-sm'>
                   Bạn chưa có tài khoản?{' '}
                   <Link
                     href={PATH.REGISTER}
-                    className="px-3 underline underline-offset-4 duration-200 hover:text-primary"
+                    className='px-3 underline underline-offset-4 duration-200 hover:text-primary'
                   >
                     Đăng ký ngay
                   </Link>
@@ -184,10 +184,10 @@ export function LoginForm({
           </Form>
         </CardContent>
       </Card>
-      <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary">
+      <div className='text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary'>
         Bằng cách nhấp vào tiếp tục, bạn đồng ý với chúng tôi{' '}
-        <a href="#">Điều khoản dịch vụ</a> and{' '}
-        <a href="#">Chính sách bảo mật</a>.
+        <a href='#'>Điều khoản dịch vụ</a> and{' '}
+        <a href='#'>Chính sách bảo mật</a>.
       </div>
     </div>
   );

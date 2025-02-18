@@ -113,19 +113,19 @@ export function DatePickerCompVN({
             !date && 'text-muted-foreground'
           )}
         >
-          <CalendarIcon className="mr-2 h-4 w-4" />
+          <CalendarIcon className='mr-2 h-4 w-4' />
           {formatDate(date)}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="pointer-events-auto w-auto p-0" align="start">
-        <div className="flex p-2">
-          <div className="m-1 w-full">
+      <PopoverContent className='pointer-events-auto w-auto p-0' align='start'>
+        <div className='flex p-2'>
+          <div className='m-1 w-full'>
             <Select
               onValueChange={handleMonthChange}
               value={months[getMonth(calendarMonth)]}
             >
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Chọn tháng" />
+              <SelectTrigger className='w-full'>
+                <SelectValue placeholder='Chọn tháng' />
               </SelectTrigger>
               <SelectContent>
                 {months.map((month) => (
@@ -136,13 +136,13 @@ export function DatePickerCompVN({
               </SelectContent>
             </Select>
           </div>
-          <div className="m-1 w-full">
+          <div className='m-1 w-full'>
             <Select
               onValueChange={handleYearChange}
               value={getYear(calendarMonth).toString()}
             >
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Chọn năm" />
+              <SelectTrigger className='w-full'>
+                <SelectValue placeholder='Chọn năm' />
               </SelectTrigger>
               <SelectContent>
                 {years.map((year) => (
@@ -155,14 +155,14 @@ export function DatePickerCompVN({
           </div>
         </div>
         <Calendar
-          mode="single"
+          mode='single'
           selected={date}
           onSelect={handleSelect}
           initialFocus
           locale={vi}
           month={calendarMonth}
           onMonthChange={setCalendarMonth}
-          className="rounded-md border"
+          className='rounded-md border'
         />
       </PopoverContent>
     </Popover>

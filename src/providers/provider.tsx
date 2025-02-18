@@ -10,8 +10,8 @@ const Provider = ({ children }: Readonly<{ children: React.ReactNode }>) => {
     <QueryProvider>
       <SessionProvider>
         <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
+          attribute='class'
+          defaultTheme='system'
           enableSystem
           disableTransitionOnChange
         >

@@ -13,8 +13,8 @@ const SelectedCategory = ({ id, onDeselect }: Props) => {
 
   if (isLoading) {
     return (
-      <CommandItem disabled className="text-muted-foreground">
-        <span className="loading loading-spinner loading-sm mr-2" />
+      <CommandItem disabled className='text-muted-foreground'>
+        <span className='loading loading-spinner loading-sm mr-2' />
         Đang tải...
       </CommandItem>
     );
@@ -24,7 +24,7 @@ const SelectedCategory = ({ id, onDeselect }: Props) => {
 
   return (
     <CommandItem onSelect={onDeselect}>
-      <Check className="mr-2 h-4 w-4 opacity-100" />
+      <Check className='mr-2 h-4 w-4 opacity-100' />
       {categories?.categoryName}
     </CommandItem>
   );

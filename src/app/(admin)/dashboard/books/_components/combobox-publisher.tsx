@@ -59,14 +59,14 @@ export function PublisherCombobox({ name, label = 'Nhà xuất bản' }: Props) 
       render={({ field }) => (
         <FormItem>
           <FormLabel>
-            {label} <span className="text-red-400">*</span>
+            {label} <span className='text-red-400'>*</span>
           </FormLabel>
           <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
               <FormControl>
                 <Button
-                  variant="outline"
-                  role="combobox"
+                  variant='outline'
+                  role='combobox'
                   disabled={isLoading}
                   className={cn(
                     'w-full justify-between',
@@ -80,17 +80,17 @@ export function PublisherCombobox({ name, label = 'Nhà xuất bản' }: Props) 
                           (publisher) => publisher.id === field.value
                         )?.publisherName
                       : 'Chọn nhà xuất bản'}
-                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
                 </Button>
               </FormControl>
             </PopoverTrigger>
             <PopoverContent
-              className="pointer-events-auto w-[400px] p-0"
-              align="start"
+              className='pointer-events-auto w-[400px] p-0'
+              align='start'
             >
               <Command shouldFilter={false}>
                 <CommandInput
-                  placeholder="Tìm theo tên hoặc email..."
+                  placeholder='Tìm theo tên hoặc email...'
                   value={inputValue}
                   onValueChange={setInputValue}
                 />
@@ -100,7 +100,7 @@ export function PublisherCombobox({ name, label = 'Nhà xuất bản' }: Props) 
                   ) : filteredPublishers?.length === 0 ? (
                     <CommandEmpty>Không tìm thấy nhà xuất bản</CommandEmpty>
                   ) : (
-                    <CommandGroup className="max-h-[300px] overflow-y-auto">
+                    <CommandGroup className='max-h-[300px] overflow-y-auto'>
                       {filteredPublishers?.map((publisher: Publisher) => (
                         <CommandItem
                           key={publisher.id}
@@ -120,10 +120,10 @@ export function PublisherCombobox({ name, label = 'Nhà xuất bản' }: Props) 
                                 : 'opacity-0'
                             )}
                           />
-                          <div className="flex flex-col">
+                          <div className='flex flex-col'>
                             <span>{publisher.publisherName}</span>
                             {publisher.email && (
-                              <span className="text-sm text-muted-foreground">
+                              <span className='text-sm text-muted-foreground'>
                                 {publisher.email}
                               </span>
                             )}

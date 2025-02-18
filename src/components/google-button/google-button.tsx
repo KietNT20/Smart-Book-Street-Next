@@ -9,7 +9,7 @@ type Props = {
 const GoogleButton = ({ signInText = false }: Props) => {
   return (
     <form action={loginGoogleAction}>
-      <Button type="submit" variant="outline" className="w-full">
+      <Button type='submit' variant='outline' className='w-full'>
         <Google />
         Đăng {signInText ? 'nhập' : 'ký'} bằng Google
       </Button>

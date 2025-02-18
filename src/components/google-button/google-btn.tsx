@@ -13,9 +13,9 @@ const GoogleBtn = () => {
 
   return (
     <Button
-      type="button"
-      variant="outline"
-      className="flex w-full items-center justify-center gap-2"
+      type='button'
+      variant='outline'
+      className='flex w-full items-center justify-center gap-2'
       onClick={handleLoginGoogle}
     >
       <Google />

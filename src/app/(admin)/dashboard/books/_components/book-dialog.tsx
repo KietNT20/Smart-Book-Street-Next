@@ -16,11 +16,11 @@ type Props = {
 export function BookDialog({ isOpen, onClose, title, children }: Props) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-3xl">
+      <DialogContent className='max-w-3xl'>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
-        <div className="p-1">{children}</div>
+        <div className='p-1'>{children}</div>
       </DialogContent>
     </Dialog>
   );
