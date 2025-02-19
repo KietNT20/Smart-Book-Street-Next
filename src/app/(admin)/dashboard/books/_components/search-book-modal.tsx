@@ -81,25 +81,25 @@ export function SearchBookModal({ isOpen, onClose, onSearch }: Props) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[600px]">
+      <DialogContent className='sm:max-w-[600px]'>
         <DialogHeader>
           <DialogTitle>Tìm kiếm nâng cao</DialogTitle>
         </DialogHeader>
-        <form onSubmit={form.handleSubmit(handleSearch)} className="space-y-4">
-          <div className="grid gap-4 py-4">
+        <form onSubmit={form.handleSubmit(handleSearch)} className='space-y-4'>
+          <div className='grid gap-4 py-4'>
             {/* Code field */}
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="code" className="text-right">
+            <div className='grid grid-cols-4 items-center gap-4'>
+              <Label htmlFor='code' className='text-right'>
                 Mã sách
               </Label>
-              <div className="col-span-3">
+              <div className='col-span-3'>
                 <Input
-                  id="code"
+                  id='code'
                   {...form.register('code')}
                   className={cn(errors.code && 'border-red-500')}
                 />
                 {errors.code && (
-                  <span className="text-sm text-red-500">
+                  <span className='text-sm text-red-500'>
                     {errors.code.message}
                   </span>
                 )}
@@ -107,37 +107,37 @@ export function SearchBookModal({ isOpen, onClose, onSearch }: Props) {
             </div>
 
             {/* Title field */}
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="title" className="text-right">
+            <div className='grid grid-cols-4 items-center gap-4'>
+              <Label htmlFor='title' className='text-right'>
                 Tên sách
               </Label>
-              <div className="col-span-3">
+              <div className='col-span-3'>
                 <Input
-                  id="title"
+                  id='title'
                   {...form.register('title')}
                   className={cn(errors.title && 'border-red-500')}
                 />
                 {errors.title && (
-                  <span className="text-sm text-red-500">
+                  <span className='text-sm text-red-500'>
                     {errors.title.message}
                   </span>
                 )}
               </div>
             </div>
 
-            <div className="space-y-4">
+            <div className='space-y-4'>
               {/* Start Date field */}
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label className="text-right">Ngày bắt đầu</Label>
-                <div className="col-span-3">
+              <div className='grid grid-cols-4 items-center gap-4'>
+                <Label className='text-right'>Ngày bắt đầu</Label>
+                <div className='col-span-3'>
                   <Input
-                    id="startDate"
-                    type="date"
+                    id='startDate'
+                    type='date'
                     {...form.register('startDate')}
                     className={cn(errors.startDate && 'border-red-500')}
                   />
                   {errors.startDate && (
-                    <span className="text-sm text-red-500">
+                    <span className='text-sm text-red-500'>
                       {errors.startDate.message}
                     </span>
                   )}
@@ -145,17 +145,17 @@ export function SearchBookModal({ isOpen, onClose, onSearch }: Props) {
               </div>
 
               {/* End Date field */}
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label className="text-right">Ngày kết thúc</Label>
-                <div className="col-span-3">
+              <div className='grid grid-cols-4 items-center gap-4'>
+                <Label className='text-right'>Ngày kết thúc</Label>
+                <div className='col-span-3'>
                   <Input
-                    id="endDate"
-                    type="date"
+                    id='endDate'
+                    type='date'
                     {...form.register('endDate')}
                     className={cn(errors.endDate && 'border-red-500')}
                   />
                   {errors.endDate && (
-                    <span className="text-sm text-red-500">
+                    <span className='text-sm text-red-500'>
                       {errors.endDate.message}
                     </span>
                   )}
@@ -164,11 +164,11 @@ export function SearchBookModal({ isOpen, onClose, onSearch }: Props) {
             </div>
 
             {/* Status field */}
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="status" className="text-right">
+            <div className='grid grid-cols-4 items-center gap-4'>
+              <Label htmlFor='status' className='text-right'>
                 Trạng thái
               </Label>
-              <div className="col-span-3">
+              <div className='col-span-3'>
                 <Select
                   value={form.watch('status')}
                   onValueChange={(value) => form.setValue('status', value)}
@@ -176,15 +176,15 @@ export function SearchBookModal({ isOpen, onClose, onSearch }: Props) {
                   <SelectTrigger
                     className={cn(errors.status && 'border-red-500')}
                   >
-                    <SelectValue placeholder="Chọn trạng thái" />
+                    <SelectValue placeholder='Chọn trạng thái' />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="new">Sách mới</SelectItem>
-                    <SelectItem value="used">Đã qua sử dụng</SelectItem>
+                    <SelectItem value='new'>Sách mới</SelectItem>
+                    <SelectItem value='used'>Đã qua sử dụng</SelectItem>
                   </SelectContent>
                 </Select>
                 {errors.status && (
-                  <span className="text-sm text-red-500">
+                  <span className='text-sm text-red-500'>
                     {errors.status.message}
                   </span>
                 )}
@@ -192,18 +192,18 @@ export function SearchBookModal({ isOpen, onClose, onSearch }: Props) {
             </div>
 
             {/* Languages field */}
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="languages" className="text-right">
+            <div className='grid grid-cols-4 items-center gap-4'>
+              <Label htmlFor='languages' className='text-right'>
                 Ngôn ngữ
               </Label>
-              <div className="col-span-3">
+              <div className='col-span-3'>
                 <Input
-                  id="languages"
+                  id='languages'
                   {...form.register('languages')}
                   className={cn(errors.languages && 'border-red-500')}
                 />
                 {errors.languages && (
-                  <span className="text-sm text-red-500">
+                  <span className='text-sm text-red-500'>
                     {errors.languages.message}
                   </span>
                 )}
@@ -211,17 +211,17 @@ export function SearchBookModal({ isOpen, onClose, onSearch }: Props) {
             </div>
 
             {/* Price field */}
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label className="text-right">Giá</Label>
-              <div className="col-span-3">
+            <div className='grid grid-cols-4 items-center gap-4'>
+              <Label className='text-right'>Giá</Label>
+              <div className='col-span-3'>
                 <Input
-                  type="number"
-                  placeholder="Nhập giá"
+                  type='number'
+                  placeholder='Nhập giá'
                   {...form.register('price', { valueAsNumber: true })}
                   className={cn(errors.price && 'border-red-500')}
                 />
                 {errors.price && (
-                  <span className="text-sm text-red-500">
+                  <span className='text-sm text-red-500'>
                     {errors.price.message}
                   </span>
                 )}
@@ -229,10 +229,10 @@ export function SearchBookModal({ isOpen, onClose, onSearch }: Props) {
             </div>
           </div>
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={handleReset}>
+            <Button type='button' variant='outline' onClick={handleReset}>
               Đặt lại
             </Button>
-            <Button type="submit">Tìm kiếm</Button>
+            <Button type='submit'>Tìm kiếm</Button>
           </DialogFooter>
         </form>
       </DialogContent>

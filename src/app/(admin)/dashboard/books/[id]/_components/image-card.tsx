@@ -45,7 +45,7 @@ const ImageCard = ({ id, url, altText }: Props) => {
   };
 
   return (
-    <Card className="group relative transform-gpu overflow-hidden">
+    <Card className='group relative transform-gpu overflow-hidden'>
       <Image
         src={url}
         alt={altText}
@@ -55,20 +55,20 @@ const ImageCard = ({ id, url, altText }: Props) => {
         }}
         width={500}
         height={300}
-        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+        className='h-full w-full object-cover transition-transform duration-300 group-hover:scale-105'
       />
-      <div className="absolute inset-0 flex items-end justify-center bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity group-hover:opacity-100">
+      <div className='absolute inset-0 flex items-end justify-center bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity group-hover:opacity-100'>
         <Button
-          variant="destructive"
-          size="sm"
-          className="flex-1"
+          variant='destructive'
+          size='sm'
+          className='flex-1'
           onClick={onDelete}
           disabled={deleteImageMutation.isPending}
         >
           {deleteImageMutation.isPending ? (
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            <Loader2 className='mr-2 h-4 w-4 animate-spin' />
           ) : (
-            <Trash2 className="mr-2 h-4 w-4" />
+            <Trash2 className='mr-2 h-4 w-4' />
           )}
           {deleteImageMutation.isPending ? 'Đang xóa...' : 'Xóa'}
         </Button>

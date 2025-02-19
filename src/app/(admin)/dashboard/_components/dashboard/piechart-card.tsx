@@ -109,16 +109,16 @@ const PiechartCard = ({
   };
 
   return (
-    <Card className="flex-1">
-      <CardHeader className="pb-0">
-        <div className="flex items-center justify-between">
-          <div>
+    <Card className='flex-1'>
+      <CardHeader className='pb-0'>
+        <div className='md:flex md:items-center md:justify-between'>
+          <div className='mb-4 md:mb-0'>
             <CardTitle>Phân loại sách</CardTitle>
             <CardDescription>{getDescriptionText(timeRange)}</CardDescription>
           </div>
           <Select value={timeRange} onValueChange={handleTimeRangeChange}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Chọn thời gian" />
+            <SelectTrigger className='w-[180px]'>
+              <SelectValue placeholder='Chọn thời gian' />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
@@ -141,10 +141,10 @@ const PiechartCard = ({
           </Select>
         </div>
       </CardHeader>
-      <CardContent className="flex-1 pb-0">
+      <CardContent className='flex-1'>
         <ChartContainer
           config={pieConfig}
-          className="mx-auto aspect-square max-h-[250px]"
+          className='mx-auto aspect-square max-h-[250px]'
         >
           <PieChart>
             <ChartTooltip
@@ -153,8 +153,8 @@ const PiechartCard = ({
             />
             <Pie
               data={pieData}
-              dataKey="visitors"
-              nameKey="category"
+              dataKey='visitors'
+              nameKey='category'
               innerRadius={60}
               strokeWidth={5}
             >
@@ -165,20 +165,20 @@ const PiechartCard = ({
                       <text
                         x={viewBox.cx}
                         y={viewBox.cy}
-                        textAnchor="middle"
-                        dominantBaseline="middle"
+                        textAnchor='middle'
+                        dominantBaseline='middle'
                       >
                         <tspan
                           x={viewBox.cx}
                           y={viewBox.cy}
-                          className="fill-foreground text-3xl font-bold"
+                          className='fill-foreground text-3xl font-bold'
                         >
                           {totalBooks.toLocaleString()}
                         </tspan>
                         <tspan
                           x={viewBox.cx}
                           y={(viewBox.cy || 0) + 24}
-                          className="fill-muted-foreground"
+                          className='fill-muted-foreground'
                         >
                           Tổng số sách
                         </tspan>
@@ -191,11 +191,11 @@ const PiechartCard = ({
           </PieChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col gap-2 text-sm">
-        <div className="flex items-center gap-2 font-medium leading-none">
-          Tăng 5.2% so với kỳ trước <TrendingUp className="h-4 w-4" />
+      <CardFooter className='flex-col gap-2 text-sm'>
+        <div className='flex items-center gap-2 font-medium leading-none'>
+          Tăng 5.2% so với kỳ trước <TrendingUp className='h-4 w-4' />
         </div>
-        <div className="leading-none text-muted-foreground">
+        <div className='leading-none text-muted-foreground'>
           Thống kê tổng số sách theo thể loại trong{' '}
           {getTimeRangeLabel(timeRange).toLowerCase()}
         </div>

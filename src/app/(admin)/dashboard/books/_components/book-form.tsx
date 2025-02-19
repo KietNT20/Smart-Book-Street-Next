@@ -30,6 +30,11 @@ export type BookCategoryIds = {
   bookId: string;
 };
 
+interface BookWithRelations extends BookFormValues {
+  bookAuthors?: BookAuthorIds[];
+  bookCategories?: BookCategoryIds[];
+}
+
 type Props = {
   book?: BookFormValues;
   onSubmit: (data: BookFormValues) => void;
@@ -44,11 +49,11 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
       ? {
           ...book,
           authorIds:
-            (book as any).bookAuthors?.map(
+            (book as BookWithRelations).bookAuthors?.map(
               (ba: BookAuthorIds) => ba.authorId
             ) || [],
           categoryIds:
-            (book as any).bookCategories?.map(
+            (book as BookWithRelations).bookCategories?.map(
               (bc: BookCategoryIds) => bc.categoryId
             ) || [],
         }
@@ -89,16 +94,16 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <div className="grid grid-cols-2 gap-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
+        <div className='grid grid-cols-2 gap-4'>
           {/* Book Code */}
           <FormField
             control={form.control}
-            name="code"
+            name='code'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  Mã sách <span className="text-red-400">*</span>
+                  Mã sách <span className='text-red-400'>*</span>
                 </FormLabel>
                 <FormControl>
                   <Input
@@ -116,14 +121,14 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
           {/* Publication Date */}
           <FormField
             control={form.control}
-            name="publicationDate"
+            name='publicationDate'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  Ngày xuất bản <span className="text-red-400">*</span>
+                  Ngày xuất bản <span className='text-red-400'>*</span>
                 </FormLabel>
                 <FormControl>
-                  <div className="block">
+                  <div className='block'>
                     <DatePickerCompVN
                       startYear={1900}
                       endYear={new Date().getFullYear() + 10}
@@ -142,11 +147,11 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
           {/* Book Title */}
           <FormField
             control={form.control}
-            name="title"
+            name='title'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  Tên sách <span className="text-red-400">*</span>
+                  Tên sách <span className='text-red-400'>*</span>
                 </FormLabel>
                 <FormControl>
                   <Input
@@ -162,18 +167,18 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
           />
 
           {/* Choose Publisher */}
-          <PublisherCombobox name="publisherId" />
+          <PublisherCombobox name='publisherId' />
 
           {/* Prices */}
           <FormField
             control={form.control}
-            name="price"
+            name='price'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Giá (VNĐ)</FormLabel>
                 <FormControl>
                   <Input
-                    type="text"
+                    type='text'
                     className={cn(
                       form.formState.errors.price && 'border-red-500'
                     )}
@@ -187,16 +192,16 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
           />
 
           {/* Choose Authors */}
-          <AuthorCombobox name="authorIds" control={form.control} />
+          <AuthorCombobox name='authorIds' control={form.control} />
 
           {/* Lang */}
           <FormField
             control={form.control}
-            name="languages"
+            name='languages'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  Ngôn ngữ <span className="text-red-400">*</span>
+                  Ngôn ngữ <span className='text-red-400'>*</span>
                 </FormLabel>
                 <FormControl>
                   <Input
@@ -213,12 +218,12 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
           />
 
           {/* Choose Categories */}
-          <CategoryCombobox name="categoryIds" control={form.control} />
+          <CategoryCombobox name='categoryIds' control={form.control} />
 
           {/* Size */}
           <FormField
             control={form.control}
-            name="size"
+            name='size'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Kích thước</FormLabel>
@@ -238,11 +243,11 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
           {/* Status */}
           <FormField
             control={form.control}
-            name="status"
+            name='status'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  Trạng thái <span className="text-red-400">*</span>
+                  Trạng thái <span className='text-red-400'>*</span>
                 </FormLabel>
                 <FormControl>
                   <Input
@@ -261,7 +266,7 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
         {/* Description */}
         <FormField
           control={form.control}
-          name="description"
+          name='description'
           render={({ field }) => (
             <FormItem>
               <FormLabel>Mô tả</FormLabel>
@@ -273,17 +278,17 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
           )}
         />
 
-        <div className="flex justify-end gap-2">
+        <div className='flex justify-end gap-2'>
           <Button
-            type="button"
-            variant="outline"
+            type='button'
+            variant='outline'
             disabled={isLoading}
             onClick={onCancel}
-            className="px-7"
+            className='px-7'
           >
             Hủy
           </Button>
-          <Button disabled={isLoading} type="submit" className="px-7">
+          <Button disabled={isLoading} type='submit' className='px-7'>
             {book ? 'Cập nhật' : 'Thêm mới'}
           </Button>
         </div>

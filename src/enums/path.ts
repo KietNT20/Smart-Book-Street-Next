@@ -3,6 +3,7 @@ export enum PATH {
   LOGIN = '/auth/login',
   HOME = '/',
   DASHBOARD = '/dashboard',
+  STATISTICS = '/dashboard/statistics',
   PROFILE = '/profile',
   BRAND = '/brand',
   BOOKS = '/dashboard/books',

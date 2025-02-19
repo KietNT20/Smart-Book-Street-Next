@@ -31,7 +31,7 @@ const BreadcrumbComp = () => {
   return (
     <Breadcrumb>
       <BreadcrumbList>
-        <BreadcrumbItem className="hidden md:block">
+        <BreadcrumbItem className='hidden md:block'>
           <BreadcrumbLink asChild>
             <Link href={PATH.HOME}>Home</Link>
           </BreadcrumbLink>
@@ -39,7 +39,7 @@ const BreadcrumbComp = () => {
 
         {segments.map((segment, index) => (
           <React.Fragment key={segment.href}>
-            <BreadcrumbSeparator className="hidden md:block" />
+            <BreadcrumbSeparator className='hidden md:block' />
             <BreadcrumbItem>
               {index === segments.length - 1 ? (
                 <BreadcrumbPage>{segment.label}</BreadcrumbPage>

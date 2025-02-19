@@ -3,6 +3,7 @@ import Credentials from 'next-auth/providers/credentials';
 import Google from 'next-auth/providers/google';
 import { API_ENDPOINT } from './constant/api-url';
 import { PATH } from './enums/path';
+import { loginSchema } from './lib/zod';
 import { LoginCredentials, UserRoles } from './types/auth-types';
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
@@ -10,6 +11,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     Google({
       clientId: process.env.AUTH_GOOGLE_ID,
       clientSecret: process.env.AUTH_GOOGLE_SECRET,
+      authorization: {
+        params: {
+          prompt: 'consent',
+          access_type: 'offline',
+          response_type: 'code',
+        },
+      },
     }),
     Credentials({
       credentials: {
@@ -18,6 +26,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
       authorize: async (credentials) => {
         try {
+          const { usernameOrEmail, password } = credentials as LoginCredentials;
+
+          const payloadLogin = await loginSchema.parseAsync({
+            usernameOrEmail,
+            password,
+          });
+
           const res = await fetch(
             `${process.env.NEXT_PUBLIC_API_URL}/${API_ENDPOINT.USERS.LOGIN}`,
             {
@@ -25,7 +40,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
               headers: {
                 'Content-Type': 'application/json',
               },
-              body: JSON.stringify(credentials as LoginCredentials),
+              body: JSON.stringify(payloadLogin),
             }
           );
 
@@ -58,8 +73,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     maxAge: 5 * 60 * 60, // 5 hours,
   },
   callbacks: {
-    jwt({ token, user, account }) {
-      console.log('account', account);
+    jwt({ token, user }) {
       if (user) {
         token.sub = user.id;
         token.userName = user.userName;

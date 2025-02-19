@@ -106,14 +106,14 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="mb-3 flex justify-end">
+      <div className='mb-3 flex justify-end'>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm">
+            <Button variant='outline' size='sm'>
               Hiển thị cột
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent align='end'>
             {table
               .getAllColumns()
               .filter((column) => column.getCanHide())
@@ -121,7 +121,7 @@ export function DataTable<TData, TValue>({
                 return (
                   <DropdownMenuCheckboxItem
                     key={column.id}
-                    className="capitalize"
+                    className='capitalize'
                     checked={column.getIsVisible()}
                     onCheckedChange={(value) =>
                       column.toggleVisibility(!!value)
@@ -135,7 +135,7 @@ export function DataTable<TData, TValue>({
         </DropdownMenu>
       </div>
 
-      <div className="rounded-md border">
+      <div className='rounded-md border'>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -166,7 +166,7 @@ export function DataTable<TData, TValue>({
               <TableSkeleton columns={columns.length} rows={state.pageSize} />
             ) : table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} className="hover:bg-muted/50">
+                <TableRow key={row.id} className='hover:bg-muted/50'>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(
@@ -181,7 +181,7 @@ export function DataTable<TData, TValue>({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center"
+                  className='h-24 text-center'
                 >
                   Không có kết quả
                 </TableCell>
@@ -191,13 +191,13 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
 
-      <div className="flex items-center justify-between py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
+      <div className='flex items-center justify-between py-4'>
+        <div className='flex-1 text-sm text-muted-foreground'>
           Trang {state.pageIndex} / {pageCount || 1}
         </div>
-        <div className="flex items-center space-x-6">
-          <div className="flex items-center space-x-2">
-            <p className="text-sm font-medium">Số dòng</p>
+        <div className='flex items-center space-x-6'>
+          <div className='flex items-center space-x-2'>
+            <p className='text-sm font-medium'>Số dòng</p>
             <select
               value={state.pageSize}
               onChange={(e) => {
@@ -207,7 +207,7 @@ export function DataTable<TData, TValue>({
                   pageIndex: 1,
                 });
               }}
-              className="h-8 rounded-md border border-input bg-background px-2"
+              className='h-8 rounded-md border border-input bg-background px-2'
             >
               {[10, 20, 30, 40, 50].map((pageSize) => (
                 <option key={pageSize} value={pageSize}>
@@ -216,10 +216,10 @@ export function DataTable<TData, TValue>({
               ))}
             </select>
           </div>
-          <div className="flex items-center space-x-2">
+          <div className='flex items-center space-x-2'>
             <Button
-              variant="outline"
-              size="sm"
+              variant='outline'
+              size='sm'
               onClick={() => {
                 if (state.pageIndex > 1) {
                   onStateChange({
@@ -233,8 +233,8 @@ export function DataTable<TData, TValue>({
               Trước
             </Button>
             <Button
-              variant="outline"
-              size="sm"
+              variant='outline'
+              size='sm'
               onClick={() => {
                 if (state.pageIndex < (pageCount || 0)) {
                   onStateChange({

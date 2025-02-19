@@ -67,34 +67,34 @@ const AuthorCombobox = ({ name, control }: Props) => {
       render={({ field }) => (
         <FormItem>
           <FormLabel>
-            Tác giả <span className="text-red-400">*</span>
+            Tác giả <span className='text-red-400'>*</span>
           </FormLabel>
           <Popover>
             <PopoverTrigger asChild>
               <FormControl>
                 <Button
-                  variant="outline"
-                  role="combobox"
-                  className="w-full justify-between"
+                  variant='outline'
+                  role='combobox'
+                  className='w-full justify-between'
                 >
                   {field.value?.length
                     ? `${field.value?.length} tác giả được chọn`
                     : 'Chọn tác giả...'}
-                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
                 </Button>
               </FormControl>
             </PopoverTrigger>
-            <PopoverContent align="start" className="p-0">
+            <PopoverContent align='start' className='p-0'>
               <Command shouldFilter={false}>
                 <CommandInput
-                  placeholder="Tìm tác giả..."
+                  placeholder='Tìm tác giả...'
                   value={input}
                   onValueChange={handleSearch}
                 />
                 <CommandList>
                   {field.value?.length > 0 && !input && (
                     <>
-                      <CommandGroup heading="Đã chọn">
+                      <CommandGroup heading='Đã chọn'>
                         {field.value.map((id: string) => (
                           <SelectedAuthor
                             key={id}
@@ -113,10 +113,10 @@ const AuthorCombobox = ({ name, control }: Props) => {
                     </>
                   )}
 
-                  <CommandGroup className="max-h-80 overflow-y-auto">
+                  <CommandGroup className='max-h-80 overflow-y-auto'>
                     {searchAuthorName.isPending && (
-                      <CommandItem disabled className="text-muted-foreground">
-                        <span className="loading loading-spinner loading-sm mr-2" />
+                      <CommandItem disabled className='text-muted-foreground'>
+                        <span className='loading loading-spinner loading-sm mr-2' />
                         Đang tải...
                       </CommandItem>
                     )}

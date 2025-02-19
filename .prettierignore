@@ -7,3 +7,16 @@ package-lock.json
 yarn.lock
 bun.lock
 pnpm-lock.yaml
+.husky
+coverage
+.prettierignore
+.stylelintignore
+.eslintignore
+stories
+storybook-static
+*.log
+playwright-report
+.nyc_output
+test-results
+junit.xml
+docs

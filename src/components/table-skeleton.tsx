@@ -12,7 +12,7 @@ export function TableSkeleton({ columns, rows }: Props) {
         <TableRow key={rowIndex}>
           {Array.from({ length: columns }).map((_, colIndex) => (
             <TableCell key={colIndex}>
-              <div className="h-4 w-full animate-pulse rounded bg-muted"></div>
+              <div className='h-4 w-full animate-pulse rounded bg-muted'></div>
             </TableCell>
           ))}
         </TableRow>

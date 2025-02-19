@@ -53,7 +53,7 @@ const ImageUploader = ({ entityId, folder }: ImageUploaderProps) => {
   return (
     <div>
       <CldUploadWidget
-        signatureEndpoint="/api/sign-cloudinary-params"
+        signatureEndpoint='/api/sign-cloudinary-params'
         onSuccess={handleUpload}
         options={uploadOptions}
       >
@@ -61,7 +61,7 @@ const ImageUploader = ({ entityId, folder }: ImageUploaderProps) => {
           <button
             onClick={() => open()}
             disabled={uploading}
-            className="rounded bg-blue-500 px-4 py-2 text-white duration-300 hover:bg-blue-600 disabled:bg-gray-400"
+            className='rounded bg-blue-500 px-4 py-2 text-white duration-300 hover:bg-blue-600 disabled:bg-gray-400'
           >
             {uploading ? 'Đang xử lý...' : 'Tải ảnh'}
           </button>

@@ -110,16 +110,16 @@ const BarchartCard = ({ barData, barConfig, onTimeRangeChange }: Props) => {
   };
 
   return (
-    <Card className="mb-4 flex-[2] md:mb-0">
+    <Card className='mb-4 flex-[2] lg:mb-0'>
       <CardHeader>
-        <div className="flex items-center justify-between">
-          <div>
+        <div className='md:flex md:items-center md:justify-between'>
+          <div className='mb-4 md:mb-0'>
             <CardTitle>Thống kê theo tháng</CardTitle>
             <CardDescription>{getDescriptionText(timeRange)}</CardDescription>
           </div>
           <Select value={timeRange} onValueChange={handleTimeRangeChange}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Chọn thời gian" />
+            <SelectTrigger className='w-[180px]'>
+              <SelectValue placeholder='Chọn thời gian' />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
@@ -147,7 +147,7 @@ const BarchartCard = ({ barData, barConfig, onTimeRangeChange }: Props) => {
           <BarChart accessibilityLayer data={barData}>
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="month"
+              dataKey='month'
               tickLine={false}
               tickMargin={10}
               axisLine={false}
@@ -155,18 +155,18 @@ const BarchartCard = ({ barData, barConfig, onTimeRangeChange }: Props) => {
             />
             <ChartTooltip
               cursor={false}
-              content={<ChartTooltipContent indicator="dashed" />}
+              content={<ChartTooltipContent indicator='dashed' />}
             />
-            <Bar dataKey="visitor" fill="hsl(var(--chart-1))" radius={4} />
-            <Bar dataKey="book" fill="hsl(var(--chart-2))" radius={4} />
+            <Bar dataKey='visitor' fill='hsl(var(--chart-1))' radius={4} />
+            <Bar dataKey='book' fill='hsl(var(--chart-2))' radius={4} />
           </BarChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 font-medium leading-none">
-          Tăng 5.2% so với kỳ trước <TrendingUp className="h-4 w-4" />
+      <CardFooter className='flex-col items-start gap-2 text-sm'>
+        <div className='flex gap-2 font-medium leading-none'>
+          Tăng 5.2% so với kỳ trước <TrendingUp className='h-4 w-4' />
         </div>
-        <div className="leading-none text-muted-foreground">
+        <div className='leading-none text-muted-foreground'>
           {getFooterText(timeRange)}
         </div>
       </CardFooter>
