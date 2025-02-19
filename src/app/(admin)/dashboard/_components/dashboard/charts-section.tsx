@@ -77,10 +77,9 @@ const ChartsSection = () => {
   }, []);
 
   return (
-    <div className='mt-4 gap-4 md:flex'>
+    <div className='mt-4 gap-4 lg:flex'>
       {/* Bar Chart Container */}
       <BarchartCard {...barProps} />
-
       {/* Pie Chart Container */}
       <PiechartCard {...pieProps} totalBooks={totalBooks} />
     </div>

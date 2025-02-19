@@ -110,10 +110,10 @@ const BarchartCard = ({ barData, barConfig, onTimeRangeChange }: Props) => {
   };
 
   return (
-    <Card className='mb-4 flex-[2] md:mb-0'>
+    <Card className='mb-4 flex-[2] lg:mb-0'>
       <CardHeader>
-        <div className='flex items-center justify-between'>
-          <div>
+        <div className='md:flex md:items-center md:justify-between'>
+          <div className='mb-4 md:mb-0'>
             <CardTitle>Thống kê theo tháng</CardTitle>
             <CardDescription>{getDescriptionText(timeRange)}</CardDescription>
           </div>

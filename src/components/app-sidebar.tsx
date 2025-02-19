@@ -10,7 +10,7 @@ import {
   LibraryBig,
   Map,
   PieChart,
-  Settings2,
+  Store,
 } from 'lucide-react';
 import * as React from 'react';
 
@@ -87,12 +87,12 @@ const data = {
       ],
     },
     {
-      title: 'Documentation',
+      title: 'Nhà xuất bản',
       url: '#',
       icon: BookOpen,
       items: [
         {
-          title: 'Introduction',
+          title: 'Quản lý',
           url: '#',
         },
         {
@@ -110,9 +110,9 @@ const data = {
       ],
     },
     {
-      title: 'Settings',
+      title: 'Cửa hàng',
       url: '#',
-      icon: Settings2,
+      icon: Store,
       items: [
         {
           title: 'General',
@@ -136,12 +136,12 @@ const data = {
   projects: [
     {
       name: 'Dashboard',
-      url: '/dashboard',
+      url: PATH.DASHBOARD,
       icon: PieChart,
     },
     {
       name: 'Statistics',
-      url: '#',
+      url: PATH.STATISTICS,
       icon: ChartNoAxesCombined,
     },
 

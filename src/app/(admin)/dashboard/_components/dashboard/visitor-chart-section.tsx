@@ -78,12 +78,12 @@ const VisitorChartSection = () => {
     useState<TimeRangeLong>('this-month');
 
   return (
-    <div className='gap-4 md:flex'>
+    <div className='gap-4 lg:flex'>
       {/* Biểu đồ số lượng khách theo giờ */}
       <Card className='flex-1'>
         <CardHeader>
-          <div className='flex items-center justify-between'>
-            <div>
+          <div className='items-center justify-between md:flex'>
+            <div className='mb-4 md:mb-0'>
               <CardTitle>Lượt khách theo giờ</CardTitle>
               <CardDescription>
                 Thống kê số lượng khách theo từng khung giờ
@@ -140,10 +140,10 @@ const VisitorChartSection = () => {
       </Card>
 
       {/* Biểu đồ phân bố độ tuổi và giới tính */}
-      <Card className='mt-4 flex-1 md:mt-0'>
+      <Card className='mt-4 flex-1 lg:mt-0'>
         <CardHeader>
-          <div className='flex items-center justify-between'>
-            <div>
+          <div className='items-center justify-between md:flex'>
+            <div className='mb-4 md:mb-0'>
               <CardTitle>Phân bố độ tuổi và giới tính</CardTitle>
               <CardDescription>
                 Thống kê theo nhóm tuổi và giới tính

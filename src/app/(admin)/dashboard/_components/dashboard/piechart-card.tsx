@@ -111,8 +111,8 @@ const PiechartCard = ({
   return (
     <Card className='flex-1'>
       <CardHeader className='pb-0'>
-        <div className='flex items-center justify-between'>
-          <div>
+        <div className='md:flex md:items-center md:justify-between'>
+          <div className='mb-4 md:mb-0'>
             <CardTitle>Phân loại sách</CardTitle>
             <CardDescription>{getDescriptionText(timeRange)}</CardDescription>
           </div>
@@ -141,7 +141,7 @@ const PiechartCard = ({
           </Select>
         </div>
       </CardHeader>
-      <CardContent className='flex-1 pb-0'>
+      <CardContent className='flex-1'>
         <ChartContainer
           config={pieConfig}
           className='mx-auto aspect-square max-h-[250px]'
