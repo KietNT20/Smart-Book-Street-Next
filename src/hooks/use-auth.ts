@@ -10,8 +10,8 @@ export const useLogin = () => {
   const router = useRouter();
   return useMutation({
     mutationKey: ['login'],
-    mutationFn: async ({ usernameOrEmail, password }: LoginCredentials) =>
-      await signIn('credentials', {
+    mutationFn: ({ usernameOrEmail, password }: LoginCredentials) =>
+      signIn('credentials', {
         usernameOrEmail,
         password,
         redirect: false,

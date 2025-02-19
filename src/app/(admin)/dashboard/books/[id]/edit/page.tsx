@@ -3,27 +3,24 @@
 import BackButton from '@/components/back-btn/back-button';
 import { Separator } from '@/components/ui/separator';
 import { PATH } from '@/enums/path';
-import { useBookSearchById } from '@/hooks/use-book-search';
-import useDebounce from '@/hooks/useDebounce';
-import { BookFormValues } from '@/lib/zod';
-import { useParams, useRouter } from 'next/navigation';
-import { useUpdateBook } from '../../_lib/use-book-operations';
 import BookForm from '../../_components/book-form';
+import { useEditPage } from './useEditPage';
 
 export default function EditBookPage() {
-  const router = useRouter();
-  const params = useParams();
-  const bookId = params.id as string;
+  // const params = useParams();
+  // const bookId = params.id as string;
 
-  const { data: book } = useBookSearchById(bookId);
-  const { handleUpdate, isLoading } = useUpdateBook({
-    _onSuccess: () => router.push(`${PATH.BOOKS}/${bookId}`),
-  });
-  const apiLoading = useDebounce(isLoading, 300);
+  // const { data: book } = useBookSearchById(bookId);
+  // const { handleUpdate, isLoading } = useUpdateBook({
+  //   _onSuccess: () => router.push(`${PATH.BOOKS}/${bookId}`),
+  // });
+  // const apiLoading = useDebounce(isLoading, 300);
 
-  const handleSubmit = (data: BookFormValues) => {
-    handleUpdate({ ...data, id: bookId });
-  };
+  // const handleSubmit = (data: BookFormValues) => {
+  //   handleUpdate({ ...data, id: bookId });
+  // };
+
+  const { book, apiLoading, router, handleSubmit } = useEditPage();
 
   return (
     <div className='container relative mx-auto'>

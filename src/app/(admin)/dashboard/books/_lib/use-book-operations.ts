@@ -39,7 +39,6 @@ export function useBookList({ pagination, searchCriteria }: UseBookListProps) {
   const handleDelete = async (id: string) => {
     try {
       await deleteBookMutation.mutateAsync(id);
-      toast.success('Đã xóa sách');
     } catch (error) {
       toast.error('Đã xảy ra lỗi khi xóa sách');
       console.error('Error deleting book:', error);

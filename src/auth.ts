@@ -3,6 +3,7 @@ import Credentials from 'next-auth/providers/credentials';
 import Google from 'next-auth/providers/google';
 import { API_ENDPOINT } from './constant/api-url';
 import { PATH } from './enums/path';
+import { loginSchema } from './lib/zod';
 import { LoginCredentials, UserRoles } from './types/auth-types';
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
@@ -25,6 +26,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
       authorize: async (credentials) => {
         try {
+          const { usernameOrEmail, password } = credentials as LoginCredentials;
+
+          const payloadLogin = await loginSchema.parseAsync({
+            usernameOrEmail,
+            password,
+          });
+
           const res = await fetch(
             `${process.env.NEXT_PUBLIC_API_URL}/${API_ENDPOINT.USERS.LOGIN}`,
             {
@@ -32,7 +40,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
               headers: {
                 'Content-Type': 'application/json',
               },
-              body: JSON.stringify(credentials as LoginCredentials),
+              body: JSON.stringify(payloadLogin),
             }
           );
 
