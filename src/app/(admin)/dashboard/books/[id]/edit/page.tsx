@@ -7,19 +7,6 @@ import BookForm from '../../_components/book-form';
 import { useEditPage } from './useEditPage';
 
 export default function EditBookPage() {
-  // const params = useParams();
-  // const bookId = params.id as string;
-
-  // const { data: book } = useBookSearchById(bookId);
-  // const { handleUpdate, isLoading } = useUpdateBook({
-  //   _onSuccess: () => router.push(`${PATH.BOOKS}/${bookId}`),
-  // });
-  // const apiLoading = useDebounce(isLoading, 300);
-
-  // const handleSubmit = (data: BookFormValues) => {
-  //   handleUpdate({ ...data, id: bookId });
-  // };
-
   const { book, apiLoading, router, handleSubmit } = useEditPage();
 
   return (

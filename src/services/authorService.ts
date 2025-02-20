@@ -33,7 +33,9 @@ export const authorService = {
     return res.data;
   },
   delete: async (id: string) => {
-    const res = await axiosInstance.put(`${API_ENDPOINT.AUTHORS.DELETE}/${id}`);
+    const res = await axiosInstance.put(
+      `${API_ENDPOINT.AUTHORS.DELETE}?id=${id}`
+    );
     return res.data;
   },
 };

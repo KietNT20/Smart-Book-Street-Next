@@ -14,7 +14,7 @@ import { useRouter } from 'next/navigation';
 
 type Props = {
   book: Book;
-  _onDelete: (id?: string) => void;
+  _onDelete: (id: string) => void;
 };
 
 const BookMenuAction = ({ book, _onDelete }: Props) => {
@@ -42,7 +42,7 @@ const BookMenuAction = ({ book, _onDelete }: Props) => {
           Sửa
         </DropdownMenuItem>
         <DropdownMenuItem
-          onClick={() => _onDelete(book?.id)}
+          onClick={() => _onDelete(book.id!)}
           className='cursor-pointer text-red-600'
         >
           <Trash className='mr-2 h-4 w-4' />

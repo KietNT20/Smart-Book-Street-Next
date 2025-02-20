@@ -6,7 +6,7 @@ import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react';
 import BookMenuAction from './_components/book-menu-action';
 
 type ColumnHandlers = {
-  _onDelete: (id?: string) => void;
+  _onDelete: (id: string) => void;
 };
 
 export const createColumns = ({
