@@ -1,4 +1,5 @@
 'use client';
+
 import BackButton from '@/components/back-btn/back-button';
 import { ConfirmModal } from '@/components/confirm-modal';
 import ImageUploader from '@/components/image-upload/image-uploader';
@@ -13,12 +14,12 @@ import useDebounce from '@/hooks/useDebounce';
 import { formatDate, formatPrice } from '@/lib/utils';
 import { authorService } from '@/services/authorService';
 import { categoryService } from '@/services/categoryService';
+import { Book } from '@/types/book-types';
 import { ImageResArr } from '@/types/image-types';
 import { useQueries } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { BookAuthorIds, BookCategoryIds } from '../_components/book-form';
 import ImageCard from './_components/image-card';
 
 export default function BooksDetailPage({
@@ -35,16 +36,17 @@ export default function BooksDetailPage({
       entityId: params.id,
     });
   const { deleteBookMutation } = useBookMutations();
+
   const apiLoading = useDebounce(bookDetailLoading || getImagePending, 300);
   const deletedLoading = useDebounce(deleteBookMutation.isPending, 300);
-  const book = bookDetailData?.result;
+
+  const book: Book = bookDetailData?.result;
+
   const bookAuthorsRes = useQueries({
-    queries: ((book?.bookAuthors as BookAuthorIds[]) || [])?.map(
-      (bookAuth, index: number) => ({
-        queryKey: ['author', index],
-        queryFn: () => authorService.getById(bookAuth.authorId),
-      })
-    ),
+    queries: (book?.bookAuthors || [])?.map((bookAuth, index: number) => ({
+      queryKey: ['author', index],
+      queryFn: () => authorService.getById(bookAuth.authorId),
+    })),
     combine: (results) => {
       return {
         data: results.map((result) => result.data),
@@ -54,7 +56,7 @@ export default function BooksDetailPage({
   });
 
   const bookCategoriesRes = useQueries({
-    queries: ((book?.bookCategories as BookCategoryIds[]) || [])?.map(
+    queries: (book?.bookCategories || [])?.map(
       (bookCategory, index: number) => ({
         queryKey: ['category', index],
         queryFn: () => categoryService.getById(bookCategory.categoryId),
@@ -139,7 +141,7 @@ export default function BooksDetailPage({
             <p className='flex items-center gap-2 font-medium'>
               Nhà xuất bản:{' '}
               <span className='font-semibold'>
-                {book?.publisher.publisherName}
+                {book.publisher?.publisherName}
               </span>
             </p>
             <p className='flex items-center gap-2 font-medium'>
@@ -166,7 +168,10 @@ export default function BooksDetailPage({
           <div className='space-y-2'>
             <h3 className='text-xl font-semibold'>Thông tin thêm</h3>
             <p>Ngày xuất bản: {formatDate(book?.publicationDate)}</p>
-            <p>Ngày tạo: {formatDate(book?.createdDate)}</p>
+            <p>
+              Ngày tạo:{' '}
+              {book.createdDate ? formatDate(book.createdDate.toString()) : ''}
+            </p>
           </div>
         </div>
       </div>

@@ -28,12 +28,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       authorize: async (credentials) => {
         try {
           const { usernameOrEmail, password } = credentials as LoginCredentials;
-
           const payloadLogin = await loginSchema.parseAsync({
             usernameOrEmail,
             password,
           });
-
           const res = await fetch(`${BASE_URL}/${API_ENDPOINT.USERS.LOGIN}`, {
             method: 'POST',
             headers: {
@@ -41,10 +39,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             },
             body: JSON.stringify(payloadLogin),
           });
-
           const data: Awaited<LoginResponse> = await res.json();
 
-          if (!res.ok) return null;
+          if (!res.ok) {
+            throw new Error(data.message || 'Invalid credentials');
+          }
 
           const user: Awaited<User> = {
             id: data.result.id,

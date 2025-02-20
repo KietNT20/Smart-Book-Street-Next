@@ -55,9 +55,9 @@ export function DataTable<TData, TValue>({
     data,
     columns,
     defaultColumn: {
-      size: 200, //starting column size
-      minSize: 50, //enforced during column resizing
-      maxSize: 500, //enforced during column resizing
+      size: 200,
+      minSize: 50,
+      maxSize: 500,
     },
     pageCount: pageCount ?? -1,
     getCoreRowModel: getCoreRowModel(),

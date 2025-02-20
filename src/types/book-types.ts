@@ -1,4 +1,17 @@
 import { BaseEntity } from './common-types';
+import { Publisher } from './publisher-types';
+
+export type BookAuthorIds = {
+  id: string;
+  authorId: string;
+  bookId: string;
+};
+
+export type BookCategoryIds = {
+  id: string;
+  categoryId: string;
+  bookId: string;
+};
 
 export interface Book extends BaseEntity {
   code: string;
@@ -12,10 +25,10 @@ export interface Book extends BaseEntity {
   publisherId: string;
   authorIds: string[];
   categoryIds: string[];
-  // publisher?: any | null;
-  // bookAuthors?: any[];
+  publisher?: Publisher;
+  bookAuthors?: BookAuthorIds[];
+  bookCategories?: BookCategoryIds[];
   // inventories?: any[];
-  // bookCategories?: any[];
 }
 
 export type GetAllBooksResponse = {

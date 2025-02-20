@@ -3,49 +3,51 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { PATH } from '@/enums/path';
-import { Book } from '@/types/book-types';
-import { Eye, MoreHorizontal, Pen, Trash } from 'lucide-react';
+import { Author } from '@/types/author-types';
+import { Eye, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 type Props = {
-  book: Book;
-  _onDelete: (id?: string) => void;
+  author: Author;
 };
 
-const BookMenuAction = ({ book, _onDelete }: Props) => {
+const AuthorMenuAction = ({ author }: Props) => {
   const router = useRouter();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant='ghost' className='h-8 w-8 p-0'>
+          <span className='sr-only'>Mở menu</span>
           <MoreHorizontal className='h-4 w-4' />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align='end'>
-        <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
         <DropdownMenuItem asChild className='cursor-pointer'>
-          <Link href={`${PATH.BOOKS}/${book.id}`}>
+          <Link href={`${PATH.AUTHORS}/${author.id}`}>
             <Eye className='mr-2 h-4 w-4' />
             Xem chi tiết
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem
-          onClick={() => router.push(`${PATH.BOOKS}/${book.id}/edit`)}
+          onClick={() => {
+            router.push(`${PATH.AUTHORS}/${author.id}/edit`);
+          }}
           className='cursor-pointer'
         >
-          <Pen className='mr-2 h-4 w-4' />
-          Sửa
+          <Pencil className='mr-2 h-4 w-4' />
+          Chỉnh sửa
         </DropdownMenuItem>
         <DropdownMenuItem
-          onClick={() => _onDelete(book?.id)}
+          onClick={() => {
+            console.log('Delete author:', author.id);
+          }}
           className='cursor-pointer text-red-600'
         >
-          <Trash className='mr-2 h-4 w-4' />
+          <Trash2 className='mr-2 h-4 w-4' />
           Xóa
         </DropdownMenuItem>
       </DropdownMenuContent>
@@ -53,4 +55,4 @@ const BookMenuAction = ({ book, _onDelete }: Props) => {
   );
 };
 
-export default BookMenuAction;
+export default AuthorMenuAction;

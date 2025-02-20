@@ -75,7 +75,7 @@ export default function BooksPage() {
             Tìm kiếm
           </Button>
           <Button onClick={() => router.push(`${PATH.BOOKS}/create`)}>
-            <Plus className='mr-2 h-4 w-4' /> Thêm sách
+            <Plus className='mr-2 h-4 w-4' /> Thêm sách mới
           </Button>
         </div>
       </div>

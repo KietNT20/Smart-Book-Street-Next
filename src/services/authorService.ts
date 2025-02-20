@@ -2,7 +2,7 @@ import { API_ENDPOINT } from '@/constant/api-url';
 import {
   Author,
   AuthorPayload,
-  SearchPaginayionAuthor,
+  SearchPaginationAuthor,
 } from '@/types/author-types';
 import axiosInstance from '@/utils/axiosInstance';
 
@@ -17,7 +17,7 @@ export const authorService = {
     const res = await axiosInstance.post(API_ENDPOINT.AUTHORS.SEARCH, payload);
     return res.data;
   },
-  searchPagination: async (payload: SearchPaginayionAuthor) => {
+  searchPagination: async (payload: SearchPaginationAuthor) => {
     const res = await axiosInstance.post(
       API_ENDPOINT.AUTHORS.SEARCH_PAGINATION,
       payload
@@ -28,7 +28,7 @@ export const authorService = {
     const res = await axiosInstance.post(API_ENDPOINT.AUTHORS.ADD, payload);
     return res.data;
   },
-  update: async (payload: Omit<Author, 'images'>) => {
+  update: async (payload: Partial<Omit<Author, 'images'>>) => {
     const res = await axiosInstance.put(API_ENDPOINT.AUTHORS.UPDATE, payload);
     return res.data;
   },

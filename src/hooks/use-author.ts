@@ -1,5 +1,9 @@
 import { authorService } from '@/services/authorService';
-import { Author, AuthorPayload } from '@/types/author-types';
+import {
+  Author,
+  AuthorPayload,
+  SearchPaginationAuthor,
+} from '@/types/author-types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
@@ -7,6 +11,13 @@ export const useGetAuthorById = (id: string) => {
   return useQuery({
     queryKey: ['author', id],
     queryFn: () => authorService.getById(id),
+  });
+};
+
+export const useSearchPaginationAuthor = (params: SearchPaginationAuthor) => {
+  return useQuery({
+    queryKey: ['authors', params],
+    queryFn: () => authorService.searchPagination(params),
   });
 };
 

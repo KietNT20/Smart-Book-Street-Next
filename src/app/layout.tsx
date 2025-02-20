@@ -1,8 +1,8 @@
 import { Toaster } from '@/components/ui/sonner';
+import Provider from '@/providers/provider';
 import type { Metadata } from 'next';
 import { Roboto } from 'next/font/google';
 import './globals.css';
-import Provider from '@/providers/provider';
 
 const roboto = Roboto({
   subsets: ['vietnamese'],
@@ -21,7 +21,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className={`${roboto.className} antialiased`}>
+      <body
+        className={`${roboto.className} antialiased`}
+        suppressHydrationWarning
+      >
         <Provider>{children}</Provider>
         <Toaster richColors />
       </body>
