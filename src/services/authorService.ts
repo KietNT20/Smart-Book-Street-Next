@@ -1,5 +1,9 @@
 import { API_ENDPOINT } from '@/constant/api-url';
-import { Author, AuthorPayload } from '@/types/author-types';
+import {
+  Author,
+  AuthorPayload,
+  SearchPaginayionAuthor,
+} from '@/types/author-types';
 import axiosInstance from '@/utils/axiosInstance';
 
 export const authorService = {
@@ -11,6 +15,13 @@ export const authorService = {
   },
   search: async (payload: { authorName: string }) => {
     const res = await axiosInstance.post(API_ENDPOINT.AUTHORS.SEARCH, payload);
+    return res.data;
+  },
+  searchPagination: async (payload: SearchPaginayionAuthor) => {
+    const res = await axiosInstance.post(
+      API_ENDPOINT.AUTHORS.SEARCH_PAGINATION,
+      payload
+    );
     return res.data;
   },
   add: async (payload: AuthorPayload) => {

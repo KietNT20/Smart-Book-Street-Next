@@ -8,3 +8,13 @@ export type Author = {
 };
 
 export type AuthorPayload = Omit<Author, 'id'>;
+
+export type SearchPaginayionAuthor = {
+  pageNumber: number;
+  pageSize: number;
+  sortField: string;
+  sortOrder: number;
+  result: {
+    authorName?: string;
+  };
+};

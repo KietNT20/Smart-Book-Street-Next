@@ -3,7 +3,7 @@ import { formatDate } from '@/lib/utils';
 import { Book } from '@/types/book-types';
 import { ColumnDef } from '@tanstack/react-table';
 import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react';
-import BookMenuAction from '../_components/book-menu-action';
+import BookMenuAction from './_components/book-menu-action';
 
 type ColumnHandlers = {
   _onDelete: (id?: string) => void;
@@ -138,38 +138,7 @@ export const createColumns = ({
       const book = row.original;
       const bookProps = { book, _onDelete };
 
-      return (
-        <BookMenuAction {...bookProps} />
-        // <DropdownMenu>
-        //   <DropdownMenuTrigger asChild>
-        //     <Button variant='ghost' className='h-8 w-8 p-0'>
-        //       <MoreHorizontal className='h-4 w-4' />
-        //     </Button>
-        //   </DropdownMenuTrigger>
-        //   <DropdownMenuContent align='end'>
-        //     <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
-        //     <DropdownMenuItem asChild className='cursor-pointer'>
-        //       <Link href={`${PATH.BOOKS}/${book.id}`}>
-        //         <Eye className='mr-2 h-4 w-4' />
-        //         Xem chi tiết
-        //       </Link>
-        //     </DropdownMenuItem>
-        //     <DropdownMenuItem asChild className='cursor-pointer'>
-        //       <Link href={`${PATH.BOOKS}/${book.id}/edit`}>
-        //         <Pen className='mr-2 h-4 w-4' />
-        //         Sửa
-        //       </Link>
-        //     </DropdownMenuItem>
-        //     <DropdownMenuItem
-        //       onClick={() => _onDelete(book?.id)}
-        //       className='cursor-pointer'
-        //     >
-        //       <Trash className='mr-2 h-4 w-4' />
-        //       Xóa
-        //     </DropdownMenuItem>
-        //   </DropdownMenuContent>
-        // </DropdownMenu>
-      );
+      return <BookMenuAction {...bookProps} />;
     },
   },
 ];

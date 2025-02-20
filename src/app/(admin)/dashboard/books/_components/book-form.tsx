@@ -16,7 +16,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import AuthorCombobox from '../../_components/author-combobox';
 import CategoryCombobox from '../../_components/category-combobox';
-import { PublisherCombobox } from './combobox-publisher';
+import PublisherCombobox from '../../_components/publisher-combobox';
 
 export type BookAuthorIds = {
   id: string;
@@ -167,7 +167,7 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
           />
 
           {/* Choose Publisher */}
-          <PublisherCombobox name='publisherId' />
+          <PublisherCombobox name='publisherId' control={form.control} />
 
           {/* Prices */}
           <FormField

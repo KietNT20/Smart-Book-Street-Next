@@ -15,9 +15,7 @@ declare module 'next-auth' {
     userName: string;
     token: string;
     userRoles: {
-      role: {
-        roleName: RoleEnums;
-      };
+      role: RoleEnums;
     }[];
   }
 }
@@ -28,9 +26,7 @@ declare module 'next-auth/jwt' {
     fullName: string;
     accessToken: string;
     userRoles: {
-      role: {
-        roleName: RoleEnums;
-      };
+      role: RoleEnums;
     }[];
   }
 }
