@@ -6,7 +6,7 @@ import { PATH } from '@/enums/path';
 import useDebounce from '@/hooks/useDebounce';
 import { Book, BookSearchCriteria } from '@/types/book-types';
 import { Plus, Search, X } from 'lucide-react';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { SearchBookModal } from './_components/search-book-modal';
 import { useBookList } from './_lib/use-book-operations';
 import { useBookPageState } from './_lib/use-book-page-state';
@@ -40,6 +40,8 @@ export default function BooksPage() {
     },
   });
 
+  const router = useRouter();
+
   const handleSearch = (criteria: Partial<BookSearchCriteria>) => {
     setSearchCriteria(criteria);
     setPagination((prev) => ({ ...prev, pageIndex: 1 }));
@@ -72,11 +74,9 @@ export default function BooksPage() {
             <Search className='mr-2 h-4 w-4' />
             Tìm kiếm
           </Button>
-          <Link href={`${PATH.BOOKS}/create`}>
-            <Button>
-              <Plus className='mr-2 h-4 w-4' /> Thêm sách
-            </Button>
-          </Link>
+          <Button onClick={() => router.push(`${PATH.BOOKS}/create`)}>
+            <Plus className='mr-2 h-4 w-4' /> Thêm sách mới
+          </Button>
         </div>
       </div>
 

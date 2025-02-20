@@ -117,11 +117,13 @@ export const searchBookSchema = z
 
 export type SearchBookFormValues = z.infer<typeof searchBookSchema>;
 
-export const authorSchema = z.object({
-  authorName: z.string().min(1, { message: 'Tên tác giả không được để trống' }),
-  dob: z.string().optional(),
-  nationality: z.string().optional(),
+export const authorFormSchema = z.object({
+  authorName: z.string().min(1, 'Tên tác giả là bắt buộc'),
+  dob: z.date({
+    required_error: 'Vui lòng chọn ngày sinh',
+  }),
+  nationality: z.string().min(1, 'Quốc tịch là bắt buộc'),
   biography: z.string().optional(),
 });
 
-export type AuthorFormValues = z.infer<typeof authorSchema>;
+export type AuthorFormValues = z.infer<typeof authorFormSchema>;

@@ -75,7 +75,10 @@ const AuthorCombobox = ({ name, control }: Props) => {
                 <Button
                   variant='outline'
                   role='combobox'
-                  className='w-full justify-between'
+                  className={cn(
+                    'w-full justify-between',
+                    !field.value && 'text-muted-foreground'
+                  )}
                 >
                   {field.value?.length
                     ? `${field.value?.length} tác giả được chọn`
@@ -84,7 +87,10 @@ const AuthorCombobox = ({ name, control }: Props) => {
                 </Button>
               </FormControl>
             </PopoverTrigger>
-            <PopoverContent align='start' className='p-0'>
+            <PopoverContent
+              align='start'
+              className='w-[200px] p-0 lg:w-[500px]'
+            >
               <Command shouldFilter={false}>
                 <CommandInput
                   placeholder='Tìm tác giả...'
@@ -121,7 +127,7 @@ const AuthorCombobox = ({ name, control }: Props) => {
                       </CommandItem>
                     )}
                     {!searchAuthorName.isPending &&
-                      !debouncedResults.length &&
+                      !debouncedResults?.length &&
                       input && (
                         <CommandEmpty>Không tìm thấy tác giả.</CommandEmpty>
                       )}

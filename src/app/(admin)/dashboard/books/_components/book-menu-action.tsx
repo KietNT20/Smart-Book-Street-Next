@@ -10,13 +10,15 @@ import { PATH } from '@/enums/path';
 import { Book } from '@/types/book-types';
 import { Eye, MoreHorizontal, Pen, Trash } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 type Props = {
   book: Book;
-  _onDelete: (id?: string) => void;
+  _onDelete: (id: string) => void;
 };
 
 const BookMenuAction = ({ book, _onDelete }: Props) => {
+  const router = useRouter();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -32,15 +34,16 @@ const BookMenuAction = ({ book, _onDelete }: Props) => {
             Xem chi tiết
           </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem asChild className='cursor-pointer'>
-          <Link href={`${PATH.BOOKS}/${book.id}/edit`}>
-            <Pen className='mr-2 h-4 w-4' />
-            Sửa
-          </Link>
+        <DropdownMenuItem
+          onClick={() => router.push(`${PATH.BOOKS}/${book.id}/edit`)}
+          className='cursor-pointer'
+        >
+          <Pen className='mr-2 h-4 w-4' />
+          Sửa
         </DropdownMenuItem>
         <DropdownMenuItem
-          onClick={() => _onDelete(book?.id)}
-          className='cursor-pointer'
+          onClick={() => _onDelete(book.id!)}
+          className='cursor-pointer text-red-600'
         >
           <Trash className='mr-2 h-4 w-4' />
           Xóa

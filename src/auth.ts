@@ -1,10 +1,11 @@
-import NextAuth from 'next-auth';
+import NextAuth, { User } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import Google from 'next-auth/providers/google';
 import { API_ENDPOINT } from './constant/api-url';
+import { BASE_URL } from './constant/environment';
 import { PATH } from './enums/path';
 import { loginSchema } from './lib/zod';
-import { LoginCredentials, UserRoles } from './types/auth-types';
+import { LoginCredentials, LoginResponse, UserRoles } from './types/auth-types';
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
@@ -27,37 +28,37 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       authorize: async (credentials) => {
         try {
           const { usernameOrEmail, password } = credentials as LoginCredentials;
-
           const payloadLogin = await loginSchema.parseAsync({
             usernameOrEmail,
             password,
           });
+          const res = await fetch(`${BASE_URL}/${API_ENDPOINT.USERS.LOGIN}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payloadLogin),
+          });
+          const data: Awaited<LoginResponse> = await res.json();
 
-          const res = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/${API_ENDPOINT.USERS.LOGIN}`,
-            {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(payloadLogin),
-            }
-          );
+          if (!res.ok) {
+            throw new Error(data.message || 'Invalid credentials');
+          }
 
-          const data = await res.json();
-
-          if (!data) return null;
-
-          return {
+          const user: Awaited<User> = {
             id: data.result.id,
-            fullName: data.result.fullName,
             email: data.result.email,
             userName: data.result.userName,
             token: data.token,
-            userRoles: data.result.userRoles.map(
-              (role: UserRoles) => role.role?.roleName
-            ),
+            userRoles: data.result.userRoles.map((role: UserRoles) => {
+              if (!role.role || !role.role.roleName) {
+                throw new Error('Missing roleName for a user role');
+              }
+              return { role: role.role.roleName };
+            }),
           };
+
+          return user;
         } catch (error) {
           console.error('Auth error:', error);
           return null;

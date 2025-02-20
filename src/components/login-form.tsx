@@ -47,7 +47,8 @@ export function LoginForm({
 
   const onSubmit = async (values: LoginFormValues) => {
     try {
-      await login.mutateAsync(values);
+      const { usernameOrEmail, password } = values;
+      await login.mutateAsync({ usernameOrEmail, password });
     } catch (error: any) {
       if ((error as AuthError)?.type === 'CredentialsSignin') {
         // Set error cho cả 2 field

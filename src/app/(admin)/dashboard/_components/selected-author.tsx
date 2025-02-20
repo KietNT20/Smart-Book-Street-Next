@@ -1,5 +1,6 @@
 import { CommandItem } from '@/components/ui/command';
 import { useGetAuthorById } from '@/hooks/use-author';
+import { Author } from '@/types/author-types';
 import { Check } from 'lucide-react';
 
 type Props = {
@@ -9,7 +10,7 @@ type Props = {
 
 const SelectedAuthor = ({ id, onDeselect }: Props) => {
   const { data: authorRes, isLoading } = useGetAuthorById(id);
-  const author = authorRes?.result;
+  const author: Author = authorRes?.result;
 
   if (isLoading) {
     return (

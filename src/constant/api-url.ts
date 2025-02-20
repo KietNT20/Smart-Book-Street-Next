@@ -22,7 +22,7 @@ export const API_ENDPOINT = {
     DELETE: `${AUTHOR}/delete`,
     GET_BY_ID: `${AUTHOR}/get-by-id`,
     SEARCH: `${AUTHOR}/search-not-pagination`,
-    PAGINATION_SEARCH: `${AUTHOR}/pagination-and-search`,
+    SEARCH_PAGINATION: `${AUTHOR}/pagination-and-search`,
   },
   BOOKS: {
     GET_ALL: `${BOOK}/get-all`,

@@ -12,23 +12,12 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 import { BookFormValues, bookSchema } from '@/lib/zod';
+import { BookAuthorIds, BookCategoryIds } from '@/types/book-types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import AuthorCombobox from '../../_components/author-combobox';
 import CategoryCombobox from '../../_components/category-combobox';
-import { PublisherCombobox } from './combobox-publisher';
-
-export type BookAuthorIds = {
-  id: string;
-  authorId: string;
-  bookId: string;
-};
-
-export type BookCategoryIds = {
-  id: string;
-  categoryId: string;
-  bookId: string;
-};
+import PublisherCombobox from '../../_components/publisher-combobox';
 
 interface BookWithRelations extends BookFormValues {
   bookAuthors?: BookAuthorIds[];
@@ -167,7 +156,7 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
           />
 
           {/* Choose Publisher */}
-          <PublisherCombobox name='publisherId' />
+          <PublisherCombobox name='publisherId' control={form.control} />
 
           {/* Prices */}
           <FormField

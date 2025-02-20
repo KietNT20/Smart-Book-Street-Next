@@ -83,7 +83,10 @@ const CategoryCombobox = ({ name, control }: Props) => {
                 </Button>
               </FormControl>
             </PopoverTrigger>
-            <PopoverContent align='start' className='p-0'>
+            <PopoverContent
+              align='start'
+              className='w-[200px] p-0 lg:w-[500px]'
+            >
               <Command shouldFilter={false}>
                 <CommandInput
                   placeholder='Tìm danh mục...'
@@ -120,7 +123,7 @@ const CategoryCombobox = ({ name, control }: Props) => {
                       </CommandItem>
                     )}
                     {!searchCategoryName.isPending &&
-                      !debouncedResults.length &&
+                      !debouncedResults?.length &&
                       input && (
                         <CommandEmpty>Không tìm thấy danh mục.</CommandEmpty>
                       )}
