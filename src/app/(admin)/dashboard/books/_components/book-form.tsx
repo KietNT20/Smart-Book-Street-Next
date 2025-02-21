@@ -68,7 +68,6 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
         onChange('');
         return;
       }
-
       // Format date to YYYY-MM-DD
       const year = date.getFullYear();
       const month = String(date.getMonth() + 1).padStart(2, '0');
