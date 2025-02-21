@@ -49,6 +49,7 @@ const PublisherCombobox = ({ name, control }: Props) => {
   });
   const [results, setResults] = useState<Publisher[]>([]);
   const [open, setOpen] = useState(false);
+  const [publisherInfo, setPublisherInfo] = useState<Publisher | null>(null);
   const { searchPublisher } = usePublisherMutation();
   const debouncedResults = useDebounce(results, 300);
 
@@ -91,11 +92,11 @@ const PublisherCombobox = ({ name, control }: Props) => {
                   role='combobox'
                   className='w-full justify-between'
                 >
-                  {field.value ? (
+                  {publisherInfo ? (
                     <span className='flex items-center gap-2'>
-                      <span>{field.value.publisherName}</span>
+                      <span>{publisherInfo.publisherName}</span>
                       <span className='text-sm text-muted-foreground'>
-                        ({field.value.email} - {field.value.phone})
+                        ({publisherInfo.email} - {publisherInfo.phone})
                       </span>
                     </span>
                   ) : (
@@ -153,7 +154,8 @@ const PublisherCombobox = ({ name, control }: Props) => {
                         <CommandItem
                           key={publisher.id}
                           onSelect={() => {
-                            field.onChange(publisher);
+                            field.onChange(publisher.id);
+                            setPublisherInfo(publisher);
                             setOpen(false);
                           }}
                         >

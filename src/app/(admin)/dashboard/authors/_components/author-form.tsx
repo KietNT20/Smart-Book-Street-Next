@@ -15,7 +15,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { PATH } from '@/enums/path';
 import { useAuthorMutation, useGetAuthorById } from '@/hooks/use-author';
 import { authorFormSchema, AuthorFormValues } from '@/lib/zod';
-import { AuthorPayload } from '@/types/author-types';
+import { Author, AuthorPayload } from '@/types/author-types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
 import { useRouter } from 'next/navigation';
@@ -23,17 +23,20 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
-interface AuthorFormProps {
-  authorId?: string;
-}
+type AuthorData = {
+  result: Author;
+};
 
-export function AuthorForm({ authorId }: AuthorFormProps) {
+type Props = {
+  authorId?: string;
+};
+
+export function AuthorForm({ authorId }: Props) {
   const router = useRouter();
   const { createAuthor, updateAuthor } = useAuthorMutation();
 
-  const { data: authorData, isLoading: isLoadingAuthor } = useGetAuthorById(
-    authorId || ''
-  );
+  const { data: authorData, isLoading: isLoadingAuthor } =
+    useGetAuthorById<AuthorData>(authorId || '');
 
   const form = useForm<AuthorFormValues>({
     resolver: zodResolver(authorFormSchema),
@@ -47,15 +50,16 @@ export function AuthorForm({ authorId }: AuthorFormProps) {
   useEffect(() => {
     if (authorData) {
       form.reset({
-        authorName: authorData.authorName,
-        dob: new Date(authorData.dob),
-        nationality: authorData.nationality,
-        biography: authorData.biography,
+        authorName: authorData.result.authorName,
+        dob: new Date(authorData.result.dob),
+        nationality: authorData.result.nationality,
+        biography: authorData.result.biography,
       });
     }
   }, [authorData, form]);
 
   const onSubmit = async (data: AuthorFormValues) => {
+    console.log('data', data);
     try {
       if (authorId) {
         await updateAuthor.mutateAsync({
