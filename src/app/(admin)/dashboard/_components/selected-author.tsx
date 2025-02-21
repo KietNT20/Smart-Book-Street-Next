@@ -3,14 +3,18 @@ import { useGetAuthorById } from '@/hooks/use-author';
 import { Author } from '@/types/author-types';
 import { Check } from 'lucide-react';
 
+type AuthorData = {
+  result: Author;
+};
+
 type Props = {
   id: string;
   onDeselect: () => void;
 };
 
 const SelectedAuthor = ({ id, onDeselect }: Props) => {
-  const { data: authorRes, isLoading } = useGetAuthorById(id);
-  const author: Author = authorRes?.result;
+  const { data: authorRes, isLoading } = useGetAuthorById<AuthorData>(id);
+  const author = authorRes?.result;
 
   if (isLoading) {
     return (
