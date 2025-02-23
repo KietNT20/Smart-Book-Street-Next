@@ -34,7 +34,6 @@ type Props = {
 export function AuthorForm({ authorId }: Props) {
   const router = useRouter();
   const { createAuthor, updateAuthor } = useAuthorMutation();
-
   const { data: authorData, isLoading: isLoadingAuthor } =
     useGetAuthorById<AuthorData>(authorId || '');
 
@@ -59,7 +58,6 @@ export function AuthorForm({ authorId }: Props) {
   }, [authorData, form]);
 
   const onSubmit = async (data: AuthorFormValues) => {
-    console.log('data', data);
     try {
       if (authorId) {
         await updateAuthor.mutateAsync({
