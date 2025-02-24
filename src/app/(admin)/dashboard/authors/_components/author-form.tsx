@@ -22,6 +22,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import AuthorSubmitBtn from './author-submit-btn';
 
 type AuthorData = {
   result: Author;
@@ -34,7 +35,6 @@ type Props = {
 export function AuthorForm({ authorId }: Props) {
   const router = useRouter();
   const { createAuthor, updateAuthor } = useAuthorMutation();
-
   const { data: authorData, isLoading: isLoadingAuthor } =
     useGetAuthorById<AuthorData>(authorId || '');
 
@@ -59,20 +59,19 @@ export function AuthorForm({ authorId }: Props) {
   }, [authorData, form]);
 
   const onSubmit = async (data: AuthorFormValues) => {
-    console.log('data', data);
     try {
       if (authorId) {
         await updateAuthor.mutateAsync({
           id: authorId,
           ...data,
-          dob: format(data.dob, 'yyyy-MM-dd'),
+          dob: data?.dob ? format(data.dob, 'yyyy-MM-dd') : '',
           biography: data.biography ?? '',
         });
         toast.success('Cập nhật tác giả thành công');
       } else {
         await createAuthor.mutateAsync({
           ...data,
-          dob: format(data.dob, 'yyyy-MM-dd'),
+          // dob: format(data.dob, 'yyyy-MM-dd'),
         } as AuthorPayload);
       }
       router.push(PATH.AUTHORS);
@@ -157,18 +156,16 @@ export function AuthorForm({ authorId }: Props) {
 
         <div className='flex justify-end gap-4'>
           <Button
-            type='submit'
-            disabled={createAuthor.isPending || updateAuthor.isPending}
-          >
-            {authorId ? 'Cập nhật' : 'Thêm mới'}
-          </Button>
-          <Button
             type='button'
             variant='outline'
             onClick={() => router.push(PATH.AUTHORS)}
           >
             Hủy
           </Button>
+          <AuthorSubmitBtn
+            authorId={authorId}
+            _onPending={createAuthor.isPending || updateAuthor.isPending}
+          />
         </div>
       </form>
     </Form>

@@ -2,7 +2,7 @@ import { PATH } from '@/enums/path';
 import { userService } from '@/services/userService';
 import { LoginCredentials, RegisterRequestBody } from '@/types/auth-types';
 import { useMutation } from '@tanstack/react-query';
-import { getSession, signIn, signOut } from 'next-auth/react';
+import { signIn, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
@@ -16,14 +16,11 @@ export const useLogin = () => {
         password,
         redirect: false,
       }),
-    onSuccess: async () => {
-      const session = await getSession();
-      if (session && session.user) {
-        router.push(PATH.DASHBOARD);
-        toast.success('Đăng nhập thành công', {
-          description: 'Vui lòng chờ trong giây lát',
-        });
-      }
+    onSuccess: () => {
+      router.push(PATH.DASHBOARD);
+      toast.success('Đăng nhập thành công', {
+        description: 'Vui lòng chờ trong giây lát',
+      });
     },
     onError: (error: Error) => {
       console.log('Error login', error);

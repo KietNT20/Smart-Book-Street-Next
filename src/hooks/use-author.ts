@@ -44,7 +44,7 @@ export const useAuthorMutation = () => {
   });
 
   const updateAuthor = useMutation({
-    mutationFn: (payload: Omit<Author, 'images'>) =>
+    mutationFn: (payload: Partial<Omit<Author, 'images'>>) =>
       authorService.update(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['authors'] });
