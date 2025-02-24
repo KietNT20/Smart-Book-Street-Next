@@ -1,6 +1,10 @@
 import { BASE_URL } from '@/constant/environment';
 import { PATH } from '@/enums/path';
-import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
+import axios, {
+  AxiosError,
+  AxiosInstance,
+  InternalAxiosRequestConfig,
+} from 'axios';
 import { getSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 
@@ -19,7 +23,7 @@ axiosInstance.interceptors.request.use(
     }
     return config;
   },
-  function (error) {
+  function (error: AxiosError) {
     // Do something with request error
     return Promise.reject(error);
   }
@@ -31,7 +35,7 @@ axiosInstance.interceptors.response.use(
     // Do something with response data
     return response;
   },
-  function (error) {
+  function (error: AxiosError) {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
     if (typeof window !== 'undefined') {

@@ -18,6 +18,7 @@ import { useForm } from 'react-hook-form';
 import AuthorCombobox from '../../_components/author-combobox';
 import CategoryCombobox from '../../_components/category-combobox';
 import PublisherCombobox from '../../_components/publisher-combobox';
+import BookSubmitBtn from './book-submit-btn';
 
 interface BookWithRelations extends BookFormValues {
   bookAuthors?: BookAuthorIds[];
@@ -276,9 +277,7 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
           >
             Hủy
           </Button>
-          <Button disabled={isLoading} type='submit' className='px-7'>
-            {book ? 'Cập nhật' : 'Thêm mới'}
-          </Button>
+          <BookSubmitBtn book={book} _onPending={isLoading!} />
         </div>
       </form>
     </Form>
