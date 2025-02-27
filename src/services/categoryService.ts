@@ -1,5 +1,5 @@
 import { API_ENDPOINT } from '@/constant/api-url';
-import { Category } from '@/types/category-types';
+import { Category, SearchPaginationCategory } from '@/types/category-types';
 import axiosInstance from '@/utils/axiosInstance';
 
 export const categoryService = {
@@ -10,7 +10,7 @@ export const categoryService = {
     );
     return res.data;
   },
-  searchPagination: async (payload: any) => {
+  searchPagination: async (payload: SearchPaginationCategory) => {
     const res = await axiosInstance.post(
       API_ENDPOINT.CATEGORIES.PAGINATION_SEARCH,
       payload

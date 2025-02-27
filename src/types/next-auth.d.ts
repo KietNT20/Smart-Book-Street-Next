@@ -4,19 +4,22 @@ import { DefaultSession } from 'next-auth';
 import 'next-auth/jwt';
 
 declare module 'next-auth' {
-  interface Session {
-    accessToken: string;
-    user: {
-      userName: string;
-    } & DefaultSession['user'];
-  }
-
   interface User {
     userName: string;
     token: string;
     userRoles: {
       role: RoleEnums;
     }[];
+  }
+  interface Session extends DefaultSession {
+    userId: string;
+    accessToken: string;
+    user: {
+      userName: string;
+      userRoles?: {
+        role: RoleEnums;
+      }[];
+    } & DefaultSession['user'];
   }
 }
 

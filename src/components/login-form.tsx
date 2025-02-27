@@ -13,10 +13,11 @@ import { cn } from '@/lib/utils';
 import { LoginFormValues, loginSchema } from '@/lib/zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff } from 'lucide-react';
-import { AuthError } from 'next-auth';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import GoogleBtn from './google-button/google-btn';
 import { Button } from './ui/button';
 import {
@@ -36,6 +37,7 @@ export function LoginForm({
   const [showPassword, setShowPassword] = useState(false);
 
   const login = useLogin();
+  const router = useRouter();
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -46,21 +48,36 @@ export function LoginForm({
   });
 
   const onSubmit = async (values: LoginFormValues) => {
+    const { usernameOrEmail, password } = values;
     try {
-      const { usernameOrEmail, password } = values;
-      await login.mutateAsync({ usernameOrEmail, password });
-    } catch (error: any) {
-      if ((error as AuthError)?.type === 'CredentialsSignin') {
-        // Set error cho cả 2 field
-        form.setError('usernameOrEmail', {
-          type: 'manual',
-          message: 'Tài khoản hoặc mật khẩu không chính xác',
-        });
-        form.setError('password', {
-          type: 'manual',
-          message: 'Tài khoản hoặc mật khẩu không chính xác',
-        });
-      }
+      await login.mutateAsync(
+        { usernameOrEmail, password },
+        {
+          onSuccess: (data) => {
+            if (data?.error === 'Configuration') {
+              form.setError('usernameOrEmail', {
+                type: 'manual',
+                message: 'Tài khoản hoặc mật khẩu không chính xác',
+              });
+              form.setError('password', {
+                type: 'manual',
+                message: 'Tài khoản hoặc mật khẩu không chính xác',
+              });
+            }
+            if (data?.error === null) {
+              toast.success('Đăng nhập thành công', {
+                description: 'Vui lòng chờ trong giây lát',
+              });
+              router.push(PATH.DASHBOARD);
+            }
+          },
+          onError: (error) => {
+            console.log('Error logging in:', error);
+          },
+        }
+      );
+    } catch (error) {
+      console.log('Error logging in:', error);
     }
   };
 

@@ -2,10 +2,9 @@ import NextAuth, { User } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import Google from 'next-auth/providers/google';
 import { API_ENDPOINT } from './constant/api-url';
-import { BASE_URL } from './constant/environment';
 import { PATH } from './enums/path';
 import { loginSchema } from './lib/zod';
-import { LoginCredentials, LoginResponse, UserRoles } from './types/auth-types';
+import { LoginResponse, UserRoles } from './types/auth-types';
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
@@ -22,46 +21,56 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
     Credentials({
       credentials: {
-        usernameOrEmail: {},
-        password: {},
+        usernameOrEmail: { label: 'Username or Email', type: 'text' },
+        password: { label: 'Password', type: 'password' },
       },
       authorize: async (credentials) => {
+        const { usernameOrEmail, password } = credentials;
+
+        if (!usernameOrEmail || !password) {
+          return null;
+        }
+
         try {
-          const { usernameOrEmail, password } = credentials as LoginCredentials;
           const payloadLogin = await loginSchema.parseAsync({
             usernameOrEmail,
             password,
           });
-          const res = await fetch(`${BASE_URL}/${API_ENDPOINT.USERS.LOGIN}`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(payloadLogin),
-          });
-          const data: Awaited<LoginResponse> = await res.json();
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINT.USERS.LOGIN}`,
+            {
+              method: 'POST',
+              headers: [
+                ['Content-Type', 'application/json'],
+                ['Accept', 'application/json'],
+              ],
+              body: JSON.stringify(payloadLogin),
+            }
+          );
+
+          const data: Awaited<Promise<LoginResponse>> = await res.json();
 
           if (!res.ok) {
-            throw new Error(data.message || 'Invalid credentials');
+            throw new Error('Invalid credentials.');
           }
 
-          const user: Awaited<User> = {
+          const user: User = {
             id: data.result.id,
             email: data.result.email,
             userName: data.result.userName,
             token: data.token,
-            userRoles: data.result.userRoles.map((role: UserRoles) => {
-              if (!role.role || !role.role.roleName) {
+            userRoles: data.result.userRoles.map((userRole: UserRoles) => {
+              if (!userRole.role || !userRole.role.roleName) {
                 throw new Error('Missing roleName for a user role');
               }
-              return { role: role.role.roleName };
+              return { role: userRole.role.roleName };
             }),
           };
 
           return user;
         } catch (error) {
           console.error('Auth error:', error);
-          return null;
+          throw error;
         }
       },
     }),
@@ -71,7 +80,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
   session: {
     strategy: 'jwt',
-    maxAge: 5 * 60 * 60, // 5 hours,
+    maxAge: 4.5 * 60 * 60, // 4 hours 30 minutes,
   },
   callbacks: {
     jwt({ token, user }) {
