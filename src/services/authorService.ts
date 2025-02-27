@@ -19,7 +19,7 @@ export const authorService = {
   },
   searchPagination: async (payload: SearchPaginationAuthor) => {
     const res = await axiosInstance.post(
-      API_ENDPOINT.AUTHORS.SEARCH_PAGINATION,
+      API_ENDPOINT.AUTHORS.PAGINATION_SEARCH,
       payload
     );
     return res.data;

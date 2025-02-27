@@ -13,7 +13,7 @@ export const bookService = {
 
   searchPagination: async (payload: BookSearchPayload) => {
     const res = await axiosInstance.post(
-      API_ENDPOINT.BOOKS.SEARCH_PAGINATION,
+      API_ENDPOINT.BOOKS.PAGINATION_SEARCH,
       payload
     );
     return res.data;

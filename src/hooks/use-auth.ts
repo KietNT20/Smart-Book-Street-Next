@@ -32,7 +32,7 @@ export const useLogin = () => {
 export const useLogout = () => {
   return useMutation({
     mutationKey: ['logout'],
-    mutationFn: async () => await signOut(),
+    mutationFn: () => signOut(),
   });
 };
 
