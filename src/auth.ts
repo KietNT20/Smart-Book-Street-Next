@@ -40,15 +40,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINT.USERS.LOGIN}`,
             {
               method: 'POST',
-              headers: [
-                ['Content-Type', 'application/json'],
-                ['Accept', 'application/json'],
-              ],
+              headers: {
+                'Content-Type': 'application/json',
+              },
               body: JSON.stringify(payloadLogin),
             }
           );
 
-          const data: Awaited<Promise<LoginResponse>> = await res.json();
+          const data: LoginResponse = await res.json();
 
           if (!res.ok) {
             throw new Error('Invalid credentials.');

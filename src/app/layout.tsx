@@ -1,8 +1,8 @@
-import { Toaster } from '@/components/ui/sonner';
 import Provider from '@/providers/provider';
 import type { Metadata } from 'next';
 import { Roboto } from 'next/font/google';
 import './globals.css';
+import { Toaster } from '@/components/ui/sonner';
 
 const roboto = Roboto({
   subsets: ['vietnamese'],

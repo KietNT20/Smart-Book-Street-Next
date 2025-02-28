@@ -3,7 +3,7 @@ import { ImagePayload } from '@/types/image-types';
 import axiosInstance from '@/utils/axiosInstance';
 
 export const imageService = {
-  add: async (payload: Array<ImagePayload>) => {
+  create: async (payload: Array<ImagePayload>) => {
     const res = await axiosInstance.post(`${API_ENDPOINT.IMAGES.ADD}`, payload);
     return res.data;
   },

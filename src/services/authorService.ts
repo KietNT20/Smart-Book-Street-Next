@@ -24,7 +24,7 @@ export const authorService = {
     );
     return res.data;
   },
-  add: async (payload: AuthorPayload) => {
+  create: async (payload: AuthorPayload) => {
     const res = await axiosInstance.post(API_ENDPOINT.AUTHORS.ADD, payload);
     return res.data;
   },
