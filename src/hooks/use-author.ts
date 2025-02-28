@@ -31,7 +31,7 @@ export const useAuthorMutation = () => {
   });
 
   const createAuthor = useMutation({
-    mutationFn: (payload: AuthorPayload) => authorService.add(payload),
+    mutationFn: (payload: AuthorPayload) => authorService.create(payload),
     onSuccess: (data) => {
       if (data) {
         toast.success('Thêm tác giả thành công');
