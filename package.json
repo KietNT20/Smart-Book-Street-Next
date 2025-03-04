@@ -78,8 +78,8 @@
     }
   },
   "lint-staged": {
+    "./src/**/*.{js,ts}": "eslint --fix",
     "./src/**/*.{ts,tsx,js,jsx}": [
-      "eslint --fix",
       "prettier --check .",
       "npm run format"
     ]
