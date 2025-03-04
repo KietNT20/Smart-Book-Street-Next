@@ -7,7 +7,6 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "lint:fix": "next lint --fix",
     "format": "prettier --write src/**/*.{ts,tsx,js,jsx,css,scss}",
     "prepare": "husky"
   },
@@ -79,7 +78,7 @@
   },
   "lint-staged": {
     "./src/**/*.{ts,tsx,js,jsx}": [
-      "npm run lint:fix",
+      "eslint --fix",
       "npm run format"
     ]
   }
