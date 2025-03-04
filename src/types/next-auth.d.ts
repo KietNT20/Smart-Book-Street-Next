@@ -6,19 +6,16 @@ import 'next-auth/jwt';
 declare module 'next-auth' {
   interface User {
     userName: string;
-    token: string;
+    access_token: string | undefined;
     userRoles: {
       role: RoleEnums;
     }[];
   }
   interface Session extends DefaultSession {
     userId: string;
-    accessToken: string;
+    access_token: string | undefined;
     user: {
-      userName: string;
-      userRoles?: {
-        role: RoleEnums;
-      }[];
+      credential?: string;
     } & DefaultSession['user'];
   }
 }
@@ -27,7 +24,7 @@ declare module 'next-auth/jwt' {
   interface JWT {
     userName: string;
     fullName: string;
-    accessToken: string;
+    access_token: string | undefined;
     userRoles: {
       role: RoleEnums;
     }[];

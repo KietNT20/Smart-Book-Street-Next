@@ -7,4 +7,8 @@ export const eventService = {
     const res = await axiosInstance.post(API_ENDPOINT.EVENTS.ADD, payload);
     return res.data;
   },
+  update: async (payload: Partial<Event>) => {
+    const res = await axiosInstance.put(API_ENDPOINT.EVENTS.UPDATE, payload);
+    return res.data;
+  },
 };

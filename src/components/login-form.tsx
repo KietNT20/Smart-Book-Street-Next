@@ -47,10 +47,10 @@ export function LoginForm({
     },
   });
 
-  const onSubmit = async (values: LoginFormValues) => {
+  const onSubmit = (values: LoginFormValues) => {
     const { usernameOrEmail, password } = values;
     try {
-      await login.mutateAsync(
+      login.mutateAsync(
         { usernameOrEmail, password },
         {
           onSuccess: (data) => {
