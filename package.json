@@ -73,12 +73,14 @@
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
       "pre-push": "npm run lint && npm run format"
     }
   },
   "lint-staged": {
     "./src/**/*.{ts,tsx,js,jsx}": [
       "eslint --fix",
+      "prettier --check .",
       "npm run format"
     ]
   }
