@@ -7,7 +7,7 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
+  SelectValue
 } from '@/components/ui/select';
 import { PATH } from '@/enums/path';
 import { useSearchPaginationAuthor } from '@/hooks/use-author';
@@ -25,14 +25,14 @@ const AuthorsPage = () => {
     sortOrder: 0,
     sortField: '',
     result: {
-      authorName: '',
-    },
+      authorName: ''
+    }
   });
 
   const {
     data: resDataAuthors,
     isLoading,
-    isError,
+    isError
   } = useSearchPaginationAuthor(searchParams);
 
   const debouncedResults = useDebounce(resDataAuthors?.results, 300);
@@ -43,8 +43,8 @@ const AuthorsPage = () => {
       pageNumber: 1,
       result: {
         ...prev.result,
-        authorName: value,
-      },
+        authorName: value
+      }
     }));
   };
 
@@ -52,14 +52,14 @@ const AuthorsPage = () => {
     setSearchParams((prev) => ({
       ...prev,
       pageNumber: 1,
-      sortOrder: parseInt(value),
+      sortOrder: parseInt(value)
     }));
   };
 
   const handlePageChange = (page: number) => {
     setSearchParams((prev) => ({
       ...prev,
-      pageNumber: page,
+      pageNumber: page
     }));
   };
 
@@ -67,7 +67,7 @@ const AuthorsPage = () => {
     setSearchParams((prev) => ({
       ...prev,
       pageSize: newPageSize,
-      pageNumber: 1,
+      pageNumber: 1
     }));
   };
 

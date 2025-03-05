@@ -22,5 +22,5 @@ export const imageService = {
       `${API_ENDPOINT.IMAGES.DELETE}?id=${id}`
     );
     return res.data;
-  },
+  }
 };

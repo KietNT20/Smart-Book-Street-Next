@@ -37,5 +37,5 @@ export const bookService = {
       `${API_ENDPOINT.BOOKS.DELETE}?id=${id}`
     );
     return res.data;
-  },
+  }
 };

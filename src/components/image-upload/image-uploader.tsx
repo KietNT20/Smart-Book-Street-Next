@@ -4,7 +4,7 @@ import { useImagesMutation } from '@/hooks/use-images';
 import {
   CldUploadWidget,
   CloudinaryUploadWidgetInfo,
-  CloudinaryUploadWidgetResults,
+  CloudinaryUploadWidgetResults
 } from 'next-cloudinary';
 import { useState } from 'react';
 
@@ -32,8 +32,8 @@ const ImageUploader = ({ entityId, folder }: ImageUploaderProps) => {
             url: imageInfo.secure_url,
             type: imageInfo.resource_type,
             altText: imageInfo.original_filename,
-            entityId: entityId,
-          },
+            entityId: entityId
+          }
         ];
         // Save image to database
         await addImageMutation.mutateAsync(imagePayload);
@@ -47,7 +47,7 @@ const ImageUploader = ({ entityId, folder }: ImageUploaderProps) => {
 
   const uploadOptions = {
     folder,
-    maxFiles: 5,
+    maxFiles: 5
   };
 
   return (

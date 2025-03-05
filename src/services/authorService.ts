@@ -2,7 +2,7 @@ import { API_ENDPOINT } from '@/constant/api-url';
 import {
   Author,
   AuthorPayload,
-  SearchPaginationAuthor,
+  SearchPaginationAuthor
 } from '@/types/author-types';
 import axiosInstance from '@/utils/axiosInstance';
 
@@ -37,5 +37,5 @@ export const authorService = {
       `${API_ENDPOINT.AUTHORS.DELETE}?id=${id}`
     );
     return res.data;
-  },
+  }
 };

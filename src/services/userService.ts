@@ -58,5 +58,5 @@ export const userService = {
   delete: async (id: string) => {
     const res = await axiosInstance.put(`${API_ENDPOINT.USERS.DELETE}/${id}`);
     return res.data;
-  },
+  }
 };

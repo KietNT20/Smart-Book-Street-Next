@@ -23,13 +23,13 @@ export default function BooksPage() {
     setModalState,
     deleteId,
     setDeleteId,
-    resetAllFilters,
+    resetAllFilters
   } = useBookPageState();
 
   const { bookData, isLoadingBooks, handleDelete, deleteBookMutation } =
     useBookList({
       pagination,
-      searchCriteria,
+      searchCriteria
     });
 
   const deletedLoading = useDebounce(deleteBookMutation.isPending, 300);
@@ -37,7 +37,7 @@ export default function BooksPage() {
   const columns = createColumns({
     _onDelete: (id?: string) => {
       setDeleteId(id || null);
-    },
+    }
   });
 
   const router = useRouter();

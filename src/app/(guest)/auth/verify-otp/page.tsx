@@ -7,14 +7,14 @@ import {
   CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
+  CardTitle
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import {
   InputOTP,
   InputOTPGroup,
-  InputOTPSlot,
+  InputOTPSlot
 } from '@/components/ui/input-otp';
 
 export default function VerifyOTP() {

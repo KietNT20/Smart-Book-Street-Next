@@ -6,14 +6,14 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'res.cloudinary.com',
-        pathname: '/deza97c4p/**',
+        pathname: '/deza97c4p/**'
       },
       {
         protocol: 'https',
-        hostname: 'th.bing.com',
-      },
-    ],
-  },
+        hostname: 'th.bing.com'
+      }
+    ]
+  }
 };
 
 export default nextConfig;

@@ -13,5 +13,5 @@ export const publisherService = {
       payload
     );
     return res.data;
-  },
+  }
 };

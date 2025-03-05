@@ -9,7 +9,7 @@ import { Calendar } from '@/components/ui/calendar';
 import {
   Popover,
   PopoverContent,
-  PopoverTrigger,
+  PopoverTrigger
 } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 import { vi } from 'date-fns/locale';
@@ -18,7 +18,7 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
+  SelectValue
 } from '../ui/select';
 
 type DatePickerProps = {
@@ -32,7 +32,7 @@ export function DatePickerCompVN({
   startYear = getYear(new Date()) - 100,
   endYear = getYear(new Date()) + 100,
   value,
-  onChange,
+  onChange
 }: DatePickerProps) {
   const [date, setDate] = React.useState<Date | undefined>(value);
   const [calendarMonth, setCalendarMonth] = React.useState<Date>(
@@ -58,7 +58,7 @@ export function DatePickerCompVN({
     'Tháng Chín',
     'Tháng Mười',
     'Tháng Mười Một',
-    'Tháng Mười Hai',
+    'Tháng Mười Hai'
   ];
 
   const years = Array.from({ length: endYear - startYear + 1 }, (_, i) => {

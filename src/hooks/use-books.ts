@@ -23,14 +23,14 @@ export const useBookMutations = () => {
     onError: (error: Error) => {
       toast.error('Đã xảy ra lỗi khi thêm sách');
       console.error('Error:', error);
-    },
+    }
   });
 
   const updateBookMutation = useMutation({
     mutationFn: (payload: BookFormValues) => bookService.update(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['books'] });
-    },
+    }
   });
 
   const deleteBookMutation = useMutation({
@@ -38,12 +38,12 @@ export const useBookMutations = () => {
     onSuccess: () => {
       toast.success('Đã xóa sách');
       queryClient.invalidateQueries({ queryKey: ['books'] });
-    },
+    }
   });
 
   return {
     createBookMutation,
     updateBookMutation,
-    deleteBookMutation,
+    deleteBookMutation
   };
 };

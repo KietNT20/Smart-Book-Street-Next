@@ -23,7 +23,7 @@ import { useState } from 'react';
 import ImageCard from './_components/image-card';
 
 export default function BooksDetailPage({
-  params,
+  params
 }: {
   params: { id: string };
 }) {
@@ -33,7 +33,7 @@ export default function BooksDetailPage({
     useBookSearchById(params.id);
   const { data: imageUrlBook, isLoading: getImagePending } =
     useGetImageByTypeOrEntityID({
-      entityId: params.id,
+      entityId: params.id
     });
   const { deleteBookMutation } = useBookMutations();
 
@@ -45,29 +45,29 @@ export default function BooksDetailPage({
   const bookAuthorsRes = useQueries({
     queries: (book?.bookAuthors || [])?.map((bookAuth, index: number) => ({
       queryKey: ['author', index],
-      queryFn: () => authorService.getById(bookAuth.authorId),
+      queryFn: () => authorService.getById(bookAuth.authorId)
     })),
     combine: (results) => {
       return {
         data: results.map((result) => result.data),
-        pending: results.some((result) => result.isPending),
+        pending: results.some((result) => result.isPending)
       };
-    },
+    }
   });
 
   const bookCategoriesRes = useQueries({
     queries: (book?.bookCategories || [])?.map(
       (bookCategory, index: number) => ({
         queryKey: ['category', index],
-        queryFn: () => categoryService.getById(bookCategory.categoryId),
+        queryFn: () => categoryService.getById(bookCategory.categoryId)
       })
     ),
     combine: (results) => {
       return {
         data: results.map((result) => result.data),
-        pending: results.some((result) => result.isPending),
+        pending: results.some((result) => result.isPending)
       };
-    },
+    }
   });
 
   const handleDeleteBook = async () => {

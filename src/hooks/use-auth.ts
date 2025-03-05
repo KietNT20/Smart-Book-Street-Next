@@ -13,15 +13,15 @@ export const useLogin = () => {
       signIn('credentials', {
         usernameOrEmail,
         password,
-        redirect: false,
-      }),
+        redirect: false
+      })
   });
 };
 
 export const useLogout = () => {
   return useMutation({
     mutationKey: ['logout'],
-    mutationFn: () => signOut(),
+    mutationFn: () => signOut()
   });
 };
 
@@ -44,6 +44,6 @@ export const useRegister = () => {
     onError: (error: Error) => {
       console.log('Error register', error);
       toast.error('Đăng ký thất bại');
-    },
+    }
   });
 };

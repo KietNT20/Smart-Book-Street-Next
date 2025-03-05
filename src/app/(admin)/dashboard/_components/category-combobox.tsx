@@ -6,19 +6,19 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-  CommandSeparator,
+  CommandSeparator
 } from '@/components/ui/command';
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  FormMessage
 } from '@/components/ui/form';
 import {
   Popover,
   PopoverContent,
-  PopoverTrigger,
+  PopoverTrigger
 } from '@/components/ui/popover';
 import { useCategoryMutation } from '@/hooks/use-category';
 import useDebounce from '@/hooks/useDebounce';
@@ -50,7 +50,7 @@ const CategoryCombobox = ({ name, control }: Props) => {
 
     try {
       const { results } = await searchCategoryName.mutateAsync({
-        categoryName: value,
+        categoryName: value
       });
       setResults(results);
     } catch (error) {

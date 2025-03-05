@@ -6,5 +6,5 @@ export const streetService = {
   create: async (payload: Partial<Omit<Street, 'id'>>) => {
     const res = await axiosInstance.post(API_ENDPOINT.STREETS.ADD, payload);
     return res.data;
-  },
+  }
 };

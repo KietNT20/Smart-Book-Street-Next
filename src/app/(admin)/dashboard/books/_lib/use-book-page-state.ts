@@ -11,7 +11,7 @@ export function useBookPageState() {
     pageIndex: 1,
     pageSize: 10,
     sortField: 'createdDate',
-    sortOrder: -1,
+    sortOrder: -1
   });
 
   const [searchCriteria, setSearchCriteria] = useState<
@@ -26,7 +26,7 @@ export function useBookPageState() {
       pageIndex: 1,
       pageSize: 10,
       sortField: 'createdDate',
-      sortOrder: -1,
+      sortOrder: -1
     });
     setSearchCriteria({});
   };
@@ -42,6 +42,6 @@ export function useBookPageState() {
     setSelectedBook,
     deleteId,
     setDeleteId,
-    resetAllFilters,
+    resetAllFilters
   };
 }

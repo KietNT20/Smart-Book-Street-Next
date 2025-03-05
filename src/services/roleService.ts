@@ -17,5 +17,5 @@ export const roleService = {
       payload
     );
     return res.data;
-  },
+  }
 };

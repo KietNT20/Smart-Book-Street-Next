@@ -8,7 +8,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  FormMessage
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -43,8 +43,8 @@ export function AuthorForm({ authorId }: Props) {
     defaultValues: {
       authorName: '',
       nationality: '',
-      biography: '',
-    },
+      biography: ''
+    }
   });
 
   useEffect(() => {
@@ -53,7 +53,7 @@ export function AuthorForm({ authorId }: Props) {
         authorName: authorData.result.authorName,
         dob: new Date(authorData.result.dob),
         nationality: authorData.result.nationality,
-        biography: authorData.result.biography,
+        biography: authorData.result.biography
       });
     }
   }, [authorData, form]);
@@ -65,12 +65,12 @@ export function AuthorForm({ authorId }: Props) {
           id: authorId,
           ...data,
           dob: data?.dob ? format(data.dob, 'yyyy-MM-dd') : '',
-          biography: data.biography ?? '',
+          biography: data.biography ?? ''
         });
         toast.success('Cập nhật tác giả thành công');
       } else {
         await createAuthor.mutateAsync({
-          ...data,
+          ...data
           // dob: format(data.dob, 'yyyy-MM-dd'),
         } as AuthorPayload);
       }

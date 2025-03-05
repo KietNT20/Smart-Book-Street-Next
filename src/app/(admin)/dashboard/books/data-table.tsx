@@ -4,7 +4,7 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuTrigger,
+  DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import {
   Table,
@@ -12,7 +12,7 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
+  TableRow
 } from '@/components/ui/table';
 import {
   ColumnDef,
@@ -21,7 +21,7 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-  VisibilityState,
+  VisibilityState
 } from '@tanstack/react-table';
 import { useState } from 'react';
 
@@ -47,7 +47,7 @@ export function DataTable<TData, TValue>({
   pageCount,
   state,
   isLoading,
-  onStateChange,
+  onStateChange
 }: DataTableProps<TData, TValue>) {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 
@@ -57,7 +57,7 @@ export function DataTable<TData, TValue>({
     defaultColumn: {
       size: 200,
       minSize: 50,
-      maxSize: 500,
+      maxSize: 500
     },
     pageCount: pageCount ?? -1,
     getCoreRowModel: getCoreRowModel(),
@@ -70,22 +70,22 @@ export function DataTable<TData, TValue>({
       columnVisibility,
       pagination: {
         pageIndex: state.pageIndex - 1,
-        pageSize: state.pageSize,
-      },
+        pageSize: state.pageSize
+      }
     },
     onPaginationChange: (updater) => {
       const newState =
         typeof updater === 'function'
           ? updater({
               pageIndex: state.pageIndex - 1,
-              pageSize: state.pageSize,
+              pageSize: state.pageSize
             })
           : updater;
 
       onStateChange({
         ...state,
         pageIndex: newState.pageIndex + 1,
-        pageSize: newState.pageSize,
+        pageSize: newState.pageSize
       });
     },
     onSortingChange: (updater) => {
@@ -98,10 +98,10 @@ export function DataTable<TData, TValue>({
         onStateChange({
           ...state,
           sortField: newSorting[0].id,
-          sortOrder: newSorting[0].desc ? -1 : 1,
+          sortOrder: newSorting[0].desc ? -1 : 1
         });
       }
-    },
+    }
   });
 
   return (
@@ -204,7 +204,7 @@ export function DataTable<TData, TValue>({
                 onStateChange({
                   ...state,
                   pageSize: Number(e.target.value),
-                  pageIndex: 1,
+                  pageIndex: 1
                 });
               }}
               className='h-8 rounded-md border border-input bg-background px-2'
@@ -224,7 +224,7 @@ export function DataTable<TData, TValue>({
                 if (state.pageIndex > 1) {
                   onStateChange({
                     ...state,
-                    pageIndex: state.pageIndex - 1,
+                    pageIndex: state.pageIndex - 1
                   });
                 }
               }}
@@ -239,7 +239,7 @@ export function DataTable<TData, TValue>({
                 if (state.pageIndex < (pageCount || 0)) {
                   onStateChange({
                     ...state,
-                    pageIndex: state.pageIndex + 1,
+                    pageIndex: state.pageIndex + 1
                   });
                 }
               }}

@@ -19,9 +19,9 @@ const ImageCard = ({ id, url, altText }: Props) => {
     const response = await fetch('/api/sign-cloudinary-params', {
       method: 'DELETE',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ publicId }),
+      body: JSON.stringify({ publicId })
     });
 
     if (!response.ok) {
@@ -51,7 +51,7 @@ const ImageCard = ({ id, url, altText }: Props) => {
         alt={altText}
         style={{
           width: '100%',
-          height: 'auto',
+          height: 'auto'
         }}
         width={500}
         height={300}

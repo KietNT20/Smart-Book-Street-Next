@@ -3,7 +3,7 @@ import {
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
-  useReactTable,
+  useReactTable
 } from '@tanstack/react-table';
 
 import {
@@ -12,7 +12,7 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
+  TableRow
 } from '@/components/ui/table';
 
 import { TableSkeleton } from '@/components/table-skeleton';
@@ -22,7 +22,7 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
+  SelectValue
 } from '@/components/ui/select';
 
 interface DataTableProps<TData, TValue> {
@@ -44,7 +44,7 @@ export function DataTable<TData, TValue>({
   pageCount = 0,
   currentPage,
   onPageChange,
-  onPageSizeChange,
+  onPageSizeChange
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -55,19 +55,19 @@ export function DataTable<TData, TValue>({
     state: {
       pagination: {
         pageSize,
-        pageIndex: currentPage - 1,
-      },
+        pageIndex: currentPage - 1
+      }
     },
     manualPagination: true,
     onPaginationChange: (updater) => {
       if (typeof updater === 'function') {
         const newState = updater({
           pageIndex: currentPage - 1,
-          pageSize,
+          pageSize
         });
         onPageChange(newState.pageIndex + 1);
       }
-    },
+    }
   });
 
   const handlePageSizeChange = (newSize: string) => {

@@ -17,10 +17,10 @@ export const loginSchema = z.object({
         return emailRegex.test(value) || usernameRegex.test(value);
       },
       {
-        message: 'Vui lòng nhập email hoặc tên đăng nhập hợp lệ',
+        message: 'Vui lòng nhập email hoặc tên đăng nhập hợp lệ'
       }
     ),
-  password: z.string().min(1, { message: 'Vui lòng nhập mật khẩu' }),
+  password: z.string().min(1, { message: 'Vui lòng nhập mật khẩu' })
 });
 
 export type RegisterFormValues = z.infer<typeof registerSchema>;
@@ -35,16 +35,16 @@ export const registerSchema = z.object({
     .string()
     .min(8, { message: 'Mật khẩu cần ít nhất 8 kí tự' })
     .regex(/[A-Z]/, {
-      message: 'Mật khẩu cần ít nhất 1 chữ hoa',
+      message: 'Mật khẩu cần ít nhất 1 chữ hoa'
     })
     .regex(/[a-z]/, {
-      message: 'Mật khẩu cần ít nhất 1 chữ thường',
+      message: 'Mật khẩu cần ít nhất 1 chữ thường'
     })
     .regex(/[0-9]/, {
-      message: 'Mật khẩu cần ít nhất 1 số',
+      message: 'Mật khẩu cần ít nhất 1 số'
     })
     .regex(REGEX.SPECIAL_CHAR, {
-      message: 'Mật khẩu cần ít nhất 1 kí tự đặc biệt',
+      message: 'Mật khẩu cần ít nhất 1 kí tự đặc biệt'
     }),
   fullName: z.string().min(1, { message: 'Vui lòng nhập họ và tên' }),
   phone: z
@@ -55,11 +55,11 @@ export const registerSchema = z.object({
         return REGEX.PHONE_VN.test(val);
       },
       {
-        message: 'Số điện thoại không hợp lệ',
+        message: 'Số điện thoại không hợp lệ'
       }
     )
     .optional(),
-  gender: z.enum([Gender.Male, Gender.Female]).optional(),
+  gender: z.enum([Gender.Male, Gender.Female]).optional()
 });
 
 export const bookSchema = z.object({
@@ -87,7 +87,7 @@ export const bookSchema = z.object({
   createdDate: z.string().optional(),
   lastUpdatedBy: z.string().optional(),
   lastUpdatedDate: z.string().optional(),
-  isDeleted: z.boolean().optional(),
+  isDeleted: z.boolean().optional()
 });
 
 export type BookFormValues = z.infer<typeof bookSchema>;
@@ -100,7 +100,7 @@ export const searchBookSchema = z
     languages: z.string().optional(),
     price: z.number().min(0, { message: 'Giá không được âm' }).optional(),
     startDate: z.string().optional(),
-    endDate: z.string().optional(),
+    endDate: z.string().optional()
   })
   .refine(
     (data) => {
@@ -111,7 +111,7 @@ export const searchBookSchema = z
     },
     {
       message: 'Ngày kết thúc phải sau ngày bắt đầu',
-      path: ['endDate'],
+      path: ['endDate']
     }
   );
 
@@ -121,7 +121,7 @@ export const authorFormSchema = z.object({
   authorName: z.string().min(1, 'Tên tác giả là bắt buộc'),
   dob: z.date().optional(),
   nationality: z.string().optional(),
-  biography: z.string().optional(),
+  biography: z.string().optional()
 });
 
 export type AuthorFormValues = z.infer<typeof authorFormSchema>;

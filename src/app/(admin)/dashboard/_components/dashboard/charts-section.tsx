@@ -12,23 +12,23 @@ const barData = [
   { month: 'Tháng 3', visitor: 237, book: 120 },
   { month: 'Tháng 4', visitor: 73, book: 190 },
   { month: 'Tháng 5', visitor: 209, book: 130 },
-  { month: 'Tháng 6', visitor: 214, book: 140 },
+  { month: 'Tháng 6', visitor: 214, book: 140 }
 ];
 
 const barConfig = {
   visitor: {
     label: 'Lượt tham quan',
-    color: 'hsl(var(--chart-1))',
+    color: 'hsl(var(--chart-1))'
   },
   book: {
     label: 'Số sách mới',
-    color: 'hsl(var(--chart-2))',
-  },
+    color: 'hsl(var(--chart-2))'
+  }
 } satisfies ChartConfig;
 
 const barProps = {
   barData,
-  barConfig,
+  barConfig
 };
 
 // Data cho Pie Chart
@@ -37,38 +37,38 @@ const pieData = [
   { category: 'thieuNhi', visitors: 200, fill: 'hsl(var(--chart-2))' },
   { category: 'giaoKhoa', visitors: 287, fill: 'hsl(var(--chart-3))' },
   { category: 'kyNang', visitors: 173, fill: 'hsl(var(--chart-4))' },
-  { category: 'other', visitors: 190, fill: 'hsl(var(--chart-5))' },
+  { category: 'other', visitors: 190, fill: 'hsl(var(--chart-5))' }
 ];
 
 const pieConfig = {
   visitors: {
-    label: 'Số lượng',
+    label: 'Số lượng'
   },
   vanHoc: {
     label: 'Văn học',
-    color: 'hsl(var(--chart-1))',
+    color: 'hsl(var(--chart-1))'
   },
   thieuNhi: {
     label: 'Thiếu nhi',
-    color: 'hsl(var(--chart-2))',
+    color: 'hsl(var(--chart-2))'
   },
   giaoKhoa: {
     label: 'Giáo khoa',
-    color: 'hsl(var(--chart-3))',
+    color: 'hsl(var(--chart-3))'
   },
   kyNang: {
     label: 'Kỹ năng',
-    color: 'hsl(var(--chart-4))',
+    color: 'hsl(var(--chart-4))'
   },
   other: {
     label: 'Khác',
-    color: 'hsl(var(--chart-5))',
-  },
+    color: 'hsl(var(--chart-5))'
+  }
 } satisfies ChartConfig;
 
 const pieProps = {
   pieData,
-  pieConfig,
+  pieConfig
 };
 
 const ChartsSection = () => {

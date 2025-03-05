@@ -13,5 +13,5 @@ export const bookAuthorService = {
       `${API_ENDPOINT.BOOK_AUTHORS.UPDATE}/${id}?BookId=${bookId}&AuthorId=${authorId}`
     );
     return res.data;
-  },
+  }
 };
