@@ -7,7 +7,6 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
 export const useLogin = () => {
-  const router = useRouter();
   return useMutation({
     mutationKey: ['login'],
     mutationFn: ({ usernameOrEmail, password }: LoginCredentials) =>
@@ -16,23 +15,13 @@ export const useLogin = () => {
         password,
         redirect: false,
       }),
-    onSuccess: () => {
-      router.push(PATH.DASHBOARD);
-      toast.success('Đăng nhập thành công', {
-        description: 'Vui lòng chờ trong giây lát',
-      });
-    },
-    onError: (error: Error) => {
-      console.log('Error login', error);
-      toast.error('Đăng nhập thất bại');
-    },
   });
 };
 
 export const useLogout = () => {
   return useMutation({
     mutationKey: ['logout'],
-    mutationFn: async () => await signOut(),
+    mutationFn: () => signOut(),
   });
 };
 

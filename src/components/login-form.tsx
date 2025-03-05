@@ -13,11 +13,12 @@ import { cn } from '@/lib/utils';
 import { LoginFormValues, loginSchema } from '@/lib/zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff } from 'lucide-react';
-import { AuthError } from 'next-auth';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import GoogleBtn from './google-button/google-btn';
+import { toast } from 'sonner';
+import GoogleButton from './google-button/google-button';
 import { Button } from './ui/button';
 import {
   Form,
@@ -36,6 +37,7 @@ export function LoginForm({
   const [showPassword, setShowPassword] = useState(false);
 
   const login = useLogin();
+  const router = useRouter();
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -45,22 +47,37 @@ export function LoginForm({
     },
   });
 
-  const onSubmit = async (values: LoginFormValues) => {
+  const onSubmit = (values: LoginFormValues) => {
+    const { usernameOrEmail, password } = values;
     try {
-      const { usernameOrEmail, password } = values;
-      await login.mutateAsync({ usernameOrEmail, password });
-    } catch (error: any) {
-      if ((error as AuthError)?.type === 'CredentialsSignin') {
-        // Set error cho cả 2 field
-        form.setError('usernameOrEmail', {
-          type: 'manual',
-          message: 'Tài khoản hoặc mật khẩu không chính xác',
-        });
-        form.setError('password', {
-          type: 'manual',
-          message: 'Tài khoản hoặc mật khẩu không chính xác',
-        });
-      }
+      login.mutateAsync(
+        { usernameOrEmail, password },
+        {
+          onSuccess: (data) => {
+            if (data?.error === 'Configuration') {
+              form.setError('usernameOrEmail', {
+                type: 'manual',
+                message: 'Tài khoản hoặc mật khẩu không chính xác',
+              });
+              form.setError('password', {
+                type: 'manual',
+                message: 'Tài khoản hoặc mật khẩu không chính xác',
+              });
+            }
+            if (data?.error === null) {
+              toast.success('Đăng nhập thành công', {
+                description: 'Vui lòng chờ trong giây lát',
+              });
+              router.push(PATH.DASHBOARD);
+            }
+          },
+          onError: (error) => {
+            console.log('Error logging in:', error);
+          },
+        }
+      );
+    } catch (error) {
+      console.log('Error logging in:', error);
     }
   };
 
@@ -76,7 +93,7 @@ export function LoginForm({
         <CardContent>
           <div className='grid gap-6'>
             <div className='flex flex-col gap-4'>
-              <GoogleBtn />
+              <GoogleButton />
             </div>
             <div className='relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border'>
               <span className='relative z-10 bg-background px-2 text-muted-foreground'>

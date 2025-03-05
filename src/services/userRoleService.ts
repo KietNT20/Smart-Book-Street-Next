@@ -18,7 +18,7 @@ export const userRoleService = {
     );
     return res.data;
   },
-  add: async (payload: UserRolePayload) => {
+  create: async (payload: UserRolePayload) => {
     const res = await axiosInstance.post(
       `${API_ENDPOINT.USER_ROLES.ADD}`,
       payload

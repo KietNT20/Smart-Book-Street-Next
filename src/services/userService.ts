@@ -44,7 +44,7 @@ export const userService = {
     );
     return res.data;
   },
-  add: async (payload = {}) => {
+  create: async (payload = {}) => {
     const res = await axiosInstance.post(`${API_ENDPOINT.USERS.ADD}`, payload);
     return res.data;
   },

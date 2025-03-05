@@ -7,7 +7,7 @@ export const roleService = {
     const res = await axiosInstance.get(`${API_ENDPOINT.ROLES.GET_ALL}`);
     return res.data;
   },
-  add: async (payload: RolePayload) => {
+  create: async (payload: RolePayload) => {
     const res = await axiosInstance.post(`${API_ENDPOINT.ROLES.ADD}`, payload);
     return res.data;
   },

@@ -15,7 +15,14 @@ export const useCategoryMutation = () => {
       categoryService.search(payload),
   });
 
+  const createCategory = useMutation({
+    mutationKey: ['create-category'],
+    mutationFn: (payload: { categoryName: string; description: string }) =>
+      categoryService.create(payload),
+  });
+
   return {
     searchCategoryName,
+    createCategory,
   };
 };

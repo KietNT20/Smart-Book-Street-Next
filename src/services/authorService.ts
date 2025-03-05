@@ -19,12 +19,12 @@ export const authorService = {
   },
   searchPagination: async (payload: SearchPaginationAuthor) => {
     const res = await axiosInstance.post(
-      API_ENDPOINT.AUTHORS.SEARCH_PAGINATION,
+      API_ENDPOINT.AUTHORS.PAGINATION_SEARCH,
       payload
     );
     return res.data;
   },
-  add: async (payload: AuthorPayload) => {
+  create: async (payload: AuthorPayload) => {
     const res = await axiosInstance.post(API_ENDPOINT.AUTHORS.ADD, payload);
     return res.data;
   },

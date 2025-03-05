@@ -17,7 +17,7 @@ export const useImagesMutation = () => {
   const queryClient = useQueryClient();
 
   const addImageMutation = useMutation({
-    mutationFn: (payload: Array<ImagePayload>) => imageService.add(payload),
+    mutationFn: (payload: Array<ImagePayload>) => imageService.create(payload),
     onSuccess: (data) => {
       if (data?.isSuccess) {
         toast.success('Thêm ảnh thành công');
