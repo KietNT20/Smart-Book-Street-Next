@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write src/**/*.{ts,tsx,js,jsx,css,scss}",
+    "prettier:fix": "npx prettier . --write",
     "prepare": "husky"
   },
   "dependencies": {
