@@ -4,12 +4,12 @@ import { Separator } from '@/components/ui/separator';
 import {
   SidebarInset,
   SidebarProvider,
-  SidebarTrigger,
+  SidebarTrigger
 } from '@/components/ui/sidebar';
 import BreadcrumbComp from './_components/breadcrumb-comp';
 
 export default function DashboardLayout({
-  children,
+  children
 }: {
   children: React.ReactNode;
 }) {

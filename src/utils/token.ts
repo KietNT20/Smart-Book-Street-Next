@@ -21,7 +21,7 @@ const localToken: TokenType = {
     if (typeof window !== 'undefined') {
       localStorage.removeItem(STORAGE.token);
     }
-  },
+  }
 };
 
 const tokenMethod: TokenType = {
@@ -30,7 +30,7 @@ const tokenMethod: TokenType = {
     console.log('token', token);
     localToken.set(token);
   },
-  remove: () => localToken.remove(),
+  remove: () => localToken.remove()
 };
 
 export default tokenMethod;

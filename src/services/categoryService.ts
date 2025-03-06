@@ -33,5 +33,5 @@ export const categoryService = {
       payload
     );
     return res.data;
-  },
+  }
 };

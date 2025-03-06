@@ -4,7 +4,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger,
+  DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { PATH } from '@/enums/path';
 import { useAuthorMutation } from '@/hooks/use-author';
@@ -36,7 +36,7 @@ const AuthorMenuAction = ({ author }: Props) => {
         onError: () => {
           toast.error('Đã xảy ra lỗi khi xóa tác giả');
           setIsDeleteModalOpen(false);
-        },
+        }
       });
     } catch (error) {
       console.error(error);

@@ -6,7 +6,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  FormMessage
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -45,7 +45,7 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
           categoryIds:
             (book as BookWithRelations).bookCategories?.map(
               (bc: BookCategoryIds) => bc.categoryId
-            ) || [],
+            ) || []
         }
       : {
           code: '',
@@ -58,8 +58,8 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
           status: '',
           publisherId: '',
           authorIds: [],
-          categoryIds: [],
-        },
+          categoryIds: []
+        }
   });
 
   const handleDateChange = (date: Date, onChange: (value: string) => void) => {

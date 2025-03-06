@@ -5,13 +5,13 @@ import { useQuery } from '@tanstack/react-query';
 export const useBookSearch = (params: BookSearchPayload) => {
   return useQuery({
     queryKey: ['books', params],
-    queryFn: () => bookService.searchPagination(params),
+    queryFn: () => bookService.searchPagination(params)
   });
 };
 
 export const useBookSearchById = (id: string) => {
   return useQuery({
     queryKey: ['books', id],
-    queryFn: () => bookService.getByID(id),
+    queryFn: () => bookService.getByID(id)
   });
 };

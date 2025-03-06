@@ -10,7 +10,7 @@ type ColumnHandlers = {
 };
 
 export const createColumns = ({
-  _onDelete,
+  _onDelete
 }: ColumnHandlers): ColumnDef<Book>[] => [
   {
     accessorKey: 'code',
@@ -30,7 +30,7 @@ export const createColumns = ({
         )}
       </Button>
     ),
-    filterFn: 'includesString',
+    filterFn: 'includesString'
   },
   {
     accessorKey: 'title',
@@ -50,7 +50,7 @@ export const createColumns = ({
         )}
       </Button>
     ),
-    filterFn: 'includesString',
+    filterFn: 'includesString'
   },
   {
     accessorKey: 'price',
@@ -77,19 +77,19 @@ export const createColumns = ({
       }
       return new Intl.NumberFormat('vi-VN', {
         style: 'currency',
-        currency: 'VND',
+        currency: 'VND'
       }).format(price);
-    },
+    }
   },
   {
     id: 'languages',
     accessorKey: 'languages',
-    header: 'Ngôn ngữ',
+    header: 'Ngôn ngữ'
   },
   {
     id: 'status',
     accessorKey: 'status',
-    header: 'Tình trạng',
+    header: 'Tình trạng'
   },
   {
     accessorKey: 'publicationDate',
@@ -109,7 +109,7 @@ export const createColumns = ({
         )}
       </Button>
     ),
-    cell: ({ row }) => formatDate(row.getValue('publicationDate')),
+    cell: ({ row }) => formatDate(row.getValue('publicationDate'))
   },
   {
     accessorKey: 'createdDate',
@@ -129,7 +129,7 @@ export const createColumns = ({
         )}
       </Button>
     ),
-    cell: ({ row }) => formatDate(row.getValue('createdDate')),
+    cell: ({ row }) => formatDate(row.getValue('createdDate'))
   },
   {
     id: 'actions',
@@ -139,6 +139,6 @@ export const createColumns = ({
       const bookProps = { book, _onDelete };
 
       return <BookMenuAction {...bookProps} />;
-    },
-  },
+    }
+  }
 ];

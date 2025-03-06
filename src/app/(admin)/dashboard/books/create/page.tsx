@@ -12,7 +12,7 @@ import { useCreateBook } from '../_lib/use-book-operations';
 export default function CreateBookPage() {
   const router = useRouter();
   const { handleCreate, isLoading } = useCreateBook({
-    _onSuccess: () => router.push(PATH.BOOKS),
+    _onSuccess: () => router.push(PATH.BOOKS)
   });
   const apiLoading = useDebounce(isLoading, 300);
 

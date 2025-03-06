@@ -6,19 +6,19 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-  CommandSeparator,
+  CommandSeparator
 } from '@/components/ui/command';
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  FormMessage
 } from '@/components/ui/form';
 import {
   Popover,
   PopoverContent,
-  PopoverTrigger,
+  PopoverTrigger
 } from '@/components/ui/popover';
 import { useAuthorMutation } from '@/hooks/use-author';
 import useDebounce from '@/hooks/useDebounce';
@@ -51,7 +51,7 @@ const AuthorCombobox = ({ name, control }: Props) => {
 
     try {
       const { results } = await searchAuthorName.mutateAsync({
-        authorName: value,
+        authorName: value
       });
       setSearchResults(results);
     } catch (error) {

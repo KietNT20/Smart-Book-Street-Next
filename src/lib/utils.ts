@@ -9,7 +9,7 @@ export function formatDate(dateString: string) {
   return new Date(dateString).toLocaleDateString('vi-VN', {
     year: 'numeric',
     month: '2-digit',
-    day: '2-digit',
+    day: '2-digit'
   });
 }
 
@@ -30,8 +30,28 @@ export const formatPrice = (
     style: options?.withSymbol === false ? 'decimal' : 'currency',
     currency: 'VND',
     notation: options?.compact ? 'compact' : 'standard',
-    maximumFractionDigits: 0,
+    maximumFractionDigits: 0
   });
 
   return formatter.format(numPrice);
 };
+
+/**
+ * Format text to a short summary with ellipsis if needed
+ */
+export function formatSummary(text: string, maxLength: number = 150): string {
+  if (text.length <= maxLength) return text;
+  return text.substring(0, maxLength).trim() + '...';
+}
+
+/**
+ * Convert utc date to local date string
+ */
+export function utcToLocalDate(utcDateString: string): string {
+  try {
+    const date = new Date(utcDateString);
+    return date.toLocaleDateString('vi-VN');
+  } catch {
+    return utcDateString;
+  }
+}

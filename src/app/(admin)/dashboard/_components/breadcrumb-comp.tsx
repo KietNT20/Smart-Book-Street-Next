@@ -6,7 +6,7 @@ import {
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
-  BreadcrumbSeparator,
+  BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
 import { PATH } from '@/enums/path';
 import Link from 'next/link';
@@ -24,7 +24,7 @@ const BreadcrumbComp = () => {
       return {
         label:
           segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, ' '),
-        href: href,
+        href: href
       };
     });
 

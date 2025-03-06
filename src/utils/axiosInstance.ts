@@ -3,13 +3,13 @@ import { PATH } from '@/enums/path';
 import axios, {
   AxiosError,
   AxiosInstance,
-  InternalAxiosRequestConfig,
+  InternalAxiosRequestConfig
 } from 'axios';
 import { getSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: BASE_URL,
+  baseURL: BASE_URL
 });
 // Add a request interceptor
 axiosInstance.interceptors.request.use(

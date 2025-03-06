@@ -12,7 +12,7 @@ export const useEditPage = () => {
 
   const { data: book } = useBookSearchById(bookId);
   const { handleUpdate, isLoading } = useUpdateBook({
-    _onSuccess: () => router.push(`${PATH.BOOKS}/${bookId}`),
+    _onSuccess: () => router.push(`${PATH.BOOKS}/${bookId}`)
   });
   const apiLoading = useDebounce(isLoading, 300);
 
@@ -23,6 +23,6 @@ export const useEditPage = () => {
     book,
     handleSubmit,
     router,
-    apiLoading,
+    apiLoading
   };
 };

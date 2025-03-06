@@ -2,7 +2,7 @@ import { authorService } from '@/services/authorService';
 import {
   Author,
   AuthorPayload,
-  SearchPaginationAuthor,
+  SearchPaginationAuthor
 } from '@/types/author-types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
@@ -10,14 +10,14 @@ import { toast } from 'sonner';
 export const useGetAuthorById = <T>(id: string) => {
   return useQuery<T>({
     queryKey: ['author', id],
-    queryFn: () => authorService.getById(id),
+    queryFn: () => authorService.getById(id)
   });
 };
 
 export const useSearchPaginationAuthor = (params: SearchPaginationAuthor) => {
   return useQuery({
     queryKey: ['authors', params],
-    queryFn: () => authorService.searchPagination(params),
+    queryFn: () => authorService.searchPagination(params)
   });
 };
 
@@ -27,11 +27,12 @@ export const useAuthorMutation = () => {
   const searchAuthorName = useMutation({
     mutationKey: ['search-author-name'],
     mutationFn: (payload: { authorName: string }) =>
-      authorService.search(payload),
+      authorService.search(payload)
   });
 
   const createAuthor = useMutation({
-    mutationFn: (payload: AuthorPayload) => authorService.create(payload),
+    mutationFn: (payload: Partial<AuthorPayload>) =>
+      authorService.create(payload),
     onSuccess: (data) => {
       if (data) {
         toast.success('Thêm tác giả thành công');
@@ -40,18 +41,18 @@ export const useAuthorMutation = () => {
     },
     onError: (error: Error) => {
       console.error('Error Add Author:', error);
-    },
+    }
   });
 
   const updateAuthor = useMutation({
-    mutationFn: (payload: Partial<Omit<Author, 'images'>>) =>
+    mutationFn: (payload: Partial<Omit<Author, 'images' | 'bookAuthors'>>) =>
       authorService.update(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['authors'] });
     },
     onError: (error: Error) => {
       console.error('Error Update Author:', error);
-    },
+    }
   });
 
   const deleteAuthor = useMutation({
@@ -61,13 +62,13 @@ export const useAuthorMutation = () => {
     },
     onError: (error: Error) => {
       console.error('Error Delete Author:', error);
-    },
+    }
   });
 
   return {
     createAuthor,
     updateAuthor,
     deleteAuthor,
-    searchAuthorName,
+    searchAuthorName
   };
 };

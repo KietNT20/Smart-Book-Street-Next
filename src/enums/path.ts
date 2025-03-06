@@ -8,5 +8,5 @@ export enum PATH {
   BRAND = '/brand',
   BOOKS = '/dashboard/books',
   AUTHORS = '/dashboard/authors',
-  CATEGORIES = '/dashboard/categories',
+  CATEGORIES = '/dashboard/categories'
 }

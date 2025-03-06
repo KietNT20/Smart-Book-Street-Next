@@ -2,7 +2,7 @@ import { API_ENDPOINT } from '@/constant/api-url';
 import {
   Author,
   AuthorPayload,
-  SearchPaginationAuthor,
+  SearchPaginationAuthor
 } from '@/types/author-types';
 import axiosInstance from '@/utils/axiosInstance';
 
@@ -24,11 +24,11 @@ export const authorService = {
     );
     return res.data;
   },
-  create: async (payload: AuthorPayload) => {
+  create: async (payload: Partial<AuthorPayload>) => {
     const res = await axiosInstance.post(API_ENDPOINT.AUTHORS.ADD, payload);
     return res.data;
   },
-  update: async (payload: Partial<Omit<Author, 'images'>>) => {
+  update: async (payload: Partial<Omit<Author, 'images' | 'bookAuthors'>>) => {
     const res = await axiosInstance.put(API_ENDPOINT.AUTHORS.UPDATE, payload);
     return res.data;
   },
@@ -37,5 +37,5 @@ export const authorService = {
       `${API_ENDPOINT.AUTHORS.DELETE}?id=${id}`
     );
     return res.data;
-  },
+  }
 };

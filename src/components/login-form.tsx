@@ -5,7 +5,7 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle,
+  CardTitle
 } from '@/components/ui/card';
 import { PATH } from '@/enums/path';
 import { useLogin } from '@/hooks/use-auth';
@@ -26,7 +26,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  FormMessage
 } from './ui/form';
 import { Input } from './ui/input';
 
@@ -43,8 +43,8 @@ export function LoginForm({
     resolver: zodResolver(loginSchema),
     defaultValues: {
       usernameOrEmail: '',
-      password: '',
-    },
+      password: ''
+    }
   });
 
   const onSubmit = (values: LoginFormValues) => {
@@ -57,23 +57,23 @@ export function LoginForm({
             if (data?.error === 'Configuration') {
               form.setError('usernameOrEmail', {
                 type: 'manual',
-                message: 'Tài khoản hoặc mật khẩu không chính xác',
+                message: 'Tài khoản hoặc mật khẩu không chính xác'
               });
               form.setError('password', {
                 type: 'manual',
-                message: 'Tài khoản hoặc mật khẩu không chính xác',
+                message: 'Tài khoản hoặc mật khẩu không chính xác'
               });
             }
             if (data?.error === null) {
               toast.success('Đăng nhập thành công', {
-                description: 'Vui lòng chờ trong giây lát',
+                description: 'Vui lòng chờ trong giây lát'
               });
               router.push(PATH.DASHBOARD);
             }
           },
           onError: (error) => {
             console.log('Error logging in:', error);
-          },
+          }
         }
       );
     } catch (error) {
@@ -111,10 +111,10 @@ export function LoginForm({
                       name='usernameOrEmail'
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Email</FormLabel>
+                          <FormLabel>Tài khoản hoặc Email</FormLabel>
                           <FormControl>
                             <Input
-                              placeholder='Tài khoản hoặc email'
+                              placeholder='Tài khoản hoặc Email'
                               disabled={login.isPending}
                               className={cn(
                                 form.formState.errors.usernameOrEmail &&

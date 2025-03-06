@@ -10,7 +10,7 @@ import {
   LibraryBig,
   Map,
   PieChart,
-  Store,
+  Store
 } from 'lucide-react';
 import * as React from 'react';
 
@@ -23,7 +23,7 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-  SidebarRail,
+  SidebarRail
 } from '@/components/ui/sidebar';
 import { PATH } from '@/enums/path';
 
@@ -33,18 +33,18 @@ const data = {
     {
       name: 'Acme Inc',
       logo: GalleryVerticalEnd,
-      plan: 'Enterprise',
+      plan: 'Enterprise'
     },
     {
       name: 'Acme Corp.',
       logo: AudioWaveform,
-      plan: 'Startup',
+      plan: 'Startup'
     },
     {
       name: 'Evil Corp.',
       logo: Command,
-      plan: 'Free',
-    },
+      plan: 'Free'
+    }
   ],
   navMain: [
     {
@@ -55,17 +55,17 @@ const data = {
       items: [
         {
           title: 'Khu vực',
-          url: '#',
+          url: '#'
         },
         {
           title: 'Nhà xuất bản',
-          url: '#',
+          url: '#'
         },
         {
           title: 'Cửa hàng',
-          url: '#',
-        },
-      ],
+          url: '#'
+        }
+      ]
     },
     {
       title: 'Sách',
@@ -74,17 +74,17 @@ const data = {
       items: [
         {
           title: 'Quản lý',
-          url: `${PATH.BOOKS}`,
+          url: `${PATH.BOOKS}`
         },
         {
           title: 'Tác giả',
-          url: `${PATH.AUTHORS}`,
+          url: `${PATH.AUTHORS}`
         },
         {
           title: 'Danh mục',
-          url: `${PATH.CATEGORIES}`,
-        },
-      ],
+          url: `${PATH.CATEGORIES}`
+        }
+      ]
     },
     {
       title: 'Nhà xuất bản',
@@ -93,21 +93,21 @@ const data = {
       items: [
         {
           title: 'Quản lý',
-          url: '#',
+          url: '#'
         },
         {
           title: 'Get Started',
-          url: '#',
+          url: '#'
         },
         {
           title: 'Tutorials',
-          url: '#',
+          url: '#'
         },
         {
           title: 'Changelog',
-          url: '#',
-        },
-      ],
+          url: '#'
+        }
+      ]
     },
     {
       title: 'Cửa hàng',
@@ -116,41 +116,41 @@ const data = {
       items: [
         {
           title: 'General',
-          url: '#',
+          url: '#'
         },
         {
           title: 'Team',
-          url: '#',
+          url: '#'
         },
         {
           title: 'Billing',
-          url: '#',
+          url: '#'
         },
         {
           title: 'Limits',
-          url: '#',
-        },
-      ],
-    },
+          url: '#'
+        }
+      ]
+    }
   ],
   projects: [
     {
       name: 'Dashboard',
       url: PATH.DASHBOARD,
-      icon: PieChart,
+      icon: PieChart
     },
     {
       name: 'Statistics',
       url: PATH.STATISTICS,
-      icon: ChartNoAxesCombined,
+      icon: ChartNoAxesCombined
     },
 
     {
       name: 'Visitors',
       url: '#',
-      icon: Map,
-    },
-  ],
+      icon: Map
+    }
+  ]
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {

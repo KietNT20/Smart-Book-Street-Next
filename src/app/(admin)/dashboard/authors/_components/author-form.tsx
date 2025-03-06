@@ -8,14 +8,14 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  FormMessage
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { PATH } from '@/enums/path';
 import { useAuthorMutation, useGetAuthorById } from '@/hooks/use-author';
 import { authorFormSchema, AuthorFormValues } from '@/lib/zod';
-import { Author, AuthorPayload } from '@/types/author-types';
+import { Author } from '@/types/author-types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
 import { useRouter } from 'next/navigation';
@@ -43,8 +43,8 @@ export function AuthorForm({ authorId }: Props) {
     defaultValues: {
       authorName: '',
       nationality: '',
-      biography: '',
-    },
+      biography: ''
+    }
   });
 
   useEffect(() => {
@@ -53,7 +53,7 @@ export function AuthorForm({ authorId }: Props) {
         authorName: authorData.result.authorName,
         dob: new Date(authorData.result.dob),
         nationality: authorData.result.nationality,
-        biography: authorData.result.biography,
+        biography: authorData.result.biography
       });
     }
   }, [authorData, form]);
@@ -65,14 +65,14 @@ export function AuthorForm({ authorId }: Props) {
           id: authorId,
           ...data,
           dob: data?.dob ? format(data.dob, 'yyyy-MM-dd') : '',
-          biography: data.biography ?? '',
+          biography: data.biography ?? ''
         });
         toast.success('Cập nhật tác giả thành công');
       } else {
         await createAuthor.mutateAsync({
           ...data,
-          // dob: format(data.dob, 'yyyy-MM-dd'),
-        } as AuthorPayload);
+          dob: data?.dob ? format(data.dob, 'yyyy-MM-dd') : ''
+        });
       }
       router.push(PATH.AUTHORS);
     } catch (error: unknown) {

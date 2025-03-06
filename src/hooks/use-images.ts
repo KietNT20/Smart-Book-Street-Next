@@ -9,7 +9,7 @@ export const useGetImageByTypeOrEntityID = (payload: {
 }) => {
   return useQuery({
     queryKey: ['images', payload],
-    queryFn: () => imageService.getByTypeOrEntityID(payload),
+    queryFn: () => imageService.getByTypeOrEntityID(payload)
   });
 };
 
@@ -27,7 +27,7 @@ export const useImagesMutation = () => {
     onError: (error: Error) => {
       console.log('Error add image', error);
       toast.error('Thêm ảnh thất bại');
-    },
+    }
   });
 
   const deleteImageMutation = useMutation({
@@ -38,11 +38,11 @@ export const useImagesMutation = () => {
     },
     onError: () => {
       toast.error('Xóa ảnh thất bại');
-    },
+    }
   });
 
   return {
     addImageMutation,
-    deleteImageMutation,
+    deleteImageMutation
   };
 };

@@ -5,7 +5,7 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle,
+  CardTitle
 } from '@/components/ui/card';
 import { Gender } from '@/enums/gender-enums';
 import { PATH } from '@/enums/path';
@@ -26,7 +26,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  FormMessage
 } from './ui/form';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
@@ -48,8 +48,8 @@ export function RegisterForm({
       password: '',
       fullName: '',
       phone: '',
-      gender: undefined,
-    },
+      gender: undefined
+    }
   });
 
   const onSubmit = async (values: RegisterFormValues) => {
@@ -59,7 +59,7 @@ export function RegisterForm({
       password: values.password,
       fullName: values.fullName,
       ...(values.phone && values.phone !== '' && { phone: values.phone }),
-      ...(values.gender && { gender: values.gender }),
+      ...(values.gender && { gender: values.gender })
     };
     await registerMutation.mutateAsync(requestData);
   };

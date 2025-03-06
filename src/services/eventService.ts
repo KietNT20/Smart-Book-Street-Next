@@ -10,5 +10,5 @@ export const eventService = {
   update: async (payload: Partial<Event>) => {
     const res = await axiosInstance.put(API_ENDPOINT.EVENTS.UPDATE, payload);
     return res.data;
-  },
+  }
 };

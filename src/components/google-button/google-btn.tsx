@@ -7,7 +7,7 @@ import { Google } from '../ui/google';
 const GoogleBtn = () => {
   const handleLoginGoogle = async () => {
     await signIn('google', {
-      callbackUrl: `${process.env.NEXT_PUBLIC_API_GOOGLE_LOGIN}`,
+      callbackUrl: `${process.env.NEXT_PUBLIC_API_GOOGLE_LOGIN}`
     });
   };
 

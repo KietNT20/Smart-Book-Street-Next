@@ -4,7 +4,7 @@ import {
   DialogContent,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
+  DialogTitle
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -13,7 +13,7 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
+  SelectValue
 } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 import { searchBookSchema, type SearchBookFormValues } from '@/lib/zod';
@@ -37,13 +37,13 @@ export function SearchBookModal({ isOpen, onClose, onSearch }: Props) {
       languages: '',
       price: 0,
       startDate: '',
-      endDate: '',
-    },
+      endDate: ''
+    }
   });
 
   const {
     formState: { errors },
-    reset,
+    reset
   } = form;
 
   const handleSearch = (values: SearchBookFormValues) => {
@@ -58,7 +58,7 @@ export function SearchBookModal({ isOpen, onClose, onSearch }: Props) {
       endDate: values.endDate
         ? new Date(values.endDate).toISOString()
         : undefined,
-      price: values.price,
+      price: values.price
     };
 
     // Remove empty values

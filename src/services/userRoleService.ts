@@ -30,5 +30,5 @@ export const userRoleService = {
       `${API_ENDPOINT.USER_ROLES.DELETE}?idUser=${userId}&idRole=${roleId}`
     );
     return res.data;
-  },
+  }
 };

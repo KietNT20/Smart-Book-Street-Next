@@ -29,7 +29,7 @@ export function useBookList({ pagination, searchCriteria }: UseBookListProps) {
     pageSize: pagination.pageSize,
     sortField: pagination.sortField,
     sortOrder: pagination.sortOrder,
-    result: searchCriteria,
+    result: searchCriteria
   });
 
   const isLoadingBooks = useDebounce(isLoading, 300);
@@ -49,7 +49,7 @@ export function useBookList({ pagination, searchCriteria }: UseBookListProps) {
     bookData,
     isLoadingBooks,
     handleDelete,
-    deleteBookMutation,
+    deleteBookMutation
   };
 }
 
@@ -63,7 +63,7 @@ export function useCreateBook({ _onSuccess }: UseBookMutationProps = {}) {
       await createBookMutation.mutateAsync({
         ...data,
         createdBy: session?.user?.email || '',
-        createdDate: new Date().toISOString(),
+        createdDate: new Date().toISOString()
       });
       _onSuccess?.();
     } catch (error) {
@@ -73,7 +73,7 @@ export function useCreateBook({ _onSuccess }: UseBookMutationProps = {}) {
 
   return {
     handleCreate,
-    isLoading: createBookMutation.isPending,
+    isLoading: createBookMutation.isPending
   };
 }
 
@@ -89,7 +89,7 @@ export function useUpdateBook({ _onSuccess }: UseBookMutationProps = {}) {
         },
         onError: () => {
           toast.error('Đã xảy ra lỗi khi cập nhật sách');
-        },
+        }
       });
     } catch (error) {
       console.error('Error:', error);
@@ -98,6 +98,6 @@ export function useUpdateBook({ _onSuccess }: UseBookMutationProps = {}) {
 
   return {
     handleUpdate,
-    isLoading: updateBookMutation.isPending,
+    isLoading: updateBookMutation.isPending
   };
 }
