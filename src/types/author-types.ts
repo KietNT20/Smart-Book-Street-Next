@@ -5,7 +5,7 @@ import { Image } from './image-types';
 export interface Author extends BaseEntity {
   id: string;
   authorName: string;
-  dob: Date | string;
+  dob: string;
   nationality: string;
   biography: string;
   bookAuthors: BookAuthor[];

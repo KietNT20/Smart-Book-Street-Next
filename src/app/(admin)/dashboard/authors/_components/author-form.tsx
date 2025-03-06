@@ -70,8 +70,8 @@ export function AuthorForm({ authorId }: Props) {
         toast.success('Cập nhật tác giả thành công');
       } else {
         await createAuthor.mutateAsync({
-          ...data
-          // dob: format(data.dob, 'yyyy-MM-dd'),
+          ...data,
+          dob: data?.dob ? format(data.dob, 'yyyy-MM-dd') : ''
         });
       }
       router.push(PATH.AUTHORS);
