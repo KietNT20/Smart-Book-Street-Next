@@ -26,7 +26,9 @@ const AuthorInfo = ({ author }: Props) => {
 
             <div className='mb-2 flex items-center'>
               <span className='w-32 text-gray-600'>Ngày sinh:</span>
-              <span className='font-medium'>{formatDate(author.dob)}</span>
+              <span className='font-medium'>
+                {formatDate(author.dob.toString())}
+              </span>
             </div>
           </div>
 
