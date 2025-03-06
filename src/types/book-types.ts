@@ -28,7 +28,7 @@ export interface Book extends BaseEntity {
   publisher?: Publisher;
   bookAuthors?: BookAuthorIds[];
   bookCategories?: BookCategoryIds[];
-  // inventories?: any[];
+  inventories?: any[];
 }
 
 export type GetAllBooksResponse = {

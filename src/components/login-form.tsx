@@ -8,11 +8,13 @@ import {
   CardTitle
 } from '@/components/ui/card';
 import { PATH } from '@/enums/path';
-import { useLogin } from '@/hooks/use-auth';
 import { cn } from '@/lib/utils';
 import { LoginFormValues, loginSchema } from '@/lib/zod';
+import { LoginCredentials } from '@/types/auth-types';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
 import { Eye, EyeOff } from 'lucide-react';
+import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
@@ -36,7 +38,6 @@ export function LoginForm({
 }: React.ComponentPropsWithoutRef<'div'>) {
   const [showPassword, setShowPassword] = useState(false);
 
-  const login = useLogin();
   const router = useRouter();
 
   const form = useForm<LoginFormValues>({
@@ -47,35 +48,40 @@ export function LoginForm({
     }
   });
 
-  const onSubmit = (values: LoginFormValues) => {
+  const login = useMutation({
+    mutationFn: ({ usernameOrEmail, password }: LoginCredentials) =>
+      signIn('credentials', {
+        usernameOrEmail,
+        password,
+        redirect: false
+      }),
+    onSuccess: (data) => {
+      if (data?.error === 'Configuration') {
+        form.setError('usernameOrEmail', {
+          type: 'manual',
+          message: 'Tài khoản hoặc mật khẩu không chính xác'
+        });
+        form.setError('password', {
+          type: 'manual',
+          message: 'Tài khoản hoặc mật khẩu không chính xác'
+        });
+      }
+      if (data?.error === null && data.url) {
+        toast.success('Đăng nhập thành công', {
+          description: 'Vui lòng chờ trong giây lát'
+        });
+        router.push(PATH.DASHBOARD);
+      }
+    },
+    onError: (error) => {
+      console.log('Error logging in:', error);
+    }
+  });
+
+  const onSubmit = async (values: LoginFormValues) => {
     const { usernameOrEmail, password } = values;
     try {
-      login.mutateAsync(
-        { usernameOrEmail, password },
-        {
-          onSuccess: (data) => {
-            if (data?.error === 'Configuration') {
-              form.setError('usernameOrEmail', {
-                type: 'manual',
-                message: 'Tài khoản hoặc mật khẩu không chính xác'
-              });
-              form.setError('password', {
-                type: 'manual',
-                message: 'Tài khoản hoặc mật khẩu không chính xác'
-              });
-            }
-            if (data?.error === null) {
-              toast.success('Đăng nhập thành công', {
-                description: 'Vui lòng chờ trong giây lát'
-              });
-              router.push(PATH.DASHBOARD);
-            }
-          },
-          onError: (error) => {
-            console.log('Error logging in:', error);
-          }
-        }
-      );
+      await login.mutateAsync({ usernameOrEmail, password });
     } catch (error) {
       console.log('Error logging in:', error);
     }

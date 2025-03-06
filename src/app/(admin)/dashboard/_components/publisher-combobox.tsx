@@ -50,6 +50,7 @@ const PublisherCombobox = ({ name, control }: Props) => {
   const [results, setResults] = useState<Publisher[]>([]);
   const [open, setOpen] = useState(false);
   const [publisherInfo, setPublisherInfo] = useState<Publisher | null>(null);
+
   const { searchPublisher } = usePublisherMutation();
   const debouncedResults = useDebounce(results, 300);
 
@@ -108,7 +109,7 @@ const PublisherCombobox = ({ name, control }: Props) => {
             </PopoverTrigger>
             <PopoverContent
               align='start'
-              className='w-[200px] p-0 lg:w-[500px]'
+              className='w-[200px] p-0 lg:w-[400px]'
             >
               <Command shouldFilter={false}>
                 <div className='space-y-2 border-b border-gray-200 p-2'>

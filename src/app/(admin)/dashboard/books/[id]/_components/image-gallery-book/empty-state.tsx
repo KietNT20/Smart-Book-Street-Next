@@ -11,7 +11,7 @@ const EmptyState = ({ bookCode }: Props) => {
       <h3 className='mb-2 text-sm font-medium'>Chưa có hình ảnh</h3>
       <p className='text-xs text-gray-500'>
         Tải lên hình ảnh cho sách &quot;{bookCode || ''}&quot; bằng cách nhấn
-        nút &quot;Tải ảnh lên&quot;
+        nút &quot;Tải ảnh&quot;
       </p>
     </div>
   );

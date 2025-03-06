@@ -119,7 +119,7 @@ export type SearchBookFormValues = z.infer<typeof searchBookSchema>;
 
 export const authorFormSchema = z.object({
   authorName: z.string().min(1, 'Tên tác giả là bắt buộc'),
-  dob: z.date().optional(),
+  dob: z.string().optional(),
   nationality: z.string().optional(),
   biography: z.string().optional()
 });

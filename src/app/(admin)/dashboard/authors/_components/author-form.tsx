@@ -1,6 +1,5 @@
 'use client';
 
-import { DatePickerCompVN } from '@/components/date-input/date-picker-custom';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -17,7 +16,6 @@ import { useAuthorMutation, useGetAuthorById } from '@/hooks/use-author';
 import { authorFormSchema, AuthorFormValues } from '@/lib/zod';
 import { Author } from '@/types/author-types';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { format } from 'date-fns';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
@@ -51,7 +49,7 @@ export function AuthorForm({ authorId }: Props) {
     if (authorData) {
       form.reset({
         authorName: authorData.result.authorName,
-        dob: new Date(authorData.result.dob),
+        dob: authorData.result.dob as string,
         nationality: authorData.result.nationality,
         biography: authorData.result.biography
       });
@@ -64,14 +62,12 @@ export function AuthorForm({ authorId }: Props) {
         await updateAuthor.mutateAsync({
           id: authorId,
           ...data,
-          dob: data?.dob ? format(data.dob, 'yyyy-MM-dd') : '',
           biography: data.biography ?? ''
         });
         toast.success('Cập nhật tác giả thành công');
       } else {
         await createAuthor.mutateAsync({
-          ...data,
-          dob: data?.dob ? format(data.dob, 'yyyy-MM-dd') : ''
+          ...data
         });
       }
       router.push(PATH.AUTHORS);
@@ -110,12 +106,7 @@ export function AuthorForm({ authorId }: Props) {
               <FormItem>
                 <FormLabel>Ngày sinh</FormLabel>
                 <FormControl>
-                  <DatePickerCompVN
-                    value={field.value}
-                    onChange={field.onChange}
-                    startYear={1900}
-                    endYear={new Date().getFullYear()}
-                  />
+                  <Input placeholder='Nhập ngày sinh' type='date' {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
