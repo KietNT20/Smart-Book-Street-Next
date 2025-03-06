@@ -5,24 +5,18 @@ import { Image } from './image-types';
 export interface Author extends BaseEntity {
   id: string;
   authorName: string;
-  dob: string;
+  dob: Date | string;
   nationality: string;
   biography: string;
   bookAuthors: BookAuthor[];
   images: Image[];
 }
 
-export interface BookAuthor {
-  id: string;
+export interface BookAuthor extends BaseEntity {
   bookId: string;
   authorId: string;
   book: Book;
   author: Author | null;
-  createdBy: string | null;
-  createdDate: string;
-  lastUpdatedBy: string | null;
-  lastUpdatedDate: string | null;
-  isDeleted: boolean;
 }
 
 export type AuthorPayload = Omit<Author, 'id' | 'images' | 'bookAuthors'>;
@@ -37,12 +31,18 @@ export type SearchPaginationAuthor = {
   };
 };
 
-export type AuthorResponse = {
+export type AuthorsApiResponse = {
   results: Author[];
   totalPages: number;
   totalRecords: number;
   pageNumber: number;
   pageSize: number;
+  isSuccess: boolean;
+  message: string;
+};
+
+export type AuthorApiResponse = {
+  result: Author;
   isSuccess: boolean;
   message: string;
 };

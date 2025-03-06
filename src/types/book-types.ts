@@ -14,6 +14,7 @@ export type BookCategoryIds = {
 };
 
 export interface Book extends BaseEntity {
+  id: string;
   code: string;
   title: string;
   publicationDate: string;
@@ -28,7 +29,7 @@ export interface Book extends BaseEntity {
   publisher?: Publisher;
   bookAuthors?: BookAuthorIds[];
   bookCategories?: BookCategoryIds[];
-  // inventories?: any[];
+  inventories?: any[];
 }
 
 export type GetAllBooksResponse = {

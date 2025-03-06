@@ -45,6 +45,9 @@ const BookInfo = ({ book, bookAuthorsRes, bookCategoriesRes }: Props) => {
           </span>
         </p>
         <p className='flex items-center gap-2 font-medium'>
+          Kích thước: {book?.size}
+        </p>
+        <p className='flex items-center gap-2 font-medium'>
           Ngôn ngữ: {book?.languages}
         </p>
         <p className='flex items-center gap-2 font-medium'>

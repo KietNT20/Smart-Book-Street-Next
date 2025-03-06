@@ -20,8 +20,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
     Credentials({
       credentials: {
-        usernameOrEmail: { label: 'Tài khoản hoặc Email', type: 'text' },
-        password: { label: 'Mật khẩu', type: 'password' }
+        usernameOrEmail: {},
+        password: {}
       },
       authorize: async (credentials) => {
         const { usernameOrEmail, password } = credentials;

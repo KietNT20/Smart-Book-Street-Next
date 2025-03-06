@@ -1,22 +1,10 @@
 import { PATH } from '@/enums/path';
 import { userService } from '@/services/userService';
-import { LoginCredentials, RegisterRequestBody } from '@/types/auth-types';
+import { RegisterRequestBody } from '@/types/auth-types';
 import { useMutation } from '@tanstack/react-query';
-import { signIn, signOut } from 'next-auth/react';
+import { signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-
-export const useLogin = () => {
-  return useMutation({
-    mutationKey: ['login'],
-    mutationFn: ({ usernameOrEmail, password }: LoginCredentials) =>
-      signIn('credentials', {
-        usernameOrEmail,
-        password,
-        redirect: false
-      })
-  });
-};
 
 export const useLogout = () => {
   return useMutation({

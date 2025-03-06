@@ -38,6 +38,7 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
     defaultValues: book
       ? {
           ...book,
+          //   publisherId
           authorIds:
             (book as BookWithRelations).bookAuthors?.map(
               (ba: BookAuthorIds) => ba.authorId
