@@ -3,7 +3,6 @@ import Credentials from 'next-auth/providers/credentials';
 import Google from 'next-auth/providers/google';
 import { API_ENDPOINT } from './constant/api-url';
 import { PATH } from './enums/path';
-import { loginSchema } from './lib/zod';
 import { UserRoles } from './types/auth-types';
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
@@ -21,8 +20,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
     Credentials({
       credentials: {
-        usernameOrEmail: { label: 'Username or Email', type: 'text' },
-        password: { label: 'Password', type: 'password' }
+        usernameOrEmail: { label: 'Tài khoản hoặc Email', type: 'text' },
+        password: { label: 'Mật khẩu', type: 'password' }
       },
       authorize: async (credentials) => {
         const { usernameOrEmail, password } = credentials;
@@ -30,11 +29,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         if (!usernameOrEmail || !password) {
           return null;
         }
-
-        const payloadLogin = await loginSchema.parseAsync({
-          usernameOrEmail,
-          password
-        });
 
         try {
           const res = await fetch(
@@ -44,12 +38,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
               headers: {
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify(payloadLogin)
+              body: JSON.stringify({ usernameOrEmail, password })
             }
           );
 
           if (!res.ok) {
-            const errorText = await res.text(); // Get the raw response
+            const errorText = await res.text();
             console.error('API error response:', errorText);
             throw new Error(`Login failed: ${res.status} ${res.statusText}`);
           }

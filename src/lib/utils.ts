@@ -35,3 +35,23 @@ export const formatPrice = (
 
   return formatter.format(numPrice);
 };
+
+/**
+ * Format text to a short summary with ellipsis if needed
+ */
+export function formatSummary(text: string, maxLength: number = 150): string {
+  if (text.length <= maxLength) return text;
+  return text.substring(0, maxLength).trim() + '...';
+}
+
+/**
+ * Convert utc date to local date string
+ */
+export function utcToLocalDate(utcDateString: string): string {
+  try {
+    const date = new Date(utcDateString);
+    return date.toLocaleDateString('vi-VN');
+  } catch {
+    return utcDateString;
+  }
+}

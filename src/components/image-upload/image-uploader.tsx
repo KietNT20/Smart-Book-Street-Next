@@ -1,6 +1,8 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
 import { useImagesMutation } from '@/hooks/use-images';
+import { ImagePlus, Loader2 } from 'lucide-react';
 import {
   CldUploadWidget,
   CloudinaryUploadWidgetInfo,
@@ -58,13 +60,23 @@ const ImageUploader = ({ entityId, folder }: ImageUploaderProps) => {
         options={uploadOptions}
       >
         {({ open }) => (
-          <button
+          <Button
             onClick={() => open()}
             disabled={uploading}
-            className='rounded bg-blue-500 px-4 py-2 text-white duration-300 hover:bg-blue-600 disabled:bg-gray-400'
+            className='flex items-center gap-2'
           >
-            {uploading ? 'Đang xử lý...' : 'Tải ảnh'}
-          </button>
+            {uploading ? (
+              <>
+                <Loader2 className='h-4 w-4 animate-spin' />
+                Đang xử lý...
+              </>
+            ) : (
+              <>
+                <ImagePlus className='h-4 w-4' />
+                Tải ảnh
+              </>
+            )}
+          </Button>
         )}
       </CldUploadWidget>
     </div>

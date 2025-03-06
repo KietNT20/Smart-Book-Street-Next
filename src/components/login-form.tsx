@@ -111,10 +111,10 @@ export function LoginForm({
                       name='usernameOrEmail'
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Email</FormLabel>
+                          <FormLabel>Tài khoản hoặc Email</FormLabel>
                           <FormControl>
                             <Input
-                              placeholder='Tài khoản hoặc email'
+                              placeholder='Tài khoản hoặc Email'
                               disabled={login.isPending}
                               className={cn(
                                 form.formState.errors.usernameOrEmail &&

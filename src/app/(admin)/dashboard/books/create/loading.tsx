@@ -1,5 +1,5 @@
-const LoadingPage = () => {
+const Loading = () => {
   return <p>Đang tải...</p>;
 };
 
-export default LoadingPage;
+export default Loading;

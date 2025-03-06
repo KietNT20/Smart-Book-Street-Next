@@ -1,13 +1,33 @@
+import { Book } from './book-types';
 import { Image } from './image-types';
 
-export type Author = {
+export interface Author {
   id: string;
   authorName: string;
-  dob: Date | string;
+  dob: string;
   nationality: string;
   biography: string;
+  bookAuthors: BookAuthor[];
   images: Image[];
-};
+  createdBy: string;
+  createdDate: string;
+  lastUpdatedBy: string;
+  lastUpdatedDate: string;
+  isDeleted: boolean;
+}
+
+export interface BookAuthor {
+  id: string;
+  bookId: string;
+  authorId: string;
+  book: Book;
+  author: Author | null;
+  createdBy: string | null;
+  createdDate: string;
+  lastUpdatedBy: string | null;
+  lastUpdatedDate: string | null;
+  isDeleted: boolean;
+}
 
 export type AuthorPayload = Omit<Author, 'id' | 'images'>;
 
