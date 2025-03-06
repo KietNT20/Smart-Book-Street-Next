@@ -31,7 +31,8 @@ export const useAuthorMutation = () => {
   });
 
   const createAuthor = useMutation({
-    mutationFn: (payload: AuthorPayload) => authorService.create(payload),
+    mutationFn: (payload: Partial<AuthorPayload>) =>
+      authorService.create(payload),
     onSuccess: (data) => {
       if (data) {
         toast.success('Thêm tác giả thành công');
@@ -44,7 +45,7 @@ export const useAuthorMutation = () => {
   });
 
   const updateAuthor = useMutation({
-    mutationFn: (payload: Partial<Omit<Author, 'images'>>) =>
+    mutationFn: (payload: Partial<Omit<Author, 'images' | 'bookAuthors'>>) =>
       authorService.update(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['authors'] });

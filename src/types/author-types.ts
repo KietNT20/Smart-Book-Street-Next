@@ -1,19 +1,15 @@
 import { Book } from './book-types';
+import { BaseEntity } from './common-types';
 import { Image } from './image-types';
 
-export interface Author {
+export interface Author extends BaseEntity {
   id: string;
   authorName: string;
-  dob: string;
+  dob: Date | string;
   nationality: string;
   biography: string;
   bookAuthors: BookAuthor[];
   images: Image[];
-  createdBy: string;
-  createdDate: string;
-  lastUpdatedBy: string;
-  lastUpdatedDate: string;
-  isDeleted: boolean;
 }
 
 export interface BookAuthor {
@@ -29,7 +25,7 @@ export interface BookAuthor {
   isDeleted: boolean;
 }
 
-export type AuthorPayload = Omit<Author, 'id' | 'images'>;
+export type AuthorPayload = Omit<Author, 'id' | 'images' | 'bookAuthors'>;
 
 export type SearchPaginationAuthor = {
   pageNumber: number;

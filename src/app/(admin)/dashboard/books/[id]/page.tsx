@@ -12,7 +12,7 @@ import { ImageResArr } from '@/types/image-types';
 import Link from 'next/link';
 import { useState } from 'react';
 import BookInfo from './_components/book-info';
-import EnhancedImageGallery from './_components/enhanced-image-gallery';
+import ImageGalleryBook from './_components/image-gallery-book';
 import { useBookDetail } from './_lib/useBookDetail';
 
 export default function BooksDetailPage({
@@ -90,7 +90,7 @@ export default function BooksDetailPage({
                 folder={`books/${book?.code}`}
               />
             </div>
-            <EnhancedImageGallery
+            <ImageGalleryBook
               images={(imageUrlBook?.results as ImageResArr) || []}
               bookCode={book?.code}
             />

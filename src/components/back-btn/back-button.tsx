@@ -20,7 +20,7 @@ const BackButton = ({ routeTo }: Props) => {
   return (
     <Button variant='ghost' className='gap-2' onClick={_onClick}>
       <ArrowLeft className='h-4 w-4' />
-      Quay lại
+      Quay lại trang quản lý sách
     </Button>
   );
 };

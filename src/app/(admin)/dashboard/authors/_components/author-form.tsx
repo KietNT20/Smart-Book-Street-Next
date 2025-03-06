@@ -15,7 +15,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { PATH } from '@/enums/path';
 import { useAuthorMutation, useGetAuthorById } from '@/hooks/use-author';
 import { authorFormSchema, AuthorFormValues } from '@/lib/zod';
-import { Author, AuthorPayload } from '@/types/author-types';
+import { Author } from '@/types/author-types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
 import { useRouter } from 'next/navigation';
@@ -72,7 +72,7 @@ export function AuthorForm({ authorId }: Props) {
         await createAuthor.mutateAsync({
           ...data
           // dob: format(data.dob, 'yyyy-MM-dd'),
-        } as AuthorPayload);
+        });
       }
       router.push(PATH.AUTHORS);
     } catch (error: unknown) {

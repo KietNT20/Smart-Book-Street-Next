@@ -2,7 +2,6 @@
 
 import BackButton from '@/components/back-btn/back-button';
 import { Separator } from '@/components/ui/separator';
-import { PATH } from '@/enums/path';
 import BookForm from '../../_components/book-form';
 import { useEditPage } from './useEditPage';
 
@@ -23,7 +22,7 @@ export default function EditBookPage() {
               <BookForm
                 book={book?.result}
                 onSubmit={handleSubmit}
-                onCancel={() => router.push(PATH.BOOKS)}
+                onCancel={() => router.back()}
                 isLoading={apiLoading}
               />
             )}
