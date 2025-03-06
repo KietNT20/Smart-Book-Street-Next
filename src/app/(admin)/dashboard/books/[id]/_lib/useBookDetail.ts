@@ -56,6 +56,7 @@ export const useBookDetail = ({ id }: { id: string }) => {
     bookAuthorsRes,
     bookCategoriesRes
   };
+
   return {
     bookDetailLoading,
     imageUrlBook,

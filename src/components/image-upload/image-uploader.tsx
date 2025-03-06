@@ -13,9 +13,16 @@ import { useState } from 'react';
 type ImageUploaderProps = {
   entityId: string;
   folder?: string;
+  maxFiles?: number;
+  mutiple?: boolean;
 };
 
-const ImageUploader = ({ entityId, folder }: ImageUploaderProps) => {
+const ImageUploader = ({
+  entityId,
+  folder,
+  maxFiles,
+  mutiple = true
+}: ImageUploaderProps) => {
   const [uploading, setUploading] = useState(false);
   const { addImageMutation } = useImagesMutation();
 
@@ -49,7 +56,8 @@ const ImageUploader = ({ entityId, folder }: ImageUploaderProps) => {
 
   const uploadOptions = {
     folder,
-    maxFiles: 5
+    multiple: mutiple,
+    maxFiles: maxFiles || 5
   };
 
   return (

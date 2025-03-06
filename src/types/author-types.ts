@@ -37,12 +37,18 @@ export type SearchPaginationAuthor = {
   };
 };
 
-export type AuthorResponse = {
+export type AuthorsApiResponse = {
   results: Author[];
   totalPages: number;
   totalRecords: number;
   pageNumber: number;
   pageSize: number;
+  isSuccess: boolean;
+  message: string;
+};
+
+export type AuthorApiResponse = {
+  result: Author;
   isSuccess: boolean;
   message: string;
 };
