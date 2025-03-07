@@ -1,4 +1,4 @@
-import { DatePickerCompVN } from '@/components/date-input/date-picker-custom';
+import { DatePickerCompVN } from '@/components/date-picker/date-picker-v1';
 import { Button } from '@/components/ui/button';
 import {
   Form,

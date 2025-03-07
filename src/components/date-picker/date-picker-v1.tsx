@@ -118,7 +118,7 @@ export function DatePickerCompVN({
         </Button>
       </PopoverTrigger>
       <PopoverContent className='pointer-events-auto w-auto p-0' align='start'>
-        <div className='flex p-2'>
+        <div className='flex p-0'>
           <div className='m-1 w-full'>
             <Select
               onValueChange={handleMonthChange}
