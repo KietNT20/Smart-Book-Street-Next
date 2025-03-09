@@ -20,7 +20,7 @@ type Props = {
   onOpenChange: (open: boolean) => void;
   selectedImage: ImageType | null;
   bookCode?: string;
-  onDelete: (id: string, url: string) => Promise<void>;
+  onDelete: (id: string) => void;
   isPending: boolean;
 };
 
@@ -63,7 +63,7 @@ const ImageDetail = ({
             variant='destructive'
             onClick={() => {
               if (selectedImage) {
-                onDelete(selectedImage.id, selectedImage.url);
+                onDelete(selectedImage.id);
                 onOpenChange(false);
               }
             }}

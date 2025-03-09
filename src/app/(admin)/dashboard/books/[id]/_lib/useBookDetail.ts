@@ -1,6 +1,6 @@
 import { useBookSearchById } from '@/hooks/use-book-search';
 import { useBookMutations } from '@/hooks/use-books';
-import { useGetImageByTypeOrEntityID } from '@/hooks/use-images';
+import { useGetImagesByEntityID } from '@/hooks/use-images';
 import useDebounce from '@/hooks/useDebounce';
 import { authorService } from '@/services/authorService';
 import { categoryService } from '@/services/categoryService';
@@ -12,13 +12,12 @@ export const useBookDetail = ({ id }: { id: string }) => {
   const router = useRouter();
   const { data: bookDetailData, isLoading: bookDetailLoading } =
     useBookSearchById(id);
-  const { data: imageUrlBook, isLoading: getImagePending } =
-    useGetImageByTypeOrEntityID({
-      entityId: id
-    });
+  const { imagesDataEntityId, isPendingImages } = useGetImagesByEntityID({
+    entityId: id
+  });
   const { deleteBookMutation } = useBookMutations();
 
-  const apiLoading = useDebounce(bookDetailLoading || getImagePending, 300);
+  const apiLoading = useDebounce(bookDetailLoading || isPendingImages, 300);
   const deletedLoading = useDebounce(deleteBookMutation.isPending, 300);
 
   const book: Book = bookDetailData?.result;
@@ -59,8 +58,8 @@ export const useBookDetail = ({ id }: { id: string }) => {
 
   return {
     bookDetailLoading,
-    imageUrlBook,
-    getImagePending,
+    imagesDataEntityId,
+    isPendingImages,
     deleteBookMutation,
     apiLoading,
     deletedLoading,

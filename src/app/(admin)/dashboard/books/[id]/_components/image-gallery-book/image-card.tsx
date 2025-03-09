@@ -21,7 +21,7 @@ type Props = {
   image: ImageType;
   bookCode?: string;
   onClick: (image: ImageType) => void;
-  onDelete: (id: string, url: string) => Promise<void>;
+  onDelete: (id: string) => void;
 };
 
 const ImageCard = ({ image, bookCode, onClick, onDelete }: Props) => {
@@ -65,7 +65,7 @@ const ImageCard = ({ image, bookCode, onClick, onDelete }: Props) => {
                   className='text-red-600 focus:text-red-600'
                   onClick={(e) => {
                     e.stopPropagation();
-                    onDelete(image.id, image.url);
+                    onDelete(image.id);
                   }}
                 >
                   Xóa ảnh

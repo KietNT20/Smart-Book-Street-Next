@@ -22,7 +22,7 @@ export default function BooksDetailPage({
 }) {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const {
-    imageUrlBook,
+    imagesDataEntityId,
     deleteBookMutation,
     apiLoading,
     deletedLoading,
@@ -74,7 +74,9 @@ export default function BooksDetailPage({
             <TabsTrigger value='info'>Thông tin sách</TabsTrigger>
             <TabsTrigger value='images'>
               Hình ảnh (
-              {((imageUrlBook?.results as ImageResArr) || [])?.length || 0})
+              {((imagesDataEntityId?.results as ImageResArr) || [])?.length ||
+                0}
+              )
             </TabsTrigger>
           </TabsList>
 
@@ -85,13 +87,10 @@ export default function BooksDetailPage({
           <TabsContent value='images'>
             <div className='mb-4 flex justify-between'>
               <h3 className='text-lg font-semibold'>Thư viện hình ảnh</h3>
-              <ImageUploader
-                entityId={params.id}
-                folder={`books/${book?.code}`}
-              />
+              <ImageUploader entityId={params.id} type='image' />
             </div>
             <ImageGalleryBook
-              images={(imageUrlBook?.results as ImageResArr) || []}
+              images={(imagesDataEntityId?.results as ImageResArr) || []}
               bookCode={book?.code}
             />
           </TabsContent>

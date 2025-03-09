@@ -7,13 +7,14 @@ export type Image = {
 };
 
 export type ImagePayload = {
-  url: string;
+  id: string;
+  files: Array<File>;
   type: string;
   altText: string;
   entityId: string;
 };
 
-export type ImageResponse = {
+export type ImageApiResponse = {
   results: Array<Image>;
   totalRecords: number;
   isSuccess: boolean;

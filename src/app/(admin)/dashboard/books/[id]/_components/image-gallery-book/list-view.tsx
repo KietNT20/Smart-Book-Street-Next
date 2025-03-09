@@ -11,7 +11,7 @@ type Props = {
   images: ImageType[];
   bookCode?: string;
   onImageClick: (image: ImageType) => void;
-  onDelete: (id: string, url: string) => Promise<void>;
+  onDelete: (id: string) => void;
 };
 
 const ListView = ({ images, bookCode, onImageClick, onDelete }: Props) => {
