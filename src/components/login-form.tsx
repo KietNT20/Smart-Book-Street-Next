@@ -14,6 +14,7 @@ import { LoginCredentials } from '@/types/auth-types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { Eye, EyeOff } from 'lucide-react';
+import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
@@ -30,7 +31,6 @@ import {
   FormMessage
 } from './ui/form';
 import { Input } from './ui/input';
-import { signIn } from 'next-auth/react';
 
 export function LoginForm({
   className,
@@ -49,8 +49,8 @@ export function LoginForm({
   });
 
   const login = useMutation({
-    mutationFn: ({ usernameOrEmail, password }: LoginCredentials) =>
-      signIn('credentials', {
+    mutationFn: async ({ usernameOrEmail, password }: LoginCredentials) =>
+      await signIn('credentials', {
         usernameOrEmail,
         password,
         redirect: false

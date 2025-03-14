@@ -34,6 +34,7 @@ export const registerSchema = z.object({
   password: z
     .string()
     .min(8, { message: 'Mật khẩu cần ít nhất 8 kí tự' })
+    .max(32, 'Mật khẩu không được quá 32 kí tự')
     .regex(/[A-Z]/, {
       message: 'Mật khẩu cần ít nhất 1 chữ hoa'
     })

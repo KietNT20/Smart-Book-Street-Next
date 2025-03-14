@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "prettier --write src/**/*.{ts,tsx,js,jsx,css,scss}",
+    "format": "prettier --write \"src/**/(*.tsx|*.ts|*.jsx|*.js|*.css|*.scss)\"",
     "prettier:fix": "npx prettier . --write",
     "prepare": "husky"
   },
@@ -80,10 +80,10 @@
     }
   },
   "lint-staged": {
-    "./src/**/*.{js,ts,tsx}": "eslint --fix",
+    "./src/**/*.{js,ts,tsx,jsx}": "eslint --fix",
     "./src/**/*.{ts,tsx,js,jsx}": [
       "npm run format",
-      "prettier --check .src/"
+      "prettier --check \"src/**/(*.tsx|*.ts|*.css|*.scss)\""
     ]
   }
 }

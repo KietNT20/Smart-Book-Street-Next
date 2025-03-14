@@ -7,7 +7,7 @@ export default function DashboardPage() {
   return (
     <>
       <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-4'>
-        <Card className='bg-gradient-to-br from-blue-500 to-blue-600'>
+        <Card className='bg-chart-1'>
           <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
             <CardTitle className='text-sm font-medium text-white'>
               Tổng Lượt Tham Quan
@@ -20,7 +20,7 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className='bg-gradient-to-br from-purple-500 to-purple-600'>
+        <Card className='bg-chart-2'>
           <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
             <CardTitle className='text-sm font-medium text-white'>
               Tổng Số Sách
@@ -35,7 +35,7 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className='bg-gradient-to-br from-green-500 to-green-600'>
+        <Card className='bg-chart-3'>
           <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
             <CardTitle className='text-sm font-medium text-white'>
               Người Dùng Đăng Ký
@@ -50,7 +50,7 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className='bg-gradient-to-br from-orange-500 to-orange-600'>
+        <Card className='bg-chart-4'>
           <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
             <CardTitle className='text-sm font-medium text-white'>
               Thời Gian Trung Bình
