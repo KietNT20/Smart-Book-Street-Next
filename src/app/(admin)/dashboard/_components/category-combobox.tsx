@@ -26,15 +26,18 @@ import { cn } from '@/lib/utils';
 import { Category } from '@/types/category-types';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { useState } from 'react';
-import { Control } from 'react-hook-form';
+import { Control, FieldValues, Path } from 'react-hook-form';
 import SelectedCategory from './selected-category';
 
-type Props = {
-  name: string;
-  control: Control;
+type Props<T extends FieldValues> = {
+  name: Path<T>;
+  control: Control<T>;
 };
 
-const CategoryCombobox = ({ name, control }: Props) => {
+const CategoryCombobox = <T extends FieldValues>({
+  name,
+  control
+}: Props<T>) => {
   const [input, setInput] = useState('');
   const [results, setResults] = useState<Category[]>([]);
   const { searchCategoryName } = useCategoryMutation();
@@ -132,9 +135,9 @@ const CategoryCombobox = ({ name, control }: Props) => {
                         <CommandItem
                           key={category.id}
                           onSelect={() => {
-                            const values = field.value || [];
+                            const values = (field.value as string[]) || [];
                             field.onChange(
-                              values?.includes(category.id)
+                              values?.includes(category.id!)
                                 ? values?.filter(
                                     (id: string) => id !== category.id
                                   )
@@ -145,7 +148,7 @@ const CategoryCombobox = ({ name, control }: Props) => {
                           <Check
                             className={cn(
                               'mr-2 h-4 w-4',
-                              field.value?.includes(category.id)
+                              (field.value as string[])?.includes(category.id!)
                                 ? 'opacity-100'
                                 : 'opacity-0'
                             )}

@@ -1,4 +1,4 @@
-import { formatDate, formatPrice } from '@/lib/utils';
+import { formateDateVi, formatPrice } from '@/lib/utils';
 import { Book } from '@/types/book-types';
 
 type Props = {
@@ -64,10 +64,9 @@ const BookInfo = ({ book, bookAuthorsRes, bookCategoriesRes }: Props) => {
       </div>
       <div className='space-y-2'>
         <h3 className='text-xl font-semibold'>Thông tin thêm</h3>
-        <p>Ngày xuất bản: {formatDate(book?.publicationDate)}</p>
+        <p>Ngày xuất bản: {formateDateVi(book.publicationDate)}</p>
         <p>
-          Ngày tạo:{' '}
-          {book.createdDate ? formatDate(book.createdDate.toString()) : ''}
+          Ngày tạo: {book.createdDate ? formateDateVi(book.createdDate) : ''}
         </p>
       </div>
     </div>

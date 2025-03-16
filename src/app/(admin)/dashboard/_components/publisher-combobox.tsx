@@ -25,7 +25,7 @@ import useDebounce from '@/hooks/useDebounce';
 import { cn } from '@/lib/utils';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { useState } from 'react';
-import { Control } from 'react-hook-form';
+import { Control, FieldValues, Path } from 'react-hook-form';
 
 type Publisher = {
   id: string;
@@ -36,12 +36,15 @@ type Publisher = {
   website: string;
 };
 
-type Props = {
-  name: string;
-  control: Control;
+type Props<T extends FieldValues> = {
+  name: Path<T>;
+  control: Control<T>;
 };
 
-const PublisherCombobox = ({ name, control }: Props) => {
+const PublisherCombobox = <T extends FieldValues>({
+  name,
+  control
+}: Props<T>) => {
   const [searchInputs, setSearchInputs] = useState({
     publisherName: '',
     email: '',

@@ -1,18 +1,13 @@
 'use client';
 
 import { useImagesMutation } from '@/hooks/use-images';
+import { ImageType } from '@/types/image-types';
 import { useState } from 'react';
 import EmptyState from './empty-state';
 import GridView from './grid-view';
 import ImageDetail from './image-detail';
 import ListView from './list-view';
 import ViewControls from './view-controls';
-
-type ImageType = {
-  id: string;
-  url: string;
-  altText: string;
-};
 
 type Props = {
   images: ImageType[];

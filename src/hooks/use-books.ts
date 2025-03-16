@@ -12,7 +12,7 @@ export const useBookMutations = () => {
   const router = useRouter();
 
   const createBookMutation = useMutation({
-    mutationFn: (payload: BookFormValues) => bookService.create(payload),
+    mutationFn: (formData: FormData) => bookService.create(formData),
     onSuccess: (data) => {
       if (data?.isSuccess) {
         toast.success('Thêm sách thành công');

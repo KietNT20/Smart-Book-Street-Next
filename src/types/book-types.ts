@@ -17,7 +17,7 @@ export interface Book extends BaseEntity {
   id: string;
   code: string;
   title: string;
-  publicationDate: string;
+  publicationDate: Date | string;
   price: number;
   languages: string;
   description?: string;
@@ -29,6 +29,12 @@ export interface Book extends BaseEntity {
   publisher?: Publisher;
   bookAuthors?: BookAuthorIds[];
   bookCategories?: BookCategoryIds[];
+  images: {
+    id: string;
+    url: string;
+    type: string;
+    altText: string;
+  }[];
   inventories?: any[];
 }
 

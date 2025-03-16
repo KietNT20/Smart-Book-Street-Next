@@ -1,4 +1,4 @@
-export type Image = {
+export type ImageType = {
   id: string;
   url: string;
   type: string;
@@ -15,10 +15,10 @@ export type ImagePayload = {
 };
 
 export type ImageApiResponse = {
-  results: Array<Image>;
+  results: Array<ImageType>;
   totalRecords: number;
   isSuccess: boolean;
   message: string;
 };
 
-export type ImageResArr = Array<Image>;
+export type ImageResArr = Array<ImageType>;

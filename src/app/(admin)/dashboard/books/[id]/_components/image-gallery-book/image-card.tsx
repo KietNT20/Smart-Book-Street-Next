@@ -8,14 +8,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
+import { ImageType } from '@/types/image-types';
 import { MoreHorizontal } from 'lucide-react';
 import Image from 'next/image';
-
-type ImageType = {
-  id: string;
-  url: string;
-  altText: string;
-};
 
 type Props = {
   image: ImageType;

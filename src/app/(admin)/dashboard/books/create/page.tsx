@@ -3,21 +3,18 @@
 import BackButton from '@/components/back-btn/back-button';
 import { Separator } from '@/components/ui/separator';
 import { PATH } from '@/enums/path';
-import useDebounce from '@/hooks/useDebounce';
-import { BookFormValues } from '@/lib/zod';
 import { useRouter } from 'next/navigation';
 import BookForm from '../_components/book-form';
-import { useCreateBook } from '../_lib/use-book-operations';
+import { useBookMutations } from '@/hooks/use-books';
+import useDebounce from '@/hooks/useDebounce';
 
 export default function CreateBookPage() {
   const router = useRouter();
-  const { handleCreate, isLoading } = useCreateBook({
-    _onSuccess: () => router.push(PATH.BOOKS)
-  });
-  const apiLoading = useDebounce(isLoading, 300);
+  const { createBookMutation } = useBookMutations();
+  const apiLoading = useDebounce(createBookMutation.isPending, 300);
 
-  const handleSubmit = (data: BookFormValues) => {
-    handleCreate(data);
+  const handleSubmit = (formData: FormData) => {
+    createBookMutation.mutate(formData);
   };
 
   return (

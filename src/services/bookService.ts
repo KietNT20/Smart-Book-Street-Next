@@ -19,8 +19,12 @@ export const bookService = {
     return res.data;
   },
 
-  create: async (payload: BookFormValues) => {
-    const res = await axiosInstance.post(API_ENDPOINT.BOOKS.ADD, payload);
+  create: async (formData: FormData) => {
+    const res = await axiosInstance.post(API_ENDPOINT.BOOKS.ADD, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
     return res.data;
   },
 

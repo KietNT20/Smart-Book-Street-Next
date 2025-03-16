@@ -1,12 +1,7 @@
 import { Button } from '@/components/ui/button';
+import { ImageType } from '@/types/image-types';
 import { Trash2 } from 'lucide-react';
 import Image from 'next/image';
-
-type ImageType = {
-  id: string;
-  url: string;
-  altText: string;
-};
 
 type Props = {
   image: ImageType;

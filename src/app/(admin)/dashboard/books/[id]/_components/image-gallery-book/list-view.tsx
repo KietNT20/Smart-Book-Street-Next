@@ -1,11 +1,6 @@
 import { ScrollArea } from '@/components/ui/scroll-area';
 import ImageItem from './image-item';
-
-type ImageType = {
-  id: string;
-  url: string;
-  altText: string;
-};
+import { ImageType } from '@/types/image-types';
 
 type Props = {
   images: ImageType[];

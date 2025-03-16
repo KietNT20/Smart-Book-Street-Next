@@ -1,10 +1,5 @@
+import { ImageType } from '@/types/image-types';
 import ImageCard from './image-card';
-
-type ImageType = {
-  id: string;
-  url: string;
-  altText: string;
-};
 
 type Props = {
   images: ImageType[];
