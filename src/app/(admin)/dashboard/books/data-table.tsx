@@ -14,6 +14,7 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table';
+import { Sort } from '@/enums/enums';
 import {
   ColumnDef,
   flexRender,
@@ -29,7 +30,7 @@ export type BookTableState = {
   pageIndex: number;
   pageSize: number;
   sortField: string;
-  sortOrder: -1 | 0 | 1;
+  sortOrder: Sort;
 };
 
 export interface DataTableProps<TData, TValue> {
@@ -66,7 +67,7 @@ export function DataTable<TData, TValue>({
     manualPagination: true,
     onColumnVisibilityChange: setColumnVisibility,
     state: {
-      sorting: [{ id: state.sortField, desc: state.sortOrder === -1 }],
+      sorting: [{ id: state.sortField, desc: state.sortOrder === Sort.DESC }],
       columnVisibility,
       pagination: {
         pageIndex: state.pageIndex - 1,
@@ -91,7 +92,9 @@ export function DataTable<TData, TValue>({
     onSortingChange: (updater) => {
       const newSorting =
         typeof updater === 'function'
-          ? updater([{ id: state.sortField, desc: state.sortOrder === -1 }])
+          ? updater([
+              { id: state.sortField, desc: state.sortOrder === Sort.DESC }
+            ])
           : updater;
 
       if (newSorting.length > 0) {
