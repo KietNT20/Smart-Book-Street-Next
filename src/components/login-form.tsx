@@ -59,11 +59,11 @@ export function LoginForm({
       if (data?.error === 'Configuration') {
         form.setError('usernameOrEmail', {
           type: 'manual',
-          message: 'Tài khoản hoặc mật khẩu không chính xác'
+          message: 'Tài khoản hoặc mật khẩu không chính xác, Vui lòng thử lại'
         });
         form.setError('password', {
           type: 'manual',
-          message: 'Tài khoản hoặc mật khẩu không chính xác'
+          message: 'Tài khoản hoặc mật khẩu không chính xác, Vui lòng thử lại'
         });
       }
       if (data?.error === null && data.url) {

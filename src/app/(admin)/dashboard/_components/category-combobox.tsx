@@ -31,7 +31,7 @@ import SelectedCategory from './selected-category';
 
 type Props = {
   name: string;
-  control: Control<any>;
+  control: Control;
 };
 
 const CategoryCombobox = ({ name, control }: Props) => {

@@ -31,7 +31,7 @@ import SelectedAuthor from './selected-author';
 
 type Props = {
   name: string;
-  control: Control<any>;
+  control: Control;
 };
 
 const AuthorCombobox = ({ name, control }: Props) => {

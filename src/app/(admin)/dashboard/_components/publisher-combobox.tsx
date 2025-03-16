@@ -38,7 +38,7 @@ type Publisher = {
 
 type Props = {
   name: string;
-  control: Control<any>;
+  control: Control;
 };
 
 const PublisherCombobox = ({ name, control }: Props) => {
