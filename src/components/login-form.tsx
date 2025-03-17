@@ -49,8 +49,8 @@ export function LoginForm({
   });
 
   const login = useMutation({
-    mutationFn: ({ usernameOrEmail, password }: LoginCredentials) =>
-      signIn('credentials', {
+    mutationFn: async ({ usernameOrEmail, password }: LoginCredentials) =>
+      await signIn('credentials', {
         usernameOrEmail,
         password,
         redirect: false
@@ -59,11 +59,11 @@ export function LoginForm({
       if (data?.error === 'Configuration') {
         form.setError('usernameOrEmail', {
           type: 'manual',
-          message: 'Tài khoản hoặc mật khẩu không chính xác'
+          message: 'Tài khoản hoặc mật khẩu không chính xác, Vui lòng thử lại'
         });
         form.setError('password', {
           type: 'manual',
-          message: 'Tài khoản hoặc mật khẩu không chính xác'
+          message: 'Tài khoản hoặc mật khẩu không chính xác, Vui lòng thử lại'
         });
       }
       if (data?.error === null && data.url) {

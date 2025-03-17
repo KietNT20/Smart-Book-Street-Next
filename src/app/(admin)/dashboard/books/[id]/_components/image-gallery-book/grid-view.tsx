@@ -1,16 +1,11 @@
+import { ImageType } from '@/types/image-types';
 import ImageCard from './image-card';
-
-type ImageType = {
-  id: string;
-  url: string;
-  altText: string;
-};
 
 type Props = {
   images: ImageType[];
   bookCode?: string;
   onImageClick: (image: ImageType) => void;
-  onDelete: (id: string, url: string) => Promise<void>;
+  onDelete: (id: string) => void;
 };
 
 const GridView = ({ images, bookCode, onImageClick, onDelete }: Props) => {

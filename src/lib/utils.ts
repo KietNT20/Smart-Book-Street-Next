@@ -1,16 +1,10 @@
 import { clsx, type ClassValue } from 'clsx';
+import { format } from 'date-fns';
+import { vi } from 'date-fns/locale';
 import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
-}
-
-export function formatDate(dateString: string) {
-  return new Date(dateString).toLocaleDateString('vi-VN', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit'
-  });
 }
 
 export const formatPrice = (
@@ -54,4 +48,8 @@ export function utcToLocalDate(utcDateString: string): string {
   } catch {
     return utcDateString;
   }
+}
+
+export function formateDateVi(date: Date | string) {
+  return format(new Date(date), 'dd/MM/yyyy', { locale: vi });
 }

@@ -12,6 +12,7 @@ import { useBookList } from './_lib/use-book-operations';
 import { useBookPageState } from './_lib/use-book-page-state';
 import { createColumns } from './columns';
 import { DataTable } from './data-table';
+import { Sort } from '@/enums/enums';
 
 export default function BooksPage() {
   const {
@@ -50,7 +51,7 @@ export default function BooksPage() {
   const hasFilters = () =>
     Object.keys(searchCriteria).length > 0 ||
     pagination.sortField !== 'createdDate' ||
-    pagination.sortOrder !== -1;
+    pagination.sortOrder !== Sort.DESC;
 
   return (
     <div className='space-y-4'>

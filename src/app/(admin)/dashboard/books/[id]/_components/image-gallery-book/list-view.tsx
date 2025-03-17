@@ -1,17 +1,12 @@
 import { ScrollArea } from '@/components/ui/scroll-area';
 import ImageItem from './image-item';
-
-type ImageType = {
-  id: string;
-  url: string;
-  altText: string;
-};
+import { ImageType } from '@/types/image-types';
 
 type Props = {
   images: ImageType[];
   bookCode?: string;
   onImageClick: (image: ImageType) => void;
-  onDelete: (id: string, url: string) => Promise<void>;
+  onDelete: (id: string) => void;
 };
 
 const ListView = ({ images, bookCode, onImageClick, onDelete }: Props) => {

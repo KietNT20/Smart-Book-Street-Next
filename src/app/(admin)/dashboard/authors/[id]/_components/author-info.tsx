@@ -1,4 +1,4 @@
-import { formatDate, formatPrice } from '@/lib/utils';
+import { formateDateVi, formatPrice } from '@/lib/utils';
 import { Author } from '@/types/author-types';
 import Link from 'next/link';
 
@@ -26,9 +26,7 @@ const AuthorInfo = ({ author }: Props) => {
 
             <div className='mb-2 flex items-center'>
               <span className='w-32 text-gray-600'>Ngày sinh:</span>
-              <span className='font-medium'>
-                {formatDate(author.dob.toString())}
-              </span>
+              <span className='font-medium'>{formateDateVi(author.dob)}</span>
             </div>
           </div>
 
@@ -58,7 +56,7 @@ const AuthorInfo = ({ author }: Props) => {
                   <div className='mb-2 text-sm text-gray-600'>
                     <div>Mã sách: {bookAuthor.book.code}</div>
                     <div>
-                      Xuất bản: {formatDate(bookAuthor.book.publicationDate)}
+                      Xuất bản: {formateDateVi(bookAuthor.book.publicationDate)}
                     </div>
                     <div>Giá: {formatPrice(bookAuthor.book.price)}</div>
                     <div>Trạng thái: {bookAuthor.book.status}</div>

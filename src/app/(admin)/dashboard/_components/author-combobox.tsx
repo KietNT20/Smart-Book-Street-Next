@@ -22,19 +22,19 @@ import {
 } from '@/components/ui/popover';
 import { useAuthorMutation } from '@/hooks/use-author';
 import useDebounce from '@/hooks/useDebounce';
-import { cn, formatDate } from '@/lib/utils';
+import { cn, formateDateVi } from '@/lib/utils';
 import { Author } from '@/types/author-types';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { useState } from 'react';
-import { Control } from 'react-hook-form';
+import { Control, FieldValues, Path } from 'react-hook-form';
 import SelectedAuthor from './selected-author';
 
-type Props = {
-  name: string;
-  control: Control<any>;
+type Props<T extends FieldValues> = {
+  name: Path<T>;
+  control: Control<T>;
 };
 
-const AuthorCombobox = ({ name, control }: Props) => {
+const AuthorCombobox = <T extends FieldValues>({ name, control }: Props<T>) => {
   const [input, setInput] = useState('');
   const [searchResults, setSearchResults] = useState<Author[]>([]);
   const { searchAuthorName } = useAuthorMutation();
@@ -136,7 +136,7 @@ const AuthorCombobox = ({ name, control }: Props) => {
                         <CommandItem
                           key={author.id}
                           onSelect={() => {
-                            const values = field.value || [];
+                            const values = (field.value as string[]) || [];
                             field.onChange(
                               values?.includes(author.id)
                                 ? values?.filter(
@@ -149,16 +149,13 @@ const AuthorCombobox = ({ name, control }: Props) => {
                           <Check
                             className={cn(
                               'mr-2 h-4 w-4',
-                              field.value?.includes(author.id)
+                              (field.value as string[])?.includes(author.id)
                                 ? 'opacity-100'
                                 : 'opacity-0'
                             )}
                           />
                           {author.authorName} (
-                          {author.dob
-                            ? formatDate(new Date(author.dob).toISOString())
-                            : ''}
-                          )
+                          {author.dob ? formateDateVi(author.dob) : ''})
                         </CommandItem>
                       ))}
                   </CommandGroup>

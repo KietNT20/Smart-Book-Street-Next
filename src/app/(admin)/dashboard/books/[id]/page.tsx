@@ -2,13 +2,12 @@
 
 import BackButton from '@/components/back-btn/back-button';
 import { ConfirmModal } from '@/components/confirm-modal';
-import ImageUploader from '@/components/image-upload/image-uploader';
 import SpinLoading from '@/components/spin/spin-loading';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PATH } from '@/enums/path';
-import { ImageResArr } from '@/types/image-types';
+import { ImageType } from '@/types/image-types';
 import Link from 'next/link';
 import { useState } from 'react';
 import BookInfo from './_components/book-info';
@@ -22,10 +21,10 @@ export default function BooksDetailPage({
 }) {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const {
-    imageUrlBook,
     deleteBookMutation,
-    apiLoading,
     deletedLoading,
+    bookDetailPending,
+    bookDetailLoading,
     book,
     bookInfoProps,
     router
@@ -40,7 +39,7 @@ export default function BooksDetailPage({
     }
   };
 
-  if (apiLoading) {
+  if (bookDetailPending || bookDetailLoading) {
     return <SpinLoading />;
   }
 
@@ -73,8 +72,7 @@ export default function BooksDetailPage({
           <TabsList className='mb-4 grid w-full grid-cols-2'>
             <TabsTrigger value='info'>Thông tin sách</TabsTrigger>
             <TabsTrigger value='images'>
-              Hình ảnh (
-              {((imageUrlBook?.results as ImageResArr) || [])?.length || 0})
+              Hình ảnh ({((book.images as ImageType[]) || [])?.length || 0})
             </TabsTrigger>
           </TabsList>
 
@@ -83,15 +81,9 @@ export default function BooksDetailPage({
           </TabsContent>
 
           <TabsContent value='images'>
-            <div className='mb-4 flex justify-between'>
-              <h3 className='text-lg font-semibold'>Thư viện hình ảnh</h3>
-              <ImageUploader
-                entityId={params.id}
-                folder={`books/${book?.code}`}
-              />
-            </div>
+            <h3 className='text-lg font-semibold'>Thư viện hình ảnh</h3>
             <ImageGalleryBook
-              images={(imageUrlBook?.results as ImageResArr) || []}
+              images={(book.images as ImageType[]) || []}
               bookCode={book?.code}
             />
           </TabsContent>

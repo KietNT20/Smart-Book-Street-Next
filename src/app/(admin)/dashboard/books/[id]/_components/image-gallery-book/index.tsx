@@ -1,19 +1,13 @@
 'use client';
 
 import { useImagesMutation } from '@/hooks/use-images';
+import { ImageType } from '@/types/image-types';
 import { useState } from 'react';
 import EmptyState from './empty-state';
 import GridView from './grid-view';
 import ImageDetail from './image-detail';
-import { useImageService } from './image-service';
 import ListView from './list-view';
 import ViewControls from './view-controls';
-
-type ImageType = {
-  id: string;
-  url: string;
-  altText: string;
-};
 
 type Props = {
   images: ImageType[];
@@ -21,15 +15,19 @@ type Props = {
 };
 
 const ImageGalleryBook = ({ images, bookCode }: Props) => {
-  const { deleteImageMutation } = useImagesMutation();
+  const { deleteImage, isDeleting } = useImagesMutation();
   const [selectedImage, setSelectedImage] = useState<ImageType | null>(null);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const { onDelete } = useImageService();
 
   const handleImageClick = (image: ImageType) => {
     setSelectedImage(image);
     setIsDialogOpen(true);
+  };
+
+  const handleDeleteImage = (id: string) => {
+    deleteImage(id);
+    setIsDialogOpen(false);
   };
 
   return (
@@ -44,14 +42,14 @@ const ImageGalleryBook = ({ images, bookCode }: Props) => {
           images={images}
           bookCode={bookCode}
           onImageClick={handleImageClick}
-          onDelete={onDelete}
+          onDelete={handleDeleteImage}
         />
       ) : (
         <ListView
           images={images}
           bookCode={bookCode}
           onImageClick={handleImageClick}
-          onDelete={onDelete}
+          onDelete={handleDeleteImage}
         />
       )}
 
@@ -61,8 +59,8 @@ const ImageGalleryBook = ({ images, bookCode }: Props) => {
         onOpenChange={setIsDialogOpen}
         selectedImage={selectedImage}
         bookCode={bookCode}
-        onDelete={onDelete}
-        isPending={deleteImageMutation.isPending}
+        onDelete={handleDeleteImage}
+        isPending={isDeleting}
       />
     </div>
   );

@@ -6,21 +6,16 @@ import {
   DialogHeader,
   DialogTitle
 } from '@/components/ui/dialog';
+import { ImageType } from '@/types/image-types';
 import { Loader2, Trash2 } from 'lucide-react';
 import Image from 'next/image';
-
-type ImageType = {
-  id: string;
-  url: string;
-  altText: string;
-};
 
 type Props = {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   selectedImage: ImageType | null;
   bookCode?: string;
-  onDelete: (id: string, url: string) => Promise<void>;
+  onDelete: (id: string) => void;
   isPending: boolean;
 };
 
@@ -63,7 +58,7 @@ const ImageDetail = ({
             variant='destructive'
             onClick={() => {
               if (selectedImage) {
-                onDelete(selectedImage.id, selectedImage.url);
+                onDelete(selectedImage.id);
                 onOpenChange(false);
               }
             }}

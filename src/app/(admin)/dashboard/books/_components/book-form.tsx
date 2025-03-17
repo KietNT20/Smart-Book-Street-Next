@@ -1,4 +1,3 @@
-import { DatePickerCompVN } from '@/components/date-input/date-picker-custom';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -13,32 +12,43 @@ import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 import { BookFormValues, bookSchema } from '@/lib/zod';
 import { BookAuthorIds, BookCategoryIds } from '@/types/book-types';
+import { Publisher } from '@/types/publisher-types';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { format, parse } from 'date-fns';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import AuthorCombobox from '../../_components/author-combobox';
 import CategoryCombobox from '../../_components/category-combobox';
 import PublisherCombobox from '../../_components/publisher-combobox';
 import BookSubmitBtn from './book-submit-btn';
+import { DatePickerV1 } from '@/components/date-picker/date-picker-v1';
 
 interface BookWithRelations extends BookFormValues {
+  publiser: Publisher;
   bookAuthors?: BookAuthorIds[];
   bookCategories?: BookCategoryIds[];
 }
 
 type Props = {
   book?: BookFormValues;
-  onSubmit: (data: BookFormValues) => void;
+  onSubmit: (formData: FormData) => void;
   onCancel: () => void;
   isLoading?: boolean;
 };
 
 const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
+  const [files, setFiles] = useState({
+    mainFile: null as File | null,
+    additionalFiles: [] as File[]
+  });
+
   const form = useForm<BookFormValues>({
     resolver: zodResolver(bookSchema),
     defaultValues: book
       ? {
           ...book,
-          //   publisherId
+          publicationDate: format(new Date(book.publicationDate), 'yyyy-MM-dd'),
+          publisherId: (book as BookWithRelations).publisherId,
           authorIds:
             (book as BookWithRelations).bookAuthors?.map(
               (ba: BookAuthorIds) => ba.authorId
@@ -59,34 +69,72 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
           status: '',
           publisherId: '',
           authorIds: [],
-          categoryIds: []
+          categoryIds: [],
+          mainImageFile: undefined,
+          additionalImageFiles: []
         }
   });
 
-  const handleDateChange = (date: Date, onChange: (value: string) => void) => {
+  // Parse publicationDate to Date object for DatePickerV1
+  const getPublicationDate = (): Date | undefined => {
+    const dateStr = form.getValues('publicationDate');
+    if (!dateStr) return undefined;
+
     try {
-      // Make sure date is valid
-      if (!date || isNaN(date.getTime())) {
-        onChange('');
-        return;
-      }
-      // Format date to YYYY-MM-DD
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0');
-      const day = String(date.getDate()).padStart(2, '0');
-      const formattedDate = `${year}-${month}-${day}`;
-      onChange(formattedDate);
+      return parse(dateStr, 'yyyy-MM-dd', new Date());
     } catch (error) {
-      console.error('Error formatting date:', error);
-      onChange('');
+      console.error('Error parsing date:', error);
+      return undefined;
+    }
+  };
+
+  const handleSubmitForm = async (values: Partial<BookFormValues>) => {
+    try {
+      const formData = new FormData();
+
+      formData.append('Code', values.code || '');
+      formData.append('Title', values.title || '');
+      formData.append('PublicationDate', values.publicationDate || '');
+      formData.append('Price', (values.price ?? 0).toString());
+      formData.append('Languages', values.languages || '');
+      formData.append('Description', values.description || '');
+      formData.append('Size', values.size || '');
+      formData.append('Status', values.status || '');
+      formData.append('PublisherId', values.publisherId || '');
+      if (values.authorIds) {
+        values.authorIds.forEach((authorId) =>
+          formData.append('AuthorIds', authorId)
+        );
+      }
+      if (values.categoryIds) {
+        values.categoryIds.forEach((categoryId) =>
+          formData.append('CategoryIds', categoryId)
+        );
+      }
+
+      if (files.mainFile) {
+        console.log('Main file:', files.mainFile);
+        formData.append('MainImageFile', files.mainFile);
+      }
+
+      files.additionalFiles.forEach((file) => {
+        formData.append('AdditionalImageFiles', file);
+      });
+
+      onSubmit(formData);
+    } catch (error) {
+      console.error('Error preparing form data:', error);
     }
   };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
+      <form
+        onSubmit={form.handleSubmit(handleSubmitForm)}
+        className='space-y-4'
+      >
         <div className='grid grid-cols-2 gap-4'>
-          {/* Book Code */}
+          {/* Mã sách */}
           <FormField
             control={form.control}
             name='code'
@@ -108,7 +156,7 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
             )}
           />
 
-          {/* Publication Date */}
+          {/* Ngày xuất bản - Sử dụng DatePickerV1 */}
           <FormField
             control={form.control}
             name='publicationDate'
@@ -118,23 +166,27 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
                   Ngày xuất bản <span className='text-red-400'>*</span>
                 </FormLabel>
                 <FormControl>
-                  <div className='block'>
-                    <DatePickerCompVN
-                      startYear={1900}
-                      endYear={new Date().getFullYear() + 10}
-                      value={field.value ? new Date(field.value) : undefined}
-                      onChange={(date) =>
-                        handleDateChange(date, field.onChange)
+                  <DatePickerV1
+                    date={getPublicationDate()}
+                    setDate={(date) => {
+                      if (date) {
+                        field.onChange(format(date, 'yyyy-MM-dd'));
+                      } else {
+                        field.onChange('');
                       }
-                    />
-                  </div>
+                    }}
+                    placeholder='Chọn ngày xuất bản'
+                    className={cn(
+                      form.formState.errors.publicationDate && 'border-red-500'
+                    )}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
 
-          {/* Book Title */}
+          {/* Tên sách */}
           <FormField
             control={form.control}
             name='title'
@@ -156,10 +208,10 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
             )}
           />
 
-          {/* Choose Publisher */}
+          {/* Nhà xuất bản */}
           <PublisherCombobox name='publisherId' control={form.control} />
 
-          {/* Prices */}
+          {/* Giá */}
           <FormField
             control={form.control}
             name='price'
@@ -181,10 +233,10 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
             )}
           />
 
-          {/* Choose Authors */}
+          {/* Tác giả */}
           <AuthorCombobox name='authorIds' control={form.control} />
 
-          {/* Lang */}
+          {/* Ngôn ngữ */}
           <FormField
             control={form.control}
             name='languages'
@@ -207,10 +259,10 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
             )}
           />
 
-          {/* Choose Categories */}
+          {/* Thể loại */}
           <CategoryCombobox name='categoryIds' control={form.control} />
 
-          {/* Size */}
+          {/* Kích thước */}
           <FormField
             control={form.control}
             name='size'
@@ -230,7 +282,7 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
             )}
           />
 
-          {/* Status */}
+          {/* Trạng thái */}
           <FormField
             control={form.control}
             name='status'
@@ -251,9 +303,86 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
               </FormItem>
             )}
           />
+
+          {/* Ảnh chính */}
+          <FormField
+            control={form.control}
+            name='mainImageFile'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Ảnh chính</FormLabel>
+                <FormControl>
+                  <Input
+                    type='file'
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        setFiles((prev) => ({ ...prev, mainFile: file }));
+                        field.onChange(file);
+                      }
+                    }}
+                    className={cn(
+                      form.formState.errors.mainImageFile && 'border-red-500'
+                    )}
+                  />
+                </FormControl>
+                {files.mainFile && (
+                  <div className='mt-1 text-sm text-gray-500'>
+                    {files.mainFile.name}
+                  </div>
+                )}
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
 
-        {/* Description */}
+        {/* Ảnh bổ sung */}
+        <FormField
+          control={form.control}
+          name='additionalImageFiles'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Ảnh bổ sung</FormLabel>
+              <FormControl>
+                <Input
+                  type='file'
+                  multiple
+                  onChange={(e) => {
+                    const fileList = e.target.files;
+                    if (fileList && fileList.length > 0) {
+                      const filesArray = Array.from(fileList) as File[];
+                      setFiles((prev) => ({
+                        ...prev,
+                        additionalFiles: filesArray
+                      }));
+                      field.onChange(filesArray);
+                    }
+                  }}
+                  className={cn(
+                    form.formState.errors.additionalImageFiles &&
+                      'border-red-500'
+                  )}
+                />
+              </FormControl>
+              {files.additionalFiles.length > 0 && (
+                <div className='mt-2'>
+                  <p className='text-sm font-medium'>
+                    Đã chọn {files.additionalFiles.length} file:
+                  </p>
+                  <ul className='mt-1 list-disc pl-5 text-sm text-gray-500'>
+                    {files.additionalFiles.map((file, index) => (
+                      <li key={index}>{file.name}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Mô tả */}
         <FormField
           control={form.control}
           name='description'
@@ -268,6 +397,7 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
           )}
         />
 
+        {/* Nút điều khiển */}
         <div className='flex justify-end gap-2'>
           <Button
             type='button'
@@ -284,4 +414,5 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
     </Form>
   );
 };
+
 export default BookForm;

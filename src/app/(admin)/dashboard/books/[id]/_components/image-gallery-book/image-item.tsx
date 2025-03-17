@@ -1,18 +1,13 @@
 import { Button } from '@/components/ui/button';
+import { ImageType } from '@/types/image-types';
 import { Trash2 } from 'lucide-react';
 import Image from 'next/image';
-
-type ImageType = {
-  id: string;
-  url: string;
-  altText: string;
-};
 
 type Props = {
   image: ImageType;
   bookCode?: string;
   onClick: (image: ImageType) => void;
-  onDelete: (id: string, url: string) => Promise<void>;
+  onDelete: (id: string) => void;
 };
 
 const ImageItem = ({ image, bookCode, onClick, onDelete }: Props) => {
@@ -66,7 +61,7 @@ const ImageItem = ({ image, bookCode, onClick, onDelete }: Props) => {
           variant='ghost'
           size='icon'
           className='h-8 w-8 text-red-600 hover:text-red-700'
-          onClick={() => onDelete(image.id, image.url)}
+          onClick={() => onDelete(image.id)}
         >
           <Trash2 className='h-4 w-4' />
           <span className='sr-only'>Xóa</span>

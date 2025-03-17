@@ -6,7 +6,7 @@ import BookForm from '../../_components/book-form';
 import { useEditPage } from './useEditPage';
 
 export default function EditBookPage() {
-  const { book, apiLoading, router, handleSubmit } = useEditPage();
+  const { book, router, handleSubmit, apiLoading } = useEditPage();
 
   return (
     <div className='container relative mx-auto'>

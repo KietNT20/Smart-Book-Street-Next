@@ -34,6 +34,7 @@ export const registerSchema = z.object({
   password: z
     .string()
     .min(8, { message: 'Mật khẩu cần ít nhất 8 kí tự' })
+    .max(32, 'Mật khẩu không được quá 32 kí tự')
     .regex(/[A-Z]/, {
       message: 'Mật khẩu cần ít nhất 1 chữ hoa'
     })
@@ -63,17 +64,19 @@ export const registerSchema = z.object({
 });
 
 export const bookSchema = z.object({
-  id: z.string().optional(),
   code: z.string().min(1, { message: 'Mã sách không được để trống' }),
   title: z.string().min(1, { message: 'Tên sách không được để trống' }),
   publicationDate: z
     .string()
-    .min(1, { message: 'Vui lòng chọn ngày xuất bản' }),
+    .date()
+    .nonempty({ message: 'Ngày xuất bản không được để trống' }),
   price: z.number().min(0, { message: 'Giá không được âm' }),
   languages: z.string().min(1, { message: 'Ngôn ngữ không được để trống' }),
   description: z.string().optional(),
   size: z.string().optional(),
   status: z.string().min(1, { message: 'Trạng thái không được để trống' }),
+  mainImageFile: z.instanceof(File).optional().or(z.string().optional()),
+  additionalImageFiles: z.array(z.instanceof(File).or(z.string())).optional(),
   publisherId: z
     .string()
     .min(1, { message: 'Nhà xuất bản không được để trống' }),
@@ -83,10 +86,11 @@ export const bookSchema = z.object({
   categoryIds: z
     .array(z.string())
     .min(1, { message: 'Thể loại không được để trống' }),
+  id: z.string().optional(),
   createdBy: z.string().optional(),
-  createdDate: z.string().optional(),
+  createdDate: z.date().optional(),
   lastUpdatedBy: z.string().optional(),
-  lastUpdatedDate: z.string().optional(),
+  lastUpdatedDate: z.date().optional(),
   isDeleted: z.boolean().optional()
 });
 

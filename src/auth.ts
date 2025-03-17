@@ -36,7 +36,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             {
               method: 'POST',
               headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                Accept: 'application/json'
               },
               body: JSON.stringify({ usernameOrEmail, password })
             }
@@ -82,8 +83,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     signIn: PATH.LOGIN
   },
   session: {
-    strategy: 'jwt',
-    maxAge: 4.5 * 60 * 60 // 4 hours 30 minutes,
+    strategy: 'jwt'
+    // maxAge: 4.5 * 60 * 60 // 4 hours 30 minutes,
   },
   callbacks: {
     jwt({ token, user, account }) {

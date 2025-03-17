@@ -1,9 +1,9 @@
 import { Button } from '@/components/ui/button';
-import { formatDate } from '@/lib/utils';
 import { Book } from '@/types/book-types';
 import { ColumnDef } from '@tanstack/react-table';
 import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react';
 import BookMenuAction from './_components/book-menu-action';
+import { formateDateVi } from '@/lib/utils';
 
 type ColumnHandlers = {
   _onDelete: (id: string) => void;
@@ -109,7 +109,7 @@ export const createColumns = ({
         )}
       </Button>
     ),
-    cell: ({ row }) => formatDate(row.getValue('publicationDate'))
+    cell: ({ row }) => formateDateVi(row.getValue('publicationDate'))
   },
   {
     accessorKey: 'createdDate',
@@ -129,7 +129,7 @@ export const createColumns = ({
         )}
       </Button>
     ),
-    cell: ({ row }) => formatDate(row.getValue('createdDate'))
+    cell: ({ row }) => formateDateVi(row.getValue('createdDate'))
   },
   {
     id: 'actions',

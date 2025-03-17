@@ -4,6 +4,7 @@ import {
   AudioWaveform,
   Book,
   BookOpen,
+  CalendarIcon,
   ChartNoAxesCombined,
   Command,
   GalleryVerticalEnd,
@@ -144,11 +145,15 @@ const data = {
       url: PATH.STATISTICS,
       icon: ChartNoAxesCombined
     },
-
     {
       name: 'Visitors',
       url: '#',
       icon: Map
+    },
+    {
+      name: 'Calendar',
+      url: PATH.CALENDAR_EVENT,
+      icon: CalendarIcon
     }
   ]
 };
