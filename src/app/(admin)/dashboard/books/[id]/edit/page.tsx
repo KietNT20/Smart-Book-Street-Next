@@ -6,7 +6,7 @@ import BookForm from '../../_components/book-form';
 import { useEditPage } from './useEditPage';
 
 export default function EditBookPage() {
-  const { book, router, handleSubmit } = useEditPage();
+  const { book, router, handleSubmit, apiLoading } = useEditPage();
 
   return (
     <div className='container relative mx-auto'>
@@ -23,8 +23,7 @@ export default function EditBookPage() {
                 book={book?.result}
                 onSubmit={handleSubmit}
                 onCancel={() => router.back()}
-                // TODO: Add isLoading prop when useEditPage is implemented
-                // isLoading={}
+                isLoading={apiLoading}
               />
             )}
           </div>

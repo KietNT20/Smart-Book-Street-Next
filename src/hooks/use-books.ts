@@ -1,7 +1,6 @@
 'use client';
 
 import { PATH } from '@/enums/path';
-import { BookFormValues } from '@/lib/zod';
 import { bookService } from '@/services/bookService';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
@@ -12,6 +11,7 @@ export const useBookMutations = () => {
   const router = useRouter();
 
   const createBookMutation = useMutation({
+    mutationKey: ['createBook'],
     mutationFn: (formData: FormData) => bookService.create(formData),
     onSuccess: (data) => {
       if (data?.isSuccess) {
@@ -27,13 +27,15 @@ export const useBookMutations = () => {
   });
 
   const updateBookMutation = useMutation({
-    mutationFn: (payload: BookFormValues) => bookService.update(payload),
+    mutationKey: ['updateBook'],
+    mutationFn: (formData: FormData) => bookService.update(formData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['books'] });
     }
   });
 
   const deleteBookMutation = useMutation({
+    mutationKey: ['deleteBook'],
     mutationFn: (id: string) => bookService.delete(id),
     onSuccess: () => {
       toast.success('Đã xóa sách');

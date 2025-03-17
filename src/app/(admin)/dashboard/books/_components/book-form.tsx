@@ -1,4 +1,3 @@
-import { DatePickerCompVN } from '@/components/date-picker/date-picker-v1';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -13,15 +12,19 @@ import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 import { BookFormValues, bookSchema } from '@/lib/zod';
 import { BookAuthorIds, BookCategoryIds } from '@/types/book-types';
+import { Publisher } from '@/types/publisher-types';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { format, parse } from 'date-fns';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import AuthorCombobox from '../../_components/author-combobox';
 import CategoryCombobox from '../../_components/category-combobox';
 import PublisherCombobox from '../../_components/publisher-combobox';
 import BookSubmitBtn from './book-submit-btn';
+import { DatePickerV1 } from '@/components/date-picker/date-picker-v1';
 
 interface BookWithRelations extends BookFormValues {
+  publiser: Publisher;
   bookAuthors?: BookAuthorIds[];
   bookCategories?: BookCategoryIds[];
 }
@@ -34,18 +37,18 @@ type Props = {
 };
 
 const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
-  // State để quản lý files upload
   const [files, setFiles] = useState({
     mainFile: null as File | null,
     additionalFiles: [] as File[]
   });
 
-  // Form hook với validation
   const form = useForm<BookFormValues>({
     resolver: zodResolver(bookSchema),
     defaultValues: book
       ? {
           ...book,
+          publicationDate: format(new Date(book.publicationDate), 'yyyy-MM-dd'),
+          publisherId: (book as BookWithRelations).publisherId,
           authorIds:
             (book as BookWithRelations).bookAuthors?.map(
               (ba: BookAuthorIds) => ba.authorId
@@ -72,20 +75,32 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
         }
   });
 
-  // Xử lý submit form
-  const handleSubmitForm = async (values: BookFormValues) => {
+  // Parse publicationDate to Date object for DatePickerV1
+  const getPublicationDate = (): Date | undefined => {
+    const dateStr = form.getValues('publicationDate');
+    if (!dateStr) return undefined;
+
+    try {
+      return parse(dateStr, 'yyyy-MM-dd', new Date());
+    } catch (error) {
+      console.error('Error parsing date:', error);
+      return undefined;
+    }
+  };
+
+  const handleSubmitForm = async (values: Partial<BookFormValues>) => {
     try {
       const formData = new FormData();
 
-      formData.append('Code', values.code);
-      formData.append('Title', values.title);
-      formData.append('PublicationDate', values.publicationDate);
-      formData.append('Price', values.price.toString());
-      formData.append('Languages', values.languages);
+      formData.append('Code', values.code || '');
+      formData.append('Title', values.title || '');
+      formData.append('PublicationDate', values.publicationDate || '');
+      formData.append('Price', (values.price ?? 0).toString());
+      formData.append('Languages', values.languages || '');
       formData.append('Description', values.description || '');
       formData.append('Size', values.size || '');
-      formData.append('Status', values.status);
-      formData.append('PublisherId', values.publisherId);
+      formData.append('Status', values.status || '');
+      formData.append('PublisherId', values.publisherId || '');
       if (values.authorIds) {
         values.authorIds.forEach((authorId) =>
           formData.append('AuthorIds', authorId)
@@ -110,16 +125,6 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
     } catch (error) {
       console.error('Error preparing form data:', error);
     }
-  };
-
-  // Xử lý ngày
-  const handleDateChange = (date: Date, onChange: (value: string) => void) => {
-    if (!date || isNaN(date.getTime())) {
-      onChange('');
-      return;
-    }
-    // Format thành ISO string như API yêu cầu
-    onChange(date.toISOString());
   };
 
   return (
@@ -151,7 +156,7 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
             )}
           />
 
-          {/* Ngày xuất bản */}
+          {/* Ngày xuất bản - Sử dụng DatePickerV1 */}
           <FormField
             control={form.control}
             name='publicationDate'
@@ -161,16 +166,20 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
                   Ngày xuất bản <span className='text-red-400'>*</span>
                 </FormLabel>
                 <FormControl>
-                  <div className='block'>
-                    <DatePickerCompVN
-                      startYear={1900}
-                      endYear={new Date().getFullYear() + 10}
-                      value={field.value ? new Date(field.value) : undefined}
-                      onChange={(date) =>
-                        handleDateChange(date, field.onChange)
+                  <DatePickerV1
+                    date={getPublicationDate()}
+                    setDate={(date) => {
+                      if (date) {
+                        field.onChange(format(date, 'yyyy-MM-dd'));
+                      } else {
+                        field.onChange('');
                       }
-                    />
-                  </div>
+                    }}
+                    placeholder='Chọn ngày xuất bản'
+                    className={cn(
+                      form.formState.errors.publicationDate && 'border-red-500'
+                    )}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

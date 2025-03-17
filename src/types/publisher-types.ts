@@ -7,7 +7,6 @@ export interface Publisher extends BaseEntity {
   email: string;
   website?: string;
   description: string;
-  [key: string]: any;
 }
 
 export type PublisherResponse = {

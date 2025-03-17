@@ -1,5 +1,4 @@
 import { API_ENDPOINT } from '@/constant/api-url';
-import { BookFormValues } from '@/lib/zod';
 import { BookSearchPayload } from '@/types/book-types';
 import axiosInstance from '@/utils/axiosInstance';
 
@@ -28,10 +27,15 @@ export const bookService = {
     return res.data;
   },
 
-  update: async (payload: BookFormValues) => {
+  update: async (formData: FormData) => {
     const res = await axiosInstance.put(
       `${API_ENDPOINT.BOOKS.UPDATE}`,
-      payload
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }
     );
     return res.data;
   },

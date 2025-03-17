@@ -1,7 +1,6 @@
-'use client';
-
-import { format, getMonth, getYear, setMonth, setYear } from 'date-fns';
-import { CalendarIcon } from 'lucide-react';
+import { format } from 'date-fns';
+import { vi } from 'date-fns/locale';
+import { Calendar as CalendarIcon } from 'lucide-react';
 import * as React from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -11,158 +10,134 @@ import {
   PopoverContent,
   PopoverTrigger
 } from '@/components/ui/popover';
-import { cn } from '@/lib/utils';
-import { vi } from 'date-fns/locale';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue
-} from '../ui/select';
+} from '@/components/ui/select';
+import { cn } from '@/lib/utils';
 
-type DatePickerProps = {
-  startYear?: number;
-  endYear?: number;
-  value?: Date;
-  onChange?: (date: Date) => void;
-};
+interface DatePickerProps {
+  date: Date | undefined;
+  setDate: (date: Date | undefined) => void;
+  className?: string;
+  placeholder?: string;
+}
 
-export function DatePickerCompVN({
-  startYear = getYear(new Date()) - 100,
-  endYear = getYear(new Date()) + 100,
-  value,
-  onChange
+export function DatePickerV1({
+  date,
+  setDate,
+  className,
+  placeholder = 'Chọn ngày'
 }: DatePickerProps) {
-  const [date, setDate] = React.useState<Date | undefined>(value);
-  const [calendarMonth, setCalendarMonth] = React.useState<Date>(
-    value || new Date()
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [month, setMonth] = React.useState<number>(
+    date ? date.getMonth() : new Date().getMonth()
+  );
+  const [year, setYear] = React.useState<number>(
+    date ? date.getFullYear() : new Date().getFullYear()
   );
 
-  React.useEffect(() => {
-    setDate(value);
-    if (value) {
-      setCalendarMonth(value);
-    }
-  }, [value]);
-
+  // Tạo các mảng tháng và năm để hiển thị trong select
   const months = [
-    'Tháng Một',
-    'Tháng Hai',
-    'Tháng Ba',
-    'Tháng Tư',
-    'Tháng Năm',
-    'Tháng Sáu',
-    'Tháng Bảy',
-    'Tháng Tám',
-    'Tháng Chín',
-    'Tháng Mười',
-    'Tháng Mười Một',
-    'Tháng Mười Hai'
+    { value: 0, label: 'Tháng 1' },
+    { value: 1, label: 'Tháng 2' },
+    { value: 2, label: 'Tháng 3' },
+    { value: 3, label: 'Tháng 4' },
+    { value: 4, label: 'Tháng 5' },
+    { value: 5, label: 'Tháng 6' },
+    { value: 6, label: 'Tháng 7' },
+    { value: 7, label: 'Tháng 8' },
+    { value: 8, label: 'Tháng 9' },
+    { value: 9, label: 'Tháng 10' },
+    { value: 10, label: 'Tháng 11' },
+    { value: 11, label: 'Tháng 12' }
   ];
 
-  const years = Array.from({ length: endYear - startYear + 1 }, (_, i) => {
-    return startYear + i;
-  });
+  // Tạo mảng năm từ năm hiện tại đến 10 năm trước và 10 năm sau
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: 21 }, (_, i) => currentYear - 10 + i);
 
-  const handleMonthChange = (month: string) => {
-    const newDate = setMonth(calendarMonth, months.indexOf(month));
-    setCalendarMonth(newDate);
+  // Xử lý khi chọn tháng
+  const handleMonthChange = (value: string) => {
+    setMonth(parseInt(value));
+  };
+
+  // Xử lý khi chọn năm
+  const handleYearChange = (value: string) => {
+    setYear(parseInt(value));
+  };
+
+  // Cập nhật tháng và năm khi date thay đổi từ bên ngoài
+  React.useEffect(() => {
     if (date) {
-      const updatedDate = setMonth(date, months.indexOf(month));
-      setDate(updatedDate);
-      onChange?.(updatedDate);
+      setMonth(date.getMonth());
+      setYear(date.getFullYear());
     }
-  };
-
-  const handleYearChange = (year: string) => {
-    const newDate = setYear(calendarMonth, parseInt(year));
-    setCalendarMonth(newDate);
-    if (date) {
-      const updatedDate = setYear(date, parseInt(year));
-      setDate(updatedDate);
-      onChange?.(updatedDate);
-    }
-  };
-
-  const handleSelect = (selectedDate: Date | undefined) => {
-    if (selectedDate) {
-      setDate(selectedDate);
-      setCalendarMonth(selectedDate);
-      onChange?.(selectedDate);
-    }
-  };
-
-  const formatDate = (date: Date | undefined) => {
-    if (!date) return 'Chọn ngày';
-    try {
-      return format(date, 'dd MMMM yyyy', { locale: vi });
-    } catch (error) {
-      console.error('Invalid date:', error);
-      return 'Chọn ngày';
-    }
-  };
+  }, [date]);
 
   return (
-    <Popover>
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
         <Button
-          variant={'outline'}
+          variant='outline'
           className={cn(
             'w-full justify-start text-left font-normal',
-            !date && 'text-muted-foreground'
+            !date && 'text-muted-foreground',
+            className
           )}
         >
           <CalendarIcon className='mr-2 h-4 w-4' />
-          {formatDate(date)}
+          {date ? (
+            format(date, 'PPP', { locale: vi })
+          ) : (
+            <span>{placeholder}</span>
+          )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className='pointer-events-auto w-auto p-0' align='start'>
-        <div className='flex p-0'>
-          <div className='m-1 w-full'>
-            <Select
-              onValueChange={handleMonthChange}
-              value={months[getMonth(calendarMonth)]}
-            >
-              <SelectTrigger className='w-full'>
-                <SelectValue placeholder='Chọn tháng' />
-              </SelectTrigger>
-              <SelectContent>
-                {months.map((month) => (
-                  <SelectItem key={month} value={month}>
-                    {month}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <div className='m-1 w-full'>
-            <Select
-              onValueChange={handleYearChange}
-              value={getYear(calendarMonth).toString()}
-            >
-              <SelectTrigger className='w-full'>
-                <SelectValue placeholder='Chọn năm' />
-              </SelectTrigger>
-              <SelectContent>
-                {years.map((year) => (
-                  <SelectItem key={year} value={year.toString()}>
-                    {year}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+      <PopoverContent className='w-auto p-0' align='start'>
+        <div className='flex items-center justify-between space-x-2 p-3'>
+          <Select value={month.toString()} onValueChange={handleMonthChange}>
+            <SelectTrigger className='w-[130px]'>
+              <SelectValue placeholder='Chọn tháng' />
+            </SelectTrigger>
+            <SelectContent>
+              {months.map((m) => (
+                <SelectItem key={m.value} value={m.value.toString()}>
+                  {m.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Select value={year.toString()} onValueChange={handleYearChange}>
+            <SelectTrigger className='w-[100px]'>
+              <SelectValue placeholder='Chọn năm' />
+            </SelectTrigger>
+            <SelectContent>
+              {years.map((y) => (
+                <SelectItem key={y} value={y.toString()}>
+                  {y}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
         <Calendar
           mode='single'
           selected={date}
-          onSelect={handleSelect}
-          initialFocus
+          onSelect={(day) => {
+            setDate(day);
+            setIsOpen(false);
+          }}
+          month={new Date(year, month)}
+          onMonthChange={(date) => {
+            setMonth(date.getMonth());
+            setYear(date.getFullYear());
+          }}
           locale={vi}
-          month={calendarMonth}
-          onMonthChange={setCalendarMonth}
-          className='rounded-md border'
+          className='border-t'
         />
       </PopoverContent>
     </Popover>

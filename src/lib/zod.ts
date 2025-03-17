@@ -68,7 +68,7 @@ export const bookSchema = z.object({
   title: z.string().min(1, { message: 'Tên sách không được để trống' }),
   publicationDate: z
     .string()
-    .datetime()
+    .date()
     .nonempty({ message: 'Ngày xuất bản không được để trống' }),
   price: z.number().min(0, { message: 'Giá không được âm' }),
   languages: z.string().min(1, { message: 'Ngôn ngữ không được để trống' }),
@@ -88,9 +88,9 @@ export const bookSchema = z.object({
     .min(1, { message: 'Thể loại không được để trống' }),
   id: z.string().optional(),
   createdBy: z.string().optional(),
-  createdDate: z.string().optional(),
+  createdDate: z.date().optional(),
   lastUpdatedBy: z.string().optional(),
-  lastUpdatedDate: z.string().optional(),
+  lastUpdatedDate: z.date().optional(),
   isDeleted: z.boolean().optional()
 });
 
