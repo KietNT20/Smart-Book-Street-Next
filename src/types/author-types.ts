@@ -1,6 +1,6 @@
 import { Book } from './book-types';
 import { BaseEntity } from './common-types';
-import { Image } from './image-types';
+import { ImageType } from './image-types';
 
 export interface Author extends BaseEntity {
   id: string;
@@ -9,7 +9,8 @@ export interface Author extends BaseEntity {
   nationality: string;
   biography: string;
   bookAuthors: BookAuthor[];
-  images: Image[];
+  baseImgUrl?: string;
+  images: ImageType[];
 }
 
 export interface BookAuthor extends BaseEntity {

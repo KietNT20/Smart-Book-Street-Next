@@ -22,8 +22,9 @@ export default function BooksDetailPage({
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const {
     deleteBookMutation,
-    apiLoading,
     deletedLoading,
+    bookDetailPending,
+    bookDetailLoading,
     book,
     bookInfoProps,
     router
@@ -38,7 +39,7 @@ export default function BooksDetailPage({
     }
   };
 
-  if (apiLoading) {
+  if (bookDetailPending || bookDetailLoading) {
     return <SpinLoading />;
   }
 

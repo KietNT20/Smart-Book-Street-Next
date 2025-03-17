@@ -6,14 +6,9 @@ import {
   DialogHeader,
   DialogTitle
 } from '@/components/ui/dialog';
+import { ImageType } from '@/types/image-types';
 import { Loader2, Trash2 } from 'lucide-react';
 import Image from 'next/image';
-
-type ImageType = {
-  id: string;
-  url: string;
-  altText: string;
-};
 
 type Props = {
   isOpen: boolean;

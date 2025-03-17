@@ -1,10 +1,22 @@
 import { formateDateVi, formatPrice } from '@/lib/utils';
+import { Author } from '@/types/author-types';
 import { Book } from '@/types/book-types';
+
+interface BookAuthorDataTypes {
+  result: Author;
+}
+
+interface BookCategoryDataTypes {
+  result: {
+    categoryName: string;
+    description: string;
+  };
+}
 
 type Props = {
   book: Book;
-  bookAuthorsRes: { data: any[] };
-  bookCategoriesRes: { data: any[] };
+  bookAuthorsRes: { data: BookAuthorDataTypes[] };
+  bookCategoriesRes: { data: BookCategoryDataTypes[] };
 };
 
 const BookInfo = ({ book, bookAuthorsRes, bookCategoriesRes }: Props) => {

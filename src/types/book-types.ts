@@ -1,4 +1,5 @@
 import { BaseEntity } from './common-types';
+import { ImageType } from './image-types';
 import { Publisher } from './publisher-types';
 
 export type BookAuthorIds = {
@@ -20,21 +21,17 @@ export interface Book extends BaseEntity {
   publicationDate: Date | string;
   price: number;
   languages: string;
-  description?: string;
-  size?: string;
+  description: string;
+  size: string;
   status: string;
   publisherId: string;
   authorIds: string[];
   categoryIds: string[];
   publisher?: Publisher;
-  bookAuthors?: BookAuthorIds[];
-  bookCategories?: BookCategoryIds[];
-  images: {
-    id: string;
-    url: string;
-    type: string;
-    altText: string;
-  }[];
+  baseImgUrl?: string;
+  images?: ImageType[];
+  bookAuthors: BookAuthorIds[];
+  bookCategories: BookCategoryIds[];
   inventories?: any[];
 }
 
