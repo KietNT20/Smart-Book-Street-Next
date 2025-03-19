@@ -27,9 +27,9 @@ export const bookService = {
     return res.data;
   },
 
-  update: async (formData: FormData) => {
+  update: async (id: string, formData: FormData) => {
     const res = await axiosInstance.put(
-      `${API_ENDPOINT.BOOKS.UPDATE}`,
+      `${API_ENDPOINT.BOOKS.UPDATE}/${id}`,
       formData,
       {
         headers: {
@@ -41,8 +41,8 @@ export const bookService = {
   },
 
   delete: async (id: string) => {
-    const res = await axiosInstance.put(
-      `${API_ENDPOINT.BOOKS.DELETE}?id=${id}`
+    const res = await axiosInstance.delete(
+      `${API_ENDPOINT.BOOKS.DELETE}/${id}`
     );
     return res.data;
   }

@@ -1,3 +1,4 @@
+import { DatePickerV1 } from '@/components/date-picker/date-picker-v1';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -21,7 +22,6 @@ import AuthorCombobox from '../../_components/author-combobox';
 import CategoryCombobox from '../../_components/category-combobox';
 import PublisherCombobox from '../../_components/publisher-combobox';
 import BookSubmitBtn from './book-submit-btn';
-import { DatePickerV1 } from '@/components/date-picker/date-picker-v1';
 
 interface BookWithRelations extends BookFormValues {
   publiser: Publisher;
@@ -75,7 +75,6 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
         }
   });
 
-  // Parse publicationDate to Date object for DatePickerV1
   const getPublicationDate = (): Date | undefined => {
     const dateStr = form.getValues('publicationDate');
     if (!dateStr) return undefined;
@@ -156,7 +155,7 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
             )}
           />
 
-          {/* Ngày xuất bản - Sử dụng DatePickerV1 */}
+          {/* Ngày xuất bản - use DatePickerV1 */}
           <FormField
             control={form.control}
             name='publicationDate'

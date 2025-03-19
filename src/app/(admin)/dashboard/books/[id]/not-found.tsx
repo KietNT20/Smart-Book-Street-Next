@@ -1,6 +1,3 @@
-'use client';
-
-import BackButton from '@/components/back-btn/back-button';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { PATH } from '@/enums/path';
@@ -9,7 +6,7 @@ import Link from 'next/link';
 export default function NotFound() {
   return (
     <div className='space-y-6'>
-      <BackButton routeTo={PATH.BOOKS} />
+      {/* <BackButton /> */}
       <Separator />
       <div className='flex flex-col items-center justify-center space-y-6 py-12'>
         <div className='rounded-full bg-red-100 p-4'>

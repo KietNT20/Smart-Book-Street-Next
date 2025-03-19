@@ -30,13 +30,9 @@ export default function BooksDetailPage({
     router
   } = useBookDetail({ id: params.id });
 
-  const handleDeleteBook = async () => {
-    try {
-      await deleteBookMutation.mutateAsync(params.id);
-      router.push(PATH.BOOKS);
-    } catch (error) {
-      console.error('Error deleting book:', error);
-    }
+  const handleDeleteBook = () => {
+    deleteBookMutation.mutate(params.id);
+    router.push(PATH.BOOKS);
   };
 
   if (bookDetailPending || bookDetailLoading) {
