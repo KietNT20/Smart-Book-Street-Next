@@ -10,7 +10,7 @@ export function useBookPageState() {
   const [pagination, setPagination] = useState<BookTableState>({
     pageIndex: 1,
     pageSize: 10,
-    sortField: 'createdDate',
+    sortField: 'lastUpdatedDate',
     sortOrder: -1
   });
 
@@ -25,7 +25,7 @@ export function useBookPageState() {
     setPagination({
       pageIndex: 1,
       pageSize: 10,
-      sortField: 'createdDate',
+      sortField: 'lastUpdatedDate',
       sortOrder: -1
     });
     setSearchCriteria({});

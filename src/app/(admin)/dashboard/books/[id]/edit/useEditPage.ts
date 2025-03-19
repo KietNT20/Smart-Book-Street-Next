@@ -12,14 +12,16 @@ export const useEditPage = () => {
   const { data: book } = useBookSearchById(bookId);
   const apiLoading = useDebounce(updateBookMutation.isPending, 300);
 
-  const handleSubmit = (formData: FormData) => {
-    console.log('formData edit page', formData);
-    updateBookMutation.mutate(formData);
+  const handleSubmitUpdate = async (formData: FormData) => {
+    console.log('handleSubmitUpdate được gọi với formData');
+    console.log('formData có Id:', formData.get('Id')); // Debug
+    console.log('bookId trước khi gọi mutation:', bookId); // Debug
+    await updateBookMutation.mutateAsync({ id: bookId, formData });
   };
 
   return {
     book,
-    handleSubmit,
+    handleSubmitUpdate,
     router,
     apiLoading
   };

@@ -1,3 +1,4 @@
+import { DatePickerV1 } from '@/components/date-picker/date-picker-v1';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -11,23 +12,15 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 import { BookFormValues, bookSchema } from '@/lib/zod';
-import { BookAuthorIds, BookCategoryIds } from '@/types/book-types';
-import { Publisher } from '@/types/publisher-types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format, parse } from 'date-fns';
-import { useState } from 'react';
+import { Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import AuthorCombobox from '../../_components/author-combobox';
 import CategoryCombobox from '../../_components/category-combobox';
 import PublisherCombobox from '../../_components/publisher-combobox';
-import BookSubmitBtn from './book-submit-btn';
-import { DatePickerV1 } from '@/components/date-picker/date-picker-v1';
-
-interface BookWithRelations extends BookFormValues {
-  publiser: Publisher;
-  bookAuthors?: BookAuthorIds[];
-  bookCategories?: BookCategoryIds[];
-}
+import { prepareInitialBookData } from '../_lib/book-form-helpers';
+import { useBookFormSubmit } from '../_lib/use-book-form-submit';
 
 type Props = {
   book?: BookFormValues;
@@ -37,45 +30,18 @@ type Props = {
 };
 
 const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
-  const [files, setFiles] = useState({
-    mainFile: null as File | null,
-    additionalFiles: [] as File[]
-  });
-
   const form = useForm<BookFormValues>({
     resolver: zodResolver(bookSchema),
-    defaultValues: book
-      ? {
-          ...book,
-          publicationDate: format(new Date(book.publicationDate), 'yyyy-MM-dd'),
-          publisherId: (book as BookWithRelations).publisherId,
-          authorIds:
-            (book as BookWithRelations).bookAuthors?.map(
-              (ba: BookAuthorIds) => ba.authorId
-            ) || [],
-          categoryIds:
-            (book as BookWithRelations).bookCategories?.map(
-              (bc: BookCategoryIds) => bc.categoryId
-            ) || []
-        }
-      : {
-          code: '',
-          title: '',
-          publicationDate: '',
-          price: 0,
-          languages: '',
-          description: '',
-          size: '',
-          status: '',
-          publisherId: '',
-          authorIds: [],
-          categoryIds: [],
-          mainImageFile: undefined,
-          additionalImageFiles: []
-        }
+    defaultValues: prepareInitialBookData(book)
   });
 
-  // Parse publicationDate to Date object for DatePickerV1
+  const {
+    files,
+    handleMainFileChange,
+    handleAdditionalFilesChange,
+    handleSubmit
+  } = useBookFormSubmit(onSubmit);
+
   const getPublicationDate = (): Date | undefined => {
     const dateStr = form.getValues('publicationDate');
     if (!dateStr) return undefined;
@@ -88,49 +54,10 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
     }
   };
 
-  const handleSubmitForm = async (values: Partial<BookFormValues>) => {
-    try {
-      const formData = new FormData();
-
-      formData.append('Code', values.code || '');
-      formData.append('Title', values.title || '');
-      formData.append('PublicationDate', values.publicationDate || '');
-      formData.append('Price', (values.price ?? 0).toString());
-      formData.append('Languages', values.languages || '');
-      formData.append('Description', values.description || '');
-      formData.append('Size', values.size || '');
-      formData.append('Status', values.status || '');
-      formData.append('PublisherId', values.publisherId || '');
-      if (values.authorIds) {
-        values.authorIds.forEach((authorId) =>
-          formData.append('AuthorIds', authorId)
-        );
-      }
-      if (values.categoryIds) {
-        values.categoryIds.forEach((categoryId) =>
-          formData.append('CategoryIds', categoryId)
-        );
-      }
-
-      if (files.mainFile) {
-        console.log('Main file:', files.mainFile);
-        formData.append('MainImageFile', files.mainFile);
-      }
-
-      files.additionalFiles.forEach((file) => {
-        formData.append('AdditionalImageFiles', file);
-      });
-
-      onSubmit(formData);
-    } catch (error) {
-      console.error('Error preparing form data:', error);
-    }
-  };
-
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(handleSubmitForm)}
+        onSubmit={form.handleSubmit((values) => handleSubmit(values))}
         className='space-y-4'
       >
         <div className='grid grid-cols-2 gap-4'>
@@ -156,7 +83,7 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
             )}
           />
 
-          {/* Ngày xuất bản - Sử dụng DatePickerV1 */}
+          {/* Ngày xuất bản - use DatePickerV1 */}
           <FormField
             control={form.control}
             name='publicationDate'
@@ -317,7 +244,7 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
                     onChange={(e) => {
                       const file = e.target.files?.[0];
                       if (file) {
-                        setFiles((prev) => ({ ...prev, mainFile: file }));
+                        handleMainFileChange(file);
                         field.onChange(file);
                       }
                     }}
@@ -352,10 +279,7 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
                     const fileList = e.target.files;
                     if (fileList && fileList.length > 0) {
                       const filesArray = Array.from(fileList) as File[];
-                      setFiles((prev) => ({
-                        ...prev,
-                        additionalFiles: filesArray
-                      }));
+                      handleAdditionalFilesChange(filesArray);
                       field.onChange(filesArray);
                     }
                   }}
@@ -408,7 +332,18 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
           >
             Hủy
           </Button>
-          <BookSubmitBtn book={book} _onPending={isLoading!} />
+          <Button disabled={isLoading} className='px-7'>
+            {isLoading ? (
+              <>
+                <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                Đang xử lý...
+              </>
+            ) : book ? (
+              'Cập nhật'
+            ) : (
+              'Thêm mới'
+            )}
+          </Button>
         </div>
       </form>
     </Form>

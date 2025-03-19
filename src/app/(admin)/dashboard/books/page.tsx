@@ -50,7 +50,7 @@ export default function BooksPage() {
 
   const hasFilters = () =>
     Object.keys(searchCriteria).length > 0 ||
-    pagination.sortField !== 'createdDate' ||
+    pagination.sortField !== 'lastUpdatedDate' ||
     pagination.sortOrder !== Sort.DESC;
 
   return (

@@ -74,24 +74,17 @@ export const bookSchema = z.object({
   languages: z.string().min(1, { message: 'Ngôn ngữ không được để trống' }),
   description: z.string().optional(),
   size: z.string().optional(),
-  status: z.string().min(1, { message: 'Trạng thái không được để trống' }),
+  status: z.string().optional(),
   mainImageFile: z.instanceof(File).optional().or(z.string().optional()),
   additionalImageFiles: z.array(z.instanceof(File).or(z.string())).optional(),
-  publisherId: z
-    .string()
-    .min(1, { message: 'Nhà xuất bản không được để trống' }),
-  authorIds: z
-    .array(z.string())
-    .min(1, { message: 'Tác giả không được để trống' }),
-  categoryIds: z
-    .array(z.string())
-    .min(1, { message: 'Thể loại không được để trống' }),
+  publisherId: z.string().optional(),
+  authorIds: z.array(z.string()).optional(),
+  categoryIds: z.array(z.string()).optional(),
   id: z.string().optional(),
   createdBy: z.string().optional(),
   createdDate: z.date().optional(),
   lastUpdatedBy: z.string().optional(),
-  lastUpdatedDate: z.date().optional(),
-  isDeleted: z.boolean().optional()
+  lastUpdatedDate: z.date().optional()
 });
 
 export type BookFormValues = z.infer<typeof bookSchema>;
