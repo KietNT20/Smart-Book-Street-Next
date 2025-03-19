@@ -158,7 +158,7 @@ export function DataTable<TData, TValue>({
               onClick={() => onPageChange(currentPage - 1)}
               disabled={currentPage === 1 || isLoading}
             >
-              Trước
+              Trang trước
             </Button>
             <Button
               variant='outline'
@@ -166,7 +166,7 @@ export function DataTable<TData, TValue>({
               onClick={() => onPageChange(currentPage + 1)}
               disabled={currentPage >= pageCount || isLoading}
             >
-              Tiếp
+              Trang sau
             </Button>
           </div>
         </div>
