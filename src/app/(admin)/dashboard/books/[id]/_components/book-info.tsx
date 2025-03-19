@@ -78,7 +78,8 @@ const BookInfo = ({ book, bookAuthorsRes, bookCategoriesRes }: Props) => {
         <h3 className='text-xl font-semibold'>Thông tin thêm</h3>
         <p>Ngày xuất bản: {formateDateVi(book.publicationDate)}</p>
         <p>
-          Ngày tạo: {book.createdDate ? formateDateVi(book.createdDate) : ''}
+          Lần cập nhật cuối:{' '}
+          {book.lastUpdatedBy ? formateDateVi(book.lastUpdatedBy) : ''}
         </p>
       </div>
     </div>

@@ -4,14 +4,14 @@ import BookForm from '../../../_components/book-form';
 import { useEditPage } from '../useEditPage';
 
 const BookFormEdit = () => {
-  const { book, router, handleSubmit, apiLoading } = useEditPage();
+  const { book, router, handleSubmitUpdate, apiLoading } = useEditPage();
 
   return (
     <div className='relative'>
       {book && (
         <BookForm
           book={book?.result}
-          onSubmit={handleSubmit}
+          onSubmit={handleSubmitUpdate}
           onCancel={() => router.back()}
           isLoading={apiLoading}
         />

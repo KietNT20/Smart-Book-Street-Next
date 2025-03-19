@@ -1,5 +1,3 @@
-'use client';
-
 import { PATH } from '@/enums/path';
 import { bookService } from '@/services/bookService';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -28,9 +26,20 @@ export const useBookMutations = () => {
 
   const updateBookMutation = useMutation({
     mutationKey: ['updateBook'],
-    mutationFn: (formData: FormData) => bookService.update(formData),
-    onSuccess: () => {
+    mutationFn: ({ id, formData }: { id: string; formData: FormData }) => {
+      console.log('Calling update API with id:', id);
+      return bookService.update(id, formData);
+    },
+    onSuccess: (data) => {
+      if (data?.isSuccess) {
+        toast.success('Cập nhật sách thành công');
+        router.push(PATH.BOOKS);
+      }
       queryClient.invalidateQueries({ queryKey: ['books'] });
+    },
+    onError: (error: Error) => {
+      toast.error('Đã xảy ra lỗi khi cập nhật sách');
+      console.error('Error updating book:', error);
     }
   });
 

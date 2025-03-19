@@ -1,9 +1,9 @@
 import { Button } from '@/components/ui/button';
+import { formateDateVi } from '@/lib/utils';
 import { Book } from '@/types/book-types';
 import { ColumnDef } from '@tanstack/react-table';
 import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react';
 import BookMenuAction from './_components/book-menu-action';
-import { formateDateVi } from '@/lib/utils';
 
 type ColumnHandlers = {
   _onDelete: (id: string) => void;
@@ -112,14 +112,14 @@ export const createColumns = ({
     cell: ({ row }) => formateDateVi(row.getValue('publicationDate'))
   },
   {
-    accessorKey: 'createdDate',
+    accessorKey: 'lastUpdatedDate',
     header: ({ column }) => (
       <Button
         variant='ghost'
         onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         className='flex items-center'
       >
-        Ngày tạo
+        Cập nhật cuối
         {column.getIsSorted() === 'asc' ? (
           <ArrowUp className='ml-2 h-4 w-4' />
         ) : column.getIsSorted() === 'desc' ? (
@@ -129,7 +129,7 @@ export const createColumns = ({
         )}
       </Button>
     ),
-    cell: ({ row }) => formateDateVi(row.getValue('createdDate'))
+    cell: ({ row }) => formateDateVi(row.getValue('lastUpdatedDate'))
   },
   {
     id: 'actions',
