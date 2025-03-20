@@ -137,7 +137,7 @@ export function DatePickerV1({
             setYear(date.getFullYear());
           }}
           locale={vi}
-          className='border-t'
+          className='rounded-md border shadow'
         />
       </PopoverContent>
     </Popover>

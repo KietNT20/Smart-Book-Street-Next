@@ -1,4 +1,5 @@
 import { DatePickerV1 } from '@/components/date-picker/date-picker-v1';
+import RichTextEditor from '@/components/rich-text-editor';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -9,7 +10,6 @@ import {
   FormMessage
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 import { BookFormValues, bookSchema } from '@/lib/zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -313,7 +313,7 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
         />
 
         {/* Mô tả */}
-        <FormField
+        {/* <FormField
           control={form.control}
           name='description'
           render={({ field }) => (
@@ -321,6 +321,26 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
               <FormLabel>Mô tả</FormLabel>
               <FormControl>
                 <Textarea placeholder='Nhập mô tả' {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        /> */}
+        <FormField
+          control={form.control}
+          name='description'
+          render={({ field }) => (
+            <FormItem className='col-span-2'>
+              <FormLabel>Mô tả</FormLabel>
+              <FormControl>
+                <RichTextEditor
+                  content={field.value || ''}
+                  onChange={field.onChange}
+                  placeholder='Nhập mô tả chi tiết về sách...'
+                  className={cn(
+                    form.formState.errors.description && 'border-red-500'
+                  )}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

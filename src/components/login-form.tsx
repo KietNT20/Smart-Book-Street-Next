@@ -67,11 +67,11 @@ export function LoginForm({
           message: 'Tài khoản hoặc mật khẩu không chính xác, Vui lòng thử lại'
         });
       }
-      if (data?.error === null && data.url) {
+      if (data?.url !== null) {
+        router.push(PATH.DASHBOARD);
         toast.success('Đăng nhập thành công', {
           description: 'Vui lòng chờ trong giây lát'
         });
-        router.push(PATH.DASHBOARD);
       }
     },
     onError: (error) => {

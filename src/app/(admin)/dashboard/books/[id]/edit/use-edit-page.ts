@@ -13,9 +13,6 @@ export const useEditPage = () => {
   const apiLoading = useDebounce(updateBookMutation.isPending, 300);
 
   const handleSubmitUpdate = async (formData: FormData) => {
-    console.log('handleSubmitUpdate được gọi với formData');
-    console.log('formData có Id:', formData.get('Id')); // Debug
-    console.log('bookId trước khi gọi mutation:', bookId); // Debug
     await updateBookMutation.mutateAsync({ id: bookId, formData });
   };
 

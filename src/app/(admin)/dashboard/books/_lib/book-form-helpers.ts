@@ -49,3 +49,12 @@ export function prepareInitialBookData(book?: BookFormValues): BookFormValues {
     lastUpdatedDate: new Date()
   };
 }
+
+// Hàm để sanitize HTML (nếu cần)
+export const sanitizeHtml = (html: string): string => {
+  // Bạn có thể sử dụng thư viện như DOMPurify để sanitize HTML
+  // Đây là một triển khai đơn giản
+  return html
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+    .replace(/on\w+="[^"]*"/g, '');
+};

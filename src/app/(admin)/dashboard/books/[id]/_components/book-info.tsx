@@ -65,13 +65,16 @@ const BookInfo = ({ book, bookAuthorsRes, bookCategoriesRes }: Props) => {
         <p className='flex items-center gap-2 font-medium'>
           Tình trạng: <span className='text-blue-500'>{book?.status}</span>
         </p>
-        <div>
+        <div className='rounded-md border p-2'>
           <p className='font-semibold'>Mô tả:</p>
-          <p>
-            {book?.description
-              ? book?.description
-              : 'Không có mô tả cho cuốn sách này'}
-          </p>
+          {book?.description ? (
+            <div
+              className='prose prose-sm mt-2 max-w-none'
+              dangerouslySetInnerHTML={{ __html: book.description }}
+            />
+          ) : (
+            <p>Không có mô tả cho cuốn sách này</p>
+          )}
         </div>{' '}
       </div>
       <div className='space-y-2'>

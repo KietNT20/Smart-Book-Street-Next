@@ -1,7 +1,7 @@
 'use client';
 
 import BookForm from '../../../_components/book-form';
-import { useEditPage } from '../useEditPage';
+import { useEditPage } from '../use-edit-page';
 
 const BookFormEdit = () => {
   const { book, router, handleSubmitUpdate, apiLoading } = useEditPage();
