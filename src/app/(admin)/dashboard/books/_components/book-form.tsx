@@ -72,6 +72,7 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
                 </FormLabel>
                 <FormControl>
                   <Input
+                    placeholder='Nhập mã sách'
                     className={cn(
                       form.formState.errors.code && 'border-red-500'
                     )}
@@ -124,6 +125,7 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
                 </FormLabel>
                 <FormControl>
                   <Input
+                    placeholder='Nhập tên sách'
                     className={cn(
                       form.formState.errors.title && 'border-red-500'
                     )}
@@ -147,7 +149,8 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
                 <FormLabel>Giá (VNĐ)</FormLabel>
                 <FormControl>
                   <Input
-                    type='text'
+                    type='number'
+                    placeholder='Nhập giá'
                     className={cn(
                       form.formState.errors.price && 'border-red-500'
                     )}
@@ -174,6 +177,7 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
                 </FormLabel>
                 <FormControl>
                   <Input
+                    placeholder='Nhập ngôn ngữ'
                     className={cn(
                       'w-full',
                       form.formState.errors.languages && 'border-red-500'
@@ -198,6 +202,7 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
                 <FormLabel>Kích thước</FormLabel>
                 <FormControl>
                   <Input
+                    placeholder='Nhập kích thước'
                     className={cn(
                       form.formState.errors.size && 'border-red-500'
                     )}
@@ -220,6 +225,7 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
                 </FormLabel>
                 <FormControl>
                   <Input
+                    placeholder='Nhập trạng thái'
                     className={cn(
                       form.formState.errors.status && 'border-red-500'
                     )}
@@ -314,7 +320,7 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
             <FormItem>
               <FormLabel>Mô tả</FormLabel>
               <FormControl>
-                <Textarea {...field} />
+                <Textarea placeholder='Nhập mô tả' {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

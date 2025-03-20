@@ -13,11 +13,13 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { PATH } from '@/enums/path';
 import { useAuthorMutation, useGetAuthorById } from '@/hooks/use-author';
+import { cn } from '@/lib/utils';
 import { authorFormSchema, AuthorFormValues } from '@/lib/zod';
 import { Author } from '@/types/author-types';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { format } from 'date-fns';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import AuthorSubmitBtn from './author-submit-btn';
@@ -26,11 +28,19 @@ type AuthorData = {
   result: Author;
 };
 
+type FileState = {
+  imgFile: File | null;
+};
+
 type Props = {
   authorId?: string;
 };
 
 export function AuthorForm({ authorId }: Props) {
+  const [file, setFile] = useState<FileState>({
+    imgFile: null
+  });
+
   const router = useRouter();
   const { createAuthor, updateAuthor } = useAuthorMutation();
   const { data: authorData, isLoading: isLoadingAuthor } =
@@ -41,7 +51,9 @@ export function AuthorForm({ authorId }: Props) {
     defaultValues: {
       authorName: '',
       nationality: '',
-      biography: ''
+      biography: '',
+      dob: '',
+      imgFile: undefined
     }
   });
 
@@ -49,32 +61,33 @@ export function AuthorForm({ authorId }: Props) {
     if (authorData) {
       form.reset({
         authorName: authorData.result.authorName,
-        dob: authorData.result.dob as string,
+        dob: format(new Date(authorData.result.dob), 'yyyy-MM-dd'),
         nationality: authorData.result.nationality,
-        biography: authorData.result.biography
+        biography: authorData.result.biography,
+        imgFile: undefined
       });
     }
   }, [authorData, form]);
 
   const onSubmit = async (data: AuthorFormValues) => {
     try {
-      if (authorId) {
-        await updateAuthor.mutateAsync({
-          id: authorId,
-          ...data,
-          biography: data.biography ?? ''
-        });
-        toast.success('Cập nhật tác giả thành công');
-      } else {
-        await createAuthor.mutateAsync({
-          ...data
-        });
+      const formData = new FormData();
+      formData.append('AuthorName', data.authorName);
+      formData.append('DOB', data.dob || '');
+      formData.append('Nationality', data.nationality || '');
+      formData.append('Biography', data.biography || '');
+      if (data.imgFile) {
+        formData.append('ImgFile', data.imgFile);
       }
-      router.push(PATH.AUTHORS);
+      await createAuthor.mutateAsync(formData);
     } catch (error: unknown) {
       console.error('Error author submit:', error);
       toast.error('Có lỗi xảy ra. Vui lòng thử lại.');
     }
+  };
+
+  const handleImageFileChange = (file: File | null) => {
+    setFile((prev) => ({ ...prev, imgFile: file }));
   };
 
   if (authorId && isLoadingAuthor) {
@@ -84,7 +97,7 @@ export function AuthorForm({ authorId }: Props) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
-        <div className='grid grid-cols-3 gap-4'>
+        <div className='grid grid-cols-2 gap-4'>
           <FormField
             control={form.control}
             name='authorName'
@@ -92,7 +105,13 @@ export function AuthorForm({ authorId }: Props) {
               <FormItem>
                 <FormLabel>Tên tác giả</FormLabel>
                 <FormControl>
-                  <Input placeholder='Nhập tên tác giả' {...field} />
+                  <Input
+                    placeholder='Nhập tên tác giả'
+                    className={cn(
+                      form.formState.errors.authorName && 'border-red-500'
+                    )}
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -112,6 +131,7 @@ export function AuthorForm({ authorId }: Props) {
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
             name='nationality'
@@ -121,6 +141,37 @@ export function AuthorForm({ authorId }: Props) {
                 <FormControl>
                   <Input placeholder='Nhập quốc tịch' {...field} />
                 </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name='imgFile'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Ảnh</FormLabel>
+                <FormControl>
+                  <Input
+                    type='file'
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        handleImageFileChange(file);
+                        field.onChange(file);
+                      }
+                    }}
+                    className={cn(
+                      form.formState.errors.imgFile && 'border-red-500'
+                    )}
+                  />
+                </FormControl>
+                {file.imgFile && (
+                  <div className='mt-1 text-sm text-gray-500'>
+                    {file.imgFile.name}
+                  </div>
+                )}
                 <FormMessage />
               </FormItem>
             )}

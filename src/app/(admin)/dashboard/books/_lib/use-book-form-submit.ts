@@ -43,7 +43,6 @@ export function useBookFormSubmit(onSubmit: (formData: FormData) => void) {
       }
 
       if (files.mainFile) {
-        console.log('Main file:', files.mainFile);
         formData.append('MainImageFile', files.mainFile);
       }
 
@@ -51,7 +50,6 @@ export function useBookFormSubmit(onSubmit: (formData: FormData) => void) {
         formData.append('AdditionalImageFiles', file);
       });
 
-      console.log('Form data ready to submit');
       onSubmit(formData);
     } catch (error) {
       console.error('Error preparing form data:', error);

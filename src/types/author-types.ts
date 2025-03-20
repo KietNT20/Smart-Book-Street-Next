@@ -20,8 +20,6 @@ export interface BookAuthor extends BaseEntity {
   author: Author | null;
 }
 
-export type AuthorPayload = Omit<Author, 'id' | 'images' | 'bookAuthors'>;
-
 export type SearchPaginationAuthor = {
   pageNumber: number;
   pageSize: number;
