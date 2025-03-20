@@ -49,6 +49,7 @@ export function LoginForm({
   });
 
   const login = useMutation({
+    mutationKey: ['login'],
     mutationFn: async ({ usernameOrEmail, password }: LoginCredentials) =>
       await signIn('credentials', {
         usernameOrEmail,

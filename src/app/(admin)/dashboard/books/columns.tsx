@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { formateDateVi } from '@/lib/utils';
+import { formateDateVi, formatPrice } from '@/lib/utils';
 import { Book } from '@/types/book-types';
 import { ColumnDef } from '@tanstack/react-table';
 import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react';
@@ -71,14 +71,7 @@ export const createColumns = ({
       </Button>
     ),
     cell: ({ row }) => {
-      const price = parseFloat(row.getValue('price'));
-      if (isNaN(price)) {
-        return '0 ₫';
-      }
-      return new Intl.NumberFormat('vi-VN', {
-        style: 'currency',
-        currency: 'VND'
-      }).format(price);
+      return formatPrice(row.getValue('price'));
     }
   },
   {

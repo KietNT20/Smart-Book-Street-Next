@@ -79,7 +79,7 @@ const BookInfo = ({ book, bookAuthorsRes, bookCategoriesRes }: Props) => {
         <p>Ngày xuất bản: {formateDateVi(book.publicationDate)}</p>
         <p>
           Lần cập nhật cuối:{' '}
-          {book.lastUpdatedBy ? formateDateVi(book.lastUpdatedBy) : ''}
+          {book.lastUpdatedDate ? formateDateVi(book.lastUpdatedDate) : ''}
         </p>
       </div>
     </div>

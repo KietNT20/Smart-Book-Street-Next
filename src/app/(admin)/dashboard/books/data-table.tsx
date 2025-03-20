@@ -233,7 +233,7 @@ export function DataTable<TData, TValue>({
               }}
               disabled={state.pageIndex === 1}
             >
-              Trước
+              Trang trước
             </Button>
             <Button
               variant='outline'
@@ -248,7 +248,7 @@ export function DataTable<TData, TValue>({
               }}
               disabled={state.pageIndex === pageCount}
             >
-              Tiếp
+              Trang sau
             </Button>
           </div>
         </div>

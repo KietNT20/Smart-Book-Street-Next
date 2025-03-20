@@ -89,8 +89,8 @@ export default function BooksDetailPage({
       <ConfirmModal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
-        onConfirm={async () => {
-          await handleDeleteBook();
+        onConfirm={() => {
+          handleDeleteBook();
           setIsDeleteModalOpen(false);
         }}
         title='Xóa sách'
