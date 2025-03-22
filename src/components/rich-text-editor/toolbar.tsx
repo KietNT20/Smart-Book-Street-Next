@@ -1,4 +1,3 @@
-// components/rich-text-editor/toolbar.tsx
 import { Button } from '@/components/ui/button';
 import {
   Select,
