@@ -1,5 +1,6 @@
 'use client';
 
+import RichTextEditor from '@/components/rich-text-editor';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -10,7 +11,6 @@ import {
   FormMessage
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { PATH } from '@/enums/path';
 import { useAuthorMutation, useGetAuthorById } from '@/hooks/use-author';
 import { cn } from '@/lib/utils';
@@ -185,9 +185,9 @@ export function AuthorForm({ authorId }: Props) {
             <FormItem>
               <FormLabel>Tiểu sử</FormLabel>
               <FormControl>
-                <Textarea
-                  placeholder='Nhập tiểu sử tác giả'
-                  className='min-h-[120px]'
+                <RichTextEditor
+                  content={field.value || ''}
+                  placeholder='Nhập mô tả chi tiết về sách...'
                   {...field}
                 />
               </FormControl>

@@ -1,12 +1,17 @@
 import { STORAGE } from '@/constant/storage';
 
-type TokenType = {
-  get: () => any;
-  set: (token: string) => void;
+type TokenTypes = {
+  accessToken: string;
+  refreshToken?: string;
+};
+
+type TokenMethodType = {
+  get: () => TokenTypes;
+  set: (token: TokenTypes) => void;
   remove: () => void;
 };
 
-const localToken: TokenType = {
+const localToken: TokenMethodType = {
   get: () => {
     if (typeof window === 'undefined') return null;
     const token = localStorage.getItem(STORAGE.token);
@@ -24,7 +29,7 @@ const localToken: TokenType = {
   }
 };
 
-const tokenMethod: TokenType = {
+const tokenMethod: TokenMethodType = {
   get: () => localToken.get(),
   set: (token) => {
     console.log('token', token);

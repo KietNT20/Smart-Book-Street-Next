@@ -30,6 +30,7 @@ export const useAuthorMutation = () => {
   });
 
   const createAuthor = useMutation({
+    mutationKey: ['create-author'],
     mutationFn: (formData: FormData) => authorService.create(formData),
     onSuccess: (data) => {
       if (data) {
@@ -44,6 +45,7 @@ export const useAuthorMutation = () => {
   });
 
   const updateAuthor = useMutation({
+    mutationKey: ['update-author'],
     mutationFn: ({ id, formData }: { id: string; formData: FormData }) =>
       authorService.update(id, formData),
     onSuccess: () => {
@@ -55,6 +57,7 @@ export const useAuthorMutation = () => {
   });
 
   const deleteAuthor = useMutation({
+    mutationKey: ['delete-author'],
     mutationFn: (id: string) => authorService.delete(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['authors'] });

@@ -9,18 +9,11 @@ import {
 } from '@/components/ui/card';
 import { PATH } from '@/enums/path';
 import { cn } from '@/lib/utils';
-import { LoginFormValues, loginSchema } from '@/lib/zod';
-import { LoginCredentials } from '@/types/auth-types';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
 import { Eye, EyeOff } from 'lucide-react';
-import { signIn } from 'next-auth/react';
 import Link from 'next/link';
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import GoogleBtn from './google-button/google-btn';
-import { Button } from './ui/button';
+import React from 'react';
+import GoogleButton from '../google-button/google-button';
+import { Button } from '../ui/button';
 import {
   Form,
   FormControl,
@@ -28,65 +21,16 @@ import {
   FormItem,
   FormLabel,
   FormMessage
-} from './ui/form';
-import { Input } from './ui/input';
-import { useRouter } from 'next/navigation';
+} from '../ui/form';
+import { Input } from '../ui/input';
+import { useLoginForm } from './use-login-form';
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<'div'>) {
-  const [showPassword, setShowPassword] = useState(false);
-
-  const router = useRouter();
-
-  const form = useForm<LoginFormValues>({
-    resolver: zodResolver(loginSchema),
-    defaultValues: {
-      usernameOrEmail: '',
-      password: ''
-    }
-  });
-
-  const login = useMutation({
-    mutationKey: ['login'],
-    mutationFn: async ({ usernameOrEmail, password }: LoginCredentials) =>
-      await signIn('credentials', {
-        usernameOrEmail,
-        password,
-        redirect: false
-      }),
-    onSuccess: (data) => {
-      if (data?.error === 'Configuration') {
-        form.setError('usernameOrEmail', {
-          type: 'manual',
-          message: 'Tài khoản hoặc mật khẩu không chính xác, Vui lòng thử lại'
-        });
-        form.setError('password', {
-          type: 'manual',
-          message: 'Tài khoản hoặc mật khẩu không chính xác, Vui lòng thử lại'
-        });
-      }
-      if (data?.url !== null) {
-        router.push(PATH.DASHBOARD);
-        toast.success('Đăng nhập thành công', {
-          description: 'Vui lòng chờ trong giây lát'
-        });
-      }
-    },
-    onError: (error) => {
-      console.log('Error logging in:', error);
-    }
-  });
-
-  const onSubmit = async (values: LoginFormValues) => {
-    const { usernameOrEmail, password } = values;
-    try {
-      await login.mutateAsync({ usernameOrEmail, password });
-    } catch (error) {
-      console.log('Error logging in:', error);
-    }
-  };
+  const { form, login, showPassword, setShowPassword, onSubmit } =
+    useLoginForm();
 
   return (
     <div className={cn('flex flex-col gap-6', className)} {...props}>
@@ -100,7 +44,7 @@ export function LoginForm({
         <CardContent>
           <div className='grid gap-6'>
             <div className='flex flex-col gap-4'>
-              <GoogleBtn />
+              <GoogleButton />
             </div>
             <div className='relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border'>
               <span className='relative z-10 bg-background px-2 text-muted-foreground'>

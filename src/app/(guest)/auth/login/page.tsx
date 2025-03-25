@@ -1,5 +1,5 @@
 import { auth } from '@/auth';
-import { LoginForm } from '@/components/login-form';
+import { LoginForm } from '@/components/form/login-form';
 import { PATH } from '@/enums/path';
 import { GalleryVerticalEnd } from 'lucide-react';
 import { redirect } from 'next/navigation';
