@@ -57,6 +57,7 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
   return (
     <Form {...form}>
       <form
+        action='#'
         onSubmit={form.handleSubmit((values) => handleSubmit(values))}
         className='space-y-4'
       >

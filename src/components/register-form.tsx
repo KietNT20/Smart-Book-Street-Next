@@ -83,7 +83,11 @@ export function RegisterForm({
             </div>
           </div>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
+            <form
+              action='#'
+              onSubmit={form.handleSubmit(onSubmit)}
+              className='space-y-6'
+            >
               <div className='grid gap-6'>
                 <div className='grid gap-4'>
                   {/* Username input */}

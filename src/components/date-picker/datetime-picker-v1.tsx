@@ -18,6 +18,7 @@ import {
   SelectValue
 } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
+import { hours, minutes, months, years } from './date-picker-utils';
 
 interface DateTimePickerProps {
   value: Date;
@@ -31,29 +32,6 @@ export function DateTimePickerV1({
   className
 }: DateTimePickerProps) {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(value);
-
-  const hours = Array.from({ length: 24 }, (_, i) => i);
-
-  const minutes = Array.from({ length: 12 }, (_, i) => i * 5);
-
-  const months = [
-    'Tháng 1',
-    'Tháng 2',
-    'Tháng 3',
-    'Tháng 4',
-    'Tháng 5',
-    'Tháng 6',
-    'Tháng 7',
-    'Tháng 8',
-    'Tháng 9',
-    'Tháng 10',
-    'Tháng 11',
-    'Tháng 12'
-  ];
-
-  // Tạo danh sách năm (10 năm trước và 10 năm sau)
-  const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: 21 }, (_, i) => currentYear - 10 + i);
 
   // Xử lý khi chọn ngày
   const handleSelect = (date: Date | undefined) => {
@@ -118,9 +96,12 @@ export function DateTimePickerV1({
                   <SelectValue placeholder='Tháng' />
                 </SelectTrigger>
                 <SelectContent>
-                  {months.map((month, index) => (
-                    <SelectItem key={index} value={index.toString()}>
-                      {month}
+                  {months.map((month) => (
+                    <SelectItem
+                      key={month.value}
+                      value={month.value.toString()}
+                    >
+                      {month.label}
                     </SelectItem>
                   ))}
                 </SelectContent>
