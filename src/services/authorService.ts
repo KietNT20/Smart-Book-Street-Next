@@ -1,9 +1,5 @@
 import { API_ENDPOINT } from '@/constant/api-url';
-import {
-  Author,
-  AuthorPayload,
-  SearchPaginationAuthor
-} from '@/types/author-types';
+import { SearchPaginationAuthor } from '@/types/author-types';
 import axiosInstance from '@/utils/axiosInstance';
 
 export const authorService = {
@@ -24,18 +20,24 @@ export const authorService = {
     );
     return res.data;
   },
-  create: async (payload: Partial<AuthorPayload>) => {
-    const res = await axiosInstance.post(API_ENDPOINT.AUTHORS.ADD, payload);
+  create: async (formData: FormData) => {
+    const res = await axiosInstance.post(API_ENDPOINT.AUTHORS.ADD, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    });
     return res.data;
   },
-  update: async (payload: Partial<Omit<Author, 'images' | 'bookAuthors'>>) => {
-    const res = await axiosInstance.put(API_ENDPOINT.AUTHORS.UPDATE, payload);
+  update: async (id: string, formData: FormData) => {
+    const res = await axiosInstance.put(
+      `${API_ENDPOINT.AUTHORS.UPDATE}/${id}`,
+      formData,
+      {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      }
+    );
     return res.data;
   },
   delete: async (id: string) => {
-    const res = await axiosInstance.put(
-      `${API_ENDPOINT.AUTHORS.DELETE}?id=${id}`
-    );
+    const res = await axiosInstance.put(`${API_ENDPOINT.AUTHORS.DELETE}/${id}`);
     return res.data;
   }
 };

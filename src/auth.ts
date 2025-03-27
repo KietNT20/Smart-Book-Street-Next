@@ -24,29 +24,25 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         password: {}
       },
       authorize: async (credentials) => {
-        const { usernameOrEmail, password } = credentials;
-
-        if (!usernameOrEmail || !password) {
-          return null;
-        }
-
         try {
           const res = await fetch(
             `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINT.USERS.LOGIN}`,
             {
               method: 'POST',
               headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json'
+                'Content-Type': 'application/json'
               },
-              body: JSON.stringify({ usernameOrEmail, password })
+              body: JSON.stringify({
+                usernameOrEmail: credentials?.usernameOrEmail,
+                password: credentials?.password
+              })
             }
           );
 
           if (!res.ok) {
             const errorText = await res.text();
             console.error('API error response:', errorText);
-            throw new Error(`Login failed: ${res.status} ${res.statusText}`);
+            return null;
           }
 
           let data;

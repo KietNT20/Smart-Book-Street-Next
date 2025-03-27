@@ -1,7 +1,6 @@
 import { format } from 'date-fns';
 import { vi } from 'date-fns/locale';
 import { Calendar as CalendarIcon } from 'lucide-react';
-import * as React from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -18,6 +17,8 @@ import {
   SelectValue
 } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
+import React from 'react';
+import { months, years } from './date-picker-utils';
 
 interface DatePickerProps {
   date: Date | undefined;
@@ -40,37 +41,14 @@ export function DatePickerV1({
     date ? date.getFullYear() : new Date().getFullYear()
   );
 
-  // Tạo các mảng tháng và năm để hiển thị trong select
-  const months = [
-    { value: 0, label: 'Tháng 1' },
-    { value: 1, label: 'Tháng 2' },
-    { value: 2, label: 'Tháng 3' },
-    { value: 3, label: 'Tháng 4' },
-    { value: 4, label: 'Tháng 5' },
-    { value: 5, label: 'Tháng 6' },
-    { value: 6, label: 'Tháng 7' },
-    { value: 7, label: 'Tháng 8' },
-    { value: 8, label: 'Tháng 9' },
-    { value: 9, label: 'Tháng 10' },
-    { value: 10, label: 'Tháng 11' },
-    { value: 11, label: 'Tháng 12' }
-  ];
-
-  // Tạo mảng năm từ năm hiện tại đến 10 năm trước và 10 năm sau
-  const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: 21 }, (_, i) => currentYear - 10 + i);
-
-  // Xử lý khi chọn tháng
   const handleMonthChange = (value: string) => {
     setMonth(parseInt(value));
   };
 
-  // Xử lý khi chọn năm
   const handleYearChange = (value: string) => {
     setYear(parseInt(value));
   };
 
-  // Cập nhật tháng và năm khi date thay đổi từ bên ngoài
   React.useEffect(() => {
     if (date) {
       setMonth(date.getMonth());
@@ -104,9 +82,9 @@ export function DatePickerV1({
               <SelectValue placeholder='Chọn tháng' />
             </SelectTrigger>
             <SelectContent>
-              {months.map((m) => (
-                <SelectItem key={m.value} value={m.value.toString()}>
-                  {m.label}
+              {months.map((month) => (
+                <SelectItem key={month.value} value={month.value.toString()}>
+                  {month.label}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -116,9 +94,9 @@ export function DatePickerV1({
               <SelectValue placeholder='Chọn năm' />
             </SelectTrigger>
             <SelectContent>
-              {years.map((y) => (
-                <SelectItem key={y} value={y.toString()}>
-                  {y}
+              {years.map((year) => (
+                <SelectItem key={year} value={year.toString()}>
+                  {year}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -137,7 +115,7 @@ export function DatePickerV1({
             setYear(date.getFullYear());
           }}
           locale={vi}
-          className='border-t'
+          className='rounded-md border shadow'
         />
       </PopoverContent>
     </Popover>

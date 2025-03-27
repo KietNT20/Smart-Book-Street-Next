@@ -1,18 +1,15 @@
 'use client';
 
 import { ConfirmModal } from '@/components/confirm-modal';
-import { Button } from '@/components/ui/button';
-import { PATH } from '@/enums/path';
+import { Sort } from '@/enums/enums';
 import useDebounce from '@/hooks/useDebounce';
 import { Book, BookSearchCriteria } from '@/types/book-types';
-import { Plus, Search, X } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { BookToolbar } from './_components/book-toolbar';
 import { SearchBookModal } from './_components/search-book-modal';
 import { useBookList } from './_lib/use-book-operations';
 import { useBookPageState } from './_lib/use-book-page-state';
 import { createColumns } from './columns';
 import { DataTable } from './data-table';
-import { Sort } from '@/enums/enums';
 
 export default function BooksPage() {
   const {
@@ -41,8 +38,6 @@ export default function BooksPage() {
     }
   });
 
-  const router = useRouter();
-
   const handleSearch = (criteria: Partial<BookSearchCriteria>) => {
     setSearchCriteria(criteria);
     setPagination((prev) => ({ ...prev, pageIndex: 1 }));
@@ -55,31 +50,11 @@ export default function BooksPage() {
 
   return (
     <div className='space-y-4'>
-      <div className='flex items-center justify-between'>
-        <h2 className='text-2xl font-bold'>Quản lý sách</h2>
-        <div className='flex items-center gap-2'>
-          {hasFilters() && (
-            <Button
-              variant='outline'
-              onClick={resetAllFilters}
-              className='gap-2'
-            >
-              <X className='h-4 w-4' />
-              Đặt lại bộ lọc
-            </Button>
-          )}
-          <Button
-            variant='outline'
-            onClick={() => setModalState({ type: 'search' })}
-          >
-            <Search className='mr-2 h-4 w-4' />
-            Tìm kiếm
-          </Button>
-          <Button onClick={() => router.push(`${PATH.BOOKS}/create`)}>
-            <Plus className='mr-2 h-4 w-4' /> Thêm sách mới
-          </Button>
-        </div>
-      </div>
+      <BookToolbar
+        hasFilters={hasFilters()}
+        onResetFilters={resetAllFilters}
+        onOpenSearch={() => setModalState({ type: 'search' })}
+      />
 
       <DataTable
         columns={columns}

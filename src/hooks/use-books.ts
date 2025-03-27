@@ -9,7 +9,7 @@ export const useBookMutations = () => {
   const router = useRouter();
 
   const createBookMutation = useMutation({
-    mutationKey: ['createBook'],
+    mutationKey: ['create-book'],
     mutationFn: (formData: FormData) => bookService.create(formData),
     onSuccess: (data) => {
       if (data?.isSuccess) {
@@ -25,7 +25,7 @@ export const useBookMutations = () => {
   });
 
   const updateBookMutation = useMutation({
-    mutationKey: ['updateBook'],
+    mutationKey: ['update-book'],
     mutationFn: ({ id, formData }: { id: string; formData: FormData }) => {
       console.log('Calling update API with id:', id);
       return bookService.update(id, formData);
@@ -44,7 +44,7 @@ export const useBookMutations = () => {
   });
 
   const deleteBookMutation = useMutation({
-    mutationKey: ['deleteBook'],
+    mutationKey: ['delete-book'],
     mutationFn: (id: string) => bookService.delete(id),
     onSuccess: () => {
       toast.success('Đã xóa sách');

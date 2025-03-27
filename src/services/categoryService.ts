@@ -33,5 +33,11 @@ export const categoryService = {
       payload
     );
     return res.data;
+  },
+  delete: async (id: string) => {
+    const res = await axiosInstance.delete(
+      `${API_ENDPOINT.CATEGORIES.DELETE}/${id}`
+    );
+    return res.data;
   }
 };

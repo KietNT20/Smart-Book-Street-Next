@@ -20,10 +20,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en'>
+    <html lang='en' suppressHydrationWarning={true}>
       <body
         className={`${roboto.className} antialiased`}
-        suppressHydrationWarning
+        suppressHydrationWarning={true}
       >
         <Provider>{children}</Provider>
         <Toaster richColors />
