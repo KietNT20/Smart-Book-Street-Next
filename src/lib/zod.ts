@@ -2,6 +2,7 @@ import { REGEX } from '@/constant/regex';
 import { Gender } from '@/enums/gender-enums';
 import * as z from 'zod';
 
+// Login form
 export type LoginFormValues = z.infer<typeof loginSchema>;
 
 export const loginSchema = z.object({
@@ -25,6 +26,7 @@ export const loginSchema = z.object({
 
 export type RegisterFormValues = z.infer<typeof registerSchema>;
 
+// Register form
 export const registerSchema = z.object({
   userName: z.string().min(1, { message: 'Vui lòng nghĩ tên đăng nhập' }),
   email: z
@@ -63,6 +65,7 @@ export const registerSchema = z.object({
   gender: z.enum([Gender.Male, Gender.Female]).optional()
 });
 
+// Book form
 export const bookSchema = z.object({
   code: z.string().min(1, { message: 'Mã sách không được để trống' }),
   title: z.string().min(1, { message: 'Tên sách không được để trống' }),
@@ -114,6 +117,7 @@ export const searchBookSchema = z
 
 export type SearchBookFormValues = z.infer<typeof searchBookSchema>;
 
+// Author form
 export const authorFormSchema = z.object({
   authorName: z.string().min(1, 'Tên tác giả là bắt buộc'),
   dob: z.string().date().optional(),
