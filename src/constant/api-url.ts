@@ -1,5 +1,5 @@
 // Note: API URL constants
-const USER = '/user';
+const USER = '/users';
 const USER_ROLE = '/UserRole';
 const ROLE = '/Role';
 const AUTHOR = '/Author';

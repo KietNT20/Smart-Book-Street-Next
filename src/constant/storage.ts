@@ -1,3 +1,3 @@
 export const STORAGE = {
-  token: 'token-sbs-cms'
+  token: 'jwt_token'
 };
