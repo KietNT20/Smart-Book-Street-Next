@@ -19,7 +19,7 @@ import StarterKit from '@tiptap/starter-kit';
 import { useCallback, useEffect, useState } from 'react';
 import LinkModal from './link-modal';
 import { customStyles } from './styles';
-import RichTextToolbar from './toolbar';
+import RichTextToolbar from './richtext-toolbar';
 
 interface RichTextEditorProps {
   content: string;
@@ -50,9 +50,9 @@ const RichTextEditor = ({
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
-        heading: false, // Sẽ cấu hình riêng
-        bulletList: false, // Sẽ cấu hình riêng
-        orderedList: false // Sẽ cấu hình riêng
+        heading: false,
+        bulletList: false,
+        orderedList: false
       }),
       Underline,
       Document,
@@ -126,14 +126,13 @@ const RichTextEditor = ({
     editable: !readOnly
   });
 
-  // Cập nhật content từ props khi thay đổi từ bên ngoài
+  // Update content when editor changes
   useEffect(() => {
     if (editor && content !== editor.getHTML()) {
       editor.commands.setContent(content);
     }
   }, [editor, content]);
 
-  // Các hàm xử lý
   const addLink = useCallback(() => {
     if (!editor) return;
     const previousUrl = editor.getAttributes('link').href || '';
@@ -150,7 +149,6 @@ const RichTextEditor = ({
         return;
       }
 
-      // Tự động thêm http:// nếu URL không có protocol
       if (url && !/^https?:\/\//i.test(url)) {
         url = 'https://' + url;
       }
@@ -168,7 +166,6 @@ const RichTextEditor = ({
   const addImage = useCallback(() => {
     if (!editor) return;
 
-    // Tạo một input file ẩn
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = 'image/*';
@@ -176,7 +173,6 @@ const RichTextEditor = ({
     input.onchange = (event) => {
       const file = (event.target as HTMLInputElement).files?.[0];
       if (file) {
-        // Sử dụng URL.createObjectURL (không upload)
         const url = URL.createObjectURL(file);
         editor.chain().focus().setImage({ src: url }).run();
       }
@@ -185,7 +181,6 @@ const RichTextEditor = ({
     input.click();
   }, [editor]);
 
-  // Sửa lỗi insertTable
   const addTable = useCallback(() => {
     if (!editor) return;
     editor

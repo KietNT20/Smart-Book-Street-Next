@@ -1,5 +1,5 @@
 import { REGEX } from '@/constant/regex';
-import { Gender } from '@/enums/gender-enums';
+import { Gender } from '@/enums/gender';
 import * as z from 'zod';
 
 // Login form

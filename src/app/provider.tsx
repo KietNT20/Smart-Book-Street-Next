@@ -1,6 +1,5 @@
 import { ThemeProvider } from '@/components/theme-provider';
 import QueryProvider from '@/providers/QueryProvider';
-import { SessionProvider } from 'next-auth/react';
 import type { ReactNode } from 'react';
 
 type Props = {
@@ -16,7 +15,7 @@ const Provider = ({ children }: Props) => {
         enableSystem
         disableTransitionOnChange
       >
-        <SessionProvider>{children}</SessionProvider>
+        {children}
       </ThemeProvider>
     </QueryProvider>
   );

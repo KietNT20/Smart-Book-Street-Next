@@ -1,4 +1,4 @@
-import { RoleEnums } from '@/enums/role-enums';
+import { RoleEnums } from '@/enums/role';
 import 'next-auth';
 import { DefaultSession } from 'next-auth';
 import 'next-auth/jwt';

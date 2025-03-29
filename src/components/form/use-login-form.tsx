@@ -1,17 +1,17 @@
 import { PATH } from '@/enums/path';
 import { LoginFormValues, loginSchema } from '@/lib/zod';
+import { userService } from '@/services/userService';
 import { LoginCredentials } from '@/types/auth-types';
+import tokenMethod from '@/utils/token';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import { AuthError } from 'next-auth';
-import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 export const useLoginForm = () => {
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const router = useRouter();
 
@@ -25,45 +25,22 @@ export const useLoginForm = () => {
 
   const login = useMutation({
     mutationKey: ['login'],
-    mutationFn: async ({ usernameOrEmail, password }: LoginCredentials) => {
-      try {
-        const result = await signIn('credentials', {
-          usernameOrEmail,
-          password,
-          redirect: false
-        });
-        return result;
-      } catch (error) {
-        if (error instanceof AuthError) {
-          switch (error.type) {
-            case 'CredentialsSignin':
-              throw new Error('Tài khoản hoặc mật khẩu không chính xác');
-            default:
-              throw new Error('Đã xảy ra lỗi trong quá trình đăng nhập');
-          }
-        }
-        throw error;
-      }
-    },
+    mutationFn: async ({ usernameOrEmail, password }: LoginCredentials) =>
+      userService.login({ usernameOrEmail, password }),
     onSuccess: (data) => {
       if (!data?.error) {
+        if (data.token) {
+          tokenMethod.set({
+            accessToken: data.token,
+            refreshToken: data.refreshToken
+          });
+        }
         router.push(PATH.DASHBOARD);
         toast.success('Đăng nhập thành công', {
           id: 'login-success',
           description: 'Vui lòng chờ trong giây lát'
         });
         form.reset();
-      } else if (data.error === 'Configuration') {
-        form.setError('usernameOrEmail', {
-          type: 'manual',
-          message: 'Tài khoản hoặc mật khẩu không chính xác, Vui lòng thử lại'
-        });
-        form.setError('password', {
-          type: 'manual',
-          message: 'Tài khoản hoặc mật khẩu không chính xác, Vui lòng thử lại'
-        });
-      } else {
-        console.log('Other Error', data.error);
       }
     },
     onError: (error) => {

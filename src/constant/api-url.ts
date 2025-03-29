@@ -7,13 +7,13 @@ const BOOK = '/book';
 const BOOK_AUTHOR = '/BookAuthor';
 const BOOK_CATEGORY = '/BookCategory';
 const BOOK_STORE = '/bookStore';
-const CATEGORY = '/Category';
-const EVENT = '/Event';
-const IMAGE = '/Image';
+const CATEGORY = '/categories';
+const EVENT = '/events';
+const IMAGE = '/images';
 const INVENTORY = '/inventory';
 const PUBLISHER = '/publisher';
-const STREET = '/Street';
-const ZONE = '/Zone';
+const STREET = '/streets';
+const ZONE = '/zone';
 
 export const API_ENDPOINT = {
   AUTHORS: {

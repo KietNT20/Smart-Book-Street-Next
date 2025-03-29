@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/card';
-import { Gender } from '@/enums/gender-enums';
+import { Gender } from '@/enums/gender';
 import { PATH } from '@/enums/path';
 import { useRegister } from '@/hooks/use-auth';
 import { cn } from '@/lib/utils';

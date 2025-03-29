@@ -16,7 +16,8 @@ import {
   SidebarMenuItem,
   useSidebar
 } from '@/components/ui/sidebar';
-import { useLogout } from '@/hooks/use-auth';
+import { PATH } from '@/enums/path';
+import tokenMethod from '@/utils/token';
 import {
   BadgeCheck,
   Bell,
@@ -26,16 +27,15 @@ import {
   Settings,
   Sparkles
 } from 'lucide-react';
-import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 export function NavUser() {
   const { isMobile } = useSidebar();
-  const logout = useLogout();
-  const { data: session } = useSession();
-  const user = session?.user;
+  const router = useRouter();
 
-  const handleLogout = () => {
-    logout.mutate();
+  const _onLogout = (): void => {
+    tokenMethod.remove();
+    router.push(PATH.LOGIN);
   };
 
   return (
@@ -48,17 +48,12 @@ export function NavUser() {
               className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
             >
               <Avatar className='h-8 w-8 rounded-lg'>
-                <AvatarImage
-                  src={user?.image || ''}
-                  alt={user?.userName || user?.name || ''}
-                />
+                <AvatarImage src={'#'} alt={'#'} />
                 <AvatarFallback className='rounded-lg'>CN</AvatarFallback>
               </Avatar>
               <div className='grid flex-1 text-left text-sm leading-tight'>
-                <span className='truncate font-semibold'>
-                  {user?.userName || user?.name}
-                </span>
-                <span className='truncate text-xs'>{user?.email}</span>
+                <span className='truncate font-semibold'>{'ShadCN'}</span>
+                <span className='truncate text-xs'>{'shadcn@example.com'}</span>
               </div>
               <ChevronsUpDown className='ml-auto size-4' />
             </SidebarMenuButton>
@@ -72,17 +67,14 @@ export function NavUser() {
             <DropdownMenuLabel className='p-0 font-normal'>
               <div className='flex items-center gap-2 px-1 py-1.5 text-left text-sm'>
                 <Avatar className='h-8 w-8 rounded-lg'>
-                  <AvatarImage
-                    src={user?.image || ''}
-                    alt={user?.userName || user?.name || ''}
-                  />
+                  <AvatarImage src={'#'} alt={'#'} />
                   <AvatarFallback className='rounded-lg'>CN</AvatarFallback>
                 </Avatar>
                 <div className='grid flex-1 text-left text-sm leading-tight'>
-                  <span className='truncate font-semibold'>
-                    {user?.userName}
+                  <span className='truncate font-semibold'>{'ShadCN'}</span>
+                  <span className='truncate text-xs'>
+                    {'shadcn@example.com'}
                   </span>
-                  <span className='truncate text-xs'>{user?.email}</span>
                 </div>
               </div>
             </DropdownMenuLabel>
@@ -114,12 +106,11 @@ export function NavUser() {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem
-              onClick={handleLogout}
-              disabled={logout.isPending}
+              onClick={_onLogout}
               className='text-red-500 focus:text-red-500'
             >
               <LogOut />
-              {logout.isPending ? 'Đang đăng xuất...' : 'Đăng xuất'}
+              {'Đăng xuất'}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

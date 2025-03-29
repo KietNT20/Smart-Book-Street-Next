@@ -2,20 +2,11 @@ import { PATH } from '@/enums/path';
 import { userService } from '@/services/userService';
 import { RegisterRequestBody } from '@/types/auth-types';
 import { useMutation } from '@tanstack/react-query';
-import { signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
-export const useLogout = () => {
-  return useMutation({
-    mutationKey: ['logout'],
-    mutationFn: () => signOut()
-  });
-};
-
 export const useRegister = () => {
   const router = useRouter();
-
   return useMutation({
     mutationKey: ['register'],
     mutationFn: (payload: RegisterRequestBody) => userService.register(payload),
