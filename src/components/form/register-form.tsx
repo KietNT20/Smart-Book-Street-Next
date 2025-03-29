@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/card';
-import { Gender } from '@/enums/gender-enums';
+import { Gender } from '@/enums/gender';
 import { PATH } from '@/enums/path';
 import { useRegister } from '@/hooks/use-auth';
 import { cn } from '@/lib/utils';
@@ -18,8 +18,7 @@ import { Eye, EyeOff } from 'lucide-react';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import GoogleButton from './google-button/google-button';
-import { Button } from './ui/button';
+import GoogleBtn from '../google-button/google-btn';
 import {
   Form,
   FormControl,
@@ -27,10 +26,11 @@ import {
   FormItem,
   FormLabel,
   FormMessage
-} from './ui/form';
-import { Input } from './ui/input';
-import { Label } from './ui/label';
-import { RadioGroup, RadioGroupItem } from './ui/radio-group';
+} from '../ui/form';
+import { Input } from '../ui/input';
+import { Button } from '../ui/button';
+import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
+import { Label } from '../ui/label';
 
 export function RegisterForm({
   className,
@@ -74,7 +74,7 @@ export function RegisterForm({
         <CardContent>
           <div className='mb-3 grid gap-6'>
             <div className='flex flex-col gap-4'>
-              <GoogleButton />
+              <GoogleBtn />
               <div className='relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border'>
                 <span className='relative z-10 bg-background px-2 text-muted-foreground'>
                   Hoặc đăng ký bằng thông tin
@@ -83,7 +83,11 @@ export function RegisterForm({
             </div>
           </div>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
+            <form
+              action='#'
+              onSubmit={form.handleSubmit(onSubmit)}
+              className='space-y-6'
+            >
               <div className='grid gap-6'>
                 <div className='grid gap-4'>
                   {/* Username input */}

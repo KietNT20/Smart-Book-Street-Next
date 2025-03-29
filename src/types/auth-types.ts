@@ -1,4 +1,4 @@
-import { Gender } from '@/enums/gender-enums';
+import { Gender } from '@/enums/gender';
 import { BaseEntity } from './common-types';
 import { Role } from './user-types';
 

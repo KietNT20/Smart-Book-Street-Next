@@ -5,8 +5,7 @@ import axios, {
   AxiosInstance,
   InternalAxiosRequestConfig
 } from 'axios';
-import { getSession } from 'next-auth/react';
-import { redirect } from 'next/navigation';
+import tokenMethod from './token';
 
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: BASE_URL
@@ -16,9 +15,9 @@ axiosInstance.interceptors.request.use(
   async function (config: InternalAxiosRequestConfig) {
     // Do something before request is sent
     if (typeof window !== 'undefined') {
-      const session = await getSession();
-      if (session) {
-        config.headers.Authorization = `Bearer ${session.access_token}`;
+      const token = tokenMethod.get();
+      if (token) {
+        config.headers.Authorization = `Bearer ${token.accessToken}`;
       }
     }
     return config;
@@ -38,10 +37,9 @@ axiosInstance.interceptors.response.use(
   function (error: AxiosError) {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
-    if (typeof window !== 'undefined') {
-      if (error.response?.status === 401 || error.response?.status === 403) {
-        redirect(PATH.LOGIN);
-      }
+    if (error.response?.status === 401 || error.response?.status === 403) {
+      tokenMethod.remove(); // Xóa token
+      window.location.href = PATH.LOGIN; // Chuyển hướng bằng window.location
     }
     return Promise.reject(error);
   }

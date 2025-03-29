@@ -8,13 +8,6 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 import { searchBookSchema, type SearchBookFormValues } from '@/lib/zod';
 import { BookSearchCriteria } from '@/types/book-types';
@@ -169,20 +162,11 @@ export function SearchBookModal({ isOpen, onClose, onSearch }: Props) {
                 Trạng thái
               </Label>
               <div className='col-span-3'>
-                <Select
-                  value={form.watch('status')}
-                  onValueChange={(value) => form.setValue('status', value)}
-                >
-                  <SelectTrigger
-                    className={cn(errors.status && 'border-red-500')}
-                  >
-                    <SelectValue placeholder='Chọn trạng thái' />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value='new'>Sách mới</SelectItem>
-                    <SelectItem value='used'>Đã qua sử dụng</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Input
+                  id='status'
+                  {...form.register('status')}
+                  className={cn(errors.status && 'border-red-500')}
+                />
                 {errors.status && (
                   <span className='text-sm text-red-500'>
                     {errors.status.message}

@@ -31,7 +31,7 @@ export default function DashboardLayout({
                 </div>
               </div>
             </header>
-            <main className='p-4'>{children}</main>
+            <main className='p-2'>{children}</main>
           </div>
         </SidebarInset>
       </div>

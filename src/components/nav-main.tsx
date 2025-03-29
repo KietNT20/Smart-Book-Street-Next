@@ -63,9 +63,7 @@ export function NavMain({ items }: Props) {
                         <Link
                           href={subItem.url}
                           className={cn(
-                            pathname === subItem.url
-                              ? 'bg-yellow-300 text-zinc-800'
-                              : ''
+                            pathname === subItem.url ? 'bg-primary' : ''
                           )}
                         >
                           <span>{subItem.title}</span>

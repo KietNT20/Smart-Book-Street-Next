@@ -1,4 +1,4 @@
-import { RoleEnums } from '@/enums/role-enums';
+import { RoleEnums } from '@/enums/role';
 import { BaseEntity } from './common-types';
 
 export interface Role extends BaseEntity {

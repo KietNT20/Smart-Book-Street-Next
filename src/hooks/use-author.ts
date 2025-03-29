@@ -1,10 +1,8 @@
+import { PATH } from '@/enums/path';
 import { authorService } from '@/services/authorService';
-import {
-  Author,
-  AuthorPayload,
-  SearchPaginationAuthor
-} from '@/types/author-types';
+import { SearchPaginationAuthor } from '@/types/author-types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
 export const useGetAuthorById = <T>(id: string) => {
@@ -23,6 +21,7 @@ export const useSearchPaginationAuthor = (params: SearchPaginationAuthor) => {
 
 export const useAuthorMutation = () => {
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const searchAuthorName = useMutation({
     mutationKey: ['search-author-name'],
@@ -31,11 +30,12 @@ export const useAuthorMutation = () => {
   });
 
   const createAuthor = useMutation({
-    mutationFn: (payload: Partial<AuthorPayload>) =>
-      authorService.create(payload),
+    mutationKey: ['create-author'],
+    mutationFn: (formData: FormData) => authorService.create(formData),
     onSuccess: (data) => {
       if (data) {
         toast.success('Thêm tác giả thành công');
+        router.push(PATH.AUTHORS);
       }
       queryClient.invalidateQueries({ queryKey: ['authors'] });
     },
@@ -45,8 +45,9 @@ export const useAuthorMutation = () => {
   });
 
   const updateAuthor = useMutation({
-    mutationFn: (payload: Partial<Omit<Author, 'images' | 'bookAuthors'>>) =>
-      authorService.update(payload),
+    mutationKey: ['update-author'],
+    mutationFn: ({ id, formData }: { id: string; formData: FormData }) =>
+      authorService.update(id, formData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['authors'] });
     },
@@ -56,6 +57,7 @@ export const useAuthorMutation = () => {
   });
 
   const deleteAuthor = useMutation({
+    mutationKey: ['delete-author'],
     mutationFn: (id: string) => authorService.delete(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['authors'] });

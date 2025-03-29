@@ -1,33 +1,57 @@
-import { NextResponse } from 'next/server';
-import { auth } from './auth';
-import { PATH } from './enums/path';
+import { PATH } from '@/enums/path';
+import { NextRequest, NextResponse } from 'next/server';
+import { STORAGE } from './constant/storage';
 
-const publicRoutes = ['/', PATH.LOGIN, PATH.REGISTER];
+// Define public paths that don't require authentication
+const publicPaths = [PATH.LOGIN, PATH.REGISTER];
 
-export default auth((req) => {
-  const isPublicRoute = publicRoutes.includes(req.nextUrl.pathname);
+export function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
 
-  if (isPublicRoute) {
-    return NextResponse.next();
+  // Get authentication status
+  const tokenCookie = request.cookies.get(STORAGE.token);
+  const isAuthenticated = !!tokenCookie?.value;
+
+  // Handle root path redirection
+  if (pathname === PATH.HOME) {
+    if (isAuthenticated) {
+      return NextResponse.redirect(new URL(PATH.DASHBOARD, request.url));
+    } else {
+      return NextResponse.redirect(new URL(PATH.LOGIN, request.url));
+    }
   }
 
-  // Check user authentication
-  if (!req.auth) {
-    return Response.redirect(new URL(PATH.LOGIN, req.url));
+  // Check if the requested path is public
+  const isPublicPath = publicPaths.some(
+    (path) => pathname === path || pathname.startsWith(`${path}/`)
+  );
+
+  // If authenticated and trying to access auth pages, redirect to dashboard
+  if (isAuthenticated && isPublicPath) {
+    return NextResponse.redirect(new URL(PATH.DASHBOARD, request.url));
+  }
+
+  // If not authenticated and trying to access protected pages, redirect to login
+  if (!isAuthenticated && !isPublicPath) {
+    const url = new URL(PATH.LOGIN, request.url);
+    // Add "from" parameter to redirect back after login
+    url.searchParams.set('from', pathname);
+    return NextResponse.redirect(url);
   }
 
   return NextResponse.next();
-});
+}
 
 export const config = {
   matcher: [
     /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico, sitemap.xml, robots.txt (metadata files)
+     * Match all paths except for:
+     * 1. /api routes
+     * 2. /_next (Next.js internals)
+     * 3. /_static (static files)
+     * 4. /_vercel (Vercel internals)
+     * 5. /favicon.ico, /sitemap.xml, /robots.txt (public files)
      */
-    '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)'
+    '/((?!api|_next|_static|_vercel|favicon.ico|sitemap.xml|robots.txt).*)'
   ]
 };

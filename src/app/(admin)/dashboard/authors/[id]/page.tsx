@@ -1,6 +1,6 @@
 const AuthorDetailPage = ({ params }: { params: { id: string } }) => {
   console.log(params);
-  return <div>AuthorDetailPage</div>;
+  return <div></div>;
 };
 
 export default AuthorDetailPage;

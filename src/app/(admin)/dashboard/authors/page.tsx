@@ -9,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
+import { Sort } from '@/enums/enums';
 import { PATH } from '@/enums/path';
 import { useSearchPaginationAuthor } from '@/hooks/use-author';
 import useDebounce from '@/hooks/useDebounce';
@@ -22,8 +23,8 @@ const AuthorsPage = () => {
   const [searchParams, setSearchParams] = useState<SearchPaginationAuthor>({
     pageNumber: 1,
     pageSize: 10,
-    sortOrder: 0,
-    sortField: '',
+    sortOrder: Sort.DESC,
+    sortField: 'authorName',
     result: {
       authorName: ''
     }
@@ -56,6 +57,14 @@ const AuthorsPage = () => {
     }));
   };
 
+  const handleSortFieldChange = (value: string) => {
+    setSearchParams((prev) => ({
+      ...prev,
+      pageNumber: 1,
+      sortField: value
+    }));
+  };
+
   const handlePageChange = (page: number) => {
     setSearchParams((prev) => ({
       ...prev,
@@ -77,7 +86,7 @@ const AuthorsPage = () => {
         <div className='flex items-center justify-between'>
           <h1 className='text-2xl font-bold'>Quản lý Tác giả</h1>
           <Link href={`${PATH.AUTHORS}/create`}>
-            <Button variant='default'>Thêm tác giả mới</Button>
+            <Button>Thêm tác giả mới</Button>
           </Link>
         </div>
 
@@ -100,7 +109,26 @@ const AuthorsPage = () => {
 
           <div className='w-48'>
             <label className='mb-2 block text-sm font-medium'>
-              Sắp xếp theo ngày tạo
+              Chọn trường sắp xếp
+            </label>
+            <Select
+              value={searchParams.sortField}
+              onValueChange={handleSortFieldChange}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder='Chọn trường sắp xếp' />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value='authorName'>Tên tác giả</SelectItem>
+                <SelectItem value='dob'>Ngày sinh</SelectItem>
+                <SelectItem value='nationality'>Quốc tịch</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className='w-48'>
+            <label className='mb-2 block text-sm font-medium'>
+              Chọn kiểu sắp xếp
             </label>
             <Select
               value={searchParams.sortOrder.toString()}
@@ -110,9 +138,8 @@ const AuthorsPage = () => {
                 <SelectValue placeholder='Chọn kiểu sắp xếp' />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value='0'>Mặc định</SelectItem>
-                <SelectItem value='1'>Tăng dần</SelectItem>
-                <SelectItem value='2'>Giảm dần</SelectItem>
+                <SelectItem value={`${Sort.ASC}`}>Tăng dần</SelectItem>
+                <SelectItem value={`${Sort.DESC}`}>Giảm dần</SelectItem>
               </SelectContent>
             </Select>
           </div>

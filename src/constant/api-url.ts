@@ -1,19 +1,19 @@
 // Note: API URL constants
-const USER = '/api/user';
-const USER_ROLE = '/api/UserRole';
-const ROLE = '/api/Role';
-const AUTHOR = '/api/Author';
-const BOOK = '/api/book';
-const BOOK_AUTHOR = '/api/BookAuthor';
-const BOOK_CATEGORY = '/api/BookCategory';
-const BOOK_STORE = '/api/bookStore';
-const CATEGORY = '/api/Category';
-const EVENT = '/api/Event';
-const IMAGE = '/api/Image';
-const INVENTORY = '/api/inventory';
-const PUBLISHER = '/api/publisher';
-const STREET = '/api/Street';
-const ZONE = '/api/Zone';
+const USER = '/user';
+const USER_ROLE = '/UserRole';
+const ROLE = '/Role';
+const AUTHOR = '/Author';
+const BOOK = '/book';
+const BOOK_AUTHOR = '/BookAuthor';
+const BOOK_CATEGORY = '/BookCategory';
+const BOOK_STORE = '/bookStore';
+const CATEGORY = '/categories';
+const EVENT = '/events';
+const IMAGE = '/images';
+const INVENTORY = '/inventory';
+const PUBLISHER = '/publisher';
+const STREET = '/streets';
+const ZONE = '/zone';
 
 export const API_ENDPOINT = {
   AUTHORS: {
