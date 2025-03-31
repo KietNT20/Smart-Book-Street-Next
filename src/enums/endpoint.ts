@@ -1,18 +1,18 @@
 export enum API_ENDPOINT {
   AUTHOR = '/authors',
   BOOK = '/books',
-  BOOK_AUTHOR = '/book-author',
+  BOOK_AUTHOR = '/book-authors',
   BOOK_CATEGORY = '/book-categories',
   CATEGORY = '/categories',
   EVENT = '/events',
   IMAGE = '/images',
   INVENTORY = '/inventories',
-  PUBLISHER = '/publisher',
-  ROLE = '/Role',
+  PUBLISHER = '/publishers',
+  ROLE = '/roles',
   SOUVENIR = '/souvenirs',
   STORE = '/stores',
   STREET = '/streets',
   USER = '/users',
-  USER_ROLE = '/UserRole',
+  USER_ROLE = '/user-roles',
   ZONE = '/zones'
 }

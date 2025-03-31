@@ -1,5 +1,5 @@
 import { publisherService } from '@/services/publisherService';
-import { SearchPublisher } from '@/types/publisher-types';
+import { PublisherSearch } from '@/types/publisher-types';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
 export const usePublisherQuery = () => {
@@ -15,7 +15,7 @@ export const usePublisherQuery = () => {
 
 export const usePublisherMutation = () => {
   const searchPublisher = useMutation({
-    mutationFn: (search: Partial<SearchPublisher>) =>
+    mutationFn: (search: Partial<PublisherSearch>) =>
       publisherService.search(search)
   });
   return { searchPublisher };

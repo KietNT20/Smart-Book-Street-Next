@@ -32,7 +32,7 @@ export default function BooksDetailPage({
 
   const handleDeleteBook = () => {
     deleteBookMutation.mutate(params.id);
-    router.push(PATH.BOOKS);
+    router.push(PATH.ADMIN_BOOKS);
   };
 
   if (bookDetailPending || bookDetailLoading) {
@@ -42,9 +42,9 @@ export default function BooksDetailPage({
   return (
     <div className='space-y-6'>
       <div className='flex items-center justify-between'>
-        <BackButton routeTo={PATH.BOOKS} />
+        <BackButton routeTo={PATH.ADMIN_BOOKS} />
         <div className='flex gap-2'>
-          <Link href={`${PATH.BOOKS}/${params.id}/edit`}>
+          <Link href={`${PATH.ADMIN_BOOKS}/${params.id}/edit`}>
             <Button variant='outline'>Sửa thông tin</Button>
           </Link>
           <Button
@@ -68,7 +68,7 @@ export default function BooksDetailPage({
           <TabsList className='mb-4 grid w-full grid-cols-2'>
             <TabsTrigger value='info'>Thông tin sách</TabsTrigger>
             <TabsTrigger value='images'>
-              Hình ảnh ({((book.images as ImageType[]) || [])?.length || 0})
+              Hình ảnh ({(book.images || [])?.length || 0})
             </TabsTrigger>
           </TabsList>
 

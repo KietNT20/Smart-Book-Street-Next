@@ -13,14 +13,14 @@ import { Sort } from '@/enums/enums';
 import { PATH } from '@/enums/path';
 import { useSearchPaginationAuthor } from '@/hooks/use-author';
 import useDebounce from '@/hooks/useDebounce';
-import { SearchPaginationAuthor } from '@/types/author-types';
+import { AuthorSearchPagination } from '@/types/author-types';
 import Link from 'next/link';
 import { useState } from 'react';
 import { columns } from './columns';
 import { DataTable } from './data-table';
 
 const AuthorsPage = () => {
-  const [searchParams, setSearchParams] = useState<SearchPaginationAuthor>({
+  const [searchParams, setSearchParams] = useState<AuthorSearchPagination>({
     pageNumber: 1,
     pageSize: 10,
     sortOrder: Sort.DESC,
@@ -85,7 +85,7 @@ const AuthorsPage = () => {
       <div className='space-y-6'>
         <div className='flex items-center justify-between'>
           <h1 className='text-2xl font-bold'>Quản lý Tác giả</h1>
-          <Link href={`${PATH.AUTHORS}/create`}>
+          <Link href={PATH.ADMIN_AUTHOR_CREATE}>
             <Button>Thêm tác giả mới</Button>
           </Link>
         </div>

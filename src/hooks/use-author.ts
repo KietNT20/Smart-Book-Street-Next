@@ -26,7 +26,7 @@ export const useAuthorMutation = () => {
 
   const searchAuthorName = useMutation({
     mutationKey: ['search-author-name'],
-    mutationFn: (payload: { authorName: string; categoryId: string }) =>
+    mutationFn: (payload: { authorName: string; categoryId?: string }) =>
       authorService.search(payload)
   });
 
@@ -36,7 +36,7 @@ export const useAuthorMutation = () => {
     onSuccess: (data) => {
       if (data) {
         toast.success('Thêm tác giả thành công');
-        router.push(PATH.AUTHORS);
+        router.push(PATH.ADMIN_AUTHORS);
       }
       queryClient.invalidateQueries({ queryKey: ['authors'] });
     },

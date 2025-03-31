@@ -41,7 +41,7 @@ const AuthorCombobox = <T extends FieldValues>({ name, control }: Props<T>) => {
 
   const debouncedResults = useDebounce(searchResults, 300);
 
-  const handleSearch = async (value: string) => {
+  const handleSearch = (value: string) => {
     setInput(value);
 
     if (!value) {
@@ -49,15 +49,20 @@ const AuthorCombobox = <T extends FieldValues>({ name, control }: Props<T>) => {
       return;
     }
 
-    try {
-      const { results } = await searchAuthorName.mutateAsync({
+    searchAuthorName.mutate(
+      {
         authorName: value
-      });
-      setSearchResults(results);
-    } catch (error) {
-      console.error('Failed to search author:', error);
-      setSearchResults([]);
-    }
+      },
+      {
+        onSuccess: (data) => {
+          setSearchResults(data.results || []);
+        },
+        onError: (error) => {
+          console.error('Failed to search author:', error);
+          setSearchResults([]);
+        }
+      }
+    );
   };
 
   return (

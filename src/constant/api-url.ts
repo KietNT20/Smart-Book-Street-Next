@@ -87,6 +87,7 @@ export const API_URL = {
     INDEX: `${USER}`,
     LOGIN: `${USER}/login`,
     REGISTER: `${USER}/register`,
+    PROFILE: `${USER}/profile`,
     PAGINATED: `${USER}/paginated`,
     SEARCH: `${USER}/search`,
     PAGINATION_SEARCH: `${USER}/search/paginated`

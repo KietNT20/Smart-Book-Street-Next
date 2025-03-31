@@ -27,7 +27,7 @@ export const authorService = {
     const res = await axiosInstance.get(`${API_URL.AUTHORS.INDEX}/${id}`);
     return res.data;
   },
-  search: async (payload: { authorName: string; categoryId: string }) => {
+  search: async (payload: { authorName: string; categoryId?: string }) => {
     const res = await axiosInstance.post(API_URL.AUTHORS.SEARCH, payload);
     return res.data;
   },

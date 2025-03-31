@@ -38,8 +38,8 @@ axiosInstance.interceptors.response.use(
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
     if (error.response?.status === 401 || error.response?.status === 403) {
-      tokenMethod.remove(); // Xóa token
-      window.location.href = PATH.LOGIN; // Chuyển hướng bằng window.location
+      tokenMethod.remove();
+      window.location.href = PATH.LOGIN;
     }
     return Promise.reject(error);
   }

@@ -60,14 +60,14 @@ const AuthorMenuAction = ({ author }: Props) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align='end'>
           <DropdownMenuItem asChild className='cursor-pointer'>
-            <Link href={`${PATH.AUTHORS}/${author.id}`}>
+            <Link href={`${PATH.ADMIN_AUTHORS}/${author.id}`}>
               <Eye className='mr-2 h-4 w-4' />
               Xem chi tiết
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => {
-              router.push(`${PATH.AUTHORS}/${author.id}/edit`);
+              router.push(`${PATH.ADMIN_AUTHORS}/${author.id}/edit`);
             }}
             className='cursor-pointer'
           >

@@ -1,6 +1,8 @@
 'use client';
 
 import { ChevronRight, type LucideIcon } from 'lucide-react';
+import { RoleEnums } from '@/enums/role';
+import { useAuth } from '@/context/auth-context';
 
 import {
   Collapsible,
@@ -20,27 +22,59 @@ import {
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useMemo } from 'react';
+
+type NavItemProps = {
+  title: string;
+  url: string;
+  roles?: RoleEnums[];
+};
+
+type NavMainItemProps = {
+  title: string;
+  url: string;
+  icon?: LucideIcon;
+  isActive?: boolean;
+  roles?: RoleEnums[];
+  items?: NavItemProps[];
+};
 
 type Props = {
-  items: {
-    title: string;
-    url: string;
-    icon?: LucideIcon;
-    isActive?: boolean;
-    items?: {
-      title: string;
-      url: string;
-    }[];
-  }[];
+  items: NavMainItemProps[];
 };
 
 export function NavMain({ items }: Props) {
   const pathname = usePathname();
+  const { hasRole, isLoading } = useAuth();
+
+  // Filter items based on user role
+  const filteredItems = useMemo(() => {
+    if (isLoading) return [];
+
+    return (
+      items
+        .filter((item) => !item.roles || hasRole(item.roles))
+        .map((item) => ({
+          ...item,
+          items:
+            item.items?.filter(
+              (subItem) => !subItem.roles || hasRole(subItem.roles)
+            ) || []
+        }))
+        // Hide menus without submenus
+        .filter((item) => item.items && item.items.length > 0)
+    );
+  }, [items, hasRole, isLoading]);
+
+  if (isLoading || filteredItems.length === 0) {
+    return null;
+  }
+
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Quản lý</SidebarGroupLabel>
       <SidebarMenu>
-        {items.map((item) => (
+        {filteredItems.map((item) => (
           <Collapsible
             key={item.title}
             asChild
