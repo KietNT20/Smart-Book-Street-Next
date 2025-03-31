@@ -1,3 +1,4 @@
+import { Sort } from '@/enums/enums';
 import { BaseEntity } from './common-types';
 import { ImageType } from './image-types';
 import { Publisher } from './publisher-types';
@@ -42,17 +43,17 @@ export type GetAllBooksResponse = {
   message: string;
 };
 
-export type GetAllBooksPaginationResponse = {
+export type BookResponse = {
   results: Book[];
   totalPages: number;
   totalRecordsPerPage: number;
   totalRecords: number;
   pageNumber: number;
   pageSize: number;
-  sortField?: string;
-  sortOrder?: number | string | null;
-  isSuccess?: true;
-  message?: string;
+  sortField: string;
+  sortOrder: Sort.ASC | Sort.DESC;
+  isSuccess: true;
+  message: string;
 };
 
 export type BookSearchResult = {
@@ -62,8 +63,8 @@ export type BookSearchResult = {
   totalRecords: number;
   pageNumber: number;
   pageSize: number;
-  sortField: string | null;
-  sortOrder: number | null;
+  sortField: string;
+  sortOrder: Sort.ASC | Sort.DESC;
   isSuccess: boolean;
   message: string;
 };
@@ -71,18 +72,26 @@ export type BookSearchResult = {
 export type BookSearchCriteria = {
   code?: string;
   title?: string;
-  startDate?: string;
-  endDate?: string;
   price?: number;
   languages?: string;
   size?: string;
   status?: string;
+  startDate?: string;
+  endDate?: string;
+  categoryId?: string;
 };
 
-export type BookSearchPayload = {
+export type BookPaginated = {
   pageNumber: number;
   pageSize: number;
-  sortField?: string;
-  sortOrder?: number;
+  sortField: string;
+  sortOrder: Sort.ASC | Sort.DESC;
+};
+
+export type BookSearchPagination = {
+  pageNumber: number;
+  pageSize: number;
+  sortField: string;
+  sortOrder: Sort.ASC | Sort.DESC;
   result?: Partial<BookSearchCriteria>;
 };

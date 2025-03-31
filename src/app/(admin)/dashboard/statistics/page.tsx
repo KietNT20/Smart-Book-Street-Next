@@ -93,7 +93,7 @@ const StatisticsPage = () => {
                     <Legend />
                     <Bar
                       dataKey='visitors'
-                      fill='hsl(var(--chart-1))'
+                      fill='hsl(var(--chart-2))'
                       name='Số lượng khách'
                     />
                   </BarChart>

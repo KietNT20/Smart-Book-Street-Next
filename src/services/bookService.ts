@@ -1,35 +1,23 @@
-import { API_ENDPOINT } from '@/constant/api-url';
-import { BookSearchPayload } from '@/types/book-types';
+import { API_URL } from '@/constant/api-url';
+import { BookPaginated, BookSearchPagination } from '@/types/book-types';
 import axiosInstance from '@/utils/axiosInstance';
 
 export const bookService = {
-  getByID: async (id: string) => {
-    const res = await axiosInstance.get(
-      `${API_ENDPOINT.BOOKS.GET_BY_ID}/${id}`
-    );
+  getAll: async () => {
+    const res = await axiosInstance.get(API_URL.BOOKS.INDEX);
     return res.data;
   },
-
-  searchPagination: async (payload: BookSearchPayload) => {
-    const res = await axiosInstance.post(
-      API_ENDPOINT.BOOKS.PAGINATION_SEARCH,
-      payload
-    );
-    return res.data;
-  },
-
   create: async (formData: FormData) => {
-    const res = await axiosInstance.post(API_ENDPOINT.BOOKS.ADD, formData, {
+    const res = await axiosInstance.post(API_URL.BOOKS.INDEX, formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
     });
     return res.data;
   },
-
   update: async (id: string, formData: FormData) => {
     const res = await axiosInstance.put(
-      `${API_ENDPOINT.BOOKS.UPDATE}/${id}`,
+      `${API_URL.BOOKS.INDEX}/${id}`,
       formData,
       {
         headers: {
@@ -39,10 +27,22 @@ export const bookService = {
     );
     return res.data;
   },
-
   delete: async (id: string) => {
-    const res = await axiosInstance.delete(
-      `${API_ENDPOINT.BOOKS.DELETE}/${id}`
+    const res = await axiosInstance.patch(`${API_URL.BOOKS.INDEX}/${id}`);
+    return res.data;
+  },
+  getByID: async (id: string) => {
+    const res = await axiosInstance.get(`${API_URL.BOOKS.INDEX}/${id}`);
+    return res.data;
+  },
+  paginated: async (payload: BookPaginated) => {
+    const res = await axiosInstance.post(API_URL.BOOKS.PAGINATED, payload);
+    return res.data;
+  },
+  searchPagination: async (payload: BookSearchPagination) => {
+    const res = await axiosInstance.post(
+      API_URL.BOOKS.PAGINATION_SEARCH,
+      payload
     );
     return res.data;
   }

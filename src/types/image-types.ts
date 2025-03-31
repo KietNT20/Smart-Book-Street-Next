@@ -7,7 +7,6 @@ export type ImageType = {
 };
 
 export type ImagePayload = {
-  id: string;
   files: Array<File>;
   type: string;
   altText: string;
@@ -20,5 +19,3 @@ export type ImageApiResponse = {
   isSuccess: boolean;
   message: string;
 };
-
-export type ImageResArr = Array<ImageType>;

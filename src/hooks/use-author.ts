@@ -1,6 +1,7 @@
 import { PATH } from '@/enums/path';
 import { authorService } from '@/services/authorService';
-import { SearchPaginationAuthor } from '@/types/author-types';
+import { AuthorSearchPagination } from '@/types/author-types';
+
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
@@ -12,7 +13,7 @@ export const useGetAuthorById = <T>(id: string) => {
   });
 };
 
-export const useSearchPaginationAuthor = (params: SearchPaginationAuthor) => {
+export const useSearchPaginationAuthor = (params: AuthorSearchPagination) => {
   return useQuery({
     queryKey: ['authors', params],
     queryFn: () => authorService.searchPagination(params)
@@ -25,7 +26,7 @@ export const useAuthorMutation = () => {
 
   const searchAuthorName = useMutation({
     mutationKey: ['search-author-name'],
-    mutationFn: (payload: { authorName: string }) =>
+    mutationFn: (payload: { authorName: string; categoryId: string }) =>
       authorService.search(payload)
   });
 

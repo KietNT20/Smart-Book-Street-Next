@@ -1,21 +1,14 @@
-import { API_ENDPOINT } from '@/constant/api-url';
+import { API_URL } from '@/constant/api-url';
 import { RolePayload } from '@/types/user-types';
 import axiosInstance from '@/utils/axiosInstance';
 
 export const roleService = {
   getAll: async () => {
-    const res = await axiosInstance.get(`${API_ENDPOINT.ROLES.GET_ALL}`);
+    const res = await axiosInstance.get(API_URL.ROLES.INDEX);
     return res.data;
   },
   create: async (payload: RolePayload) => {
-    const res = await axiosInstance.post(`${API_ENDPOINT.ROLES.ADD}`, payload);
-    return res.data;
-  },
-  delete: async (payload = {}) => {
-    const res = await axiosInstance.put(
-      `${API_ENDPOINT.ROLES.DELETE}`,
-      payload
-    );
+    const res = await axiosInstance.post(API_URL.ROLES.INDEX, payload);
     return res.data;
   }
 };

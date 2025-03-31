@@ -1,3 +1,5 @@
+import { Sort } from '@/enums/enums';
+
 export type BaseEntity = {
   id?: string;
   createdBy?: string;
@@ -11,5 +13,5 @@ export type PaginationSchema = {
   pageNumber: number;
   pageSize: number;
   sortField?: string;
-  sortOrder?: -1 | 0 | 1;
+  sortOrder?: Sort.ASC | Sort.DESC;
 };

@@ -1,3 +1,4 @@
+import { Sort } from '@/enums/enums';
 import { Book } from './book-types';
 import { BaseEntity } from './common-types';
 
@@ -12,11 +13,11 @@ export interface Category extends BaseEntity {
   }[];
 }
 
-export type SearchPaginationCategory = {
+export type CategorySearchPagination = {
   pageNumber: number;
   pageSize: number;
   sortField: string;
-  sortOrder: -1 | 0 | 1;
+  sortOrder: Sort.ASC | Sort.DESC;
   result: {
     categoryName: string;
   };
