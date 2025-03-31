@@ -29,13 +29,13 @@ const BookMenuAction = ({ book, _onDelete }: Props) => {
       <DropdownMenuContent align='end'>
         <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
         <DropdownMenuItem asChild className='cursor-pointer'>
-          <Link href={`${PATH.BOOKS}/${book.id}`}>
+          <Link href={`${PATH.ADMIN_BOOKS}/${book.id}`}>
             <Eye className='mr-2 h-4 w-4' />
             Xem chi tiết
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem
-          onClick={() => router.push(`${PATH.BOOKS}/${book.id}/edit`)}
+          onClick={() => router.push(`${PATH.ADMIN_BOOKS}/${book.id}/edit`)}
           className='cursor-pointer'
         >
           <Pen className='mr-2 h-4 w-4' />

@@ -204,7 +204,7 @@ export function AuthorForm({ authorId }: Props) {
           <Button
             type='button'
             variant='outline'
-            onClick={() => router.push(PATH.AUTHORS)}
+            onClick={() => router.push(PATH.ADMIN_AUTHORS)}
           >
             Hủy
           </Button>

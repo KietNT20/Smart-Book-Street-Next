@@ -1,148 +1,101 @@
-// Note: API URL constants
-const USER = '/users';
-const USER_ROLE = '/UserRole';
-const ROLE = '/Role';
-const AUTHOR = '/Author';
-const BOOK = '/book';
-const BOOK_AUTHOR = '/BookAuthor';
-const BOOK_CATEGORY = '/BookCategory';
-const BOOK_STORE = '/bookStore';
-const CATEGORY = '/categories';
-const EVENT = '/events';
-const IMAGE = '/images';
-const INVENTORY = '/inventory';
-const PUBLISHER = '/publisher';
-const STREET = '/streets';
-const ZONE = '/zone';
+import { API_ENDPOINT } from '@/enums/endpoint';
 
-export const API_ENDPOINT = {
+const AUTHOR = API_ENDPOINT.AUTHOR;
+const BOOK = API_ENDPOINT.BOOK;
+const BOOK_AUTHOR = API_ENDPOINT.BOOK_AUTHOR;
+const STORE = API_ENDPOINT.STORE;
+const PUBLISHER = API_ENDPOINT.PUBLISHER;
+const ROLE = API_ENDPOINT.ROLE;
+const SOUVENIR = API_ENDPOINT.SOUVENIR;
+const USER = API_ENDPOINT.USER;
+const USER_ROLE = API_ENDPOINT.USER_ROLE;
+const BOOK_CATEGORY = API_ENDPOINT.BOOK_CATEGORY;
+const CATEGORY = API_ENDPOINT.CATEGORY;
+const EVENT = API_ENDPOINT.EVENT;
+const IMAGE = API_ENDPOINT.IMAGE;
+const INVENTORY = API_ENDPOINT.INVENTORY;
+const STREET = API_ENDPOINT.STREET;
+const ZONE = API_ENDPOINT.ZONE;
+
+export const API_URL = {
   AUTHORS: {
-    ADD: `${AUTHOR}/add`,
-    UPDATE: `${AUTHOR}/update`,
-    DELETE: `${AUTHOR}/delete`,
-    GET_BY_ID: `${AUTHOR}/get-by-id`,
-    SEARCH: `${AUTHOR}/search-not-pagination`,
-    PAGINATION_SEARCH: `${AUTHOR}/pagination-and-search`
+    INDEX: `${AUTHOR}`,
+    SEARCH: `${AUTHOR}/search`,
+    PAGINATION_SEARCH: `${AUTHOR}/search/paginated`
   },
   BOOKS: {
-    GET_ALL: `${BOOK}/get-all`,
-    GET_ALL_PAGINATION: `${BOOK}/get-all-pagination`,
-    GET_BY_ID: `${BOOK}/get-by-id`,
-    PAGINATION_SEARCH: `${BOOK}/search-pagination`,
-    SEARCH: `${BOOK}/search-without-pagination`,
-    ADD: `${BOOK}/add`,
-    UPDATE: `${BOOK}/update`,
-    DELETE: `${BOOK}/delete`
+    INDEX: `${BOOK}`,
+    PAGINATION_SEARCH: `${BOOK}/search/paginated`,
+    SEARCH: `${BOOK}/search`,
+    PAGINATED: `${BOOK}/paginated`
   },
   BOOK_AUTHORS: {
-    ADD: `${BOOK_AUTHOR}/add`,
-    UPDATE: `${BOOK_AUTHOR}/update`,
-    DELETE: `${BOOK_AUTHOR}/delete`,
-    GET_BY_ID: `${BOOK_AUTHOR}/get-by-id`,
-    GET_ALL_ACTIVE: `${BOOK_AUTHOR}/get-all-active`,
-    PAGINATION_SEARCH: `${BOOK_AUTHOR}/pagination-and-search`,
-    GET_ALL_BY_ELEMENT: `${BOOK_AUTHOR}/get-all-by-element`
+    INDEX: `${BOOK_AUTHOR}`,
+    PAGINATION_SEARCH: `${BOOK_AUTHOR}/search/paginated`,
+    FILTER: `${BOOK_AUTHOR}/filter`
   },
   BOOK_CATEGORIES: {
-    ADD: `${BOOK_CATEGORY}/add`,
-    UPDATE: `${BOOK_CATEGORY}/update`,
-    DELETE: `${BOOK_CATEGORY}/delete`,
-    GET_BY_ID: `${BOOK_CATEGORY}/get-by-id`,
-    GET_ALL_ACTIVE: `${BOOK_CATEGORY}/get-all-active`,
-    PAGINATION_SEARCH: `${BOOK_CATEGORY}/pagination-and-search`,
-    GET_ALL_BY_ELEMENT: `${BOOK_CATEGORY}/get-all-by-element`
-  },
-  BOOK_STORES: {
-    ADD: `${BOOK_STORE}/add`,
-    UPDATE: `${BOOK_STORE}/update`,
-    DELETE: `${BOOK_STORE}/delete`,
-    SEARCH: `${BOOK_STORE}/search-without-pagination`,
-    PAGINATION_SEARCH: `${BOOK_STORE}/search-pagination`,
-    GET_ALL: `${BOOK_STORE}/get-all`,
-    GET_BY_ID: `${BOOK_STORE}/get-by-id`,
-    GET_ALL_PAGINATION: `${BOOK_STORE}/get-all-pagination`
+    INDEX: `${BOOK_CATEGORY}`,
+    PAGINATION_SEARCH: `${BOOK_CATEGORY}/search/paginated`,
+    FILTER: `${BOOK_CATEGORY}/filter`
   },
   CATEGORIES: {
-    ADD: `${CATEGORY}/add`,
-    UPDATE: `${CATEGORY}/update`,
-    DELETE: `${CATEGORY}/delete`,
-    GET_BY_ID: `${CATEGORY}/get-by-id`,
-    SEARCH: `${CATEGORY}/search-not-pagination`,
-    PAGINATION_SEARCH: `${CATEGORY}/pagination-and-search`
+    INDEX: `${CATEGORY}`,
+    PAGINATION_SEARCH: `${CATEGORY}/search/paginated`,
+    SEARCH: `${CATEGORY}/search`
   },
   EVENTS: {
-    ADD: `${EVENT}/add`,
-    UPDATE: `${EVENT}/update`,
-    DELETE: `${EVENT}/delete`,
-    GET_BY_ID: `${EVENT}/get-by-id`,
-    GET_EVENT_COMING: `${EVENT}/get-event-coming`,
-    PAGINATION_SEARCH: `${EVENT}/pagination-and-search`
+    INDEX: `${EVENT}`,
+    COMING: `${EVENT}/events-coming`,
+    PAGINATED: `${EVENT}/paginated`,
+    DATES_IN_MONTH: `${EVENT}/event-dates-in-month`,
+    IN_DATE: `${EVENT}/events-in-date`
   },
   IMAGES: {
-    ADD: `${IMAGE}/add`,
-    UPDATE: `${IMAGE}/update`,
-    DELETE: `${IMAGE}/delete`,
-    GET_BY_ID: `${IMAGE}/get-by-id`,
+    INDEX: `${IMAGE}`,
+    LIST: `${IMAGE}/list`,
     GET_BY_TYPE_OR_ENTITY_ID: `${IMAGE}/get-by-type-or-entityID`
   },
   INVENTORIES: {
-    ADD: `${INVENTORY}/add`,
-    DELETE: `${INVENTORY}/delete`,
-    GET_ALL: `${INVENTORY}/get-all`,
-    GET_BY_BOOK: `${INVENTORY}/get-by-book`,
-    GET_BY_BOOK_STORE: `${INVENTORY}/get-by-bookstore`
+    INDEX: `${INVENTORY}`
   },
   PUBLISHERS: {
-    ADD: `${PUBLISHER}/add`,
-    UPDATE: `${PUBLISHER}/update`,
-    DELETE: `${PUBLISHER}/delete`,
-    PAGINATION_SEARCH: `${PUBLISHER}/search-pagination`,
-    SEARCH: `${PUBLISHER}/search-without-pagination`,
-    GET_ALL: `${PUBLISHER}/get-all`,
-    GET_BY_ID: `${PUBLISHER}/get-by-id`,
-    GET_ALL_PAGINATION: `${PUBLISHER}/get-all-pagination`
+    INDEX: `${PUBLISHER}`,
+    PAGINATED: `${PUBLISHER}/paginated`,
+    SEARCH: `${PUBLISHER}/search`,
+    PAGINATION_SEARCH: `${PUBLISHER}/search/paginated`
+  },
+  SOUVENIRS: {
+    INDEX: `${SOUVENIR}`,
+    PAGINATION_SEARCH: `${SOUVENIR}/search/paginated`
+  },
+  STORES: {
+    INDEX: `${STORE}`,
+    PAGINATED: `${STORE}/paginated`,
+    SEARCH: `${STORE}/search`,
+    PAGINATION_SEARCH: `${STORE}/search/paginated`
   },
   STREETS: {
-    ADD: `${STREET}/add`,
-    UPDATE: `${STREET}/update`,
-    DELETE: `${STREET}/delete`,
-    GET_BY_ID: `${STREET}/get-by-id`,
-    GET_ALL_ACTIVE: `${STREET}/get-all-active`,
-    PAGINATION_SEARCH: `${STREET}/pagination-and-search`
+    INDEX: `${STREET}`,
+    PAGINATION_SEARCH: `${STREET}/search/paginated`
   },
   ZONES: {
-    ADD: `${ZONE}/add`,
-    UPDATE: `${ZONE}/update`,
-    DELETE: `${ZONE}/delete`,
-    GET_BY_ID: `${ZONE}/get-by-id`,
-    GET_ALL_ACTIVE: `${ZONE}/get-all-active`,
-    PAGINATION_SEARCH: `${ZONE}/pagination-and-search`
+    INDEX: `${ZONE}`,
+    PAGINATION_SEARCH: `${ZONE}/search/paginated`
   },
   USERS: {
-    GOOGLE_LOGIN: `${USER}/google-login`,
-    GOOGLE_RESPONSE: `${USER}/google-response`,
+    INDEX: `${USER}`,
     LOGIN: `${USER}/login`,
     REGISTER: `${USER}/register`,
-    GET_ALL: `${USER}/get-all`,
-    GET_ALL_PAGINATION: `${USER}/get-all-pagination`,
-    GET_BY_ID: `${USER}/get-by-id`,
-    GET_BY_EMAIL: `${USER}/get-by-email`,
-    SEARCH: `${USER}/search-without-pagination`,
-    PAGINATION_SEARCH: `${USER}/search-pagination`,
-    ADD: `${USER}/add`,
-    UPDATE: `${USER}/update`,
-    DELETE: `${USER}/delete`
+    PROFILE: `${USER}/profile`,
+    PAGINATED: `${USER}/paginated`,
+    SEARCH: `${USER}/search`,
+    PAGINATION_SEARCH: `${USER}/search/paginated`
   },
   USER_ROLES: {
-    GET_ALL: `${USER_ROLE}/get-all`,
-    GET_BY_ROLE_ID: `${USER_ROLE}/get-by-role`,
-    GET_BY_USER_ID: `${USER_ROLE}/get-by-user`,
-    ADD: `${USER_ROLE}/add`,
-    DELETE: `${USER_ROLE}/delete`
+    INDEX: `${USER_ROLE}`
   },
   ROLES: {
-    GET_ALL: `${ROLE}/get-all`,
-    ADD: `${ROLE}/add`,
-    DELETE: `${ROLE}/delete`
+    INDEX: `${ROLE}`
   }
 } as const;

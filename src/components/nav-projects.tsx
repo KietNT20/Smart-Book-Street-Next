@@ -1,5 +1,7 @@
 'use client';
 
+import { useAuth } from '@/context/auth-context';
+import { RoleEnums } from '@/enums/role';
 import {
   Folder,
   Forward,
@@ -25,23 +27,41 @@ import {
   useSidebar
 } from '@/components/ui/sidebar';
 import Link from 'next/link';
+import { useMemo } from 'react';
 
-export function NavProjects({
-  projects
-}: {
-  projects: {
-    name: string;
-    url: string;
-    icon: LucideIcon;
-  }[];
-}) {
+type ProjectItemProps = {
+  name: string;
+  url: string;
+  icon: LucideIcon;
+  roles?: RoleEnums[];
+};
+
+type Props = {
+  projects: ProjectItemProps[];
+};
+
+export function NavProjects({ projects }: Props) {
   const { isMobile } = useSidebar();
+  const { hasRole, isLoading } = useAuth();
+
+  // Filter items based on user role
+  const filteredProjects = useMemo(() => {
+    if (isLoading) return [];
+
+    return projects.filter(
+      (project) => !project.roles || hasRole(project.roles)
+    );
+  }, [projects, hasRole, isLoading]);
+
+  if (isLoading || filteredProjects.length === 0) {
+    return null;
+  }
 
   return (
     <SidebarGroup className='group-data-[collapsible=icon]:hidden'>
       <SidebarGroupLabel>Projects</SidebarGroupLabel>
       <SidebarMenu>
-        {projects.map((item) => (
+        {filteredProjects.map((item) => (
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton asChild>
               <Link href={item.url}>

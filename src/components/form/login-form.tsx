@@ -71,6 +71,7 @@ export function LoginForm({
                             <Input
                               placeholder='Tài khoản hoặc Email'
                               disabled={login.isPending}
+                              autoComplete='username'
                               className={cn(
                                 form.formState.errors.usernameOrEmail &&
                                   'border-red-500'
@@ -100,6 +101,7 @@ export function LoginForm({
                                 placeholder='Mật khẩu'
                                 type={showPassword ? 'text' : 'password'}
                                 disabled={login.isPending}
+                                autoComplete='current-password'
                                 className={cn(
                                   form.formState.errors.password &&
                                     'border-red-500'

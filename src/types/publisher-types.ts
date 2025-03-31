@@ -15,7 +15,7 @@ export type PublisherResponse = {
   isSuccess: boolean;
 };
 
-export type SearchPublisher = {
+export type PublisherSearch = {
   publisherName: string;
   address: string;
   phone: string;

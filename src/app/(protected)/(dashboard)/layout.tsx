@@ -23,9 +23,7 @@ export default function DashboardLayout({
               <div className='flex flex-1 items-center gap-4'>
                 <SidebarTrigger className='-ml-2 h-8 w-8' />
                 <Separator orientation='vertical' className='h-6' />
-
                 <BreadcrumbComp />
-
                 <div className='ml-auto flex items-center gap-4'>
                   <ModeToggle />
                 </div>

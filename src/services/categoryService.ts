@@ -1,42 +1,38 @@
-import { API_ENDPOINT } from '@/constant/api-url';
-import { Category, SearchPaginationCategory } from '@/types/category-types';
+import { API_URL } from '@/constant/api-url';
+import { Category, CategorySearchPagination } from '@/types/category-types';
 import axiosInstance from '@/utils/axiosInstance';
 
 export const categoryService = {
-  search: async (payload: { categoryName: string }) => {
-    const res = await axiosInstance.post(
-      API_ENDPOINT.CATEGORIES.SEARCH,
-      payload
-    );
-    return res.data;
-  },
-  searchPagination: async (payload: SearchPaginationCategory) => {
-    const res = await axiosInstance.post(
-      API_ENDPOINT.CATEGORIES.PAGINATION_SEARCH,
-      payload
-    );
-    return res.data;
-  },
-  getById: async (id: string) => {
-    const res = await axiosInstance.get(
-      `${API_ENDPOINT.CATEGORIES.GET_BY_ID}/${id}`
-    );
-    return res.data;
-  },
   create: async (payload: Partial<Omit<Category, 'id'>>) => {
-    const res = await axiosInstance.post(API_ENDPOINT.CATEGORIES.ADD, payload);
+    const res = await axiosInstance.post(API_URL.CATEGORIES.INDEX, payload);
     return res.data;
   },
-  update: async (payload: Partial<Category>) => {
+  update: async (
+    id: string,
+    payload: { categoryName: string; description: string }
+  ) => {
     const res = await axiosInstance.put(
-      API_ENDPOINT.CATEGORIES.UPDATE,
+      `${API_URL.CATEGORIES.INDEX}/${id}`,
       payload
     );
     return res.data;
   },
   delete: async (id: string) => {
-    const res = await axiosInstance.delete(
-      `${API_ENDPOINT.CATEGORIES.DELETE}/${id}`
+    const res = await axiosInstance.patch(`${API_URL.CATEGORIES.INDEX}/${id}`);
+    return res.data;
+  },
+  getById: async (id: string) => {
+    const res = await axiosInstance.get(`${API_URL.CATEGORIES.INDEX}/${id}`);
+    return res.data;
+  },
+  search: async (payload: { categoryName: string }) => {
+    const res = await axiosInstance.post(API_URL.CATEGORIES.SEARCH, payload);
+    return res.data;
+  },
+  searchPagination: async (payload: CategorySearchPagination) => {
+    const res = await axiosInstance.post(
+      API_URL.CATEGORIES.PAGINATION_SEARCH,
+      payload
     );
     return res.data;
   }

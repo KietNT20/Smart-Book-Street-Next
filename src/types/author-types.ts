@@ -1,3 +1,4 @@
+import { Sort } from '@/enums/enums';
 import { Book } from './book-types';
 import { BaseEntity } from './common-types';
 import { ImageType } from './image-types';
@@ -20,17 +21,35 @@ export interface BookAuthor extends BaseEntity {
   author: Author | null;
 }
 
-export type SearchPaginationAuthor = {
+export type AuthorSearchPagination = {
   pageNumber: number;
   pageSize: number;
   sortField: string;
-  sortOrder: number;
+  sortOrder: Sort.ASC | Sort.DESC;
   result: {
     authorName: string;
   };
 };
 
-export type AuthorsApiResponse = {
+export type BookAuthorSearchPagination = {
+  pageNumber: number;
+  pageSize: number;
+  sortField: string;
+  sortOrder: Sort.ASC | Sort.DESC;
+  result: {
+    key: string;
+    authorId: string;
+    bookId: string;
+  };
+};
+
+export type BookAuthorPaginated = {
+  key: string;
+  authorId: string;
+  bookId: string;
+};
+
+export type AuthorsResponse = {
   results: Author[];
   totalPages: number;
   totalRecords: number;
@@ -40,7 +59,7 @@ export type AuthorsApiResponse = {
   message: string;
 };
 
-export type AuthorApiResponse = {
+export type AuthorResponse = {
   result: Author;
   isSuccess: boolean;
   message: string;

@@ -32,11 +32,6 @@ export type LoginCredentials = {
   password: string;
 };
 
-export type AuthError = {
-  type: 'CredentialsSignin' | 'NetworkError' | 'ServerError' | 'Default';
-  message: string;
-};
-
 export interface RegisterRequestBody extends Omit<BaseEntity, 'id'> {
   userName: string;
   email: string;

@@ -14,7 +14,7 @@ export const useBookMutations = () => {
     onSuccess: (data) => {
       if (data?.isSuccess) {
         toast.success('Thêm sách thành công');
-        router.push(PATH.BOOKS);
+        router.push(PATH.ADMIN_BOOKS);
       }
       queryClient.invalidateQueries({ queryKey: ['books'] });
     },
@@ -33,7 +33,7 @@ export const useBookMutations = () => {
     onSuccess: (data) => {
       if (data?.isSuccess) {
         toast.success('Cập nhật sách thành công');
-        router.push(PATH.BOOKS);
+        router.push(PATH.ADMIN_BOOKS);
       }
       queryClient.invalidateQueries({ queryKey: ['books'] });
     },
