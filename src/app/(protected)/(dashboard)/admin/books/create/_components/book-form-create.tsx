@@ -7,11 +7,11 @@ import BookForm from '../../_components/book-form';
 
 const BookFormCreate = () => {
   const router = useRouter();
-  const { createBookMutation } = useBookMutations();
-  const apiLoading = useDebounce(createBookMutation.isPending, 300);
+  const { createBook, createBookPending } = useBookMutations();
+  const apiLoading = useDebounce(createBookPending, 300);
 
   const handleSubmit = (formData: FormData) => {
-    createBookMutation.mutate(formData);
+    createBook(formData);
   };
 
   return (

@@ -8,12 +8,12 @@ export const useEditPage = () => {
   const params = useParams();
   const bookId = params.id as string;
 
-  const { updateBookMutation } = useBookMutations();
+  const { updateBook, updateBookPending } = useBookMutations();
   const { data: book } = useGetBookByID(bookId);
-  const apiLoading = useDebounce(updateBookMutation.isPending, 300);
+  const apiLoading = useDebounce(updateBookPending, 300);
 
-  const handleSubmitUpdate = async (formData: FormData) => {
-    await updateBookMutation.mutateAsync({ id: bookId, formData });
+  const handleSubmitUpdate = (formData: FormData) => {
+    updateBook({ id: bookId, formData });
   };
 
   return {

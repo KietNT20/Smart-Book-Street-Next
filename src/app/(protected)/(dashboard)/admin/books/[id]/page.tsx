@@ -21,17 +21,17 @@ export default function BooksDetailPage({
 }) {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const {
-    deleteBookMutation,
     deletedLoading,
     bookDetailPending,
     bookDetailLoading,
     book,
     bookInfoProps,
-    router
+    router,
+    deleteBook
   } = useBookDetail({ id: params.id });
 
   const handleDeleteBook = () => {
-    deleteBookMutation.mutate(params.id);
+    deleteBook(params.id);
     router.push(PATH.ADMIN_BOOKS);
   };
 

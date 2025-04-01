@@ -42,7 +42,12 @@ export function AuthorForm({ authorId }: Props) {
   });
 
   const router = useRouter();
-  const { createAuthor, updateAuthor } = useAuthorMutation();
+  const {
+    createAuthor,
+    createAuthorPending,
+    updateAuthor,
+    updateAuthorPending
+  } = useAuthorMutation();
   const { data: authorData, isLoading: isLoadingAuthor } =
     useGetAuthorById<AuthorData>(authorId || '');
 
@@ -69,7 +74,7 @@ export function AuthorForm({ authorId }: Props) {
     }
   }, [authorData, form]);
 
-  const onSubmit = async (data: AuthorFormValues) => {
+  const onSubmit = (data: AuthorFormValues) => {
     try {
       const formData = new FormData();
       formData.append('AuthorName', data.authorName);
@@ -79,7 +84,11 @@ export function AuthorForm({ authorId }: Props) {
       if (data.imgFile) {
         formData.append('ImgFile', data.imgFile);
       }
-      await createAuthor.mutateAsync(formData);
+      if (authorId) {
+        updateAuthor({ id: authorId, formData });
+      } else if (!authorId) {
+        createAuthor(formData);
+      }
     } catch (error: unknown) {
       console.error('Error author submit:', error);
       toast.error('Có lỗi xảy ra. Vui lòng thử lại.');
@@ -210,7 +219,7 @@ export function AuthorForm({ authorId }: Props) {
           </Button>
           <AuthorSubmitBtn
             authorId={authorId}
-            _onPending={createAuthor.isPending || updateAuthor.isPending}
+            _onPending={createAuthorPending || updateAuthorPending}
           />
         </div>
       </form>

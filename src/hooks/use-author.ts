@@ -49,7 +49,11 @@ export const useAuthorMutation = () => {
     mutationKey: ['update-author'],
     mutationFn: ({ id, formData }: { id: string; formData: FormData }) =>
       authorService.update(id, formData),
-    onSuccess: () => {
+    onSuccess: (data) => {
+      if (data) {
+        toast.success('Cập nhật tác giả thành công');
+        router.push(`${PATH.ADMIN_AUTHORS}/${data.result.id}`);
+      }
       queryClient.invalidateQueries({ queryKey: ['authors'] });
     },
     onError: (error: Error) => {
@@ -69,9 +73,15 @@ export const useAuthorMutation = () => {
   });
 
   return {
-    createAuthor,
-    updateAuthor,
-    deleteAuthor,
+    // Create Author
+    createAuthor: createAuthor.mutate,
+    createAuthorPending: createAuthor.isPending,
+    // Update Author
+    updateAuthor: updateAuthor.mutate,
+    updateAuthorPending: updateAuthor.isPending,
+    // Delete Author
+    deleteAuthor: deleteAuthor.mutate,
+    deleteAuthorPending: deleteAuthor.isPending,
     searchAuthorName
   };
 };

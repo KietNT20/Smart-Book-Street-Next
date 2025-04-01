@@ -2,7 +2,6 @@
 
 import { ConfirmModal } from '@/components/confirm-modal';
 import { Sort } from '@/enums/enums';
-import useDebounce from '@/hooks/use-debounce';
 import { Book, BookSearchCriteria } from '@/types/book-types';
 import { BookToolbar } from './_components/book-toolbar';
 import { SearchBookModal } from './_components/search-book-modal';
@@ -24,13 +23,11 @@ export default function BooksPage() {
     resetAllFilters
   } = useBookPageState();
 
-  const { bookData, isLoadingBooks, handleDelete, deleteBookMutation } =
+  const { bookData, isLoadingBooks, handleDelete, deletedLoading } =
     useBookList({
       pagination,
       searchCriteria
     });
-
-  const deletedLoading = useDebounce(deleteBookMutation.isPending, 300);
 
   const columns = createColumns({
     _onDelete: (id?: string) => {

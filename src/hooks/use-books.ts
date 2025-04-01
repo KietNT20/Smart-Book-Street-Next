@@ -33,7 +33,7 @@ export const useBookMutations = () => {
     onSuccess: (data) => {
       if (data?.isSuccess) {
         toast.success('Cập nhật sách thành công');
-        router.push(PATH.ADMIN_BOOKS);
+        router.push(`${PATH.ADMIN_BOOKS}/${data?.result.id}`);
       }
       queryClient.invalidateQueries({ queryKey: ['books'] });
     },
@@ -53,8 +53,14 @@ export const useBookMutations = () => {
   });
 
   return {
-    createBookMutation,
-    updateBookMutation,
-    deleteBookMutation
+    // Create Book
+    createBook: createBookMutation.mutate,
+    createBookPending: createBookMutation.isPending,
+    // Update Book
+    updateBook: updateBookMutation.mutate,
+    updateBookPending: updateBookMutation.isPending,
+    // Delete Book
+    deleteBook: deleteBookMutation.mutate,
+    deleteBookPending: deleteBookMutation.isPending
   };
 };

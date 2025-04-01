@@ -27,11 +27,12 @@ export function useBookList({ pagination, searchCriteria }: UseBookListProps) {
 
   const isLoadingBooks = useDebounce(isLoading, 300);
 
-  const { deleteBookMutation } = useBookMutations();
+  const { deleteBook, deleteBookPending } = useBookMutations();
+  const deletedLoading = useDebounce(deleteBookPending, 300);
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = (id: string) => {
     try {
-      await deleteBookMutation.mutateAsync(id);
+      deleteBook(id);
     } catch (error) {
       toast.error('Đã xảy ra lỗi khi xóa sách');
       console.error('Error deleting book:', error);
@@ -42,6 +43,6 @@ export function useBookList({ pagination, searchCriteria }: UseBookListProps) {
     bookData,
     isLoadingBooks,
     handleDelete,
-    deleteBookMutation
+    deletedLoading
   };
 }

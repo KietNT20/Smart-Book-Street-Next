@@ -15,9 +15,9 @@ export const useBookDetail = ({ id }: { id: string }) => {
     isPending: bookDetailPending
   } = useGetBookByID(id);
 
-  const { deleteBookMutation } = useBookMutations();
+  const { deleteBook, deleteBookPending } = useBookMutations();
 
-  const deletedLoading = useDebounce(deleteBookMutation.isPending, 300);
+  const deletedLoading = useDebounce(deleteBookPending, 300);
 
   const book: Book = bookDetailData?.result;
 
@@ -58,7 +58,7 @@ export const useBookDetail = ({ id }: { id: string }) => {
   return {
     bookDetailPending,
     bookDetailLoading,
-    deleteBookMutation,
+    deleteBook,
     deletedLoading,
     book,
     bookInfoProps,

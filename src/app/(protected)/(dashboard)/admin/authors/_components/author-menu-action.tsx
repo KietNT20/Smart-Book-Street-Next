@@ -24,11 +24,11 @@ const AuthorMenuAction = ({ author }: Props) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
   const router = useRouter();
-  const { deleteAuthor } = useAuthorMutation();
+  const { deleteAuthor, deleteAuthorPending } = useAuthorMutation();
 
   const _onDelete = async (id: string) => {
     try {
-      await deleteAuthor.mutateAsync(id, {
+      deleteAuthor(id, {
         onSuccess: () => {
           toast.success('Xóa tác giả thành công');
           setIsDeleteModalOpen(false);
@@ -96,7 +96,7 @@ const AuthorMenuAction = ({ author }: Props) => {
         confirmText='Xóa'
         cancelText='Hủy'
         variant='destructive'
-        isLoading={deleteAuthor.isPending}
+        isLoading={deleteAuthorPending}
       />
     </>
   );
