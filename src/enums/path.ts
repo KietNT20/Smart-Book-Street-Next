@@ -24,6 +24,8 @@ export enum PATH {
   EVENT_CREATE = '/admin/events/create',
   CALENDAR_EVENT = '/admin/events/calendar',
 
+  ZONES = '/admin/zones',
+
   VISITOR_STATISTICS = '/admin/visitors/statistics',
   VISITOR_PREDICTION = '/admin/visitors/prediction',
   VISITOR_RECOMMENDATION = '/admin/visitors/recommendation',
@@ -33,13 +35,10 @@ export enum PATH {
   ROLES = '/admin/roles',
 
   // PUBLISHER MANAGER
+  CATEGORIES = '/categories',
+  CATEGORY_CREATE = '/categories/create',
 
-  CATEGORIES = '/publisher/categories',
-  CATEGORY_CREATE = '/publisher/categories/create',
-
-  INVENTORY = '/publisher/inventory',
-
-  PUBLISHER_BOOKS = '/publisher/books',
+  INVENTORY = '/inventory',
 
   // STORE MANAGER
 

@@ -2,6 +2,7 @@
 
 import {
   AudioWaveform,
+  BarChart3,
   Book,
   BookOpen,
   CalendarIcon,
@@ -9,9 +10,9 @@ import {
   Command,
   GalleryVerticalEnd,
   LibraryBig,
-  Map,
   PieChart,
-  Store
+  Store,
+  Users
 } from 'lucide-react';
 import * as React from 'react';
 
@@ -42,7 +43,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     );
   };
 
-  // Define menu data with role requirements
   const menuData = {
     teams: [
       {
@@ -62,20 +62,21 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       }
     ],
     navMain: [
+      // ADMIN MENUS
       {
         title: 'Đường sách',
         url: '#',
         icon: LibraryBig,
         isActive: checkActive([
-          { url: '#' },
           { url: PATH.PUBLISHERS },
-          { url: PATH.STORES }
+          { url: PATH.STORES },
+          { url: PATH.ZONES }
         ]),
         roles: [RoleEnums.ADMIN],
         items: [
           {
             title: 'Khu vực',
-            url: '#',
+            url: PATH.ZONES,
             roles: [RoleEnums.ADMIN]
           },
           {
@@ -99,7 +100,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           { url: PATH.ADMIN_AUTHORS },
           { url: PATH.CATEGORIES }
         ]),
-        roles: [RoleEnums.ADMIN, RoleEnums.PUBLISHER_MANAGER],
+        roles: [RoleEnums.ADMIN],
         items: [
           {
             title: 'Quản lý sách',
@@ -107,70 +108,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             roles: [RoleEnums.ADMIN]
           },
           {
-            title: 'Tác giả',
+            title: 'Quản lý tác giả',
             url: PATH.ADMIN_AUTHORS,
             roles: [RoleEnums.ADMIN]
           },
           {
-            title: 'Danh mục',
+            title: 'Quản lý danh mục sách',
             url: PATH.CATEGORIES,
-            roles: [RoleEnums.ADMIN, RoleEnums.PUBLISHER_MANAGER]
-          },
-          {
-            title: 'Kho sách',
-            url: PATH.INVENTORY,
-            roles: [RoleEnums.ADMIN, RoleEnums.PUBLISHER_MANAGER]
-          }
-        ]
-      },
-      {
-        title: 'Nhà xuất bản',
-        url: '#',
-        icon: BookOpen,
-        isActive: checkActive([{ url: PATH.PUBLISHER_BOOKS }]),
-        roles: [RoleEnums.PUBLISHER_MANAGER],
-        items: [
-          {
-            title: 'Cập nhật sách',
-            url: PATH.PUBLISHER_BOOKS,
-            roles: [RoleEnums.PUBLISHER_MANAGER]
-          },
-          {
-            title: 'Quản lý danh mục',
-            url: PATH.CATEGORIES,
-            roles: [RoleEnums.PUBLISHER_MANAGER]
-          },
-          {
-            title: 'Quản lý kho',
-            url: PATH.INVENTORY,
-            roles: [RoleEnums.PUBLISHER_MANAGER]
-          }
-        ]
-      },
-      {
-        title: 'Cửa hàng',
-        url: '#',
-        icon: Store,
-        isActive: checkActive([
-          { url: PATH.STORE_BOOKS },
-          { url: PATH.STORE_HOURS }
-        ]),
-        roles: [RoleEnums.STORE_MANAGER],
-        items: [
-          {
-            title: 'Quản lý sách',
-            url: PATH.STORE_BOOKS,
-            roles: [RoleEnums.STORE_MANAGER]
-          },
-          {
-            title: 'Giờ mở cửa',
-            url: PATH.STORE_HOURS,
-            roles: [RoleEnums.STORE_MANAGER]
-          },
-          {
-            title: 'Sự kiện',
-            url: '#',
-            roles: [RoleEnums.STORE_MANAGER]
+            roles: [RoleEnums.ADMIN]
           }
         ]
       },
@@ -195,9 +140,89 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             roles: [RoleEnums.ADMIN]
           }
         ]
+      },
+      {
+        title: 'Người dùng',
+        url: '#',
+        icon: Users,
+        isActive: checkActive([{ url: PATH.USERS }, { url: PATH.ROLES }]),
+        roles: [RoleEnums.ADMIN],
+        items: [
+          {
+            title: 'Quản lý người dùng',
+            url: PATH.USERS,
+            roles: [RoleEnums.ADMIN]
+          },
+          {
+            title: 'Quản lý vai trò',
+            url: PATH.ROLES,
+            roles: [RoleEnums.ADMIN]
+          }
+        ]
+      },
+
+      // PUBLISHER MANAGER MENUS
+      {
+        title: 'Quản lý sách',
+        url: '#',
+        icon: BookOpen,
+        isActive: checkActive([
+          { url: PATH.ADMIN_BOOKS },
+          { url: PATH.CATEGORIES },
+          { url: PATH.INVENTORY }
+        ]),
+        roles: [RoleEnums.PUBLISHER_MANAGER],
+        items: [
+          {
+            title: 'Thông tin sách',
+            url: PATH.ADMIN_BOOKS,
+            roles: [RoleEnums.PUBLISHER_MANAGER]
+          },
+          {
+            title: 'Danh mục sách',
+            url: PATH.CATEGORIES,
+            roles: [RoleEnums.PUBLISHER_MANAGER]
+          },
+          {
+            title: 'Quản lý kho sách',
+            url: PATH.INVENTORY,
+            roles: [RoleEnums.PUBLISHER_MANAGER]
+          }
+        ]
+      },
+
+      // STORE MANAGER MENUS
+      {
+        title: 'Quản lý cửa hàng',
+        url: '#',
+        icon: Store,
+        isActive: checkActive([
+          { url: PATH.STORE_BOOKS },
+          { url: PATH.STORE_HOURS },
+          { url: PATH.INVENTORY }
+        ]),
+        roles: [RoleEnums.STORE_MANAGER],
+        items: [
+          {
+            title: 'Sách tại cửa hàng',
+            url: PATH.STORE_BOOKS,
+            roles: [RoleEnums.STORE_MANAGER]
+          },
+          {
+            title: 'Giờ hoạt động',
+            url: PATH.STORE_HOURS,
+            roles: [RoleEnums.STORE_MANAGER]
+          },
+          {
+            title: 'Kho sách',
+            url: PATH.INVENTORY,
+            roles: [RoleEnums.STORE_MANAGER]
+          }
+        ]
       }
     ],
     projects: [
+      // Projects common to all roles
       {
         name: 'Dashboard',
         url: PATH.DASHBOARD,
@@ -209,25 +234,33 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         ]
       },
       {
-        name: 'Thống kê',
+        name: 'Thống kê sách',
         url: PATH.STATISTICS,
-        icon: ChartNoAxesCombined,
+        icon: BarChart3,
         roles: [
           RoleEnums.ADMIN,
           RoleEnums.PUBLISHER_MANAGER,
           RoleEnums.STORE_MANAGER
         ]
       },
+
+      // Admin-only items
       {
         name: 'Thống kê khách',
         url: PATH.VISITOR_STATISTICS,
-        icon: Map,
+        icon: Users,
         roles: [RoleEnums.ADMIN]
       },
       {
-        name: 'Dự đoán khách',
+        name: 'Dự đoán lượng khách',
         url: PATH.VISITOR_PREDICTION,
         icon: ChartNoAxesCombined,
+        roles: [RoleEnums.ADMIN]
+      },
+      {
+        name: 'Khuyến nghị khách',
+        url: PATH.VISITOR_RECOMMENDATION,
+        icon: Users,
         roles: [RoleEnums.ADMIN]
       }
     ]
@@ -260,14 +293,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       (project) => !project.roles || hasRole(project.roles)
     );
   }, [menuData.projects, hasRole, isLoading]);
-
-  if (isLoading) {
-    return (
-      <div className='flex h-screen w-64 items-center justify-center bg-sidebar'>
-        <div className='h-8 w-8 animate-spin rounded-full border-b-2 border-white'></div>
-      </div>
-    );
-  }
 
   return (
     <Sidebar collapsible='icon' {...props}>

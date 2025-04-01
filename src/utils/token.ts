@@ -59,7 +59,7 @@ const tokenMethod: TokenMethodType = {
     return cookieToken.get();
   },
   set: (token) => {
-    console.log('Setting token', token);
+    // console.log('Setting token', token);
     cookieToken.set(token);
   },
   remove: () => {
