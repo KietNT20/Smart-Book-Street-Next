@@ -1,6 +1,6 @@
-import { useBookSearchById } from '@/hooks/use-book-search';
+import { useGetBookByID } from '@/hooks/use-book-search';
 import { useBookMutations } from '@/hooks/use-books';
-import useDebounce from '@/hooks/useDebounce';
+import useDebounce from '@/hooks/use-debounce';
 import { authorService } from '@/services/authorService';
 import { categoryService } from '@/services/categoryService';
 import { Book } from '@/types/book-types';
@@ -13,7 +13,7 @@ export const useBookDetail = ({ id }: { id: string }) => {
     data: bookDetailData,
     isLoading: bookDetailLoading,
     isPending: bookDetailPending
-  } = useBookSearchById(id);
+  } = useGetBookByID(id);
 
   const { deleteBookMutation } = useBookMutations();
 

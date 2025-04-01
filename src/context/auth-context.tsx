@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const checkAuth = async () => {
       const token = tokenMethod.get();
-      if (!token) {
+      if (!token || !token.accessToken) {
         setIsLoading(false);
         return;
       }

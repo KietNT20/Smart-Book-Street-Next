@@ -1,5 +1,5 @@
 import { useGetAuthorById } from '@/hooks/use-author';
-import useDebounce from '@/hooks/useDebounce';
+import useDebounce from '@/hooks/use-debounce';
 import { AuthorResponse } from '@/types/author-types';
 import { useRouter } from 'next/navigation';
 

@@ -9,7 +9,7 @@ export const useBookSearch = (params: BookSearchPagination) => {
   });
 };
 
-export const useBookSearchById = (id: string) => {
+export const useGetBookByID = (id: string) => {
   return useQuery({
     queryKey: ['books', id],
     queryFn: () => bookService.getByID(id)

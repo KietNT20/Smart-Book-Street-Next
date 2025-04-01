@@ -21,7 +21,7 @@ import {
   PopoverTrigger
 } from '@/components/ui/popover';
 import { useCategoryMutation } from '@/hooks/use-category';
-import useDebounce from '@/hooks/useDebounce';
+import useDebounce from '@/hooks/use-debounce';
 import { cn } from '@/lib/utils';
 import { Category } from '@/types/category-types';
 import { Check, ChevronsUpDown } from 'lucide-react';
