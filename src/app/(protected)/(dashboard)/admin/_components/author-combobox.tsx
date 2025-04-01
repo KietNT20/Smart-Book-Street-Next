@@ -21,7 +21,7 @@ import {
   PopoverTrigger
 } from '@/components/ui/popover';
 import { useAuthorMutation } from '@/hooks/use-author';
-import useDebounce from '@/hooks/useDebounce';
+import useDebounce from '@/hooks/use-debounce';
 import { cn, formateDateVi } from '@/lib/utils';
 import { Author } from '@/types/author-types';
 import { Check, ChevronsUpDown } from 'lucide-react';

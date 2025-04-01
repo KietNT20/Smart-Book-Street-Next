@@ -2,7 +2,7 @@
 
 import { ConfirmModal } from '@/components/confirm-modal';
 import { Sort } from '@/enums/enums';
-import useDebounce from '@/hooks/useDebounce';
+import useDebounce from '@/hooks/use-debounce';
 import { Book, BookSearchCriteria } from '@/types/book-types';
 import { BookToolbar } from './_components/book-toolbar';
 import { SearchBookModal } from './_components/search-book-modal';

@@ -1,7 +1,7 @@
 'use client';
 
 import { useBookMutations } from '@/hooks/use-books';
-import useDebounce from '@/hooks/useDebounce';
+import useDebounce from '@/hooks/use-debounce';
 import { useRouter } from 'next/navigation';
 import BookForm from '../../_components/book-form';
 

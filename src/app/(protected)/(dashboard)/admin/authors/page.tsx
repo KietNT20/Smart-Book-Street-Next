@@ -12,7 +12,7 @@ import {
 import { Sort } from '@/enums/enums';
 import { PATH } from '@/enums/path';
 import { useSearchPaginationAuthor } from '@/hooks/use-author';
-import useDebounce from '@/hooks/useDebounce';
+import useDebounce from '@/hooks/use-debounce';
 import { AuthorSearchPagination } from '@/types/author-types';
 import Link from 'next/link';
 import { useState } from 'react';

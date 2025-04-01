@@ -1,6 +1,6 @@
 import { ThemeProvider } from '@/components/theme-provider';
 import { AuthProvider } from '@/context/auth-context';
-import QueryProvider from '@/providers/QueryProvider';
+import QueryProvider from '@/providers/query-provider';
 import type { ReactNode } from 'react';
 
 type Props = {

@@ -1,16 +1,18 @@
 import { API_URL } from '@/constant/api-url';
-import { Category, CategorySearchPagination } from '@/types/category-types';
+import { CategorySearchPagination } from '@/types/category-types';
 import axiosInstance from '@/utils/axiosInstance';
 
+export interface CategoryPayload {
+  categoryName: string;
+  description: string;
+}
+
 export const categoryService = {
-  create: async (payload: Partial<Omit<Category, 'id'>>) => {
+  create: async (payload: Partial<CategoryPayload>) => {
     const res = await axiosInstance.post(API_URL.CATEGORIES.INDEX, payload);
     return res.data;
   },
-  update: async (
-    id: string,
-    payload: { categoryName: string; description: string }
-  ) => {
+  update: async (id: string, payload: Partial<CategoryPayload>) => {
     const res = await axiosInstance.put(
       `${API_URL.CATEGORIES.INDEX}/${id}`,
       payload
@@ -29,7 +31,7 @@ export const categoryService = {
     const res = await axiosInstance.post(API_URL.CATEGORIES.SEARCH, payload);
     return res.data;
   },
-  searchPagination: async (payload: CategorySearchPagination) => {
+  searchPagination: async (payload: Partial<CategorySearchPagination>) => {
     const res = await axiosInstance.post(
       API_URL.CATEGORIES.PAGINATION_SEARCH,
       payload

@@ -1,6 +1,6 @@
 import { categoryService } from '@/services/categoryService';
 import { CategorySearchPagination } from '@/types/category-types';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 export const useGetCategoryById = (id: string) => {
   return useQuery({
@@ -17,6 +17,8 @@ export const useGetAndSearchCategory = (params: CategorySearchPagination) => {
 };
 
 export const useCategoryMutation = () => {
+  const queryClient = useQueryClient();
+
   const searchCategoryName = useMutation({
     mutationKey: ['search-category-name'],
     mutationFn: (payload: { categoryName: string }) =>
@@ -26,7 +28,10 @@ export const useCategoryMutation = () => {
   const createCategory = useMutation({
     mutationKey: ['create-category'],
     mutationFn: (payload: { categoryName: string; description: string }) =>
-      categoryService.create(payload)
+      categoryService.create(payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['categories'] });
+    }
   });
 
   const updateCategory = useMutation({

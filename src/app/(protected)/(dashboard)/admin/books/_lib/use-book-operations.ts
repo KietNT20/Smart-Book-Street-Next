@@ -1,6 +1,6 @@
 import { useBookSearch } from '@/hooks/use-book-search';
 import { useBookMutations } from '@/hooks/use-books';
-import useDebounce from '@/hooks/useDebounce';
+import useDebounce from '@/hooks/use-debounce';
 import { BookSearchCriteria } from '@/types/book-types';
 import { toast } from 'sonner';
 
