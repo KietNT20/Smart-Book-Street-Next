@@ -1,6 +1,6 @@
 import { BookFormValues } from '@/lib/zod';
 import { BookAuthorIds, BookCategoryIds } from '@/types/book-types';
-import { format } from 'date-fns';
+import dayjs from 'dayjs';
 
 interface BookWithRelations extends BookFormValues {
   bookAuthors?: BookAuthorIds[];
@@ -22,8 +22,7 @@ export function prepareInitialBookData(book?: BookFormValues): BookFormValues {
       authorIds: [],
       categoryIds: [],
       mainImageFile: undefined,
-      additionalImageFiles: [],
-      createdDate: new Date()
+      additionalImageFiles: []
     };
   }
 
@@ -31,7 +30,7 @@ export function prepareInitialBookData(book?: BookFormValues): BookFormValues {
     code: book.code || '',
     title: book.title || '',
     publicationDate: book.publicationDate
-      ? format(new Date(book.publicationDate), 'yyyy-MM-dd')
+      ? dayjs(new Date(book.publicationDate)).format('YYYY-MM-DD')
       : '',
     price: book.price || 0,
     languages: book.languages || '',
@@ -45,8 +44,7 @@ export function prepareInitialBookData(book?: BookFormValues): BookFormValues {
       (book as BookWithRelations).bookCategories?.map((bc) => bc.categoryId) ||
       [],
     mainImageFile: undefined,
-    additionalImageFiles: [],
-    lastUpdatedDate: new Date()
+    additionalImageFiles: []
   };
 }
 

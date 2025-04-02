@@ -17,7 +17,8 @@ import { cn } from '@/lib/utils';
 import { authorFormSchema, AuthorFormValues } from '@/lib/zod';
 import { Author } from '@/types/author-types';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { format } from 'date-fns';
+import { DatePicker } from 'antd';
+import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -57,7 +58,7 @@ export function AuthorForm({ authorId }: Props) {
       authorName: '',
       nationality: '',
       biography: '',
-      dob: '',
+      dob: new Date(),
       imgFile: undefined
     }
   });
@@ -66,7 +67,7 @@ export function AuthorForm({ authorId }: Props) {
     if (authorData) {
       form.reset({
         authorName: authorData.result.authorName,
-        dob: format(new Date(authorData.result.dob), 'yyyy-MM-dd'),
+        dob: new Date(authorData.result.dob),
         nationality: authorData.result.nationality,
         biography: authorData.result.biography,
         imgFile: undefined
@@ -78,7 +79,7 @@ export function AuthorForm({ authorId }: Props) {
     try {
       const formData = new FormData();
       formData.append('AuthorName', data.authorName);
-      formData.append('DOB', data.dob || '');
+      formData.append('DOB', data.dob?.toDateString() || '');
       formData.append('Nationality', data.nationality || '');
       formData.append('Biography', data.biography || '');
       if (data.imgFile) {
@@ -136,9 +137,21 @@ export function AuthorForm({ authorId }: Props) {
             name='dob'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Ngày sinh</FormLabel>
+                <FormLabel>Ngày sinh:</FormLabel>
                 <FormControl>
-                  <Input placeholder='Nhập ngày sinh' type='date' {...field} />
+                  <DatePicker
+                    format='YYYY-MM-DD'
+                    value={field.value ? dayjs(field.value) : null}
+                    onChange={(date) => {
+                      field.onChange(date ? date.format('YYYY-MM-DD') : null);
+                    }}
+                    placeholder='Chọn ngày sinh'
+                    className={cn(
+                      'w-full px-3 py-2',
+                      form.formState.errors.dob && 'border-red-500'
+                    )}
+                    onBlur={field.onBlur}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

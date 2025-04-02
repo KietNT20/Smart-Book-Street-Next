@@ -69,10 +69,9 @@ export const registerSchema = z.object({
 export const bookSchema = z.object({
   code: z.string().min(1, { message: 'Mã sách không được để trống' }),
   title: z.string().min(1, { message: 'Tên sách không được để trống' }),
-  publicationDate: z
-    .string()
-    .date()
-    .nonempty({ message: 'Ngày xuất bản không được để trống' }),
+  publicationDate: z.string().date().nonempty({
+    message: 'Ngày xuất bản không được để trống'
+  }),
   price: z.number().min(0, { message: 'Giá không được âm' }),
   languages: z.string().min(1, { message: 'Ngôn ngữ không được để trống' }),
   description: z.string().optional(),
@@ -120,7 +119,7 @@ export type SearchBookFormValues = z.infer<typeof searchBookSchema>;
 // Author form
 export const authorFormSchema = z.object({
   authorName: z.string().min(1, 'Tên tác giả là bắt buộc'),
-  dob: z.string().date().optional(),
+  dob: z.date().optional(),
   nationality: z.string().optional(),
   biography: z.string().optional(),
   imgFile: z.instanceof(File).optional().or(z.string().optional())

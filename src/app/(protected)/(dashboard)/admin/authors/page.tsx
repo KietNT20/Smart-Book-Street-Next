@@ -30,13 +30,10 @@ const AuthorsPage = () => {
     }
   });
 
-  const {
-    data: resDataAuthors,
-    isLoading,
-    isError
-  } = useSearchPaginationAuthor(searchParams);
+  const { authorsRes, authorsLoading, error } =
+    useSearchPaginationAuthor(searchParams);
 
-  const debouncedResults = useDebounce(resDataAuthors?.results, 300);
+  const debouncedResults = useDebounce(authorsRes?.results, 300);
 
   const handleAuthorNameChange = (value: string) => {
     setSearchParams((prev) => ({
@@ -145,7 +142,7 @@ const AuthorsPage = () => {
           </div>
         </div>
 
-        {isError ? (
+        {error ? (
           <div className='py-4 text-center text-red-500'>
             Đã có lỗi xảy ra khi tải dữ liệu. Vui lòng thử lại.
           </div>
@@ -153,9 +150,9 @@ const AuthorsPage = () => {
           <DataTable
             columns={columns}
             data={debouncedResults || []}
-            isLoading={isLoading}
+            isLoading={authorsLoading}
             pageSize={searchParams.pageSize}
-            pageCount={resDataAuthors?.totalPages}
+            pageCount={authorsRes?.totalPages}
             currentPage={searchParams.pageNumber}
             onPageChange={handlePageChange}
             onPageSizeChange={handlePageSizeChange}

@@ -27,6 +27,7 @@ interface RichTextEditorProps {
   className?: string;
   placeholder?: string;
   readOnly?: boolean;
+  isPending?: boolean;
 }
 
 const RichTextEditor = ({
@@ -34,7 +35,8 @@ const RichTextEditor = ({
   onChange,
   className,
   placeholder = 'Nhập nội dung...',
-  readOnly = false
+  readOnly = false,
+  isPending
 }: RichTextEditorProps) => {
   const [linkModalOpen, setLinkModalOpen] = useState(false);
   const [currentLinkUrl, setCurrentLinkUrl] = useState('');
@@ -311,6 +313,7 @@ const RichTextEditor = ({
       <EditorContent
         editor={editor}
         className='prose max-w-none overflow-hidden'
+        disabled={isPending}
       />
 
       <LinkModal

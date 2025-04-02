@@ -13,11 +13,78 @@ export const useGetAuthorById = <T>(id: string) => {
   });
 };
 
-export const useSearchPaginationAuthor = (params: AuthorSearchPagination) => {
-  return useQuery({
-    queryKey: ['authors', params],
-    queryFn: () => authorService.searchPagination(params)
+export const useSearchPaginationAuthor = ({
+  sortField,
+  sortOrder,
+  result,
+  pageNumber,
+  pageSize
+}: AuthorSearchPagination) => {
+  const queryClient = useQueryClient();
+  const {
+    data: authorsRes,
+    isLoading: authorsLoading,
+    error
+  } = useQuery({
+    queryKey: ['authors', result, sortField, sortOrder, pageSize, pageNumber],
+    queryFn: () =>
+      authorService.searchPagination({
+        pageNumber,
+        pageSize,
+        sortField,
+        sortOrder,
+        result
+      })
   });
+  // Prefetching
+  const totalPage = authorsRes?.totalPages || 0;
+
+  if (pageNumber < totalPage) {
+    queryClient.prefetchQuery({
+      queryKey: [
+        'authors',
+        result,
+        sortField,
+        sortOrder,
+        pageSize,
+        pageNumber + 1
+      ],
+      queryFn: () =>
+        authorService.searchPagination({
+          pageNumber: pageNumber + 1,
+          pageSize,
+          sortField,
+          sortOrder,
+          result
+        })
+    });
+  }
+
+  if (pageNumber > 1) {
+    queryClient.prefetchQuery({
+      queryKey: [
+        'authors',
+        result,
+        sortField,
+        sortOrder,
+        pageSize,
+        pageNumber - 1
+      ],
+      queryFn: () =>
+        authorService.searchPagination({
+          pageNumber: pageNumber - 1,
+          pageSize,
+          sortField,
+          sortOrder,
+          result
+        })
+    });
+  }
+  return {
+    authorsRes,
+    authorsLoading,
+    error
+  };
 };
 
 export const useAuthorMutation = () => {
@@ -82,6 +149,7 @@ export const useAuthorMutation = () => {
     // Delete Author
     deleteAuthor: deleteAuthor.mutate,
     deleteAuthorPending: deleteAuthor.isPending,
+    // Search Author
     searchAuthorName
   };
 };
