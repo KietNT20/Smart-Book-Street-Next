@@ -45,7 +45,7 @@ export default function BooksDetailPage({
         <BackButton routeTo={PATH.ADMIN_BOOKS} />
         <div className='flex gap-2'>
           <Link href={`${PATH.ADMIN_BOOKS}/${params.id}/edit`}>
-            <Button variant='outline'>Sửa thông tin</Button>
+            <Button variant='primaryblue'>Sửa thông tin</Button>
           </Link>
           <Button
             variant='destructive'

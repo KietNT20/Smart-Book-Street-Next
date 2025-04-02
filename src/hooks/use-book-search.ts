@@ -1,12 +1,80 @@
 import { bookService } from '@/services/bookService';
 import { BookSearchPagination } from '@/types/book-types';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
-export const useBookSearch = (params: BookSearchPagination) => {
-  return useQuery({
-    queryKey: ['books', params],
-    queryFn: () => bookService.searchPagination(params)
+export const useBookSearch = ({
+  sortField,
+  sortOrder,
+  result,
+  pageSize,
+  pageNumber
+}: BookSearchPagination) => {
+  const queryClient = useQueryClient();
+  const {
+    data: booksRes,
+    isLoading,
+    error
+  } = useQuery({
+    queryKey: ['books', sortField, sortOrder, result, pageSize, pageNumber],
+    queryFn: () =>
+      bookService.searchPagination({
+        sortField,
+        sortOrder,
+        result,
+        pageSize,
+        pageNumber
+      })
   });
+
+  const totalPage = booksRes?.totalPages || 1;
+
+  if (pageNumber < totalPage) {
+    queryClient.prefetchQuery({
+      queryKey: [
+        'books',
+        sortField,
+        sortOrder,
+        result,
+        pageSize,
+        pageNumber + 1
+      ],
+      queryFn: () =>
+        bookService.searchPagination({
+          sortField,
+          sortOrder,
+          result,
+          pageSize,
+          pageNumber: pageNumber + 1
+        })
+    });
+  }
+
+  if (pageNumber > 1) {
+    queryClient.prefetchQuery({
+      queryKey: [
+        'books',
+        sortField,
+        sortOrder,
+        result,
+        pageSize,
+        pageNumber - 1
+      ],
+      queryFn: () =>
+        bookService.searchPagination({
+          sortField,
+          sortOrder,
+          result,
+          pageSize,
+          pageNumber: pageNumber - 1
+        })
+    });
+  }
+
+  return {
+    booksRes,
+    isLoading,
+    error
+  };
 };
 
 export const useGetBookByID = (id: string) => {

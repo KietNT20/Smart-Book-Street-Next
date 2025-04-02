@@ -13,11 +13,11 @@ export const months: Array<{ value: number; label: string }> = [
   { value: 11, label: 'Tháng 12' }
 ];
 
-// Create an array of years from 10 years ago to 10 years later
 export const currentYear: number = new Date().getFullYear();
+// Create an array of years from 30 years ago to 30 years later
 export const years: number[] = Array.from(
-  { length: 21 },
-  (_, i) => currentYear - 10 + i
+  { length: 31 },
+  (_, i) => currentYear - 15 + i
 );
 
 export const hours: number[] = Array.from({ length: 24 }, (_, i) => i);

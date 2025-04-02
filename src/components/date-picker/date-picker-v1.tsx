@@ -76,7 +76,7 @@ export function DatePickerV1({
         </Button>
       </PopoverTrigger>
       <PopoverContent className='w-auto p-0' align='start'>
-        <div className='flex items-center justify-between space-x-2 p-3'>
+        <div className='flex items-center justify-between p-1'>
           <Select value={month.toString()} onValueChange={handleMonthChange}>
             <SelectTrigger className='w-[130px]'>
               <SelectValue placeholder='Chọn tháng' />

@@ -2,7 +2,7 @@
 
 import { ConfirmModal } from '@/components/confirm-modal';
 import { Sort } from '@/enums/enums';
-import { Book, BookSearchCriteria } from '@/types/book-types';
+import { BookSearchCriteria } from '@/types/book-types';
 import { BookToolbar } from './_components/book-toolbar';
 import { SearchBookModal } from './_components/search-book-modal';
 import { useBookList } from './_lib/use-book-operations';
@@ -23,7 +23,7 @@ export default function BooksPage() {
     resetAllFilters
   } = useBookPageState();
 
-  const { bookData, isLoadingBooks, handleDelete, deletedLoading } =
+  const { booksRes, isLoadingBooks, handleDelete, deletedLoading } =
     useBookList({
       pagination,
       searchCriteria
@@ -55,10 +55,8 @@ export default function BooksPage() {
 
       <DataTable
         columns={columns}
-        data={(bookData?.results || []).filter(
-          (book: Book) => !book.isDeleted === true
-        )}
-        pageCount={bookData?.totalPages}
+        data={booksRes?.results || []}
+        pageCount={booksRes?.totalPages}
         state={pagination}
         onStateChange={setPagination}
         isLoading={isLoadingBooks}

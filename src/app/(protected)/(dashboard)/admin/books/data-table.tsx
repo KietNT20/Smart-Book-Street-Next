@@ -19,7 +19,6 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
   VisibilityState
@@ -60,9 +59,9 @@ export function DataTable<TData, TValue>({
       minSize: 50,
       maxSize: 500
     },
-    pageCount: pageCount ?? -1,
+    pageCount: pageCount,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
+    // getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     manualPagination: true,
     onColumnVisibilityChange: setColumnVisibility,
@@ -101,7 +100,7 @@ export function DataTable<TData, TValue>({
         onStateChange({
           ...state,
           sortField: newSorting[0].id,
-          sortOrder: newSorting[0].desc ? -1 : 1
+          sortOrder: newSorting[0].desc ? Sort.DESC : Sort.ASC
         });
       }
     }

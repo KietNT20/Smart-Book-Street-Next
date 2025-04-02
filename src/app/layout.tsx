@@ -6,7 +6,9 @@ import Provider from './provider';
 
 const roboto = Roboto({
   subsets: ['vietnamese'],
-  weight: ['400', '700']
+  weight: ['400', '700'],
+  display: 'swap',
+  variable: '--font-roboto'
 });
 
 export const metadata: Metadata = {

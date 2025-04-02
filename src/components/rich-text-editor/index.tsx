@@ -18,8 +18,8 @@ import { Editor, EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { useCallback, useEffect, useState } from 'react';
 import LinkModal from './link-modal';
-import { customStyles } from './styles';
 import RichTextToolbar from './richtext-toolbar';
+import { customStyles } from './styles';
 
 interface RichTextEditorProps {
   content: string;
@@ -39,7 +39,6 @@ const RichTextEditor = ({
   const [linkModalOpen, setLinkModalOpen] = useState(false);
   const [currentLinkUrl, setCurrentLinkUrl] = useState('');
 
-  // Memoize nội dung để tránh re-render không cần thiết
   const onUpdate = useCallback(
     ({ editor }: { editor: Editor }) => {
       onChange(editor.getHTML());

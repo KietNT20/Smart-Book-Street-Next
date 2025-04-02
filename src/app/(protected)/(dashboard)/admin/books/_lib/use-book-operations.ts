@@ -2,7 +2,6 @@ import { useBookSearch } from '@/hooks/use-book-search';
 import { useBookMutations } from '@/hooks/use-books';
 import useDebounce from '@/hooks/use-debounce';
 import { BookSearchCriteria } from '@/types/book-types';
-import { toast } from 'sonner';
 
 type UseBookListProps = {
   pagination: BookTableState;
@@ -17,7 +16,7 @@ type BookTableState = {
 };
 
 export function useBookList({ pagination, searchCriteria }: UseBookListProps) {
-  const { data: bookData, isLoading } = useBookSearch({
+  const { booksRes, isLoading } = useBookSearch({
     pageNumber: pagination.pageIndex,
     pageSize: pagination.pageSize,
     sortField: pagination.sortField,
@@ -31,16 +30,11 @@ export function useBookList({ pagination, searchCriteria }: UseBookListProps) {
   const deletedLoading = useDebounce(deleteBookPending, 300);
 
   const handleDelete = (id: string) => {
-    try {
-      deleteBook(id);
-    } catch (error) {
-      toast.error('Đã xảy ra lỗi khi xóa sách');
-      console.error('Error deleting book:', error);
-    }
+    deleteBook(id);
   };
 
   return {
-    bookData,
+    booksRes,
     isLoadingBooks,
     handleDelete,
     deletedLoading

@@ -30,24 +30,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const checkAuth = async () => {
-      const token = tokenMethod.get();
-      if (!token || !token.accessToken) {
-        setIsLoading(false);
-        return;
-      }
-
-      try {
-        const response = await userService.getProfile();
-        if (response.isSuccess && response.result) {
-          setUser(response.result);
-          setIsAuthenticated(true);
+      if (tokenMethod.get()) {
+        try {
+          const response = await userService.getProfile();
+          if (response.isSuccess && response.result) {
+            setUser(response.result);
+            setIsAuthenticated(true);
+          }
+        } catch (error) {
+          console.error('Failed to fetch user profile:', error);
+          tokenMethod.remove();
         }
-      } catch (error) {
-        console.error('Failed to fetch user profile:', error);
-        tokenMethod.remove();
-      } finally {
-        setIsLoading(false);
       }
+      setIsLoading(false);
     };
 
     checkAuth();

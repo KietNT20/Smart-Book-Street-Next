@@ -16,11 +16,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { format, parse } from 'date-fns';
 import { Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
+import AuthorCombobox from '../../_components/author-combobox';
+import CategoryCombobox from '../../_components/category-combobox';
 import PublisherCombobox from '../../_components/publisher-combobox';
 import { prepareInitialBookData } from '../_lib/book-form-helpers';
 import { useBookFormSubmit } from '../_lib/use-book-form-submit';
-import AuthorCombobox from '../../_components/author-combobox';
-import CategoryCombobox from '../../_components/category-combobox';
 
 type Props = {
   book?: BookFormValues;
@@ -269,49 +269,49 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
               </FormItem>
             )}
           />
-        </div>
 
-        {/* Ảnh bổ sung */}
-        <FormField
-          control={form.control}
-          name='additionalImageFiles'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Ảnh bổ sung</FormLabel>
-              <FormControl>
-                <Input
-                  type='file'
-                  multiple
-                  onChange={(e) => {
-                    const fileList = e.target.files;
-                    if (fileList && fileList.length > 0) {
-                      const filesArray = Array.from(fileList) as File[];
-                      handleAdditionalFilesChange(filesArray);
-                      field.onChange(filesArray);
-                    }
-                  }}
-                  className={cn(
-                    form.formState.errors.additionalImageFiles &&
-                      'border-red-500'
-                  )}
-                />
-              </FormControl>
-              {files.additionalFiles.length > 0 && (
-                <div className='mt-2'>
-                  <p className='text-sm font-medium'>
-                    Đã chọn {files.additionalFiles.length} file:
-                  </p>
-                  <ul className='mt-1 list-disc pl-5 text-sm text-gray-500'>
-                    {files.additionalFiles.map((file, index) => (
-                      <li key={index}>{file.name}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          {/* Ảnh bổ sung */}
+          <FormField
+            control={form.control}
+            name='additionalImageFiles'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Ảnh bổ sung</FormLabel>
+                <FormControl>
+                  <Input
+                    type='file'
+                    multiple
+                    onChange={(e) => {
+                      const fileList = e.target.files;
+                      if (fileList && fileList.length > 0) {
+                        const filesArray = Array.from(fileList) as File[];
+                        handleAdditionalFilesChange(filesArray);
+                        field.onChange(filesArray);
+                      }
+                    }}
+                    className={cn(
+                      form.formState.errors.additionalImageFiles &&
+                        'border-red-500'
+                    )}
+                  />
+                </FormControl>
+                {files.additionalFiles.length > 0 && (
+                  <div className='mt-2'>
+                    <p className='text-sm font-medium'>
+                      Đã chọn {files.additionalFiles.length} file:
+                    </p>
+                    <ul className='mt-1 list-disc pl-5 text-sm text-gray-500'>
+                      {files.additionalFiles.map((file, index) => (
+                        <li key={index}>{file.name}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
         {/* Mô tả */}
         {/* <FormField
