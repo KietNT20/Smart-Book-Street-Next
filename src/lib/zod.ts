@@ -66,12 +66,23 @@ export const registerSchema = z.object({
 });
 
 // Book form
+const bookPublishedDatedSchema = z.string().refine(
+  (value) => {
+    return (
+      /^\d{4}$/.test(value) ||
+      /^\d{4}-\d{2}$/.test(value) ||
+      /^\d{4}-\d{2}-\d{2}$/.test(value)
+    );
+  },
+  {
+    message: 'Ngày xuất bản không hợp lệ'
+  }
+);
+
 export const bookSchema = z.object({
   code: z.string().min(1, { message: 'Mã sách không được để trống' }),
   title: z.string().min(1, { message: 'Tên sách không được để trống' }),
-  publicationDate: z.string().date().nonempty({
-    message: 'Ngày xuất bản không được để trống'
-  }),
+  publicationDate: bookPublishedDatedSchema,
   price: z.number().min(0, { message: 'Giá không được âm' }),
   languages: z.string().min(1, { message: 'Ngôn ngữ không được để trống' }),
   description: z.string().optional(),
@@ -82,11 +93,7 @@ export const bookSchema = z.object({
   publisherId: z.string().optional(),
   authorIds: z.array(z.string()).optional(),
   categoryIds: z.array(z.string()).optional(),
-  id: z.string().optional(),
-  createdBy: z.string().optional(),
-  createdDate: z.date().optional(),
-  lastUpdatedBy: z.string().optional(),
-  lastUpdatedDate: z.date().optional()
+  id: z.string().optional()
 });
 
 export type BookFormValues = z.infer<typeof bookSchema>;

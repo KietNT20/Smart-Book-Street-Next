@@ -1,9 +1,8 @@
 'use client';
 
+import { formateDateVi } from '@/lib/utils';
 import { Author } from '@/types/author-types';
 import { ColumnDef } from '@tanstack/react-table';
-import { format } from 'date-fns';
-import { vi } from 'date-fns/locale';
 import AuthorMenuAction from './_components/author-menu-action';
 
 export const columns: ColumnDef<Author>[] = [
@@ -15,11 +14,9 @@ export const columns: ColumnDef<Author>[] = [
     accessorKey: 'dob',
     header: 'Ngày sinh',
     cell: ({ row }) => {
-      const date = row.getValue('dob') as Date | string;
-      if (!date) return null;
-
-      const dateValue = typeof date === 'string' ? new Date(date) : date;
-      return format(dateValue, 'dd/MM/yyyy', { locale: vi });
+      const date = row.getValue('dob') as string | Date;
+      if (!date) return 'Chưa có thông tin';
+      return formateDateVi(date);
     }
   },
   {

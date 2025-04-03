@@ -9,20 +9,21 @@ import {
   FormMessage
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { PATH } from '@/enums/path';
 import { useBookMutations } from '@/hooks/use-books';
 import useDebounce from '@/hooks/use-debounce';
 import { cn } from '@/lib/utils';
 import { BookFormValues, bookSchema } from '@/lib/zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { DatePicker } from 'antd';
-import dayjs from 'dayjs';
 import { Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import AuthorCombobox from '../../_components/author-combobox';
 import CategoryCombobox from '../../_components/category-combobox';
 import PublisherCombobox from '../../_components/publisher-combobox';
 import { prepareInitialBookData } from '../_lib/book-form-helpers';
 import { useBookFormSubmit } from '../_lib/use-book-form-submit';
+import BookPublicationDate from './book-publication-date';
 
 type Props = {
   book?: BookFormValues;
@@ -37,10 +38,19 @@ const BookForm = ({ book, onCancel }: Props) => {
   const { createBook, createBookPending, updateBook, updateBookPending } =
     useBookMutations();
   const isLoading = useDebounce(createBookPending || updateBookPending, 300);
+  const router = useRouter();
 
   const onSubmit = (formData: FormData) => {
     if (book) {
-      updateBook({ id: book.id!, formData });
+      updateBook(
+        { id: book.id!, formData },
+        {
+          onSuccess: () => {
+            form.reset();
+            router.push(`${PATH.ADMIN_BOOKS}/${book.id}`);
+          }
+        }
+      );
     } else {
       createBook(formData, {
         onSuccess: () => {
@@ -90,34 +100,7 @@ const BookForm = ({ book, onCancel }: Props) => {
           />
 
           {/* Ngày xuất bản  */}
-          <FormField
-            control={form.control}
-            name='publicationDate'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>
-                  Ngày xuất bản <span className='text-red-400'>*</span>
-                </FormLabel>
-                <FormControl>
-                  <DatePicker
-                    format='YYYY-MM-DD'
-                    value={field.value ? dayjs(field.value) : null}
-                    onChange={(date) => {
-                      field.onChange(date ? date.format('YYYY-MM-DD') : null);
-                    }}
-                    placeholder='Chọn ngày xuất bản'
-                    className={cn(
-                      'w-full px-3 py-2',
-                      form.formState.errors.publicationDate && 'border-red-500'
-                    )}
-                    onBlur={field.onBlur}
-                    disabled={isLoading}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <BookPublicationDate control={form.control} disabled={isLoading} />
 
           {/* Tên sách */}
           <FormField

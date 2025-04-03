@@ -12,13 +12,17 @@ import { cn } from '@/lib/utils';
 import { searchBookSchema, type SearchBookFormValues } from '@/lib/zod';
 import { BookSearchCriteria } from '@/types/book-types';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { DatePicker } from 'antd';
+import dayjs from 'dayjs';
+import { Controller, useForm } from 'react-hook-form';
 
 type Props = {
   isOpen: boolean;
   onClose: () => void;
   onSearch: (criteria: Partial<BookSearchCriteria>) => void;
 };
+
+const { RangePicker } = DatePicker;
 
 export function SearchBookModal({ isOpen, onClose, onSearch }: Props) {
   const form = useForm<SearchBookFormValues>({
@@ -35,6 +39,9 @@ export function SearchBookModal({ isOpen, onClose, onSearch }: Props) {
   });
 
   const {
+    register,
+    control,
+    handleSubmit,
     formState: { errors },
     reset
   } = form;
@@ -78,7 +85,7 @@ export function SearchBookModal({ isOpen, onClose, onSearch }: Props) {
         <DialogHeader>
           <DialogTitle>Tìm kiếm nâng cao</DialogTitle>
         </DialogHeader>
-        <form onSubmit={form.handleSubmit(handleSearch)} className='space-y-4'>
+        <form onSubmit={handleSubmit(handleSearch)} className='space-y-4'>
           <div className='grid gap-4 py-4'>
             {/* Code field */}
             <div className='grid grid-cols-4 items-center gap-4'>
@@ -88,7 +95,7 @@ export function SearchBookModal({ isOpen, onClose, onSearch }: Props) {
               <div className='col-span-3'>
                 <Input
                   id='code'
-                  {...form.register('code')}
+                  {...register('code')}
                   className={cn(errors.code && 'border-red-500')}
                 />
                 {errors.code && (
@@ -107,7 +114,7 @@ export function SearchBookModal({ isOpen, onClose, onSearch }: Props) {
               <div className='col-span-3'>
                 <Input
                   id='title'
-                  {...form.register('title')}
+                  {...register('title')}
                   className={cn(errors.title && 'border-red-500')}
                 />
                 {errors.title && (
@@ -118,41 +125,36 @@ export function SearchBookModal({ isOpen, onClose, onSearch }: Props) {
               </div>
             </div>
 
-            <div className='space-y-4'>
-              {/* Start Date field */}
-              <div className='grid grid-cols-4 items-center gap-4'>
-                <Label className='text-right'>Ngày bắt đầu</Label>
-                <div className='col-span-3'>
-                  <Input
-                    id='startDate'
-                    type='date'
-                    {...form.register('startDate')}
-                    className={cn(errors.startDate && 'border-red-500')}
-                  />
-                  {errors.startDate && (
-                    <span className='text-sm text-red-500'>
-                      {errors.startDate.message}
-                    </span>
+            {/* Date Range Picker */}
+            <div className='grid grid-cols-4 items-center gap-4'>
+              <Label className='text-right'>Thời gian</Label>
+              <div className='col-span-3'>
+                <Controller
+                  control={control}
+                  name='startDate'
+                  render={() => (
+                    <RangePicker
+                      className='w-full px-3 py-2'
+                      onChange={(dates, dateStrings) => {
+                        if (dates) {
+                          form.setValue('startDate', dateStrings[0]);
+                          form.setValue('endDate', dateStrings[1]);
+                        } else {
+                          form.setValue('startDate', '');
+                          form.setValue('endDate', '');
+                        }
+                      }}
+                      value={[
+                        form.getValues('startDate')
+                          ? dayjs(form.getValues('startDate'))
+                          : null,
+                        form.getValues('endDate')
+                          ? dayjs(form.getValues('endDate'))
+                          : null
+                      ]}
+                    />
                   )}
-                </div>
-              </div>
-
-              {/* End Date field */}
-              <div className='grid grid-cols-4 items-center gap-4'>
-                <Label className='text-right'>Ngày kết thúc</Label>
-                <div className='col-span-3'>
-                  <Input
-                    id='endDate'
-                    type='date'
-                    {...form.register('endDate')}
-                    className={cn(errors.endDate && 'border-red-500')}
-                  />
-                  {errors.endDate && (
-                    <span className='text-sm text-red-500'>
-                      {errors.endDate.message}
-                    </span>
-                  )}
-                </div>
+                />
               </div>
             </div>
 
@@ -164,7 +166,7 @@ export function SearchBookModal({ isOpen, onClose, onSearch }: Props) {
               <div className='col-span-3'>
                 <Input
                   id='status'
-                  {...form.register('status')}
+                  {...register('status')}
                   className={cn(errors.status && 'border-red-500')}
                 />
                 {errors.status && (
@@ -183,7 +185,7 @@ export function SearchBookModal({ isOpen, onClose, onSearch }: Props) {
               <div className='col-span-3'>
                 <Input
                   id='languages'
-                  {...form.register('languages')}
+                  {...register('languages')}
                   className={cn(errors.languages && 'border-red-500')}
                 />
                 {errors.languages && (
@@ -201,7 +203,7 @@ export function SearchBookModal({ isOpen, onClose, onSearch }: Props) {
                 <Input
                   type='number'
                   placeholder='Nhập giá'
-                  {...form.register('price', { valueAsNumber: true })}
+                  {...register('price', { valueAsNumber: true })}
                   className={cn(errors.price && 'border-red-500')}
                 />
                 {errors.price && (
