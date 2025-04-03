@@ -133,3 +133,17 @@ export const authorFormSchema = z.object({
 });
 
 export type AuthorFormValues = z.infer<typeof authorFormSchema>;
+
+// Category form
+export const categoryFormSchema = z.object({
+  categoryName: z
+    .string()
+    .min(2, { message: 'Tên danh mục phải có ít nhất 2 ký tự' })
+    .max(50, { message: 'Tên danh mục không được vượt quá 50 ký tự' }),
+  description: z
+    .string()
+    .max(500, { message: 'Mô tả không được vượt quá 500 ký tự' })
+    .optional()
+});
+
+export type CategoryFormValues = z.infer<typeof categoryFormSchema>;

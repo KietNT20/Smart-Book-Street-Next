@@ -1,5 +1,6 @@
 import { formateDateVi, formatPrice } from '@/lib/utils';
 import { Author } from '@/types/author-types';
+import Image from 'next/image';
 import Link from 'next/link';
 
 type Props = {
@@ -11,7 +12,14 @@ const AuthorInfo = ({ author }: Props) => {
     <div className='overflow-hidden rounded-lg bg-white shadow-lg'>
       {/* Header với thông tin cơ bản */}
       <div className='md:flex'>
-        <div className='flex items-center justify-center p-6 md:w-1/3'></div>
+        <div className='flex items-center justify-center p-6 md:w-1/3'>
+          <Image
+            src={`${author.baseImgUrl}`}
+            alt={author.authorName}
+            width={500}
+            height={500}
+          />
+        </div>
 
         <div className='p-6 md:w-2/3'>
           <h1 className='mb-4 text-3xl font-bold text-gray-800'>

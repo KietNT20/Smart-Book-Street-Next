@@ -13,7 +13,7 @@ export const useGetAuthorById = <T>(id: string) => {
   });
 };
 
-export const useSearchPaginationAuthor = ({
+export const useGetAuthors = ({
   sortField,
   sortOrder,
   result,

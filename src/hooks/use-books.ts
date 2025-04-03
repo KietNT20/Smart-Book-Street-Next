@@ -14,9 +14,9 @@ export const useBookMutations = () => {
         queryClient.invalidateQueries({ queryKey: ['books'] });
       }
     },
-    onError: (error: Error) => {
+    onError: (error) => {
       toast.error('Đã xảy ra lỗi khi thêm sách');
-      console.error('Error add book:', error);
+      console.error('Error creating book:', error);
     }
   });
 
@@ -31,7 +31,7 @@ export const useBookMutations = () => {
         queryClient.invalidateQueries({ queryKey: ['books'] });
       }
     },
-    onError: (error: Error) => {
+    onError: (error) => {
       toast.error('Đã xảy ra lỗi khi cập nhật sách');
       console.error('Error updating book:', error);
     }
@@ -40,9 +40,15 @@ export const useBookMutations = () => {
   const deleteBookMutation = useMutation({
     mutationKey: ['delete-book'],
     mutationFn: (id: string) => bookService.delete(id),
-    onSuccess: () => {
-      toast.success('Đã xóa sách');
-      queryClient.invalidateQueries({ queryKey: ['books'] });
+    onSuccess: (data) => {
+      if (data?.isSuccess) {
+        toast.success('Xóa sách thành công');
+        queryClient.invalidateQueries({ queryKey: ['books'] });
+      }
+    },
+    onError: (error) => {
+      toast.error('Đã xảy ra lỗi khi xóa sách');
+      console.error('Error deleting book:', error);
     }
   });
 

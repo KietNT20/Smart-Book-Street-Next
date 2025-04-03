@@ -23,7 +23,7 @@ export default function BooksPage() {
     resetAllFilters
   } = useBookPageState();
 
-  const { booksRes, isLoadingBooks, handleDelete, deletedLoading } =
+  const { booksRes, isLoadingBooks, handleDelete, deletedLoading, isPending } =
     useBookList({
       pagination,
       searchCriteria
@@ -59,7 +59,7 @@ export default function BooksPage() {
         pageCount={booksRes?.totalPages}
         state={pagination}
         onStateChange={setPagination}
-        isLoading={isLoadingBooks}
+        isLoading={isLoadingBooks || isPending}
       />
 
       <SearchBookModal

@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/select';
 import { Sort } from '@/enums/enums';
 import { PATH } from '@/enums/path';
-import { useSearchPaginationAuthor } from '@/hooks/use-author';
+import { useGetAuthors } from '@/hooks/use-author';
 import useDebounce from '@/hooks/use-debounce';
 import { AuthorSearchPagination } from '@/types/author-types';
 import Link from 'next/link';
@@ -30,8 +30,7 @@ const AuthorsPage = () => {
     }
   });
 
-  const { authorsRes, authorsLoading, error } =
-    useSearchPaginationAuthor(searchParams);
+  const { authorsRes, authorsLoading, error } = useGetAuthors(searchParams);
 
   const debouncedResults = useDebounce(authorsRes?.results, 300);
 
@@ -81,7 +80,7 @@ const AuthorsPage = () => {
     <div className='container mx-auto'>
       <div className='space-y-6'>
         <div className='flex items-center justify-between'>
-          <h1 className='text-2xl font-bold'>Quản lý Tác giả</h1>
+          <h2 className='text-2xl font-bold'>Quản lý Tác giả</h2>
           <Link href={PATH.ADMIN_AUTHOR_CREATE}>
             <Button>Thêm tác giả mới</Button>
           </Link>

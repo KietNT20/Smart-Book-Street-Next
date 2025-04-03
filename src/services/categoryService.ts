@@ -8,6 +8,10 @@ export interface CategoryPayload {
 }
 
 export const categoryService = {
+  getAll: async () => {
+    const res = await axiosInstance.get(API_URL.CATEGORIES.INDEX);
+    return res.data;
+  },
   create: async (payload: Partial<CategoryPayload>) => {
     const res = await axiosInstance.post(API_URL.CATEGORIES.INDEX, payload);
     return res.data;

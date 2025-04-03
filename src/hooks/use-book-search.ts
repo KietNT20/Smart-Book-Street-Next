@@ -2,7 +2,7 @@ import { bookService } from '@/services/bookService';
 import { BookSearchPagination } from '@/types/book-types';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
-export const useBookSearch = ({
+export const useGetBooks = ({
   sortField,
   sortOrder,
   result,
@@ -13,6 +13,7 @@ export const useBookSearch = ({
   const {
     data: booksRes,
     isLoading,
+    isPending,
     error
   } = useQuery({
     queryKey: ['books', sortField, sortOrder, result, pageSize, pageNumber],
@@ -73,6 +74,7 @@ export const useBookSearch = ({
   return {
     booksRes,
     isLoading,
+    isPending,
     error
   };
 };

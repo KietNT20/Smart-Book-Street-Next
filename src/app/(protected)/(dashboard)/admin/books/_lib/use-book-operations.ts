@@ -1,4 +1,4 @@
-import { useBookSearch } from '@/hooks/use-book-search';
+import { useGetBooks } from '@/hooks/use-book-search';
 import { useBookMutations } from '@/hooks/use-books';
 import useDebounce from '@/hooks/use-debounce';
 import { BookSearchCriteria } from '@/types/book-types';
@@ -16,7 +16,7 @@ type BookTableState = {
 };
 
 export function useBookList({ pagination, searchCriteria }: UseBookListProps) {
-  const { booksRes, isLoading } = useBookSearch({
+  const { booksRes, isLoading, isPending } = useGetBooks({
     pageNumber: pagination.pageIndex,
     pageSize: pagination.pageSize,
     sortField: pagination.sortField,
@@ -36,6 +36,7 @@ export function useBookList({ pagination, searchCriteria }: UseBookListProps) {
   return {
     booksRes,
     isLoadingBooks,
+    isPending,
     handleDelete,
     deletedLoading
   };
