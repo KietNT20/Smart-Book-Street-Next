@@ -5,6 +5,7 @@ import { RoleEnums } from '@/enums/role';
 import { userService } from '@/services/userService';
 import { User } from '@/types/user-types';
 import tokenMethod from '@/utils/token';
+import { useQuery } from '@tanstack/react-query';
 import { createContext, useContext, useEffect, useState } from 'react';
 
 interface AuthContextType {
@@ -28,25 +29,26 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  const { data: response } = useQuery({
+    queryKey: ['user-profile'],
+    queryFn: () => userService.getProfile(),
+    retry: false,
+    refetchOnWindowFocus: false,
+    enabled: !!tokenMethod.get()
+  });
+
   useEffect(() => {
-    const checkAuth = async () => {
+    const checkAuth = () => {
       if (tokenMethod.get()) {
-        try {
-          const response = await userService.getProfile();
-          if (response.isSuccess && response.result) {
-            setUser(response.result);
-            setIsAuthenticated(true);
-          }
-        } catch (error) {
-          console.error('Failed to fetch user profile:', error);
-          tokenMethod.remove();
+        if (response?.isSuccess && response.result) {
+          setUser(response.result);
+          setIsAuthenticated(true);
         }
       }
       setIsLoading(false);
     };
-
     checkAuth();
-  }, []);
+  }, [response]);
 
   const hasRole = (roles?: RoleEnums | RoleEnums[]): boolean => {
     // If no roles are provided, allow access
