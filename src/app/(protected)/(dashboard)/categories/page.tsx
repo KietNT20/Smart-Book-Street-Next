@@ -19,6 +19,7 @@ import { CategoryFormValues } from '@/lib/zod';
 import { CategoryFormModal } from './_components/cate-form-modal';
 import { CategoryCol, columns } from './columns';
 import { DataTable } from './data-table';
+import LoadingSpinner from '@/components/spin/loading-spinner';
 
 export default function CategoriesPage() {
   const { data: categoriesRes, isLoading } = useGetCategories();
@@ -91,7 +92,7 @@ export default function CategoriesPage() {
   };
 
   if (isLoading) {
-    return <div className='container mx-auto py-10'>Đang tải dữ liệu...</div>;
+    return <LoadingSpinner />;
   }
 
   if (!categoriesRes) {
@@ -103,7 +104,7 @@ export default function CategoriesPage() {
   return (
     <div className='container mx-auto py-10'>
       <div className='mb-6 flex items-center justify-between'>
-        <h2 className='text-3xl font-bold'>Quản lý danh mục</h2>
+        <h2 className='text-2xl font-bold'>Quản lý danh mục</h2>
         <Button onClick={handleCreate}>
           <Plus className='mr-2 h-4 w-4' />
           Tạo danh mục
