@@ -1,6 +1,6 @@
 'use client';
 
-import { useAuth } from '@/context/auth-context';
+// import { useAuth } from '@/context/auth-context';
 import { RoleEnums } from '@/enums/role';
 import {
   Folder,
@@ -28,6 +28,7 @@ import {
 } from '@/components/ui/sidebar';
 import Link from 'next/link';
 import { useMemo } from 'react';
+import { useAuth } from '@/hooks/use-auth';
 
 type ProjectItemProps = {
   name: string;

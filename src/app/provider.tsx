@@ -1,6 +1,6 @@
 import { ThemeProvider } from '@/components/theme-provider';
-import { AuthProvider } from '@/context/auth-context';
 import QueryProvider from '@/providers/query-provider';
+import StoreProvider from '@/providers/store-provider';
 import { ConfigProvider } from 'antd';
 import locale from 'antd/locale/vi_VN';
 import type { ReactNode } from 'react';
@@ -11,8 +11,8 @@ type Props = {
 
 const Provider = ({ children }: Props) => {
   return (
-    <QueryProvider>
-      <AuthProvider>
+    <StoreProvider>
+      <QueryProvider>
         <ThemeProvider
           attribute='class'
           defaultTheme='system'
@@ -21,8 +21,8 @@ const Provider = ({ children }: Props) => {
         >
           <ConfigProvider locale={locale}>{children}</ConfigProvider>
         </ThemeProvider>
-      </AuthProvider>
-    </QueryProvider>
+      </QueryProvider>
+    </StoreProvider>
   );
 };
 

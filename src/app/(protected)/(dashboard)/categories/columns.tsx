@@ -51,7 +51,6 @@ export const columns = ({
               column.clearSorting();
             }
           }}
-          className='px-0 hover:bg-transparent'
         >
           Tên danh mục
           {getSortIcon(sorted)}
