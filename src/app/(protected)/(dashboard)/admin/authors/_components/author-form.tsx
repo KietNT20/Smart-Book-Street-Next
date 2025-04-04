@@ -58,7 +58,7 @@ export function AuthorForm({ authorId }: Props) {
       authorName: '',
       nationality: '',
       biography: '',
-      dob: new Date(),
+      dob: '',
       imgFile: undefined
     }
   });
@@ -67,7 +67,9 @@ export function AuthorForm({ authorId }: Props) {
     if (authorData) {
       form.reset({
         authorName: authorData.result.authorName,
-        dob: new Date(authorData.result.dob),
+        dob: authorData.result.dob
+          ? dayjs(authorData.result.dob).format('YYYY-MM-DD')
+          : '',
         nationality: authorData.result.nationality,
         biography: authorData.result.biography,
         imgFile: undefined
@@ -79,7 +81,7 @@ export function AuthorForm({ authorId }: Props) {
     try {
       const formData = new FormData();
       formData.append('AuthorName', data.authorName);
-      formData.append('DOB', data.dob?.toDateString() || '');
+      formData.append('DOB', data.dob || '');
       formData.append('Nationality', data.nationality || '');
       formData.append('Biography', data.biography || '');
       if (data.imgFile) {
