@@ -27,10 +27,11 @@ import {
   SidebarHeader,
   SidebarRail
 } from '@/components/ui/sidebar';
-import { useAuth } from '@/context/auth-context';
+// import { useAuth } from '@/context/auth-context';
 import { PATH } from '@/enums/path';
 import { RoleEnums } from '@/enums/role';
 import { usePathname } from 'next/navigation';
+import { useAuth } from '@/hooks/use-auth';
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();

@@ -1,4 +1,12 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ChartAreaInteractive } from '@/components/chart-area-interactive';
+import { SectionCards } from '@/components/section-cards';
+import {
+  Card,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle
+} from '@/components/ui/card';
 import { BookOpen, Clock, UserCheck, Users } from 'lucide-react';
 import ChartsSection from './_components/dashboard/charts-section';
 import VisitorChartSection from './_components/dashboard/visitor-chart-section';
@@ -7,65 +15,85 @@ export default function DashboardPage() {
   return (
     <>
       <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-4'>
-        <Card className='bg-chart-1'>
-          <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-            <CardTitle className='text-sm font-medium text-white'>
+        <Card className='shadow-xs bg-chart-1 from-primary/5 to-card'>
+          <CardHeader className='relative'>
+            <CardDescription className='text-white'>
               Tổng Lượt Tham Quan
+            </CardDescription>
+            <CardTitle className='text-2xl font-semibold tabular-nums text-white md:text-3xl'>
+              15,234
             </CardTitle>
-            <Users className='text-blue-100' />
+            <div className='absolute right-4 top-4'>
+              <Users className='text-blue-100' />
+            </div>
           </CardHeader>
-          <CardContent>
-            <div className='text-2xl font-bold text-white'>15,234</div>
-            <p className='text-xs text-blue-100'>+2,345 so với tháng trước</p>
-          </CardContent>
+          <CardFooter className='flex-col items-start gap-1 text-sm'>
+            <div className='line-clamp-1 flex gap-2 font-medium text-purple-100'>
+              +2,345 so với tháng trước
+            </div>
+          </CardFooter>
         </Card>
 
-        <Card className='bg-chart-2'>
-          <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-            <CardTitle className='text-sm font-medium text-white'>
+        <Card className='shadow-xs bg-chart-2 from-primary/5 to-card'>
+          <CardHeader className='relative'>
+            <CardDescription className='text-white'>
               Tổng Số Sách
+            </CardDescription>
+            <CardTitle className='text-2xl font-semibold tabular-nums text-white md:text-3xl'>
+              8,432
             </CardTitle>
-            <BookOpen className='text-purple-100' />
+            <div className='absolute right-4 top-4'>
+              <BookOpen className='text-purple-100' />
+            </div>
           </CardHeader>
-          <CardContent>
-            <div className='text-2xl font-bold text-white'>8,432</div>
-            <p className='text-xs text-purple-100'>
+          <CardFooter className='flex-col items-start gap-1 text-sm'>
+            <div className='line-clamp-1 flex gap-2 font-medium text-purple-100'>
               +123 đầu sách mới trong tháng
-            </p>
-          </CardContent>
+            </div>
+          </CardFooter>
         </Card>
 
-        <Card className='bg-chart-3'>
-          <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-            <CardTitle className='text-sm font-medium text-white'>
+        <Card className='shadow-xs bg-chart-3 from-primary/5 to-card'>
+          <CardHeader className='relative'>
+            <CardDescription className='text-white'>
               Người Dùng Đăng Ký
+            </CardDescription>
+            <CardTitle className='text-2xl font-semibold tabular-nums text-white md:text-3xl'>
+              3,573
             </CardTitle>
-            <UserCheck className='text-green-100' />
+            <div className='absolute right-4 top-4'>
+              <UserCheck className='text-green-100' />
+            </div>
           </CardHeader>
-          <CardContent>
-            <div className='text-2xl font-bold text-white'>3,573</div>
-            <p className='text-xs text-green-100'>
+          <CardFooter className='flex-col items-start gap-1 text-sm'>
+            <div className='line-clamp-1 flex gap-2 font-medium text-purple-100'>
               +251 người dùng mới tháng này
-            </p>
-          </CardContent>
+            </div>
+          </CardFooter>
         </Card>
 
-        <Card className='bg-chart-4'>
-          <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-            <CardTitle className='text-sm font-medium text-white'>
+        <Card className='shadow-xs bg-chart-4 from-primary/5 to-card'>
+          <CardHeader className='relative'>
+            <CardDescription className='text-white'>
               Thời Gian Trung Bình
+            </CardDescription>
+            <CardTitle className='text-2xl font-semibold tabular-nums text-white md:text-3xl'>
+              45 phút
             </CardTitle>
-            <Clock className='text-orange-100' />
+            <div className='absolute right-4 top-4'>
+              <Clock className='text-orange-100' />
+            </div>
           </CardHeader>
-          <CardContent>
-            <div className='text-2xl font-bold text-white'>45 phút</div>
-            <p className='text-xs text-orange-100'>
+          <CardFooter className='flex-col items-start gap-1 text-sm'>
+            <div className='line-clamp-1 flex gap-2 font-medium text-purple-100'>
               Thời gian tham quan trung bình
-            </p>
-          </CardContent>
+            </div>
+          </CardFooter>
         </Card>
       </div>
-      <div className='mt-4'>
+      <div className='flex flex-col gap-4 py-4 md:gap-6 md:py-6'>
+        <SectionCards />
+        <ChartAreaInteractive />
         <ChartsSection />
       </div>
       <div className='mt-4'>

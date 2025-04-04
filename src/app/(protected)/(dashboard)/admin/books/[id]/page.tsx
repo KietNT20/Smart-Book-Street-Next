@@ -21,17 +21,17 @@ export default function BooksDetailPage({
 }) {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const {
-    deleteBookMutation,
     deletedLoading,
     bookDetailPending,
     bookDetailLoading,
     book,
     bookInfoProps,
-    router
+    router,
+    deleteBook
   } = useBookDetail({ id: params.id });
 
   const handleDeleteBook = () => {
-    deleteBookMutation.mutate(params.id);
+    deleteBook(params.id);
     router.push(PATH.ADMIN_BOOKS);
   };
 
@@ -45,7 +45,7 @@ export default function BooksDetailPage({
         <BackButton routeTo={PATH.ADMIN_BOOKS} />
         <div className='flex gap-2'>
           <Link href={`${PATH.ADMIN_BOOKS}/${params.id}/edit`}>
-            <Button variant='outline'>Sửa thông tin</Button>
+            <Button variant='primaryblue'>Sửa thông tin</Button>
           </Link>
           <Button
             variant='destructive'

@@ -24,11 +24,11 @@ const AuthorMenuAction = ({ author }: Props) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
   const router = useRouter();
-  const { deleteAuthor } = useAuthorMutation();
+  const { deleteAuthor, deleteAuthorPending } = useAuthorMutation();
 
   const _onDelete = async (id: string) => {
     try {
-      await deleteAuthor.mutateAsync(id, {
+      deleteAuthor(id, {
         onSuccess: () => {
           toast.success('Xóa tác giả thành công');
           setIsDeleteModalOpen(false);
@@ -92,11 +92,11 @@ const AuthorMenuAction = ({ author }: Props) => {
         onClose={handleModalClose}
         onConfirm={() => _onDelete(author.id)}
         title='Xóa sách'
-        description='Bạn có chắc chắn muốn xóa sách này? Hành động này không thể hoàn tác.'
+        description={`Bạn có chắc chắn muốn xóa ${author.authorName} này? Hành động này không thể hoàn tác.`}
         confirmText='Xóa'
         cancelText='Hủy'
         variant='destructive'
-        isLoading={deleteAuthor.isPending}
+        isLoading={deleteAuthorPending}
       />
     </>
   );

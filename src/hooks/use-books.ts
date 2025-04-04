@@ -1,12 +1,9 @@
-import { PATH } from '@/enums/path';
 import { bookService } from '@/services/bookService';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
 export const useBookMutations = () => {
   const queryClient = useQueryClient();
-  const router = useRouter();
 
   const createBookMutation = useMutation({
     mutationKey: ['create-book'],
@@ -14,30 +11,27 @@ export const useBookMutations = () => {
     onSuccess: (data) => {
       if (data?.isSuccess) {
         toast.success('Thêm sách thành công');
-        router.push(PATH.ADMIN_BOOKS);
+        queryClient.invalidateQueries({ queryKey: ['books'] });
       }
-      queryClient.invalidateQueries({ queryKey: ['books'] });
     },
-    onError: (error: Error) => {
+    onError: (error) => {
       toast.error('Đã xảy ra lỗi khi thêm sách');
-      console.error('Error add book:', error);
+      console.error('Error creating book:', error);
     }
   });
 
   const updateBookMutation = useMutation({
     mutationKey: ['update-book'],
     mutationFn: ({ id, formData }: { id: string; formData: FormData }) => {
-      console.log('Calling update API with id:', id);
       return bookService.update(id, formData);
     },
     onSuccess: (data) => {
       if (data?.isSuccess) {
         toast.success('Cập nhật sách thành công');
-        router.push(PATH.ADMIN_BOOKS);
+        queryClient.invalidateQueries({ queryKey: ['books'] });
       }
-      queryClient.invalidateQueries({ queryKey: ['books'] });
     },
-    onError: (error: Error) => {
+    onError: (error) => {
       toast.error('Đã xảy ra lỗi khi cập nhật sách');
       console.error('Error updating book:', error);
     }
@@ -46,15 +40,27 @@ export const useBookMutations = () => {
   const deleteBookMutation = useMutation({
     mutationKey: ['delete-book'],
     mutationFn: (id: string) => bookService.delete(id),
-    onSuccess: () => {
-      toast.success('Đã xóa sách');
-      queryClient.invalidateQueries({ queryKey: ['books'] });
+    onSuccess: (data) => {
+      if (data?.isSuccess) {
+        toast.success('Xóa sách thành công');
+        queryClient.invalidateQueries({ queryKey: ['books'] });
+      }
+    },
+    onError: (error) => {
+      toast.error('Đã xảy ra lỗi khi xóa sách');
+      console.error('Error deleting book:', error);
     }
   });
 
   return {
-    createBookMutation,
-    updateBookMutation,
-    deleteBookMutation
+    // Create Book
+    createBook: createBookMutation.mutate,
+    createBookPending: createBookMutation.isPending,
+    // Update Book
+    updateBook: updateBookMutation.mutate,
+    updateBookPending: updateBookMutation.isPending,
+    // Delete Book
+    deleteBook: deleteBookMutation.mutate,
+    deleteBookPending: deleteBookMutation.isPending
   };
 };

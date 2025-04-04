@@ -2,7 +2,7 @@
 
 import { ChevronRight, type LucideIcon } from 'lucide-react';
 import { RoleEnums } from '@/enums/role';
-import { useAuth } from '@/context/auth-context';
+// import { useAuth } from '@/context/auth-context';
 
 import {
   Collapsible,
@@ -23,6 +23,7 @@ import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useMemo } from 'react';
+import { useAuth } from '@/hooks/use-auth';
 
 type NavItemProps = {
   title: string;

@@ -6,7 +6,9 @@ import Provider from './provider';
 
 const roboto = Roboto({
   subsets: ['vietnamese'],
-  weight: ['400', '700']
+  weight: ['300', '700'],
+  display: 'swap',
+  variable: '--font-roboto'
 });
 
 export const metadata: Metadata = {
@@ -22,7 +24,7 @@ export default function RootLayout({
   return (
     <html lang='en' suppressHydrationWarning={true}>
       <body
-        className={`${roboto.className} antialiased`}
+        className={`${roboto.variable} antialiased`}
         suppressHydrationWarning={true}
       >
         <Provider>{children}</Provider>

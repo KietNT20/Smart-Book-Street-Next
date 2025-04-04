@@ -17,7 +17,8 @@ import { cn } from '@/lib/utils';
 import { authorFormSchema, AuthorFormValues } from '@/lib/zod';
 import { Author } from '@/types/author-types';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { format } from 'date-fns';
+import { DatePicker } from 'antd';
+import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -42,7 +43,12 @@ export function AuthorForm({ authorId }: Props) {
   });
 
   const router = useRouter();
-  const { createAuthor, updateAuthor } = useAuthorMutation();
+  const {
+    createAuthor,
+    createAuthorPending,
+    updateAuthor,
+    updateAuthorPending
+  } = useAuthorMutation();
   const { data: authorData, isLoading: isLoadingAuthor } =
     useGetAuthorById<AuthorData>(authorId || '');
 
@@ -61,7 +67,9 @@ export function AuthorForm({ authorId }: Props) {
     if (authorData) {
       form.reset({
         authorName: authorData.result.authorName,
-        dob: format(new Date(authorData.result.dob), 'yyyy-MM-dd'),
+        dob: authorData.result.dob
+          ? dayjs(authorData.result.dob).format('YYYY-MM-DD')
+          : '',
         nationality: authorData.result.nationality,
         biography: authorData.result.biography,
         imgFile: undefined
@@ -69,7 +77,7 @@ export function AuthorForm({ authorId }: Props) {
     }
   }, [authorData, form]);
 
-  const onSubmit = async (data: AuthorFormValues) => {
+  const onSubmit = (data: AuthorFormValues) => {
     try {
       const formData = new FormData();
       formData.append('AuthorName', data.authorName);
@@ -79,7 +87,11 @@ export function AuthorForm({ authorId }: Props) {
       if (data.imgFile) {
         formData.append('ImgFile', data.imgFile);
       }
-      await createAuthor.mutateAsync(formData);
+      if (authorId) {
+        updateAuthor({ id: authorId, formData });
+      } else if (!authorId) {
+        createAuthor(formData);
+      }
     } catch (error: unknown) {
       console.error('Error author submit:', error);
       toast.error('Có lỗi xảy ra. Vui lòng thử lại.');
@@ -127,9 +139,21 @@ export function AuthorForm({ authorId }: Props) {
             name='dob'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Ngày sinh</FormLabel>
+                <FormLabel>Ngày sinh:</FormLabel>
                 <FormControl>
-                  <Input placeholder='Nhập ngày sinh' type='date' {...field} />
+                  <DatePicker
+                    format='YYYY-MM-DD'
+                    value={field.value ? dayjs(field.value) : null}
+                    onChange={(date) => {
+                      field.onChange(date ? date.format('YYYY-MM-DD') : null);
+                    }}
+                    placeholder='Chọn ngày sinh'
+                    className={cn(
+                      'w-full px-3 py-2',
+                      form.formState.errors.dob && 'border-red-500'
+                    )}
+                    onBlur={field.onBlur}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -210,7 +234,7 @@ export function AuthorForm({ authorId }: Props) {
           </Button>
           <AuthorSubmitBtn
             authorId={authorId}
-            _onPending={createAuthor.isPending || updateAuthor.isPending}
+            _onPending={createAuthorPending || updateAuthorPending}
           />
         </div>
       </form>

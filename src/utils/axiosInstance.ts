@@ -3,6 +3,7 @@ import { PATH } from '@/enums/path';
 import axios, {
   AxiosError,
   AxiosInstance,
+  AxiosResponse,
   InternalAxiosRequestConfig
 } from 'axios';
 import tokenMethod from './token';
@@ -12,7 +13,7 @@ const axiosInstance: AxiosInstance = axios.create({
 });
 // Add a request interceptor
 axiosInstance.interceptors.request.use(
-  async function (config: InternalAxiosRequestConfig) {
+  function (config: InternalAxiosRequestConfig) {
     // Do something before request is sent
     if (typeof window !== 'undefined') {
       const token = tokenMethod.get();
@@ -29,7 +30,7 @@ axiosInstance.interceptors.request.use(
 );
 // Add a response interceptor
 axiosInstance.interceptors.response.use(
-  function (response) {
+  function (response: AxiosResponse) {
     // Any status code that lie within the range of 2xx cause this function to trigger
     // Do something with response data
     return response;

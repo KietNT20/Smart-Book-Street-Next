@@ -1,6 +1,5 @@
 import { clsx, type ClassValue } from 'clsx';
-import { format as formatDateFNS } from 'date-fns';
-import { vi } from 'date-fns/locale';
+import dayjs from 'dayjs';
 import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
@@ -50,6 +49,6 @@ export function utcToLocalDate(utcDateString: string): string {
   }
 }
 
-export function formateDateVi(date: Date | string | number) {
-  return formatDateFNS(new Date(date), 'dd/MM/yyyy', { locale: vi });
+export function formateDateVi(date: Date | string): string {
+  return dayjs(new Date(date)).format('DD/MM/YYYY');
 }

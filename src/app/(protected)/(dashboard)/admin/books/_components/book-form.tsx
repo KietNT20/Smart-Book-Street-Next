@@ -1,4 +1,3 @@
-import { DatePickerV1 } from '@/components/date-picker/date-picker-v1';
 import RichTextEditor from '@/components/rich-text-editor';
 import { Button } from '@/components/ui/button';
 import {
@@ -10,30 +9,56 @@ import {
   FormMessage
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { PATH } from '@/enums/path';
+import { useBookMutations } from '@/hooks/use-books';
+import useDebounce from '@/hooks/use-debounce';
 import { cn } from '@/lib/utils';
 import { BookFormValues, bookSchema } from '@/lib/zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { format, parse } from 'date-fns';
 import { Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
+import AuthorCombobox from '../../_components/author-combobox';
+import CategoryCombobox from '../../_components/category-combobox';
 import PublisherCombobox from '../../_components/publisher-combobox';
 import { prepareInitialBookData } from '../_lib/book-form-helpers';
 import { useBookFormSubmit } from '../_lib/use-book-form-submit';
-import AuthorCombobox from '../../_components/author-combobox';
-import CategoryCombobox from '../../_components/category-combobox';
+import BookPublicationDate from './book-publication-date';
 
 type Props = {
   book?: BookFormValues;
-  onSubmit: (formData: FormData) => void;
   onCancel: () => void;
-  isLoading?: boolean;
 };
 
-const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
+const BookForm = ({ book, onCancel }: Props) => {
   const form = useForm<BookFormValues>({
     resolver: zodResolver(bookSchema),
     defaultValues: prepareInitialBookData(book)
   });
+  const { createBook, createBookPending, updateBook, updateBookPending } =
+    useBookMutations();
+  const isLoading = useDebounce(createBookPending || updateBookPending, 300);
+  const router = useRouter();
+
+  const onSubmit = (formData: FormData) => {
+    if (book) {
+      updateBook(
+        { id: book.id!, formData },
+        {
+          onSuccess: () => {
+            form.reset();
+            router.push(`${PATH.ADMIN_BOOKS}/${book.id}`);
+          }
+        }
+      );
+    } else {
+      createBook(formData, {
+        onSuccess: () => {
+          form.reset();
+        }
+      });
+    }
+  };
 
   const {
     files,
@@ -41,18 +66,6 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
     handleAdditionalFilesChange,
     handleSubmit
   } = useBookFormSubmit(onSubmit);
-
-  const getPublicationDate = (): Date | undefined => {
-    const dateStr = form.getValues('publicationDate');
-    if (!dateStr) return undefined;
-
-    try {
-      return parse(dateStr, 'yyyy-MM-dd', new Date());
-    } catch (error) {
-      console.error('Error parsing date:', error);
-      return undefined;
-    }
-  };
 
   return (
     <Form {...form}>
@@ -74,6 +87,7 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
                 <FormControl>
                   <Input
                     placeholder='Nhập mã sách'
+                    disabled={isLoading}
                     className={cn(
                       form.formState.errors.code && 'border-red-500'
                     )}
@@ -85,35 +99,8 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
             )}
           />
 
-          {/* Ngày xuất bản - use DatePickerV1 */}
-          <FormField
-            control={form.control}
-            name='publicationDate'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>
-                  Ngày xuất bản <span className='text-red-400'>*</span>
-                </FormLabel>
-                <FormControl>
-                  <DatePickerV1
-                    date={getPublicationDate()}
-                    setDate={(date) => {
-                      if (date) {
-                        field.onChange(format(date, 'yyyy-MM-dd'));
-                      } else {
-                        field.onChange('');
-                      }
-                    }}
-                    placeholder='Chọn ngày xuất bản'
-                    className={cn(
-                      form.formState.errors.publicationDate && 'border-red-500'
-                    )}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {/* Ngày xuất bản  */}
+          <BookPublicationDate control={form.control} disabled={isLoading} />
 
           {/* Tên sách */}
           <FormField
@@ -127,6 +114,7 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
                 <FormControl>
                   <Input
                     placeholder='Nhập tên sách'
+                    disabled={isLoading}
                     className={cn(
                       form.formState.errors.title && 'border-red-500'
                     )}
@@ -152,6 +140,7 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
                   <Input
                     type='number'
                     placeholder='Nhập giá'
+                    disabled={isLoading}
                     className={cn(
                       form.formState.errors.price && 'border-red-500'
                     )}
@@ -179,6 +168,7 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
                 <FormControl>
                   <Input
                     placeholder='Nhập ngôn ngữ'
+                    disabled={isLoading}
                     className={cn(
                       'w-full',
                       form.formState.errors.languages && 'border-red-500'
@@ -204,6 +194,7 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
                 <FormControl>
                   <Input
                     placeholder='Nhập kích thước'
+                    disabled={isLoading}
                     className={cn(
                       form.formState.errors.size && 'border-red-500'
                     )}
@@ -227,6 +218,7 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
                 <FormControl>
                   <Input
                     placeholder='Nhập trạng thái'
+                    disabled={isLoading}
                     className={cn(
                       form.formState.errors.status && 'border-red-500'
                     )}
@@ -258,6 +250,7 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
                     className={cn(
                       form.formState.errors.mainImageFile && 'border-red-500'
                     )}
+                    disabled={isLoading}
                   />
                 </FormControl>
                 {files.mainFile && (
@@ -269,49 +262,50 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
               </FormItem>
             )}
           />
-        </div>
 
-        {/* Ảnh bổ sung */}
-        <FormField
-          control={form.control}
-          name='additionalImageFiles'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Ảnh bổ sung</FormLabel>
-              <FormControl>
-                <Input
-                  type='file'
-                  multiple
-                  onChange={(e) => {
-                    const fileList = e.target.files;
-                    if (fileList && fileList.length > 0) {
-                      const filesArray = Array.from(fileList) as File[];
-                      handleAdditionalFilesChange(filesArray);
-                      field.onChange(filesArray);
-                    }
-                  }}
-                  className={cn(
-                    form.formState.errors.additionalImageFiles &&
-                      'border-red-500'
-                  )}
-                />
-              </FormControl>
-              {files.additionalFiles.length > 0 && (
-                <div className='mt-2'>
-                  <p className='text-sm font-medium'>
-                    Đã chọn {files.additionalFiles.length} file:
-                  </p>
-                  <ul className='mt-1 list-disc pl-5 text-sm text-gray-500'>
-                    {files.additionalFiles.map((file, index) => (
-                      <li key={index}>{file.name}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          {/* Ảnh bổ sung */}
+          <FormField
+            control={form.control}
+            name='additionalImageFiles'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Ảnh bổ sung</FormLabel>
+                <FormControl>
+                  <Input
+                    type='file'
+                    multiple
+                    onChange={(e) => {
+                      const fileList = e.target.files;
+                      if (fileList && fileList.length > 0) {
+                        const filesArray = Array.from(fileList) as File[];
+                        handleAdditionalFilesChange(filesArray);
+                        field.onChange(filesArray);
+                      }
+                    }}
+                    className={cn(
+                      form.formState.errors.additionalImageFiles &&
+                        'border-red-500'
+                    )}
+                    disabled={isLoading}
+                  />
+                </FormControl>
+                {files.additionalFiles.length > 0 && (
+                  <div className='mt-2'>
+                    <p className='text-sm font-medium'>
+                      Đã chọn {files.additionalFiles.length} file:
+                    </p>
+                    <ul className='mt-1 list-disc pl-5 text-sm text-gray-500'>
+                      {files.additionalFiles.map((file, index) => (
+                        <li key={index}>{file.name}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
         {/* Mô tả */}
         {/* <FormField
@@ -341,6 +335,8 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
                   className={cn(
                     form.formState.errors.description && 'border-red-500'
                   )}
+                  isPending={isLoading}
+                  readOnly={isLoading}
                 />
               </FormControl>
               <FormMessage />
@@ -359,7 +355,7 @@ const BookForm = ({ book, isLoading, onSubmit, onCancel }: Props) => {
           >
             Hủy
           </Button>
-          <Button disabled={isLoading} className='px-7'>
+          <Button type='submit' disabled={isLoading} className='px-7'>
             {isLoading ? (
               <>
                 <Loader2 className='mr-2 h-4 w-4 animate-spin' />

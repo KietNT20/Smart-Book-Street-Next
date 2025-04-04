@@ -16,6 +16,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'firebasestorage.googleapis.com',
         pathname: '/v0/b/aibookstreet-viet.firebasestorage.app/o/**'
+      },
+      {
+        protocol: 'https',
+        hostname: 'th.bing.com'
       }
     ]
   }

@@ -28,6 +28,7 @@ import {
   Sparkles
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 export function NavUser() {
   const { isMobile } = useSidebar();
@@ -36,6 +37,8 @@ export function NavUser() {
   const _onLogout = (): void => {
     tokenMethod.remove();
     router.push(PATH.LOGIN);
+    router.refresh();
+    toast.success('Đăng xuất thành công');
   };
 
   return (
