@@ -17,6 +17,7 @@ import {
   useSidebar
 } from '@/components/ui/sidebar';
 import { PATH } from '@/enums/path';
+import { useAppSelector } from '@/lib/hooks';
 import tokenMethod from '@/utils/token';
 import {
   BadgeCheck,
@@ -33,6 +34,8 @@ import { toast } from 'sonner';
 export function NavUser() {
   const { isMobile } = useSidebar();
   const router = useRouter();
+  const { profile } = useAppSelector((state) => state.user);
+  console.log('profile', profile);
 
   const _onLogout = (): void => {
     tokenMethod.remove();

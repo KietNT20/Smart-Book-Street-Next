@@ -33,7 +33,6 @@ const { actions, reducer: userReducer } = userSlice;
 export const { setUserProfile, clearUserProfile } = actions;
 export default userReducer;
 
-// Helper function để kiểm tra quyền
 export const hasUserRole = (
   profile: User | null,
   roles?: RoleEnums | RoleEnums[]
