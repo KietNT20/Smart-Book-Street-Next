@@ -2,7 +2,13 @@ import { Button } from '@/components/ui/button';
 import { formateDateVi, formatPrice } from '@/lib/utils';
 import { Book } from '@/types/book-types';
 import { ColumnDef } from '@tanstack/react-table';
-import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react';
+import {
+  ArrowDown,
+  ArrowUp,
+  ArrowUpDown,
+  SortAsc,
+  SortDesc
+} from 'lucide-react';
 import BookMenuAction from './_components/book-menu-action';
 
 type ColumnHandlers = {
@@ -22,11 +28,11 @@ export const createColumns = ({
       >
         Mã sách
         {column.getIsSorted() === 'asc' ? (
-          <ArrowUp className='ml-2 h-4 w-4' />
+          <SortAsc className='ml-1 h-4 w-4 text-blue-500' />
         ) : column.getIsSorted() === 'desc' ? (
-          <ArrowDown className='ml-2 h-4 w-4' />
+          <SortDesc className='ml-1 h-4 w-4 text-blue-500' />
         ) : (
-          <ArrowUpDown className='ml-2 h-4 w-4' />
+          <ArrowUpDown className='ml-1 h-4 w-4 text-zinc-500' />
         )}
       </Button>
     ),

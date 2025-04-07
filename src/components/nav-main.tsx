@@ -1,7 +1,7 @@
 'use client';
 
-import { ChevronRight, type LucideIcon } from 'lucide-react';
 import { RoleEnums } from '@/enums/role';
+import { ChevronRight, type LucideIcon } from 'lucide-react';
 // import { useAuth } from '@/context/auth-context';
 
 import {
@@ -19,11 +19,11 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem
 } from '@/components/ui/sidebar';
+import { useAuth } from '@/hooks/use-auth';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useMemo } from 'react';
-import { useAuth } from '@/hooks/use-auth';
 
 type NavItemProps = {
   title: string;

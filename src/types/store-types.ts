@@ -2,7 +2,7 @@ import { Sort } from '@/enums/enums';
 import { BaseEntity } from './common-types';
 
 export interface StoreData extends BaseEntity {
-  bookStoreName: string;
+  storeName: string;
   address: string;
   phone: string;
   email: string;
@@ -21,12 +21,12 @@ export interface StoreParams {
   pageSize: number;
   sortField?: string;
   sortOrder: Sort.ASC | Sort.DESC;
-  result?: {
-    bookStoreName: string;
-    address: string;
-    phone: string;
-    email: string;
-    openingTime: string;
-    closingTime: string;
+  result: {
+    bookStoreName?: string;
+    address?: string;
+    phone?: string;
+    email?: string;
+    openingTime?: string | null;
+    closingTime?: string | null;
   };
 }

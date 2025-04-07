@@ -1,0 +1,373 @@
+import { TableSkeleton } from '@/components/table-skeleton';
+import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle
+} from '@/components/ui/dialog';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious
+} from '@/components/ui/pagination';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
+} from '@/components/ui/table';
+import { Sort } from '@/enums/enums';
+import { useStoreMutation } from '@/hooks/use-store';
+import { formateDateVi } from '@/lib/utils';
+import {
+  Eye,
+  FileEdit,
+  MoreHorizontal,
+  SortAsc,
+  SortDesc,
+  Trash2
+} from 'lucide-react';
+import { useState } from 'react';
+
+export interface Store {
+  id: string;
+  storeName: string;
+  address: string;
+  phone: string;
+  email: string;
+  openingTime: string;
+  closingTime: string;
+}
+
+interface StoreTableProps {
+  stores: Store[];
+  isLoading: boolean;
+  isSearching: boolean;
+  totalPages: number;
+  pageNumber: number;
+  setPageNumber: (page: number) => void;
+  pageSize: number;
+  setPageSize: (size: number) => void;
+  sortField: string;
+  sortOrder: Sort;
+  handleSort: (field: string) => void;
+  onViewStore: (id: string) => void;
+  onEditStore: (id: string) => void;
+}
+
+export const StoreTable = ({
+  stores,
+  isLoading,
+  isSearching,
+  totalPages,
+  pageNumber,
+  setPageNumber,
+  pageSize,
+  setPageSize,
+  sortField,
+  sortOrder,
+  handleSort,
+  onViewStore,
+  onEditStore
+}: StoreTableProps) => {
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [storeToDelete, setStoreToDelete] = useState<string | null>(null);
+
+  const { deleteStore } = useStoreMutation();
+
+  // Handle page size change
+  const handlePageSizeChange = (value: string) => {
+    setPageSize(Number(value));
+    setPageNumber(1); // Reset to first page when changing page size
+  };
+
+  // Handle opening delete dialog
+  const handleDeleteClick = (storeId: string) => {
+    setStoreToDelete(storeId);
+    setDeleteDialogOpen(true);
+  };
+
+  // Handle delete confirmation
+  const handleDeleteConfirm = () => {
+    if (storeToDelete) {
+      // Call API to delete store with the store ID
+      deleteStore(storeToDelete);
+
+      // Close dialog and reset state
+      setDeleteDialogOpen(false);
+      setStoreToDelete(null);
+    }
+  };
+
+  const totalPagesCount = totalPages || 10;
+  const pagesToShow = Math.min(5, totalPagesCount);
+  const startPage = Math.max(
+    1,
+    Math.min(
+      pageNumber - Math.floor(pagesToShow / 2),
+      totalPagesCount - pagesToShow + 1
+    )
+  );
+
+  return (
+    <>
+      {/* Table */}
+      <div className='rounded-md border'>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead
+                className='cursor-pointer'
+                onClick={() => handleSort('bookStoreName')}
+              >
+                <div className='flex items-center'>
+                  Store Name
+                  {sortField === 'bookStoreName' &&
+                    (sortOrder === Sort.ASC ? (
+                      <SortAsc className='ml-1 h-4 w-4' />
+                    ) : (
+                      <SortDesc className='ml-1 h-4 w-4' />
+                    ))}
+                </div>
+              </TableHead>
+              <TableHead
+                className='cursor-pointer'
+                onClick={() => handleSort('address')}
+              >
+                <div className='flex items-center'>
+                  Address
+                  {sortField === 'address' &&
+                    (sortOrder === Sort.ASC ? (
+                      <SortAsc className='ml-1 h-4 w-4' />
+                    ) : (
+                      <SortDesc className='ml-1 h-4 w-4' />
+                    ))}
+                </div>
+              </TableHead>
+              <TableHead
+                className='cursor-pointer'
+                onClick={() => handleSort('phone')}
+              >
+                <div className='flex items-center'>
+                  Phone
+                  {sortField === 'phone' &&
+                    (sortOrder === Sort.ASC ? (
+                      <SortAsc className='ml-1 h-4 w-4' />
+                    ) : (
+                      <SortDesc className='ml-1 h-4 w-4' />
+                    ))}
+                </div>
+              </TableHead>
+              <TableHead>Email</TableHead>
+              <TableHead>Hours</TableHead>
+              <TableHead className='text-right'>Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {isLoading ? (
+              <TableSkeleton columns={6} rows={pageSize} />
+            ) : stores.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={6} className='py-10 text-center'>
+                  No stores found.{' '}
+                  {isSearching && 'Try a different search term.'}
+                </TableCell>
+              </TableRow>
+            ) : (
+              stores.map((store) => (
+                <TableRow key={store.id}>
+                  <TableCell className='font-medium'>
+                    {store.storeName}
+                  </TableCell>
+                  <TableCell>{store.address}</TableCell>
+                  <TableCell>{store.phone}</TableCell>
+                  <TableCell>{store.email}</TableCell>
+                  <TableCell>{`${formateDateVi(store.openingTime)} - ${formateDateVi(store.closingTime)}`}</TableCell>
+                  <TableCell className='text-right'>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant='ghost' size='icon'>
+                          <MoreHorizontal className='h-4 w-4' />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align='end'>
+                        <DropdownMenuItem onClick={() => onViewStore(store.id)}>
+                          <Eye className='mr-2 h-4 w-4' />
+                          Xem chi tiết
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => onEditStore(store.id)}>
+                          <FileEdit className='mr-2 h-4 w-4' />
+                          Chỉnh sửa
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          className='text-destructive'
+                          onClick={() => handleDeleteClick(store.id)}
+                        >
+                          <Trash2 className='mr-2 h-4 w-4' />
+                          Xóa
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </div>
+
+      {/* Pagination and page size controls */}
+      <div className='mt-4 flex items-center justify-between'>
+        <div className='flex items-center gap-2'>
+          <span className='whitespace-nowrap text-sm text-muted-foreground'>
+            Hàng mỗi trang:
+          </span>
+          <Select
+            value={pageSize.toString()}
+            onValueChange={handlePageSizeChange}
+          >
+            <SelectTrigger className='h-8 w-16'>
+              <SelectValue placeholder={pageSize.toString()} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value='10'>10</SelectItem>
+              <SelectItem value='20'>20</SelectItem>
+              <SelectItem value='50'>50</SelectItem>
+              <SelectItem value='100'>100</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <Pagination className='m-0 flex items-center justify-end'>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                href='#'
+                onClick={(e) => {
+                  e.preventDefault();
+                  setPageNumber(Math.max(pageNumber - 1, 1));
+                }}
+              />
+            </PaginationItem>
+
+            {pageNumber > 3 && (
+              <>
+                <PaginationItem>
+                  <PaginationLink
+                    href='#'
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setPageNumber(1);
+                    }}
+                  >
+                    1
+                  </PaginationLink>
+                </PaginationItem>
+                {pageNumber > 4 && (
+                  <PaginationItem>
+                    <PaginationEllipsis />
+                  </PaginationItem>
+                )}
+              </>
+            )}
+
+            {Array.from({ length: pagesToShow }).map((_, index) => {
+              const page = startPage + index;
+              return (
+                <PaginationItem key={page}>
+                  <PaginationLink
+                    href='#'
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setPageNumber(page);
+                    }}
+                    isActive={pageNumber === page}
+                  >
+                    {page}
+                  </PaginationLink>
+                </PaginationItem>
+              );
+            })}
+
+            {pageNumber < totalPagesCount - 2 && (
+              <>
+                {pageNumber < totalPagesCount - 3 && (
+                  <PaginationItem>
+                    <PaginationEllipsis />
+                  </PaginationItem>
+                )}
+                <PaginationItem>
+                  <PaginationLink
+                    href='#'
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setPageNumber(totalPagesCount);
+                    }}
+                  >
+                    {totalPagesCount}
+                  </PaginationLink>
+                </PaginationItem>
+              </>
+            )}
+
+            <PaginationItem>
+              <PaginationNext
+                href='#'
+                onClick={(e) => {
+                  e.preventDefault();
+                  setPageNumber(Math.min(pageNumber + 1, totalPagesCount));
+                }}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      </div>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <DialogContent className='sm:max-w-[425px]'>
+          <DialogHeader>
+            <DialogTitle>Xác nhận xóa</DialogTitle>
+            <DialogDescription>
+              Bạn có chắc chắn muốn xóa cửa hàng này không? Hành động này không
+              thể hoàn tác.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className='mt-4'>
+            <Button
+              variant='outline'
+              onClick={() => setDeleteDialogOpen(false)}
+            >
+              Hủy
+            </Button>
+            <Button variant='destructive' onClick={handleDeleteConfirm}>
+              Xóa
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+};

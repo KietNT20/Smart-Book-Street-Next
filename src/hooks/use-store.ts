@@ -76,7 +76,8 @@ export const useStores = ({
     stores: storesRes?.results || [],
     isLoading,
     isPending,
-    error
+    error,
+    totalPages
   };
 };
 

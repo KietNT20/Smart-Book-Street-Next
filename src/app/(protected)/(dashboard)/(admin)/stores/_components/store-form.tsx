@@ -16,6 +16,7 @@ import { useStoreMutation } from '@/hooks/use-store';
 import { storeFormSchema, StoreFormValues } from '@/lib/zod';
 import { StoreData } from '@/types/store-types';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { DatePicker } from 'antd';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
@@ -341,7 +342,14 @@ const StoreForm = ({ storeToEdit }: Props) => {
                   <FormItem>
                     <FormLabel>Giờ mở cửa</FormLabel>
                     <FormControl>
-                      <Input type='time' disabled={isWorking} {...field} />
+                      <DatePicker
+                        className='w-full'
+                        showTime={{ format: 'HH:mm' }}
+                        format='YYYY-MM-DD HH:mm'
+                        onChange={(value, dateString) => {
+                          field.onChange(dateString);
+                        }}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -355,7 +363,14 @@ const StoreForm = ({ storeToEdit }: Props) => {
                   <FormItem>
                     <FormLabel>Giờ đóng cửa</FormLabel>
                     <FormControl>
-                      <Input type='time' disabled={isWorking} {...field} />
+                      <DatePicker
+                        className='w-full'
+                        showTime={{ format: 'HH:mm' }}
+                        format='YYYY-MM-DD HH:mm'
+                        onChange={(value, dateString) => {
+                          field.onChange(dateString);
+                        }}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
