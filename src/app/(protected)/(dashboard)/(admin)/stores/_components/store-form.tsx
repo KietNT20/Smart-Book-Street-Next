@@ -347,6 +347,8 @@ const StoreForm = ({ storeToEdit }: Props) => {
                         showTime={{ format: 'HH:mm' }}
                         format='YYYY-MM-DD HH:mm'
                         onChange={(value, dateString) => {
+                          console.log('Selected Time: ', value);
+                          console.log('Formatted Selected Time: ', dateString);
                           field.onChange(dateString);
                         }}
                       />
@@ -368,6 +370,8 @@ const StoreForm = ({ storeToEdit }: Props) => {
                         showTime={{ format: 'HH:mm' }}
                         format='YYYY-MM-DD HH:mm'
                         onChange={(value, dateString) => {
+                          console.log('Selected Time: ', value);
+                          console.log('Formatted Selected Time: ', dateString);
                           field.onChange(dateString);
                         }}
                       />

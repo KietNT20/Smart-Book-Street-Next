@@ -24,6 +24,7 @@ import PublisherCombobox from '../../_components/publisher-combobox';
 import { prepareInitialBookData } from '../_lib/book-form-helpers';
 import { useBookFormSubmit } from '../_lib/use-book-form-submit';
 import BookPublicationDate from './book-publication-date';
+import BookSelectLang from './book-select-lang';
 
 type Props = {
   book?: BookFormValues;
@@ -166,14 +167,13 @@ const BookForm = ({ book, onCancel }: Props) => {
                   Ngôn ngữ <span className='text-red-400'>*</span>
                 </FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder='Nhập ngôn ngữ'
-                    disabled={isLoading}
+                  <BookSelectLang
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    disabled={false}
                     className={cn(
-                      'w-full',
                       form.formState.errors.languages && 'border-red-500'
                     )}
-                    {...field}
                   />
                 </FormControl>
                 <FormMessage />

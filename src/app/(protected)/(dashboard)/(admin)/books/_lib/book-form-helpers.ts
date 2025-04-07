@@ -23,7 +23,7 @@ export function prepareInitialBookData(book?: BookFormValues): BookFormValues {
       code: '',
       title: '',
       publicationDate: '',
-      price: 0,
+      price: 1000,
       languages: '',
       description: '',
       size: '',
