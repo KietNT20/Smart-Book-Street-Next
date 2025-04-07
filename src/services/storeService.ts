@@ -11,13 +11,22 @@ export const storeService = {
     return res.data;
   },
   create: async (payload: FormData) => {
-    const res = await axiosInstance.post(API_URL.STORES.INDEX, payload);
+    const res = await axiosInstance.post(API_URL.STORES.INDEX, payload, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
     return res.data;
   },
   update: async (id: string, payload: FormData) => {
     const res = await axiosInstance.put(
       `${API_URL.STORES.INDEX}/${id}`,
-      payload
+      payload,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }
     );
     return res.data;
   },

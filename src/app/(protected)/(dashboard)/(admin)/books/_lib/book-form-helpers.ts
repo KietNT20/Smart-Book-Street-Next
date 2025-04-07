@@ -7,14 +7,13 @@ interface BookWithRelations extends BookFormValues {
   bookCategories?: BookCategoryIds[];
 }
 
-// Hàm để phát hiện định dạng ngày
 export function detectDateFormat(dateString: string): string {
   if (/^\d{4}$/.test(dateString)) {
-    return 'YYYY'; // Chỉ có năm
+    return 'YYYY';
   } else if (/^\d{4}-\d{2}$/.test(dateString)) {
-    return 'YYYY-MM'; // Có tháng và năm
+    return 'YYYY-MM';
   } else {
-    return 'YYYY-MM-DD'; // Mặc định định dạng đầy đủ
+    return 'YYYY-MM-DD';
   }
 }
 
@@ -37,19 +36,15 @@ export function prepareInitialBookData(book?: BookFormValues): BookFormValues {
     };
   }
 
-  // Xử lý ngày xuất bản - giữ nguyên định dạng gốc nếu có thể
   let formattedDate = '';
   if (book.publicationDate) {
-    // Kiểm tra xem dữ liệu đã ở dạng chuỗi với định dạng YYYY, YYYY-MM, YYYY-MM-DD chưa
     if (
       /^\d{4}$/.test(book.publicationDate) ||
       /^\d{4}-\d{2}$/.test(book.publicationDate) ||
       /^\d{4}-\d{2}-\d{2}$/.test(book.publicationDate)
     ) {
-      // Nếu đã là chuỗi với định dạng hợp lệ, giữ nguyên
       formattedDate = book.publicationDate;
     } else {
-      // Nếu là Date object hoặc chuỗi ngày khác, thì chuyển đổi
       try {
         const dateObj = dayjs(new Date(book.publicationDate));
         if (dateObj.isValid()) {

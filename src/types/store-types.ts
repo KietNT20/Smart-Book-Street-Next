@@ -1,4 +1,6 @@
-export interface StoreData {
+import { BaseEntity } from './common-types';
+
+export interface StoreData extends BaseEntity {
   bookStoreName: string;
   address: string;
   phone: string;

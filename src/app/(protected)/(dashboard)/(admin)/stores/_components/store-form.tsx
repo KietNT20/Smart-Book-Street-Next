@@ -1,177 +1,393 @@
 'use client';
 
-import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { useStoreMutation } from '@/hooks/use-store';
+import { storeFormSchema, StoreFormValues } from '@/lib/zod';
+import { StoreData } from '@/types/store-types';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Loader2 } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import AddressSearch from './address-search';
 
-interface StoreFormProps {
-  initialData?: StoreData;
-  isEditing?: boolean;
-}
+type Props = {
+  storeToEdit?: StoreData;
+};
 
-interface StoreData {
-  id?: string;
-  bookStoreName: string;
-  address: string;
-  phone: string;
-  email: string;
-  openingTime: string;
-  closingTime: string;
-  latitude: number;
-  longitude: number;
-  type: string;
-  managerId: string;
-  zoneId: string;
-}
+const StoreForm = ({ storeToEdit }: Props) => {
+  const { createStore, updateStore, isCreatingStore, isUpdatingStore } =
+    useStoreMutation();
 
-export default function StoreForm({
-  initialData,
-  isEditing = false
-}: StoreFormProps) {
-  const router = useRouter();
-  const [formData, setFormData] = useState<StoreData>(
-    initialData || {
+  const isWorking = isCreatingStore || isUpdatingStore;
+
+  const form = useForm<StoreFormValues>({
+    resolver: zodResolver(storeFormSchema),
+    defaultValues: storeToEdit || {
       bookStoreName: '',
       address: '',
       phone: '',
       email: '',
       openingTime: '',
       closingTime: '',
+      mainImageFile: undefined,
+      additionalImageFiles: [],
       latitude: 0,
       longitude: 0,
       type: '',
       managerId: '',
       zoneId: ''
     }
-  );
-
-  // Mutation để tạo hoặc cập nhật cửa hàng
-  const storeMutation = useMutation({
-    mutationFn: (data: StoreData) => {
-      if (isEditing) {
-        return axios.put(`/api/stores/${initialData?.id}`, data);
-      }
-      return axios.post('/api/stores', data);
-    },
-    onSuccess: () => {
-      router.push('/stores');
-      router.refresh();
-    }
   });
 
-  // Hàm lấy vị trí hiện tại
-  const getCurrentLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setFormData({
-            ...formData,
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude
-          });
-        },
-        (error) => {
-          console.error('Lỗi khi lấy vị trí:', error);
-          alert('Không thể lấy vị trí hiện tại. Vui lòng nhập thủ công.');
-        }
-      );
-    } else {
-      alert('Trình duyệt không hỗ trợ lấy vị trí.');
-    }
-  };
+  function onSubmit(values: StoreFormValues) {
+    try {
+      const formData = new FormData();
+      formData.append('BookStoreName', values.bookStoreName);
+      formData.append('Address', values.address);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    storeMutation.mutate(formData);
+      if (values.phone) {
+        formData.append('Phone', values.phone);
+      }
+
+      if (values.email) {
+        formData.append('Email', values.email);
+      }
+
+      if (values.openingTime) {
+        formData.append('OpeningTime', values.openingTime);
+      }
+
+      if (values.closingTime) {
+        formData.append('ClosingTime', values.closingTime);
+      }
+
+      if (values.mainImageFile) {
+        formData.append(
+          'MainImageFile',
+          values.mainImageFile instanceof File
+            ? values.mainImageFile
+            : new Blob([values.mainImageFile]),
+          values.mainImageFile instanceof File
+            ? values.mainImageFile.name
+            : 'main-image'
+        );
+      }
+
+      values.additionalImageFiles.forEach((file, index) => {
+        if (file) {
+          formData.append(
+            'AdditionalImageFiles',
+            file instanceof File ? file : new Blob([file]),
+            file instanceof File ? file.name : `additional-image-${index}`
+          );
+        }
+      });
+
+      formData.append('Latitude', values.latitude?.toString() || '0');
+      formData.append('Longitude', values.longitude?.toString() || '0');
+
+      if (values.type) {
+        formData.append('Type', values.type);
+      }
+
+      if (values.managerId) {
+        formData.append('ManagerId', values.managerId);
+      }
+
+      if (values.zoneId) {
+        formData.append('ZoneId', values.zoneId);
+      }
+
+      if (storeToEdit) {
+        if (!storeToEdit.id) {
+          throw new Error('Store ID is missing for update operation');
+        }
+        updateStore({ id: storeToEdit.id, data: formData });
+      } else {
+        createStore(formData);
+      }
+
+      console.log('Form submitted successfully!');
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    }
+  }
+
+  // Handler for file inputs
+  const handleFileChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    fieldName: 'mainImageFile' | 'additionalImageFiles'
+  ) => {
+    const files = e.target.files;
+
+    if (!files) return;
+
+    if (fieldName === 'mainImageFile' && files[0]) {
+      form.setValue('mainImageFile', files[0], { shouldValidate: true });
+    } else if (fieldName === 'additionalImageFiles') {
+      const fileArray = Array.from(files);
+      form.setValue('additionalImageFiles', fileArray, {
+        shouldValidate: true
+      });
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit} className='space-y-4'>
-      <div>
-        <label className='block text-sm font-medium'>Tên cửa hàng</label>
-        <input
-          type='text'
-          className='mt-1 block w-full rounded-md border-gray-300 shadow-sm'
-          value={formData.bookStoreName}
-          onChange={(e) =>
-            setFormData({ ...formData, bookStoreName: e.target.value })
-          }
-          required
-        />
-      </div>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
+        <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'>
+          <FormField
+            control={form.control}
+            name='bookStoreName'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Tên cửa hàng</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder='Tên cửa hàng sách'
+                    disabled={isWorking}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-      <div>
-        <label className='block text-sm font-medium'>Địa chỉ</label>
-        <input
-          type='text'
-          className='mt-1 block w-full rounded-md border-gray-300 shadow-sm'
-          value={formData.address}
-          onChange={(e) =>
-            setFormData({ ...formData, address: e.target.value })
-          }
-          required
-        />
-      </div>
+          <FormField
+            control={form.control}
+            name='address'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Địa chỉ</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder='Địa chỉ'
+                    disabled={isWorking}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+                <AddressSearch form={form} disabled={isWorking} />
+              </FormItem>
+            )}
+          />
 
-      {/* Các trường khác tương tự */}
+          <FormField
+            control={form.control}
+            name='phone'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Số điện thoại</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder='Số điện thoại'
+                    disabled={isWorking}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-      <div className='flex items-center space-x-4'>
-        <div className='w-1/2'>
-          <label className='block text-sm font-medium'>Latitude</label>
-          <input
-            type='number'
-            step='any'
-            className='mt-1 block w-full rounded-md border-gray-300 shadow-sm'
-            value={formData.latitude}
-            onChange={(e) =>
-              setFormData({ ...formData, latitude: parseFloat(e.target.value) })
-            }
-            required
+          <FormField
+            control={form.control}
+            name='email'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input placeholder='Email' disabled={isWorking} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name='openingTime'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Giờ mở cửa</FormLabel>
+                <FormControl>
+                  <Input type='time' disabled={isWorking} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name='closingTime'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Giờ đóng cửa</FormLabel>
+                <FormControl>
+                  <Input type='time' disabled={isWorking} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name='type'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Loại cửa hàng</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder='Loại cửa hàng'
+                    disabled={isWorking}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name='managerId'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>ID Quản lý</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder='ID Quản lý'
+                    disabled={isWorking}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name='zoneId'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>ID Khu vực</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder='ID Khu vực'
+                    disabled={isWorking}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name='latitude'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Vĩ độ</FormLabel>
+                <FormControl>
+                  <Input
+                    type='number'
+                    placeholder='Vĩ độ'
+                    disabled={isWorking}
+                    {...field}
+                    onChange={(e) =>
+                      field.onChange(parseFloat(e.target.value) || 0)
+                    }
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name='longitude'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Kinh độ</FormLabel>
+                <FormControl>
+                  <Input
+                    type='number'
+                    placeholder='Kinh độ'
+                    disabled={isWorking}
+                    {...field}
+                    onChange={(e) =>
+                      field.onChange(parseFloat(e.target.value) || 0)
+                    }
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
         </div>
 
-        <div className='w-1/2'>
-          <label className='block text-sm font-medium'>Longitude</label>
-          <input
-            type='number'
-            step='any'
-            className='mt-1 block w-full rounded-md border-gray-300 shadow-sm'
-            value={formData.longitude}
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                longitude: parseFloat(e.target.value)
-              })
-            }
-            required
-          />
+        <div className='space-y-4'>
+          <div>
+            <FormLabel>Ảnh chính</FormLabel>
+            <Input
+              type='file'
+              accept='image/*'
+              onChange={(e) => handleFileChange(e, 'mainImageFile')}
+              disabled={isWorking}
+            />
+            {form.formState.errors.mainImageFile && (
+              <p className='text-sm text-red-500'>
+                {form.formState.errors.mainImageFile.message?.toString()}
+              </p>
+            )}
+          </div>
+
+          <div>
+            <FormLabel>Ảnh bổ sung</FormLabel>
+            <Input
+              type='file'
+              multiple
+              accept='image/*'
+              onChange={(e) => handleFileChange(e, 'additionalImageFiles')}
+              disabled={isWorking}
+            />
+            {form.formState.errors.additionalImageFiles && (
+              <p className='text-sm text-red-500'>
+                {form.formState.errors.additionalImageFiles.message?.toString()}
+              </p>
+            )}
+          </div>
         </div>
-      </div>
 
-      <div>
-        <button
-          type='button'
-          className='rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700'
-          onClick={getCurrentLocation}
-        >
-          Lấy vị trí hiện tại
-        </button>
-      </div>
-
-      <div>
-        <button
-          type='submit'
-          className='rounded bg-green-600 px-4 py-2 font-bold text-white hover:bg-green-800'
-          disabled={storeMutation.isPending}
-        >
-          {storeMutation.isPending
-            ? 'Đang xử lý...'
-            : isEditing
-              ? 'Cập nhật'
-              : 'Tạo mới'}
-        </button>
-      </div>
-    </form>
+        <Button type='submit' disabled={isWorking}>
+          {isWorking ? (
+            <>
+              <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+              Đang xử lý...
+            </>
+          ) : storeToEdit ? (
+            'Cập nhật cửa hàng'
+          ) : (
+            'Thêm cửa hàng'
+          )}
+        </Button>
+      </form>
+    </Form>
   );
-}
+};
+
+export default StoreForm;

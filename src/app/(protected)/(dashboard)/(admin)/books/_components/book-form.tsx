@@ -240,6 +240,7 @@ const BookForm = ({ book, onCancel }: Props) => {
                 <FormControl>
                   <Input
                     type='file'
+                    accept='image/*'
                     onChange={(e) => {
                       const file = e.target.files?.[0];
                       if (file) {
@@ -274,6 +275,7 @@ const BookForm = ({ book, onCancel }: Props) => {
                   <Input
                     type='file'
                     multiple
+                    accept='image/*'
                     onChange={(e) => {
                       const fileList = e.target.files;
                       if (fileList && fileList.length > 0) {

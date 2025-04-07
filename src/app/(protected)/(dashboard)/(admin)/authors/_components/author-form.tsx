@@ -1,6 +1,7 @@
 'use client';
 
 import RichTextEditor from '@/components/rich-text-editor';
+import LoadingSpinner from '@/components/spin/loading-spinner';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -103,7 +104,7 @@ export function AuthorForm({ authorId }: Props) {
   };
 
   if (authorId && isLoadingAuthor) {
-    return <div>Đang tải...</div>;
+    return <LoadingSpinner />;
   }
 
   return (
