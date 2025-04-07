@@ -1,5 +1,6 @@
 'use client';
 
+import { PATH } from '@/enums/path';
 import { useRouter } from 'next/navigation';
 import BookForm from '../../_components/book-form';
 
@@ -8,7 +9,7 @@ const BookFormCreate = () => {
 
   return (
     <div className='relative'>
-      <BookForm onCancel={() => router.back()} />
+      <BookForm onCancel={() => router.push(PATH.ADMIN_BOOKS)} />
     </div>
   );
 };

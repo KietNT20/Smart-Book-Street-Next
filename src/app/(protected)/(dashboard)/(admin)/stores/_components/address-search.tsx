@@ -3,46 +3,77 @@
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { StoreFormValues } from '@/lib/zod';
-import { Loader2, Search } from 'lucide-react';
-import { useState } from 'react';
+import { Loader2, MapPin, Search } from 'lucide-react';
+import 'mapbox-gl/dist/mapbox-gl.css';
+import 'maplibre-gl/dist/maplibre-gl.css';
+import { useEffect, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
-
-interface Coordinates {
-  latitude: number;
-  longitude: number;
-}
+import Map, { Marker } from 'react-map-gl/mapbox';
 
 interface AddressSearchProps {
   form: UseFormReturn<StoreFormValues>;
   disabled?: boolean;
 }
 
-const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
-
-const getCoordinates = async (address: string): Promise<Coordinates> => {
-  const encodedAddress = encodeURIComponent(address);
-  const response = await fetch(
-    `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodedAddress}.json?access_token=${MAPBOX_TOKEN}&country=vn&limit=1`
-  );
-
-  if (!response.ok) {
-    throw new Error('Không thể kết nối với Mapbox API');
-  }
-
-  const data = await response.json();
-
-  if (data.features && data.features.length > 0) {
-    const [longitude, latitude] = data.features[0].center;
-    return { longitude, latitude };
-  }
-
-  throw new Error('Không tìm thấy vị trí cho địa chỉ này');
-};
-
 const AddressSearch = ({ form, disabled = false }: AddressSearchProps) => {
   const [isSearching, setIsSearching] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
+  const [viewState, setViewState] = useState({
+    longitude: 106.6297,
+    latitude: 10.8231,
+    zoom: 13
+  });
+  const [markerPosition, setMarkerPosition] = useState({
+    longitude: 106.6297,
+    latitude: 10.8231
+  });
 
+  const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || '';
+
+  // Initialize with form values if they exist
+  useEffect(() => {
+    const lat = form.getValues('latitude');
+    const lng = form.getValues('longitude');
+
+    if (lat && lng && lat !== 0 && lng !== 0) {
+      setViewState((prev) => ({
+        ...prev,
+        latitude: lat,
+        longitude: lng
+      }));
+      setMarkerPosition({
+        latitude: lat,
+        longitude: lng
+      });
+    }
+  }, [form]);
+
+  // Get coordinates from address
+  const getCoordinates = async (address: string) => {
+    if (!MAPBOX_TOKEN) {
+      throw new Error('Chưa cấu hình MAPBOX_TOKEN');
+    }
+
+    const encodedAddress = encodeURIComponent(address);
+    const response = await fetch(
+      `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodedAddress}.json?access_token=${MAPBOX_TOKEN}&country=vn&limit=1`
+    );
+
+    if (!response.ok) {
+      throw new Error('Không thể kết nối đến Mapbox API');
+    }
+
+    const data = await response.json();
+
+    if (data.features && data.features.length > 0) {
+      const [longitude, latitude] = data.features[0].center;
+      return { longitude, latitude };
+    }
+
+    throw new Error('Không tìm thấy vị trí cho địa chỉ này');
+  };
+
+  // Handle address search
   const handleSearch = async (): Promise<void> => {
     const address = form.getValues('address');
 
@@ -57,9 +88,20 @@ const AddressSearch = ({ form, disabled = false }: AddressSearchProps) => {
     try {
       const { latitude, longitude } = await getCoordinates(address);
 
-      // Set the latitude and longitude values in the form
+      // Update form values
       form.setValue('latitude', latitude, { shouldValidate: true });
       form.setValue('longitude', longitude, { shouldValidate: true });
+
+      // Update map position
+      setViewState({
+        latitude,
+        longitude,
+        zoom: 15
+      });
+      setMarkerPosition({
+        latitude,
+        longitude
+      });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Lỗi không xác định');
     } finally {
@@ -67,9 +109,24 @@ const AddressSearch = ({ form, disabled = false }: AddressSearchProps) => {
     }
   };
 
+  // Handle marker drag
+  const onMarkerDragEnd = (event: any) => {
+    const { lngLat } = event;
+    const newLng = lngLat.lng;
+    const newLat = lngLat.lat;
+
+    setMarkerPosition({
+      longitude: newLng,
+      latitude: newLat
+    });
+
+    form.setValue('longitude', newLng, { shouldValidate: true });
+    form.setValue('latitude', newLat, { shouldValidate: true });
+  };
+
   return (
     <div className='space-y-2'>
-      <div className='flex items-center gap-2'>
+      <div className='flex items-center justify-between'>
         <Button
           type='button'
           onClick={handleSearch}
@@ -84,18 +141,44 @@ const AddressSearch = ({ form, disabled = false }: AddressSearchProps) => {
           )}
           Tìm tọa độ
         </Button>
-        {form.getValues('latitude') && form.getValues('longitude') && (
+        <div className='flex items-center'>
+          <MapPin className='mr-1 h-4 w-4 text-muted-foreground' />
           <span className='text-xs text-muted-foreground'>
-            Đã tìm thấy tọa độ
+            {form.getValues('latitude') && form.getValues('longitude')
+              ? `Tọa độ: ${form.getValues('latitude')}, ${form.getValues('longitude')}`
+              : 'Chưa có tọa độ'}
           </span>
-        )}
+        </div>
       </div>
 
+      {/* Error display */}
       {error && (
         <Alert variant='destructive' className='py-2'>
           <AlertDescription className='text-xs'>{error}</AlertDescription>
         </Alert>
       )}
+
+      {/* Map container */}
+      <div className='mt-2 h-[250px] w-full overflow-hidden rounded-md border'>
+        <Map
+          mapboxAccessToken={MAPBOX_TOKEN}
+          {...viewState}
+          onMove={(evt) => setViewState(evt.viewState)}
+          style={{ width: '100%', height: '100%' }}
+          mapStyle='mapbox://styles/mapbox/streets-v12'
+        >
+          <Marker
+            longitude={markerPosition.longitude}
+            latitude={markerPosition.latitude}
+            draggable
+            onDragEnd={onMarkerDragEnd}
+            color='#FF0000'
+          />
+        </Map>
+      </div>
+      <p className='mt-1 text-xs text-muted-foreground'>
+        Di chuyển ghim trên bản đồ để điều chỉnh vị trí chính xác
+      </p>
     </div>
   );
 };

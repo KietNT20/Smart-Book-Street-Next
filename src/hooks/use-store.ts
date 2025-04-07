@@ -1,5 +1,84 @@
 import { storeService } from '@/services/storeService';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { StoreParams } from '@/types/store-types';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+
+export const useStores = ({
+  result,
+  sortField,
+  sortOrder,
+  pageSize,
+  pageNumber
+}: StoreParams) => {
+  const queryClient = useQueryClient();
+  const {
+    data: storesRes,
+    isLoading,
+    isPending,
+    error
+  } = useQuery({
+    queryKey: ['stores', result, sortField, sortOrder, pageSize, pageNumber],
+    queryFn: () =>
+      storeService.searchPagination({
+        result,
+        sortField,
+        sortOrder,
+        pageSize,
+        pageNumber
+      })
+  });
+
+  const totalPages = storesRes?.totalPages || 0;
+
+  // Prefetch the next page of stores
+  if (pageNumber < totalPages) {
+    queryClient.prefetchQuery({
+      queryKey: [
+        'stores',
+        result,
+        sortField,
+        sortOrder,
+        pageSize,
+        pageNumber + 1
+      ],
+      queryFn: () =>
+        storeService.searchPagination({
+          result,
+          sortField,
+          sortOrder,
+          pageSize,
+          pageNumber: pageNumber + 1
+        })
+    });
+  }
+  // Prefetch the previous page of stores
+  if (pageNumber > 1) {
+    queryClient.prefetchQuery({
+      queryKey: [
+        'stores',
+        result,
+        sortField,
+        sortOrder,
+        pageSize,
+        pageNumber - 1
+      ],
+      queryFn: () =>
+        storeService.searchPagination({
+          result,
+          sortField,
+          sortOrder,
+          pageSize,
+          pageNumber: pageNumber - 1
+        })
+    });
+  }
+
+  return {
+    stores: storesRes?.results || [],
+    isLoading,
+    isPending,
+    error
+  };
+};
 
 export const useStoreMutation = () => {
   const queryClient = useQueryClient();

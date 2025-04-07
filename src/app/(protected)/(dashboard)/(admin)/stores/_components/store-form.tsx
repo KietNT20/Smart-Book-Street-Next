@@ -1,6 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Form,
   FormControl,
@@ -10,11 +11,13 @@ import {
   FormMessage
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { PATH } from '@/enums/path';
 import { useStoreMutation } from '@/hooks/use-store';
 import { storeFormSchema, StoreFormValues } from '@/lib/zod';
 import { StoreData } from '@/types/store-types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import AddressSearch from './address-search';
 
@@ -25,6 +28,7 @@ type Props = {
 const StoreForm = ({ storeToEdit }: Props) => {
   const { createStore, updateStore, isCreatingStore, isUpdatingStore } =
     useStoreMutation();
+  const router = useRouter();
 
   const isWorking = isCreatingStore || isUpdatingStore;
 
@@ -42,7 +46,6 @@ const StoreForm = ({ storeToEdit }: Props) => {
       latitude: 0,
       longitude: 0,
       type: '',
-      managerId: '',
       zoneId: ''
     }
   });
@@ -98,10 +101,6 @@ const StoreForm = ({ storeToEdit }: Props) => {
         formData.append('Type', values.type);
       }
 
-      if (values.managerId) {
-        formData.append('ManagerId', values.managerId);
-      }
-
       if (values.zoneId) {
         formData.append('ZoneId', values.zoneId);
       }
@@ -143,248 +142,293 @@ const StoreForm = ({ storeToEdit }: Props) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
-        <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'>
-          <FormField
-            control={form.control}
-            name='bookStoreName'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Tên cửa hàng</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder='Tên cửa hàng sách'
-                    disabled={isWorking}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        {/* Infomation */}
+        <Card>
+          <CardHeader>
+            <CardTitle className='text-lg'>Thông tin cơ bản</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'>
+              <FormField
+                control={form.control}
+                name='bookStoreName'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Tên cửa hàng</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder='Tên cửa hàng sách'
+                        disabled={isWorking}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-          <FormField
-            control={form.control}
-            name='address'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Địa chỉ</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder='Địa chỉ'
-                    disabled={isWorking}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-                <AddressSearch form={form} disabled={isWorking} />
-              </FormItem>
-            )}
-          />
+              <FormField
+                control={form.control}
+                name='type'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Loại cửa hàng</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder='Loại cửa hàng'
+                        disabled={isWorking}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-          <FormField
-            control={form.control}
-            name='phone'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Số điện thoại</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder='Số điện thoại'
-                    disabled={isWorking}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+              <FormField
+                control={form.control}
+                name='zoneId'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>ID Khu vực</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder='ID Khu vực'
+                        disabled={isWorking}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </CardContent>
+        </Card>
 
-          <FormField
-            control={form.control}
-            name='email'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input placeholder='Email' disabled={isWorking} {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        {/* Address and Location */}
+        <Card>
+          <CardHeader>
+            <CardTitle className='text-lg'>Địa chỉ và vị trí</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className='grid grid-cols-1 gap-6'>
+              <FormField
+                control={form.control}
+                name='address'
+                render={({ field }) => (
+                  <FormItem className='col-span-1'>
+                    <FormLabel>Địa chỉ</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder='Địa chỉ cửa hàng'
+                        disabled={isWorking}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                    <AddressSearch form={form} disabled={isWorking} />
+                  </FormItem>
+                )}
+              />
 
-          <FormField
-            control={form.control}
-            name='openingTime'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Giờ mở cửa</FormLabel>
-                <FormControl>
-                  <Input type='time' disabled={isWorking} {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+              <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+                <FormField
+                  control={form.control}
+                  name='latitude'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Vĩ độ</FormLabel>
+                      <FormControl>
+                        <Input
+                          type='number'
+                          placeholder='Vĩ độ'
+                          disabled={isWorking}
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(parseFloat(e.target.value) || 0)
+                          }
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-          <FormField
-            control={form.control}
-            name='closingTime'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Giờ đóng cửa</FormLabel>
-                <FormControl>
-                  <Input type='time' disabled={isWorking} {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                <FormField
+                  control={form.control}
+                  name='longitude'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Kinh độ</FormLabel>
+                      <FormControl>
+                        <Input
+                          type='number'
+                          placeholder='Kinh độ'
+                          disabled={isWorking}
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(parseFloat(e.target.value) || 0)
+                          }
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
-          <FormField
-            control={form.control}
-            name='type'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Loại cửa hàng</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder='Loại cửa hàng'
-                    disabled={isWorking}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        {/* Contact */}
+        <Card>
+          <CardHeader>
+            <CardTitle className='text-lg'>Thông tin liên hệ</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+              <FormField
+                control={form.control}
+                name='phone'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Số điện thoại</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder='Số điện thoại'
+                        disabled={isWorking}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-          <FormField
-            control={form.control}
-            name='managerId'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>ID Quản lý</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder='ID Quản lý'
-                    disabled={isWorking}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+              <FormField
+                control={form.control}
+                name='email'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder='Email'
+                        disabled={isWorking}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </CardContent>
+        </Card>
 
-          <FormField
-            control={form.control}
-            name='zoneId'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>ID Khu vực</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder='ID Khu vực'
-                    disabled={isWorking}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        {/* Schedule */}
+        <Card>
+          <CardHeader>
+            <CardTitle className='text-lg'>Giờ hoạt động</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+              <FormField
+                control={form.control}
+                name='openingTime'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Giờ mở cửa</FormLabel>
+                    <FormControl>
+                      <Input type='time' disabled={isWorking} {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-          <FormField
-            control={form.control}
-            name='latitude'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Vĩ độ</FormLabel>
-                <FormControl>
-                  <Input
-                    type='number'
-                    placeholder='Vĩ độ'
-                    disabled={isWorking}
-                    {...field}
-                    onChange={(e) =>
-                      field.onChange(parseFloat(e.target.value) || 0)
-                    }
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+              <FormField
+                control={form.control}
+                name='closingTime'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Giờ đóng cửa</FormLabel>
+                    <FormControl>
+                      <Input type='time' disabled={isWorking} {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </CardContent>
+        </Card>
 
-          <FormField
-            control={form.control}
-            name='longitude'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Kinh độ</FormLabel>
-                <FormControl>
-                  <Input
-                    type='number'
-                    placeholder='Kinh độ'
-                    disabled={isWorking}
-                    {...field}
-                    onChange={(e) =>
-                      field.onChange(parseFloat(e.target.value) || 0)
-                    }
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+        {/* Images Store */}
+        <Card>
+          <CardHeader>
+            <CardTitle className='text-lg'>Hình ảnh cửa hàng</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className='space-y-6'>
+              <div>
+                <FormLabel>Ảnh chính</FormLabel>
+                <Input
+                  type='file'
+                  accept='image/*'
+                  onChange={(e) => handleFileChange(e, 'mainImageFile')}
+                  disabled={isWorking}
+                />
+                {form.formState.errors.mainImageFile && (
+                  <p className='text-sm text-red-500'>
+                    {form.formState.errors.mainImageFile.message?.toString()}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <FormLabel>Ảnh bổ sung</FormLabel>
+                <Input
+                  type='file'
+                  multiple
+                  accept='image/*'
+                  onChange={(e) => handleFileChange(e, 'additionalImageFiles')}
+                  disabled={isWorking}
+                />
+                {form.formState.errors.additionalImageFiles && (
+                  <p className='text-sm text-red-500'>
+                    {form.formState.errors.additionalImageFiles.message?.toString()}
+                  </p>
+                )}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <div className='flex items-center justify-end gap-4'>
+          <Button
+            type='button'
+            variant='outline'
+            disabled={isWorking}
+            onClick={() => router.push(PATH.STORES)}
+            className='px-7'
+          >
+            Hủy
+          </Button>
+          <Button type='submit' disabled={isWorking} size='lg'>
+            {isWorking ? (
+              <>
+                <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                Đang xử lý...
+              </>
+            ) : storeToEdit ? (
+              'Cập nhật cửa hàng'
+            ) : (
+              'Thêm cửa hàng'
             )}
-          />
+          </Button>
         </div>
-
-        <div className='space-y-4'>
-          <div>
-            <FormLabel>Ảnh chính</FormLabel>
-            <Input
-              type='file'
-              accept='image/*'
-              onChange={(e) => handleFileChange(e, 'mainImageFile')}
-              disabled={isWorking}
-            />
-            {form.formState.errors.mainImageFile && (
-              <p className='text-sm text-red-500'>
-                {form.formState.errors.mainImageFile.message?.toString()}
-              </p>
-            )}
-          </div>
-
-          <div>
-            <FormLabel>Ảnh bổ sung</FormLabel>
-            <Input
-              type='file'
-              multiple
-              accept='image/*'
-              onChange={(e) => handleFileChange(e, 'additionalImageFiles')}
-              disabled={isWorking}
-            />
-            {form.formState.errors.additionalImageFiles && (
-              <p className='text-sm text-red-500'>
-                {form.formState.errors.additionalImageFiles.message?.toString()}
-              </p>
-            )}
-          </div>
-        </div>
-
-        <Button type='submit' disabled={isWorking}>
-          {isWorking ? (
-            <>
-              <Loader2 className='mr-2 h-4 w-4 animate-spin' />
-              Đang xử lý...
-            </>
-          ) : storeToEdit ? (
-            'Cập nhật cửa hàng'
-          ) : (
-            'Thêm cửa hàng'
-          )}
-        </Button>
       </form>
     </Form>
   );

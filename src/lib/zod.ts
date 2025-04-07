@@ -174,7 +174,6 @@ export const storeFormSchema = z.object({
   latitude: z.number().optional(),
   longitude: z.number().optional(),
   type: z.string().optional(),
-  managerId: z.string().optional(),
   zoneId: z.string().optional()
 });
 

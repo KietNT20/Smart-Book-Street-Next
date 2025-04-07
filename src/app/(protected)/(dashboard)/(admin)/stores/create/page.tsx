@@ -1,13 +1,12 @@
+import { Separator } from '@/components/ui/separator';
 import StoreForm from '../_components/store-form';
 
 const CreateStorePage = () => {
   return (
     <div>
       <h2 className='text-2xl font-bold'>Tạo cửa hàng</h2>
-      <p className='text-sm text-muted-foreground'>
-        Nhập thông tin cửa hàng của bạn để tạo mới.
-      </p>
-      <div className='mt-4'>
+      <Separator className='my-4' />
+      <div>
         <StoreForm />
       </div>
     </div>

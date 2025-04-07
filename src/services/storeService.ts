@@ -1,4 +1,5 @@
 import { API_URL } from '@/constant/api-url';
+import { StoreParams } from '@/types/store-types';
 import axiosInstance from '@/utils/axiosInstance';
 
 export const storeService = {
@@ -32,6 +33,13 @@ export const storeService = {
   },
   delete: async (id: string) => {
     const res = await axiosInstance.delete(`${API_URL.STORES.INDEX}/${id}`);
+    return res.data;
+  },
+  searchPagination: async (params: StoreParams) => {
+    const res = await axiosInstance.post(
+      API_URL.STORES.PAGINATION_SEARCH,
+      params
+    );
     return res.data;
   }
 };
