@@ -37,7 +37,7 @@ const StoreForm = ({ storeToEdit }: Props) => {
   const form = useForm<StoreFormValues>({
     resolver: zodResolver(storeFormSchema),
     defaultValues: storeToEdit || {
-      bookStoreName: '',
+      storeName: '',
       address: '',
       phone: '',
       email: '',
@@ -55,7 +55,7 @@ const StoreForm = ({ storeToEdit }: Props) => {
   function onSubmit(values: StoreFormValues) {
     try {
       const formData = new FormData();
-      formData.append('BookStoreName', values.bookStoreName);
+      formData.append('StoreName', values.storeName);
       formData.append('Address', values.address);
 
       if (values.phone) {
@@ -85,22 +85,18 @@ const StoreForm = ({ storeToEdit }: Props) => {
           'MainImageFile',
           values.mainImageFile instanceof File
             ? values.mainImageFile
-            : new Blob([values.mainImageFile]),
-          values.mainImageFile instanceof File
-            ? values.mainImageFile.name
-            : 'main-image'
+            : new Blob([values.mainImageFile])
         );
       }
 
-      values.additionalImageFiles.forEach((file, index) => {
-        if (file) {
+      if (values.additionalImageFiles) {
+        values.additionalImageFiles.forEach((file) => {
           formData.append(
             'AdditionalImageFiles',
-            file instanceof File ? file : new Blob([file]),
-            file instanceof File ? file.name : `additional-image-${index}`
+            file instanceof File ? file : new Blob([file])
           );
-        }
-      });
+        });
+      }
 
       formData.append('Latitude', values.latitude?.toString() || '0');
       formData.append('Longitude', values.longitude?.toString() || '0');
@@ -159,7 +155,7 @@ const StoreForm = ({ storeToEdit }: Props) => {
             <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'>
               <FormField
                 control={form.control}
-                name='bookStoreName'
+                name='storeName'
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Tên cửa hàng</FormLabel>

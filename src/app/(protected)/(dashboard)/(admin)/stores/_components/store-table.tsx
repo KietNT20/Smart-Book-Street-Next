@@ -12,6 +12,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import {
@@ -140,11 +141,11 @@ export const StoreTable = ({
             <TableRow>
               <TableHead
                 className='cursor-pointer'
-                onClick={() => handleSort('bookStoreName')}
+                onClick={() => handleSort('storeName')}
               >
                 <div className='flex items-center'>
-                  Store Name
-                  {sortField === 'bookStoreName' &&
+                  Tên cửa hàng
+                  {sortField === 'storeName' &&
                     (sortOrder === Sort.ASC ? (
                       <SortAsc className='ml-1 h-4 w-4' />
                     ) : (
@@ -157,7 +158,7 @@ export const StoreTable = ({
                 onClick={() => handleSort('address')}
               >
                 <div className='flex items-center'>
-                  Address
+                  Địa chỉ
                   {sortField === 'address' &&
                     (sortOrder === Sort.ASC ? (
                       <SortAsc className='ml-1 h-4 w-4' />
@@ -171,7 +172,7 @@ export const StoreTable = ({
                 onClick={() => handleSort('phone')}
               >
                 <div className='flex items-center'>
-                  Phone
+                  Số điện thoại
                   {sortField === 'phone' &&
                     (sortOrder === Sort.ASC ? (
                       <SortAsc className='ml-1 h-4 w-4' />
@@ -181,8 +182,8 @@ export const StoreTable = ({
                 </div>
               </TableHead>
               <TableHead>Email</TableHead>
-              <TableHead>Hours</TableHead>
-              <TableHead className='text-right'>Actions</TableHead>
+              <TableHead>Giờ làm việc</TableHead>
+              <TableHead className='text-right'>Thao tác</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -213,6 +214,7 @@ export const StoreTable = ({
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align='end'>
+                        <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
                         <DropdownMenuItem onClick={() => onViewStore(store.id)}>
                           <Eye className='mr-2 h-4 w-4' />
                           Xem chi tiết
@@ -242,7 +244,7 @@ export const StoreTable = ({
       <div className='mt-4 flex items-center justify-between'>
         <div className='flex items-center gap-2'>
           <span className='whitespace-nowrap text-sm text-muted-foreground'>
-            Hàng mỗi trang:
+            Số dòng:
           </span>
           <Select
             value={pageSize.toString()}
@@ -254,8 +256,9 @@ export const StoreTable = ({
             <SelectContent>
               <SelectItem value='10'>10</SelectItem>
               <SelectItem value='20'>20</SelectItem>
+              <SelectItem value='30'>30</SelectItem>
+              <SelectItem value='40'>40</SelectItem>
               <SelectItem value='50'>50</SelectItem>
-              <SelectItem value='100'>100</SelectItem>
             </SelectContent>
           </Select>
         </div>

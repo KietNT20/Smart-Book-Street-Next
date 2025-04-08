@@ -7,6 +7,13 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select';
+import {
   Table,
   TableBody,
   TableCell,
@@ -200,23 +207,27 @@ export function DataTable<TData, TValue>({
         <div className='flex items-center space-x-6'>
           <div className='flex items-center space-x-2'>
             <p className='text-sm font-medium'>Số dòng</p>
-            <select
-              value={state.pageSize}
-              onChange={(e) => {
+            <Select
+              value={state.pageSize.toString()}
+              onValueChange={(value) => {
                 onStateChange({
                   ...state,
-                  pageSize: Number(e.target.value),
+                  pageSize: Number(value),
                   pageIndex: 1
                 });
               }}
-              className='h-8 rounded-md border border-input bg-background px-2'
             >
-              {[10, 20, 30, 40, 50].map((pageSize) => (
-                <option key={pageSize} value={pageSize}>
-                  {pageSize}
-                </option>
-              ))}
-            </select>
+              <SelectTrigger className='h-8 w-24'>
+                <SelectValue>{state.pageSize}</SelectValue>
+              </SelectTrigger>
+              <SelectContent>
+                {[10, 20, 30, 40, 50].map((pageSize) => (
+                  <SelectItem key={pageSize} value={pageSize.toString()}>
+                    {pageSize}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
           <div className='flex items-center space-x-2'>
             <Button
@@ -232,7 +243,7 @@ export function DataTable<TData, TValue>({
               }}
               disabled={state.pageIndex === 1}
             >
-              Trang trước
+              Previous
             </Button>
             <Button
               variant='outline'
@@ -247,7 +258,7 @@ export function DataTable<TData, TValue>({
               }}
               disabled={state.pageIndex === pageCount}
             >
-              Trang sau
+              Next
             </Button>
           </div>
         </div>

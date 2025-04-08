@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { PATH } from '@/enums/path';
 import { Book } from '@/types/book-types';
-import { Eye, MoreHorizontal, Pen, Trash } from 'lucide-react';
+import { Edit, Eye, MoreHorizontal, Trash } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -38,7 +38,7 @@ const BookMenuAction = ({ book, _onDelete }: Props) => {
           onClick={() => router.push(`${PATH.ADMIN_BOOKS}/${book.id}/edit`)}
           className='cursor-pointer'
         >
-          <Pen className='mr-2 h-4 w-4' />
+          <Edit className='mr-2 h-4 w-4' />
           Sửa
         </DropdownMenuItem>
         <DropdownMenuItem

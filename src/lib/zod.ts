@@ -150,9 +150,7 @@ export type CategoryFormValues = z.infer<typeof categoryFormSchema>;
 
 // Store form
 export const storeFormSchema = z.object({
-  bookStoreName: z
-    .string()
-    .min(1, { message: 'Tên cửa hàng không được để trống' }),
+  storeName: z.string().min(1, { message: 'Tên cửa hàng không được để trống' }),
   address: z.string().min(1, { message: 'Địa chỉ không được để trống' }),
   phone: z
     .string()

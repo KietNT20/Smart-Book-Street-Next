@@ -3,7 +3,8 @@ import {
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
-  useReactTable
+  useReactTable,
+  VisibilityState
 } from '@tanstack/react-table';
 
 import {
@@ -18,12 +19,19 @@ import {
 import { TableSkeleton } from '@/components/table-skeleton';
 import { Button } from '@/components/ui/button';
 import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu';
+import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
+import { useState } from 'react';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -46,13 +54,16 @@ export function DataTable<TData, TValue>({
   onPageChange,
   onPageSizeChange
 }: DataTableProps<TData, TValue>) {
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
     pageCount: pageCount,
     state: {
+      columnVisibility,
       pagination: {
         pageSize,
         pageIndex: currentPage - 1
@@ -78,6 +89,34 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className='space-y-4'>
+      <div className='flex items-center'>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant='outline' className='ml-auto'>
+              Hiển thị cột
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align='end'>
+            {table
+              .getAllColumns()
+              .filter((column) => column.getCanHide())
+              .map((column) => {
+                return (
+                  <DropdownMenuCheckboxItem
+                    key={column.id}
+                    className='capitalize'
+                    checked={column.getIsVisible()}
+                    onCheckedChange={(value) =>
+                      column.toggleVisibility(!!value)
+                    }
+                  >
+                    {column.id}
+                  </DropdownMenuCheckboxItem>
+                );
+              })}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
       <div className='rounded-md border'>
         <Table>
           <TableHeader>
@@ -158,7 +197,7 @@ export function DataTable<TData, TValue>({
               onClick={() => onPageChange(currentPage - 1)}
               disabled={currentPage === 1 || isLoading}
             >
-              Trang trước
+              Previous
             </Button>
             <Button
               variant='outline'
@@ -166,7 +205,7 @@ export function DataTable<TData, TValue>({
               onClick={() => onPageChange(currentPage + 1)}
               disabled={currentPage >= pageCount || isLoading}
             >
-              Trang sau
+              Next
             </Button>
           </div>
         </div>

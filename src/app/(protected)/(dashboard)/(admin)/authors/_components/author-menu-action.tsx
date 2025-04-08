@@ -4,12 +4,13 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { PATH } from '@/enums/path';
 import { useAuthorMutation } from '@/hooks/use-author';
 import { Author } from '@/types/author-types';
-import { Eye, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
+import { Edit, Eye, MoreHorizontal, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -59,6 +60,7 @@ const AuthorMenuAction = ({ author }: Props) => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align='end'>
+          <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
           <DropdownMenuItem asChild className='cursor-pointer'>
             <Link href={`${PATH.ADMIN_AUTHORS}/${author.id}`}>
               <Eye className='mr-2 h-4 w-4' />
@@ -71,7 +73,7 @@ const AuthorMenuAction = ({ author }: Props) => {
             }}
             className='cursor-pointer'
           >
-            <Pencil className='mr-2 h-4 w-4' />
+            <Edit className='mr-2 h-4 w-4' />
             Chỉnh sửa
           </DropdownMenuItem>
           <DropdownMenuItem

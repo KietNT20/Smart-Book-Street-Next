@@ -33,6 +33,7 @@ export const columns: ColumnDef<Author>[] = [
   },
   {
     id: 'actions',
+    header: 'Thao tác',
     cell: ({ row }) => {
       const author = row.original;
       const authorProps = { author };
