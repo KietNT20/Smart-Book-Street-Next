@@ -7,6 +7,9 @@ import {
 } from '@/components/ui/collapsible';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { DatePicker } from 'antd';
+import type { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import { ChevronDown, ChevronUp, X } from 'lucide-react';
 import { useState } from 'react';
 
@@ -27,13 +30,13 @@ interface StoreFilterProps {
   onClearSearch: () => void;
 }
 
-export const StoreFilter: React.FC<StoreFilterProps> = ({
+const StoreFilter = ({
   filters,
   setFilters,
   isSearching,
   onSearch,
   onClearSearch
-}) => {
+}: StoreFilterProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleInputChange = (
@@ -41,6 +44,17 @@ export const StoreFilter: React.FC<StoreFilterProps> = ({
     value: string | null
   ) => {
     setFilters({ ...filters, [field]: value });
+  };
+
+  const handleDateChange = (
+    field: 'openingTime' | 'closingTime',
+    value: Dayjs | null
+  ) => {
+    if (value) {
+      setFilters({ ...filters, [field]: value.format('YYYY-MM-DD HH:mm') });
+    } else {
+      setFilters({ ...filters, [field]: null });
+    }
   };
 
   const clearField = (field: keyof SearchFilters) => {
@@ -74,11 +88,11 @@ export const StoreFilter: React.FC<StoreFilterProps> = ({
           <CollapsibleContent>
             <div className='grid grid-cols-1 gap-4 pt-2 md:grid-cols-2 lg:grid-cols-3'>
               <div className='space-y-2'>
-                <Label htmlFor='storeName'>Store Name</Label>
+                <Label htmlFor='storeName'>Tên cửa hàng</Label>
                 <div className='relative'>
                   <Input
                     id='storeName'
-                    placeholder='Search by store name...'
+                    placeholder='Tìm theo tên cửa hàng...'
                     value={filters.storeName || ''}
                     onChange={(e) =>
                       handleInputChange('storeName', e.target.value)
@@ -98,11 +112,11 @@ export const StoreFilter: React.FC<StoreFilterProps> = ({
               </div>
 
               <div className='space-y-2'>
-                <Label htmlFor='address'>Address</Label>
+                <Label htmlFor='address'>Địa chỉ</Label>
                 <div className='relative'>
                   <Input
                     id='address'
-                    placeholder='Search by address...'
+                    placeholder='Tìm theo địa chỉ...'
                     value={filters.address || ''}
                     onChange={(e) =>
                       handleInputChange('address', e.target.value)
@@ -122,11 +136,11 @@ export const StoreFilter: React.FC<StoreFilterProps> = ({
               </div>
 
               <div className='space-y-2'>
-                <Label htmlFor='phone'>Phone</Label>
+                <Label htmlFor='phone'>Số điện thoại</Label>
                 <div className='relative'>
                   <Input
                     id='phone'
-                    placeholder='Search by phone...'
+                    placeholder='Tìm theo số điện thoại...'
                     value={filters.phone || ''}
                     onChange={(e) => handleInputChange('phone', e.target.value)}
                   />
@@ -148,7 +162,7 @@ export const StoreFilter: React.FC<StoreFilterProps> = ({
                 <div className='relative'>
                   <Input
                     id='email'
-                    placeholder='Search by email...'
+                    placeholder='Tìm theo email...'
                     value={filters.email || ''}
                     onChange={(e) => handleInputChange('email', e.target.value)}
                   />
@@ -166,15 +180,18 @@ export const StoreFilter: React.FC<StoreFilterProps> = ({
               </div>
 
               <div className='space-y-2'>
-                <Label htmlFor='openingTime'>Opening Time</Label>
+                <Label htmlFor='openingTime'>Giờ mở cửa</Label>
                 <div className='relative'>
-                  <Input
+                  <DatePicker
                     id='openingTime'
-                    placeholder='Search by opening time...'
-                    value={filters.openingTime || ''}
-                    onChange={(e) =>
-                      handleInputChange('openingTime', e.target.value)
+                    placeholder='Chọn giờ mở cửa'
+                    showTime={{ format: 'HH:mm' }}
+                    format='YYYY-MM-DD HH:mm'
+                    value={
+                      filters.openingTime ? dayjs(filters.openingTime) : null
                     }
+                    onChange={(date) => handleDateChange('openingTime', date)}
+                    className='w-full rounded-md border px-3 py-2'
                   />
                   {filters.openingTime && (
                     <Button
@@ -190,15 +207,18 @@ export const StoreFilter: React.FC<StoreFilterProps> = ({
               </div>
 
               <div className='space-y-2'>
-                <Label htmlFor='closingTime'>Closing Time</Label>
+                <Label htmlFor='closingTime'>Giờ đóng cửa</Label>
                 <div className='relative'>
-                  <Input
+                  <DatePicker
                     id='closingTime'
-                    placeholder='Search by closing time...'
-                    value={filters.closingTime || ''}
-                    onChange={(e) =>
-                      handleInputChange('closingTime', e.target.value)
+                    placeholder='Chọn giờ đóng cửa'
+                    showTime={{ format: 'HH:mm' }}
+                    format='YYYY-MM-DD HH:mm'
+                    value={
+                      filters.closingTime ? dayjs(filters.closingTime) : null
                     }
+                    onChange={(date) => handleDateChange('closingTime', date)}
+                    className='w-full rounded-md border px-3 py-2'
                   />
                   {filters.closingTime && (
                     <Button
@@ -219,3 +239,4 @@ export const StoreFilter: React.FC<StoreFilterProps> = ({
     </Card>
   );
 };
+export default StoreFilter;

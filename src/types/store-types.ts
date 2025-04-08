@@ -6,8 +6,8 @@ export interface StoreData extends BaseEntity {
   address: string;
   phone: string;
   email: string;
-  openingTime: string;
-  closingTime: string;
+  openingTime: string | null;
+  closingTime: string | null;
   mainImageFile: string;
   additionalImageFiles: string[];
   latitude: number;

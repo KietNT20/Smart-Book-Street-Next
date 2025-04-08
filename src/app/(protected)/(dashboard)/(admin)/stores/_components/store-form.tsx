@@ -17,6 +17,7 @@ import { storeFormSchema, StoreFormValues } from '@/lib/zod';
 import { StoreData } from '@/types/store-types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { DatePicker } from 'antd';
+import dayjs from 'dayjs';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
@@ -40,8 +41,8 @@ const StoreForm = ({ storeToEdit }: Props) => {
       address: '',
       phone: '',
       email: '',
-      openingTime: '',
-      closingTime: '',
+      openingTime: null,
+      closingTime: null,
       mainImageFile: undefined,
       additionalImageFiles: [],
       latitude: 0,
@@ -66,11 +67,17 @@ const StoreForm = ({ storeToEdit }: Props) => {
       }
 
       if (values.openingTime) {
-        formData.append('OpeningTime', values.openingTime);
+        const openingTime = dayjs(values.openingTime).format(
+          'YYYY-MM-DDTHH:mm:ss'
+        );
+        formData.append('OpeningTime', openingTime);
       }
 
       if (values.closingTime) {
-        formData.append('ClosingTime', values.closingTime);
+        const closingTime = dayjs(values.closingTime).format(
+          'YYYY-MM-DDTHH:mm:ss'
+        );
+        formData.append('ClosingTime', closingTime);
       }
 
       if (values.mainImageFile) {
@@ -291,13 +298,13 @@ const StoreForm = ({ storeToEdit }: Props) => {
             <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
               <FormField
                 control={form.control}
-                name='phone'
+                name='email'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Số điện thoại</FormLabel>
+                    <FormLabel>Email</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder='Số điện thoại'
+                        placeholder='Email'
                         disabled={isWorking}
                         {...field}
                       />
@@ -309,13 +316,13 @@ const StoreForm = ({ storeToEdit }: Props) => {
 
               <FormField
                 control={form.control}
-                name='email'
+                name='phone'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>Số điện thoại</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder='Email'
+                        placeholder='Số điện thoại'
                         disabled={isWorking}
                         {...field}
                       />
@@ -343,12 +350,10 @@ const StoreForm = ({ storeToEdit }: Props) => {
                     <FormLabel>Giờ mở cửa</FormLabel>
                     <FormControl>
                       <DatePicker
-                        className='w-full'
+                        className='w-full rounded-md border px-3 py-2'
                         showTime={{ format: 'HH:mm' }}
                         format='YYYY-MM-DD HH:mm'
-                        onChange={(value, dateString) => {
-                          console.log('Selected Time: ', value);
-                          console.log('Formatted Selected Time: ', dateString);
+                        onChange={(_, dateString) => {
                           field.onChange(dateString);
                         }}
                       />
@@ -366,12 +371,10 @@ const StoreForm = ({ storeToEdit }: Props) => {
                     <FormLabel>Giờ đóng cửa</FormLabel>
                     <FormControl>
                       <DatePicker
-                        className='w-full'
+                        className='w-full rounded-md border px-3 py-2'
                         showTime={{ format: 'HH:mm' }}
                         format='YYYY-MM-DD HH:mm'
-                        onChange={(value, dateString) => {
-                          console.log('Selected Time: ', value);
-                          console.log('Formatted Selected Time: ', dateString);
+                        onChange={(_, dateString) => {
                           field.onChange(dateString);
                         }}
                       />

@@ -1,3 +1,4 @@
+import { Sort } from '@/enums/enums';
 import { Book, BookSearchCriteria } from '@/types/book-types';
 import { useState } from 'react';
 import { BookTableState } from '../data-table';
@@ -11,7 +12,7 @@ export function useBookPageState() {
     pageIndex: 1,
     pageSize: 10,
     sortField: 'lastUpdatedDate',
-    sortOrder: -1
+    sortOrder: Sort.DESC
   });
 
   const [searchCriteria, setSearchCriteria] = useState<
@@ -26,7 +27,7 @@ export function useBookPageState() {
       pageIndex: 1,
       pageSize: 10,
       sortField: 'lastUpdatedDate',
-      sortOrder: -1
+      sortOrder: Sort.DESC
     });
     setSearchCriteria({});
   };

@@ -7,8 +7,8 @@ import { useStores } from '@/hooks/use-store';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { StoreFilter } from './_components/store-filter';
 import { StoreTable } from './_components/store-table';
+import StoreFilter from './_components/store-filter';
 
 interface SearchFilters {
   bookStoreName?: string;
@@ -22,8 +22,8 @@ interface SearchFilters {
 export default function StoresPage() {
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const [sortField, setSortField] = useState<string>('storeName');
-  const [sortOrder, setSortOrder] = useState<Sort>(Sort.ASC);
+  const [sortField, setSortField] = useState<string>('');
+  const [sortOrder, setSortOrder] = useState<Sort>(Sort.DESC);
   const [filters, setFilters] = useState<SearchFilters>({
     bookStoreName: '',
     address: '',
@@ -95,7 +95,7 @@ export default function StoresPage() {
   };
 
   return (
-    <div className='container mx-auto py-6'>
+    <div className='container mx-auto py-10'>
       <div className='mb-4 flex items-center justify-between'>
         <h2 className='text-2xl font-bold'>Quản lý cửa hàng</h2>
         <Link href={PATH.STORE_CREATE} passHref>
