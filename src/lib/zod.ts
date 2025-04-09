@@ -18,10 +18,10 @@ export const loginSchema = z.object({
         return emailRegex.test(value) || usernameRegex.test(value);
       },
       {
-        message: 'Vui lòng nhập email hoặc tên đăng nhập hợp lệ'
+        message: 'Vui lòng nhập email hoặc tên đăng nhập hợp lệ',
       }
     ),
-  password: z.string().min(1, { message: 'Vui lòng nhập mật khẩu' })
+  password: z.string().min(1, { message: 'Vui lòng nhập mật khẩu' }),
 });
 
 export type RegisterFormValues = z.infer<typeof registerSchema>;
@@ -38,16 +38,16 @@ export const registerSchema = z.object({
     .min(8, { message: 'Mật khẩu cần ít nhất 8 kí tự' })
     .max(32, 'Mật khẩu không được quá 32 kí tự')
     .regex(/[A-Z]/, {
-      message: 'Mật khẩu cần ít nhất 1 chữ hoa'
+      message: 'Mật khẩu cần ít nhất 1 chữ hoa',
     })
     .regex(/[a-z]/, {
-      message: 'Mật khẩu cần ít nhất 1 chữ thường'
+      message: 'Mật khẩu cần ít nhất 1 chữ thường',
     })
     .regex(/[0-9]/, {
-      message: 'Mật khẩu cần ít nhất 1 số'
+      message: 'Mật khẩu cần ít nhất 1 số',
     })
     .regex(REGEX.SPECIAL_CHAR, {
-      message: 'Mật khẩu cần ít nhất 1 kí tự đặc biệt'
+      message: 'Mật khẩu cần ít nhất 1 kí tự đặc biệt',
     }),
   fullName: z.string().min(1, { message: 'Vui lòng nhập họ và tên' }),
   phone: z
@@ -58,11 +58,11 @@ export const registerSchema = z.object({
         return REGEX.PHONE_VN.test(val);
       },
       {
-        message: 'Số điện thoại không hợp lệ'
+        message: 'Số điện thoại không hợp lệ',
       }
     )
     .optional(),
-  gender: z.enum([Gender.Male, Gender.Female]).optional()
+  gender: z.enum([Gender.Male, Gender.Female]).optional(),
 });
 
 // Book form
@@ -75,7 +75,7 @@ const bookPublishedDatedSchema = z.string().refine(
     );
   },
   {
-    message: 'Ngày xuất bản không hợp lệ'
+    message: 'Ngày xuất bản không hợp lệ',
   }
 );
 
@@ -93,7 +93,7 @@ export const bookSchema = z.object({
   publisherId: z.string().optional(),
   authorIds: z.array(z.string()).optional(),
   categoryIds: z.array(z.string()).optional(),
-  id: z.string().optional()
+  id: z.string().optional(),
 });
 
 export type BookFormValues = z.infer<typeof bookSchema>;
@@ -106,7 +106,7 @@ export const searchBookSchema = z
     languages: z.string().optional(),
     price: z.number().min(0, { message: 'Giá không được âm' }).optional(),
     startDate: z.string().optional(),
-    endDate: z.string().optional()
+    endDate: z.string().optional(),
   })
   .refine(
     (data) => {
@@ -117,7 +117,7 @@ export const searchBookSchema = z
     },
     {
       message: 'Ngày kết thúc phải sau ngày bắt đầu',
-      path: ['endDate']
+      path: ['endDate'],
     }
   );
 
@@ -129,7 +129,7 @@ export const authorFormSchema = z.object({
   dob: z.string().date().optional(),
   nationality: z.string().optional(),
   biography: z.string().optional(),
-  imgFile: z.instanceof(File).optional().or(z.string().optional())
+  imgFile: z.instanceof(File).optional().or(z.string().optional()),
 });
 
 export type AuthorFormValues = z.infer<typeof authorFormSchema>;
@@ -143,7 +143,7 @@ export const categoryFormSchema = z.object({
   description: z
     .string()
     .max(500, { message: 'Mô tả không được vượt quá 500 ký tự' })
-    .optional()
+    .optional(),
 });
 
 export type CategoryFormValues = z.infer<typeof categoryFormSchema>;
@@ -160,7 +160,7 @@ export const storeFormSchema = z.object({
         return REGEX.PHONE_VN.test(val);
       },
       {
-        message: 'Số điện thoại không hợp lệ'
+        message: 'Số điện thoại không hợp lệ',
       }
     )
     .optional(),
@@ -170,7 +170,7 @@ export const storeFormSchema = z.object({
   latitude: z.number().optional(),
   longitude: z.number().optional(),
   type: z.string().optional(),
-  zoneId: z.string().optional()
+  zoneId: z.string().optional(),
 });
 
 export type StoreFormValues = z.infer<typeof storeFormSchema>;

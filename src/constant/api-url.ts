@@ -21,67 +21,67 @@ export const API_URL = {
   AUTHORS: {
     INDEX: `${AUTHOR}`,
     SEARCH: `${AUTHOR}/search`,
-    PAGINATION_SEARCH: `${AUTHOR}/search/paginated`
+    PAGINATION_SEARCH: `${AUTHOR}/search/paginated`,
   },
   BOOKS: {
     INDEX: `${BOOK}`,
     PAGINATION_SEARCH: `${BOOK}/search/paginated`,
     SEARCH: `${BOOK}/search`,
-    PAGINATED: `${BOOK}/paginated`
+    PAGINATED: `${BOOK}/paginated`,
   },
   BOOK_AUTHORS: {
     INDEX: `${BOOK_AUTHOR}`,
     PAGINATION_SEARCH: `${BOOK_AUTHOR}/search/paginated`,
-    FILTER: `${BOOK_AUTHOR}/filter`
+    FILTER: `${BOOK_AUTHOR}/filter`,
   },
   BOOK_CATEGORIES: {
     INDEX: `${BOOK_CATEGORY}`,
     PAGINATION_SEARCH: `${BOOK_CATEGORY}/search/paginated`,
-    FILTER: `${BOOK_CATEGORY}/filter`
+    FILTER: `${BOOK_CATEGORY}/filter`,
   },
   CATEGORIES: {
     INDEX: `${CATEGORY}`,
     PAGINATION_SEARCH: `${CATEGORY}/search/paginated`,
-    SEARCH: `${CATEGORY}/search`
+    SEARCH: `${CATEGORY}/search`,
   },
   EVENTS: {
     INDEX: `${EVENT}`,
     COMING: `${EVENT}/events-coming`,
     PAGINATED: `${EVENT}/paginated`,
     DATES_IN_MONTH: `${EVENT}/event-dates-in-month`,
-    IN_DATE: `${EVENT}/events-in-date`
+    IN_DATE: `${EVENT}/events-in-date`,
   },
   IMAGES: {
     INDEX: `${IMAGE}`,
     LIST: `${IMAGE}/list`,
-    GET_BY_TYPE_OR_ENTITY_ID: `${IMAGE}/get-by-type-or-entityID`
+    GET_BY_TYPE_OR_ENTITY_ID: `${IMAGE}/get-by-type-or-entityID`,
   },
   INVENTORIES: {
-    INDEX: `${INVENTORY}`
+    INDEX: `${INVENTORY}`,
   },
   PUBLISHERS: {
     INDEX: `${PUBLISHER}`,
     PAGINATED: `${PUBLISHER}/paginated`,
     SEARCH: `${PUBLISHER}/search`,
-    PAGINATION_SEARCH: `${PUBLISHER}/search/paginated`
+    PAGINATION_SEARCH: `${PUBLISHER}/search/paginated`,
   },
   SOUVENIRS: {
     INDEX: `${SOUVENIR}`,
-    PAGINATION_SEARCH: `${SOUVENIR}/search/paginated`
+    PAGINATION_SEARCH: `${SOUVENIR}/search/paginated`,
   },
   STORES: {
     INDEX: `${STORE}`,
     PAGINATED: `${STORE}/paginated`,
     SEARCH: `${STORE}/search`,
-    PAGINATION_SEARCH: `${STORE}/search/paginated`
+    PAGINATION_SEARCH: `${STORE}/search/paginated`,
   },
   STREETS: {
     INDEX: `${STREET}`,
-    PAGINATION_SEARCH: `${STREET}/search/paginated`
+    PAGINATION_SEARCH: `${STREET}/search/paginated`,
   },
   ZONES: {
     INDEX: `${ZONE}`,
-    PAGINATION_SEARCH: `${ZONE}/search/paginated`
+    PAGINATION_SEARCH: `${ZONE}/search/paginated`,
   },
   USERS: {
     INDEX: `${USER}`,
@@ -90,12 +90,12 @@ export const API_URL = {
     PROFILE: `${USER}/profile`,
     PAGINATED: `${USER}/paginated`,
     SEARCH: `${USER}/search`,
-    PAGINATION_SEARCH: `${USER}/search/paginated`
+    PAGINATION_SEARCH: `${USER}/search/paginated`,
   },
   USER_ROLES: {
-    INDEX: `${USER_ROLE}`
+    INDEX: `${USER_ROLE}`,
   },
   ROLES: {
-    INDEX: `${ROLE}`
-  }
+    INDEX: `${ROLE}`,
+  },
 } as const;

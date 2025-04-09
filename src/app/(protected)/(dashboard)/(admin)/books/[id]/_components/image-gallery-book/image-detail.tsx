@@ -4,7 +4,7 @@ import {
   DialogContent,
   DialogDescription,
   DialogHeader,
-  DialogTitle
+  DialogTitle,
 } from '@/components/ui/dialog';
 import { ImageType } from '@/types/image-types';
 import { Loader2, Trash2 } from 'lucide-react';
@@ -25,7 +25,7 @@ const ImageDetail = ({
   selectedImage,
   bookCode,
   onDelete,
-  isPending
+  isPending,
 }: Props) => {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>

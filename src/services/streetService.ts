@@ -9,9 +9,9 @@ export const streetService = {
   create: async (data: FormData) => {
     const res = await axiosInstance.post(API_URL.STREETS.INDEX, data, {
       headers: {
-        'Content-Type': 'multipart/form-data'
-      }
+        'Content-Type': 'multipart/form-data',
+      },
     });
     return res.data;
-  }
+  },
 };

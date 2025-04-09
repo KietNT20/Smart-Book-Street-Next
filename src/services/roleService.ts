@@ -10,5 +10,5 @@ export const roleService = {
   create: async (payload: RolePayload) => {
     const res = await axiosInstance.post(API_URL.ROLES.INDEX, payload);
     return res.data;
-  }
+  },
 };

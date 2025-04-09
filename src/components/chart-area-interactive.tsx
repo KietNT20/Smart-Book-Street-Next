@@ -9,20 +9,20 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle
+  CardTitle,
 } from '@/components/ui/card';
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
-  ChartTooltipContent
+  ChartTooltipContent,
 } from '@/components/ui/chart';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
+  SelectValue,
 } from '@/components/ui/select';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 const chartData = [
@@ -116,21 +116,21 @@ const chartData = [
   { date: '2024-06-27', desktop: 448, mobile: 490 },
   { date: '2024-06-28', desktop: 149, mobile: 200 },
   { date: '2024-06-29', desktop: 103, mobile: 160 },
-  { date: '2024-06-30', desktop: 446, mobile: 400 }
+  { date: '2024-06-30', desktop: 446, mobile: 400 },
 ];
 
 const chartConfig = {
   visitors: {
-    label: 'Visitors'
+    label: 'Visitors',
   },
   desktop: {
     label: 'Desktop',
-    color: 'hsl(var(--chart-1))'
+    color: 'hsl(var(--chart-1))',
   },
   mobile: {
     label: 'Mobile',
-    color: 'hsl(var(--chart-2))'
-  }
+    color: 'hsl(var(--chart-2))',
+  },
 } satisfies ChartConfig;
 
 export function ChartAreaInteractive() {
@@ -249,7 +249,7 @@ export function ChartAreaInteractive() {
                 const date = new Date(value);
                 return date.toLocaleDateString('en-US', {
                   month: 'short',
-                  day: 'numeric'
+                  day: 'numeric',
                 });
               }}
             />
@@ -260,7 +260,7 @@ export function ChartAreaInteractive() {
                   labelFormatter={(value) => {
                     return new Date(value).toLocaleDateString('en-US', {
                       month: 'short',
-                      day: 'numeric'
+                      day: 'numeric',
                     });
                   }}
                   indicator='dot'

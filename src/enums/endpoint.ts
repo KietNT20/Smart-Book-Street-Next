@@ -14,5 +14,5 @@ export enum API_ENDPOINT {
   STREET = '/streets',
   USER = '/users',
   USER_ROLE = '/user-roles',
-  ZONE = '/zones'
+  ZONE = '/zones',
 }

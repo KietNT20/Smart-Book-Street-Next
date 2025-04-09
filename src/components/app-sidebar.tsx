@@ -12,7 +12,7 @@ import {
   LibraryBig,
   PieChart,
   Store,
-  Users
+  Users,
 } from 'lucide-react';
 import * as React from 'react';
 
@@ -25,7 +25,7 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-  SidebarRail
+  SidebarRail,
 } from '@/components/ui/sidebar';
 // import { useAuth } from '@/context/auth-context';
 import { PATH } from '@/enums/path';
@@ -49,18 +49,18 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       {
         name: 'Acme Inc',
         logo: GalleryVerticalEnd,
-        plan: 'Enterprise'
+        plan: 'Enterprise',
       },
       {
         name: 'Acme Corp.',
         logo: AudioWaveform,
-        plan: 'Startup'
+        plan: 'Startup',
       },
       {
         name: 'Evil Corp.',
         logo: Command,
-        plan: 'Free'
-      }
+        plan: 'Free',
+      },
     ],
     navMain: [
       // ADMIN MENUS
@@ -71,26 +71,26 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         isActive: checkActive([
           { url: PATH.PUBLISHERS },
           { url: PATH.STORES },
-          { url: PATH.ZONES }
+          { url: PATH.ZONES },
         ]),
         roles: [RoleEnums.ADMIN],
         items: [
           {
             title: 'Khu vực',
             url: PATH.ZONES,
-            roles: [RoleEnums.ADMIN]
+            roles: [RoleEnums.ADMIN],
           },
           {
             title: 'Nhà xuất bản',
             url: PATH.PUBLISHERS,
-            roles: [RoleEnums.ADMIN]
+            roles: [RoleEnums.ADMIN],
           },
           {
             title: 'Cửa hàng',
             url: PATH.STORES,
-            roles: [RoleEnums.ADMIN]
-          }
-        ]
+            roles: [RoleEnums.ADMIN],
+          },
+        ],
       },
       {
         title: 'Sách',
@@ -99,26 +99,26 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         isActive: checkActive([
           { url: PATH.ADMIN_BOOKS },
           { url: PATH.ADMIN_AUTHORS },
-          { url: PATH.CATEGORIES }
+          { url: PATH.CATEGORIES },
         ]),
         roles: [RoleEnums.ADMIN],
         items: [
           {
             title: 'Quản lý sách',
             url: PATH.ADMIN_BOOKS,
-            roles: [RoleEnums.ADMIN]
+            roles: [RoleEnums.ADMIN],
           },
           {
             title: 'Quản lý tác giả',
             url: PATH.ADMIN_AUTHORS,
-            roles: [RoleEnums.ADMIN]
+            roles: [RoleEnums.ADMIN],
           },
           {
             title: 'Quản lý danh mục sách',
             url: PATH.CATEGORIES,
-            roles: [RoleEnums.ADMIN]
-          }
-        ]
+            roles: [RoleEnums.ADMIN],
+          },
+        ],
       },
       {
         title: 'Sự kiện',
@@ -126,21 +126,21 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         icon: CalendarIcon,
         isActive: checkActive([
           { url: PATH.EVENTS },
-          { url: PATH.CALENDAR_EVENT }
+          { url: PATH.CALENDAR_EVENT },
         ]),
         roles: [RoleEnums.ADMIN],
         items: [
           {
             title: 'Quản lý sự kiện',
             url: PATH.EVENTS,
-            roles: [RoleEnums.ADMIN]
+            roles: [RoleEnums.ADMIN],
           },
           {
             title: 'Lịch sự kiện',
             url: PATH.CALENDAR_EVENT,
-            roles: [RoleEnums.ADMIN]
-          }
-        ]
+            roles: [RoleEnums.ADMIN],
+          },
+        ],
       },
       {
         title: 'Người dùng',
@@ -152,14 +152,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           {
             title: 'Quản lý người dùng',
             url: PATH.USERS,
-            roles: [RoleEnums.ADMIN]
+            roles: [RoleEnums.ADMIN],
           },
           {
             title: 'Quản lý vai trò',
             url: PATH.ROLES,
-            roles: [RoleEnums.ADMIN]
-          }
-        ]
+            roles: [RoleEnums.ADMIN],
+          },
+        ],
       },
 
       // PUBLISHER MANAGER MENUS
@@ -170,26 +170,26 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         isActive: checkActive([
           { url: PATH.ADMIN_BOOKS },
           { url: PATH.CATEGORIES },
-          { url: PATH.INVENTORY }
+          { url: PATH.INVENTORY },
         ]),
         roles: [RoleEnums.PUBLISHER_MANAGER],
         items: [
           {
             title: 'Thông tin sách',
             url: PATH.ADMIN_BOOKS,
-            roles: [RoleEnums.PUBLISHER_MANAGER]
+            roles: [RoleEnums.PUBLISHER_MANAGER],
           },
           {
             title: 'Danh mục sách',
             url: PATH.CATEGORIES,
-            roles: [RoleEnums.PUBLISHER_MANAGER]
+            roles: [RoleEnums.PUBLISHER_MANAGER],
           },
           {
             title: 'Quản lý kho sách',
             url: PATH.INVENTORY,
-            roles: [RoleEnums.PUBLISHER_MANAGER]
-          }
-        ]
+            roles: [RoleEnums.PUBLISHER_MANAGER],
+          },
+        ],
       },
 
       // STORE MANAGER MENUS
@@ -200,27 +200,27 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         isActive: checkActive([
           { url: PATH.STORE_BOOKS },
           { url: PATH.STORE_HOURS },
-          { url: PATH.INVENTORY }
+          { url: PATH.INVENTORY },
         ]),
         roles: [RoleEnums.STORE_MANAGER],
         items: [
           {
             title: 'Sách tại cửa hàng',
             url: PATH.STORE_BOOKS,
-            roles: [RoleEnums.STORE_MANAGER]
+            roles: [RoleEnums.STORE_MANAGER],
           },
           {
             title: 'Giờ hoạt động',
             url: PATH.STORE_HOURS,
-            roles: [RoleEnums.STORE_MANAGER]
+            roles: [RoleEnums.STORE_MANAGER],
           },
           {
             title: 'Kho sách',
             url: PATH.INVENTORY,
-            roles: [RoleEnums.STORE_MANAGER]
-          }
-        ]
-      }
+            roles: [RoleEnums.STORE_MANAGER],
+          },
+        ],
+      },
     ],
     projects: [
       // Projects common to all roles
@@ -231,8 +231,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         roles: [
           RoleEnums.ADMIN,
           RoleEnums.PUBLISHER_MANAGER,
-          RoleEnums.STORE_MANAGER
-        ]
+          RoleEnums.STORE_MANAGER,
+        ],
       },
       {
         name: 'Thống kê sách',
@@ -241,8 +241,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         roles: [
           RoleEnums.ADMIN,
           RoleEnums.PUBLISHER_MANAGER,
-          RoleEnums.STORE_MANAGER
-        ]
+          RoleEnums.STORE_MANAGER,
+        ],
       },
 
       // Admin-only items
@@ -250,21 +250,21 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         name: 'Thống kê khách',
         url: PATH.VISITOR_STATISTICS,
         icon: Users,
-        roles: [RoleEnums.ADMIN]
+        roles: [RoleEnums.ADMIN],
       },
       {
         name: 'Dự đoán lượng khách',
         url: PATH.VISITOR_PREDICTION,
         icon: ChartNoAxesCombined,
-        roles: [RoleEnums.ADMIN]
+        roles: [RoleEnums.ADMIN],
       },
       {
         name: 'Khuyến nghị khách',
         url: PATH.VISITOR_RECOMMENDATION,
         icon: Users,
-        roles: [RoleEnums.ADMIN]
-      }
-    ]
+        roles: [RoleEnums.ADMIN],
+      },
+    ],
   };
 
   // Filter menu items based on user roles
@@ -279,7 +279,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           items:
             item.items?.filter(
               (subItem) => !subItem.roles || hasRole(subItem.roles)
-            ) || []
+            ) || [],
         }))
         // Filter out menu items with no accessible subitems
         .filter((item) => item.items.length > 0)

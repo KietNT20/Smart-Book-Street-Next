@@ -4,14 +4,14 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
+  SelectValue,
 } from '@/components/ui/select';
 import {
   Table,
@@ -19,7 +19,7 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow
+  TableRow,
 } from '@/components/ui/table';
 import { Sort } from '@/enums/enums';
 import {
@@ -28,7 +28,7 @@ import {
   getCoreRowModel,
   getSortedRowModel,
   useReactTable,
-  VisibilityState
+  VisibilityState,
 } from '@tanstack/react-table';
 import { useState } from 'react';
 
@@ -54,7 +54,7 @@ export function DataTable<TData, TValue>({
   pageCount,
   state,
   isLoading,
-  onStateChange
+  onStateChange,
 }: DataTableProps<TData, TValue>) {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 
@@ -64,7 +64,7 @@ export function DataTable<TData, TValue>({
     defaultColumn: {
       size: 200,
       minSize: 50,
-      maxSize: 500
+      maxSize: 500,
     },
     pageCount: pageCount,
     getCoreRowModel: getCoreRowModel(),
@@ -77,29 +77,29 @@ export function DataTable<TData, TValue>({
       columnVisibility,
       pagination: {
         pageIndex: state.pageIndex - 1,
-        pageSize: state.pageSize
-      }
+        pageSize: state.pageSize,
+      },
     },
     onPaginationChange: (updater) => {
       const newState =
         typeof updater === 'function'
           ? updater({
               pageIndex: state.pageIndex - 1,
-              pageSize: state.pageSize
+              pageSize: state.pageSize,
             })
           : updater;
 
       onStateChange({
         ...state,
         pageIndex: newState.pageIndex + 1,
-        pageSize: newState.pageSize
+        pageSize: newState.pageSize,
       });
     },
     onSortingChange: (updater) => {
       const newSorting =
         typeof updater === 'function'
           ? updater([
-              { id: state.sortField, desc: state.sortOrder === Sort.DESC }
+              { id: state.sortField, desc: state.sortOrder === Sort.DESC },
             ])
           : updater;
 
@@ -107,10 +107,10 @@ export function DataTable<TData, TValue>({
         onStateChange({
           ...state,
           sortField: newSorting[0].id,
-          sortOrder: newSorting[0].desc ? Sort.DESC : Sort.ASC
+          sortOrder: newSorting[0].desc ? Sort.DESC : Sort.ASC,
         });
       }
-    }
+    },
   });
 
   return (
@@ -213,7 +213,7 @@ export function DataTable<TData, TValue>({
                 onStateChange({
                   ...state,
                   pageSize: Number(value),
-                  pageIndex: 1
+                  pageIndex: 1,
                 });
               }}
             >
@@ -237,7 +237,7 @@ export function DataTable<TData, TValue>({
                 if (state.pageIndex > 1) {
                   onStateChange({
                     ...state,
-                    pageIndex: state.pageIndex - 1
+                    pageIndex: state.pageIndex - 1,
                   });
                 }
               }}
@@ -252,7 +252,7 @@ export function DataTable<TData, TValue>({
                 if (state.pageIndex < (pageCount || 0)) {
                   onStateChange({
                     ...state,
-                    pageIndex: state.pageIndex + 1
+                    pageIndex: state.pageIndex + 1,
                   });
                 }
               }}

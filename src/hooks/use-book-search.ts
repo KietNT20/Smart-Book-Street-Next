@@ -7,14 +7,14 @@ export const useGetBooks = ({
   sortOrder,
   result,
   pageSize,
-  pageNumber
+  pageNumber,
 }: BookSearchPagination) => {
   const queryClient = useQueryClient();
   const {
     data: booksRes,
     isLoading,
     isPending,
-    error
+    error,
   } = useQuery({
     queryKey: ['books', sortField, sortOrder, result, pageSize, pageNumber],
     queryFn: () =>
@@ -23,8 +23,8 @@ export const useGetBooks = ({
         sortOrder,
         result,
         pageSize,
-        pageNumber
-      })
+        pageNumber,
+      }),
   });
 
   const totalPage = booksRes?.totalPages || 1;
@@ -37,7 +37,7 @@ export const useGetBooks = ({
         sortOrder,
         result,
         pageSize,
-        pageNumber + 1
+        pageNumber + 1,
       ],
       queryFn: () =>
         bookService.searchPagination({
@@ -45,8 +45,8 @@ export const useGetBooks = ({
           sortOrder,
           result,
           pageSize,
-          pageNumber: pageNumber + 1
-        })
+          pageNumber: pageNumber + 1,
+        }),
     });
   }
 
@@ -58,7 +58,7 @@ export const useGetBooks = ({
         sortOrder,
         result,
         pageSize,
-        pageNumber - 1
+        pageNumber - 1,
       ],
       queryFn: () =>
         bookService.searchPagination({
@@ -66,8 +66,8 @@ export const useGetBooks = ({
           sortOrder,
           result,
           pageSize,
-          pageNumber: pageNumber - 1
-        })
+          pageNumber: pageNumber - 1,
+        }),
     });
   }
 
@@ -75,13 +75,13 @@ export const useGetBooks = ({
     booksRes,
     isLoading,
     isPending,
-    error
+    error,
   };
 };
 
 export const useGetBookByID = (id: string) => {
   return useQuery({
     queryKey: ['books', id],
-    queryFn: () => bookService.getByID(id)
+    queryFn: () => bookService.getByID(id),
   });
 };

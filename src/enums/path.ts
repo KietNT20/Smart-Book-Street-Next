@@ -52,5 +52,5 @@ export enum PATH {
   CHANGE_PASSWORD = '/profile/change-password',
 
   SETTINGS = '/settings',
-  NOTIFICATIONS = '/notifications'
+  NOTIFICATIONS = '/notifications',
 }

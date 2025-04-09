@@ -12,7 +12,7 @@ interface BookToolbarProps {
 export function BookToolbar({
   hasFilters,
   onResetFilters,
-  onOpenSearch
+  onOpenSearch,
 }: BookToolbarProps) {
   return (
     <div className='flex items-center justify-between'>

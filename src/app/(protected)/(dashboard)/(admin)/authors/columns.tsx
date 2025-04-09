@@ -8,7 +8,7 @@ import AuthorMenuAction from './_components/author-menu-action';
 export const columns: ColumnDef<Author>[] = [
   {
     accessorKey: 'authorName',
-    header: 'Tên tác giả'
+    header: 'Tên tác giả',
   },
   {
     accessorKey: 'dob',
@@ -17,11 +17,11 @@ export const columns: ColumnDef<Author>[] = [
       const date = row.getValue('dob') as string | Date;
       if (!date) return 'Chưa có thông tin';
       return formateDateVi(date);
-    }
+    },
   },
   {
     accessorKey: 'nationality',
-    header: 'Quốc tịch'
+    header: 'Quốc tịch',
   },
   {
     accessorKey: 'biography',
@@ -29,7 +29,7 @@ export const columns: ColumnDef<Author>[] = [
     cell: ({ row }) => {
       const bio = row.getValue('biography') as string;
       return bio?.length > 50 ? `${bio.substring(0, 50)}...` : bio;
-    }
+    },
   },
   {
     id: 'actions',
@@ -39,6 +39,6 @@ export const columns: ColumnDef<Author>[] = [
       const authorProps = { author };
 
       return <AuthorMenuAction {...authorProps} />;
-    }
-  }
+    },
+  },
 ];

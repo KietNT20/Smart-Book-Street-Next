@@ -20,19 +20,19 @@ export default function BooksPage() {
     setModalState,
     deleteId,
     setDeleteId,
-    resetAllFilters
+    resetAllFilters,
   } = useBookPageState();
 
   const { booksRes, isLoadingBooks, handleDelete, deletedLoading, isPending } =
     useBookList({
       pagination,
-      searchCriteria
+      searchCriteria,
     });
 
   const columns = createColumns({
     _onDelete: (id?: string) => {
       setDeleteId(id || null);
-    }
+    },
   });
 
   const handleSearch = (criteria: Partial<BookSearchCriteria>) => {

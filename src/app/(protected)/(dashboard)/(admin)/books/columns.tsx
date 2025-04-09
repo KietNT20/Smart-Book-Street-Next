@@ -7,7 +7,7 @@ import {
   ArrowUp,
   ArrowUpDown,
   SortAsc,
-  SortDesc
+  SortDesc,
 } from 'lucide-react';
 import BookMenuAction from './_components/book-menu-action';
 
@@ -16,7 +16,7 @@ type ColumnHandlers = {
 };
 
 export const createColumns = ({
-  _onDelete
+  _onDelete,
 }: ColumnHandlers): ColumnDef<Book>[] => [
   {
     accessorKey: 'code',
@@ -36,7 +36,7 @@ export const createColumns = ({
         )}
       </Button>
     ),
-    filterFn: 'includesString'
+    filterFn: 'includesString',
   },
   {
     accessorKey: 'title',
@@ -56,7 +56,7 @@ export const createColumns = ({
         )}
       </Button>
     ),
-    filterFn: 'includesString'
+    filterFn: 'includesString',
   },
   {
     accessorKey: 'price',
@@ -78,17 +78,17 @@ export const createColumns = ({
     ),
     cell: ({ row }) => {
       return formatPrice(row.getValue('price'));
-    }
+    },
   },
   {
     id: 'languages',
     accessorKey: 'languages',
-    header: 'Ngôn ngữ'
+    header: 'Ngôn ngữ',
   },
   {
     id: 'status',
     accessorKey: 'status',
-    header: 'Tình trạng'
+    header: 'Tình trạng',
   },
   {
     accessorKey: 'publicationDate',
@@ -108,7 +108,7 @@ export const createColumns = ({
         )}
       </Button>
     ),
-    cell: ({ row }) => formateDateVi(row.getValue('publicationDate'))
+    cell: ({ row }) => formateDateVi(row.getValue('publicationDate')),
   },
   {
     accessorKey: 'lastUpdatedDate',
@@ -128,7 +128,7 @@ export const createColumns = ({
         )}
       </Button>
     ),
-    cell: ({ row }) => formateDateVi(row.getValue('lastUpdatedDate'))
+    cell: ({ row }) => formateDateVi(row.getValue('lastUpdatedDate')),
   },
   {
     id: 'actions',
@@ -138,6 +138,6 @@ export const createColumns = ({
       const bookProps = { book, _onDelete };
 
       return <BookMenuAction {...bookProps} />;
-    }
-  }
+    },
+  },
 ];

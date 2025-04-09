@@ -1,7 +1,7 @@
 import { API_URL } from '@/constant/api-url';
 import {
   BookAuthorPaginated,
-  BookAuthorSearchPagination
+  BookAuthorSearchPagination,
 } from '@/types/author-types';
 import axiosInstance from '@/utils/axiosInstance';
 
@@ -26,5 +26,5 @@ export const bookAuthorService = {
   filter: async (payload: Partial<BookAuthorPaginated>) => {
     const res = await axiosInstance.post(API_URL.BOOK_AUTHORS.FILTER, payload);
     return res.data;
-  }
+  },
 };

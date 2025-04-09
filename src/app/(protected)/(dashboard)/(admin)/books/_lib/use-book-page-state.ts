@@ -12,7 +12,7 @@ export function useBookPageState() {
     pageIndex: 1,
     pageSize: 10,
     sortField: 'lastUpdatedDate',
-    sortOrder: Sort.DESC
+    sortOrder: Sort.DESC,
   });
 
   const [searchCriteria, setSearchCriteria] = useState<
@@ -27,7 +27,7 @@ export function useBookPageState() {
       pageIndex: 1,
       pageSize: 10,
       sortField: 'lastUpdatedDate',
-      sortOrder: Sort.DESC
+      sortOrder: Sort.DESC,
     });
     setSearchCriteria({});
   };
@@ -43,6 +43,6 @@ export function useBookPageState() {
     setSelectedBook,
     deleteId,
     setDeleteId,
-    resetAllFilters
+    resetAllFilters,
   };
 }

@@ -12,7 +12,7 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle
+  AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { useCategoryMutation, useGetCategories } from '@/hooks/use-category';
@@ -30,7 +30,7 @@ export default function CategoriesPage() {
     updateCategory,
     updateCategoryPending,
     deleteCategory,
-    deleteCategoryPending
+    deleteCategoryPending,
   } = useCategoryMutation();
 
   // State for modal
@@ -64,7 +64,7 @@ export default function CategoriesPage() {
       onSuccess: () => {
         setIsDeleteDialogOpen(false);
         setCategoryToDelete(null);
-      }
+      },
     });
   };
 
@@ -73,13 +73,13 @@ export default function CategoriesPage() {
       updateCategory(
         {
           id: selectedCategory.id,
-          payload: values
+          payload: values,
         },
         {
           onSuccess: () => {
             setIsModalOpen(false);
             setSelectedCategory(null);
-          }
+          },
         }
       );
     } else {
@@ -87,7 +87,7 @@ export default function CategoriesPage() {
       createCategory(values, {
         onSuccess: () => {
           setIsModalOpen(false);
-        }
+        },
       });
     }
   };
@@ -113,7 +113,7 @@ export default function CategoriesPage() {
       <DataTable
         columns={columns({
           onEdit: handleEdit,
-          onDelete: handleDelete
+          onDelete: handleDelete,
         })}
         data={categoriesRes?.results || []}
       />

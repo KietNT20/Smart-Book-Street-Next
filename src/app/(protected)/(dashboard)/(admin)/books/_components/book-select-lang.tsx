@@ -5,7 +5,7 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
+  SelectValue,
 } from '@/components/ui/select';
 import { Language, LanguageLabels } from '@/enums/lang';
 import { cn } from '@/lib/utils';
@@ -24,7 +24,7 @@ const BookSelectLang: React.FC<BookSelectLangProps> = ({
   onValueChange,
   disabled = false,
   placeholder = 'Chọn ngôn ngữ',
-  className
+  className,
 }) => {
   return (
     <Select

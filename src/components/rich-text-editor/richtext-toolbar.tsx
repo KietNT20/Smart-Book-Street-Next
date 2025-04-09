@@ -4,7 +4,7 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
+  SelectValue,
 } from '@/components/ui/select';
 import { Editor } from '@tiptap/react';
 import {
@@ -20,7 +20,7 @@ import {
   Redo,
   Table as TableIcon,
   Underline as UnderlineIcon,
-  Undo
+  Undo,
 } from 'lucide-react';
 
 interface RichTextToolbarProps {
@@ -34,7 +34,7 @@ const RichTextToolbar = ({
   editor,
   onAddLink,
   onAddImage,
-  onAddTable
+  onAddTable,
 }: RichTextToolbarProps) => {
   return (
     <div className='flex flex-wrap gap-1 rounded-md border border-input bg-background p-1'>
@@ -57,7 +57,7 @@ const RichTextToolbar = ({
               .chain()
               .focus()
               .toggleHeading({
-                level: parseInt(value.charAt(1)) as 1 | 2 | 3 | 4 | 5 | 6
+                level: parseInt(value.charAt(1)) as 1 | 2 | 3 | 4 | 5 | 6,
               })
               .run();
           }

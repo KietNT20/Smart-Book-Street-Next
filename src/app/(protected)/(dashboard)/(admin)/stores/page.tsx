@@ -30,7 +30,7 @@ export default function StoresPage() {
     phone: '',
     email: '',
     openingTime: null,
-    closingTime: null
+    closingTime: null,
   });
   const [isSearching, setIsSearching] = useState(false);
 
@@ -54,7 +54,7 @@ export default function StoresPage() {
     pageSize,
     sortField,
     sortOrder,
-    result: buildResultObject()
+    result: buildResultObject(),
   });
 
   const handleSort = (field: string) => {
@@ -81,7 +81,7 @@ export default function StoresPage() {
       phone: '',
       email: '',
       openingTime: null,
-      closingTime: null
+      closingTime: null,
     });
     setIsSearching(false);
   };

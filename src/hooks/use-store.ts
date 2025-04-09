@@ -7,14 +7,14 @@ export const useStores = ({
   sortField,
   sortOrder,
   pageSize,
-  pageNumber
+  pageNumber,
 }: StoreParams) => {
   const queryClient = useQueryClient();
   const {
     data: storesRes,
     isLoading,
     isPending,
-    error
+    error,
   } = useQuery({
     queryKey: ['stores', result, sortField, sortOrder, pageSize, pageNumber],
     queryFn: () =>
@@ -23,8 +23,8 @@ export const useStores = ({
         sortField,
         sortOrder,
         pageSize,
-        pageNumber
-      })
+        pageNumber,
+      }),
   });
 
   const totalPages = storesRes?.totalPages || 0;
@@ -38,7 +38,7 @@ export const useStores = ({
         sortField,
         sortOrder,
         pageSize,
-        pageNumber + 1
+        pageNumber + 1,
       ],
       queryFn: () =>
         storeService.searchPagination({
@@ -46,8 +46,8 @@ export const useStores = ({
           sortField,
           sortOrder,
           pageSize,
-          pageNumber: pageNumber + 1
-        })
+          pageNumber: pageNumber + 1,
+        }),
     });
   }
   // Prefetch the previous page of stores
@@ -59,7 +59,7 @@ export const useStores = ({
         sortField,
         sortOrder,
         pageSize,
-        pageNumber - 1
+        pageNumber - 1,
       ],
       queryFn: () =>
         storeService.searchPagination({
@@ -67,8 +67,8 @@ export const useStores = ({
           sortField,
           sortOrder,
           pageSize,
-          pageNumber: pageNumber - 1
-        })
+          pageNumber: pageNumber - 1,
+        }),
     });
   }
 
@@ -77,7 +77,7 @@ export const useStores = ({
     isLoading,
     isPending,
     error,
-    totalPages
+    totalPages,
   };
 };
 
@@ -91,7 +91,7 @@ export const useStoreMutation = () => {
     },
     onError: (error: unknown) => {
       console.error('Error creating store:', error);
-    }
+    },
   });
 
   const updateStoreMutation = useMutation({
@@ -102,7 +102,7 @@ export const useStoreMutation = () => {
     },
     onError: (error: unknown) => {
       console.error('Error updating store:', error);
-    }
+    },
   });
 
   const deleteStoreMutation = useMutation({
@@ -112,7 +112,7 @@ export const useStoreMutation = () => {
     },
     onError: (error: unknown) => {
       console.error('Error deleting store:', error);
-    }
+    },
   });
 
   return {
@@ -124,6 +124,6 @@ export const useStoreMutation = () => {
     isUpdatingStore: updateStoreMutation.isPending,
     // Delete store
     deleteStore: deleteStoreMutation.mutate,
-    isDeletingStore: deleteStoreMutation.isPending
+    isDeletingStore: deleteStoreMutation.isPending,
   };
 };

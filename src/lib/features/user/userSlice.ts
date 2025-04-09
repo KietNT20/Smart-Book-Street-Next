@@ -10,7 +10,7 @@ interface UserState {
 
 const initialState: UserState = {
   profile: null,
-  isAuthenticated: false
+  isAuthenticated: false,
 };
 
 const userSlice = createSlice({
@@ -24,8 +24,8 @@ const userSlice = createSlice({
     clearUserProfile: (state) => {
       state.profile = null;
       state.isAuthenticated = false;
-    }
-  }
+    },
+  },
 });
 
 // Extract the action creators object and the reducer

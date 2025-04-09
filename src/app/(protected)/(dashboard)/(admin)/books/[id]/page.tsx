@@ -15,7 +15,7 @@ import ImageGalleryBook from './_components/image-gallery-book';
 import { useBookDetail } from './_lib/useBookDetail';
 
 export default function BooksDetailPage({
-  params
+  params,
 }: {
   params: { id: string };
 }) {
@@ -27,7 +27,7 @@ export default function BooksDetailPage({
     book,
     bookInfoProps,
     router,
-    deleteBook
+    deleteBook,
   } = useBookDetail({ id: params.id });
 
   const handleDeleteBook = () => {

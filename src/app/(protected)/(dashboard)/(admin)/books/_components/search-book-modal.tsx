@@ -4,7 +4,7 @@ import {
   DialogContent,
   DialogFooter,
   DialogHeader,
-  DialogTitle
+  DialogTitle,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -34,8 +34,8 @@ export function SearchBookModal({ isOpen, onClose, onSearch }: Props) {
       languages: '',
       price: 0,
       startDate: '',
-      endDate: ''
-    }
+      endDate: '',
+    },
   });
 
   const {
@@ -43,7 +43,7 @@ export function SearchBookModal({ isOpen, onClose, onSearch }: Props) {
     control,
     handleSubmit,
     formState: { errors },
-    reset
+    reset,
   } = form;
 
   const handleSearch = (values: SearchBookFormValues) => {
@@ -58,7 +58,7 @@ export function SearchBookModal({ isOpen, onClose, onSearch }: Props) {
       endDate: values.endDate
         ? new Date(values.endDate).toISOString()
         : undefined,
-      price: values.price
+      price: values.price,
     };
 
     // Remove empty values
@@ -150,7 +150,7 @@ export function SearchBookModal({ isOpen, onClose, onSearch }: Props) {
                           : null,
                         form.getValues('endDate')
                           ? dayjs(form.getValues('endDate'))
-                          : null
+                          : null,
                       ]}
                     />
                   )}

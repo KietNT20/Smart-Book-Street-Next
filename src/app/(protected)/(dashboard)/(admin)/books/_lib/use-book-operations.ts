@@ -21,7 +21,7 @@ export function useBookList({ pagination, searchCriteria }: UseBookListProps) {
     pageSize: pagination.pageSize,
     sortField: pagination.sortField,
     sortOrder: pagination.sortOrder,
-    result: searchCriteria
+    result: searchCriteria,
   });
 
   const isLoadingBooks = useDebounce(isLoading, 300);
@@ -38,6 +38,6 @@ export function useBookList({ pagination, searchCriteria }: UseBookListProps) {
     isLoadingBooks,
     isPending,
     handleDelete,
-    deletedLoading
+    deletedLoading,
   };
 }

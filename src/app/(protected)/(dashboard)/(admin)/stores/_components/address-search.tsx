@@ -21,11 +21,11 @@ const AddressSearch = ({ form, disabled = false }: AddressSearchProps) => {
   const [viewState, setViewState] = useState({
     longitude: 106.6297,
     latitude: 10.8231,
-    zoom: 13
+    zoom: 13,
   });
   const [markerPosition, setMarkerPosition] = useState({
     longitude: 106.6297,
-    latitude: 10.8231
+    latitude: 10.8231,
   });
 
   const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || '';
@@ -39,11 +39,11 @@ const AddressSearch = ({ form, disabled = false }: AddressSearchProps) => {
       setViewState((prev) => ({
         ...prev,
         latitude: lat,
-        longitude: lng
+        longitude: lng,
       }));
       setMarkerPosition({
         latitude: lat,
-        longitude: lng
+        longitude: lng,
       });
     }
   }, [form]);
@@ -96,11 +96,11 @@ const AddressSearch = ({ form, disabled = false }: AddressSearchProps) => {
       setViewState({
         latitude,
         longitude,
-        zoom: 15
+        zoom: 15,
       });
       setMarkerPosition({
         latitude,
-        longitude
+        longitude,
       });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Lỗi không xác định');
@@ -117,7 +117,7 @@ const AddressSearch = ({ form, disabled = false }: AddressSearchProps) => {
 
     setMarkerPosition({
       longitude: newLng,
-      latitude: newLat
+      latitude: newLat,
     });
 
     form.setValue('longitude', newLng, { shouldValidate: true });

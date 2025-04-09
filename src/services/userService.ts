@@ -15,5 +15,5 @@ export const userService = {
   getProfile: async (): Promise<UserProfileResponse> => {
     const res = await axiosInstance.get(`${API_URL.USERS.PROFILE}`);
     return res.data;
-  }
+  },
 };

@@ -6,7 +6,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
+  FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { PATH } from '@/enums/path';
@@ -34,7 +34,7 @@ type Props = {
 const BookForm = ({ book, onCancel }: Props) => {
   const form = useForm<BookFormValues>({
     resolver: zodResolver(bookSchema),
-    defaultValues: prepareInitialBookData(book)
+    defaultValues: prepareInitialBookData(book),
   });
   const { createBook, createBookPending, updateBook, updateBookPending } =
     useBookMutations();
@@ -49,14 +49,14 @@ const BookForm = ({ book, onCancel }: Props) => {
           onSuccess: () => {
             form.reset();
             router.push(`${PATH.ADMIN_BOOKS}/${book.id}`);
-          }
+          },
         }
       );
     } else {
       createBook(formData, {
         onSuccess: () => {
           form.reset();
-        }
+        },
       });
     }
   };
@@ -65,7 +65,7 @@ const BookForm = ({ book, onCancel }: Props) => {
     files,
     handleMainFileChange,
     handleAdditionalFilesChange,
-    handleSubmit
+    handleSubmit,
   } = useBookFormSubmit(onSubmit);
 
   return (

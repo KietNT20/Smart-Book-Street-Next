@@ -8,7 +8,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
+  FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { PATH } from '@/enums/path';
@@ -44,8 +44,8 @@ const StoreForm = ({ storeToEdit }: Props) => {
       latitude: 0,
       longitude: 0,
       type: '',
-      zoneId: ''
-    }
+      zoneId: '',
+    },
   });
 
   function onSubmit(values: StoreFormValues) {
@@ -120,7 +120,7 @@ const StoreForm = ({ storeToEdit }: Props) => {
     } else if (fieldName === 'additionalImageFiles') {
       const fileArray = Array.from(files);
       form.setValue('additionalImageFiles', fileArray, {
-        shouldValidate: true
+        shouldValidate: true,
       });
     }
   };

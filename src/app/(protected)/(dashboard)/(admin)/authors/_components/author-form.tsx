@@ -9,7 +9,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
+  FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { PATH } from '@/enums/path';
@@ -40,7 +40,7 @@ type Props = {
 
 export function AuthorForm({ authorId }: Props) {
   const [file, setFile] = useState<FileState>({
-    imgFile: null
+    imgFile: null,
   });
 
   const router = useRouter();
@@ -48,7 +48,7 @@ export function AuthorForm({ authorId }: Props) {
     createAuthor,
     createAuthorPending,
     updateAuthor,
-    updateAuthorPending
+    updateAuthorPending,
   } = useAuthorMutation();
   const { data: authorData, isLoading: isLoadingAuthor } =
     useGetAuthorById<AuthorData>(authorId || '');
@@ -60,8 +60,8 @@ export function AuthorForm({ authorId }: Props) {
       nationality: '',
       biography: '',
       dob: '',
-      imgFile: undefined
-    }
+      imgFile: undefined,
+    },
   });
 
   useEffect(() => {
@@ -73,7 +73,7 @@ export function AuthorForm({ authorId }: Props) {
           : '',
         nationality: authorData.result.nationality,
         biography: authorData.result.biography,
-        imgFile: undefined
+        imgFile: undefined,
       });
     }
   }, [authorData, form]);

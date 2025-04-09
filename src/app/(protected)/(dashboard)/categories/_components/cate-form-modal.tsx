@@ -8,7 +8,7 @@ import {
   DialogContent,
   DialogFooter,
   DialogHeader,
-  DialogTitle
+  DialogTitle,
 } from '@/components/ui/dialog';
 import {
   Form,
@@ -16,7 +16,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
+  FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -36,7 +36,7 @@ export function CategoryFormModal({
   onClose,
   onSubmit,
   initialData,
-  isSubmitting = false
+  isSubmitting = false,
 }: CategoryFormProps) {
   const isEditing = !!initialData;
 
@@ -44,15 +44,15 @@ export function CategoryFormModal({
     resolver: zodResolver(categoryFormSchema),
     defaultValues: {
       categoryName: '',
-      description: ''
-    }
+      description: '',
+    },
   });
 
   useEffect(() => {
     if (initialData) {
       form.reset({
         categoryName: initialData.categoryName,
-        description: initialData.description || ''
+        description: initialData.description || '',
       });
     } else {
       form.reset();

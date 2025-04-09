@@ -5,7 +5,7 @@ import {
   CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle
+  CardTitle,
 } from '@/components/ui/card';
 import { BookOpen, Clock, UserCheck, Users } from 'lucide-react';
 import ChartsSection from './_components/dashboard/charts-section';

@@ -6,14 +6,14 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle
+  DialogTitle,
 } from '@/components/ui/dialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import {
   Pagination,
@@ -22,14 +22,14 @@ import {
   PaginationItem,
   PaginationLink,
   PaginationNext,
-  PaginationPrevious
+  PaginationPrevious,
 } from '@/components/ui/pagination';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
+  SelectValue,
 } from '@/components/ui/select';
 import {
   Table,
@@ -37,7 +37,7 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow
+  TableRow,
 } from '@/components/ui/table';
 import { Sort } from '@/enums/enums';
 import { useStoreMutation } from '@/hooks/use-store';
@@ -48,7 +48,7 @@ import {
   MoreHorizontal,
   SortAsc,
   SortDesc,
-  Trash2
+  Trash2,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -91,7 +91,7 @@ export const StoreTable = ({
   sortOrder,
   handleSort,
   onViewStore,
-  onEditStore
+  onEditStore,
 }: StoreTableProps) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [storeToDelete, setStoreToDelete] = useState<string | null>(null);

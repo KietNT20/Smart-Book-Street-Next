@@ -14,14 +14,14 @@ import {
   ResponsiveContainer,
   Tooltip,
   XAxis,
-  YAxis
+  YAxis,
 } from 'recharts';
 
 const ageData = [
   { name: '0-18', value: 250 },
   { name: '19-30', value: 450 },
   { name: '31-50', value: 300 },
-  { name: '50+', value: 150 }
+  { name: '50+', value: 150 },
 ];
 
 const weeklyData = [
@@ -31,19 +31,19 @@ const weeklyData = [
   { day: 'Thứ 5', visitors: 200 },
   { day: 'Thứ 6', visitors: 250 },
   { day: 'Thứ 7', visitors: 300 },
-  { day: 'CN', visitors: 280 }
+  { day: 'CN', visitors: 280 },
 ];
 
 const genderData = [
   { name: 'Nam', value: 170 },
-  { name: 'Nữ', value: 87 }
+  { name: 'Nữ', value: 87 },
 ];
 
 const COLORS = [
   'hsl(var(--chart-1))',
   'hsl(var(--chart-2))',
   'hsl(var(--chart-3))',
-  'hsl(var(--chart-4))'
+  'hsl(var(--chart-4))',
 ];
 const GENDER_COLORS = ['hsl(var(--chart-1))', 'hsl(var(--chart-2))'];
 
