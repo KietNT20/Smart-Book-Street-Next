@@ -8,31 +8,31 @@ export enum PATH {
   STATISTICS = '/statistics',
 
   // ADMIN
-  PUBLISHERS = '/admin/publishers',
-  PUBLISHER_CREATE = '/admin/publishers/create',
+  PUBLISHERS = '/publishers',
+  PUBLISHER_CREATE = '/publishers/create',
 
-  STORES = '/admin/stores',
-  STORE_CREATE = '/admin/stores/create',
+  STORES = '/stores',
+  STORE_CREATE = '/stores/create',
 
-  ADMIN_BOOKS = '/admin/books',
-  ADMIN_BOOK_CREATE = '/admin/books/create',
+  ADMIN_BOOKS = '/books',
+  ADMIN_BOOK_CREATE = '/books/create',
 
-  ADMIN_AUTHORS = '/admin/authors',
-  ADMIN_AUTHOR_CREATE = '/admin/authors/create',
+  ADMIN_AUTHORS = '/authors',
+  ADMIN_AUTHOR_CREATE = '/authors/create',
 
-  EVENTS = '/admin/events',
-  EVENT_CREATE = '/admin/events/create',
-  CALENDAR_EVENT = '/admin/events/calendar',
+  EVENTS = '/events',
+  EVENT_CREATE = '/events/create',
+  CALENDAR_EVENT = '/events/calendar',
 
-  ZONES = '/admin/zones',
+  ZONES = '/zones',
 
-  VISITOR_STATISTICS = '/admin/visitors/statistics',
-  VISITOR_PREDICTION = '/admin/visitors/prediction',
-  VISITOR_RECOMMENDATION = '/admin/visitors/recommendation',
+  VISITOR_STATISTICS = '/visitors/statistics',
+  VISITOR_PREDICTION = '/visitors/prediction',
+  VISITOR_RECOMMENDATION = '/visitors/recommendation',
 
-  USERS = '/admin/users',
-  USER_CREATE = '/admin/users/create',
-  ROLES = '/admin/roles',
+  USERS = '/users',
+  USER_CREATE = '/users/create',
+  ROLES = '/roles',
 
   // PUBLISHER MANAGER
   CATEGORIES = '/categories',

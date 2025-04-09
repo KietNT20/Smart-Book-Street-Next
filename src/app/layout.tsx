@@ -1,4 +1,5 @@
 import { Toaster } from '@/components/ui/sonner';
+import 'mapbox-gl/dist/mapbox-gl.css';
 import type { Metadata } from 'next';
 import { Roboto } from 'next/font/google';
 import './globals.css';
@@ -22,11 +23,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en' suppressHydrationWarning={true}>
-      <body
-        className={`${roboto.variable} antialiased`}
-        suppressHydrationWarning={true}
-      >
+    <html lang='en' suppressHydrationWarning>
+      <body className={`${roboto.variable} antialiased`}>
         <Provider>{children}</Provider>
         <Toaster richColors />
       </body>

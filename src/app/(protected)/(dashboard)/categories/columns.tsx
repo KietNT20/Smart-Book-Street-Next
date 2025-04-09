@@ -3,15 +3,16 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { ColumnDef } from '@tanstack/react-table';
 import {
-  ArrowDown,
-  ArrowUp,
   ArrowUpDown,
   Edit,
   MoreHorizontal,
+  SortAsc,
+  SortDesc,
   Trash
 } from 'lucide-react';
 
@@ -22,10 +23,10 @@ export interface CategoryCol {
 }
 
 const getSortIcon = (isSorted: false | 'asc' | 'desc') => {
-  if (!isSorted) return <ArrowUpDown className='ml-2 h-4 w-4 text-gray-400' />;
+  if (!isSorted) return <ArrowUpDown className='ml-1 h-4 w-4 text-zinc-500' />;
   if (isSorted === 'asc')
-    return <ArrowUp className='ml-2 h-4 w-4 text-blue-500' />;
-  return <ArrowDown className='ml-2 h-4 w-4 text-blue-500' />;
+    return <SortAsc className='ml-1 h-4 w-4 text-blue-500' />;
+  return <SortDesc className='ml-1 h-4 w-4 text-blue-500' />;
 };
 
 export const columns = ({
@@ -90,6 +91,7 @@ export const columns = ({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align='end'>
+            <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
             <DropdownMenuItem onClick={() => onEdit(category)}>
               <Edit className='mr-2 h-4 w-4' />
               Sửa danh mục

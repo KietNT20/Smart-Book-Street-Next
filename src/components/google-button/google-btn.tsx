@@ -1,20 +1,11 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import axios from 'axios';
 import { Google } from '../ui/google';
 
 const GoogleBtn = () => {
-  const handleLoginWithGoogle = async () => {
-    try {
-      const ressponse = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_GOOGLE_LOGIN}`
-      );
-      const { url } = ressponse.data;
-      window.location.href = url;
-    } catch (error) {
-      console.log('Error logging in with Google:', error);
-    }
+  const handleLoginWithGoogle = () => {
+    window.location.href = `${process.env.NEXT_PUBLIC_API_GOOGLE_LOGIN}`;
   };
 
   return (

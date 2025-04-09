@@ -89,7 +89,7 @@ export const bookSchema = z.object({
   size: z.string().optional(),
   status: z.string().optional(),
   mainImageFile: z.instanceof(File).optional().or(z.string().optional()),
-  additionalImageFiles: z.array(z.instanceof(File).or(z.string())).optional(),
+  additionalImageFiles: z.array(z.instanceof(File).or(z.string())).default([]),
   publisherId: z.string().optional(),
   authorIds: z.array(z.string()).optional(),
   categoryIds: z.array(z.string()).optional(),
@@ -147,3 +147,30 @@ export const categoryFormSchema = z.object({
 });
 
 export type CategoryFormValues = z.infer<typeof categoryFormSchema>;
+
+// Store form
+export const storeFormSchema = z.object({
+  storeName: z.string().min(1, { message: 'Tên cửa hàng không được để trống' }),
+  address: z.string().min(1, { message: 'Địa chỉ không được để trống' }),
+  phone: z
+    .string()
+    .refine(
+      (val) => {
+        if (!val) return true;
+        return REGEX.PHONE_VN.test(val);
+      },
+      {
+        message: 'Số điện thoại không hợp lệ'
+      }
+    )
+    .optional(),
+  email: z.string().email({ message: 'Email không hợp lệ' }).optional(),
+  mainImageFile: z.instanceof(File).optional().or(z.string().optional()),
+  additionalImageFiles: z.array(z.instanceof(File).or(z.string())).default([]),
+  latitude: z.number().optional(),
+  longitude: z.number().optional(),
+  type: z.string().optional(),
+  zoneId: z.string().optional()
+});
+
+export type StoreFormValues = z.infer<typeof storeFormSchema>;
