@@ -165,8 +165,6 @@ export const storeFormSchema = z.object({
     )
     .optional(),
   email: z.string().email({ message: 'Email không hợp lệ' }).optional(),
-  openingTime: z.string().datetime().optional().nullable(),
-  closingTime: z.string().datetime().optional().nullable(),
   mainImageFile: z.instanceof(File).optional().or(z.string().optional()),
   additionalImageFiles: z.array(z.instanceof(File).or(z.string())).default([]),
   latitude: z.number().optional(),

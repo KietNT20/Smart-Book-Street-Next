@@ -16,8 +16,6 @@ import { useStoreMutation } from '@/hooks/use-store';
 import { storeFormSchema, StoreFormValues } from '@/lib/zod';
 import { StoreData } from '@/types/store-types';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { DatePicker } from 'antd';
-import dayjs from 'dayjs';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
@@ -41,8 +39,6 @@ const StoreForm = ({ storeToEdit }: Props) => {
       address: '',
       phone: '',
       email: '',
-      openingTime: null,
-      closingTime: null,
       mainImageFile: undefined,
       additionalImageFiles: [],
       latitude: 0,
@@ -64,20 +60,6 @@ const StoreForm = ({ storeToEdit }: Props) => {
 
       if (values.email) {
         formData.append('Email', values.email);
-      }
-
-      if (values.openingTime) {
-        const openingTime = dayjs(values.openingTime).format(
-          'YYYY-MM-DDTHH:mm:ss'
-        );
-        formData.append('OpeningTime', openingTime);
-      }
-
-      if (values.closingTime) {
-        const closingTime = dayjs(values.closingTime).format(
-          'YYYY-MM-DDTHH:mm:ss'
-        );
-        formData.append('ClosingTime', closingTime);
       }
 
       if (values.mainImageFile) {
@@ -321,58 +303,6 @@ const StoreForm = ({ storeToEdit }: Props) => {
                         placeholder='Số điện thoại'
                         disabled={isWorking}
                         {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Schedule */}
-        <Card>
-          <CardHeader>
-            <CardTitle className='text-lg'>Giờ hoạt động</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
-              <FormField
-                control={form.control}
-                name='openingTime'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Giờ mở cửa</FormLabel>
-                    <FormControl>
-                      <DatePicker
-                        className='w-full rounded-md border px-3 py-2'
-                        showTime={{ format: 'HH:mm' }}
-                        format='YYYY-MM-DD HH:mm'
-                        onChange={(_, dateString) => {
-                          field.onChange(dateString);
-                        }}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name='closingTime'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Giờ đóng cửa</FormLabel>
-                    <FormControl>
-                      <DatePicker
-                        className='w-full rounded-md border px-3 py-2'
-                        showTime={{ format: 'HH:mm' }}
-                        format='YYYY-MM-DD HH:mm'
-                        onChange={(_, dateString) => {
-                          field.onChange(dateString);
-                        }}
                       />
                     </FormControl>
                     <FormMessage />

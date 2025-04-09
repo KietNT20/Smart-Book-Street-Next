@@ -6,8 +6,6 @@ export interface StoreData extends BaseEntity {
   address: string;
   phone: string;
   email: string;
-  openingTime: string | null;
-  closingTime: string | null;
   mainImageFile: string;
   additionalImageFiles: string[];
   latitude: number;
@@ -22,11 +20,11 @@ export interface StoreParams {
   sortField?: string;
   sortOrder: Sort.ASC | Sort.DESC;
   result: {
-    bookStoreName?: string;
+    storeName?: string;
     address?: string;
     phone?: string;
     email?: string;
-    openingTime?: string | null;
-    closingTime?: string | null;
+    storeTheme?: string;
+    type?: string;
   };
 }

@@ -1,4 +1,5 @@
 import { AppSidebar } from '@/components/app-sidebar';
+import BreadcrumbPath from '@/components/breadcrumb/breadcrumb-path';
 import { ModeToggle } from '@/components/model-toggle';
 import { Separator } from '@/components/ui/separator';
 import {
@@ -6,7 +7,6 @@ import {
   SidebarProvider,
   SidebarTrigger
 } from '@/components/ui/sidebar';
-import BreadcrumbComp from './_components/breadcrumb-comp';
 
 export default function DashboardLayout({
   children
@@ -23,7 +23,7 @@ export default function DashboardLayout({
               <div className='flex flex-1 items-center gap-4'>
                 <SidebarTrigger className='-ml-2 h-8 w-8' />
                 <Separator orientation='vertical' className='h-6' />
-                <BreadcrumbComp />
+                <BreadcrumbPath />
                 <div className='ml-auto flex items-center gap-4'>
                   <ModeToggle />
                 </div>

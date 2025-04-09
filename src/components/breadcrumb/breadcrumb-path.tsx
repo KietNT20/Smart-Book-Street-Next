@@ -13,7 +13,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React from 'react';
 
-const BreadcrumbComp = () => {
+const BreadcrumbPath = () => {
   const pathname = usePathname();
 
   const segments = pathname
@@ -56,4 +56,4 @@ const BreadcrumbComp = () => {
   );
 };
 
-export default BreadcrumbComp;
+export default BreadcrumbPath;
