@@ -1,5 +1,6 @@
 'use client';
 
+import SubmitBtn from '@/components/button/submit-btn';
 import RichTextEditor from '@/components/rich-text-editor';
 import LoadingSpinner from '@/components/spin/loading-spinner';
 import { Button } from '@/components/ui/button';
@@ -24,7 +25,6 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import AuthorSubmitBtn from './author-submit-btn';
 
 type AuthorData = {
   result: Author;
@@ -235,8 +235,8 @@ export function AuthorForm({ authorId }: Props) {
           >
             Hủy
           </Button>
-          <AuthorSubmitBtn
-            authorId={authorId}
+          <SubmitBtn
+            ID={authorId}
             _onPending={createAuthorPending || updateAuthorPending}
           />
         </div>

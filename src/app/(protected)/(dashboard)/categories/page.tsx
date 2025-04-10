@@ -31,7 +31,7 @@ export default function CategoriesPage() {
   );
 
   // State for delete confirmation
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
   const [categoryToDelete, setCategoryToDelete] = useState<string | null>(null);
 
   const handleCreate = () => {
@@ -74,7 +74,6 @@ export default function CategoriesPage() {
         }
       );
     } else {
-      // Create
       createCategory(values, {
         onSuccess: () => {
           setIsModalOpen(false);

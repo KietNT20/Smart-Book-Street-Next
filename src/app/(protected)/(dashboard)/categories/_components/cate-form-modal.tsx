@@ -21,6 +21,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { categoryFormSchema, CategoryFormValues } from '@/lib/zod';
+import { Loader2 } from 'lucide-react';
 import { CategoryCol } from '../columns';
 
 interface CategoryFormProps {
@@ -120,7 +121,16 @@ export function CategoryFormModal({
                 Hủy
               </Button>
               <Button type='submit' disabled={isSubmitting}>
-                {isEditing ? 'Cập nhật' : 'Thêm mới'}
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                    Đang xử lý...
+                  </>
+                ) : isEditing ? (
+                  'Cập nhật'
+                ) : (
+                  'Thêm mới'
+                )}
               </Button>
             </DialogFooter>
           </form>

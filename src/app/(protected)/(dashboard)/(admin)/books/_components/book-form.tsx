@@ -1,3 +1,4 @@
+import SubmitBtn from '@/components/button/submit-btn';
 import RichTextEditor from '@/components/rich-text-editor';
 import { Button } from '@/components/ui/button';
 import {
@@ -15,7 +16,6 @@ import useDebounce from '@/hooks/use-debounce';
 import { cn } from '@/lib/utils';
 import { BookFormValues, bookSchema } from '@/lib/zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import AuthorCombobox from '../../_components/author-combobox';
@@ -357,18 +357,7 @@ const BookForm = ({ book, onCancel }: Props) => {
           >
             Hủy
           </Button>
-          <Button type='submit' disabled={isLoading} className='px-7'>
-            {isLoading ? (
-              <>
-                <Loader2 className='mr-2 h-4 w-4 animate-spin' />
-                Đang xử lý...
-              </>
-            ) : book ? (
-              'Cập nhật'
-            ) : (
-              'Thêm mới'
-            )}
-          </Button>
+          <SubmitBtn ID={book?.id || ''} _onPending={isLoading} />
         </div>
       </form>
     </Form>

@@ -46,7 +46,7 @@ export const cookieToken: TokenMethodType = {
   },
   set: (token) => {
     Cookies.set(STORAGE.token, JSON.stringify(token), {
-      expires: 7, // 7 days expiration
+      expires: 7,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict', // CSRF protection
     });
