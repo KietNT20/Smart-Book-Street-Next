@@ -174,3 +174,30 @@ export const storeFormSchema = z.object({
 });
 
 export type StoreFormValues = z.infer<typeof storeFormSchema>;
+
+// Publisher form
+export const publisherFormSchema = z.object({
+  publisherName: z
+    .string()
+    .min(1, { message: 'Tên nhà xuất bản không được để trống' }),
+  address: z.string().optional(),
+  phone: z
+    .string()
+    .refine(
+      (val) => {
+        if (!val) return true;
+        return REGEX.PHONE_VN.test(val);
+      },
+      {
+        message: 'Số điện thoại không hợp lệ',
+      }
+    )
+    .optional(),
+  email: z.string().email({ message: 'Email không hợp lệ' }).optional(),
+  description: z.string().optional(),
+  website: z.string().optional(),
+  mainImageFile: z.instanceof(File).optional().or(z.string().optional()),
+  additionalImageFiles: z.array(z.instanceof(File).or(z.string())).default([]),
+});
+
+export type PublisherFormValues = z.infer<typeof publisherFormSchema>;

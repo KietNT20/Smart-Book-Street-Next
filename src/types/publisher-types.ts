@@ -1,3 +1,4 @@
+import { Sort } from '@/enums/enums';
 import { BaseEntity } from './common-types';
 
 export interface Publisher extends BaseEntity {
@@ -9,10 +10,12 @@ export interface Publisher extends BaseEntity {
   description: string;
 }
 
-export type PublisherResponse = {
+export type PublishersResponse = {
   results: Publisher[];
   totalRecords: number;
+  totalPages: number;
   isSuccess: boolean;
+  message: string;
 };
 
 export type PublisherSearch = {
@@ -22,3 +25,17 @@ export type PublisherSearch = {
   email: string;
   website: string;
 };
+
+export interface PublisherParams {
+  pageNumber: number;
+  pageSize: number;
+  sortField: string;
+  sortOrder: Sort.ASC | Sort.DESC;
+  result: {
+    publisherName?: string;
+    address?: string;
+    phone?: string;
+    email?: string;
+    website?: string;
+  };
+}

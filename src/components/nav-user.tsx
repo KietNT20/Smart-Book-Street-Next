@@ -35,7 +35,6 @@ export function NavUser() {
   const { isMobile } = useSidebar();
   const router = useRouter();
   const { profile } = useAppSelector((state) => state.user);
-  console.log('profile', profile);
 
   const _onLogout = (): void => {
     tokenMethod.remove();
@@ -55,11 +54,17 @@ export function NavUser() {
             >
               <Avatar className='h-8 w-8 rounded-lg'>
                 <AvatarImage src={'#'} alt={'#'} />
-                <AvatarFallback className='rounded-lg'>CN</AvatarFallback>
+                <AvatarFallback className='rounded-lg'>
+                  {profile?.mainImageFile || 'CN'}
+                </AvatarFallback>
               </Avatar>
               <div className='grid flex-1 text-left text-sm leading-tight'>
-                <span className='truncate font-semibold'>{'ShadCN'}</span>
-                <span className='truncate text-xs'>{'shadcn@example.com'}</span>
+                <span className='truncate font-semibold'>
+                  {profile?.userName || 'Username'}
+                </span>
+                <span className='truncate text-xs'>
+                  {profile?.email || 'user@example.com'}
+                </span>
               </div>
               <ChevronsUpDown className='ml-auto size-4' />
             </SidebarMenuButton>
@@ -73,13 +78,18 @@ export function NavUser() {
             <DropdownMenuLabel className='p-0 font-normal'>
               <div className='flex items-center gap-2 px-1 py-1.5 text-left text-sm'>
                 <Avatar className='h-8 w-8 rounded-lg'>
-                  <AvatarImage src={'#'} alt={'#'} />
+                  <AvatarImage
+                    src={profile?.mainImageFile}
+                    alt={profile?.userName}
+                  />
                   <AvatarFallback className='rounded-lg'>CN</AvatarFallback>
                 </Avatar>
                 <div className='grid flex-1 text-left text-sm leading-tight'>
-                  <span className='truncate font-semibold'>{'ShadCN'}</span>
+                  <span className='truncate font-semibold'>
+                    {profile?.userName || 'Username'}
+                  </span>
                   <span className='truncate text-xs'>
-                    {'shadcn@example.com'}
+                    {profile?.email || 'user@example.com'}
                   </span>
                 </div>
               </div>
@@ -113,7 +123,7 @@ export function NavUser() {
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={_onLogout}
-              className='text-red-500 focus:text-red-500'
+              className='text-red-400 focus:text-red-500'
             >
               <LogOut />
               {'Đăng xuất'}

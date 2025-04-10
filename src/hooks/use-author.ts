@@ -22,7 +22,7 @@ export const useGetAuthors = ({
 }: AuthorSearchPagination) => {
   const queryClient = useQueryClient();
   const {
-    data: authorsRes,
+    data,
     isLoading: authorsLoading,
     error,
   } = useQuery({
@@ -37,7 +37,7 @@ export const useGetAuthors = ({
       }),
   });
   // Prefetching
-  const totalPage = authorsRes?.totalPages || 0;
+  const totalPage = data?.totalPages || 0;
 
   if (pageNumber < totalPage) {
     queryClient.prefetchQuery({
@@ -81,9 +81,10 @@ export const useGetAuthors = ({
     });
   }
   return {
-    authorsRes,
+    authorsRes: data?.results || [],
     authorsLoading,
     error,
+    totalPage,
   };
 };
 

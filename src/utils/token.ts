@@ -46,9 +46,10 @@ export const cookieToken: TokenMethodType = {
   },
   set: (token) => {
     Cookies.set(STORAGE.token, JSON.stringify(token), {
-      expires: 7,
+      expires: 30 * 24 * 60 * 60, // 30 days
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict', // CSRF protection
+      // httpOnly: true,
     });
   },
   remove: () => Cookies.remove(STORAGE.token),

@@ -3,7 +3,6 @@
 import {
   AudioWaveform,
   BarChart3,
-  Book,
   BookOpen,
   CalendarIcon,
   ChartNoAxesCombined,
@@ -92,34 +91,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         ],
       },
       {
-        title: 'Sách',
-        url: '#',
-        icon: Book,
-        isActive: checkActive([
-          { url: PATH.ADMIN_BOOKS },
-          { url: PATH.ADMIN_AUTHORS },
-          { url: PATH.CATEGORIES },
-        ]),
-        roles: [RoleEnums.PUBLISHER_MANAGER],
-        items: [
-          {
-            title: 'Quản lý sách',
-            url: PATH.ADMIN_BOOKS,
-            roles: [RoleEnums.PUBLISHER_MANAGER],
-          },
-          {
-            title: 'Quản lý tác giả',
-            url: PATH.ADMIN_AUTHORS,
-            roles: [RoleEnums.PUBLISHER_MANAGER],
-          },
-          {
-            title: 'Quản lý danh mục sách',
-            url: PATH.CATEGORIES,
-            roles: [RoleEnums.PUBLISHER_MANAGER],
-          },
-        ],
-      },
-      {
         title: 'Sự kiện',
         url: '#',
         icon: CalendarIcon,
@@ -179,13 +150,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             roles: [RoleEnums.PUBLISHER_MANAGER],
           },
           {
-            title: 'Danh mục sách',
-            url: PATH.CATEGORIES,
+            title: 'Thông tin tác giả',
+            url: PATH.ADMIN_AUTHORS,
             roles: [RoleEnums.PUBLISHER_MANAGER],
           },
           {
-            title: 'Quản lý kho sách',
-            url: PATH.INVENTORY,
+            title: 'Danh mục sách',
+            url: PATH.CATEGORIES,
             roles: [RoleEnums.PUBLISHER_MANAGER],
           },
         ],

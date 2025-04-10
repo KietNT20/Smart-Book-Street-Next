@@ -2,14 +2,16 @@ import { publisherService } from '@/services/publisherService';
 import { PublisherSearch } from '@/types/publisher-types';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
-export const usePublisherQuery = () => {
-  const getAllPublishers = useQuery({
+export const usePublishers = () => {
+  const { data, isLoading, error } = useQuery({
     queryKey: ['publishers'],
     queryFn: () => publisherService.getAll(),
   });
 
   return {
-    getAllPublishers,
+    publishers: data?.results || [],
+    isLoadingPublishers: isLoading,
+    errorPublishers: error,
   };
 };
 
