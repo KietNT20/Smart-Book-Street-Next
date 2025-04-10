@@ -82,7 +82,7 @@ const AuthorsPage = () => {
         <div className='flex items-center justify-between'>
           <h2 className='text-2xl font-bold'>Quản lý Tác giả</h2>
           <Link href={PATH.ADMIN_AUTHOR_CREATE}>
-            <Button>Thêm tác giả mới</Button>
+            <Button>Thêm tác giả</Button>
           </Link>
         </div>
 

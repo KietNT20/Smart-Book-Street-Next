@@ -1,6 +1,5 @@
 'use client';
 
-// import { useAuth } from '@/context/auth-context';
 import { RoleEnums } from '@/enums/role';
 import {
   Folder,

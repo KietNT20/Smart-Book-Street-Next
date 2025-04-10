@@ -184,6 +184,8 @@ export function AuthorForm({ authorId }: Props) {
                 <FormControl>
                   <Input
                     type='file'
+                    accept='image/*'
+                    placeholder='Chọn ảnh'
                     onChange={(e) => {
                       const file = e.target.files?.[0];
                       if (file) {

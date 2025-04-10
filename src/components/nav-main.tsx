@@ -2,7 +2,6 @@
 
 import { RoleEnums } from '@/enums/role';
 import { ChevronRight, type LucideIcon } from 'lucide-react';
-// import { useAuth } from '@/context/auth-context';
 
 import {
   Collapsible,

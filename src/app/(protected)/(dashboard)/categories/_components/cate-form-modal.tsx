@@ -120,7 +120,7 @@ export function CategoryFormModal({
                 Hủy
               </Button>
               <Button type='submit' disabled={isSubmitting}>
-                {isEditing ? 'Cập nhật' : 'Tạo mới'}
+                {isEditing ? 'Cập nhật' : 'Thêm mới'}
               </Button>
             </DialogFooter>
           </form>

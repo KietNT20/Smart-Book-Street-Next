@@ -36,7 +36,6 @@ export enum PATH {
 
   // PUBLISHER MANAGER
   CATEGORIES = '/categories',
-  CATEGORY_CREATE = '/categories/create',
 
   INVENTORY = '/inventory',
 

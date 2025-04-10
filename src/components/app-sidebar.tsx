@@ -14,7 +14,6 @@ import {
   Store,
   Users,
 } from 'lucide-react';
-import * as React from 'react';
 
 import { NavMain } from '@/components/nav-main';
 import { NavProjects } from '@/components/nav-projects';
@@ -27,11 +26,11 @@ import {
   SidebarHeader,
   SidebarRail,
 } from '@/components/ui/sidebar';
-// import { useAuth } from '@/context/auth-context';
 import { PATH } from '@/enums/path';
 import { RoleEnums } from '@/enums/role';
 import { useAuth } from '@/hooks/use-auth';
 import { usePathname } from 'next/navigation';
+import { useMemo } from 'react';
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
@@ -65,7 +64,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     navMain: [
       // ADMIN MENUS
       {
-        title: 'Đường sách',
+        title: 'Quản lý Đường sách',
         url: '#',
         icon: LibraryBig,
         isActive: checkActive([
@@ -101,22 +100,22 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           { url: PATH.ADMIN_AUTHORS },
           { url: PATH.CATEGORIES },
         ]),
-        roles: [RoleEnums.ADMIN],
+        roles: [RoleEnums.PUBLISHER_MANAGER],
         items: [
           {
             title: 'Quản lý sách',
             url: PATH.ADMIN_BOOKS,
-            roles: [RoleEnums.ADMIN],
+            roles: [RoleEnums.PUBLISHER_MANAGER],
           },
           {
             title: 'Quản lý tác giả',
             url: PATH.ADMIN_AUTHORS,
-            roles: [RoleEnums.ADMIN],
+            roles: [RoleEnums.PUBLISHER_MANAGER],
           },
           {
             title: 'Quản lý danh mục sách',
             url: PATH.CATEGORIES,
-            roles: [RoleEnums.ADMIN],
+            roles: [RoleEnums.PUBLISHER_MANAGER],
           },
         ],
       },
@@ -268,7 +267,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   };
 
   // Filter menu items based on user roles
-  const filteredNavMain = React.useMemo(() => {
+  const filteredNavMain = useMemo(() => {
     if (isLoading) return [];
 
     return (
@@ -287,7 +286,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   }, [menuData.navMain, hasRole, isLoading]);
 
   // Filter project items based on user roles
-  const filteredProjects = React.useMemo(() => {
+  const filteredProjects = useMemo(() => {
     if (isLoading) return [];
 
     return menuData.projects.filter(
