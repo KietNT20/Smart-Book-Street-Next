@@ -15,7 +15,7 @@ export function middleware(request: NextRequest) {
   // Handle root path redirection
   if (pathname === PATH.HOME) {
     if (isAuthenticated) {
-      return NextResponse.redirect(new URL(PATH.DASHBOARD, request.url));
+      return NextResponse.redirect(new URL(PATH.HOME, request.url));
     } else {
       return NextResponse.redirect(new URL(PATH.LOGIN, request.url));
     }

@@ -10,7 +10,6 @@ import {
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { userService } from '@/services/userService';
 import { RegisterRequestBody } from '@/types/auth-types';
-import tokenMethod from '@/utils/token';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect } from 'react';
@@ -51,9 +50,8 @@ export const useAuth = () => {
   } = useQuery({
     queryKey: ['user-profile'],
     queryFn: () => userService.getProfile(),
-    retry: false,
+    retry: 1,
     refetchOnWindowFocus: false,
-    enabled: !!tokenMethod.get() && !profile,
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
 

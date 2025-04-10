@@ -1,10 +1,14 @@
 import { API_URL } from '@/constant/api-url';
-import { LoginCredentials, RegisterRequestBody } from '@/types/auth-types';
+import {
+  LoginCredentials,
+  LoginResponse,
+  RegisterRequestBody,
+} from '@/types/auth-types';
 import { UserProfileResponse } from '@/types/user-types';
 import axiosInstance from '@/utils/axiosInstance';
 
 export const userService = {
-  login: async (payload: LoginCredentials) => {
+  login: async (payload: LoginCredentials): Promise<LoginResponse> => {
     const res = await axiosInstance.post(`${API_URL.USERS.LOGIN}`, payload);
     return res.data;
   },

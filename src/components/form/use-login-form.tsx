@@ -1,4 +1,5 @@
 import { PATH } from '@/enums/path';
+import { RoleEnums } from '@/enums/role';
 import { LoginFormValues, loginSchema } from '@/lib/zod';
 import { userService } from '@/services/userService';
 import { LoginCredentials } from '@/types/auth-types';
@@ -28,18 +29,31 @@ export const useLoginForm = () => {
     mutationFn: async ({ usernameOrEmail, password }: LoginCredentials) =>
       userService.login({ usernameOrEmail, password }),
     onSuccess: (data) => {
-      if (!data?.error) {
+      if (data) {
         if (data.token) {
           tokenMethod.set({
             accessToken: data.token,
-            refreshToken: data.refreshToken,
           });
         }
-        router.push(PATH.DASHBOARD);
-        toast.success('Đăng nhập thành công', {
-          id: 'login-success',
-          description: 'Vui lòng chờ trong giây lát',
-        });
+        if (data.result.userRoles) {
+          const hasAdminRole = data.result.userRoles.some(
+            (role) => role.role?.roleName === RoleEnums.ADMIN
+          );
+          const hasPublisherManagerRole = data.result.userRoles.some(
+            (role) => role.role?.roleName === RoleEnums.PUBLISHER_MANAGER
+          );
+          if (hasAdminRole) {
+            router.push(PATH.DASHBOARD);
+          } else if (hasPublisherManagerRole) {
+            router.push(PATH.ADMIN_BOOKS);
+          } else {
+            router.push(PATH.STORE_BOOKS);
+          }
+          toast.success('Đăng nhập thành công', {
+            id: 'login-success',
+            description: 'Vui lòng chờ trong giây lát',
+          });
+        }
         form.reset();
       }
     },
