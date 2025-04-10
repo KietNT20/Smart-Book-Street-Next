@@ -17,7 +17,7 @@ export const useBookMutations = () => {
     onError: (error) => {
       toast.error('Đã xảy ra lỗi khi thêm sách');
       console.error('Error creating book:', error);
-    }
+    },
   });
 
   const updateBookMutation = useMutation({
@@ -34,7 +34,7 @@ export const useBookMutations = () => {
     onError: (error) => {
       toast.error('Đã xảy ra lỗi khi cập nhật sách');
       console.error('Error updating book:', error);
-    }
+    },
   });
 
   const deleteBookMutation = useMutation({
@@ -49,7 +49,7 @@ export const useBookMutations = () => {
     onError: (error) => {
       toast.error('Đã xảy ra lỗi khi xóa sách');
       console.error('Error deleting book:', error);
-    }
+    },
   });
 
   return {
@@ -61,6 +61,6 @@ export const useBookMutations = () => {
     updateBookPending: updateBookMutation.isPending,
     // Delete Book
     deleteBook: deleteBookMutation.mutate,
-    deleteBookPending: deleteBookMutation.isPending
+    deleteBookPending: deleteBookMutation.isPending,
   };
 };

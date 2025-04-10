@@ -19,8 +19,8 @@ export const useLoginForm = () => {
     resolver: zodResolver(loginSchema),
     defaultValues: {
       usernameOrEmail: '',
-      password: ''
-    }
+      password: '',
+    },
   });
 
   const login = useMutation({
@@ -32,13 +32,13 @@ export const useLoginForm = () => {
         if (data.token) {
           tokenMethod.set({
             accessToken: data.token,
-            refreshToken: data.refreshToken
+            refreshToken: data.refreshToken,
           });
         }
         router.push(PATH.DASHBOARD);
         toast.success('Đăng nhập thành công', {
           id: 'login-success',
-          description: 'Vui lòng chờ trong giây lát'
+          description: 'Vui lòng chờ trong giây lát',
         });
         form.reset();
       }
@@ -46,9 +46,9 @@ export const useLoginForm = () => {
     onError: (error) => {
       console.log('Error logging in:', error);
       toast.error('Đăng nhập thất bại', {
-        description: 'Đã có lỗi xảy ra, vui lòng thử lại sau'
+        description: 'Đã có lỗi xảy ra, vui lòng thử lại sau',
       });
-    }
+    },
   });
 
   const onSubmit = (values: LoginFormValues) => {
@@ -61,6 +61,6 @@ export const useLoginForm = () => {
     form,
     showPassword,
     setShowPassword,
-    onSubmit
+    onSubmit,
   };
 };

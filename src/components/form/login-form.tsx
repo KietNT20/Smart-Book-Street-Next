@@ -5,7 +5,7 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle
+  CardTitle,
 } from '@/components/ui/card';
 import { PATH } from '@/enums/path';
 import { cn } from '@/lib/utils';
@@ -20,7 +20,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
+  FormMessage,
 } from '../ui/form';
 import { Input } from '../ui/input';
 import { useLoginForm } from './use-login-form';

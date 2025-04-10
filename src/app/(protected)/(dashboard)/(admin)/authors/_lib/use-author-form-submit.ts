@@ -8,7 +8,7 @@ type FileState = {
 
 export function useBookFormSubmit(onSubmit: (formData: FormData) => void) {
   const [file, setFile] = useState<FileState>({
-    imgFile: null
+    imgFile: null,
   });
 
   const handleImageFileChange = (file: File | null) => {
@@ -35,6 +35,6 @@ export function useBookFormSubmit(onSubmit: (formData: FormData) => void) {
   return {
     file,
     handleImageFileChange,
-    handleSubmit
+    handleSubmit,
   };
 }

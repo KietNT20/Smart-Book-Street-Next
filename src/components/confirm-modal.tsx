@@ -6,7 +6,7 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle
+  AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 
 type Props = {
@@ -30,7 +30,7 @@ export const ConfirmModal = ({
   confirmText = 'Xác nhận',
   cancelText = 'Hủy',
   variant = 'default',
-  isLoading
+  isLoading,
 }: Props) => {
   return (
     <AlertDialog open={isOpen} onOpenChange={onClose}>

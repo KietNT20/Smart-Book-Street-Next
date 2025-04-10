@@ -9,7 +9,7 @@ import { toast } from 'sonner';
 export const useGetAuthorById = <T>(id: string) => {
   return useQuery<T>({
     queryKey: ['author', id],
-    queryFn: () => authorService.getById(id)
+    queryFn: () => authorService.getById(id),
   });
 };
 
@@ -18,13 +18,13 @@ export const useGetAuthors = ({
   sortOrder,
   result,
   pageNumber,
-  pageSize
+  pageSize,
 }: AuthorSearchPagination) => {
   const queryClient = useQueryClient();
   const {
     data: authorsRes,
     isLoading: authorsLoading,
-    error
+    error,
   } = useQuery({
     queryKey: ['authors', result, sortField, sortOrder, pageSize, pageNumber],
     queryFn: () =>
@@ -33,8 +33,8 @@ export const useGetAuthors = ({
         pageSize,
         sortField,
         sortOrder,
-        result
-      })
+        result,
+      }),
   });
   // Prefetching
   const totalPage = authorsRes?.totalPages || 0;
@@ -47,7 +47,7 @@ export const useGetAuthors = ({
         sortField,
         sortOrder,
         pageSize,
-        pageNumber + 1
+        pageNumber + 1,
       ],
       queryFn: () =>
         authorService.searchPagination({
@@ -55,8 +55,8 @@ export const useGetAuthors = ({
           pageSize,
           sortField,
           sortOrder,
-          result
-        })
+          result,
+        }),
     });
   }
 
@@ -68,7 +68,7 @@ export const useGetAuthors = ({
         sortField,
         sortOrder,
         pageSize,
-        pageNumber - 1
+        pageNumber - 1,
       ],
       queryFn: () =>
         authorService.searchPagination({
@@ -76,14 +76,14 @@ export const useGetAuthors = ({
           pageSize,
           sortField,
           sortOrder,
-          result
-        })
+          result,
+        }),
     });
   }
   return {
     authorsRes,
     authorsLoading,
-    error
+    error,
   };
 };
 
@@ -94,7 +94,7 @@ export const useAuthorMutation = () => {
   const searchAuthorName = useMutation({
     mutationKey: ['search-author-name'],
     mutationFn: (payload: { authorName: string; categoryId?: string }) =>
-      authorService.search(payload)
+      authorService.search(payload),
   });
 
   const createAuthor = useMutation({
@@ -109,7 +109,7 @@ export const useAuthorMutation = () => {
     },
     onError: (error: Error) => {
       console.error('Error Add Author:', error);
-    }
+    },
   });
 
   const updateAuthor = useMutation({
@@ -125,7 +125,7 @@ export const useAuthorMutation = () => {
     },
     onError: (error: Error) => {
       console.error('Error Update Author:', error);
-    }
+    },
   });
 
   const deleteAuthor = useMutation({
@@ -136,7 +136,7 @@ export const useAuthorMutation = () => {
     },
     onError: (error: Error) => {
       console.error('Error Delete Author:', error);
-    }
+    },
   });
 
   return {
@@ -150,6 +150,6 @@ export const useAuthorMutation = () => {
     deleteAuthor: deleteAuthor.mutate,
     deleteAuthorPending: deleteAuthor.isPending,
     // Search Author
-    searchAuthorName
+    searchAuthorName,
   };
 };

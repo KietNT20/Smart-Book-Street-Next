@@ -4,12 +4,12 @@ import axios, {
   AxiosError,
   AxiosInstance,
   AxiosResponse,
-  InternalAxiosRequestConfig
+  InternalAxiosRequestConfig,
 } from 'axios';
 import tokenMethod from './token';
 
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: BASE_URL
+  baseURL: BASE_URL,
 });
 // Add a request interceptor
 axiosInstance.interceptors.request.use(

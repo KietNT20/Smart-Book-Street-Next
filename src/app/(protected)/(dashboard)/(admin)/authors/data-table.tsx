@@ -4,7 +4,7 @@ import {
   getCoreRowModel,
   getPaginationRowModel,
   useReactTable,
-  VisibilityState
+  VisibilityState,
 } from '@tanstack/react-table';
 
 import {
@@ -13,7 +13,7 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow
+  TableRow,
 } from '@/components/ui/table';
 
 import { TableSkeleton } from '@/components/table-skeleton';
@@ -22,14 +22,14 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
+  SelectValue,
 } from '@/components/ui/select';
 import { useState } from 'react';
 
@@ -52,7 +52,7 @@ export function DataTable<TData, TValue>({
   pageCount = 0,
   currentPage,
   onPageChange,
-  onPageSizeChange
+  onPageSizeChange,
 }: DataTableProps<TData, TValue>) {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const table = useReactTable({
@@ -66,19 +66,19 @@ export function DataTable<TData, TValue>({
       columnVisibility,
       pagination: {
         pageSize,
-        pageIndex: currentPage - 1
-      }
+        pageIndex: currentPage - 1,
+      },
     },
     manualPagination: true,
     onPaginationChange: (updater) => {
       if (typeof updater === 'function') {
         const newState = updater({
           pageIndex: currentPage - 1,
-          pageSize
+          pageSize,
         });
         onPageChange(newState.pageIndex + 1);
       }
-    }
+    },
   });
 
   const handlePageSizeChange = (newSize: string) => {

@@ -5,13 +5,13 @@ import { toast } from 'sonner';
 export const useGetImagesByEntityID = ({ entityId }: { entityId?: string }) => {
   const getImagesByEntityId = useQuery({
     queryKey: ['images', entityId],
-    queryFn: async () => await imageService.getByTypeOrEntityID({ entityId })
+    queryFn: async () => await imageService.getByTypeOrEntityID({ entityId }),
   });
 
   return {
     imagesDataEntityId: getImagesByEntityId.data,
     isPendingImages: getImagesByEntityId.isPending,
-    errorImages: getImagesByEntityId.error
+    errorImages: getImagesByEntityId.error,
   };
 };
 
@@ -22,13 +22,13 @@ export const useImagesMutation = () => {
     mutationFn: (payload: UploadImagePayload) => imageService.create(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['books'] });
-    }
+    },
   });
 
   const updateImageMutation = useMutation({
     mutationFn: ({
       id,
-      payload
+      payload,
     }: {
       id: string;
       payload: Partial<UploadImagePayload>;
@@ -36,7 +36,7 @@ export const useImagesMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['books'] });
       toast.success('Cập nhật ảnh thành công');
-    }
+    },
   });
 
   const deleteImageMutation = useMutation({
@@ -44,7 +44,7 @@ export const useImagesMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['books'] });
       toast.success('Xóa ảnh thành công');
-    }
+    },
   });
 
   return {
@@ -61,6 +61,6 @@ export const useImagesMutation = () => {
     // Delete image
     deleteImage: deleteImageMutation.mutate,
     isDeleting: deleteImageMutation.isPending,
-    errorDelete: deleteImageMutation.error
+    errorDelete: deleteImageMutation.error,
   };
 };

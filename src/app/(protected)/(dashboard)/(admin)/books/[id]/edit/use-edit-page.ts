@@ -10,6 +10,6 @@ export const useEditPage = () => {
 
   return {
     book,
-    router
+    router,
   };
 };

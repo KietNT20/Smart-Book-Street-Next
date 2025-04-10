@@ -8,7 +8,7 @@ import {
   DialogContent,
   DialogFooter,
   DialogHeader,
-  DialogTitle
+  DialogTitle,
 } from '@/components/ui/dialog';
 import {
   Form,
@@ -16,11 +16,12 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
+  FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { categoryFormSchema, CategoryFormValues } from '@/lib/zod';
+import { Loader2 } from 'lucide-react';
 import { CategoryCol } from '../columns';
 
 interface CategoryFormProps {
@@ -36,7 +37,7 @@ export function CategoryFormModal({
   onClose,
   onSubmit,
   initialData,
-  isSubmitting = false
+  isSubmitting = false,
 }: CategoryFormProps) {
   const isEditing = !!initialData;
 
@@ -44,15 +45,15 @@ export function CategoryFormModal({
     resolver: zodResolver(categoryFormSchema),
     defaultValues: {
       categoryName: '',
-      description: ''
-    }
+      description: '',
+    },
   });
 
   useEffect(() => {
     if (initialData) {
       form.reset({
         categoryName: initialData.categoryName,
-        description: initialData.description || ''
+        description: initialData.description || '',
       });
     } else {
       form.reset();
@@ -120,7 +121,16 @@ export function CategoryFormModal({
                 Hủy
               </Button>
               <Button type='submit' disabled={isSubmitting}>
-                {isEditing ? 'Cập nhật' : 'Tạo mới'}
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                    Đang xử lý...
+                  </>
+                ) : isEditing ? (
+                  'Cập nhật'
+                ) : (
+                  'Thêm mới'
+                )}
               </Button>
             </DialogFooter>
           </form>

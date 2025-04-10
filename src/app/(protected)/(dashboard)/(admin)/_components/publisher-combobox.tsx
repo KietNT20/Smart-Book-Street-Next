@@ -5,20 +5,20 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
-  CommandList
+  CommandList,
 } from '@/components/ui/command';
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
+  FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import {
   Popover,
   PopoverContent,
-  PopoverTrigger
+  PopoverTrigger,
 } from '@/components/ui/popover';
 import useDebounce from '@/hooks/use-debounce';
 import { usePublisherMutation } from '@/hooks/use-publisher';
@@ -43,12 +43,12 @@ type Props<T extends FieldValues> = {
 
 const PublisherCombobox = <T extends FieldValues>({
   name,
-  control
+  control,
 }: Props<T>) => {
   const [searchInputs, setSearchInputs] = useState({
     publisherName: '',
     email: '',
-    phone: ''
+    phone: '',
   });
   const [results, setResults] = useState<Publisher[]>([]);
   const [open, setOpen] = useState(false);

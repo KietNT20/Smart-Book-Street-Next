@@ -7,13 +7,19 @@ export const useZones = ({
   sortField,
   sortOrder,
   pageSize,
-  pageNumber
+  pageNumber,
 }: ZoneParams) => {
   const queryClient = useQueryClient();
   const { data, isLoading, error } = useQuery({
     queryKey: ['zones', result, sortField, sortOrder, pageSize, pageNumber],
     queryFn: () =>
-      zoneService.getAll({ result, sortField, sortOrder, pageSize, pageNumber })
+      zoneService.getAll({
+        result,
+        sortField,
+        sortOrder,
+        pageSize,
+        pageNumber,
+      }),
   });
 
   // Prefetching data
@@ -27,7 +33,7 @@ export const useZones = ({
         sortField,
         sortOrder,
         pageSize,
-        pageNumber + 1
+        pageNumber + 1,
       ],
       queryFn: () =>
         zoneService.getAll({
@@ -35,8 +41,8 @@ export const useZones = ({
           sortField,
           sortOrder,
           pageSize,
-          pageNumber: pageNumber + 1
-        })
+          pageNumber: pageNumber + 1,
+        }),
     });
   }
 
@@ -48,7 +54,7 @@ export const useZones = ({
         sortField,
         sortOrder,
         pageSize,
-        pageNumber - 1
+        pageNumber - 1,
       ],
       queryFn: () =>
         zoneService.getAll({
@@ -56,14 +62,14 @@ export const useZones = ({
           sortField,
           sortOrder,
           pageSize,
-          pageNumber: pageNumber - 1
-        })
+          pageNumber: pageNumber - 1,
+        }),
     });
   }
 
   return {
     zonesRes: data?.results || [],
     isLoadingZones: isLoading,
-    errorZones: error
+    errorZones: error,
   };
 };

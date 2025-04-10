@@ -7,7 +7,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger
+  DialogTrigger,
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { useImagesMutation } from '@/hooks/use-images';
@@ -77,7 +77,7 @@ const ImageUploader = ({ entityId, type }: ImageUploaderProps) => {
         files: files,
         type,
         altText,
-        entityId
+        entityId,
       },
       {
         onSuccess: () => {
@@ -92,7 +92,7 @@ const ImageUploader = ({ entityId, type }: ImageUploaderProps) => {
         },
         onError: (error) => {
           toast.error(error.message || 'Đã xảy ra lỗi khi tải lên hình ảnh');
-        }
+        },
       }
     );
   };

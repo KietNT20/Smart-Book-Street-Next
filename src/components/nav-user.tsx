@@ -8,13 +8,13 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar
+  useSidebar,
 } from '@/components/ui/sidebar';
 import { PATH } from '@/enums/path';
 import { useAppSelector } from '@/lib/hooks';
@@ -26,7 +26,7 @@ import {
   CreditCard,
   LogOut,
   Settings,
-  Sparkles
+  Sparkles,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';

@@ -4,7 +4,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { ColumnDef } from '@tanstack/react-table';
 import {
@@ -13,7 +13,7 @@ import {
   MoreHorizontal,
   SortAsc,
   SortDesc,
-  Trash
+  Trash,
 } from 'lucide-react';
 
 export interface CategoryCol {
@@ -31,7 +31,7 @@ const getSortIcon = (isSorted: false | 'asc' | 'desc') => {
 
 export const columns = ({
   onEdit,
-  onDelete
+  onDelete,
 }: {
   onEdit: (category: CategoryCol) => void;
   onDelete: (id: string) => void;
@@ -60,7 +60,7 @@ export const columns = ({
     },
     enableSorting: true,
     enableColumnFilter: true,
-    filterFn: 'includesString'
+    filterFn: 'includesString',
   },
   {
     accessorKey: 'description',
@@ -72,7 +72,7 @@ export const columns = ({
       return description?.length > 50
         ? `${description.substring(0, 50)}...`
         : description;
-    }
+    },
   },
   {
     id: 'actions',
@@ -106,6 +106,6 @@ export const columns = ({
           </DropdownMenuContent>
         </DropdownMenu>
       );
-    }
-  }
+    },
+  },
 ];

@@ -36,7 +36,6 @@ export enum PATH {
 
   // PUBLISHER MANAGER
   CATEGORIES = '/categories',
-  CATEGORY_CREATE = '/categories/create',
 
   INVENTORY = '/inventory',
 
@@ -52,5 +51,5 @@ export enum PATH {
   CHANGE_PASSWORD = '/profile/change-password',
 
   SETTINGS = '/settings',
-  NOTIFICATIONS = '/notifications'
+  NOTIFICATIONS = '/notifications',
 }

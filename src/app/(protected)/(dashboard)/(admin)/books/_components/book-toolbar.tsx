@@ -12,7 +12,7 @@ interface BookToolbarProps {
 export function BookToolbar({
   hasFilters,
   onResetFilters,
-  onOpenSearch
+  onOpenSearch,
 }: BookToolbarProps) {
   return (
     <div className='flex items-center justify-between'>
@@ -30,7 +30,7 @@ export function BookToolbar({
         </Button>
         <Link href={PATH.ADMIN_BOOK_CREATE}>
           <Button>
-            <Plus className='mr-2 h-4 w-4' /> Thêm sách mới
+            <Plus className='mr-2 h-4 w-4' /> Thêm sách
           </Button>
         </Link>
       </div>

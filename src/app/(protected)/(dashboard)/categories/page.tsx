@@ -3,17 +3,8 @@
 import { Plus } from 'lucide-react';
 import { useState } from 'react';
 
+import { ConfirmModal } from '@/components/confirm-modal';
 import LoadingSpinner from '@/components/spin/loading-spinner';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle
-} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { useCategoryMutation, useGetCategories } from '@/hooks/use-category';
 import { CategoryFormValues } from '@/lib/zod';
@@ -30,7 +21,7 @@ export default function CategoriesPage() {
     updateCategory,
     updateCategoryPending,
     deleteCategory,
-    deleteCategoryPending
+    deleteCategoryPending,
   } = useCategoryMutation();
 
   // State for modal
@@ -40,7 +31,7 @@ export default function CategoriesPage() {
   );
 
   // State for delete confirmation
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
   const [categoryToDelete, setCategoryToDelete] = useState<string | null>(null);
 
   const handleCreate = () => {
@@ -64,7 +55,7 @@ export default function CategoriesPage() {
       onSuccess: () => {
         setIsDeleteDialogOpen(false);
         setCategoryToDelete(null);
-      }
+      },
     });
   };
 
@@ -73,21 +64,20 @@ export default function CategoriesPage() {
       updateCategory(
         {
           id: selectedCategory.id,
-          payload: values
+          payload: values,
         },
         {
           onSuccess: () => {
             setIsModalOpen(false);
             setSelectedCategory(null);
-          }
+          },
         }
       );
     } else {
-      // Create
       createCategory(values, {
         onSuccess: () => {
           setIsModalOpen(false);
-        }
+        },
       });
     }
   };
@@ -106,14 +96,14 @@ export default function CategoriesPage() {
         <h2 className='text-2xl font-bold'>Quản lý danh mục</h2>
         <Button onClick={handleCreate}>
           <Plus className='mr-2 h-4 w-4' />
-          Tạo danh mục
+          Thêm danh mục
         </Button>
       </div>
 
       <DataTable
         columns={columns({
           onEdit: handleEdit,
-          onDelete: handleDelete
+          onDelete: handleDelete,
         })}
         data={categoriesRes?.results || []}
       />
@@ -126,32 +116,15 @@ export default function CategoriesPage() {
         isSubmitting={createCategoryPending || updateCategoryPending}
       />
 
-      <AlertDialog
-        open={isDeleteDialogOpen}
-        onOpenChange={setIsDeleteDialogOpen}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Bạn có chắc chắn muốn xóa?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Hành động này không thể hoàn tác. Danh mục này sẽ bị xóa vĩnh viễn
-              khỏi hệ thống.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={deleteCategoryPending}>
-              Hủy
-            </AlertDialogCancel>
-            <AlertDialogAction
-              onClick={confirmDelete}
-              disabled={deleteCategoryPending}
-              className='bg-red-600 hover:bg-red-700'
-            >
-              Xóa
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <ConfirmModal
+        isOpen={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen}
+        onConfirm={confirmDelete}
+        title='Bạn có chắc chắn muốn xóa?'
+        description='Hành động này không thể hoàn tác. Danh mục này sẽ bị xóa khỏi hệ thống.'
+        variant='destructive'
+        isLoading={deleteCategoryPending}
+      />
     </div>
   );
 }

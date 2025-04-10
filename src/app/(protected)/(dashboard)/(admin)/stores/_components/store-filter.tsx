@@ -3,7 +3,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import {
   Collapsible,
   CollapsibleContent,
-  CollapsibleTrigger
+  CollapsibleTrigger,
 } from '@/components/ui/collapsible';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -35,7 +35,7 @@ const StoreFilter = ({
   setFilters,
   isSearching,
   onSearch,
-  onClearSearch
+  onClearSearch,
 }: StoreFilterProps) => {
   const [isOpen, setIsOpen] = useState(false);
 

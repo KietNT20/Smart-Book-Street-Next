@@ -36,7 +36,7 @@ const RichTextEditor = ({
   className,
   placeholder = 'Nhập nội dung...',
   readOnly = false,
-  isPending
+  isPending,
 }: RichTextEditorProps) => {
   const [linkModalOpen, setLinkModalOpen] = useState(false);
   const [currentLinkUrl, setCurrentLinkUrl] = useState('');
@@ -53,7 +53,7 @@ const RichTextEditor = ({
       StarterKit.configure({
         heading: false,
         bulletList: false,
-        orderedList: false
+        orderedList: false,
       }),
       Underline,
       Document,
@@ -61,58 +61,58 @@ const RichTextEditor = ({
       Text,
       BulletList.configure({
         HTMLAttributes: {
-          class: 'bullet-list'
-        }
+          class: 'bullet-list',
+        },
       }),
       OrderedList.configure({
         HTMLAttributes: {
-          class: 'ordered-list'
-        }
+          class: 'ordered-list',
+        },
       }),
       Link.configure({
         openOnClick: false,
         HTMLAttributes: {
-          class: 'text-blue-500 underline cursor-pointer'
-        }
+          class: 'text-blue-500 underline cursor-pointer',
+        },
       }),
       TextAlign.configure({
         types: ['heading', 'paragraph'],
-        alignments: ['left', 'center', 'right', 'justify']
+        alignments: ['left', 'center', 'right', 'justify'],
       }),
       Heading.configure({
         levels: [1, 2, 3, 4, 5, 6],
         HTMLAttributes: {
-          class: 'heading'
-        }
+          class: 'heading',
+        },
       }),
       Image.configure({
         HTMLAttributes: {
-          class: 'mx-auto max-w-full rounded-md'
-        }
+          class: 'mx-auto max-w-full rounded-md',
+        },
       }),
       Placeholder.configure({
-        placeholder
+        placeholder,
       }),
       Table.configure({
         HTMLAttributes: {
-          class: 'table-auto border-collapse w-full'
-        }
+          class: 'table-auto border-collapse w-full',
+        },
       }),
       TableRow.configure({
         HTMLAttributes: {
-          class: 'border border-gray-300'
-        }
+          class: 'border border-gray-300',
+        },
       }),
       TableHeader.configure({
         HTMLAttributes: {
-          class: 'border border-gray-300 bg-gray-100 p-2 font-bold'
-        }
+          class: 'border border-gray-300 bg-gray-100 p-2 font-bold',
+        },
       }),
       TableCell.configure({
         HTMLAttributes: {
-          class: 'border border-gray-300 p-2'
-        }
-      })
+          class: 'border border-gray-300 p-2',
+        },
+      }),
     ],
     content,
     onUpdate,
@@ -121,10 +121,10 @@ const RichTextEditor = ({
         class: cn(
           'prose max-w-none focus:outline-none',
           'min-h-[300px] rounded-md border border-input p-3'
-        )
-      }
+        ),
+      },
     },
-    editable: !readOnly
+    editable: !readOnly,
   });
 
   // Update content when editor changes
@@ -198,29 +198,29 @@ const RichTextEditor = ({
                 content: [
                   {
                     type: 'paragraph',
-                    content: [{ type: 'text', text: 'Tiêu đề 1' }]
-                  }
-                ]
+                    content: [{ type: 'text', text: 'Tiêu đề 1' }],
+                  },
+                ],
               },
               {
                 type: 'tableHeader',
                 content: [
                   {
                     type: 'paragraph',
-                    content: [{ type: 'text', text: 'Tiêu đề 2' }]
-                  }
-                ]
+                    content: [{ type: 'text', text: 'Tiêu đề 2' }],
+                  },
+                ],
               },
               {
                 type: 'tableHeader',
                 content: [
                   {
                     type: 'paragraph',
-                    content: [{ type: 'text', text: 'Tiêu đề 3' }]
-                  }
-                ]
-              }
-            ]
+                    content: [{ type: 'text', text: 'Tiêu đề 3' }],
+                  },
+                ],
+              },
+            ],
           },
           {
             type: 'tableRow',
@@ -230,29 +230,29 @@ const RichTextEditor = ({
                 content: [
                   {
                     type: 'paragraph',
-                    content: [{ type: 'text', text: 'Nội dung' }]
-                  }
-                ]
+                    content: [{ type: 'text', text: 'Nội dung' }],
+                  },
+                ],
               },
               {
                 type: 'tableCell',
                 content: [
                   {
                     type: 'paragraph',
-                    content: [{ type: 'text', text: 'Nội dung' }]
-                  }
-                ]
+                    content: [{ type: 'text', text: 'Nội dung' }],
+                  },
+                ],
               },
               {
                 type: 'tableCell',
                 content: [
                   {
                     type: 'paragraph',
-                    content: [{ type: 'text', text: 'Nội dung' }]
-                  }
-                ]
-              }
-            ]
+                    content: [{ type: 'text', text: 'Nội dung' }],
+                  },
+                ],
+              },
+            ],
           },
           {
             type: 'tableRow',
@@ -262,31 +262,31 @@ const RichTextEditor = ({
                 content: [
                   {
                     type: 'paragraph',
-                    content: [{ type: 'text', text: 'Nội dung' }]
-                  }
-                ]
+                    content: [{ type: 'text', text: 'Nội dung' }],
+                  },
+                ],
               },
               {
                 type: 'tableCell',
                 content: [
                   {
                     type: 'paragraph',
-                    content: [{ type: 'text', text: 'Nội dung' }]
-                  }
-                ]
+                    content: [{ type: 'text', text: 'Nội dung' }],
+                  },
+                ],
               },
               {
                 type: 'tableCell',
                 content: [
                   {
                     type: 'paragraph',
-                    content: [{ type: 'text', text: 'Nội dung' }]
-                  }
-                ]
-              }
-            ]
-          }
-        ]
+                    content: [{ type: 'text', text: 'Nội dung' }],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
       })
       .run();
   }, [editor]);

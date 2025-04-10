@@ -6,19 +6,19 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-  CommandSeparator
+  CommandSeparator,
 } from '@/components/ui/command';
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
+  FormMessage,
 } from '@/components/ui/form';
 import {
   Popover,
   PopoverContent,
-  PopoverTrigger
+  PopoverTrigger,
 } from '@/components/ui/popover';
 import { useAuthorMutation } from '@/hooks/use-author';
 import useDebounce from '@/hooks/use-debounce';
@@ -51,7 +51,7 @@ const AuthorCombobox = <T extends FieldValues>({ name, control }: Props<T>) => {
 
     searchAuthorName.mutate(
       {
-        authorName: value
+        authorName: value,
       },
       {
         onSuccess: (data) => {
@@ -60,7 +60,7 @@ const AuthorCombobox = <T extends FieldValues>({ name, control }: Props<T>) => {
         onError: (error) => {
           console.error('Failed to search author:', error);
           setSearchResults([]);
-        }
+        },
       }
     );
   };

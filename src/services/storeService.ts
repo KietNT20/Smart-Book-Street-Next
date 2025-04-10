@@ -14,8 +14,8 @@ export const storeService = {
   create: async (payload: FormData) => {
     const res = await axiosInstance.post(API_URL.STORES.INDEX, payload, {
       headers: {
-        'Content-Type': 'multipart/form-data'
-      }
+        'Content-Type': 'multipart/form-data',
+      },
     });
     return res.data;
   },
@@ -25,8 +25,8 @@ export const storeService = {
       payload,
       {
         headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+          'Content-Type': 'multipart/form-data',
+        },
       }
     );
     return res.data;
@@ -41,5 +41,5 @@ export const storeService = {
       params
     );
     return res.data;
-  }
+  },
 };

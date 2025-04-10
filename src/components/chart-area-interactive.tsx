@@ -1,30 +1,31 @@
 'use client';
 
-import * as React from 'react';
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
 
-import { useIsMobile } from '@/hooks/use-mobile';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle
+  CardTitle,
 } from '@/components/ui/card';
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
-  ChartTooltipContent
+  ChartTooltipContent,
 } from '@/components/ui/chart';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
+  SelectValue,
 } from '@/components/ui/select';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { useEffect, useState } from 'react';
+
 const chartData = [
   { date: '2024-04-01', desktop: 222, mobile: 150 },
   { date: '2024-04-02', desktop: 97, mobile: 180 },
@@ -116,28 +117,28 @@ const chartData = [
   { date: '2024-06-27', desktop: 448, mobile: 490 },
   { date: '2024-06-28', desktop: 149, mobile: 200 },
   { date: '2024-06-29', desktop: 103, mobile: 160 },
-  { date: '2024-06-30', desktop: 446, mobile: 400 }
+  { date: '2024-06-30', desktop: 446, mobile: 400 },
 ];
 
 const chartConfig = {
   visitors: {
-    label: 'Visitors'
+    label: 'Visitors',
   },
   desktop: {
     label: 'Desktop',
-    color: 'hsl(var(--chart-1))'
+    color: 'hsl(var(--chart-1))',
   },
   mobile: {
     label: 'Mobile',
-    color: 'hsl(var(--chart-2))'
-  }
+    color: 'hsl(var(--chart-2))',
+  },
 } satisfies ChartConfig;
 
 export function ChartAreaInteractive() {
   const isMobile = useIsMobile();
-  const [timeRange, setTimeRange] = React.useState('30d');
+  const [timeRange, setTimeRange] = useState('30d');
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (isMobile) {
       setTimeRange('7d');
     }
@@ -249,7 +250,7 @@ export function ChartAreaInteractive() {
                 const date = new Date(value);
                 return date.toLocaleDateString('en-US', {
                   month: 'short',
-                  day: 'numeric'
+                  day: 'numeric',
                 });
               }}
             />
@@ -260,7 +261,7 @@ export function ChartAreaInteractive() {
                   labelFormatter={(value) => {
                     return new Date(value).toLocaleDateString('en-US', {
                       month: 'short',
-                      day: 'numeric'
+                      day: 'numeric',
                     });
                   }}
                   indicator='dot'

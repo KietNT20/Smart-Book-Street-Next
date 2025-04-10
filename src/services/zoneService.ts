@@ -1,5 +1,5 @@
 import { API_URL } from '@/constant/api-url';
-import { ZoneParams } from '@/types/zone-types';
+import { ZoneCreate, ZoneParams, ZoneUpdate } from '@/types/zone-types';
 import axiosInstance from '@/utils/axiosInstance';
 
 export const zoneService = {
@@ -11,12 +11,19 @@ export const zoneService = {
     const res = await axiosInstance.post(API_URL.ZONES.INDEX, params);
     return res.data;
   },
-  create: async (data: FormData) => {
-    const res = await axiosInstance.post(API_URL.ZONES.INDEX, data, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    });
+  create: async (payload: ZoneCreate) => {
+    const res = await axiosInstance.post(API_URL.ZONES.INDEX, payload);
     return res.data;
-  }
+  },
+  update: async (id: string, payload: ZoneUpdate) => {
+    const res = await axiosInstance.put(
+      `${API_URL.ZONES.INDEX}/${id}`,
+      payload
+    );
+    return res.data;
+  },
+  delete: async (id: string) => {
+    const res = await axiosInstance.patch(`${API_URL.ZONES.INDEX}/${id}`);
+    return res.data;
+  },
 };

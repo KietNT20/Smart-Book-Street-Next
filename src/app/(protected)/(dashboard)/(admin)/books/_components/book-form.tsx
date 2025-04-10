@@ -1,3 +1,4 @@
+import SubmitBtn from '@/components/button/submit-btn';
 import RichTextEditor from '@/components/rich-text-editor';
 import { Button } from '@/components/ui/button';
 import {
@@ -6,7 +7,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
+  FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { PATH } from '@/enums/path';
@@ -15,7 +16,6 @@ import useDebounce from '@/hooks/use-debounce';
 import { cn } from '@/lib/utils';
 import { BookFormValues, bookSchema } from '@/lib/zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import AuthorCombobox from '../../_components/author-combobox';
@@ -34,7 +34,7 @@ type Props = {
 const BookForm = ({ book, onCancel }: Props) => {
   const form = useForm<BookFormValues>({
     resolver: zodResolver(bookSchema),
-    defaultValues: prepareInitialBookData(book)
+    defaultValues: prepareInitialBookData(book),
   });
   const { createBook, createBookPending, updateBook, updateBookPending } =
     useBookMutations();
@@ -49,14 +49,14 @@ const BookForm = ({ book, onCancel }: Props) => {
           onSuccess: () => {
             form.reset();
             router.push(`${PATH.ADMIN_BOOKS}/${book.id}`);
-          }
+          },
         }
       );
     } else {
       createBook(formData, {
         onSuccess: () => {
           form.reset();
-        }
+        },
       });
     }
   };
@@ -65,7 +65,7 @@ const BookForm = ({ book, onCancel }: Props) => {
     files,
     handleMainFileChange,
     handleAdditionalFilesChange,
-    handleSubmit
+    handleSubmit,
   } = useBookFormSubmit(onSubmit);
 
   return (
@@ -357,18 +357,7 @@ const BookForm = ({ book, onCancel }: Props) => {
           >
             Hủy
           </Button>
-          <Button type='submit' disabled={isLoading} className='px-7'>
-            {isLoading ? (
-              <>
-                <Loader2 className='mr-2 h-4 w-4 animate-spin' />
-                Đang xử lý...
-              </>
-            ) : book ? (
-              'Cập nhật'
-            ) : (
-              'Thêm mới'
-            )}
-          </Button>
+          <SubmitBtn ID={book?.id || ''} _onPending={isLoading} />
         </div>
       </form>
     </Form>

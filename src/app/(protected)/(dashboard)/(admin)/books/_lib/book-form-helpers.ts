@@ -32,7 +32,7 @@ export function prepareInitialBookData(book?: BookFormValues): BookFormValues {
       authorIds: [],
       categoryIds: [],
       mainImageFile: undefined,
-      additionalImageFiles: []
+      additionalImageFiles: [],
     };
   }
 
@@ -73,7 +73,7 @@ export function prepareInitialBookData(book?: BookFormValues): BookFormValues {
       (book as BookWithRelations).bookCategories?.map((bc) => bc.categoryId) ||
       [],
     mainImageFile: undefined,
-    additionalImageFiles: []
+    additionalImageFiles: [],
   };
 }
 

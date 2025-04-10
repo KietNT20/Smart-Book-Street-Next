@@ -13,5 +13,5 @@ export const eventService = {
       payload
     );
     return res.data;
-  }
+  },
 };

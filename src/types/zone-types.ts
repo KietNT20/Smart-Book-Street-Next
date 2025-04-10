@@ -4,10 +4,17 @@ export interface Zone {
   id: string;
   zoneName: string;
   description: string;
-  isDeleted: boolean;
   latitude: number;
   longitude: number;
 }
+
+export type ZoneCreate = Partial<Omit<Zone, 'id'>> & {
+  streetId: string;
+};
+
+export type ZoneUpdate = Partial<Omit<Zone, 'id'>> & {
+  streetId: string;
+};
 
 export interface ZonesResponse {
   results: Zone[];

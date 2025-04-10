@@ -5,7 +5,7 @@ import axiosInstance from '@/utils/axiosInstance';
 export const authorService = {
   create: async (formData: FormData) => {
     const res = await axiosInstance.post(API_URL.AUTHORS.INDEX, formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
+      headers: { 'Content-Type': 'multipart/form-data' },
     });
     return res.data;
   },
@@ -14,7 +14,7 @@ export const authorService = {
       `${API_URL.AUTHORS.INDEX}/${id}`,
       formData,
       {
-        headers: { 'Content-Type': 'multipart/form-data' }
+        headers: { 'Content-Type': 'multipart/form-data' },
       }
     );
     return res.data;
@@ -37,5 +37,5 @@ export const authorService = {
       payload
     );
     return res.data;
-  }
+  },
 };

@@ -2,12 +2,11 @@
 
 import { RoleEnums } from '@/enums/role';
 import { ChevronRight, type LucideIcon } from 'lucide-react';
-// import { useAuth } from '@/context/auth-context';
 
 import {
   Collapsible,
   CollapsibleContent,
-  CollapsibleTrigger
+  CollapsibleTrigger,
 } from '@/components/ui/collapsible';
 import {
   SidebarGroup,
@@ -17,7 +16,7 @@ import {
   SidebarMenuItem,
   SidebarMenuSub,
   SidebarMenuSubButton,
-  SidebarMenuSubItem
+  SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
 import { useAuth } from '@/hooks/use-auth';
 import { cn } from '@/lib/utils';
@@ -60,7 +59,7 @@ export function NavMain({ items }: Props) {
           items:
             item.items?.filter(
               (subItem) => !subItem.roles || hasRole(subItem.roles)
-            ) || []
+            ) || [],
         }))
         // Hide menus without submenus
         .filter((item) => item.items && item.items.length > 0)

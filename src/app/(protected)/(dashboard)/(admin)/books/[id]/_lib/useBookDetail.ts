@@ -12,7 +12,7 @@ export const useBookDetail = ({ id }: { id: string }) => {
   const {
     data: bookDetailData,
     isLoading: bookDetailLoading,
-    isPending: bookDetailPending
+    isPending: bookDetailPending,
   } = useGetBookByID(id);
 
   const { deleteBook, deleteBookPending } = useBookMutations();
@@ -24,35 +24,35 @@ export const useBookDetail = ({ id }: { id: string }) => {
   const bookAuthorsRes = useQueries({
     queries: (book?.bookAuthors || [])?.map((bookAuth, index: number) => ({
       queryKey: ['author', index],
-      queryFn: () => authorService.getById(bookAuth.authorId)
+      queryFn: () => authorService.getById(bookAuth.authorId),
     })),
     combine: (results) => {
       return {
         data: results.map((result) => result.data),
-        pending: results.some((result) => result.isPending)
+        pending: results.some((result) => result.isPending),
       };
-    }
+    },
   });
 
   const bookCategoriesRes = useQueries({
     queries: (book?.bookCategories || [])?.map(
       (bookCategory, index: number) => ({
         queryKey: ['category', index],
-        queryFn: () => categoryService.getById(bookCategory.categoryId)
+        queryFn: () => categoryService.getById(bookCategory.categoryId),
       })
     ),
     combine: (results) => {
       return {
         data: results.map((result) => result.data),
-        pending: results.some((result) => result.isPending)
+        pending: results.some((result) => result.isPending),
       };
-    }
+    },
   });
   // Book Info Props
   const bookInfoProps = {
     book,
     bookAuthorsRes,
-    bookCategoriesRes
+    bookCategoriesRes,
   };
 
   return {
@@ -62,6 +62,6 @@ export const useBookDetail = ({ id }: { id: string }) => {
     deletedLoading,
     book,
     bookInfoProps,
-    router
+    router,
   };
 };

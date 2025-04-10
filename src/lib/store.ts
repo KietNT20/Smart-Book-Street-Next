@@ -4,13 +4,13 @@ import userReducer from './features/user/userSlice';
 export const makeStore = () => {
   return configureStore({
     reducer: {
-      user: userReducer
+      user: userReducer,
     },
     devTools: process.env.NODE_ENV !== 'production',
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
-        serializableCheck: false
-      })
+        serializableCheck: false,
+      }),
   });
 };
 

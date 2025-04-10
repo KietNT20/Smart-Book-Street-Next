@@ -5,12 +5,12 @@ import { useQuery } from '@tanstack/react-query';
 export const useStreets = () => {
   const { data, isLoading, error } = useQuery<StreetsResponse>({
     queryKey: ['streets'],
-    queryFn: () => streetService.getAll()
+    queryFn: () => streetService.getAll(),
   });
 
   return {
     streetsRes: data?.results || [],
     isLoadingStreets: isLoading,
-    errorStreets: error
+    errorStreets: error,
   };
 };

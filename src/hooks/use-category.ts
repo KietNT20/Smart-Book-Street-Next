@@ -5,14 +5,14 @@ import { toast } from 'sonner';
 export const useGetCategories = () => {
   return useQuery({
     queryKey: ['categories'],
-    queryFn: () => categoryService.getAll()
+    queryFn: () => categoryService.getAll(),
   });
 };
 
 export const useGetCategoryById = (id: string) => {
   return useQuery({
     queryKey: ['categories', id],
-    queryFn: () => categoryService.getById(id)
+    queryFn: () => categoryService.getById(id),
   });
 };
 
@@ -108,7 +108,7 @@ export const useCategoryMutation = () => {
       if (data) {
         queryClient.invalidateQueries({ queryKey: ['categories'] });
       }
-    }
+    },
   });
 
   const createCategoryMutation = useMutation({
@@ -124,14 +124,14 @@ export const useCategoryMutation = () => {
     onError: (error) => {
       toast.error('Đã xảy ra lỗi khi thêm danh mục');
       console.error('Error creating category:', error);
-    }
+    },
   });
 
   const updateCategoryMutation = useMutation({
     mutationKey: ['update-category'],
     mutationFn: ({
       id,
-      payload
+      payload,
     }: {
       id: string;
       payload: { categoryName: string; description?: string };
@@ -145,7 +145,7 @@ export const useCategoryMutation = () => {
     onError: (error) => {
       toast.error('Đã xảy ra lỗi khi cập nhật danh mục');
       console.error('Error updating category:', error);
-    }
+    },
   });
 
   const deleteCategoryMutation = useMutation({
@@ -160,7 +160,7 @@ export const useCategoryMutation = () => {
     onError: (error) => {
       toast.error('Đã xảy ra lỗi khi xóa danh mục');
       console.error('Error deleting category:', error);
-    }
+    },
   });
 
   return {
@@ -173,6 +173,6 @@ export const useCategoryMutation = () => {
     updateCategoryPending: updateCategoryMutation.isPending,
     // Delete Category
     deleteCategory: deleteCategoryMutation.mutate,
-    deleteCategoryPending: deleteCategoryMutation.isPending
+    deleteCategoryPending: deleteCategoryMutation.isPending,
   };
 };

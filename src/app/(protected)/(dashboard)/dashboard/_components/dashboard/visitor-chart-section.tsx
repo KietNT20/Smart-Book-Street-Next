@@ -6,7 +6,7 @@ import {
   CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle
+  CardTitle,
 } from '@/components/ui/card';
 import {
   Select,
@@ -15,7 +15,7 @@ import {
   SelectItem,
   SelectLabel,
   SelectTrigger,
-  SelectValue
+  SelectValue,
 } from '@/components/ui/select';
 import { TrendingUp } from 'lucide-react';
 import { useState } from 'react';
@@ -29,7 +29,7 @@ import {
   ResponsiveContainer,
   Tooltip,
   XAxis,
-  YAxis
+  YAxis,
 } from 'recharts';
 
 // Types
@@ -60,7 +60,7 @@ const hourlyData: HourlyData[] = [
   { hour: '14:00', visitors: 310 },
   { hour: '16:00', visitors: 280 },
   { hour: '18:00', visitors: 150 },
-  { hour: '20:00', visitors: 80 }
+  { hour: '20:00', visitors: 80 },
 ];
 
 const demographicsData: DemographicsData[] = [
@@ -68,7 +68,7 @@ const demographicsData: DemographicsData[] = [
   { ageGroup: '19-24', male: 800, female: 1000 },
   { ageGroup: '25-35', male: 650, female: 700 },
   { ageGroup: '36-50', male: 450, female: 500 },
-  { ageGroup: '>50', male: 200, female: 180 }
+  { ageGroup: '>50', male: 200, female: 180 },
 ];
 
 const VisitorChartSection = () => {

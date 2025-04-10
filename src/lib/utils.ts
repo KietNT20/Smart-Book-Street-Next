@@ -23,7 +23,7 @@ export const formatPrice = (
     style: options?.withSymbol === false ? 'decimal' : 'currency',
     currency: 'VND',
     notation: options?.compact ? 'compact' : 'standard',
-    maximumFractionDigits: 0
+    maximumFractionDigits: 0,
   });
 
   return formatter.format(numPrice);

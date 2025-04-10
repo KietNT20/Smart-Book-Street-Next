@@ -12,7 +12,7 @@ export enum Language {
   ITALIAN = 'it',
   ARABIC = 'ar',
   HINDI = 'hi',
-  THAI = 'th'
+  THAI = 'th',
 }
 
 export const LanguageLabels: Record<Language, string> = {
@@ -29,7 +29,7 @@ export const LanguageLabels: Record<Language, string> = {
   [Language.ITALIAN]: 'Italiano (Italian)',
   [Language.ARABIC]: 'العربية (Arabic)',
   [Language.HINDI]: 'हिन्दी (Hindi)',
-  [Language.THAI]: 'ไทย (Thai)'
+  [Language.THAI]: 'ไทย (Thai)',
 };
 
 //  (Optional) Vietnamese language labels for the languages
@@ -47,5 +47,5 @@ export const VietnameseLanguageLabels: Record<Language, string> = {
   [Language.ITALIAN]: 'Tiếng Ý',
   [Language.ARABIC]: 'Tiếng Ả Rập',
   [Language.HINDI]: 'Tiếng Hindi',
-  [Language.THAI]: 'Tiếng Thái'
+  [Language.THAI]: 'Tiếng Thái',
 };

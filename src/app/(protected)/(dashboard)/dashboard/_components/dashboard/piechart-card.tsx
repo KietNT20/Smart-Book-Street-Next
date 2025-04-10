@@ -4,12 +4,12 @@ import {
   CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle
+  CardTitle,
 } from '@/components/ui/card';
 import {
   ChartContainer,
   ChartTooltip,
-  ChartTooltipContent
+  ChartTooltipContent,
 } from '@/components/ui/chart';
 import {
   Select,
@@ -18,7 +18,7 @@ import {
   SelectItem,
   SelectLabel,
   SelectTrigger,
-  SelectValue
+  SelectValue,
 } from '@/components/ui/select';
 import { TrendingUp } from 'lucide-react';
 import { useState } from 'react';
@@ -76,7 +76,7 @@ const timeRangeOptions = [
   { value: 'this-6-months', label: '6 tháng này' },
   { value: 'last-6-months', label: '6 tháng trước' },
   { value: 'this-year', label: 'Năm nay' },
-  { value: 'last-year', label: 'Năm trước' }
+  { value: 'last-year', label: 'Năm trước' },
 ] as const;
 
 const getTimeRangeLabel = (range: TimeRange) => {
@@ -88,7 +88,7 @@ const PiechartCard = ({
   pieData,
   pieConfig,
   totalBooks,
-  onTimeRangeChange
+  onTimeRangeChange,
 }: Props) => {
   const [timeRange, setTimeRange] = useState<TimeRange>('this-6-months');
 

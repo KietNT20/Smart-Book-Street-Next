@@ -7,7 +7,7 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
+  SelectValue,
 } from '@/components/ui/select';
 import { Sort } from '@/enums/enums';
 import { PATH } from '@/enums/path';
@@ -26,8 +26,8 @@ const AuthorsPage = () => {
     sortOrder: Sort.DESC,
     sortField: 'authorName',
     result: {
-      authorName: ''
-    }
+      authorName: '',
+    },
   });
 
   const { authorsRes, authorsLoading, error } = useGetAuthors(searchParams);
@@ -40,8 +40,8 @@ const AuthorsPage = () => {
       pageNumber: 1,
       result: {
         ...prev.result,
-        authorName: value
-      }
+        authorName: value,
+      },
     }));
   };
 
@@ -49,7 +49,7 @@ const AuthorsPage = () => {
     setSearchParams((prev) => ({
       ...prev,
       pageNumber: 1,
-      sortOrder: parseInt(value)
+      sortOrder: parseInt(value),
     }));
   };
 
@@ -57,14 +57,14 @@ const AuthorsPage = () => {
     setSearchParams((prev) => ({
       ...prev,
       pageNumber: 1,
-      sortField: value
+      sortField: value,
     }));
   };
 
   const handlePageChange = (page: number) => {
     setSearchParams((prev) => ({
       ...prev,
-      pageNumber: page
+      pageNumber: page,
     }));
   };
 
@@ -72,7 +72,7 @@ const AuthorsPage = () => {
     setSearchParams((prev) => ({
       ...prev,
       pageSize: newPageSize,
-      pageNumber: 1
+      pageNumber: 1,
     }));
   };
 
@@ -82,7 +82,7 @@ const AuthorsPage = () => {
         <div className='flex items-center justify-between'>
           <h2 className='text-2xl font-bold'>Quản lý Tác giả</h2>
           <Link href={PATH.ADMIN_AUTHOR_CREATE}>
-            <Button>Thêm tác giả mới</Button>
+            <Button>Thêm tác giả</Button>
           </Link>
         </div>
 

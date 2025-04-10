@@ -10,5 +10,5 @@ export const publisherService = {
   search: async (payload: Partial<PublisherSearch>) => {
     const res = await axiosInstance.post(API_URL.PUBLISHERS.SEARCH, payload);
     return res.data;
-  }
+  },
 };

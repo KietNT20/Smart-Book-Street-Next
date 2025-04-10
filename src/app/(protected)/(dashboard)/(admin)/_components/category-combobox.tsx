@@ -6,19 +6,19 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-  CommandSeparator
+  CommandSeparator,
 } from '@/components/ui/command';
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
+  FormMessage,
 } from '@/components/ui/form';
 import {
   Popover,
   PopoverContent,
-  PopoverTrigger
+  PopoverTrigger,
 } from '@/components/ui/popover';
 import { useCategoryMutation } from '@/hooks/use-category';
 import useDebounce from '@/hooks/use-debounce';
@@ -36,7 +36,7 @@ type Props<T extends FieldValues> = {
 
 const CategoryCombobox = <T extends FieldValues>({
   name,
-  control
+  control,
 }: Props<T>) => {
   const [input, setInput] = useState('');
   const [results, setResults] = useState<Category[]>([]);
@@ -53,7 +53,7 @@ const CategoryCombobox = <T extends FieldValues>({
 
     try {
       const { results } = await searchCategoryName.mutateAsync({
-        categoryName: value
+        categoryName: value,
       });
       setResults(results);
     } catch (error) {

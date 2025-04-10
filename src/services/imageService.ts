@@ -59,5 +59,5 @@ export const imageService = {
   delete: async (id: string) => {
     const res = await axiosInstance.patch(`${API_URL.IMAGES.INDEX}/${id}`);
     return res.data;
-  }
+  },
 };

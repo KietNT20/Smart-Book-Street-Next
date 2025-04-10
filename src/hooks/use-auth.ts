@@ -5,7 +5,7 @@ import {
   hasUserRole,
   selectIsAuthenticated,
   selectProfile,
-  setUserProfile
+  setUserProfile,
 } from '@/lib/features/user/userSlice';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { userService } from '@/services/userService';
@@ -34,7 +34,7 @@ export const useRegister = () => {
     onError: (error: Error) => {
       console.log('Error register', error);
       toast.error('Đăng ký thất bại');
-    }
+    },
   });
 };
 
@@ -47,14 +47,14 @@ export const useAuth = () => {
     data: response,
     isLoading,
     isError,
-    error
+    error,
   } = useQuery({
     queryKey: ['user-profile'],
     queryFn: () => userService.getProfile(),
     retry: false,
     refetchOnWindowFocus: false,
     enabled: !!tokenMethod.get() && !profile,
-    staleTime: 1000 * 60 * 5 // 5 minutes
+    staleTime: 1000 * 60 * 5, // 5 minutes
   });
 
   useEffect(() => {
@@ -82,6 +82,6 @@ export const useAuth = () => {
     profile,
     isLoading,
     isAuthenticated,
-    hasRole
+    hasRole,
   };
 };

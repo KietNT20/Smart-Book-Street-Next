@@ -1,3 +1,3 @@
 export const STORAGE = {
-  token: 'auth_token'
+  token: 'auth_token',
 };
