@@ -1,9 +1,9 @@
 import { API_URL } from '@/constant/api-url';
-import { RolePayload } from '@/types/user-types';
+import { RolePayload, RolesResponse } from '@/types/user-types';
 import axiosInstance from '@/utils/axiosInstance';
 
 export const roleService = {
-  getAll: async () => {
+  getAll: async (): Promise<RolesResponse> => {
     const res = await axiosInstance.get(API_URL.ROLES.INDEX);
     return res.data;
   },

@@ -28,7 +28,7 @@ export const useStores = ({
       }),
   });
 
-  const totalPages = storesRes?.totalPages || 0;
+  const totalPages = storesRes?.totalPages || 1;
 
   // Prefetch the next page of stores
   if (pageNumber < totalPages) {
@@ -94,7 +94,7 @@ export const useStoreMutation = () => {
         toast.success('Tạo cửa hàng thành công!');
       }
     },
-    onError: (error: unknown) => {
+    onError: (error: Error) => {
       toast.error('Tạo cửa hàng không thành công!');
       console.error('Error creating store:', error);
     },
@@ -110,7 +110,7 @@ export const useStoreMutation = () => {
         toast.success('Cập nhật cửa hàng thành công!');
       }
     },
-    onError: (error: unknown) => {
+    onError: (error: Error) => {
       toast.error('Cập nhật cửa hàng không thành công!');
       console.error('Error updating store:', error);
     },
@@ -125,7 +125,7 @@ export const useStoreMutation = () => {
         toast.success('Xóa cửa hàng thành công!');
       }
     },
-    onError: (error: unknown) => {
+    onError: (error: Error) => {
       toast.error('Xóa cửa hàng không thành công!');
       console.error('Error deleting store:', error);
     },

@@ -4,7 +4,11 @@ import {
   LoginResponse,
   RegisterRequestBody,
 } from '@/types/auth-types';
-import { UserProfileResponse } from '@/types/user-types';
+import {
+  UserParams,
+  UserProfileResponse,
+  UsersResponse,
+} from '@/types/user-types';
 import axiosInstance from '@/utils/axiosInstance';
 
 export const userService = {
@@ -18,6 +22,13 @@ export const userService = {
   },
   getProfile: async (): Promise<UserProfileResponse> => {
     const res = await axiosInstance.get(`${API_URL.USERS.PROFILE}`);
+    return res.data;
+  },
+  getUsersParams: async (params: UserParams): Promise<UsersResponse> => {
+    const res = await axiosInstance.post(
+      `${API_URL.USERS.PAGINATION_SEARCH}`,
+      params
+    );
     return res.data;
   },
 };

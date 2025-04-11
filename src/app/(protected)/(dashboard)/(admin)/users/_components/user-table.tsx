@@ -1,4 +1,5 @@
 import { ConfirmModal } from '@/components/confirm-modal';
+import { UserRoleSelector } from '@/components/select/select-role';
 import { TableSkeleton } from '@/components/table-skeleton';
 import { Button } from '@/components/ui/button';
 import {
@@ -33,8 +34,9 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Sort } from '@/enums/enums';
-import { useStoreMutation } from '@/hooks/use-store';
-import { StoreData } from '@/types/store-types';
+import { usePublisherMutation } from '@/hooks/use-publisher';
+import { useRoles } from '@/hooks/use-role';
+import { User } from '@/types/user-types';
 import {
   ArrowUpDown,
   Eye,
@@ -46,8 +48,8 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 
-interface StoreTableProps {
-  stores: StoreData[];
+type Props = {
+  users: User[];
   isLoading: boolean;
   isSearching: boolean;
   totalPages: number;
@@ -60,10 +62,10 @@ interface StoreTableProps {
   handleSort: (field: string) => void;
   onViewStore: (id: string) => void;
   onEditStore: (id: string) => void;
-}
+};
 
-export const StoreTable = ({
-  stores,
+const UserTable = ({
+  users,
   isLoading,
   isSearching,
   totalPages,
@@ -76,11 +78,15 @@ export const StoreTable = ({
   handleSort,
   onViewStore,
   onEditStore,
-}: StoreTableProps) => {
+}: Props) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [storeToDelete, setStoreToDelete] = useState<string | null>(null);
+  const [publisherToDelete, setPublisherToDelete] = useState<string | null>(
+    null
+  );
 
-  const { deleteStore } = useStoreMutation();
+  const { deletePublisher } = usePublisherMutation();
+
+  const { roles, isLoading: isLoadingRoles } = useRoles();
 
   // Handle page size change
   const handlePageSizeChange = (value: string) => {
@@ -89,20 +95,20 @@ export const StoreTable = ({
   };
 
   // Handle opening delete dialog
-  const handleDeleteClick = (storeId: string) => {
-    setStoreToDelete(storeId);
+  const handleDeleteClick = (publisherId: string) => {
+    setPublisherToDelete(publisherId);
     setDeleteDialogOpen(true);
   };
 
   // Handle delete confirmation
   const handleDeleteConfirm = () => {
-    if (storeToDelete) {
+    if (publisherToDelete) {
       // Call API to delete store with the store ID
-      deleteStore(storeToDelete);
+      deletePublisher(publisherToDelete);
 
       // Close dialog and reset state
       setDeleteDialogOpen(false);
-      setStoreToDelete(null);
+      setPublisherToDelete(null);
     }
   };
 
@@ -115,7 +121,6 @@ export const StoreTable = ({
       totalPagesCount - pagesToShow + 1
     )
   );
-
   return (
     <>
       {/* Table */}
@@ -125,52 +130,35 @@ export const StoreTable = ({
             <TableRow>
               <TableHead
                 className='cursor-pointer'
-                onClick={() => handleSort('StoreName')}
+                onClick={() => handleSort('UserName')}
               >
                 <Button variant='ghost'>
-                  Tên cửa hàng
-                  {sortField === 'StoreName' ? (
+                  Tài khoản
+                  {sortField === 'UserName' ? (
                     sortOrder === Sort.ASC ? (
-                      <SortAsc />
+                      <SortAsc className='ml-2 h-4 w-4' />
                     ) : (
-                      <SortDesc />
+                      <SortDesc className='ml-2 h-4 w-4' />
                     )
                   ) : (
-                    <ArrowUpDown />
+                    <ArrowUpDown className='ml-2 h-4 w-4' />
                   )}
                 </Button>
               </TableHead>
               <TableHead
                 className='cursor-pointer'
-                onClick={() => handleSort('Address')}
+                onClick={() => handleSort('FullName')}
               >
                 <Button variant='ghost'>
-                  Địa chỉ
-                  {sortField === 'Address' ? (
+                  Tên nguời dùng
+                  {sortField === 'FullName' ? (
                     sortOrder === Sort.ASC ? (
-                      <SortAsc />
+                      <SortAsc className='ml-2 h-4 w-4' />
                     ) : (
-                      <SortDesc />
+                      <SortDesc className='ml-2 h-4 w-4' />
                     )
                   ) : (
-                    <ArrowUpDown />
-                  )}
-                </Button>
-              </TableHead>
-              <TableHead
-                className='cursor-pointer'
-                onClick={() => handleSort('Phone')}
-              >
-                <Button variant='ghost'>
-                  Số điện thoại
-                  {sortField === 'Phone' ? (
-                    sortOrder === Sort.ASC ? (
-                      <SortAsc />
-                    ) : (
-                      <SortDesc />
-                    )
-                  ) : (
-                    <ArrowUpDown />
+                    <ArrowUpDown className='ml-2 h-4 w-4' />
                   )}
                 </Button>
               </TableHead>
@@ -182,37 +170,63 @@ export const StoreTable = ({
                   Email
                   {sortField === 'Email' ? (
                     sortOrder === Sort.ASC ? (
-                      <SortAsc />
+                      <SortAsc className='ml-2 h-4 w-4' />
                     ) : (
-                      <SortDesc />
+                      <SortDesc className='ml-2 h-4 w-4' />
                     )
                   ) : (
-                    <ArrowUpDown />
+                    <ArrowUpDown className='ml-2 h-4 w-4' />
                   )}
                 </Button>
               </TableHead>
+              <TableHead
+                className='cursor-pointer'
+                onClick={() => handleSort('Phone')}
+              >
+                <Button variant='ghost'>
+                  Số điện thoại
+                  {sortField === 'Phone' ? (
+                    sortOrder === Sort.ASC ? (
+                      <SortAsc className='ml-2 h-4 w-4' />
+                    ) : (
+                      <SortDesc className='ml-2 h-4 w-4' />
+                    )
+                  ) : (
+                    <ArrowUpDown className='ml-2 h-4 w-4' />
+                  )}
+                </Button>
+              </TableHead>
+              <TableHead>Date of birth</TableHead>
+              <TableHead>Vai trò</TableHead>
               <TableHead className='text-right'>Thao tác</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {isLoading ? (
-              <TableSkeleton columns={6} rows={pageSize} />
-            ) : stores.length === 0 ? (
+              <TableSkeleton columns={7} rows={pageSize} />
+            ) : users.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={6} className='py-10 text-center'>
-                  Không tìm thấy cửa hàng.{' '}
+                <TableCell colSpan={7} className='py-10 text-center'>
+                  Không tìm thấy người dùng.{' '}
                   {isSearching && 'Hãy thử một từ khóa tìm kiếm khác.'}
                 </TableCell>
               </TableRow>
             ) : (
-              stores.map((store) => (
-                <TableRow key={store.id}>
-                  <TableCell className='font-medium'>
-                    {store.storeName}
+              users.map((user) => (
+                <TableRow key={user.id}>
+                  <TableCell className='font-medium'>{user.userName}</TableCell>
+                  <TableCell>{user.fullName}</TableCell>
+                  <TableCell>{user.email}</TableCell>
+                  <TableCell>{user.phone}</TableCell>
+                  <TableCell>{user.dob}</TableCell>
+                  <TableCell>
+                    <UserRoleSelector
+                      userId={user.id || ''}
+                      currentRoleId={user.userRoles}
+                      roles={roles}
+                      isLoading={isLoadingRoles}
+                    />
                   </TableCell>
-                  <TableCell>{store.address}</TableCell>
-                  <TableCell>{store.phone}</TableCell>
-                  <TableCell>{store.email}</TableCell>
                   <TableCell className='text-right'>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -223,20 +237,20 @@ export const StoreTable = ({
                       <DropdownMenuContent align='end'>
                         <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
                         <DropdownMenuItem
-                          onClick={() => onViewStore(store.id || '')}
+                          onClick={() => onViewStore(user.id || '')}
                         >
                           <Eye className='mr-2 h-4 w-4' />
                           Xem chi tiết
                         </DropdownMenuItem>
                         <DropdownMenuItem
-                          onClick={() => onEditStore(store.id || '')}
+                          onClick={() => onEditStore(user.id || '')}
                         >
                           <FileEdit className='mr-2 h-4 w-4' />
                           Chỉnh sửa
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className='text-destructive'
-                          onClick={() => handleDeleteClick(store.id || '')}
+                          onClick={() => handleDeleteClick(user.id || '')}
                         >
                           <Trash2 className='mr-2 h-4 w-4' />
                           Xóa
@@ -365,9 +379,11 @@ export const StoreTable = ({
         onClose={() => setDeleteDialogOpen(false)}
         variant='destructive'
         title='Xác nhận xóa'
-        description='Bạn có chắc chắn muốn xóa cửa hàng này không? Hành động này không thể hoàn tác.'
+        description='Bạn có chắc chắn muốn xóa người dùng này không? Hành động này không thể hoàn tác.'
         onConfirm={handleDeleteConfirm}
       />
     </>
   );
 };
+
+export default UserTable;

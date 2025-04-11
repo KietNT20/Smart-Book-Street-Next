@@ -56,6 +56,7 @@ const BookForm = ({ book, onCancel }: Props) => {
       createBook(formData, {
         onSuccess: () => {
           form.reset();
+          router.push(PATH.ADMIN_BOOKS);
         },
       });
     }
@@ -168,7 +169,7 @@ const BookForm = ({ book, onCancel }: Props) => {
                 </FormLabel>
                 <FormControl>
                   <BookSelectLang
-                    value={field.value}
+                    value={field.value!}
                     onValueChange={field.onChange}
                     disabled={false}
                     className={cn(

@@ -32,7 +32,7 @@ export const usePublishers = ({
   });
 
   // Prefetch data for pagination
-  const totalPage = data?.totalPages || 0;
+  const totalPage = data?.totalPages || 1;
 
   if (pageNumber < totalPage) {
     queryClient.prefetchQuery({
@@ -102,7 +102,7 @@ export const usePublisherMutation = () => {
         toast.success('Tạo nhà xuất bản thành công');
       }
     },
-    onError: (error: unknown) => {
+    onError: (error: Error) => {
       toast.error('Tạo nhà xuất bản thất bại');
       console.error('Error creating publisher:', error);
     },
@@ -118,7 +118,7 @@ export const usePublisherMutation = () => {
         toast.success('Cập nhật nhà xuất bản thành công');
       }
     },
-    onError: (error: unknown) => {
+    onError: (error: Error) => {
       toast.error('Cập nhật nhà xuất bản thất bại');
       console.error('Error updating publisher:', error);
     },
@@ -133,7 +133,7 @@ export const usePublisherMutation = () => {
         toast.success('Xóa nhà xuất bản thành công');
       }
     },
-    onError: (error: unknown) => {
+    onError: (error: Error) => {
       toast.error('Xóa nhà xuất bản thất bại');
       console.error('Error deleting publisher:', error);
     },

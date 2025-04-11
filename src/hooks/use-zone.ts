@@ -38,7 +38,7 @@ export const useZones = ({
   });
 
   // Prefetching data
-  const totalPages = data?.totalPages || 0;
+  const totalPages = data?.totalPages || 1;
 
   if (pageNumber < totalPages) {
     queryClient.prefetchQuery({
@@ -101,7 +101,7 @@ export const useZoneMutation = () => {
         toast.success('Tạo khu vực thành công!');
       }
     },
-    onError: (error: unknown) => {
+    onError: (error: Error) => {
       toast.error(`Lỗi khi tạo khu vực, vui lòng thử lại!`);
       console.error('Error creating zone:', error);
     },
@@ -117,7 +117,7 @@ export const useZoneMutation = () => {
         toast.success('Cập nhật khu vực thành công!');
       }
     },
-    onError: (error: unknown) => {
+    onError: (error: Error) => {
       toast.error(`Lỗi khi cập nhật khu vực, vui lòng thử lại!`);
       console.error('Error updating zone:', error);
     },
@@ -132,7 +132,7 @@ export const useZoneMutation = () => {
         toast.success('Xóa khu vực thành công!');
       }
     },
-    onError: (error: unknown) => {
+    onError: (error: Error) => {
       toast.error(`Lỗi khi xóa khu vực, vui lòng thử lại!`);
       console.error('Error deleting zone:', error);
     },

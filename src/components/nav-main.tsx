@@ -86,7 +86,7 @@ export function NavMain({ items }: Props) {
                 <SidebarMenuButton tooltip={item.title}>
                   {item.icon && <item.icon />}
                   <span>{item.title}</span>
-                  <ChevronRight className='ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90' />
+                  <ChevronRight className='ml-auto transition-transform duration-300 group-data-[state=open]/collapsible:rotate-90' />
                 </SidebarMenuButton>
               </CollapsibleTrigger>
               <CollapsibleContent>
@@ -94,13 +94,14 @@ export function NavMain({ items }: Props) {
                   {item.items?.map((subItem) => (
                     <SidebarMenuSubItem key={subItem.title}>
                       <SidebarMenuSubButton asChild>
-                        <Link
-                          href={subItem.url}
-                          className={cn(
-                            pathname === subItem.url ? 'bg-primary' : ''
-                          )}
-                        >
-                          <span>{subItem.title}</span>
+                        <Link href={subItem.url}>
+                          <span
+                            className={cn(
+                              pathname === subItem.url ? 'text-primary' : ''
+                            )}
+                          >
+                            {subItem.title}
+                          </span>
                         </Link>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>

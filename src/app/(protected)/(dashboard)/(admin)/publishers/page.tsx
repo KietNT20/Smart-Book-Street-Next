@@ -84,7 +84,7 @@ const PublishersPage = () => {
     setIsSearching(false);
   };
 
-  const handleEditStore = (publisherId: string) => {
+  const handleEditPublisher = (publisherId: string) => {
     router.push(`${PATH.PUBLISHERS}/${publisherId}/edit`);
   };
 
@@ -124,7 +124,7 @@ const PublishersPage = () => {
         sortOrder={sortOrder}
         handleSort={handleSort}
         onViewStore={handleViewPublisherDetail}
-        onEditStore={handleEditStore}
+        onEditStore={handleEditPublisher}
       />
     </div>
   );

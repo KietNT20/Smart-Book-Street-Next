@@ -1,3 +1,4 @@
+import { Language } from '@/enums/lang';
 import { BookFormValues } from '@/lib/zod';
 import { BookAuthorIds, BookCategoryIds } from '@/types/book-types';
 import dayjs from 'dayjs';
@@ -24,7 +25,7 @@ export function prepareInitialBookData(book?: BookFormValues): BookFormValues {
       title: '',
       publicationDate: '',
       price: 1000,
-      languages: '',
+      languages: Language.VIETNAMESE,
       description: '',
       size: '',
       status: '',

@@ -1,3 +1,4 @@
+import { Sort } from '@/enums/enums';
 import { RoleEnums } from '@/enums/role';
 import { BaseEntity } from './common-types';
 import { ImageType } from './image-types';
@@ -10,6 +11,13 @@ export interface Role extends BaseEntity {
     | RoleEnums.STORE_MANAGER;
   description: string;
 }
+
+export type RolesResponse = {
+  results: Role[];
+  totalRecords: number;
+  isSuccess: true;
+  message: string;
+};
 
 export type UserRolePayload = {
   userId: string;
@@ -35,15 +43,15 @@ export interface User extends BaseEntity {
   password: string;
   email: string;
   fullName: string;
-  dob: string;
+  dob: string | null;
   address: string;
   phone: string;
   gender: string;
-  mainImageFile: string;
+  mainImageFile: string | null;
   additionalImageFiles: string[] | null;
-  store: unknown;
   publisher: Publisher;
   userRoles: UserRole[];
+  userStores: any[];
   images: ImageType[];
 }
 
@@ -51,4 +59,28 @@ export interface UserProfileResponse {
   result: User;
   isSuccess: boolean;
   message: string;
+}
+
+export interface UsersResponse {
+  results: User[];
+  totalPages: number;
+  totalRecords: number;
+  pageNumber: number;
+  pageSize: number;
+}
+
+export interface UserParams {
+  pageNumber: number;
+  pageSize: number;
+  sortField: string;
+  sortOrder: Sort.ASC | Sort.DESC;
+  result: {
+    userName?: string;
+    email?: string;
+    fullName?: string;
+    dob?: string;
+    address?: string;
+    phone?: string;
+    gender?: string;
+  };
 }

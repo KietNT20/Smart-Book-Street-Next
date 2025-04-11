@@ -37,7 +37,7 @@ export const useGetAuthors = ({
       }),
   });
   // Prefetching
-  const totalPage = data?.totalPages || 0;
+  const totalPage = data?.totalPages || 1;
 
   if (pageNumber < totalPage) {
     queryClient.prefetchQuery({
@@ -51,11 +51,11 @@ export const useGetAuthors = ({
       ],
       queryFn: () =>
         authorService.searchPagination({
-          pageNumber: pageNumber + 1,
-          pageSize,
+          result,
           sortField,
           sortOrder,
-          result,
+          pageSize,
+          pageNumber: pageNumber + 1,
         }),
     });
   }
@@ -72,11 +72,11 @@ export const useGetAuthors = ({
       ],
       queryFn: () =>
         authorService.searchPagination({
-          pageNumber: pageNumber - 1,
-          pageSize,
+          result,
           sortField,
           sortOrder,
-          result,
+          pageSize,
+          pageNumber: pageNumber - 1,
         }),
     });
   }
@@ -108,7 +108,7 @@ export const useAuthorMutation = () => {
       }
       queryClient.invalidateQueries({ queryKey: ['authors'] });
     },
-    onError: (error: unknown) => {
+    onError: (error: Error) => {
       console.error('Error Add Author:', error);
     },
   });
@@ -124,7 +124,7 @@ export const useAuthorMutation = () => {
       }
       queryClient.invalidateQueries({ queryKey: ['authors'] });
     },
-    onError: (error: unknown) => {
+    onError: (error: Error) => {
       console.error('Error Update Author:', error);
     },
   });
@@ -135,7 +135,7 @@ export const useAuthorMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['authors'] });
     },
-    onError: (error: unknown) => {
+    onError: (error: Error) => {
       console.error('Error Delete Author:', error);
     },
   });
