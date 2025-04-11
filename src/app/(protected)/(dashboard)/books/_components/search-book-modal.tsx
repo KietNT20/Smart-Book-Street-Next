@@ -32,7 +32,8 @@ export function SearchBookModal({ isOpen, onClose, onSearch }: Props) {
       title: '',
       status: '',
       languages: '',
-      price: 0,
+      minPrice: undefined,
+      maxPrice: undefined,
       startDate: '',
       endDate: '',
     },
@@ -58,7 +59,8 @@ export function SearchBookModal({ isOpen, onClose, onSearch }: Props) {
       endDate: values.endDate
         ? new Date(values.endDate).toISOString()
         : undefined,
-      price: values.price,
+      minPrice: values.minPrice || undefined,
+      maxPrice: values.maxPrice || undefined,
     };
 
     // Remove empty values
@@ -202,13 +204,32 @@ export function SearchBookModal({ isOpen, onClose, onSearch }: Props) {
               <div className='col-span-3'>
                 <Input
                   type='number'
-                  placeholder='Nhập giá'
-                  {...register('price', { valueAsNumber: true })}
-                  className={cn(errors.price && 'border-red-500')}
+                  min={0}
+                  placeholder='Nhập giá tối thiểu'
+                  {...register('minPrice', { valueAsNumber: true })}
+                  className={cn(errors.minPrice && 'border-red-500')}
                 />
-                {errors.price && (
+                {errors.minPrice && (
                   <span className='text-sm text-red-500'>
-                    {errors.price.message}
+                    {errors.minPrice.message}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <div className='grid grid-cols-4 items-center gap-4'>
+              <Label className='text-right'>Giá tối đa</Label>
+              <div className='col-span-3'>
+                <Input
+                  type='number'
+                  min={0}
+                  placeholder='Nhập giá tối đa'
+                  {...register('maxPrice', { valueAsNumber: true })}
+                  className={cn(errors.maxPrice && 'border-red-500')}
+                />
+                {errors.maxPrice && (
+                  <span className='text-sm text-red-500'>
+                    {errors.maxPrice.message}
                   </span>
                 )}
               </div>
