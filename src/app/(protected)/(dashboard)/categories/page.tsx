@@ -118,7 +118,7 @@ export default function CategoriesPage() {
 
       <ConfirmModal
         isOpen={isDeleteDialogOpen}
-        onClose={() => setIsDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
         onConfirm={confirmDelete}
         title='Bạn có chắc chắn muốn xóa?'
         description='Hành động này không thể hoàn tác. Danh mục này sẽ bị xóa khỏi hệ thống.'
