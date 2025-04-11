@@ -23,18 +23,10 @@ import {
 import useDebounce from '@/hooks/use-debounce';
 import { usePublisherMutation } from '@/hooks/use-publisher';
 import { cn } from '@/lib/utils';
+import { Publisher } from '@/types/publisher-types';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { useState } from 'react';
 import { Control, FieldValues, Path } from 'react-hook-form';
-
-type Publisher = {
-  id: string;
-  publisherName: string;
-  address: string;
-  phone: string;
-  email: string;
-  website: string;
-};
 
 type Props<T extends FieldValues> = {
   name: Path<T>;
@@ -71,8 +63,15 @@ const PublisherCombobox = <T extends FieldValues>({
     }
 
     try {
-      const { results } = await searchPublisher.mutateAsync(newSearchInputs);
-      setResults(results);
+      await searchPublisher.mutateAsync(newSearchInputs, {
+        onSuccess: (data) => {
+          if (data.isSuccess) {
+            setResults(data.results);
+          } else {
+            setResults([]);
+          }
+        },
+      });
     } catch (error) {
       console.error('Failed to search publisher:', error);
       setResults([]);

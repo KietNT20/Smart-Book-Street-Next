@@ -1,13 +1,16 @@
 import { Sort } from '@/enums/enums';
 import { BaseEntity } from './common-types';
+import { ImageType } from './image-types';
 
 export interface Publisher extends BaseEntity {
   publisherName: string;
   address: string;
   phone: string;
   email: string;
-  website?: string;
   description: string;
+  website?: string;
+  images?: ImageType[];
+  managerId?: string;
 }
 
 export type PublishersResponse = {

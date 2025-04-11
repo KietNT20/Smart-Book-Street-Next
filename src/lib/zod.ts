@@ -180,7 +180,9 @@ export const publisherFormSchema = z.object({
   publisherName: z
     .string()
     .min(1, { message: 'Tên nhà xuất bản không được để trống' }),
-  address: z.string().optional(),
+  managerId: z.string().min(1, {
+    message: 'Vui lòng chọn người quản lý',
+  }),
   phone: z
     .string()
     .refine(
@@ -194,6 +196,7 @@ export const publisherFormSchema = z.object({
     )
     .optional(),
   email: z.string().email({ message: 'Email không hợp lệ' }).optional(),
+  address: z.string().optional(),
   description: z.string().optional(),
   website: z.string().optional(),
   mainImageFile: z.instanceof(File).optional().or(z.string().optional()),
