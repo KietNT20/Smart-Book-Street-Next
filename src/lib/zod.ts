@@ -102,17 +102,37 @@ export const searchBookSchema = z
   .object({
     code: z.string().optional(),
     title: z.string().optional(),
-    status: z.string().optional(),
+    minPrice: z.number().optional(),
+    maxPrice: z.number().optional(),
     languages: z.string().optional(),
-    price: z.number().min(0, { message: 'Giá không được âm' }).optional(),
+    size: z.string().optional(),
+    status: z.string().optional(),
     startDate: z.string().optional(),
     endDate: z.string().optional(),
+    categoryId: z.string().optional(),
+    authorId: z.string().optional(),
   })
   .refine(
     (data) => {
+      // Only apply this validation if both values are present
+      if (data.minPrice !== undefined && data.maxPrice !== undefined) {
+        return data.maxPrice >= data.minPrice;
+      }
+      // Return true if we don't need to validate
+      return true;
+    },
+    {
+      message: 'Giá tối đa phải lớn hơn hoặc bằng giá tối thiểu',
+      path: ['maxPrice'],
+    }
+  )
+  .refine(
+    (data) => {
+      // Only apply this validation if both values are present
       if (data.startDate && data.endDate) {
         return data.endDate >= data.startDate;
       }
+      // Return true if we don't need to validate
       return true;
     },
     {
