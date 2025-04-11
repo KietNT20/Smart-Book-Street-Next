@@ -73,12 +73,15 @@ export type BookSearchCriteria = {
   code?: string;
   title?: string;
   price?: number;
+  minPrice?: number;
+  maxPrice?: number;
   languages?: string;
   size?: string;
   status?: string;
   startDate?: string;
   endDate?: string;
   categoryId?: string;
+  authorId?: string;
 };
 
 export type BookPaginated = {

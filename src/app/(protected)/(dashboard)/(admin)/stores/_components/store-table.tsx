@@ -1,13 +1,6 @@
+import { ConfirmModal } from '@/components/confirm-modal';
 import { TableSkeleton } from '@/components/table-skeleton';
 import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -41,7 +34,7 @@ import {
 } from '@/components/ui/table';
 import { Sort } from '@/enums/enums';
 import { useStoreMutation } from '@/hooks/use-store';
-import { formateDateVi } from '@/lib/utils';
+import { StoreData } from '@/types/store-types';
 import {
   Eye,
   FileEdit,
@@ -52,18 +45,8 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 
-export interface Store {
-  id: string;
-  storeName: string;
-  address: string;
-  phone: string;
-  email: string;
-  openingTime: string;
-  closingTime: string;
-}
-
 interface StoreTableProps {
-  stores: Store[];
+  stores: StoreData[];
   isLoading: boolean;
   isSearching: boolean;
   totalPages: number;
@@ -182,7 +165,6 @@ export const StoreTable = ({
                 </div>
               </TableHead>
               <TableHead>Email</TableHead>
-              <TableHead>Giờ làm việc</TableHead>
               <TableHead className='text-right'>Thao tác</TableHead>
             </TableRow>
           </TableHeader>
@@ -192,8 +174,8 @@ export const StoreTable = ({
             ) : stores.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={6} className='py-10 text-center'>
-                  No stores found.{' '}
-                  {isSearching && 'Try a different search term.'}
+                  Không tìm thấy cửa hàng.{' '}
+                  {isSearching && 'Hãy thử một từ khóa tìm kiếm khác.'}
                 </TableCell>
               </TableRow>
             ) : (
@@ -205,7 +187,6 @@ export const StoreTable = ({
                   <TableCell>{store.address}</TableCell>
                   <TableCell>{store.phone}</TableCell>
                   <TableCell>{store.email}</TableCell>
-                  <TableCell>{`${formateDateVi(store.openingTime)} - ${formateDateVi(store.closingTime)}`}</TableCell>
                   <TableCell className='text-right'>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -215,17 +196,21 @@ export const StoreTable = ({
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align='end'>
                         <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
-                        <DropdownMenuItem onClick={() => onViewStore(store.id)}>
+                        <DropdownMenuItem
+                          onClick={() => onViewStore(store.id || '')}
+                        >
                           <Eye className='mr-2 h-4 w-4' />
                           Xem chi tiết
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => onEditStore(store.id)}>
+                        <DropdownMenuItem
+                          onClick={() => onEditStore(store.id || '')}
+                        >
                           <FileEdit className='mr-2 h-4 w-4' />
                           Chỉnh sửa
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className='text-destructive'
-                          onClick={() => handleDeleteClick(store.id)}
+                          onClick={() => handleDeleteClick(store.id || '')}
                         >
                           <Trash2 className='mr-2 h-4 w-4' />
                           Xóa
@@ -349,28 +334,14 @@ export const StoreTable = ({
       </div>
 
       {/* Delete Confirmation Dialog */}
-      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <DialogContent className='sm:max-w-[425px]'>
-          <DialogHeader>
-            <DialogTitle>Xác nhận xóa</DialogTitle>
-            <DialogDescription>
-              Bạn có chắc chắn muốn xóa cửa hàng này không? Hành động này không
-              thể hoàn tác.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter className='mt-4'>
-            <Button
-              variant='outline'
-              onClick={() => setDeleteDialogOpen(false)}
-            >
-              Hủy
-            </Button>
-            <Button variant='destructive' onClick={handleDeleteConfirm}>
-              Xóa
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <ConfirmModal
+        isOpen={deleteDialogOpen}
+        onClose={() => setDeleteDialogOpen(false)}
+        variant='destructive'
+        title='Xác nhận xóa'
+        description='Bạn có chắc chắn muốn xóa cửa hàng này không? Hành động này không thể hoàn tác.'
+        onConfirm={handleDeleteConfirm}
+      />
     </>
   );
 };

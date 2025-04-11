@@ -11,21 +11,21 @@ import { ChevronDown, ChevronUp, X } from 'lucide-react';
 import { useState } from 'react';
 import { SearchFilters } from '../page';
 
-interface StoreFilterProps {
+type Props = {
   filters: SearchFilters;
   setFilters: (filters: SearchFilters) => void;
   isSearching: boolean;
   onSearch: () => void;
   onClearSearch: () => void;
-}
+};
 
-const StoreFilter = ({
+const PublisherFilter = ({
   filters,
   setFilters,
   isSearching,
   onSearch,
   onClearSearch,
-}: StoreFilterProps) => {
+}: Props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleInputChange = (
@@ -66,22 +66,22 @@ const StoreFilter = ({
           <CollapsibleContent>
             <div className='grid grid-cols-1 gap-4 pt-2 md:grid-cols-2 lg:grid-cols-3'>
               <div className='space-y-2'>
-                <Label htmlFor='storeName'>Tên cửa hàng</Label>
+                <Label htmlFor='publisherName'>Tên Nhà xuất bản</Label>
                 <div className='relative'>
                   <Input
-                    id='storeName'
-                    placeholder='Tìm theo tên cửa hàng...'
-                    value={filters.storeName || ''}
+                    id='publisherName'
+                    placeholder='Tìm theo tên nhà xuất bản...'
+                    value={filters.publisherName || ''}
                     onChange={(e) =>
-                      handleInputChange('storeName', e.target.value)
+                      handleInputChange('publisherName', e.target.value)
                     }
                   />
-                  {filters.storeName && (
+                  {filters.publisherName && (
                     <Button
                       variant='ghost'
                       size='icon'
                       className='absolute right-0 top-0 h-full'
-                      onClick={() => clearField('storeName')}
+                      onClick={() => clearField('publisherName')}
                     >
                       <X className='h-4 w-4' />
                     </Button>
@@ -158,44 +158,22 @@ const StoreFilter = ({
               </div>
 
               <div className='space-y-2'>
-                <Label htmlFor='storeTheme'>Chủ đề của cửa hàng</Label>
+                <Label htmlFor='website'>Website</Label>
                 <div className='relative'>
                   <Input
-                    id='storeTheme'
-                    placeholder='Tìm theo chủ đề cửa hàng...'
-                    value={filters.storeTheme || ''}
+                    id='website'
+                    placeholder='Tìm theo website...'
+                    value={filters.website || ''}
                     onChange={(e) =>
-                      handleInputChange('storeTheme', e.target.value)
+                      handleInputChange('website', e.target.value)
                     }
                   />
-                  {filters.storeTheme && (
+                  {filters.website && (
                     <Button
                       variant='ghost'
                       size='icon'
                       className='absolute right-0 top-0 h-full'
-                      onClick={() => clearField('storeTheme')}
-                    >
-                      <X className='h-4 w-4' />
-                    </Button>
-                  )}
-                </div>
-              </div>
-
-              <div className='space-y-2'>
-                <Label htmlFor='type'>Loại cửa hàng</Label>
-                <div className='relative'>
-                  <Input
-                    id='type'
-                    placeholder='Tìm theo loại cửa hàng...'
-                    value={filters.type || ''}
-                    onChange={(e) => handleInputChange('type', e.target.value)}
-                  />
-                  {filters.type && (
-                    <Button
-                      variant='ghost'
-                      size='icon'
-                      className='absolute right-0 top-0 h-full'
-                      onClick={() => clearField('type')}
+                      onClick={() => clearField('website')}
                     >
                       <X className='h-4 w-4' />
                     </Button>
@@ -209,4 +187,4 @@ const StoreFilter = ({
     </Card>
   );
 };
-export default StoreFilter;
+export default PublisherFilter;

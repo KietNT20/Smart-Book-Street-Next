@@ -4,19 +4,20 @@ import { Button } from '@/components/ui/button';
 import { Sort } from '@/enums/enums';
 import { PATH } from '@/enums/path';
 import { useStores } from '@/hooks/use-store';
+import { Plus } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { StoreTable } from './_components/store-table';
 import StoreFilter from './_components/store-filter';
+import { StoreTable } from './_components/store-table';
 
-interface SearchFilters {
-  bookStoreName?: string;
+export interface SearchFilters {
+  storeName?: string;
   address?: string;
   phone?: string;
   email?: string;
-  openingTime?: string | null;
-  closingTime?: string | null;
+  storeTheme?: string;
+  type?: string;
 }
 
 export default function StoresPage() {
@@ -25,12 +26,12 @@ export default function StoresPage() {
   const [sortField, setSortField] = useState<string>('');
   const [sortOrder, setSortOrder] = useState<Sort>(Sort.DESC);
   const [filters, setFilters] = useState<SearchFilters>({
-    bookStoreName: '',
+    storeName: '',
     address: '',
     phone: '',
     email: '',
-    openingTime: null,
-    closingTime: null,
+    storeTheme: '',
+    type: '',
   });
   const [isSearching, setIsSearching] = useState(false);
 
@@ -76,12 +77,12 @@ export default function StoresPage() {
 
   const clearSearch = () => {
     setFilters({
-      bookStoreName: '',
+      storeName: '',
       address: '',
       phone: '',
       email: '',
-      openingTime: null,
-      closingTime: null,
+      storeTheme: '',
+      type: '',
     });
     setIsSearching(false);
   };
@@ -99,7 +100,9 @@ export default function StoresPage() {
       <div className='mb-4 flex items-center justify-between'>
         <h2 className='text-2xl font-bold'>Quản lý cửa hàng</h2>
         <Link href={PATH.STORE_CREATE} passHref>
-          <Button>Thêm cửa hàng mới</Button>
+          <Button>
+            <Plus /> Thêm cửa hàng mới
+          </Button>
         </Link>
       </div>
 
