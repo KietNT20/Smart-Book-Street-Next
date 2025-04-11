@@ -11,6 +11,7 @@ export type Street = {
 export type StreetsResponse = {
   results: Street[];
   totalRecords: number;
+  totalPages: number;
   isSuccess: boolean;
   message: string;
 };

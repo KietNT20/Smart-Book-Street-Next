@@ -4,7 +4,10 @@ import { ImageType } from './image-types';
 import { Publisher } from './publisher-types';
 
 export interface Role extends BaseEntity {
-  roleName: RoleEnums;
+  roleName:
+    | RoleEnums.ADMIN
+    | RoleEnums.PUBLISHER_MANAGER
+    | RoleEnums.STORE_MANAGER;
   description: string;
 }
 
@@ -36,7 +39,7 @@ export interface User extends BaseEntity {
   address: string;
   phone: string;
   gender: string;
-  mainImageFile: string | null;
+  mainImageFile: string;
   additionalImageFiles: string[] | null;
   store: unknown;
   publisher: Publisher;

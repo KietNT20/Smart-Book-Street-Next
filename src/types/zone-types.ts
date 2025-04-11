@@ -12,13 +12,16 @@ export type ZoneCreate = Partial<Omit<Zone, 'id'>> & {
   streetId: string;
 };
 
-export type ZoneUpdate = Partial<Omit<Zone, 'id'>> & {
-  streetId: string;
-};
-
 export interface ZonesResponse {
   results: Zone[];
   totalRecords: number;
+  totalPages: number;
+  isSuccess: boolean;
+  message: string;
+}
+
+export interface ZoneResponse {
+  result: Zone[];
   isSuccess: boolean;
   message: string;
 }

@@ -1,5 +1,5 @@
 import { API_URL } from '@/constant/api-url';
-import { AuthorSearchPagination } from '@/types/author-types';
+import { AuthorSearchPagination, AuthorsResponse } from '@/types/author-types';
 import axiosInstance from '@/utils/axiosInstance';
 
 export const authorService = {
@@ -31,7 +31,9 @@ export const authorService = {
     const res = await axiosInstance.post(API_URL.AUTHORS.SEARCH, payload);
     return res.data;
   },
-  searchPagination: async (payload: AuthorSearchPagination) => {
+  searchPagination: async (
+    payload: AuthorSearchPagination
+  ): Promise<AuthorsResponse> => {
     const res = await axiosInstance.post(
       API_URL.AUTHORS.PAGINATION_SEARCH,
       payload

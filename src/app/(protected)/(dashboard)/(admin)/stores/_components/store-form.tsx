@@ -1,5 +1,6 @@
 'use client';
 
+import SubmitBtn from '@/components/button/submit-btn';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -16,7 +17,6 @@ import { useStoreMutation } from '@/hooks/use-store';
 import { storeFormSchema, StoreFormValues } from '@/lib/zod';
 import { StoreData } from '@/types/store-types';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import AddressSearch from './address-search';
@@ -364,18 +364,7 @@ const StoreForm = ({ storeToEdit }: Props) => {
           >
             Hủy
           </Button>
-          <Button type='submit' disabled={isWorking} size='lg'>
-            {isWorking ? (
-              <>
-                <Loader2 className='mr-2 h-4 w-4 animate-spin' />
-                Đang xử lý...
-              </>
-            ) : storeToEdit ? (
-              'Cập nhật cửa hàng'
-            ) : (
-              'Thêm cửa hàng'
-            )}
-          </Button>
+          <SubmitBtn ID={storeToEdit?.id} _onPending={isWorking} />
         </div>
       </form>
     </Form>

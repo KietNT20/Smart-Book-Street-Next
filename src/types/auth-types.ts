@@ -1,6 +1,6 @@
 import { Gender } from '@/enums/gender';
 import { BaseEntity } from './common-types';
-import { Role } from './user-types';
+import { Role, User } from './user-types';
 
 export interface UserRoles extends BaseEntity {
   userId?: string;
@@ -10,17 +10,7 @@ export interface UserRoles extends BaseEntity {
 }
 
 export type LoginResponse = {
-  result: {
-    userName: string;
-    email: string;
-    fullName: string;
-    gender: string;
-    dob: string;
-    address: string;
-    phone: string;
-    id: string;
-    userRoles: UserRoles[];
-  };
+  result: User;
   token: string;
   expiration: string;
   isSuccess: boolean;
