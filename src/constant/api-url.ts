@@ -91,6 +91,7 @@ export const API_URL = {
     PAGINATED: `${USER}/paginated`,
     SEARCH: `${USER}/search`,
     PAGINATION_SEARCH: `${USER}/search/paginated`,
+    GET_BY_EMAIL: `${USER}/by-email`,
   },
   USER_ROLES: {
     INDEX: `${USER_ROLE}`,

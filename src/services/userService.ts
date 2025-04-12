@@ -31,4 +31,10 @@ export const userService = {
     );
     return res.data;
   },
+  getByEmail: async (email: string): Promise<UserProfileResponse> => {
+    const res = await axiosInstance.get(
+      `${API_URL.USERS.GET_BY_EMAIL}/${email}`
+    );
+    return res.data;
+  },
 };

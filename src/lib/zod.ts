@@ -1,5 +1,6 @@
 import { REGEX } from '@/constant/regex';
 import { Gender } from '@/enums/gender';
+import { StoreRent } from '@/enums/store-rent';
 import * as z from 'zod';
 
 // Login form
@@ -224,3 +225,16 @@ export const publisherFormSchema = z.object({
 });
 
 export type PublisherFormValues = z.infer<typeof publisherFormSchema>;
+
+// User Store form
+export const userStoreFormSchema = z.object({
+  userId: z.string().min(1, { message: 'Vui lòng chọn người thuê' }),
+  storeId: z.string().min(1, { message: 'Vui lòng chọn cửa hàng' }),
+  contractNumber: z.string().min(1, { message: 'Số hợp đồng là bắt buộc' }),
+  startDate: z.string().datetime(),
+  endDate: z.string().datetime(),
+  status: z.enum([StoreRent.ACTIVE, StoreRent.TERMINATED, StoreRent.EXPIRED]),
+  notes: z.string().optional(),
+});
+
+export type UserStoreFormValues = z.infer<typeof userStoreFormSchema>;

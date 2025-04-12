@@ -74,3 +74,23 @@ export const useUsersParams = ({
     totalPage,
   };
 };
+
+export const useUserEmail = (email: string) => {
+  const queryClient = useQueryClient();
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['user', email],
+    queryFn: () => userService.getByEmail(email),
+    enabled: !!email,
+  });
+
+  if (data) {
+    queryClient.setQueryData(['user', email], data);
+  }
+
+  return {
+    user: data?.result || null,
+    userLoading: isLoading,
+    userError: error,
+  };
+};

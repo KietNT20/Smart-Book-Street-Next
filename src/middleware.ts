@@ -19,8 +19,8 @@ const publicPaths = [PATH.LOGIN, PATH.REGISTER];
 
 const roleBasedRoutes: RoleRouteMap = {
   [PATH.DASHBOARD]: [RoleEnums.ADMIN],
-  [PATH.PUBLISHERS]: [RoleEnums.ADMIN],
-  [PATH.STORES]: [RoleEnums.ADMIN],
+  '/publishers/*': [RoleEnums.ADMIN],
+  '/stores/*': [RoleEnums.ADMIN],
   [PATH.STORE_MANAGER_DASHBOARD]: [RoleEnums.STORE_MANAGER, RoleEnums.ADMIN],
   [PATH.STORE_OWNER_DASHBOARD]: [RoleEnums.STORE_OWNER, RoleEnums.ADMIN],
   '/books/*': [RoleEnums.PUBLISHER],

@@ -41,7 +41,7 @@ const PublisherFilter = ({
 
   return (
     <Card className='mb-6'>
-      <CardContent className='pt-6'>
+      <CardContent className='p-3 pt-3'>
         <Collapsible open={isOpen} onOpenChange={setIsOpen}>
           <div className='flex items-center justify-end gap-2'>
             {isSearching && (
