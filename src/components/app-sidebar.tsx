@@ -138,7 +138,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         url: '#',
         icon: BookOpen,
         isActive: checkActive([
-          { url: PATH.ADMIN_BOOKS },
+          { url: PATH.BOOKS },
           { url: PATH.CATEGORIES },
           { url: PATH.INVENTORY },
         ]),
@@ -146,7 +146,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         items: [
           {
             title: 'Thông tin sách',
-            url: PATH.ADMIN_BOOKS,
+            url: PATH.BOOKS,
             roles: [RoleEnums.PUBLISHER],
           },
           {

@@ -9,7 +9,7 @@ const BookFormCreate = () => {
 
   return (
     <div className='relative'>
-      <BookForm onCancel={() => router.push(PATH.ADMIN_BOOKS)} />
+      <BookForm onCancel={() => router.push(PATH.BOOKS)} />
     </div>
   );
 };

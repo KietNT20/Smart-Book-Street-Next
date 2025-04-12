@@ -36,7 +36,7 @@ export default function NotFound() {
           <Button variant='outline' onClick={() => window.history.back()}>
             Quay lại
           </Button>
-          <Link href={PATH.ADMIN_BOOKS}>
+          <Link href={PATH.BOOKS}>
             <Button>Danh sách sách</Button>
           </Link>
         </div>

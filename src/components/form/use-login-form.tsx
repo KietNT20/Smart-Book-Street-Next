@@ -45,7 +45,7 @@ export const useLoginForm = () => {
           if (hasAdminRole) {
             router.push(PATH.DASHBOARD);
           } else if (hasPublisherManagerRole) {
-            router.push(PATH.ADMIN_BOOKS);
+            router.push(PATH.BOOKS);
           } else {
             router.push(PATH.STORE_BOOKS);
           }

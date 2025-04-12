@@ -32,7 +32,7 @@ export default function BooksDetailPage({
 
   const handleDeleteBook = () => {
     deleteBook(params.id);
-    router.push(PATH.ADMIN_BOOKS);
+    router.push(PATH.BOOKS);
   };
 
   if (bookDetailPending || bookDetailLoading) {
@@ -42,9 +42,9 @@ export default function BooksDetailPage({
   return (
     <div className='space-y-6'>
       <div className='flex items-center justify-between'>
-        <BackButton routeTo={PATH.ADMIN_BOOKS} />
+        <BackButton routeTo={PATH.BOOKS} />
         <div className='flex gap-2'>
-          <Link href={`${PATH.ADMIN_BOOKS}/${params.id}/edit`}>
+          <Link href={`${PATH.BOOKS}/${params.id}/edit`}>
             <Button>Sửa thông tin</Button>
           </Link>
           <Button

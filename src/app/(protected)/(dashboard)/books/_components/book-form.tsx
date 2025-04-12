@@ -48,7 +48,7 @@ const BookForm = ({ book, onCancel }: Props) => {
         {
           onSuccess: () => {
             form.reset();
-            router.push(`${PATH.ADMIN_BOOKS}/${book.id}`);
+            router.push(`${PATH.BOOKS}/${book.id}`);
           },
         }
       );
@@ -56,7 +56,7 @@ const BookForm = ({ book, onCancel }: Props) => {
       createBook(formData, {
         onSuccess: () => {
           form.reset();
-          router.push(PATH.ADMIN_BOOKS);
+          router.push(PATH.BOOKS);
         },
       });
     }
