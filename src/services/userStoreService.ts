@@ -10,4 +10,16 @@ export const userStoreService = {
     );
     return res.data;
   },
+  checkUserContract: async (userId: string) => {
+    const res = await axiosInstance.get(
+      `${API_URL.USER_STORES.USER}/${userId}`
+    );
+    return res.data;
+  },
+  checkStoreContract: async (storeId: string) => {
+    const res = await axiosInstance.get(
+      `${API_URL.USER_STORES.STORE}/${storeId}`
+    );
+    return res.data;
+  },
 };

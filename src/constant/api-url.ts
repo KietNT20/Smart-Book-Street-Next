@@ -99,6 +99,8 @@ export const API_URL = {
   },
   USER_STORES: {
     INDEX: `${USER_STORE}`,
+    USER: `${USER_STORE}/user`,
+    STORE: `${USER_STORE}/store`,
     PAGINATED: `${USER_STORE}/paginated`,
     SEARCH: `${USER_STORE}/search`,
     PAGINATION_SEARCH: `${USER_STORE}/search/paginated`,
