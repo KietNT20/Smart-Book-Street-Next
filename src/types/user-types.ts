@@ -5,10 +5,7 @@ import { ImageType } from './image-types';
 import { Publisher } from './publisher-types';
 
 export interface Role extends BaseEntity {
-  roleName:
-    | RoleEnums.ADMIN
-    | RoleEnums.PUBLISHER_MANAGER
-    | RoleEnums.STORE_MANAGER;
+  roleName: RoleEnums.ADMIN | RoleEnums.PUBLISHER | RoleEnums.STORE_MANAGER;
   description: string;
 }
 

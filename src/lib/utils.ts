@@ -49,6 +49,7 @@ export function utcToLocalDate(utcDateString: string): string {
   }
 }
 
-export function formateDateVi(date: Date | string): string {
+export function formateDateVi(date: Date | string | null): string {
+  if (date === null) return '';
   return dayjs(new Date(date)).format('DD/MM/YYYY');
 }

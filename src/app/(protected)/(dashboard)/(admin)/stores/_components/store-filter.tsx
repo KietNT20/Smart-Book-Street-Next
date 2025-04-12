@@ -70,7 +70,7 @@ const StoreFilter = ({
                 <div className='relative'>
                   <Input
                     id='storeName'
-                    placeholder='Tìm theo tên cửa hàng...'
+                    placeholder='Tìm theo tên cửa hàng'
                     value={filters.storeName || ''}
                     onChange={(e) =>
                       handleInputChange('storeName', e.target.value)
@@ -94,7 +94,7 @@ const StoreFilter = ({
                 <div className='relative'>
                   <Input
                     id='address'
-                    placeholder='Tìm theo địa chỉ...'
+                    placeholder='Tìm theo địa chỉ'
                     value={filters.address || ''}
                     onChange={(e) =>
                       handleInputChange('address', e.target.value)
@@ -118,7 +118,7 @@ const StoreFilter = ({
                 <div className='relative'>
                   <Input
                     id='phone'
-                    placeholder='Tìm theo số điện thoại...'
+                    placeholder='Tìm theo số điện thoại'
                     value={filters.phone || ''}
                     onChange={(e) => handleInputChange('phone', e.target.value)}
                   />
@@ -140,7 +140,7 @@ const StoreFilter = ({
                 <div className='relative'>
                   <Input
                     id='email'
-                    placeholder='Tìm theo email...'
+                    placeholder='Tìm theo email'
                     value={filters.email || ''}
                     onChange={(e) => handleInputChange('email', e.target.value)}
                   />
@@ -162,7 +162,7 @@ const StoreFilter = ({
                 <div className='relative'>
                   <Input
                     id='storeTheme'
-                    placeholder='Tìm theo chủ đề cửa hàng...'
+                    placeholder='Tìm theo chủ đề cửa hàng'
                     value={filters.storeTheme || ''}
                     onChange={(e) =>
                       handleInputChange('storeTheme', e.target.value)
@@ -186,7 +186,7 @@ const StoreFilter = ({
                 <div className='relative'>
                   <Input
                     id='type'
-                    placeholder='Tìm theo loại cửa hàng...'
+                    placeholder='Tìm theo loại cửa hàng'
                     value={filters.type || ''}
                     onChange={(e) => handleInputChange('type', e.target.value)}
                   />

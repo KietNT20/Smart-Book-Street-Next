@@ -159,8 +159,7 @@ const AuthorCombobox = <T extends FieldValues>({ name, control }: Props<T>) => {
                                 : 'opacity-0'
                             )}
                           />
-                          {author.authorName} (
-                          {author.dob ? formateDateVi(author.dob) : ''})
+                          {author.authorName} ({formateDateVi(author.dob)})
                         </CommandItem>
                       ))}
                   </CommandGroup>

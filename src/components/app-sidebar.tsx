@@ -142,22 +142,22 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           { url: PATH.CATEGORIES },
           { url: PATH.INVENTORY },
         ]),
-        roles: [RoleEnums.PUBLISHER_MANAGER],
+        roles: [RoleEnums.PUBLISHER],
         items: [
           {
             title: 'Thông tin sách',
             url: PATH.ADMIN_BOOKS,
-            roles: [RoleEnums.PUBLISHER_MANAGER],
+            roles: [RoleEnums.PUBLISHER],
           },
           {
             title: 'Thông tin tác giả',
             url: PATH.ADMIN_AUTHORS,
-            roles: [RoleEnums.PUBLISHER_MANAGER],
+            roles: [RoleEnums.PUBLISHER],
           },
           {
             title: 'Danh mục sách',
             url: PATH.CATEGORIES,
-            roles: [RoleEnums.PUBLISHER_MANAGER],
+            roles: [RoleEnums.PUBLISHER],
           },
         ],
       },
@@ -198,21 +198,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         name: 'Dashboard',
         url: PATH.DASHBOARD,
         icon: PieChart,
-        roles: [
-          RoleEnums.ADMIN,
-          RoleEnums.PUBLISHER_MANAGER,
-          RoleEnums.STORE_MANAGER,
-        ],
+        roles: [RoleEnums.ADMIN, RoleEnums.PUBLISHER, RoleEnums.STORE_MANAGER],
       },
       {
         name: 'Thống kê sách',
         url: PATH.STATISTICS,
         icon: BarChart3,
-        roles: [
-          RoleEnums.ADMIN,
-          RoleEnums.PUBLISHER_MANAGER,
-          RoleEnums.STORE_MANAGER,
-        ],
+        roles: [RoleEnums.ADMIN, RoleEnums.PUBLISHER, RoleEnums.STORE_MANAGER],
       },
 
       // Admin-only items

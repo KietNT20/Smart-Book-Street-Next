@@ -36,6 +36,7 @@ import {
 import { Sort } from '@/enums/enums';
 import { usePublisherMutation } from '@/hooks/use-publisher';
 import { useRoles } from '@/hooks/use-role';
+import { formateDateVi } from '@/lib/utils';
 import { User } from '@/types/user-types';
 import {
   ArrowUpDown,
@@ -218,7 +219,7 @@ const UserTable = ({
                   <TableCell>{user.fullName}</TableCell>
                   <TableCell>{user.email}</TableCell>
                   <TableCell>{user.phone}</TableCell>
-                  <TableCell>{user.dob}</TableCell>
+                  <TableCell>{formateDateVi(user.dob)}</TableCell>
                   <TableCell>
                     <UserRoleSelector
                       userId={user.id || ''}

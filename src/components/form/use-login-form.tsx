@@ -40,7 +40,7 @@ export const useLoginForm = () => {
             (role) => role.role?.roleName === RoleEnums.ADMIN
           );
           const hasPublisherManagerRole = data.result.userRoles.some(
-            (role) => role.role?.roleName === RoleEnums.PUBLISHER_MANAGER
+            (role) => role.role?.roleName === RoleEnums.PUBLISHER
           );
           if (hasAdminRole) {
             router.push(PATH.DASHBOARD);

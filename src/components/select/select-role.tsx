@@ -5,6 +5,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { RoleLabels } from '@/enums/role';
 import { useUserRoleMutation } from '@/hooks/use-user-roles';
 import { UserRole } from '@/types/user-types';
 import { useState } from 'react';
@@ -81,7 +82,7 @@ export const UserRoleSelector = ({
       <SelectContent>
         {roles.map((role) => (
           <SelectItem key={role.value} value={role.value || ''}>
-            {role.label}
+            {RoleLabels[role.label as keyof typeof RoleLabels]}
           </SelectItem>
         ))}
       </SelectContent>
