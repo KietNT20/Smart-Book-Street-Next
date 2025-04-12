@@ -1,5 +1,6 @@
 import { REGEX } from '@/constant/regex';
 import { Gender } from '@/enums/gender';
+import { StoreRent } from '@/enums/store-rent';
 import * as z from 'zod';
 
 // Login form
@@ -80,11 +81,11 @@ const bookPublishedDatedSchema = z.string().refine(
 );
 
 export const bookSchema = z.object({
-  code: z.string().min(1, { message: 'Mã sách không được để trống' }),
+  isbn: z.string().min(1, { message: 'Mã sách không được để trống' }),
   title: z.string().min(1, { message: 'Tên sách không được để trống' }),
   publicationDate: bookPublishedDatedSchema,
   price: z.number().min(0, { message: 'Giá không được âm' }),
-  languages: z.string().min(1, { message: 'Ngôn ngữ không được để trống' }),
+  languages: z.string(),
   description: z.string().optional(),
   size: z.string().optional(),
   status: z.string().optional(),
@@ -100,7 +101,7 @@ export type BookFormValues = z.infer<typeof bookSchema>;
 
 export const searchBookSchema = z
   .object({
-    code: z.string().optional(),
+    isbn: z.string().optional(),
     title: z.string().optional(),
     minPrice: z.number().optional(),
     maxPrice: z.number().optional(),
@@ -224,3 +225,19 @@ export const publisherFormSchema = z.object({
 });
 
 export type PublisherFormValues = z.infer<typeof publisherFormSchema>;
+
+// User Store form
+export const userStoreFormSchema = z.object({
+  storeId: z.string().min(1, { message: 'Vui lòng chọn cửa hàng' }),
+  contractNumber: z.string().min(1, { message: 'Số hợp đồng là bắt buộc' }),
+  startDate: z.string().date().nonempty({
+    message: 'Ngày bắt đầu là bắt buộc',
+  }),
+  endDate: z.string().date().nonempty({
+    message: 'Ngày kết thúc là bắt buộc',
+  }),
+  status: z.enum([StoreRent.ACTIVE, StoreRent.TERMINATED, StoreRent.EXPIRED]),
+  notes: z.string().optional(),
+});
+
+export type UserStoreFormValues = z.infer<typeof userStoreFormSchema>;

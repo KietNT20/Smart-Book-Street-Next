@@ -28,7 +28,7 @@ export function SearchBookModal({ isOpen, onClose, onSearch }: Props) {
   const form = useForm<SearchBookFormValues>({
     resolver: zodResolver(searchBookSchema),
     defaultValues: {
-      code: '',
+      isbn: '',
       title: '',
       status: '',
       languages: '',
@@ -49,7 +49,7 @@ export function SearchBookModal({ isOpen, onClose, onSearch }: Props) {
 
   const handleSearch = (values: SearchBookFormValues) => {
     const searchCriteria: Partial<BookSearchCriteria> = {
-      code: values.code || undefined,
+      isbn: values.isbn || undefined,
       title: values.title || undefined,
       status: values.status,
       languages: values.languages,
@@ -91,18 +91,18 @@ export function SearchBookModal({ isOpen, onClose, onSearch }: Props) {
           <div className='grid gap-4 py-4'>
             {/* Code field */}
             <div className='grid grid-cols-4 items-center gap-4'>
-              <Label htmlFor='code' className='text-right'>
+              <Label htmlFor='isbn' className='text-right'>
                 Mã sách
               </Label>
               <div className='col-span-3'>
                 <Input
-                  id='code'
-                  {...register('code')}
-                  className={cn(errors.code && 'border-red-500')}
+                  id='isbn'
+                  {...register('isbn')}
+                  className={cn(errors.isbn && 'border-red-500')}
                 />
-                {errors.code && (
+                {errors.isbn && (
                   <span className='text-sm text-red-500'>
-                    {errors.code.message}
+                    {errors.isbn.message}
                   </span>
                 )}
               </div>

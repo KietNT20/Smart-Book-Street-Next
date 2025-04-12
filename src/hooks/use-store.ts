@@ -1,5 +1,5 @@
 import { storeService } from '@/services/storeService';
-import { StoreParams } from '@/types/store-types';
+import { StoreParams, StoreSearchCriteria } from '@/types/store-types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
@@ -28,7 +28,7 @@ export const useStores = ({
       }),
   });
 
-  const totalPages = storesRes?.totalPages || 0;
+  const totalPages = storesRes?.totalPages || 1;
 
   // Prefetch the next page of stores
   if (pageNumber < totalPages) {
@@ -94,7 +94,7 @@ export const useStoreMutation = () => {
         toast.success('Tạo cửa hàng thành công!');
       }
     },
-    onError: (error: unknown) => {
+    onError: (error: Error) => {
       toast.error('Tạo cửa hàng không thành công!');
       console.error('Error creating store:', error);
     },
@@ -110,7 +110,7 @@ export const useStoreMutation = () => {
         toast.success('Cập nhật cửa hàng thành công!');
       }
     },
-    onError: (error: unknown) => {
+    onError: (error: Error) => {
       toast.error('Cập nhật cửa hàng không thành công!');
       console.error('Error updating store:', error);
     },
@@ -125,7 +125,7 @@ export const useStoreMutation = () => {
         toast.success('Xóa cửa hàng thành công!');
       }
     },
-    onError: (error: unknown) => {
+    onError: (error: Error) => {
       toast.error('Xóa cửa hàng không thành công!');
       console.error('Error deleting store:', error);
     },
@@ -141,5 +141,45 @@ export const useStoreMutation = () => {
     // Delete store
     deleteStore: deleteStoreMutation.mutate,
     isDeletingStore: deleteStoreMutation.isPending,
+  };
+};
+
+export const useStoresAll = () => {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['stores'],
+    queryFn: () => storeService.getAll(),
+  });
+
+  return {
+    stores: data || [],
+    isLoading,
+    error,
+  };
+};
+
+export const useStoreSearch = (params: StoreSearchCriteria) => {
+  const { data, isLoading, isPending, error } = useQuery({
+    queryKey: ['stores', params],
+    queryFn: () => storeService.search(params),
+  });
+
+  return {
+    stores: data?.results || [],
+    isLoading,
+    isPending,
+    error,
+  };
+};
+
+export const useStoreById = (id: string) => {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['stores', id],
+    queryFn: () => storeService.getById(id),
+  });
+
+  return {
+    store: data?.result || null,
+    isLoading,
+    error,
   };
 };

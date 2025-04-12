@@ -48,7 +48,7 @@ const BookForm = ({ book, onCancel }: Props) => {
         {
           onSuccess: () => {
             form.reset();
-            router.push(`${PATH.ADMIN_BOOKS}/${book.id}`);
+            router.push(`${PATH.BOOKS}/${book.id}`);
           },
         }
       );
@@ -56,6 +56,7 @@ const BookForm = ({ book, onCancel }: Props) => {
       createBook(formData, {
         onSuccess: () => {
           form.reset();
+          router.push(PATH.BOOKS);
         },
       });
     }
@@ -79,7 +80,7 @@ const BookForm = ({ book, onCancel }: Props) => {
           {/* Mã sách */}
           <FormField
             control={form.control}
-            name='code'
+            name='isbn'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
@@ -90,7 +91,7 @@ const BookForm = ({ book, onCancel }: Props) => {
                     placeholder='Nhập mã sách'
                     disabled={isLoading}
                     className={cn(
-                      form.formState.errors.code && 'border-red-500'
+                      form.formState.errors.isbn && 'border-red-500'
                     )}
                     {...field}
                   />
@@ -168,7 +169,7 @@ const BookForm = ({ book, onCancel }: Props) => {
                 </FormLabel>
                 <FormControl>
                   <BookSelectLang
-                    value={field.value}
+                    value={field.value!}
                     onValueChange={field.onChange}
                     disabled={false}
                     className={cn(

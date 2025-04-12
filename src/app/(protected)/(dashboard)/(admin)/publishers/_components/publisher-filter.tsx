@@ -41,7 +41,7 @@ const PublisherFilter = ({
 
   return (
     <Card className='mb-6'>
-      <CardContent className='pt-6'>
+      <CardContent className='p-3 pt-3'>
         <Collapsible open={isOpen} onOpenChange={setIsOpen}>
           <div className='flex items-center justify-end gap-2'>
             {isSearching && (
@@ -70,7 +70,7 @@ const PublisherFilter = ({
                 <div className='relative'>
                   <Input
                     id='publisherName'
-                    placeholder='Tìm theo tên nhà xuất bản...'
+                    placeholder='Tìm theo tên nhà xuất bản'
                     value={filters.publisherName || ''}
                     onChange={(e) =>
                       handleInputChange('publisherName', e.target.value)
@@ -94,7 +94,7 @@ const PublisherFilter = ({
                 <div className='relative'>
                   <Input
                     id='address'
-                    placeholder='Tìm theo địa chỉ...'
+                    placeholder='Tìm theo địa chỉ'
                     value={filters.address || ''}
                     onChange={(e) =>
                       handleInputChange('address', e.target.value)
@@ -118,7 +118,7 @@ const PublisherFilter = ({
                 <div className='relative'>
                   <Input
                     id='phone'
-                    placeholder='Tìm theo số điện thoại...'
+                    placeholder='Tìm theo số điện thoại'
                     value={filters.phone || ''}
                     onChange={(e) => handleInputChange('phone', e.target.value)}
                   />
@@ -140,7 +140,7 @@ const PublisherFilter = ({
                 <div className='relative'>
                   <Input
                     id='email'
-                    placeholder='Tìm theo email...'
+                    placeholder='Tìm theo email'
                     value={filters.email || ''}
                     onChange={(e) => handleInputChange('email', e.target.value)}
                   />
@@ -162,7 +162,7 @@ const PublisherFilter = ({
                 <div className='relative'>
                   <Input
                     id='website'
-                    placeholder='Tìm theo website...'
+                    placeholder='Tìm theo website'
                     value={filters.website || ''}
                     onChange={(e) =>
                       handleInputChange('website', e.target.value)

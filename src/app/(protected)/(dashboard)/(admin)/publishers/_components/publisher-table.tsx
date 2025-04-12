@@ -36,6 +36,7 @@ import { Sort } from '@/enums/enums';
 import { usePublisherMutation } from '@/hooks/use-publisher';
 import { Publisher } from '@/types/publisher-types';
 import {
+  ArrowUpDown,
   Eye,
   FileEdit,
   MoreHorizontal,
@@ -125,47 +126,72 @@ const PublisherTable = ({
             <TableRow>
               <TableHead
                 className='cursor-pointer'
-                onClick={() => handleSort('publisherName')}
+                onClick={() => handleSort('PublisherName')}
               >
-                <div className='flex items-center'>
-                  Tên nhà xuất bản
-                  {sortField === 'publisherName' &&
-                    (sortOrder === Sort.ASC ? (
-                      <SortAsc className='ml-1 h-4 w-4' />
+                <Button variant='ghost'>
+                  Tên Nhà Xuất Bản
+                  {sortField === 'PublisherName' ? (
+                    sortOrder === Sort.ASC ? (
+                      <SortAsc />
                     ) : (
-                      <SortDesc className='ml-1 h-4 w-4' />
-                    ))}
-                </div>
+                      <SortDesc />
+                    )
+                  ) : (
+                    <ArrowUpDown />
+                  )}
+                </Button>
               </TableHead>
               <TableHead
                 className='cursor-pointer'
-                onClick={() => handleSort('address')}
+                onClick={() => handleSort('Address')}
               >
-                <div className='flex items-center'>
+                <Button variant='ghost'>
                   Địa chỉ
-                  {sortField === 'address' &&
-                    (sortOrder === Sort.ASC ? (
-                      <SortAsc className='ml-1 h-4 w-4' />
+                  {sortField === 'Address' ? (
+                    sortOrder === Sort.ASC ? (
+                      <SortAsc />
                     ) : (
-                      <SortDesc className='ml-1 h-4 w-4' />
-                    ))}
-                </div>
+                      <SortDesc />
+                    )
+                  ) : (
+                    <ArrowUpDown />
+                  )}
+                </Button>
               </TableHead>
               <TableHead
                 className='cursor-pointer'
-                onClick={() => handleSort('phone')}
+                onClick={() => handleSort('Phone')}
               >
-                <div className='flex items-center'>
+                <Button variant='ghost'>
                   Số điện thoại
-                  {sortField === 'phone' &&
-                    (sortOrder === Sort.ASC ? (
-                      <SortAsc className='ml-1 h-4 w-4' />
+                  {sortField === 'Phone' ? (
+                    sortOrder === Sort.ASC ? (
+                      <SortAsc />
                     ) : (
-                      <SortDesc className='ml-1 h-4 w-4' />
-                    ))}
-                </div>
+                      <SortDesc />
+                    )
+                  ) : (
+                    <ArrowUpDown />
+                  )}
+                </Button>
               </TableHead>
-              <TableHead>Email</TableHead>
+              <TableHead
+                className='cursor-pointer'
+                onClick={() => handleSort('Email')}
+              >
+                <Button variant='ghost'>
+                  Email
+                  {sortField === 'Email' ? (
+                    sortOrder === Sort.ASC ? (
+                      <SortAsc />
+                    ) : (
+                      <SortDesc />
+                    )
+                  ) : (
+                    <ArrowUpDown />
+                  )}
+                </Button>
+              </TableHead>
               <TableHead className='text-right'>Thao tác</TableHead>
             </TableRow>
           </TableHeader>

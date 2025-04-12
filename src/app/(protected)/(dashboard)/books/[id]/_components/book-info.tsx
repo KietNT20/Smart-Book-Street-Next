@@ -25,7 +25,7 @@ const BookInfo = ({ book, bookAuthorsRes, bookCategoriesRes }: Props) => {
       <div className='mb-4 space-y-2'>
         <h3 className='text-2xl'>Thông tin cơ bản</h3>
         <p className='flex items-center gap-2 font-medium'>
-          Mã sách: <span className='font-semibold'>{book?.code}</span>
+          Mã sách: <span className='font-semibold'>{book?.isbn}</span>
         </p>
         <p className='flex items-center gap-2 font-medium'>
           Tên sách: <span className='font-semibold'>{book?.title}</span>

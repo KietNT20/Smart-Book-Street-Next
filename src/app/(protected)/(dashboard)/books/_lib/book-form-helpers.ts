@@ -1,3 +1,4 @@
+import { Language } from '@/enums/lang';
 import { BookFormValues } from '@/lib/zod';
 import { BookAuthorIds, BookCategoryIds } from '@/types/book-types';
 import dayjs from 'dayjs';
@@ -20,11 +21,11 @@ export function detectDateFormat(dateString: string): string {
 export function prepareInitialBookData(book?: BookFormValues): BookFormValues {
   if (!book) {
     return {
-      code: '',
+      isbn: '',
       title: '',
       publicationDate: '',
       price: 1000,
-      languages: '',
+      languages: Language.VIETNAMESE,
       description: '',
       size: '',
       status: '',
@@ -58,7 +59,7 @@ export function prepareInitialBookData(book?: BookFormValues): BookFormValues {
   }
 
   return {
-    code: book.code || '',
+    isbn: book.isbn || '',
     title: book.title || '',
     publicationDate: formattedDate,
     price: book.price || 0,

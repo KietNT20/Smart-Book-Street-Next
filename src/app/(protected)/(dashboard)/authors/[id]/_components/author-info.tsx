@@ -62,7 +62,7 @@ const AuthorInfo = ({ author }: Props) => {
                   </h3>
 
                   <div className='mb-2 text-sm text-gray-600'>
-                    <div>Mã sách: {bookAuthor.book.code}</div>
+                    <div>Mã sách: {bookAuthor.book.isbn}</div>
                     <div>
                       Xuất bản: {formateDateVi(bookAuthor.book.publicationDate)}
                     </div>

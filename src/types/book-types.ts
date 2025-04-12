@@ -17,7 +17,7 @@ export type BookCategoryIds = {
 
 export interface Book extends BaseEntity {
   id: string;
-  code: string;
+  isbn: string;
   title: string;
   publicationDate: Date | string;
   price: number;
@@ -70,7 +70,7 @@ export type BookSearchResult = {
 };
 
 export type BookSearchCriteria = {
-  code?: string;
+  isbn?: string;
   title?: string;
   price?: number;
   minPrice?: number;

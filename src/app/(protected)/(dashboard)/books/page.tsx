@@ -42,8 +42,10 @@ export default function BooksPage() {
 
   const hasFilters = () =>
     Object.keys(searchCriteria).length > 0 ||
-    pagination.sortField !== 'lastUpdatedDate' ||
+    pagination.sortField !== 'LastUpdatedDate' ||
     pagination.sortOrder !== Sort.DESC;
+
+  console.log('hasFilters', hasFilters());
 
   return (
     <div className='space-y-4'>

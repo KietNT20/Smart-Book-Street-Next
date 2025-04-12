@@ -37,6 +37,14 @@ export function formatSummary(text: string, maxLength: number = 150): string {
   return text.substring(0, maxLength).trim() + '...';
 }
 
+export function formatSummaryAddress(
+  text: string,
+  maxLength: number = 50
+): string {
+  if (text.length <= maxLength) return text;
+  return text.substring(0, maxLength).trim() + '...';
+}
+
 /**
  * Convert utc date to local date string
  */
@@ -49,6 +57,7 @@ export function utcToLocalDate(utcDateString: string): string {
   }
 }
 
-export function formateDateVi(date: Date | string): string {
+export function formateDateVi(date: Date | string | null): string {
+  if (date === null) return '';
   return dayjs(new Date(date)).format('DD/MM/YYYY');
 }

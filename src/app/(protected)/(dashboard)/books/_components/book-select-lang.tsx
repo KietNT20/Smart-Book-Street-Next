@@ -9,23 +9,22 @@ import {
 } from '@/components/ui/select';
 import { Language, LanguageLabels } from '@/enums/lang';
 import { cn } from '@/lib/utils';
-import React from 'react';
 
-interface BookSelectLangProps {
+type Props = {
   value: string;
   onValueChange: (value: string) => void;
   disabled?: boolean;
   placeholder?: string;
   className?: string;
-}
+};
 
-const BookSelectLang: React.FC<BookSelectLangProps> = ({
+const BookSelectLang = ({
   value,
   onValueChange,
   disabled = false,
   placeholder = 'Chọn ngôn ngữ',
   className,
-}) => {
+}: Props) => {
   return (
     <Select
       disabled={disabled}

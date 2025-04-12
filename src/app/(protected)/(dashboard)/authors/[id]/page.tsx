@@ -1,10 +1,8 @@
 'use client';
 import BackButton from '@/components/back-btn/back-button';
-import RoleGuard from '@/components/role-guard/role-guard';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { PATH } from '@/enums/path';
-import { RoleEnums } from '@/enums/role';
 import { useGetAuthorById } from '@/hooks/use-author';
 import { Author } from '@/types/author-types';
 import Link from 'next/link';
@@ -30,10 +28,10 @@ const AuthorDetailPage = ({ params }: { params: { id: string } }) => {
   }
 
   return (
-    <RoleGuard allowedRoles={RoleEnums.PUBLISHER_MANAGER}>
+    <>
       <div className='flex items-center justify-between'>
         <BackButton />
-        <Button variant={'primaryblue'}>
+        <Button>
           <Link href={`${PATH.ADMIN_AUTHORS}/${params.id}/edit`}>
             Chỉnh sửa
           </Link>
@@ -41,7 +39,7 @@ const AuthorDetailPage = ({ params }: { params: { id: string } }) => {
       </div>
       <Separator className='my-4' />
       <AuthorInfo author={authorRes?.result} />
-    </RoleGuard>
+    </>
   );
 };
 

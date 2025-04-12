@@ -3,7 +3,7 @@
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { StoreFormValues } from '@/lib/zod';
-import { Loader2, MapPin, Search } from 'lucide-react';
+import { Loader2, MapPin, Navigation, Search } from 'lucide-react';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { useEffect, useState } from 'react';
@@ -17,15 +17,16 @@ interface AddressSearchProps {
 
 const AddressSearch = ({ form, disabled = false }: AddressSearchProps) => {
   const [isSearching, setIsSearching] = useState<boolean>(false);
+  const [isGettingLocation, setIsGettingLocation] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
   const [viewState, setViewState] = useState({
-    longitude: 106.6297,
-    latitude: 10.8231,
+    longitude: 106.78011084793037,
+    latitude: 10.84502574064812,
     zoom: 13,
   });
   const [markerPosition, setMarkerPosition] = useState({
-    longitude: 106.6297,
-    latitude: 10.8231,
+    longitude: 106.78011084793037,
+    latitude: 10.84502574064812,
   });
 
   const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || '';
@@ -109,6 +110,60 @@ const AddressSearch = ({ form, disabled = false }: AddressSearchProps) => {
     }
   };
 
+  // Get current location
+  const getCurrentLocation = (): void => {
+    setIsGettingLocation(true);
+    setError('');
+
+    if (!navigator.geolocation) {
+      setError('Trình duyệt của bạn không hỗ trợ định vị');
+      setIsGettingLocation(false);
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+
+        // Update form values
+        form.setValue('latitude', latitude, { shouldValidate: true });
+        form.setValue('longitude', longitude, { shouldValidate: true });
+
+        // Update map position
+        setViewState({
+          latitude,
+          longitude,
+          zoom: 15,
+        });
+        setMarkerPosition({
+          latitude,
+          longitude,
+        });
+
+        setIsGettingLocation(false);
+      },
+      (error) => {
+        let errorMessage = 'Không thể lấy vị trí hiện tại';
+
+        if (error.code === 1) {
+          errorMessage = 'Bạn đã từ chối quyền truy cập vị trí';
+        } else if (error.code === 2) {
+          errorMessage = 'Không thể xác định vị trí';
+        } else if (error.code === 3) {
+          errorMessage = 'Quá thời gian yêu cầu vị trí';
+        }
+
+        setError(errorMessage);
+        setIsGettingLocation(false);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0,
+      }
+    );
+  };
+
   // Handle marker drag
   const onMarkerDragEnd = (event: any) => {
     const { lngLat } = event;
@@ -126,21 +181,38 @@ const AddressSearch = ({ form, disabled = false }: AddressSearchProps) => {
 
   return (
     <div className='space-y-2'>
-      <div className='flex items-center justify-between'>
-        <Button
-          type='button'
-          onClick={handleSearch}
-          disabled={isSearching || disabled}
-          variant='outline'
-          size='sm'
-        >
-          {isSearching ? (
-            <Loader2 className='mr-2 h-4 w-4 animate-spin' />
-          ) : (
-            <Search className='mr-2 h-4 w-4' />
-          )}
-          Tìm tọa độ
-        </Button>
+      <div className='flex items-center justify-between gap-2'>
+        <div className='flex gap-2'>
+          <Button
+            type='button'
+            onClick={handleSearch}
+            disabled={isSearching || disabled}
+            variant='outline'
+            size='sm'
+          >
+            {isSearching ? (
+              <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+            ) : (
+              <Search className='mr-2 h-4 w-4' />
+            )}
+            Tìm tọa độ
+          </Button>
+
+          <Button
+            type='button'
+            onClick={getCurrentLocation}
+            disabled={isGettingLocation || disabled}
+            variant='outline'
+            size='sm'
+          >
+            {isGettingLocation ? (
+              <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+            ) : (
+              <Navigation className='mr-2 h-4 w-4' />
+            )}
+            Vị trí hiện tại
+          </Button>
+        </div>
         <div className='flex items-center'>
           <MapPin className='mr-1 h-4 w-4 text-muted-foreground' />
           <span className='text-xs text-muted-foreground'>
@@ -177,7 +249,8 @@ const AddressSearch = ({ form, disabled = false }: AddressSearchProps) => {
         </Map>
       </div>
       <p className='mt-1 text-xs text-muted-foreground'>
-        Di chuyển ghim trên bản đồ để điều chỉnh vị trí chính xác
+        Di chuyển ghim trên bản đồ để điều chỉnh vị trí chính xác hoặc sử dụng
+        nút &quot;Vị trí hiện tại&quot;
       </p>
     </div>
   );

@@ -28,7 +28,7 @@ export function BookToolbar({
           <Search className='mr-2 h-4 w-4' />
           Tìm kiếm
         </Button>
-        <Link href={PATH.ADMIN_BOOK_CREATE}>
+        <Link href={PATH.BOOK_CREATE}>
           <Button>
             <Plus className='mr-2 h-4 w-4' /> Thêm sách
           </Button>

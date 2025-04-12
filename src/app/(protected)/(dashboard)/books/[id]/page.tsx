@@ -32,7 +32,7 @@ export default function BooksDetailPage({
 
   const handleDeleteBook = () => {
     deleteBook(params.id);
-    router.push(PATH.ADMIN_BOOKS);
+    router.push(PATH.BOOKS);
   };
 
   if (bookDetailPending || bookDetailLoading) {
@@ -42,10 +42,10 @@ export default function BooksDetailPage({
   return (
     <div className='space-y-6'>
       <div className='flex items-center justify-between'>
-        <BackButton routeTo={PATH.ADMIN_BOOKS} />
+        <BackButton routeTo={PATH.BOOKS} />
         <div className='flex gap-2'>
-          <Link href={`${PATH.ADMIN_BOOKS}/${params.id}/edit`}>
-            <Button variant='primaryblue'>Sửa thông tin</Button>
+          <Link href={`${PATH.BOOKS}/${params.id}/edit`}>
+            <Button>Sửa thông tin</Button>
           </Link>
           <Button
             variant='destructive'
@@ -61,7 +61,7 @@ export default function BooksDetailPage({
         <h2 className='mb-4 text-2xl font-bold'>
           {book?.title || 'Chi tiết sách'}
         </h2>
-        <h3 className='text-muted-foreground'>Mã sách: {book?.code}</h3>
+        <h3 className='text-muted-foreground'>Mã sách: {book?.isbn}</h3>
         <Separator className='my-4' />
 
         <Tabs defaultValue='info' className='w-full'>
@@ -80,7 +80,7 @@ export default function BooksDetailPage({
             <h3 className='text-lg font-semibold'>Thư viện hình ảnh</h3>
             <ImageGalleryBook
               images={(book.images as ImageType[]) || []}
-              bookCode={book?.code}
+              bookCode={book?.isbn}
             />
           </TabsContent>
         </Tabs>

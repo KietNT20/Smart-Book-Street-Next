@@ -30,7 +30,7 @@ export const useRegister = () => {
         router.push(PATH.LOGIN);
       }
     },
-    onError: (error: unknown) => {
+    onError: (error: Error) => {
       console.log('Error register', error);
       toast.error('Đăng ký thất bại');
     },

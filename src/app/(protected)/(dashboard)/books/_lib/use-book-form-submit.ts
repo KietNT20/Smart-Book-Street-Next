@@ -30,7 +30,7 @@ export function useBookFormSubmit(onSubmit: (formData: FormData) => void) {
         ? sanitizeHtml(values.description)
         : '';
 
-      formData.append('Code', values.code || '');
+      formData.append('ISBN', values.isbn || '');
       formData.append('Title', values.title || '');
       formData.append('PublicationDate', values.publicationDate || '');
       formData.append('Price', (values.price ?? 0).toString());

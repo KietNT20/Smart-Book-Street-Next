@@ -5,6 +5,8 @@ export enum PATH {
   UNAUTHORIZED = '/unauthorized',
 
   DASHBOARD = '/dashboard',
+  STORE_OWNER_DASHBOARD = '/so-dashboard',
+  STORE_MANAGER_DASHBOARD = '/sm-dashboard',
   STATISTICS = '/statistics',
 
   // ADMIN
@@ -14,8 +16,8 @@ export enum PATH {
   STORES = '/stores',
   STORE_CREATE = '/stores/create',
 
-  ADMIN_BOOKS = '/books',
-  ADMIN_BOOK_CREATE = '/books/create',
+  BOOKS = '/books',
+  BOOK_CREATE = '/books/create',
 
   ADMIN_AUTHORS = '/authors',
   ADMIN_AUTHOR_CREATE = '/authors/create',
@@ -32,6 +34,7 @@ export enum PATH {
 
   USERS = '/users',
   USER_CREATE = '/users/create',
+  USER_STORES = '/userstores',
   ROLES = '/roles',
 
   // PUBLISHER MANAGER

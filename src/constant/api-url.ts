@@ -9,6 +9,7 @@ const ROLE = API_ENDPOINT.ROLE;
 const SOUVENIR = API_ENDPOINT.SOUVENIR;
 const USER = API_ENDPOINT.USER;
 const USER_ROLE = API_ENDPOINT.USER_ROLE;
+const USER_STORE = API_ENDPOINT.USER_STORE;
 const BOOK_CATEGORY = API_ENDPOINT.BOOK_CATEGORY;
 const CATEGORY = API_ENDPOINT.CATEGORY;
 const EVENT = API_ENDPOINT.EVENT;
@@ -91,9 +92,18 @@ export const API_URL = {
     PAGINATED: `${USER}/paginated`,
     SEARCH: `${USER}/search`,
     PAGINATION_SEARCH: `${USER}/search/paginated`,
+    GET_BY_EMAIL: `${USER}/by-email`,
   },
   USER_ROLES: {
     INDEX: `${USER_ROLE}`,
+  },
+  USER_STORES: {
+    INDEX: `${USER_STORE}`,
+    USER: `${USER_STORE}/user`,
+    STORE: `${USER_STORE}/store`,
+    PAGINATED: `${USER_STORE}/paginated`,
+    SEARCH: `${USER_STORE}/search`,
+    PAGINATION_SEARCH: `${USER_STORE}/search/paginated`,
   },
   ROLES: {
     INDEX: `${ROLE}`,
