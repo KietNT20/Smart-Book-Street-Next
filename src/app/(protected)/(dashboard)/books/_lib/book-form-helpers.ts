@@ -21,7 +21,7 @@ export function detectDateFormat(dateString: string): string {
 export function prepareInitialBookData(book?: BookFormValues): BookFormValues {
   if (!book) {
     return {
-      code: '',
+      isbn: '',
       title: '',
       publicationDate: '',
       price: 1000,
@@ -59,7 +59,7 @@ export function prepareInitialBookData(book?: BookFormValues): BookFormValues {
   }
 
   return {
-    code: book.code || '',
+    isbn: book.isbn || '',
     title: book.title || '',
     publicationDate: formattedDate,
     price: book.price || 0,

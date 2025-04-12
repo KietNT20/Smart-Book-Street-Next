@@ -204,9 +204,7 @@ const UserTable = ({
                 <TableHead className='whitespace-nowrap'>
                   Date of birth
                 </TableHead>
-                <TableHead className='min-w-[200px] whitespace-nowrap'>
-                  Vai trò
-                </TableHead>
+                <TableHead className='whitespace-nowrap'>Vai trò</TableHead>
                 <TableHead className='whitespace-nowrap text-right'>
                   Thao tác
                 </TableHead>
@@ -251,7 +249,6 @@ const UserTable = ({
                         isLoading={isLoadingRoles}
                       />
                     </TableCell>
-                    <TableCell className='whitespace-nowrap'></TableCell>
                     <TableCell className='whitespace-nowrap text-right'>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>

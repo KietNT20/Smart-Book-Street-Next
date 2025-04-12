@@ -61,7 +61,7 @@ export default function BooksDetailPage({
         <h2 className='mb-4 text-2xl font-bold'>
           {book?.title || 'Chi tiết sách'}
         </h2>
-        <h3 className='text-muted-foreground'>Mã sách: {book?.code}</h3>
+        <h3 className='text-muted-foreground'>Mã sách: {book?.isbn}</h3>
         <Separator className='my-4' />
 
         <Tabs defaultValue='info' className='w-full'>
@@ -80,7 +80,7 @@ export default function BooksDetailPage({
             <h3 className='text-lg font-semibold'>Thư viện hình ảnh</h3>
             <ImageGalleryBook
               images={(book.images as ImageType[]) || []}
-              bookCode={book?.code}
+              bookCode={book?.isbn}
             />
           </TabsContent>
         </Tabs>

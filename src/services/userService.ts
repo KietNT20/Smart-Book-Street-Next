@@ -24,6 +24,10 @@ export const userService = {
     const res = await axiosInstance.get(`${API_URL.USERS.PROFILE}`);
     return res.data;
   },
+  getAll: async (): Promise<UsersResponse> => {
+    const res = await axiosInstance.get(API_URL.USERS.INDEX);
+    return res.data;
+  },
   getUsersParams: async (params: UserParams): Promise<UsersResponse> => {
     const res = await axiosInstance.post(
       `${API_URL.USERS.PAGINATION_SEARCH}`,

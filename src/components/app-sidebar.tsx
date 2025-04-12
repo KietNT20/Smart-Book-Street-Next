@@ -125,6 +125,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             roles: [RoleEnums.ADMIN],
           },
           {
+            title: 'Đăng ký thuê cửa hàng',
+            url: PATH.USER_STORES,
+            roles: [RoleEnums.ADMIN],
+          },
+          {
             title: 'Quản lý vai trò',
             url: PATH.ROLES,
             roles: [RoleEnums.ADMIN],

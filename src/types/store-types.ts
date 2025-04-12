@@ -28,3 +28,28 @@ export interface StoreParams {
     type?: string;
   };
 }
+
+export interface StoresResponse {
+  results: StoreData[];
+  totalPages: number;
+  totalRecords: number;
+  pageNumber: number;
+  pageSize: number;
+  isSuccess: boolean;
+  message: string;
+}
+
+export interface StoreResponse {
+  result: StoreData;
+  isSuccess: boolean;
+  message: string;
+}
+
+export interface StoreSearchCriteria {
+  storeName: string;
+  address: string;
+  phone: string;
+  email: string;
+  storeTheme: string;
+  type: string;
+}

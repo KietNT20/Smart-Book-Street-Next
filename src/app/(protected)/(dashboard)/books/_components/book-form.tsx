@@ -80,7 +80,7 @@ const BookForm = ({ book, onCancel }: Props) => {
           {/* Mã sách */}
           <FormField
             control={form.control}
-            name='code'
+            name='isbn'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
@@ -91,7 +91,7 @@ const BookForm = ({ book, onCancel }: Props) => {
                     placeholder='Nhập mã sách'
                     disabled={isLoading}
                     className={cn(
-                      form.formState.errors.code && 'border-red-500'
+                      form.formState.errors.isbn && 'border-red-500'
                     )}
                     {...field}
                   />

@@ -94,3 +94,16 @@ export const useUserEmail = (email: string) => {
     userError: error,
   };
 };
+
+export const useUsers = () => {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['users'],
+    queryFn: () => userService.getAll(),
+  });
+
+  return {
+    users: data?.results || [],
+    usersLoading: isLoading,
+    userError: error,
+  };
+};

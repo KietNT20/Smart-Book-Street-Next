@@ -34,6 +34,7 @@ export enum PATH {
 
   USERS = '/users',
   USER_CREATE = '/users/create',
+  USER_STORES = '/userstores',
   ROLES = '/roles',
 
   // PUBLISHER MANAGER

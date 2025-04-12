@@ -1,13 +1,18 @@
 import { API_URL } from '@/constant/api-url';
-import { StoreParams } from '@/types/store-types';
+import {
+  StoreParams,
+  StoreResponse,
+  StoreSearchCriteria,
+  StoresResponse,
+} from '@/types/store-types';
 import axiosInstance from '@/utils/axiosInstance';
 
 export const storeService = {
-  getAll: async () => {
+  getAll: async (): Promise<StoresResponse> => {
     const res = await axiosInstance.get(API_URL.STORES.INDEX);
     return res.data;
   },
-  getById: async (id: string) => {
+  getById: async (id: string): Promise<StoreResponse> => {
     const res = await axiosInstance.get(`${API_URL.STORES.INDEX}/${id}`);
     return res.data;
   },
@@ -35,11 +40,15 @@ export const storeService = {
     const res = await axiosInstance.delete(`${API_URL.STORES.INDEX}/${id}`);
     return res.data;
   },
-  searchPagination: async (params: StoreParams) => {
+  searchPagination: async (params: StoreParams): Promise<StoresResponse> => {
     const res = await axiosInstance.post(
       API_URL.STORES.PAGINATION_SEARCH,
       params
     );
+    return res.data;
+  },
+  search: async (payload: StoreSearchCriteria): Promise<StoresResponse> => {
+    const res = await axiosInstance.post(API_URL.STORES.SEARCH, payload);
     return res.data;
   },
 };

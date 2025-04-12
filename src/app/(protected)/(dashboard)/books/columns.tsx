@@ -19,7 +19,7 @@ export const createColumns = ({
   _onDelete,
 }: ColumnHandlers): ColumnDef<Book>[] => [
   {
-    accessorKey: 'code',
+    accessorKey: 'isbn',
     header: ({ column }) => (
       <Button
         variant='ghost'

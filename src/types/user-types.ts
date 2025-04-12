@@ -1,5 +1,7 @@
 import { Sort } from '@/enums/enums';
+import { Gender } from '@/enums/gender';
 import { RoleEnums } from '@/enums/role';
+import { StoreRent } from '@/enums/store-rent';
 import { BaseEntity } from './common-types';
 import { ImageType } from './image-types';
 import { Publisher } from './publisher-types';
@@ -20,6 +22,16 @@ export type UserRolePayload = {
   userId: string;
   roleId: string;
   assignedAt: string;
+};
+
+export type UserStorePayload = {
+  userId: string;
+  storeId: string;
+  startDate: string;
+  endDate: string;
+  status: StoreRent;
+  contractNumber: string;
+  notes?: string;
 };
 
 export type RolePayload = {
@@ -43,7 +55,7 @@ export interface User extends BaseEntity {
   dob: string | null;
   address: string;
   phone: string;
-  gender: string;
+  gender: Gender.Male | Gender.Female;
   mainImageFile: string | null;
   additionalImageFiles: string[] | null;
   publisher: Publisher;
