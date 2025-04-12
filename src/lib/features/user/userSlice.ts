@@ -1,15 +1,6 @@
-// src/store/features/user/userSlice.ts
 import { RoleEnums } from '@/enums/role';
 import { User } from '@/types/user-types';
 import { createSlice } from '@reduxjs/toolkit';
-
-/* 
- roles: [
-  {role: {roleName: 'ADMIN', id: '1'}, userId: '1', roleId: '1'},
-  {role: {roleName: 'USER', id: '2'}, userId: '2', roleId: '2'},
- ]
-
-*/
 
 interface UserState {
   profile: User | null;
