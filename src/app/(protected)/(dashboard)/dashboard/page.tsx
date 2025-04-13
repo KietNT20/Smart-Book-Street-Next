@@ -8,6 +8,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { useGetPersonTotal } from '@/hooks/use-person';
 import { BookOpen, Clock, UserCheck, Users } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { ChartAreaInteractive } from './_components/dashboard/chart-area-interactive';
@@ -18,6 +19,20 @@ import SyncButton from './_components/sync-button';
 
 export default function DashboardPage() {
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const [formattedTotal, setFormattedTotal] = useState<string>('');
+
+  const { total, isLoading } = useGetPersonTotal();
+
+  const formatNumber = (num: number): string => {
+    if (!num) return '';
+    return new Intl.NumberFormat().format(num);
+  };
+
+  useEffect(() => {
+    if (!isLoading && total !== undefined) {
+      setFormattedTotal(formatNumber(total));
+    }
+  }, [total, isLoading]);
 
   useEffect(() => {
     setLastUpdated(new Date());
@@ -44,17 +59,12 @@ export default function DashboardPage() {
               Tổng Lượt Tham Quan
             </CardDescription>
             <CardTitle className='text-2xl font-semibold tabular-nums text-white md:text-3xl'>
-              15,234
+              {isLoading ? 'Đang tải' : formattedTotal}
             </CardTitle>
             <div className='absolute right-4 top-4'>
               <Users className='text-blue-100' />
             </div>
           </CardHeader>
-          <CardFooter className='flex-col items-start gap-1 text-sm'>
-            <div className='line-clamp-1 flex gap-2 font-medium text-purple-100'>
-              +2,345 so với tháng trước
-            </div>
-          </CardFooter>
         </Card>
 
         <Card className='shadow-xs bg-chart-2 from-primary/5 to-card'>
@@ -79,10 +89,10 @@ export default function DashboardPage() {
         <Card className='shadow-xs bg-chart-3 from-primary/5 to-card'>
           <CardHeader className='relative'>
             <CardDescription className='text-white'>
-              Người Dùng Đăng Ký
+              Các đối tác
             </CardDescription>
             <CardTitle className='text-2xl font-semibold tabular-nums text-white md:text-3xl'>
-              3,573
+              46
             </CardTitle>
             <div className='absolute right-4 top-4'>
               <UserCheck className='text-green-100' />
@@ -90,7 +100,7 @@ export default function DashboardPage() {
           </CardHeader>
           <CardFooter className='flex-col items-start gap-1 text-sm'>
             <div className='line-clamp-1 flex gap-2 font-medium text-purple-100'>
-              +251 người dùng mới tháng này
+              +21 đối tác mới trong tháng
             </div>
           </CardFooter>
         </Card>
