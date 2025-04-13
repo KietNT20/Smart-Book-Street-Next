@@ -1,1 +1,13 @@
 *.css
+*.scss
+*.less
+*.html
+*.json
+*.md
+*.txt
+*.xml
+*.yml
+*.yaml
+.next
+node_modules
+public
