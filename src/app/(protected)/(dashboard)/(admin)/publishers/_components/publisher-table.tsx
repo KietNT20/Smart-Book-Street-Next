@@ -124,6 +124,7 @@ const PublisherTable = ({
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead>No.</TableHead>
               <TableHead
                 className='cursor-pointer'
                 onClick={() => handleSort('PublisherName')}
@@ -206,8 +207,11 @@ const PublisherTable = ({
                 </TableCell>
               </TableRow>
             ) : (
-              publishers.map((publisher) => (
+              publishers.map((publisher, index) => (
                 <TableRow key={publisher.id}>
+                  <TableCell className='text-muted-foreground'>
+                    {index + 1 + (pageNumber - 1) * pageSize}
+                  </TableCell>
                   <TableCell className='font-medium'>
                     {publisher.publisherName}
                   </TableCell>

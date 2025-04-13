@@ -7,8 +7,9 @@ import {
 } from '@/components/ui/collapsible';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import useDebounce from '@/hooks/use-debounce';
 import { ChevronDown, ChevronUp, X } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SearchFilters } from '../page';
 
 type Props = {
@@ -27,16 +28,36 @@ const UserFilter = ({
   onClearSearch,
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [localFilters, setLocalFilters] = useState<SearchFilters>(filters);
+  const debouncedFilters = useDebounce(localFilters, 3000);
+
+  useEffect(() => {
+    setLocalFilters(filters);
+  }, [filters]);
+
+  useEffect(() => {
+    setFilters(debouncedFilters);
+    const hasActiveFilter = Object.values(debouncedFilters).some(
+      (val) => val && val.trim() !== ''
+    );
+
+    if (hasActiveFilter) {
+      onSearch();
+    } else if (isSearching) {
+      onClearSearch();
+    }
+  }, [debouncedFilters, setFilters, onSearch, onClearSearch, isSearching]);
 
   const handleInputChange = (
     field: keyof SearchFilters,
     value: string | null
   ) => {
-    setFilters({ ...filters, [field]: value });
+    const newFilters = { ...localFilters, [field]: value };
+    setLocalFilters(newFilters);
   };
 
   const clearField = (field: keyof SearchFilters) => {
-    setFilters({ ...filters, [field]: null });
+    handleInputChange(field, '');
   };
 
   return (
@@ -49,15 +70,18 @@ const UserFilter = ({
                 Xóa bộ lọc
               </Button>
             )}
-            <Button onClick={onSearch} size='sm'>
-              Tìm kiếm
-            </Button>
             <CollapsibleTrigger asChild>
               <Button variant='outline' size='sm'>
                 {isOpen ? (
-                  <ChevronUp className='h-4 w-4' />
+                  <>
+                    <span className='mr-1'>Ẩn bộ lọc</span>
+                    <ChevronUp className='h-4 w-4' />
+                  </>
                 ) : (
-                  <ChevronDown className='h-4 w-4' />
+                  <>
+                    <span className='mr-1'>Hiển thị bộ lọc</span>
+                    <ChevronDown className='h-4 w-4' />
+                  </>
                 )}
               </Button>
             </CollapsibleTrigger>
@@ -71,12 +95,12 @@ const UserFilter = ({
                   <Input
                     id='userName'
                     placeholder='Tìm theo tên tài khoản'
-                    value={filters.userName || ''}
+                    value={localFilters.userName || ''}
                     onChange={(e) =>
                       handleInputChange('userName', e.target.value)
                     }
                   />
-                  {filters.userName && (
+                  {localFilters.userName && (
                     <Button
                       variant='ghost'
                       size='icon'
@@ -95,12 +119,12 @@ const UserFilter = ({
                   <Input
                     id='fullName'
                     placeholder='Tìm theo tên người dùng'
-                    value={filters.fullName || ''}
+                    value={localFilters.fullName || ''}
                     onChange={(e) =>
                       handleInputChange('fullName', e.target.value)
                     }
                   />
-                  {filters.fullName && (
+                  {localFilters.fullName && (
                     <Button
                       variant='ghost'
                       size='icon'
@@ -119,10 +143,10 @@ const UserFilter = ({
                   <Input
                     id='email'
                     placeholder='Tìm theo email'
-                    value={filters.email || ''}
+                    value={localFilters.email || ''}
                     onChange={(e) => handleInputChange('email', e.target.value)}
                   />
-                  {filters.email && (
+                  {localFilters.email && (
                     <Button
                       variant='ghost'
                       size='icon'
@@ -141,10 +165,10 @@ const UserFilter = ({
                   <Input
                     id='phone'
                     placeholder='Tìm theo số điện thoại'
-                    value={filters.phone || ''}
+                    value={localFilters.phone || ''}
                     onChange={(e) => handleInputChange('phone', e.target.value)}
                   />
-                  {filters.phone && (
+                  {localFilters.phone && (
                     <Button
                       variant='ghost'
                       size='icon'
@@ -163,4 +187,5 @@ const UserFilter = ({
     </Card>
   );
 };
+
 export default UserFilter;

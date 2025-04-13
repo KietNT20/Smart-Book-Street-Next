@@ -1,6 +1,6 @@
 import { userStoreService } from '@/services/userStoreService';
 import { UserStorePayload } from '@/types/user-types';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 export const useUserStoresMutation = () => {
@@ -21,5 +21,16 @@ export const useUserStoresMutation = () => {
   return {
     registerStore: registerStoreMutation.mutate,
     isRegisteringStore: registerStoreMutation.isPending,
+  };
+};
+
+export const useGetContractUser = (userId: string) => {
+  const { data, isLoading } = useQuery({
+    queryKey: ['user-stores', userId],
+    queryFn: () => userStoreService.checkUserContract(userId),
+  });
+  return {
+    userStore: data,
+    isLoadingUserStore: isLoading,
   };
 };
