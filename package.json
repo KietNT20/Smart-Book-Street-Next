@@ -105,13 +105,5 @@
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
       "pre-push": "npm run lint:fix && npm run prettier"
     }
-  },
-  "lint-staged": {
-    "./src/**/*.{js,ts,tsx,jsx}": "npm run lint:fix",
-    "./src/**/*": [
-      "npm run prettier",
-      "npm run lint:fix",
-      "prettier --check src/"
-    ]
   }
 }
