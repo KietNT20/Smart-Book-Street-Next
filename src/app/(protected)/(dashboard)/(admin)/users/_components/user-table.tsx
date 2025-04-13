@@ -223,7 +223,7 @@ const UserTable = ({
               ) : (
                 users.map((user, index) => (
                   <TableRow key={user.id || index}>
-                    <TableCell className='whitespace-nowrap font-medium'>
+                    <TableCell className='whitespace-nowrap text-muted-foreground'>
                       {index + 1 + (pageNumber - 1) * pageSize}
                     </TableCell>
                     <TableCell className='whitespace-nowrap font-medium'>

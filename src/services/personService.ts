@@ -1,0 +1,65 @@
+import { API_ENDPOINT } from '@/enums/endpoint';
+import { DailyPopulationStatistics } from '@/lib/zod';
+import axiosInstance from '@/utils/axiosInstance';
+
+enum GenderCount {
+  MALE = 'male',
+  FEMALE = 'female',
+}
+
+export const personService = {
+  syncData: async (): Promise<{ isSuccess: boolean; message: string }> => {
+    const res = await axiosInstance.post(`${API_ENDPOINT.PERSON}/sync`);
+    return res.data;
+  },
+  total: async (): Promise<{ success: boolean; total: number }> => {
+    const res = await axiosInstance.get(`${API_ENDPOINT.PERSON}/stats/total`);
+    return res.data;
+  },
+  getTotalByGender: async (
+    gender: GenderCount
+  ): Promise<{
+    success: boolean;
+    gender: GenderCount;
+    count: number;
+  }> => {
+    const res = await axiosInstance.get(
+      `${API_ENDPOINT.PERSON}/stats/gender/${gender}`
+    );
+    return res.data;
+  },
+  dailyPopulation: async (
+    query: DailyPopulationStatistics
+  ): Promise<{
+    success: boolean;
+    date: string;
+    statistics: {
+      male: number;
+      female: number;
+      total: number;
+    };
+  }> => {
+    const res = await axiosInstance.get(
+      `${API_ENDPOINT.PERSON}/stats/daily${query}`
+    );
+    return res.data;
+  },
+  monthlyPopulation: async (
+    yearly: number,
+    month: number
+  ): Promise<{
+    success: boolean;
+    year: number;
+    month: number;
+    statistics: {
+      male: number;
+      female: number;
+      total: number;
+    };
+  }> => {
+    const res = await axiosInstance.get(
+      `${API_ENDPOINT.PERSON}/stats/monthly/${yearly}/${month}`
+    );
+    return res.data;
+  },
+};

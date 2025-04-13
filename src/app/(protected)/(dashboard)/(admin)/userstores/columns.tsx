@@ -10,6 +10,14 @@ import Link from 'next/link';
 
 export const columns: ColumnDef<User>[] = [
   {
+    accessorKey: 'no',
+    header: 'No.',
+    cell: ({ row }) => {
+      const index = row.index + 1;
+      return <p className='text-muted-foreground'>{index}</p>;
+    },
+  },
+  {
     accessorKey: 'userName',
     header: 'Tên đăng nhập',
   },
