@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { StoreFormValues } from '@/lib/zod';
 import { Loader2, MapPin, Navigation, Search } from 'lucide-react';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import 'maplibre-gl/dist/maplibre-gl.css';
 import { useEffect, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import Map, { Marker } from 'react-map-gl/mapbox';
