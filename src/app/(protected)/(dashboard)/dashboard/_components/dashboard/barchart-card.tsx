@@ -11,163 +11,171 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import type { DatePickerProps } from 'antd';
+import { DatePicker } from 'antd';
+import type { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import { TrendingUp } from 'lucide-react';
 import { useState } from 'react';
 import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
 
-type TimeRange =
-  | '1'
-  | '2'
-  | '3'
-  | '4'
-  | '5'
-  | '6'
-  | '7'
-  | '8'
-  | '9'
-  | '10'
-  | '11'
-  | '12'
-  | 'this-quarter'
-  | 'last-quarter'
-  | 'this-6-months'
-  | 'last-6-months'
-  | 'this-year'
-  | 'last-year';
+const { RangePicker } = DatePicker;
+
+const getYearMonth = (date: Dayjs) => date.year() * 12 + date.month();
+
+const disabled7DaysDate: DatePickerProps['disabledDate'] = (
+  current,
+  { from, type }
+) => {
+  if (from) {
+    const minDate = from.subtract(7, 'days');
+    const maxDate = from.add(7, 'days');
+
+    switch (type) {
+      case 'year':
+        return (
+          current.year() < minDate.year() || current.year() > maxDate.year()
+        );
+      case 'month':
+        return (
+          getYearMonth(current) < getYearMonth(minDate) ||
+          getYearMonth(current) > getYearMonth(maxDate)
+        );
+      default:
+        return Math.abs(current.diff(from, 'days')) > 7;
+    }
+  }
+  return false;
+};
 
 type Props = {
-  barData: { month: string; visitor: number; book: number }[];
+  barData: {
+    date: string;
+    male: number;
+    female: number;
+  }[];
   barConfig: {
-    visitor: { label: string; color: string };
-    book: { label: string; color: string };
+    male: { label: string; color: string };
+    female: { label: string; color: string };
   };
-  onTimeRangeChange?: (range: TimeRange) => void;
+  isLoading?: boolean;
 };
 
-const timeRangeOptions = [
-  { value: '1', label: 'Tháng 1' },
-  { value: '2', label: 'Tháng 2' },
-  { value: '3', label: 'Tháng 3' },
-  { value: '4', label: 'Tháng 4' },
-  { value: '5', label: 'Tháng 5' },
-  { value: '6', label: 'Tháng 6' },
-  { value: '7', label: 'Tháng 7' },
-  { value: '8', label: 'Tháng 8' },
-  { value: '9', label: 'Tháng 9' },
-  { value: '10', label: 'Tháng 10' },
-  { value: '11', label: 'Tháng 11' },
-  { value: '12', label: 'Tháng 12' },
-  { value: 'this-quarter', label: 'Quý này' },
-  { value: 'last-quarter', label: 'Quý trước' },
-  { value: 'this-6-months', label: '6 tháng này' },
-  { value: 'last-6-months', label: '6 tháng trước' },
-  { value: 'this-year', label: 'Năm nay' },
-  { value: 'last-year', label: 'Năm trước' },
-] as const;
+const BarchartCard = ({ barData, barConfig, isLoading }: Props) => {
+  const [dateRange, setDateRange] = useState<[Dayjs, Dayjs]>([
+    dayjs().subtract(6, 'days'),
+    dayjs(),
+  ]);
 
-const getTimeRangeLabel = (range: TimeRange) => {
-  const option = timeRangeOptions.find((opt) => opt.value === range);
-  return option?.label || 'Chọn thời gian';
-};
-
-const BarchartCard = ({ barData, barConfig, onTimeRangeChange }: Props) => {
-  const [timeRange, setTimeRange] = useState<TimeRange>('this-6-months');
-
-  const handleTimeRangeChange = (value: TimeRange) => {
-    setTimeRange(value);
-    onTimeRangeChange?.(value);
+  // Format date for display
+  const formatDate = (date: string) => {
+    return dayjs(date).format('DD/MM');
   };
 
-  const getDescriptionText = (range: TimeRange) => {
-    if (
-      ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'].includes(
-        range
-      )
-    ) {
-      return `Dữ liệu ${getTimeRangeLabel(range)} năm 2024`;
+  // Check if the date is within the selected range
+  const filteredData = barData.filter((item) => {
+    const itemDate = dayjs(item.date);
+    return (
+      (dateRange[0]
+        ? itemDate.isAfter(dateRange[0], 'day') ||
+          itemDate.isSame(dateRange[0], 'day')
+        : true) &&
+      (dateRange[1]
+        ? itemDate.isBefore(dateRange[1], 'day') ||
+          itemDate.isSame(dateRange[1], 'day')
+        : true)
+    );
+  });
+
+  // Handle date range change
+  const handleRangeChange = (dates: [Dayjs | null, Dayjs | null] | null) => {
+    if (dates && dates[0] && dates[1]) {
+      setDateRange([dates[0], dates[1]]);
     }
-    return `Dữ liệu theo ${getTimeRangeLabel(range)}`;
   };
 
-  const getFooterText = (range: TimeRange) => {
-    if (
-      ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'].includes(
-        range
-      )
-    ) {
-      return `Thống kê lượt tham quan và sách mới trong ${getTimeRangeLabel(range).toLowerCase()}`;
+  const getDescriptionText = () => {
+    if (dateRange && dateRange.length === 2) {
+      return `Dữ liệu từ ${dateRange[0].format('DD/MM/YYYY')} - ${dateRange[1].format('DD/MM/YYYY')}`;
     }
-    return `Thống kê lượt tham quan và sách mới trong ${getTimeRangeLabel(range)}`;
+    return 'Chọn khoảng thời gian để hiển thị dữ liệu';
   };
+
+  const totalMale = filteredData.reduce((sum, item) => sum + item.male, 0);
+  const totalFemale = filteredData.reduce((sum, item) => sum + item.female, 0);
+  const totalVisitors = totalMale + totalFemale;
 
   return (
     <Card className='mb-4 flex-[2] lg:mb-0'>
       <CardHeader>
         <div className='md:flex md:items-center md:justify-between'>
           <div className='mb-4 md:mb-0'>
-            <CardTitle>Thống kê theo tháng</CardTitle>
-            <CardDescription>{getDescriptionText(timeRange)}</CardDescription>
+            <CardTitle>Thống kê lượt tham quan</CardTitle>
+            <CardDescription className='mt-3'>
+              {getDescriptionText()}
+            </CardDescription>
           </div>
-          <Select value={timeRange} onValueChange={handleTimeRangeChange}>
-            <SelectTrigger className='w-[180px]'>
-              <SelectValue placeholder='Chọn thời gian' />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Theo tháng</SelectLabel>
-                {timeRangeOptions.slice(0, 12).map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-              <SelectGroup>
-                <SelectLabel>Theo khoảng thời gian</SelectLabel>
-                {timeRangeOptions.slice(12).map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+          <RangePicker
+            className='px-3 py-2'
+            value={dateRange}
+            onChange={handleRangeChange}
+            disabledDate={disabled7DaysDate}
+            allowClear={false}
+            format='DD/MM/YYYY'
+            placeholder={['Từ ngày', 'Đến ngày']}
+          />
         </div>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={barConfig}>
-          <BarChart accessibilityLayer data={barData}>
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey='month'
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-              tickFormatter={(value) => value}
-            />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent indicator='dashed' />}
-            />
-            <Bar dataKey='visitor' fill='hsl(var(--chart-1))' radius={4} />
-            <Bar dataKey='book' fill='hsl(var(--chart-2))' radius={4} />
-          </BarChart>
-        </ChartContainer>
+        {isLoading ? (
+          <div className='flex h-64 items-center justify-center'>
+            <p>Đang tải dữ liệu...</p>
+          </div>
+        ) : filteredData.length > 0 ? (
+          <ChartContainer config={barConfig}>
+            <BarChart
+              accessibilityLayer
+              data={filteredData}
+              margin={{ top: 10, right: 30, left: 0, bottom: 5 }}
+            >
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey='date'
+                tickLine={false}
+                tickMargin={10}
+                axisLine={false}
+                tickFormatter={formatDate}
+              />
+              <ChartTooltip
+                cursor={false}
+                content={<ChartTooltipContent indicator='dashed' />}
+              />
+              <Bar dataKey='male' fill='hsl(var(--chart-1))' radius={4} />
+              <Bar dataKey='female' fill='hsl(var(--chart-2))' radius={4} />
+            </BarChart>
+          </ChartContainer>
+        ) : (
+          <div className='flex h-64 items-center justify-center'>
+            <p>Không có dữ liệu trong khoảng thời gian đã chọn</p>
+          </div>
+        )}
       </CardContent>
       <CardFooter className='flex-col items-start gap-2 text-sm'>
         <div className='flex gap-2 font-medium leading-none'>
-          Tăng 5.2% so với kỳ trước <TrendingUp className='h-4 w-4' />
+          {filteredData.length > 0 ? (
+            <>
+              Tổng lượt tham quan: {totalVisitors} (Nam: {totalMale}, Nữ:{' '}
+              {totalFemale})
+              {totalVisitors > 0 && <TrendingUp className='h-4 w-4' />}
+            </>
+          ) : (
+            'Chưa có dữ liệu'
+          )}
         </div>
         <div className='leading-none text-muted-foreground'>
-          {getFooterText(timeRange)}
+          {dateRange[0] && dateRange[1]
+            ? `Thống kê lượt tham quan theo giới tính trong ${dateRange[1].diff(dateRange[0], 'days') + 1} ngày`
+            : 'Thống kê lượt tham quan theo giới tính'}
         </div>
       </CardFooter>
     </Card>

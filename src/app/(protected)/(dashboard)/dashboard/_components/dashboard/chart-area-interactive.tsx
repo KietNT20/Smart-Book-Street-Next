@@ -131,28 +131,36 @@ export function ChartAreaInteractive() {
       }
 
       // Filter and process data from API
-      (result.data || []).forEach((item: any) => {
-        console.log('item', item);
-        const monthKey = item.month;
-        const itemYear = item.year || displayYear;
+      (result.data || []).forEach(
+        (item: {
+          count: number;
+          gender: 'male' | 'female' | 'total';
+          month: number;
+          monthName: string;
+          period: string;
+          year?: number;
+        }) => {
+          const monthKey = item.month;
+          const itemYear = item.year || displayYear;
 
-        if (!monthlyData[monthKey]) {
-          monthlyData[monthKey] = {
-            date: `${itemYear}-${monthKey.toString().padStart(2, '0')}-01`,
-            male: 0,
-            female: 0,
-            total: 0,
-          };
-        }
+          if (!monthlyData[monthKey]) {
+            monthlyData[monthKey] = {
+              date: `${itemYear}-${monthKey.toString().padStart(2, '0')}-01`,
+              male: 0,
+              female: 0,
+              total: 0,
+            };
+          }
 
-        if (item.gender === 'male') {
-          monthlyData[monthKey].male = item.count;
-        } else if (item.gender === 'female') {
-          monthlyData[monthKey].female = item.count;
-        } else if (item.gender === 'total') {
-          monthlyData[monthKey].total = item.count;
+          if (item.gender === 'male') {
+            monthlyData[monthKey].male = item.count;
+          } else if (item.gender === 'female') {
+            monthlyData[monthKey].female = item.count;
+          } else if (item.gender === 'total') {
+            monthlyData[monthKey].total = item.count;
+          }
         }
-      });
+      );
 
       // Convert object to array and sort by date
       const formattedData = Object.values(monthlyData).sort((a, b) => {
