@@ -56,7 +56,7 @@ export default function DashboardPage() {
         <Card className='shadow-xs bg-chart-1 from-primary/5 to-card'>
           <CardHeader className='relative'>
             <CardDescription className='text-white'>
-              Tổng Lượt Tham Quan
+              Tổng trung bình số người
             </CardDescription>
             <CardTitle className='text-2xl font-semibold tabular-nums text-white md:text-3xl'>
               {isLoading ? 'Đang tải' : formattedTotal}
