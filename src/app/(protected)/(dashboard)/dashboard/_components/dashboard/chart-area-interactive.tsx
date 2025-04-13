@@ -132,6 +132,7 @@ export function ChartAreaInteractive() {
 
       // Filter and process data from API
       (result.data || []).forEach((item: any) => {
+        console.log('item', item);
         const monthKey = item.month;
         const itemYear = item.year || displayYear;
 
@@ -206,10 +207,10 @@ export function ChartAreaInteractive() {
   return (
     <Card className='@container/card'>
       <CardHeader className='relative'>
-        <CardTitle>Thống kê dân số</CardTitle>
+        <CardTitle>Thống kê số lượng người tại đường sách</CardTitle>
         <CardDescription>
           <span className='@[540px]/card:block hidden'>
-            Dữ liệu dân số theo giới tính - {getPeriodLabel()}
+            Dữ liệu số lượng người theo giới tính - {getPeriodLabel()}
           </span>
           <span className='@[540px]/card:hidden'>{getPeriodLabel()}</span>
         </CardDescription>
