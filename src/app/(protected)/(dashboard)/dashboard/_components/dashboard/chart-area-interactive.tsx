@@ -53,6 +53,22 @@ type TimeRangeOption =
   | 'currentYear'
   | 'prevYear';
 
+type PopulationData = {
+  date: string;
+  male: number;
+  female: number;
+  total: number;
+};
+
+type ApiResponse = {
+  month: number;
+  monthName: string;
+  gender: string;
+  count: number;
+  period: string;
+  year?: number;
+};
+
 export function ChartAreaInteractive() {
   const isMobile = useIsMobile();
   const [timeRange, setTimeRange] = useState<TimeRangeOption>('currentYear');
@@ -60,7 +76,7 @@ export function ChartAreaInteractive() {
   const [dataType, setDataType] = useState<'stacked' | 'separate'>('stacked');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [populationData, setPopulationData] = useState<any[]>([]);
+  const [populationData, setPopulationData] = useState<PopulationData[]>([]);
 
   useEffect(() => {
     if (isMobile) {
@@ -116,7 +132,7 @@ export function ChartAreaInteractive() {
 
       const result = await response.json();
 
-      const monthlyData: Record<string, any> = {};
+      const monthlyData: Record<string, PopulationData> = {};
 
       let displayYear = year;
       if (timeRange === 'prevYear') displayYear = year - 1;
@@ -131,8 +147,7 @@ export function ChartAreaInteractive() {
       }
 
       // Filter and process data from API
-      (result.data || []).forEach((item: any) => {
-        console.log('item', item);
+      (result.data || []).forEach((item: ApiResponse) => {
         const monthKey = item.month;
         const itemYear = item.year || displayYear;
 
@@ -207,10 +222,10 @@ export function ChartAreaInteractive() {
   return (
     <Card className='@container/card'>
       <CardHeader className='relative'>
-        <CardTitle>Thống kê số lượng người tại đường sách</CardTitle>
+        <CardTitle>Thống kê dân số</CardTitle>
         <CardDescription>
           <span className='@[540px]/card:block hidden'>
-            Dữ liệu số lượng người theo giới tính - {getPeriodLabel()}
+            Dữ liệu dân số theo giới tính - {getPeriodLabel()}
           </span>
           <span className='@[540px]/card:hidden'>{getPeriodLabel()}</span>
         </CardDescription>

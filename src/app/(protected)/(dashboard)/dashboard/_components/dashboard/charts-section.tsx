@@ -1,35 +1,36 @@
 'use client';
 
 import { ChartConfig } from '@/components/ui/chart';
+import axios from 'axios';
 import * as React from 'react';
 import BarchartCard from './barchart-card';
 import PiechartCard from './piechart-card';
 
-// Data cho Bar Chart
-const barData = [
-  { month: 'Tháng 1', visitor: 186, book: 80 },
-  { month: 'Tháng 2', visitor: 305, book: 200 },
-  { month: 'Tháng 3', visitor: 237, book: 120 },
-  { month: 'Tháng 4', visitor: 73, book: 190 },
-  { month: 'Tháng 5', visitor: 209, book: 130 },
-  { month: 'Tháng 6', visitor: 214, book: 140 },
-];
+interface DailyVisitorsApiResponse {
+  success: boolean;
+  data: {
+    date: string;
+    male: number;
+    female: number;
+  }[];
+}
+
+type BarData = {
+  date: string;
+  male: number;
+  female: number;
+}[];
 
 const barConfig = {
-  visitor: {
-    label: 'Lượt tham quan',
+  male: {
+    label: 'Nam',
     color: 'hsl(var(--chart-1))',
   },
-  book: {
-    label: 'Số sách mới',
+  female: {
+    label: 'Nữ',
     color: 'hsl(var(--chart-2))',
   },
 } satisfies ChartConfig;
-
-const barProps = {
-  barData,
-  barConfig,
-};
 
 // Data cho Pie Chart
 const pieData = [
@@ -66,23 +67,70 @@ const pieConfig = {
   },
 } satisfies ChartConfig;
 
-const pieProps = {
-  pieData,
-  pieConfig,
-};
-
 const ChartsSection = () => {
+  const [barData, setBarData] = React.useState<BarData>([]);
+  const [isLoading, setIsLoading] = React.useState<boolean>(true);
+  const [error, setError] = React.useState<string | null>(null);
+
   const totalBooks = React.useMemo(() => {
     return pieData.reduce((acc, curr) => acc + curr.visitors, 0);
   }, []);
 
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+
+        const endDate = new Date();
+        const startDate = new Date();
+        startDate.setDate(startDate.getDate() - 6); // 6 ngày trước + ngày hiện tại = 7 ngày
+
+        const formattedStartDate = startDate.toISOString().split('T')[0];
+        const formattedEndDate = endDate.toISOString().split('T')[0];
+
+        const response = await axios.get<DailyVisitorsApiResponse>(
+          `/api/visitors/daily-statistics?startDate=${formattedStartDate}&endDate=${formattedEndDate}`
+        );
+
+        if (response.data.success) {
+          setBarData(response.data.data);
+        } else {
+          setError('Không thể tải dữ liệu');
+        }
+      } catch (err) {
+        console.error('Lỗi khi tải thống kê khách tham quan:', err);
+        setError('Lỗi khi tải dữ liệu');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const pieProps = {
+    pieData,
+    pieConfig,
+    totalBooks,
+  };
+
   return (
     <div className='mt-4 gap-4 lg:flex'>
       {/* Bar Chart Container */}
-      <BarchartCard {...barProps} />
+      <BarchartCard
+        barData={barData}
+        barConfig={barConfig}
+        isLoading={isLoading}
+      />
+
       {/* Pie Chart Container */}
-      <PiechartCard {...pieProps} totalBooks={totalBooks} />
+      <PiechartCard {...pieProps} />
+
+      {error && (
+        <div className='rounded bg-red-50 p-4 text-red-500'>{error}</div>
+      )}
     </div>
   );
 };
+
 export default ChartsSection;
