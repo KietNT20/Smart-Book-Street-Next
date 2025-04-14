@@ -1,6 +1,6 @@
 import { API_ENDPOINT } from '@/enums/endpoint';
 import { DailyPopulationStatistics } from '@/lib/zod';
-import { DailyVisitorsResponse } from '@/types/person-types';
+import { BarData, DailyVisitorsResponse } from '@/types/person-types';
 import axiosInstance from '@/utils/axiosInstance';
 
 enum GenderCount {
@@ -69,6 +69,15 @@ export const personService = {
   }): Promise<DailyVisitorsResponse> => {
     const res = await axiosInstance.get(
       `${API_ENDPOINT.PERSON}/stats/range-gender?startDate=${query.startDate}&endDate=${query.endDate}`
+    );
+    return res.data;
+  },
+  dailyRange: async (query: {
+    startDate: string;
+    endDate: string;
+  }): Promise<BarData> => {
+    const res = await axiosInstance.get(
+      `${API_ENDPOINT.PERSON}/stats/range?startDate=${query.startDate}&endDate=${query.endDate}`
     );
     return res.data;
   },

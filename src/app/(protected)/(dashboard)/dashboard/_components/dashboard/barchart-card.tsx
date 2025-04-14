@@ -11,6 +11,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
+import { BarDatum } from '@/types/person-types';
 import type { DatePickerProps } from 'antd';
 import { DatePicker } from 'antd';
 import type { Dayjs } from 'dayjs';
@@ -49,11 +50,7 @@ const disabled7DaysDate: DatePickerProps['disabledDate'] = (
 };
 
 type Props = {
-  barData: {
-    date: string;
-    male: number;
-    female: number;
-  }[];
+  barData: BarDatum[];
   barConfig: {
     male: { label: string; color: string };
     female: { label: string; color: string };
@@ -74,7 +71,7 @@ const BarchartCard = ({ barData, barConfig, isLoading }: Props) => {
 
   // Check if the date is within the selected range
   const filteredData = barData.filter((item) => {
-    const itemDate = dayjs(item.date);
+    const itemDate = dayjs(item.day);
     return (
       (dateRange[0]
         ? itemDate.isAfter(dateRange[0], 'day') ||
@@ -140,7 +137,7 @@ const BarchartCard = ({ barData, barConfig, isLoading }: Props) => {
             >
               <CartesianGrid vertical={false} />
               <XAxis
-                dataKey='date'
+                dataKey='day'
                 tickLine={false}
                 tickMargin={10}
                 axisLine={false}

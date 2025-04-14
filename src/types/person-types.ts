@@ -29,3 +29,15 @@ export interface DailyVisitorsResponse {
     datasets: DatasetInfo[];
   };
 }
+
+export interface BarData {
+  success: boolean;
+  barData: BarDatum[];
+}
+
+export interface BarDatum {
+  day: Date | string;
+  visitor: number;
+  male: number;
+  female: number;
+}

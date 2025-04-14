@@ -1,25 +1,11 @@
 'use client';
 
 import { ChartConfig } from '@/components/ui/chart';
-import axios from 'axios';
+import { useDailyRangeStatistics } from '@/hooks/use-person';
+import dayjs from 'dayjs';
 import * as React from 'react';
 import BarchartCard from './barchart-card';
 import PiechartCard from './piechart-card';
-
-interface DailyVisitorsApiResponse {
-  success: boolean;
-  data: {
-    date: string;
-    male: number;
-    female: number;
-  }[];
-}
-
-type BarData = {
-  date: string;
-  male: number;
-  female: number;
-}[];
 
 const barConfig = {
   male: {
@@ -68,50 +54,26 @@ const pieConfig = {
 } satisfies ChartConfig;
 
 const ChartsSection = () => {
-  const [barData, setBarData] = React.useState<BarData>([]);
-  const [isLoading, setIsLoading] = React.useState<boolean>(true);
-  const [error, setError] = React.useState<string | null>(null);
+  const endDate = dayjs(new Date()).format('YYYY-MM-DD');
+  const startDate = dayjs(new Date()).subtract(6, 'day').format('YYYY-MM-DD');
+  const { barData, isLoading, error } = useDailyRangeStatistics({
+    startDate: startDate,
+    endDate: endDate,
+  });
+
+  const totalMale = barData.reduce((sum, item) => sum + item.male, 0);
+  const totalFemale = barData.reduce((sum, item) => sum + item.female, 0);
+  const totalVisitors = totalMale + totalFemale;
 
   const totalBooks = React.useMemo(() => {
     return pieData.reduce((acc, curr) => acc + curr.visitors, 0);
-  }, []);
-
-  React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-
-        const endDate = new Date();
-        const startDate = new Date();
-        startDate.setDate(startDate.getDate() - 6); // 6 ngày trước + ngày hiện tại = 7 ngày
-
-        const formattedStartDate = startDate.toISOString().split('T')[0];
-        const formattedEndDate = endDate.toISOString().split('T')[0];
-
-        const response = await axios.get<DailyVisitorsApiResponse>(
-          `/api/visitors/daily-statistics?startDate=${formattedStartDate}&endDate=${formattedEndDate}`
-        );
-
-        if (response.data.success) {
-          setBarData(response.data.data);
-        } else {
-          setError('Không thể tải dữ liệu');
-        }
-      } catch (err) {
-        console.error('Lỗi khi tải thống kê khách tham quan:', err);
-        setError('Lỗi khi tải dữ liệu');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
   }, []);
 
   const pieProps = {
     pieData,
     pieConfig,
     totalBooks,
+    totalVisitors,
   };
 
   return (
@@ -127,7 +89,9 @@ const ChartsSection = () => {
       <PiechartCard {...pieProps} />
 
       {error && (
-        <div className='rounded bg-red-50 p-4 text-red-500'>{error}</div>
+        <div className='rounded bg-red-50 p-4 text-red-500'>
+          {error.message}
+        </div>
       )}
     </div>
   );

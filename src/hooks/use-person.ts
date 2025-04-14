@@ -23,3 +23,18 @@ export const useGetPersonTotal = () => {
 
   return { total: data?.total, isLoading };
 };
+
+export const useDailyRangeStatistics = ({
+  startDate,
+  endDate,
+}: {
+  startDate: string;
+  endDate: string;
+}) => {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['daily-range', startDate, endDate],
+    queryFn: () => personService.dailyRange({ startDate, endDate }),
+  });
+
+  return { barData: data?.barData || [], isLoading, error };
+};
