@@ -6,6 +6,8 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { ConfigProvider } from 'antd';
+import locale from 'antd/locale/vi_VN';
 
 function makeQueryClient() {
   return new QueryClient({
@@ -48,7 +50,7 @@ export default function QueryProvider({
 
   return (
     <QueryClientProvider client={queryClient}>
-      {children}
+      <ConfigProvider locale={locale}>{children}</ConfigProvider>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );

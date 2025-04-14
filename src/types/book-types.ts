@@ -16,7 +16,6 @@ export type BookCategoryIds = {
 };
 
 export interface Book extends BaseEntity {
-  id: string;
   isbn: string;
   title: string;
   publicationDate: Date | string;

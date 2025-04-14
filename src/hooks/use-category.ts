@@ -13,6 +13,7 @@ export const useGetCategoryById = (id: string) => {
   return useQuery({
     queryKey: ['categories', id],
     queryFn: () => categoryService.getById(id),
+    enabled: !!id,
   });
 };
 

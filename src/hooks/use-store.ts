@@ -175,6 +175,7 @@ export const useStoreById = (id: string) => {
   const { data, isLoading, error } = useQuery({
     queryKey: ['stores', id],
     queryFn: () => storeService.getById(id),
+    enabled: !!id,
   });
 
   return {
