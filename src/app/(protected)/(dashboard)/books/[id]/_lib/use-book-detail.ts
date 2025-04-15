@@ -3,7 +3,6 @@ import { useBookMutations } from '@/hooks/use-books';
 import useDebounce from '@/hooks/use-debounce';
 import { authorService } from '@/services/authorService';
 import { categoryService } from '@/services/categoryService';
-import { Book } from '@/types/book-types';
 import { useQueries } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 
@@ -19,7 +18,7 @@ export const useBookDetail = ({ id }: { id: string }) => {
 
   const deletedLoading = useDebounce(deleteBookPending, 300);
 
-  const book: Book = bookDetailData?.result;
+  const book = bookDetailData?.result;
 
   const bookAuthorsRes = useQueries({
     queries: (book?.bookAuthors || [])?.map((bookAuth, index: number) => ({

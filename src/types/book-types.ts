@@ -1,4 +1,5 @@
 import { Sort } from '@/enums/enums';
+import { Language } from '@/enums/lang';
 import { BaseEntity } from './common-types';
 import { ImageType } from './image-types';
 import { Publisher } from './publisher-types';
@@ -18,15 +19,17 @@ export type BookCategoryIds = {
 export interface Book extends BaseEntity {
   isbn: string;
   title: string;
-  publicationDate: Date | string;
+  publicationDate: Date | string | null;
   price: number;
-  languages: string;
+  languages: Language;
   description: string;
   size: string;
   status: string;
   publisherId: string;
   authorIds: string[];
   categoryIds: string[];
+  mainImageFile: File | null;
+  additionalImageFiles: File[] | null;
   publisher?: Publisher;
   baseImgUrl?: string;
   images?: ImageType[];
@@ -42,29 +45,21 @@ export type GetAllBooksResponse = {
   message: string;
 };
 
-export type BookResponse = {
+export type BooksResponse = {
   results: Book[];
   totalPages: number;
   totalRecordsPerPage: number;
   totalRecords: number;
   pageNumber: number;
   pageSize: number;
-  sortField: string;
-  sortOrder: Sort.ASC | Sort.DESC;
   isSuccess: true;
   message: string;
 };
 
-export type BookSearchResult = {
-  results: Book[];
-  totalPages: number;
-  totalRecordsPerPage: number;
+export type BookResponse = {
+  result: Book;
   totalRecords: number;
-  pageNumber: number;
-  pageSize: number;
-  sortField: string;
-  sortOrder: Sort.ASC | Sort.DESC;
-  isSuccess: boolean;
+  isSuccess: true;
   message: string;
 };
 

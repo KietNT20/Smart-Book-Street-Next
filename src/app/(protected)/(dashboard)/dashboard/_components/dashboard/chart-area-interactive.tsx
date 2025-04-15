@@ -29,7 +29,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 // Chart configuration
 const chartConfig = {
   population: {
-    label: 'Dân số',
+    label: 'Số người qua camera',
   },
   male: {
     label: 'Nam',
@@ -222,10 +222,10 @@ export function ChartAreaInteractive() {
   return (
     <Card className='@container/card'>
       <CardHeader className='relative'>
-        <CardTitle>Thống kê dân số</CardTitle>
+        <CardTitle>Thống kê số người qua camera</CardTitle>
         <CardDescription>
           <span className='@[540px]/card:block hidden'>
-            Dữ liệu dân số theo giới tính - {getPeriodLabel()}
+            Dữ liệu theo giới tính - {getPeriodLabel()}
           </span>
           <span className='@[540px]/card:hidden'>{getPeriodLabel()}</span>
         </CardDescription>
@@ -340,6 +340,7 @@ export function ChartAreaInteractive() {
       <CardContent className='px-2 pt-4 sm:px-6 sm:pt-6'>
         {loading ? (
           <div className='flex h-[300px] items-center justify-center'>
+            <div className='h-4 w-4 animate-spin rounded-full border-b-4 border-t-4 border-zinc-500'></div>
             <div className='text-xl'>Đang tải dữ liệu...</div>
           </div>
         ) : error ? (
