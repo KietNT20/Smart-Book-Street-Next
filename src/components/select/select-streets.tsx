@@ -1,6 +1,6 @@
 'use client';
 
-import { useStreets } from '@/hooks/use-street';
+import { useGetStreetsAll } from '@/hooks/use-street';
 import {
   Select,
   SelectContent,
@@ -11,7 +11,7 @@ import {
 import { Skeleton } from '../ui/skeleton';
 
 const SelectStreet = () => {
-  const { streetsRes, isLoadingStreets, errorStreets } = useStreets();
+  const { streetsRes, isLoadingStreets, errorStreets } = useGetStreetsAll();
   return (
     <Select>
       <SelectTrigger className='w-[180px]'>
