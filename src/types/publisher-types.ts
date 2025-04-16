@@ -33,7 +33,7 @@ export interface PublisherParams {
   pageNumber: number;
   pageSize: number;
   sortField: string;
-  sortOrder: Sort.ASC | Sort.DESC;
+  sortOrder: Sort;
   result: {
     publisherName?: string;
     address?: string;
