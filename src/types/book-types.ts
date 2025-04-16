@@ -4,16 +4,20 @@ import { BaseEntity } from './common-types';
 import { ImageType } from './image-types';
 import { Publisher } from './publisher-types';
 
-export type BookAuthorIds = {
+export type BookAuthor = {
   id: string;
   authorId: string;
   bookId: string;
+  authorName: string;
+  isNewAuthor: boolean;
 };
 
-export type BookCategoryIds = {
+export type BookCategories = {
   id: string;
   categoryId: string;
   bookId: string;
+  categoryName: string;
+  isNewCategory: boolean;
 };
 
 export interface Book extends BaseEntity {
@@ -33,8 +37,8 @@ export interface Book extends BaseEntity {
   publisher?: Publisher;
   baseImgUrl?: string;
   images?: ImageType[];
-  bookAuthors: BookAuthorIds[];
-  bookCategories: BookCategoryIds[];
+  bookAuthors: BookAuthor[];
+  bookCategories: BookCategories[];
   inventories?: any[];
 }
 
