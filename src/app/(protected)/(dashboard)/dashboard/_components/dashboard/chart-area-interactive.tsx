@@ -239,8 +239,8 @@ export function ChartAreaInteractive() {
               <SelectContent className='rounded-xl'>
                 {/* Generate last 5 years and next year for selection */}
                 {Array.from(
-                  { length: 6 },
-                  (_, i) => new Date().getFullYear() - 4 + i
+                  { length: 5 },
+                  (_, i) => new Date().getFullYear() + i
                 ).map((y) => (
                   <SelectItem
                     key={y}

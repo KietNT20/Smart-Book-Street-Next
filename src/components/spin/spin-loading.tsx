@@ -1,9 +1,47 @@
-const SpinLoading = () => {
+'use client';
+
+import { motion } from 'motion/react';
+
+function SpinLoading() {
   return (
-    <div className='flex h-screen items-center justify-center'>
-      <div className='h-12 w-12 animate-spin rounded-full border-t-4 border-blue-500' />
+    <div className='container'>
+      <motion.div
+        className='spinner'
+        animate={{ rotate: 360 }}
+        transition={{
+          duration: 1.5,
+          repeat: Infinity,
+          ease: 'linear',
+        }}
+      />
+      <StyleSheet />
     </div>
   );
-};
+}
+
+function StyleSheet() {
+  return (
+    <style>
+      {`
+            .container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 40px;
+                border-radius: 8px;
+            }
+
+            .spinner {
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                border: 4px solid var(--divider);
+                border-top-color: #ff0088;
+                will-change: transform;
+            }
+            `}
+    </style>
+  );
+}
 
 export default SpinLoading;

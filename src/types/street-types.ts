@@ -1,3 +1,5 @@
+import { ApiListResponse } from './common-types';
+
 export type Street = {
   id: string;
   streetName: string;
@@ -8,10 +10,4 @@ export type Street = {
   baseImgUrl: string;
 };
 
-export type StreetsResponse = {
-  results: Street[];
-  totalRecords: number;
-  totalPages: number;
-  isSuccess: boolean;
-  message: string;
-};
+export type StreetsResponse = ApiListResponse<Street>;

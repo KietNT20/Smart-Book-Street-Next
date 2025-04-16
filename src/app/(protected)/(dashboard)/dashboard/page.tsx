@@ -15,6 +15,7 @@ import { ChartAreaInteractive } from './_components/dashboard/chart-area-interac
 import ChartsSection from './_components/dashboard/charts-section';
 import VisitorChartSection from './_components/dashboard/visitor-chart-section';
 import LastUpdated from './_components/last-updated';
+import OrderStatisticsPage from './_components/order-statics';
 import SyncButton from './_components/sync-button';
 
 export default function DashboardPage() {
@@ -56,7 +57,7 @@ export default function DashboardPage() {
         <Card className='shadow-xs bg-chart-1 from-primary/5 to-card'>
           <CardHeader className='relative'>
             <CardDescription className='text-white'>
-              Tổng trung bình số người
+              Tổng số người camera phát hiện
             </CardDescription>
             <CardTitle className='text-2xl font-semibold tabular-nums text-white md:text-3xl'>
               {isLoading ? 'Đang tải' : formattedTotal}
@@ -130,6 +131,9 @@ export default function DashboardPage() {
       </div>
       <div className='mt-4'>
         <VisitorChartSection />
+      </div>
+      <div>
+        <OrderStatisticsPage />
       </div>
     </>
   );

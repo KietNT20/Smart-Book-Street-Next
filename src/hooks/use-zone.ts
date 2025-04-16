@@ -3,6 +3,19 @@ import { ZoneCreate, ZoneParams } from '@/types/zone-types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
+export const useNonDeletedZones = () => {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['zones'],
+    queryFn: () => zoneService.getNonDeleted(),
+  });
+
+  return {
+    nonDeletedZones: data?.results || [],
+    isLoadingNonDeletedZones: isLoading,
+    errorNonDeletedZones: error,
+  };
+};
+
 export const useZoneDetail = (id: string) => {
   const { data, isLoading, error } = useQuery({
     queryKey: ['zones', id],

@@ -12,7 +12,6 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart';
 import { BarDatum } from '@/types/person-types';
-import type { DatePickerProps } from 'antd';
 import { DatePicker } from 'antd';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
@@ -22,32 +21,32 @@ import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
 
 const { RangePicker } = DatePicker;
 
-const getYearMonth = (date: Dayjs) => date.year() * 12 + date.month();
+// const getYearMonth = (date: Dayjs) => date.year() * 12 + date.month();
 
-const disabled7DaysDate: DatePickerProps['disabledDate'] = (
-  current,
-  { from, type }
-) => {
-  if (from) {
-    const minDate = from.subtract(7, 'days');
-    const maxDate = from.add(7, 'days');
+// const disabled7DaysDate: DatePickerProps['disabledDate'] = (
+//   current,
+//   { from, type }
+// ) => {
+//   if (from) {
+//     const minDate = from.subtract(7, 'days');
+//     const maxDate = from.add(7, 'days');
 
-    switch (type) {
-      case 'year':
-        return (
-          current.year() < minDate.year() || current.year() > maxDate.year()
-        );
-      case 'month':
-        return (
-          getYearMonth(current) < getYearMonth(minDate) ||
-          getYearMonth(current) > getYearMonth(maxDate)
-        );
-      default:
-        return Math.abs(current.diff(from, 'days')) > 7;
-    }
-  }
-  return false;
-};
+//     switch (type) {
+//       case 'year':
+//         return (
+//           current.year() < minDate.year() || current.year() > maxDate.year()
+//         );
+//       case 'month':
+//         return (
+//           getYearMonth(current) < getYearMonth(minDate) ||
+//           getYearMonth(current) > getYearMonth(maxDate)
+//         );
+//       default:
+//         return Math.abs(current.diff(from, 'days')) > 7;
+//     }
+//   }
+//   return false;
+// };
 
 type Props = {
   barData: BarDatum[];
@@ -112,15 +111,17 @@ const BarchartCard = ({ barData, barConfig, isLoading }: Props) => {
               {getDescriptionText()}
             </CardDescription>
           </div>
-          <RangePicker
-            className='px-3 py-2'
-            value={dateRange}
-            onChange={handleRangeChange}
-            disabledDate={disabled7DaysDate}
-            allowClear={false}
-            format='DD/MM/YYYY'
-            placeholder={['Từ ngày', 'Đến ngày']}
-          />
+          <div className='bg-background'>
+            <RangePicker
+              className='px-3 py-2'
+              value={dateRange}
+              onChange={handleRangeChange}
+              // disabledDate={disabled7DaysDate}
+              allowClear={false}
+              format='DD/MM/YYYY'
+              placeholder={['Từ ngày', 'Đến ngày']}
+            />
+          </div>
         </div>
       </CardHeader>
       <CardContent>

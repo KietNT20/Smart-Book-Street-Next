@@ -1,5 +1,5 @@
 import { API_URL } from '@/constant/api-url';
-import { UserStorePayload } from '@/types/user-types';
+import { UserStorePayload, UserStoreResponse } from '@/types/user-types';
 import axiosInstance from '@/utils/axiosInstance';
 
 export const userStoreService = {
@@ -10,7 +10,7 @@ export const userStoreService = {
     );
     return res.data;
   },
-  checkUserContract: async (userId: string) => {
+  checkUserContract: async (userId: string): Promise<UserStoreResponse> => {
     const res = await axiosInstance.get(
       `${API_URL.USER_STORES.USER}/${userId}`
     );

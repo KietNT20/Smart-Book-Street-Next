@@ -1,13 +1,9 @@
 'use client';
 
 import {
-  AudioWaveform,
-  BarChart3,
   BookOpen,
   CalendarIcon,
   ChartNoAxesCombined,
-  Command,
-  GalleryVerticalEnd,
   LibraryBig,
   PieChart,
   Store,
@@ -17,7 +13,6 @@ import {
 import { NavMain } from '@/components/nav-main';
 import { NavProjects } from '@/components/nav-projects';
 import { NavUser } from '@/components/nav-user';
-import { TeamSwitcher } from '@/components/team-switcher';
 import {
   Sidebar,
   SidebarContent,
@@ -30,6 +25,7 @@ import { RoleEnums } from '@/enums/role';
 import { useAuth } from '@/hooks/use-auth';
 import { usePathname } from 'next/navigation';
 import { useMemo } from 'react';
+import { TeamSwitcher } from './team-switcher';
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
@@ -43,23 +39,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   };
 
   const menuData = {
-    teams: [
-      {
-        name: 'Acme Inc',
-        logo: GalleryVerticalEnd,
-        plan: 'Enterprise',
-      },
-      {
-        name: 'Acme Corp.',
-        logo: AudioWaveform,
-        plan: 'Startup',
-      },
-      {
-        name: 'Evil Corp.',
-        logo: Command,
-        plan: 'Free',
-      },
-    ],
     navMain: [
       // ADMIN MENUS
       {
@@ -205,20 +184,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         icon: PieChart,
         roles: [RoleEnums.ADMIN, RoleEnums.PUBLISHER, RoleEnums.STORE_MANAGER],
       },
-      {
-        name: 'Thống kê sách',
-        url: PATH.STATISTICS,
-        icon: BarChart3,
-        roles: [RoleEnums.ADMIN, RoleEnums.PUBLISHER, RoleEnums.STORE_MANAGER],
-      },
 
       // Admin-only items
-      {
-        name: 'Thống kê khách',
-        url: PATH.VISITOR_STATISTICS,
-        icon: Users,
-        roles: [RoleEnums.ADMIN],
-      },
+      // {
+      //   name: 'Thống kê khách',
+      //   url: PATH.VISITOR_STATISTICS,
+      //   icon: Users,
+      //   roles: [RoleEnums.ADMIN],
+      // },
       {
         name: 'Dự đoán lượng khách',
         url: PATH.VISITOR_PREDICTION,
@@ -265,7 +238,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible='icon' {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={menuData.teams} />
+        <TeamSwitcher />
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={filteredNavMain} />
