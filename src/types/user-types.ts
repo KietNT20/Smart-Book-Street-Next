@@ -82,7 +82,7 @@ export interface UserParams {
   pageNumber: number;
   pageSize: number;
   sortField: string;
-  sortOrder: Sort.ASC | Sort.DESC;
+  sortOrder: Sort;
   result: {
     userName?: string;
     email?: string;

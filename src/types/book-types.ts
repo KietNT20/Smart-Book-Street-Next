@@ -86,13 +86,13 @@ export type BookPaginated = {
   pageNumber: number;
   pageSize: number;
   sortField: string;
-  sortOrder: Sort.ASC | Sort.DESC;
+  sortOrder: Sort;
 };
 
 export type BookSearchPagination = {
   pageNumber: number;
   pageSize: number;
   sortField?: string;
-  sortOrder: Sort.ASC | Sort.DESC;
+  sortOrder: Sort;
   result?: Partial<BookSearchCriteria>;
 };
