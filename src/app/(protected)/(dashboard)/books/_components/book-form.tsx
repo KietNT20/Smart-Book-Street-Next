@@ -15,6 +15,7 @@ import { useBookMutations } from '@/hooks/use-books';
 import useDebounce from '@/hooks/use-debounce';
 import { cn } from '@/lib/utils';
 import { BookFormValues, bookSchema } from '@/lib/zod';
+import { Book } from '@/types/book-types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
@@ -27,7 +28,7 @@ import BookPublicationDate from './book-publication-date';
 import BookSelectLang from './book-select-lang';
 
 type Props = {
-  book?: BookFormValues;
+  book?: Book;
   onCancel: () => void;
 };
 
