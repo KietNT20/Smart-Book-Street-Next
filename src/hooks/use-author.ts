@@ -10,6 +10,7 @@ export const useGetAuthorById = <T>(id: string) => {
   return useQuery<T>({
     queryKey: ['author', id],
     queryFn: () => authorService.getById(id),
+    enabled: !!id,
   });
 };
 

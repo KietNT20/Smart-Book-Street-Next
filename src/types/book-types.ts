@@ -1,38 +1,44 @@
 import { Sort } from '@/enums/enums';
+import { Language } from '@/enums/lang';
 import { BaseEntity } from './common-types';
 import { ImageType } from './image-types';
 import { Publisher } from './publisher-types';
 
-export type BookAuthorIds = {
+export type BookAuthor = {
   id: string;
   authorId: string;
   bookId: string;
+  authorName: string;
+  isNewAuthor: boolean;
 };
 
-export type BookCategoryIds = {
+export type BookCategories = {
   id: string;
   categoryId: string;
   bookId: string;
+  categoryName: string;
+  isNewCategory: boolean;
 };
 
 export interface Book extends BaseEntity {
-  id: string;
   isbn: string;
   title: string;
-  publicationDate: Date | string;
+  publicationDate: Date | string | null;
   price: number;
-  languages: string;
+  languages: Language;
   description: string;
   size: string;
   status: string;
   publisherId: string;
   authorIds: string[];
   categoryIds: string[];
+  mainImageFile: File | null;
+  additionalImageFiles: File[] | null;
   publisher?: Publisher;
   baseImgUrl?: string;
   images?: ImageType[];
-  bookAuthors: BookAuthorIds[];
-  bookCategories: BookCategoryIds[];
+  bookAuthors: BookAuthor[];
+  bookCategories: BookCategories[];
   inventories?: any[];
 }
 
@@ -43,29 +49,21 @@ export type GetAllBooksResponse = {
   message: string;
 };
 
-export type BookResponse = {
+export type BooksResponse = {
   results: Book[];
   totalPages: number;
   totalRecordsPerPage: number;
   totalRecords: number;
   pageNumber: number;
   pageSize: number;
-  sortField: string;
-  sortOrder: Sort.ASC | Sort.DESC;
   isSuccess: true;
   message: string;
 };
 
-export type BookSearchResult = {
-  results: Book[];
-  totalPages: number;
-  totalRecordsPerPage: number;
+export type BookResponse = {
+  result: Book;
   totalRecords: number;
-  pageNumber: number;
-  pageSize: number;
-  sortField: string;
-  sortOrder: Sort.ASC | Sort.DESC;
-  isSuccess: boolean;
+  isSuccess: true;
   message: string;
 };
 
@@ -88,13 +86,13 @@ export type BookPaginated = {
   pageNumber: number;
   pageSize: number;
   sortField: string;
-  sortOrder: Sort.ASC | Sort.DESC;
+  sortOrder: Sort;
 };
 
 export type BookSearchPagination = {
   pageNumber: number;
   pageSize: number;
   sortField?: string;
-  sortOrder: Sort.ASC | Sort.DESC;
+  sortOrder: Sort;
   result?: Partial<BookSearchCriteria>;
 };

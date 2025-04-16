@@ -7,12 +7,11 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PATH } from '@/enums/path';
-import { ImageType } from '@/types/image-types';
 import Link from 'next/link';
 import { useState } from 'react';
 import BookInfo from './_components/book-info';
 import ImageGalleryBook from './_components/image-gallery-book';
-import { useBookDetail } from './_lib/useBookDetail';
+import { useBookDetail } from './_lib/use-book-detail';
 
 export default function BooksDetailPage({
   params,
@@ -68,18 +67,18 @@ export default function BooksDetailPage({
           <TabsList className='mb-4 grid w-full grid-cols-2'>
             <TabsTrigger value='info'>Thông tin sách</TabsTrigger>
             <TabsTrigger value='images'>
-              Hình ảnh ({(book.images || [])?.length || 0})
+              Hình ảnh ({(book?.images || [])?.length || 0})
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value='info' className='space-y-4'>
-            <BookInfo {...bookInfoProps} />
+            {book && <BookInfo {...bookInfoProps} book={book} />}
           </TabsContent>
 
           <TabsContent value='images'>
             <h3 className='text-lg font-semibold'>Thư viện hình ảnh</h3>
             <ImageGalleryBook
-              images={(book.images as ImageType[]) || []}
+              images={book?.images || []}
               bookCode={book?.isbn}
             />
           </TabsContent>

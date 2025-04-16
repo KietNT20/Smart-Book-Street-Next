@@ -30,7 +30,7 @@ export interface ZoneParams {
   pageNumber: number;
   pageSize: number;
   sortField: string;
-  sortOrder: Sort.ASC | Sort.DESC;
+  sortOrder: Sort;
   result: {
     zoneName?: string;
     streetId?: string;

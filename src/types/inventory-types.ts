@@ -13,3 +13,14 @@ export interface InventoryItemCreate {
   quantity: number;
   isInStock: boolean;
 }
+
+export interface Inventory extends BaseEntity {
+  entityId: string;
+  storeId: string;
+  quantity: number;
+  isInStock: boolean;
+  book: null;
+  souvenir: null;
+  store: null;
+  orderDetails?: null;
+}

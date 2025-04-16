@@ -17,7 +17,7 @@ export type CategorySearchPagination = {
   pageNumber: number;
   pageSize: number;
   sortField: string;
-  sortOrder: Sort.ASC | Sort.DESC;
+  sortOrder: Sort;
   result: {
     categoryName: string;
   };

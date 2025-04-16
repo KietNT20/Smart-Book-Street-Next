@@ -25,7 +25,7 @@ export type AuthorSearchPagination = {
   pageNumber: number;
   pageSize: number;
   sortField: string;
-  sortOrder: Sort.ASC | Sort.DESC;
+  sortOrder: Sort;
   result: {
     authorName: string;
   };
@@ -35,7 +35,7 @@ export type BookAuthorSearchPagination = {
   pageNumber: number;
   pageSize: number;
   sortField: string;
-  sortOrder: Sort.ASC | Sort.DESC;
+  sortOrder: Sort;
   result: {
     key: string;
     authorId: string;

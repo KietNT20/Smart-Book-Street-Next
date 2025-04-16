@@ -1,8 +1,8 @@
 import { ThemeProvider } from '@/components/theme-provider';
 import QueryProvider from '@/providers/query-provider';
 import StoreProvider from '@/providers/store-provider';
-import { ConfigProvider } from 'antd';
-import locale from 'antd/locale/vi_VN';
+import { AntdRegistry } from '@ant-design/nextjs-registry';
+
 import type { ReactNode } from 'react';
 
 type Props = {
@@ -11,18 +11,20 @@ type Props = {
 
 const Provider = ({ children }: Props) => {
   return (
-    <StoreProvider>
+    <AntdRegistry>
       <QueryProvider>
-        <ThemeProvider
-          attribute='class'
-          defaultTheme='system'
-          enableSystem
-          disableTransitionOnChange
-        >
-          <ConfigProvider locale={locale}>{children}</ConfigProvider>
-        </ThemeProvider>
+        <StoreProvider>
+          <ThemeProvider
+            attribute='class'
+            defaultTheme='system'
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
+        </StoreProvider>
       </QueryProvider>
-    </StoreProvider>
+    </AntdRegistry>
   );
 };
 

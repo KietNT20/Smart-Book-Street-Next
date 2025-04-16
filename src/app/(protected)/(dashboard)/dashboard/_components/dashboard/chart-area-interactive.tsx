@@ -25,11 +25,12 @@ import {
 } from '@/components/ui/select';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { DailyPopulationStatistics } from '@/lib/zod';
 
 // Chart configuration
 const chartConfig = {
   population: {
-    label: 'Dân số',
+    label: 'Số người qua camera',
   },
   male: {
     label: 'Nam',
@@ -53,13 +54,6 @@ type TimeRangeOption =
   | 'currentYear'
   | 'prevYear';
 
-type PopulationData = {
-  date: string;
-  male: number;
-  female: number;
-  total: number;
-};
-
 type ApiResponse = {
   month: number;
   monthName: string;
@@ -76,7 +70,9 @@ export function ChartAreaInteractive() {
   const [dataType, setDataType] = useState<'stacked' | 'separate'>('stacked');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [populationData, setPopulationData] = useState<PopulationData[]>([]);
+  const [populationData, setPopulationData] = useState<
+    DailyPopulationStatistics[]
+  >([]);
 
   useEffect(() => {
     if (isMobile) {
@@ -132,7 +128,7 @@ export function ChartAreaInteractive() {
 
       const result = await response.json();
 
-      const monthlyData: Record<string, PopulationData> = {};
+      const monthlyData: Record<string, DailyPopulationStatistics> = {};
 
       let displayYear = year;
       if (timeRange === 'prevYear') displayYear = year - 1;
@@ -222,10 +218,10 @@ export function ChartAreaInteractive() {
   return (
     <Card className='@container/card'>
       <CardHeader className='relative'>
-        <CardTitle>Thống kê dân số</CardTitle>
+        <CardTitle>Thống kê số người qua camera</CardTitle>
         <CardDescription>
           <span className='@[540px]/card:block hidden'>
-            Dữ liệu dân số theo giới tính - {getPeriodLabel()}
+            Dữ liệu theo giới tính - {getPeriodLabel()}
           </span>
           <span className='@[540px]/card:hidden'>{getPeriodLabel()}</span>
         </CardDescription>
@@ -340,6 +336,7 @@ export function ChartAreaInteractive() {
       <CardContent className='px-2 pt-4 sm:px-6 sm:pt-6'>
         {loading ? (
           <div className='flex h-[300px] items-center justify-center'>
+            <div className='h-4 w-4 animate-spin rounded-full border-b-4 border-t-4 border-zinc-500'></div>
             <div className='text-xl'>Đang tải dữ liệu...</div>
           </div>
         ) : error ? (
@@ -477,8 +474,10 @@ export function ChartAreaInteractive() {
                 <span className='text-base font-medium'>Tổng: </span>
                 <span className='font-bold'>
                   {filteredData
-                    .reduce((sum, item) => sum + item.total, 0)
-                    .toLocaleString('vi-VN')}
+                    ? filteredData
+                        .reduce((sum, item) => sum + item.total!, 0)
+                        .toLocaleString('vi-VN')
+                    : '0'}
                 </span>
               </div>
             </div>

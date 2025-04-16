@@ -244,6 +244,9 @@ export type UserStoreFormValues = z.infer<typeof userStoreFormSchema>;
 
 export const dailyPopulationSchema = z.object({
   date: z.string().date(),
+  male: z.number().optional(),
+  female: z.number().optional(),
+  total: z.number().optional(),
 });
 
 export type DailyPopulationStatistics = z.infer<typeof dailyPopulationSchema>;

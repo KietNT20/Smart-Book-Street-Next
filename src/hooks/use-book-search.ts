@@ -83,5 +83,6 @@ export const useGetBookByID = (id: string) => {
   return useQuery({
     queryKey: ['books', id],
     queryFn: () => bookService.getByID(id),
+    enabled: !!id,
   });
 };

@@ -8,7 +8,7 @@ const BookFormEdit = () => {
 
   return (
     <div className='relative'>
-      {book && <BookForm book={book?.result} onCancel={() => router.back()} />}
+      {book && <BookForm book={book.result} onCancel={() => router.back()} />}
     </div>
   );
 };

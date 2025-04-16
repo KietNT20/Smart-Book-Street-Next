@@ -18,7 +18,7 @@ export interface StoreParams {
   pageNumber: number;
   pageSize: number;
   sortField?: string;
-  sortOrder: Sort.ASC | Sort.DESC;
+  sortOrder: Sort;
   result: {
     storeName?: string;
     address?: string;

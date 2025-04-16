@@ -1,5 +1,10 @@
 import { API_URL } from '@/constant/api-url';
-import { BookPaginated, BookSearchPagination } from '@/types/book-types';
+import {
+  BookPaginated,
+  BookResponse,
+  BookSearchPagination,
+  BooksResponse,
+} from '@/types/book-types';
 import axiosInstance from '@/utils/axiosInstance';
 
 export const bookService = {
@@ -31,15 +36,17 @@ export const bookService = {
     const res = await axiosInstance.patch(`${API_URL.BOOKS.INDEX}/${id}`);
     return res.data;
   },
-  getByID: async (id: string) => {
+  getByID: async (id: string): Promise<BookResponse> => {
     const res = await axiosInstance.get(`${API_URL.BOOKS.INDEX}/${id}`);
     return res.data;
   },
-  paginated: async (payload: BookPaginated) => {
+  paginated: async (payload: BookPaginated): Promise<BooksResponse> => {
     const res = await axiosInstance.post(API_URL.BOOKS.PAGINATED, payload);
     return res.data;
   },
-  searchPagination: async (payload: BookSearchPagination) => {
+  searchPagination: async (
+    payload: BookSearchPagination
+  ): Promise<BooksResponse> => {
     const res = await axiosInstance.post(
       API_URL.BOOKS.PAGINATION_SEARCH,
       payload
