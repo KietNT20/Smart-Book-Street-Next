@@ -20,8 +20,6 @@ import {
 import { TrendingUp } from 'lucide-react';
 import { useState } from 'react';
 import {
-  Bar,
-  BarChart,
   CartesianGrid,
   Legend,
   Line,
@@ -38,18 +36,18 @@ interface HourlyData {
   visitors: number;
 }
 
-interface DemographicsData {
-  ageGroup: string;
-  male: number;
-  female: number;
-}
+// interface DemographicsData {
+//   ageGroup: string;
+//   male: number;
+//   female: number;
+// }
 
 type TimeRangeShort = 'today' | 'yesterday' | 'this-week' | 'last-week';
-type TimeRangeLong =
-  | 'this-month'
-  | 'last-month'
-  | 'this-quarter'
-  | 'last-quarter';
+// type TimeRangeLong =
+//   | 'this-month'
+//   | 'last-month'
+//   | 'this-quarter'
+//   | 'last-quarter';
 
 // Sample data
 const hourlyData: HourlyData[] = [
@@ -63,19 +61,19 @@ const hourlyData: HourlyData[] = [
   { hour: '20:00', visitors: 80 },
 ];
 
-const demographicsData: DemographicsData[] = [
-  { ageGroup: '0-18', male: 320, female: 400 },
-  { ageGroup: '19-24', male: 800, female: 1000 },
-  { ageGroup: '25-35', male: 650, female: 700 },
-  { ageGroup: '36-50', male: 450, female: 500 },
-  { ageGroup: '>50', male: 200, female: 180 },
-];
+// const demographicsData: DemographicsData[] = [
+//   { ageGroup: '0-18', male: 320, female: 400 },
+//   { ageGroup: '19-24', male: 800, female: 1000 },
+//   { ageGroup: '25-35', male: 650, female: 700 },
+//   { ageGroup: '36-50', male: 450, female: 500 },
+//   { ageGroup: '>50', male: 200, female: 180 },
+// ];
 
 const VisitorChartSection = () => {
   const [hourlyTimeRange, setHourlyTimeRange] =
     useState<TimeRangeShort>('today');
-  const [demographicsTimeRange, setDemographicsTimeRange] =
-    useState<TimeRangeLong>('this-month');
+  // const [demographicsTimeRange, setDemographicsTimeRange] =
+  //   useState<TimeRangeLong>('this-month');
 
   return (
     <div className='gap-4 lg:flex'>
@@ -140,7 +138,7 @@ const VisitorChartSection = () => {
       </Card>
 
       {/* Biểu đồ phân bố độ tuổi và giới tính */}
-      <Card className='mt-4 flex-1 lg:mt-0'>
+      {/* <Card className='mt-4 flex-1 lg:mt-0'>
         <CardHeader>
           <div className='items-center justify-between md:flex'>
             <div className='mb-4 md:mb-0'>
@@ -193,7 +191,7 @@ const VisitorChartSection = () => {
             Tỷ lệ Nam/Nữ: 45%/55%
           </div>
         </CardFooter>
-      </Card>
+      </Card> */}
     </div>
   );
 };

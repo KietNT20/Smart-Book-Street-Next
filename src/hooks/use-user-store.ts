@@ -31,7 +31,7 @@ export const useGetContractUser = (userId: string) => {
     enabled: !!userId,
   });
   return {
-    userStore: data,
+    userStore: data?.results || [],
     isLoadingUserStore: isLoading,
   };
 };

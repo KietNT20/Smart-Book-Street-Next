@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import useDebounce from '@/hooks/use-debounce';
 import { useStoreSearch } from '@/hooks/use-store';
 import { StoreData } from '@/types/store-types';
 import { Search } from 'lucide-react';
@@ -39,7 +40,9 @@ const StoreSearch = ({ onSelectStore, value }: Props) => {
     type: '',
   });
 
-  const { stores, isLoading, isPending } = useStoreSearch(searchParams);
+  const debounceSearchParams = useDebounce(searchParams, 500);
+
+  const { stores, isLoading, isPending } = useStoreSearch(debounceSearchParams);
   const isWorking = isLoading || isPending;
 
   const handleSearch = (e: React.MouseEvent) => {

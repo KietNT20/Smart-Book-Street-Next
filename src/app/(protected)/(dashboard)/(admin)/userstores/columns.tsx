@@ -37,7 +37,6 @@ export const columns: ColumnDef<User>[] = [
   {
     accessorKey: 'address',
     header: 'Địa chỉ',
-
     cell: ({ row }) => {
       const address = row.getValue('address') as string;
       if (!address) return '—';
@@ -67,13 +66,12 @@ export const columns: ColumnDef<User>[] = [
     header: 'Thao tác',
     cell: ({ row }) => {
       const userStore = row.original;
-
       return (
         <div className='flex items-center gap-2'>
           <Link href={`${PATH.USER_STORES}/${userStore.id}`}>
             <Button>Tạo đơn</Button>
           </Link>
-          <Link href={`${PATH.USER_STORES}/${userStore.id}`}>
+          <Link href={`${PATH.USER_STORES}/${userStore.id}/registered`}>
             <Button variant={'outline'}>Xem đơn</Button>
           </Link>
         </div>

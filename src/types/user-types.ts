@@ -2,9 +2,10 @@ import { Sort } from '@/enums/enums';
 import { Gender } from '@/enums/gender';
 import { RoleEnums } from '@/enums/role';
 import { StoreRent } from '@/enums/store-rent';
-import { BaseEntity } from './common-types';
+import { ApiListResponse, BaseEntity } from './common-types';
 import { ImageType } from './image-types';
 import { Publisher } from './publisher-types';
+import { StoreData } from './store-types';
 
 export interface Role extends BaseEntity {
   roleName: RoleEnums;
@@ -93,3 +94,17 @@ export interface UserParams {
     gender?: string;
   };
 }
+
+export interface UserStore extends BaseEntity {
+  userId: string;
+  user: User;
+  storeId: string;
+  store: StoreData;
+  startDate: Date | string | null;
+  endDate: Date | string | null;
+  status: StoreRent;
+  contractNumber: string;
+  notes: string;
+}
+
+export type UserStoreResponse = ApiListResponse<UserStore>;

@@ -7,6 +7,7 @@ import {
 } from '@/components/ui/collapsible';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import useDebounce from '@/hooks/use-debounce';
 import { ChevronDown, ChevronUp, X } from 'lucide-react';
 import { useState } from 'react';
 import { SearchFilters } from '../page';
@@ -27,12 +28,13 @@ const PublisherFilter = ({
   onClearSearch,
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
+  const filterDebouce = useDebounce(filters, 500);
 
   const handleInputChange = (
     field: keyof SearchFilters,
     value: string | null
   ) => {
-    setFilters({ ...filters, [field]: value });
+    setFilters({ ...filterDebouce, [field]: value });
   };
 
   const clearField = (field: keyof SearchFilters) => {
@@ -45,7 +47,11 @@ const PublisherFilter = ({
         <Collapsible open={isOpen} onOpenChange={setIsOpen}>
           <div className='flex items-center justify-end gap-2'>
             {isSearching && (
-              <Button variant='outline' onClick={onClearSearch} size='sm'>
+              <Button
+                variant='outline'
+                onClick={() => onClearSearch()}
+                size='sm'
+              >
                 Xóa bộ lọc
               </Button>
             )}
@@ -64,7 +70,7 @@ const PublisherFilter = ({
           </div>
 
           <CollapsibleContent>
-            <div className='grid grid-cols-1 gap-4 pt-2 md:grid-cols-2 lg:grid-cols-3'>
+            <div className='grid grid-cols-1 gap-4 pt-2 md:grid-cols-2 lg:grid-cols-4'>
               <div className='space-y-2'>
                 <Label htmlFor='publisherName'>Tên Nhà xuất bản</Label>
                 <div className='relative'>
@@ -150,30 +156,6 @@ const PublisherFilter = ({
                       size='icon'
                       className='absolute right-0 top-0 h-full'
                       onClick={() => clearField('email')}
-                    >
-                      <X className='h-4 w-4' />
-                    </Button>
-                  )}
-                </div>
-              </div>
-
-              <div className='space-y-2'>
-                <Label htmlFor='website'>Website</Label>
-                <div className='relative'>
-                  <Input
-                    id='website'
-                    placeholder='Tìm theo website'
-                    value={filters.website || ''}
-                    onChange={(e) =>
-                      handleInputChange('website', e.target.value)
-                    }
-                  />
-                  {filters.website && (
-                    <Button
-                      variant='ghost'
-                      size='icon'
-                      className='absolute right-0 top-0 h-full'
-                      onClick={() => clearField('website')}
                     >
                       <X className='h-4 w-4' />
                     </Button>

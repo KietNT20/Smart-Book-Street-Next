@@ -186,8 +186,15 @@ export const storeFormSchema = z.object({
     )
     .optional(),
   email: z.string().email({ message: 'Email không hợp lệ' }).optional(),
-  mainImageFile: z.instanceof(File).optional().or(z.string().optional()),
-  additionalImageFiles: z.array(z.instanceof(File).or(z.string())).default([]),
+  mainImageFile: z
+    .instanceof(File)
+    .optional()
+    .or(z.string().optional())
+    .nullable(),
+  additionalImageFiles: z
+    .array(z.instanceof(File).or(z.string()))
+    .default([])
+    .nullable(),
   latitude: z.number().optional(),
   longitude: z.number().optional(),
   type: z.string().optional(),
@@ -250,3 +257,32 @@ export const dailyPopulationSchema = z.object({
 });
 
 export type DailyPopulationStatistics = z.infer<typeof dailyPopulationSchema>;
+
+export const eventFormSchema = z.object({
+  eventName: z.string().min(1, { message: 'Tên sự kiện không được để trống' }),
+  startDate: z
+    .string()
+    .date()
+    .nonempty({
+      message: 'Ngày bắt đầu là bắt buộc',
+    })
+    .nullable(),
+  endDate: z
+    .string()
+    .date()
+    .nonempty({
+      message: 'Ngày kết thúc là bắt buộc',
+    })
+    .nullable(),
+  description: z.string().optional(),
+  baseImgFile: z.instanceof(File).optional().or(z.string().optional()),
+  otherImgFile: z.array(z.instanceof(File).or(z.string())).default([]),
+  videoFile: z.instanceof(File).optional().or(z.string().optional()),
+  isOpen: z.boolean().optional(),
+  allowAds: z.boolean().optional(),
+  zoneId: z.string().min(1, {
+    message: 'Vui lòng chọn khu vực tổ chức sự kiện',
+  }),
+});
+
+export type EventFormValues = z.infer<typeof eventFormSchema>;

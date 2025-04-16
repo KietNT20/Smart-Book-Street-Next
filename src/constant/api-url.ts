@@ -15,6 +15,7 @@ const IMAGE = API_ENDPOINT.IMAGE;
 const INVENTORY = API_ENDPOINT.INVENTORY;
 const STREET = API_ENDPOINT.STREET;
 const ZONE = API_ENDPOINT.ZONE;
+const ORDER = API_ENDPOINT.ORDER;
 
 export const API_URL = {
   AUTHORS: {
@@ -99,5 +100,13 @@ export const API_URL = {
     PAGINATED: `${USER_STORE}/paginated`,
     SEARCH: `${USER_STORE}/search`,
     PAGINATION_SEARCH: `${USER_STORE}/search/paginated`,
+  },
+  ORDERS: {
+    INDEX: `${ORDER}`,
+    PAGINATION_SEARCH: `${ORDER}/search/paginated`,
+    SEARCH: `${ORDER}/search`,
+    STATISTICS_DAILY: `${ORDER}/statics-for-admin/daily`,
+    STATISTICS_MONTHLY: `${ORDER}/statics-for-admin/monthly`,
+    STATISTICS_YEARLY: `${ORDER}/statics-for-admin/yearly`,
   },
 } as const;

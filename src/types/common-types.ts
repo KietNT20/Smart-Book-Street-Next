@@ -20,3 +20,19 @@ export type PaginationSchema<T> = {
 export enum StatusBook {
   UPDATED = 'UPDATED',
 }
+
+export interface ApiListResponse<T> {
+  results: T[];
+  totalPages: number;
+  totalRecords: number;
+  pageNumber: number;
+  pageSize: number;
+  isSuccess: boolean;
+  message: string;
+}
+
+export interface ApiResponse<T> {
+  result: T;
+  isSuccess: boolean;
+  message: string;
+}

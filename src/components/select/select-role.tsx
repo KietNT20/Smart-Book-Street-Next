@@ -139,7 +139,7 @@ const UserRoleSelector = ({
                 <Eye className='h-4 w-4' />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align='start' className='w-56'>
+            <DropdownMenuContent className='w-56'>
               <div className='p-2 text-sm font-medium'>
                 Quyền của người dùng
               </div>

@@ -39,12 +39,12 @@ const StoreForm = ({ storeToEdit }: Props) => {
       address: '',
       phone: '',
       email: '',
-      mainImageFile: undefined,
+      mainImageFile: null,
       additionalImageFiles: [],
       latitude: 0,
       longitude: 0,
       type: '',
-      zoneId: '',
+      zoneId: '2b3c4d5e-6f7a-8b9c-0d1e-2f3a4b5c6d1e',
     },
   });
 
@@ -134,7 +134,7 @@ const StoreForm = ({ storeToEdit }: Props) => {
             <CardTitle className='text-lg'>Thông tin cơ bản</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'>
+            <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
               <FormField
                 control={form.control}
                 name='storeName'
@@ -171,7 +171,7 @@ const StoreForm = ({ storeToEdit }: Props) => {
                 )}
               />
 
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name='zoneId'
                 render={({ field }) => (
@@ -187,7 +187,7 @@ const StoreForm = ({ storeToEdit }: Props) => {
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              /> */}
             </div>
           </CardContent>
         </Card>

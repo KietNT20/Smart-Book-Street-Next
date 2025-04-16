@@ -1,16 +1,24 @@
 import { API_URL } from '@/constant/api-url';
-import { Event } from '@/types/event-types';
 import axiosInstance from '@/utils/axiosInstance';
 
 export const eventService = {
-  create: async (payload: Partial<Omit<Event, 'id'>>) => {
-    const res = await axiosInstance.post(API_URL.EVENTS.INDEX, payload);
+  create: async (formData: FormData) => {
+    const res = await axiosInstance.post(API_URL.EVENTS.INDEX, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
     return res.data;
   },
-  update: async (id: string, payload: Partial<Omit<Event, 'id'>>) => {
+  update: async (id: string, formData: FormData) => {
     const res = await axiosInstance.put(
       `${API_URL.EVENTS.INDEX}/${id}`,
-      payload
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
     );
     return res.data;
   },
