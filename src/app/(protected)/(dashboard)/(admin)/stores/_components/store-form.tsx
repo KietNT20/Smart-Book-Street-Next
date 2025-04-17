@@ -95,9 +95,26 @@ const StoreForm = ({ storeToEdit }: Props) => {
         if (!storeToEdit.id) {
           throw new Error('Store ID is missing for update operation');
         }
-        updateStore({ id: storeToEdit.id, data: formData });
+        updateStore(
+          { id: storeToEdit.id, data: formData },
+          {
+            onSuccess: (data) => {
+              if (data) {
+                router.replace(PATH.STORES);
+                form.reset();
+              }
+            },
+          }
+        );
       } else {
-        createStore(formData);
+        createStore(formData, {
+          onSuccess: (data) => {
+            if (data) {
+              router.replace(PATH.STORES);
+              form.reset();
+            }
+          },
+        });
       }
 
       console.log('Form submitted successfully!');

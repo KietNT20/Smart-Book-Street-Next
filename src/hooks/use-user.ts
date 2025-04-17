@@ -95,6 +95,20 @@ export const useUserEmail = (email: string) => {
   };
 };
 
+export const useManagerEmail = (email: string) => {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['manager', email],
+    queryFn: () => userService.getByEmail(email),
+    enabled: !!email,
+  });
+
+  return {
+    managerId: data?.result.id || null,
+    managerLoading: isLoading,
+    managerError: error,
+  };
+};
+
 export const useUsers = () => {
   const { data, isLoading, error } = useQuery({
     queryKey: ['users'],

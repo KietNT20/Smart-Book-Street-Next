@@ -1,5 +1,11 @@
+import PublisherForm from '../_components/publisher-form';
+
 const CreatePublisherPage = () => {
-  return <div>CreatePublisherPage</div>;
+  return (
+    <div>
+      <PublisherForm />
+    </div>
+  );
 };
 
 export default CreatePublisherPage;

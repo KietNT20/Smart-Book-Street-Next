@@ -1,3 +1,4 @@
+import { Sort } from '@/enums/enums';
 import { zoneService } from '@/services/zoneService';
 import { ZoneCreate, ZoneParams } from '@/types/zone-types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -164,5 +165,57 @@ export const useZoneMutation = () => {
     deleteZone: deleteZoneMutation.mutate,
     isDeletingZone: deleteZoneMutation.isPending,
     errorDeleteZone: deleteZoneMutation.error,
+  };
+};
+
+export const useZonesStore = ({ result, pageNumber }: ZoneParams) => {
+  const queryClient = useQueryClient();
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['zones-store', result, pageNumber],
+    queryFn: () =>
+      zoneService.getAll({
+        result,
+        sortField: '',
+        sortOrder: Sort.DEFAULT,
+        pageSize: 5,
+        pageNumber,
+      }),
+  });
+
+  // Prefetching data
+  const totalPages = data?.totalPages || 1;
+
+  if (pageNumber < totalPages) {
+    queryClient.prefetchQuery({
+      queryKey: ['zones-store', result, pageNumber + 1],
+      queryFn: () =>
+        zoneService.getAll({
+          result,
+          sortField: '',
+          sortOrder: Sort.DEFAULT,
+          pageSize: 5,
+          pageNumber: pageNumber + 1,
+        }),
+    });
+  }
+
+  if (pageNumber > 1) {
+    queryClient.prefetchQuery({
+      queryKey: ['zones-store', result, pageNumber - 1],
+      queryFn: () =>
+        zoneService.getAll({
+          result,
+          sortField: '',
+          sortOrder: Sort.DEFAULT,
+          pageSize: 5,
+          pageNumber: pageNumber - 1,
+        }),
+    });
+  }
+
+  return {
+    zonesStoreRes: data?.results || [],
+    isLoadingZonesStore: isLoading,
+    errorZonesStore: error,
   };
 };
