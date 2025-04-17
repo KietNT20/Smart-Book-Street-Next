@@ -78,7 +78,7 @@ export const useAuth = () => {
     tokenMethod.remove();
     dispatch(clearUserProfile());
     queryClient.clear();
-    router.push(PATH.LOGIN);
+    router.replace(PATH.LOGIN);
   };
 
   return {

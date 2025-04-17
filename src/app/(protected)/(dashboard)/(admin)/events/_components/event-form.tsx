@@ -504,7 +504,7 @@ const EventForm = ({
 
         {/* Nút gửi */}
         <Button type='submit' disabled={isSubmitting}>
-          {isSubmitting ? 'Đang xử lý...' : 'Lưu sự kiện'}
+          {isSubmitting ? 'Đang xử lý...' : 'Tạo sự kiện'}
         </Button>
       </form>
     </Form>

@@ -13,7 +13,10 @@ export const zoneService = {
     return res.data;
   },
   getAll: async (params: ZoneParams): Promise<ZonesResponse> => {
-    const res = await axiosInstance.post(API_URL.ZONES.INDEX, params);
+    const res = await axiosInstance.post(
+      API_URL.ZONES.PAGINATION_SEARCH,
+      params
+    );
     return res.data;
   },
   getById: async (id: string): Promise<ZoneResponse> => {

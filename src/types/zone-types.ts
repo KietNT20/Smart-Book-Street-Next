@@ -36,3 +36,11 @@ export interface ZoneParams {
     streetId?: string;
   };
 }
+
+export interface ZoneSearchStoreParams {
+  pageNumber: number;
+  result: {
+    zoneName?: string;
+    streetId?: string;
+  };
+}
