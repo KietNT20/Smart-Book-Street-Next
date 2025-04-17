@@ -16,9 +16,9 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
-import { PATH } from '@/enums/path';
+import { STORAGE } from '@/constant/storage';
+import { useAuth } from '@/hooks/use-auth';
 import { useAppSelector } from '@/lib/hooks';
-import tokenMethod from '@/utils/token';
 import {
   BadgeCheck,
   Bell,
@@ -28,19 +28,16 @@ import {
   Settings,
   Sparkles,
 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { toast } from 'sonner';
 
 export function NavUser() {
   const { isMobile } = useSidebar();
-  const router = useRouter();
   const { profile } = useAppSelector((state) => state.user);
+  const { handleLogout } = useAuth();
 
   const _onLogout = (): void => {
-    tokenMethod.remove();
-    router.push(PATH.LOGIN);
-    router.refresh();
-    toast.success('Đăng xuất thành công');
+    handleLogout();
+    localStorage.removeItem(STORAGE.SELECTED_STREET_KEY);
+    localStorage.removeItem(STORAGE.SELECTED_STORE_KEY);
   };
 
   return (

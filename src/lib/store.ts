@@ -1,21 +1,48 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import {
+  FLUSH,
+  PAUSE,
+  PERSIST,
+  persistReducer,
+  persistStore,
+  PURGE,
+  REGISTER,
+  REHYDRATE,
+} from 'redux-persist';
 import userReducer from './features/user/userSlice';
 
-export const makeStore = () => {
-  return configureStore({
-    reducer: {
-      user: userReducer,
-    },
+const rootReducer = combineReducers({
+  user: userReducer,
+});
+
+export const makeStore = async () => {
+  const { default: storage } = await import('redux-persist/lib/storage');
+
+  const persistConfig = {
+    key: 'root',
+    storage,
+    whitelist: ['user'],
+  };
+
+  const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+  const store = configureStore({
+    reducer: persistedReducer,
     devTools: process.env.NODE_ENV !== 'production',
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
-        serializableCheck: false,
+        serializableCheck: {
+          ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+        },
       }),
   });
+
+  const persistor = persistStore(store);
+
+  return { store, persistor };
 };
 
-// Infer the type of makeStore
-export type AppStore = ReturnType<typeof makeStore>;
-// Infer the `RootState` and `AppDispatch` types from the store itself
+export type AppStore = Awaited<ReturnType<typeof makeStore>>['store'];
+export type AppPersistor = Awaited<ReturnType<typeof makeStore>>['persistor'];
 export type RootState = ReturnType<AppStore['getState']>;
 export type AppDispatch = AppStore['dispatch'];

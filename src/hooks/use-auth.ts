@@ -3,14 +3,13 @@ import { RoleEnums } from '@/enums/role';
 import {
   clearUserProfile,
   hasUserRole,
-  selectIsAuthenticated,
-  selectProfile,
   setUserProfile,
 } from '@/lib/features/user/userSlice';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { userService } from '@/services/userService';
 import { RegisterRequestBody } from '@/types/auth-types';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import tokenMethod from '@/utils/token';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect } from 'react';
 import { toast } from 'sonner';
@@ -39,8 +38,10 @@ export const useRegister = () => {
 
 export const useAuth = () => {
   const dispatch = useAppDispatch();
-  const profile = useAppSelector(selectProfile);
-  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const profile = useAppSelector((state) => state.user.profile);
+  const isAuthenticated = useAppSelector((state) => state.user.isAuthenticated);
+  const queryClient = useQueryClient();
+  const router = useRouter();
 
   const {
     data: response,
@@ -50,16 +51,14 @@ export const useAuth = () => {
   } = useQuery({
     queryKey: ['user-profile'],
     queryFn: () => userService.getProfile(),
-    retry: 1,
+    staleTime: 0,
     refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    enabled: !!tokenMethod.get()?.accessToken,
   });
 
-  useEffect(() => {
-    if (response?.isSuccess && response.result) {
-      dispatch(setUserProfile(response.result));
-    }
-  }, [response, dispatch]);
+  if (response?.result) {
+    dispatch(setUserProfile(response.result));
+  }
 
   useEffect(() => {
     if (isError && error) {
@@ -75,11 +74,19 @@ export const useAuth = () => {
     [profile]
   );
 
+  const handleLogout = () => {
+    tokenMethod.remove();
+    dispatch(clearUserProfile());
+    queryClient.clear();
+    router.push(PATH.LOGIN);
+  };
+
   return {
     user: profile,
     profile,
     isLoading,
     isAuthenticated,
     hasRole,
+    handleLogout,
   };
 };

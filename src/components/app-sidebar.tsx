@@ -22,15 +22,57 @@ import {
 } from '@/components/ui/sidebar';
 import { PATH } from '@/enums/path';
 import { RoleEnums } from '@/enums/role';
-import { useAuth } from '@/hooks/use-auth';
+import tokenMethod from '@/utils/token';
+import { jwtDecode } from 'jwt-decode';
 import { usePathname } from 'next/navigation';
-import { useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { TeamSwitcher } from './team-switcher';
+
+interface DecodedToken {
+  sub: string;
+  email: string;
+  'http://schemas.microsoft.com/ws/2008/06/identity/claims/role':
+    | string
+    | string[];
+  exp: number;
+}
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
-  const { hasRole, isLoading } = useAuth();
+  const [userRoles, setUserRoles] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
+  // Get user roles from JWT token
+  useEffect(() => {
+    try {
+      const token = tokenMethod.get()?.accessToken;
+      if (token) {
+        const decoded = jwtDecode<DecodedToken>(token);
+        const roles =
+          decoded[
+            'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'
+          ];
+
+        // Convert roles to array if it's a single string
+        const rolesArray = Array.isArray(roles) ? roles : [roles];
+        setUserRoles(rolesArray);
+      }
+      setIsLoading(false);
+    } catch (error) {
+      console.error('Error decoding token:', error);
+      setUserRoles([]);
+      setIsLoading(false);
+    }
+  }, []);
+
+  // Function to check if user has a specific role
+  const hasRole = useCallback(
+    (roles: RoleEnums | RoleEnums[]) => {
+      const rolesToCheck = Array.isArray(roles) ? roles : [roles];
+      return rolesToCheck.some((role) => userRoles.includes(role));
+    },
+    [userRoles]
+  );
   // Check if path is active for a menu group
   const checkActive = (items: { url: string }[]) => {
     return items.some(
@@ -108,11 +150,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             url: PATH.USER_STORES,
             roles: [RoleEnums.ADMIN],
           },
-          // {
-          //   title: 'Quản lý vai trò',
-          //   url: PATH.ROLES,
-          //   roles: [RoleEnums.ADMIN],
-          // },
         ],
       },
 
@@ -126,22 +163,38 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           { url: PATH.CATEGORIES },
           { url: PATH.INVENTORY },
         ]),
-        roles: [RoleEnums.PUBLISHER],
+        roles: [
+          RoleEnums.PUBLISHER,
+          RoleEnums.STORE_MANAGER,
+          RoleEnums.STORE_OWNER,
+        ],
         items: [
           {
             title: 'Thông tin sách',
             url: PATH.BOOKS,
-            roles: [RoleEnums.PUBLISHER],
+            roles: [
+              RoleEnums.PUBLISHER,
+              RoleEnums.STORE_MANAGER,
+              RoleEnums.STORE_OWNER,
+            ],
           },
           {
             title: 'Thông tin tác giả',
             url: PATH.ADMIN_AUTHORS,
-            roles: [RoleEnums.PUBLISHER],
+            roles: [
+              RoleEnums.PUBLISHER,
+              RoleEnums.STORE_MANAGER,
+              RoleEnums.STORE_OWNER,
+            ],
           },
           {
             title: 'Danh mục sách',
             url: PATH.CATEGORIES,
-            roles: [RoleEnums.PUBLISHER],
+            roles: [
+              RoleEnums.PUBLISHER,
+              RoleEnums.STORE_MANAGER,
+              RoleEnums.STORE_OWNER,
+            ],
           },
         ],
       },
@@ -152,26 +205,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         url: '#',
         icon: Store,
         isActive: checkActive([
-          { url: PATH.STORE_BOOKS },
           { url: PATH.STORE_HOURS },
           { url: PATH.INVENTORY },
         ]),
-        roles: [RoleEnums.STORE_MANAGER],
+        roles: [RoleEnums.STORE_MANAGER, RoleEnums.STORE_OWNER],
         items: [
-          {
-            title: 'Sách tại cửa hàng',
-            url: PATH.STORE_BOOKS,
-            roles: [RoleEnums.STORE_MANAGER],
-          },
           {
             title: 'Giờ hoạt động',
             url: PATH.STORE_HOURS,
-            roles: [RoleEnums.STORE_MANAGER],
-          },
-          {
-            title: 'Kho sách',
-            url: PATH.INVENTORY,
-            roles: [RoleEnums.STORE_MANAGER],
+            roles: [RoleEnums.STORE_MANAGER, RoleEnums.STORE_OWNER],
           },
         ],
       },
@@ -182,16 +224,18 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         name: 'Dashboard',
         url: PATH.DASHBOARD,
         icon: PieChart,
-        roles: [RoleEnums.ADMIN, RoleEnums.PUBLISHER, RoleEnums.STORE_MANAGER],
+        roles: [RoleEnums.ADMIN, RoleEnums.PUBLISHER],
       },
-
-      // Admin-only items
-      // {
-      //   name: 'Thống kê khách',
-      //   url: PATH.VISITOR_STATISTICS,
-      //   icon: Users,
-      //   roles: [RoleEnums.ADMIN],
-      // },
+      {
+        name: 'Store Dashboard',
+        url: PATH.STORE_OWNER_DASHBOARD,
+        icon: PieChart,
+        roles: [
+          RoleEnums.ADMIN,
+          RoleEnums.STORE_OWNER,
+          RoleEnums.STORE_MANAGER,
+        ],
+      },
       {
         name: 'Dự đoán lượng khách',
         url: PATH.VISITOR_PREDICTION,

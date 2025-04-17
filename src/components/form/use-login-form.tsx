@@ -47,7 +47,7 @@ export const useLoginForm = () => {
           } else if (hasPublisherManagerRole) {
             router.push(PATH.BOOKS);
           } else {
-            router.push(PATH.STORE_BOOKS);
+            router.push(PATH.STORE_OWNER_DASHBOARD);
           }
           toast.success('Đăng nhập thành công', {
             id: 'login-success',
