@@ -1,19 +1,35 @@
 'use client';
 
-import { AppStore, makeStore } from '@/lib/store';
-import { useRef } from 'react';
+import LoadingSpinner from '@/components/spin/loading-spinner';
+import { AppPersistor, AppStore, makeStore } from '@/lib/store';
+import { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 
 export default function StoreProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const storeRef = useRef<AppStore>(undefined);
-  if (!storeRef.current) {
-    // Create the store instance the first time this renders
-    storeRef.current = makeStore();
+  const [store, setStore] = useState<AppStore | null>(null);
+  const [persistor, setPersistor] = useState<AppPersistor | null>(null);
+
+  useEffect(() => {
+    makeStore().then(({ store, persistor }) => {
+      setStore(store);
+      setPersistor(persistor);
+    });
+  }, []);
+
+  if (!store || !persistor) {
+    return <LoadingSpinner />;
   }
 
-  return <Provider store={storeRef.current}>{children}</Provider>;
+  return (
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        {children}
+      </PersistGate>
+    </Provider>
+  );
 }

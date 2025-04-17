@@ -44,8 +44,6 @@ export enum PATH {
 
   // STORE MANAGER
 
-  STORE_BOOKS = '/store/books',
-
   STORE_HOURS = '/store/hours',
   STORE_HOURS_EDIT = '/store/hours/edit',
 

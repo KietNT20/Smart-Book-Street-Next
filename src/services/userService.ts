@@ -10,6 +10,7 @@ import {
   UsersResponse,
 } from '@/types/user-types';
 import axiosInstance from '@/utils/axiosInstance';
+import tokenMethod from '@/utils/token';
 
 export const userService = {
   login: async (payload: LoginCredentials): Promise<LoginResponse> => {
@@ -21,7 +22,11 @@ export const userService = {
     return res.data;
   },
   getProfile: async (): Promise<UserProfileResponse> => {
-    const res = await axiosInstance.get(`${API_URL.USERS.PROFILE}`);
+    const res = await axiosInstance.get(`${API_URL.USERS.PROFILE}`, {
+      headers: {
+        Authorization: `Bearer ${tokenMethod.get()?.accessToken}`,
+      },
+    });
     return res.data;
   },
   getAll: async (): Promise<UsersResponse> => {

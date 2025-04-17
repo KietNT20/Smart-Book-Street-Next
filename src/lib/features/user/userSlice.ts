@@ -60,8 +60,3 @@ export const hasUserRole = (
 
   return userRoleNames.includes(roles);
 };
-
-// Selectors
-export const selectProfile = (state: { user: UserState }) => state.user.profile;
-export const selectIsAuthenticated = (state: { user: UserState }) =>
-  state.user.isAuthenticated;

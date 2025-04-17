@@ -75,7 +75,7 @@ const EventCalendar = () => {
   };
 
   return (
-    <div className='container mx-auto rounded-lg border bg-white shadow-md'>
+    <div className='container mx-auto rounded-lg border bg-white p-4 shadow-md'>
       <Calendar cellRender={cellRender} />
     </div>
   );
