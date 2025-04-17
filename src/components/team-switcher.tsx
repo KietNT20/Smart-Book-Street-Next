@@ -27,6 +27,7 @@ import { StoreData } from '@/types/store-types';
 import { Street } from '@/types/street-types';
 
 export function TeamSwitcher() {
+  const { hasRole, profile } = useAuth();
   // Initialize with first street or from local storage
   const [activeStreet, setActiveStreet] = React.useState<Street | null>(null);
   const [activeStore, setActiveStore] = React.useState<StoreData | undefined>(
@@ -34,7 +35,7 @@ export function TeamSwitcher() {
   );
   const { isMobile } = useSidebar();
   const { streetsRes, isLoadingStreets } = useGetStreetsAll();
-  const { hasRole, profile } = useAuth();
+
   const { userStore } = useGetContractUser(profile?.id || '');
 
   // Use useMemo to memoize the streets array
@@ -50,7 +51,7 @@ export function TeamSwitcher() {
 
       setActiveStreet(savedStreet || streets[0]);
     }
-  }, [streets]);
+  }, [streets, hasRole]);
 
   // Set active store from localStorage
   React.useEffect(() => {
@@ -67,7 +68,7 @@ export function TeamSwitcher() {
         setActiveStore(savedStore);
       }
     }
-  }, [userStore, hasRole]);
+  }, [userStore, hasRole, profile?.id]);
 
   // Handle street selection
   const handleStreetSelect = (street: Street) => {
