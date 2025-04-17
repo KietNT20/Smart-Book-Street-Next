@@ -6,10 +6,7 @@ import { DatePicker } from 'antd';
 import dayjs from 'dayjs';
 import 'dayjs/locale/vi';
 import { useState } from 'react';
-import {
-  OrderChartAdmin,
-  StatisticsTimeframe,
-} from './dashboard/chart-bar-mixed';
+import { OrderChartStore, StatisticsTimeframe } from './chart-bar-mixed';
 
 // Setup dayjs
 dayjs.locale('vi');
@@ -100,7 +97,7 @@ export default function OrderStatisticsPage() {
         <div className='grid grid-cols-1 gap-6'>
           {/* Render appropriate OrderChartAdmin based on timeframe */}
           {timeframe === 'daily' && (
-            <OrderChartAdmin
+            <OrderChartStore
               timeframe='daily'
               date={formattedDate}
               title='Thống Kê Theo Ngày'
@@ -109,7 +106,7 @@ export default function OrderStatisticsPage() {
           )}
 
           {timeframe === 'monthly' && (
-            <OrderChartAdmin
+            <OrderChartStore
               timeframe='monthly'
               month={selectedMonthYear.month() + 1}
               year={selectedMonthYear.year()}
@@ -119,7 +116,7 @@ export default function OrderStatisticsPage() {
           )}
 
           {timeframe === 'yearly' && (
-            <OrderChartAdmin
+            <OrderChartStore
               timeframe='yearly'
               year={selectedYear.year()}
               title='Thống Kê Theo Năm'
@@ -129,7 +126,7 @@ export default function OrderStatisticsPage() {
 
           {/* You can add more OrderChartAdmin components here with different configurations */}
           {timeframe === 'daily' && (
-            <OrderChartAdmin
+            <OrderChartStore
               timeframe='daily'
               date={formattedDate}
               title='Số Lượng Đơn Hàng'
@@ -139,7 +136,7 @@ export default function OrderStatisticsPage() {
           )}
 
           {timeframe === 'monthly' && (
-            <OrderChartAdmin
+            <OrderChartStore
               timeframe='monthly'
               month={selectedMonthYear.month() + 1}
               year={selectedMonthYear.year()}
@@ -150,7 +147,7 @@ export default function OrderStatisticsPage() {
           )}
 
           {timeframe === 'yearly' && (
-            <OrderChartAdmin
+            <OrderChartStore
               timeframe='yearly'
               year={selectedYear.year()}
               title='Số Lượng Đơn Hàng'

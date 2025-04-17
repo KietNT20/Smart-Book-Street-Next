@@ -108,5 +108,8 @@ export const API_URL = {
     STATISTICS_DAILY: `${ORDER}/statics-for-admin/daily`,
     STATISTICS_MONTHLY: `${ORDER}/statics-for-admin/monthly`,
     STATISTICS_YEARLY: `${ORDER}/statics-for-admin/yearly`,
+    STATISTICS_DAILY_SM: `${ORDER}/statics-for-store/daily`,
+    STATISTICS_MONTHLY_SM: `${ORDER}/statics-for-store/monthly`,
+    STATISTICS_YEARLY_SM: `${ORDER}/statics-for-store/yearly`,
   },
 } as const;

@@ -29,4 +29,34 @@ export const orderService = {
     );
     return res.data;
   },
+  getOrderStaticsDailyStore: async (
+    date: string,
+    storeId: string
+  ): Promise<OrderStaticsDailyAdmin> => {
+    const res = await axiosInstance.get(
+      `${API_URL.ORDERS.STATISTICS_DAILY_SM}?date=${date}&storeId=${storeId}`
+    );
+    return res.data;
+  },
+
+  getOrderStaticsMonthlyStore: async (
+    month: number,
+    year: number,
+    storeId: string
+  ): Promise<OrderStaticsDailyAdmin> => {
+    const res = await axiosInstance.get(
+      `${API_URL.ORDERS.STATISTICS_MONTHLY_SM}/${month}/${year}/${storeId}`
+    );
+    return res.data;
+  },
+
+  getOrderStaticsYearlyStore: async (
+    year: number,
+    storeId: string
+  ): Promise<OrderStaticsDailyAdmin> => {
+    const res = await axiosInstance.get(
+      `${API_URL.ORDERS.STATISTICS_YEARLY_SM}/${year}/${storeId}`
+    );
+    return res.data;
+  },
 };

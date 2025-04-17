@@ -17,11 +17,12 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
+import { STORAGE } from '@/constant/storage';
 import useDebounce from '@/hooks/use-debounce';
 import {
-  useOrderStaticsDailyAdmin,
-  useOrderStaticsMonthlyAdmin,
-  useOrderStaticsYearAdmin,
+  useOrderStaticsDailyStore,
+  useOrderStaticsMonthlyStore,
+  useOrderStaticsYearlyStore,
 } from '@/hooks/use-order';
 
 export interface OrderStaticValue {
@@ -29,7 +30,7 @@ export interface OrderStaticValue {
   value: number;
 }
 
-export interface OrderStaticsAdmin {
+export interface OrderStatics {
   orderChart: OrderStaticValue[];
   orderProfit: OrderStaticValue[];
   totalOrder: number;
@@ -80,7 +81,7 @@ interface ChartBarProps {
   profilt?: boolean;
 }
 
-export function OrderChartAdmin({
+export function OrderChartStore({
   timeframe = 'daily',
   date,
   month,
@@ -94,26 +95,27 @@ export function OrderChartAdmin({
   const currentMonth = month || new Date().getMonth() + 1;
   const currentYear = year || new Date().getFullYear();
   const thisYear = year || new Date().getFullYear();
+  const storeID = localStorage.getItem(STORAGE.SELECTED_STORE_KEY);
 
   // Use appropriate hooks based on timeframe
-  const { orderStaticsDailyAdmin, orderDailyLoading, orderDailyError } =
-    useOrderStaticsDailyAdmin(currentDate);
+  const { orderStaticsDailyStore, orderDailyLoading, orderDailyError } =
+    useOrderStaticsDailyStore(currentDate, storeID || '');
 
-  const { orderStaticsMonthlyAdmin, orderMonthlyLoading, orderMonthlyError } =
-    useOrderStaticsMonthlyAdmin(currentMonth, currentYear);
+  const { orderStaticsMonthlyStore, orderMonthlyLoading, orderMonthlyError } =
+    useOrderStaticsMonthlyStore(currentMonth, currentYear, storeID || '');
 
-  const { orderStaticsYearAdmin, orderYearLoading, orderYearError } =
-    useOrderStaticsYearAdmin(thisYear);
+  const { orderStaticsYearlyStore, orderYearLoading, orderYearError } =
+    useOrderStaticsYearlyStore(thisYear, storeID || '');
 
   // Determine which data to use based on timeframe
   const getActiveData = () => {
     switch (timeframe) {
       case 'daily':
-        return orderStaticsDailyAdmin;
+        return orderStaticsDailyStore;
       case 'monthly':
-        return orderStaticsMonthlyAdmin;
+        return orderStaticsMonthlyStore;
       case 'yearly':
-        return orderStaticsYearAdmin;
+        return orderStaticsYearlyStore;
       default:
         return null;
     }
