@@ -1,5 +1,7 @@
 'use client';
 
+import { AlertDestructive } from '@/components/alert/alert-destructive';
+import BackButton from '@/components/back-btn/back-button';
 import { Badge as UIBadge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -30,7 +32,6 @@ import {
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import AlertUser from './_components/alert-user';
 import LoadingSkeleton from './_components/loading-skeleton';
 
 type Props = {
@@ -38,17 +39,20 @@ type Props = {
 };
 
 const UserStoreRegisteredPage = ({ params }: Props) => {
-  const { userStore, isLoadingUserStore } = useGetContractUser(params.id);
+  const { userStore, isLoadingUserStore, error } = useGetContractUser(
+    params.id
+  );
+
   const isLoading = useDebounce(isLoadingUserStore, 300);
   const router = useRouter();
   const [selectedContractIndex, setSelectedContractIndex] = useState(0);
 
   const contract = userStore[selectedContractIndex];
-  const store = contract.store;
-  const user = contract.user;
+  const store = contract?.store;
+  const user = contract?.user;
 
-  const startDate = formateDateVi(contract.startDate);
-  const endDate = formateDateVi(contract.endDate);
+  const startDate = formateDateVi(contract?.startDate);
+  const endDate = formateDateVi(contract?.endDate);
 
   const getStatusColor = (status: StoreRent) => {
     switch (status) {
@@ -67,13 +71,21 @@ const UserStoreRegisteredPage = ({ params }: Props) => {
     return <LoadingSkeleton />;
   }
 
-  if (!userStore || userStore.length === 0) {
-    return <AlertUser />;
+  if (error || !userStore || !store) {
+    return (
+      <div className='flex w-full items-center justify-center'>
+        <AlertDestructive
+          title='Có lỗi xảy ra!'
+          description='Không thể lấy thông tin hợp đồng. Hoặc hợp đồng không tồn tại.'
+        />
+      </div>
+    );
   }
 
   return (
     <div className='container mx-auto py-6'>
       <div className='mb-6 space-y-2'>
+        <BackButton />
         <h1 className='text-3xl font-bold'>Thông Tin Hợp Đồng</h1>
         <div className='flex items-center gap-6'>
           <p className='text-muted-foreground'>#{contract.contractNumber}</p>

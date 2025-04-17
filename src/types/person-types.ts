@@ -41,3 +41,35 @@ export interface BarDatum {
   male: number;
   female: number;
 }
+
+export enum Trend {
+  INCREASE = 'increase',
+  DECREASE = 'decrease',
+  STABLE = 'stable',
+}
+
+export interface PersonTotal {
+  success: boolean;
+  total: number;
+  currentMonthPercentChange: number;
+  changeDirection: Trend;
+}
+
+export interface AverageMinute {
+  success: boolean;
+  averageTime: string;
+  averageTimeByGender: AverageTimeByGender;
+  chartData: ChartDatum[];
+  averageTimeMinutes: number;
+}
+
+export interface AverageTimeByGender {
+  male: string;
+  female: string;
+}
+
+export interface ChartDatum {
+  label: string;
+  value: number;
+  time: string;
+}

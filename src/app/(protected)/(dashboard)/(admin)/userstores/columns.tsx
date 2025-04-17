@@ -69,7 +69,7 @@ export const columns: ColumnDef<User>[] = [
       return (
         <div className='flex items-center gap-2'>
           <Link href={`${PATH.USER_STORES}/${userStore.id}`}>
-            <Button>Tạo đơn</Button>
+            <Button variant={'darker'}>Tạo đơn</Button>
           </Link>
           <Link href={`${PATH.USER_STORES}/${userStore.id}/registered`}>
             <Button variant={'outline'}>Xem đơn</Button>

@@ -48,7 +48,7 @@ export const API_URL = {
     INDEX: `${EVENT}`,
     COMING: `${EVENT}/events-coming`,
     PAGINATED: `${EVENT}/paginated`,
-    DATES_IN_MONTH: `${EVENT}/event-dates-in-month`,
+    IN_MONTH: `${EVENT}/event-dates-in-month`,
     IN_DATE: `${EVENT}/events-in-date`,
   },
   IMAGES: {

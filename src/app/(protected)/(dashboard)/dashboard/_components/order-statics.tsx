@@ -57,7 +57,7 @@ export default function OrderStatisticsPage() {
                 <div className='flex items-center gap-2'>
                   <span>Chọn ngày:</span>
                   <DatePicker
-                    className='px-3 py-2'
+                    className='h-10 px-3 py-2'
                     value={selectedDate}
                     onChange={(date) => date && setSelectedDate(date)}
                     format='DD/MM/YYYY'
@@ -71,7 +71,7 @@ export default function OrderStatisticsPage() {
                   <span>Chọn tháng:</span>
                   <DatePicker
                     picker='month'
-                    className='px-3 py-2'
+                    className='h-10 px-3 py-2'
                     value={selectedMonthYear}
                     onChange={(date) => date && setSelectedMonthYear(date)}
                     format='MM/YYYY'
@@ -84,7 +84,7 @@ export default function OrderStatisticsPage() {
                 <div className='flex items-center gap-2'>
                   <span>Chọn năm:</span>
                   <DatePicker
-                    className='px-3 py-2'
+                    className='h-10 px-3 py-2'
                     picker='year'
                     value={selectedYear}
                     onChange={(date) => date && setSelectedYear(date)}

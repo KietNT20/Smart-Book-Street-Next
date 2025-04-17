@@ -292,7 +292,7 @@ const UserTable = ({
       <div className='mt-4 flex flex-col items-center justify-between gap-4 sm:flex-row'>
         <div className='flex items-center gap-2'>
           <span className='whitespace-nowrap text-sm text-muted-foreground'>
-            Số dòng:
+            Số dòng mỗi trang:
           </span>
           <Select
             value={pageSize.toString()}

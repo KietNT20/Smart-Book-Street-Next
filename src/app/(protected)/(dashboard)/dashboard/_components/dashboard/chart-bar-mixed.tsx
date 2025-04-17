@@ -3,6 +3,7 @@
 import { TrendingUp } from 'lucide-react';
 import { Bar, BarChart, XAxis, YAxis } from 'recharts';
 
+import LoadingSpinner from '@/components/spin/loading-spinner';
 import {
   Card,
   CardContent,
@@ -153,7 +154,7 @@ export function OrderChartAdmin({
           <CardDescription>{description}</CardDescription>
         </CardHeader>
         <CardContent className='flex h-[300px] items-center justify-center'>
-          <div className='text-muted-foreground'>Đang tải...</div>
+          <LoadingSpinner />
         </CardContent>
       </Card>
     );

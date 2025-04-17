@@ -255,7 +255,7 @@ export const StoreTable = ({
       <div className='mt-4 flex items-center justify-between'>
         <div className='flex items-center gap-2'>
           <span className='whitespace-nowrap text-sm text-muted-foreground'>
-            Số dòng:
+            Số dòng mỗi trang:
           </span>
           <Select
             value={pageSize.toString()}

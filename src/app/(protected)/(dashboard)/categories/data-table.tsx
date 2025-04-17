@@ -30,7 +30,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { useState } from 'react';
-import { DataTablePagination } from './_components/data-table-pagination';
+import { DataTablePagination } from '@/components/data-table-pagination';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
