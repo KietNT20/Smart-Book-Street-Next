@@ -119,27 +119,12 @@ const PublisherForm = ({ publisher }: Props) => {
     }
 
     if (publisher?.id) {
-      updatePublisher(
-        {
-          id: publisher.id,
-          formData,
-        },
-        {
-          onSuccess: (data) => {
-            if (data) {
-              router.replace(`${PATH.PUBLISHERS}`);
-            }
-          },
-        }
-      );
-    } else {
-      createPublisher(formData, {
-        onSuccess: (data) => {
-          if (data) {
-            router.replace(PATH.PUBLISHERS);
-          }
-        },
+      updatePublisher({
+        id: publisher.id,
+        formData,
       });
+    } else {
+      createPublisher(formData);
     }
   }
 
@@ -155,7 +140,7 @@ const PublisherForm = ({ publisher }: Props) => {
     <Card>
       <CardHeader>
         <h2 className='text-3xl font-bold'>
-          {publisher ? 'Cập nhật nhà xuất bản' : 'Tạo mới nhà xuất bản'}
+          {publisher ? 'Chỉnh sửa nhà xuất bản' : 'Tạo mới nhà xuất bản'}
         </h2>
       </CardHeader>
       <CardContent>
@@ -165,23 +150,6 @@ const PublisherForm = ({ publisher }: Props) => {
             onSubmit={form.handleSubmit(_onSubmit)}
             className='space-y-4'
           >
-            <div>
-              <FormLabel>Email User</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder='Nhập email của người phụ trách'
-                  disabled={isWorking}
-                  value={userEmail}
-                  onChange={(e) => setUserEmail(e.target.value)}
-                />
-              </FormControl>
-              {managerId && (
-                <p className='mt-1 text-sm text-green-600'>
-                  Đã tìm thấy tài khoản
-                </p>
-              )}
-            </div>
-
             <FormField
               control={form.control}
               name='publisherName'
@@ -190,6 +158,18 @@ const PublisherForm = ({ publisher }: Props) => {
                   <FormLabel>Tên Nhà xuất bản</FormLabel>
                   <FormControl>
                     <Input placeholder='Tên Nhà xuất bản' {...field} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name='email'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input placeholder='Nhập email nhà xuất bản' {...field} />
                   </FormControl>
                 </FormItem>
               )}
@@ -218,18 +198,23 @@ const PublisherForm = ({ publisher }: Props) => {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name='managerId'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Người phụ trách</FormLabel>
-                  <FormControl>
-                    <Input placeholder='Nhập người phụ trách' {...field} />
-                  </FormControl>
-                </FormItem>
+            <div>
+              <FormLabel>Email User</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder='Nhập email của người phụ trách'
+                  disabled={isWorking}
+                  value={userEmail}
+                  onChange={(e) => setUserEmail(e.target.value)}
+                />
+              </FormControl>
+              {managerId && (
+                <p className='mt-1 text-sm text-green-600'>
+                  Đã tìm thấy tài khoản
+                </p>
               )}
-            />
+            </div>
+
             <FormField
               control={form.control}
               name='address'

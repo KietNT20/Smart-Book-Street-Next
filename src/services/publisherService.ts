@@ -1,6 +1,7 @@
 import { API_URL } from '@/constant/api-url';
 import {
   PublisherParams,
+  PublisherResponse,
   PublisherSearch,
   PublishersResponse,
 } from '@/types/publisher-types';
@@ -18,6 +19,10 @@ export const publisherService = {
       API_URL.PUBLISHERS.PAGINATION_SEARCH,
       params
     );
+    return res.data;
+  },
+  getById: async (id: string): Promise<PublisherResponse> => {
+    const res = await axiosInstance.get(`${API_URL.PUBLISHERS.INDEX}/${id}`);
     return res.data;
   },
   search: async (
