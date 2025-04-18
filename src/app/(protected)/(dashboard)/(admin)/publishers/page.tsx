@@ -123,8 +123,8 @@ const PublishersPage = () => {
         sortField={sortField}
         sortOrder={sortOrder}
         handleSort={handleSort}
-        onViewStore={handleViewPublisherDetail}
-        onEditStore={handleEditPublisher}
+        onViewPublisher={handleViewPublisherDetail}
+        onEditPublisher={handleEditPublisher}
       />
     </div>
   );

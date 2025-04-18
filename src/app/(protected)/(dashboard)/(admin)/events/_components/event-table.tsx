@@ -25,8 +25,9 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Sort } from '@/enums/enums';
-import { usePublisherMutation } from '@/hooks/use-publisher';
-import { Publisher } from '@/types/publisher-types';
+import { useEventMutaton } from '@/hooks/use-event';
+import { formateDateVi } from '@/lib/utils';
+import { Event } from '@/types/event-types';
 import {
   ArrowUpDown,
   Eye,
@@ -39,7 +40,7 @@ import {
 import { useState } from 'react';
 
 type Props = {
-  publishers: Publisher[];
+  events: Event[];
   isLoading: boolean;
   isSearching: boolean;
   totalPages: number;
@@ -50,12 +51,12 @@ type Props = {
   sortField: string;
   sortOrder: Sort;
   handleSort: (field: string) => void;
-  onViewPublisher: (id: string) => void;
-  onEditPublisher: (id: string) => void;
+  onViewEvent: (id: string) => void;
+  onEditEvent: (id: string) => void;
 };
 
-const PublisherTable = ({
-  publishers,
+const EventTable = ({
+  events,
   isLoading,
   isSearching,
   totalPages,
@@ -66,15 +67,12 @@ const PublisherTable = ({
   sortField,
   sortOrder,
   handleSort,
-  onViewPublisher,
-  onEditPublisher,
+  onViewEvent,
+  onEditEvent,
 }: Props) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [publisherToDelete, setPublisherToDelete] = useState<string | null>(
-    null
-  );
-
-  const { deletePublisher } = usePublisherMutation();
+  const [eventToDelete, setEventToDelete] = useState<string | null>(null);
+  const { deleteEvent } = useEventMutaton();
 
   // Handle page size change
   const handlePageSizeChange = (value: string) => {
@@ -84,19 +82,17 @@ const PublisherTable = ({
 
   // Handle opening delete dialog
   const handleDeleteClick = (publisherId: string) => {
-    setPublisherToDelete(publisherId);
+    setEventToDelete(publisherId);
     setDeleteDialogOpen(true);
   };
 
   // Handle delete confirmation
   const handleDeleteConfirm = () => {
-    if (publisherToDelete) {
-      // Call API to delete store with the store ID
-      deletePublisher(publisherToDelete);
+    if (eventToDelete) {
+      deleteEvent(eventToDelete);
 
-      // Close dialog and reset state
       setDeleteDialogOpen(false);
-      setPublisherToDelete(null);
+      setEventToDelete(null);
     }
   };
 
@@ -110,11 +106,11 @@ const PublisherTable = ({
               <TableHead>No.</TableHead>
               <TableHead
                 className='cursor-pointer'
-                onClick={() => handleSort('PublisherName')}
+                onClick={() => handleSort('EventName')}
               >
                 <Button variant='ghost'>
-                  Tên Nhà Xuất Bản
-                  {sortField === 'PublisherName' ? (
+                  Tên Sự Kiện
+                  {sortField === 'EventName' ? (
                     sortOrder === Sort.ASC ? (
                       <SortAsc />
                     ) : (
@@ -127,11 +123,11 @@ const PublisherTable = ({
               </TableHead>
               <TableHead
                 className='cursor-pointer'
-                onClick={() => handleSort('Address')}
+                onClick={() => handleSort('StartDate')}
               >
                 <Button variant='ghost'>
-                  Địa chỉ
-                  {sortField === 'Address' ? (
+                  Ngày bắt đầu
+                  {sortField === 'StartDate' ? (
                     sortOrder === Sort.ASC ? (
                       <SortAsc />
                     ) : (
@@ -144,11 +140,11 @@ const PublisherTable = ({
               </TableHead>
               <TableHead
                 className='cursor-pointer'
-                onClick={() => handleSort('Phone')}
+                onClick={() => handleSort('EndDate')}
               >
                 <Button variant='ghost'>
-                  Số điện thoại
-                  {sortField === 'Phone' ? (
+                  Ngày kết thúc
+                  {sortField === 'EndDate' ? (
                     sortOrder === Sort.ASC ? (
                       <SortAsc />
                     ) : (
@@ -161,11 +157,11 @@ const PublisherTable = ({
               </TableHead>
               <TableHead
                 className='cursor-pointer'
-                onClick={() => handleSort('Email')}
+                onClick={() => handleSort('Zone')}
               >
                 <Button variant='ghost'>
-                  Email
-                  {sortField === 'Email' ? (
+                  Khu vực
+                  {sortField === 'Zone' ? (
                     sortOrder === Sort.ASC ? (
                       <SortAsc />
                     ) : (
@@ -182,25 +178,27 @@ const PublisherTable = ({
           <TableBody>
             {isLoading ? (
               <TableSkeleton columns={6} rows={pageSize} />
-            ) : publishers.length === 0 ? (
+            ) : events.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={6} className='py-10 text-center'>
-                  Không tìm thấy cửa hàng.{' '}
+                  Không tìm thấy sự kiện.{' '}
                   {isSearching && 'Hãy thử một từ khóa tìm kiếm khác.'}
                 </TableCell>
               </TableRow>
             ) : (
-              publishers.map((publisher, index) => (
-                <TableRow key={publisher.id}>
+              events.map((event, index) => (
+                <TableRow key={event.id}>
                   <TableCell className='text-muted-foreground'>
                     {index + 1 + (pageNumber - 1) * pageSize}
                   </TableCell>
                   <TableCell className='font-medium'>
-                    {publisher.publisherName}
+                    {event.eventName}
                   </TableCell>
-                  <TableCell>{publisher.address}</TableCell>
-                  <TableCell>{publisher.phone}</TableCell>
-                  <TableCell>{publisher.email}</TableCell>
+                  <TableCell>{formateDateVi(event.startDate)}</TableCell>
+                  <TableCell>{formateDateVi(event.endDate)}</TableCell>
+                  <TableCell className='max-w-52 overflow-hidden text-ellipsis whitespace-nowrap'>
+                    {event?.zone?.zoneName}
+                  </TableCell>
                   <TableCell className='text-right'>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -211,20 +209,20 @@ const PublisherTable = ({
                       <DropdownMenuContent align='end'>
                         <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
                         <DropdownMenuItem
-                          onClick={() => onViewPublisher(publisher.id || '')}
+                          onClick={() => onViewEvent(event.id || '')}
                         >
                           <Eye className='mr-2 h-4 w-4' />
                           Xem chi tiết
                         </DropdownMenuItem>
                         <DropdownMenuItem
-                          onClick={() => onEditPublisher(publisher.id || '')}
+                          onClick={() => onEditEvent(event.id || '')}
                         >
                           <FileEdit className='mr-2 h-4 w-4' />
                           Chỉnh sửa
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className='text-destructive'
-                          onClick={() => handleDeleteClick(publisher.id || '')}
+                          onClick={() => handleDeleteClick(event.id || '')}
                         >
                           <Trash2 className='mr-2 h-4 w-4' />
                           Xóa
@@ -263,9 +261,9 @@ const PublisherTable = ({
         </div>
 
         <TablePagination
+          totalPages={totalPages}
           pageNumber={pageNumber}
           setPageNumber={setPageNumber}
-          totalPages={totalPages}
         />
       </div>
 
@@ -282,4 +280,4 @@ const PublisherTable = ({
   );
 };
 
-export default PublisherTable;
+export default EventTable;

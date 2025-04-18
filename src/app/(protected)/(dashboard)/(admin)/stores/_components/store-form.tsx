@@ -231,7 +231,8 @@ const StoreForm = ({ storeToEdit }: Props) => {
                           <DialogHeader>
                             <DialogTitle>Chọn Khu Vực Cửa Hàng</DialogTitle>
                             <DialogDescription>
-                              Tìm kiếm và chọn khu vực cho cửa hàng của bạn.
+                              Tìm kiếm khu vực cho cửa hàng của bạn theo tên
+                              Đường Sách
                             </DialogDescription>
                           </DialogHeader>
                           <ZoneSearch

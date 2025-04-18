@@ -7,7 +7,9 @@ import {
 } from '@/components/ui/collapsible';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
 import useDebounce from '@/hooks/use-debounce';
+import { DatePicker } from 'antd';
 import { ChevronDown, ChevronUp, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { SearchFilters } from '../page';
@@ -20,7 +22,7 @@ type Props = {
   onClearSearch: () => void;
 };
 
-const PublisherFilter = ({
+const EventFilter = ({
   filters,
   setFilters,
   isSearching,
@@ -30,15 +32,18 @@ const PublisherFilter = ({
   const [isOpen, setIsOpen] = useState(false);
   const debouncedFilters = useDebounce(filters, 700);
 
-  const handleInputChange = (
-    field: keyof SearchFilters,
-    value: string | null
-  ) => {
+  const handleInputChange = (field: keyof SearchFilters, value: any) => {
     setFilters({ ...filters, [field]: value });
   };
 
   const clearField = (field: keyof SearchFilters) => {
-    setFilters({ ...filters, [field]: '' });
+    if (field === 'allowAds') {
+      setFilters({ ...filters, [field]: false });
+    } else if (field === 'startDate' || field === 'endDate') {
+      setFilters({ ...filters, [field]: null });
+    } else {
+      setFilters({ ...filters, [field]: '' });
+    }
   };
 
   useEffect(() => {
@@ -70,46 +75,68 @@ const PublisherFilter = ({
           <CollapsibleContent>
             <div className='grid grid-cols-1 gap-4 pt-2 md:grid-cols-2 lg:grid-cols-4'>
               <div className='space-y-2'>
-                <Label htmlFor='publisherName'>Tên Nhà xuất bản</Label>
+                <Label htmlFor='key'>Tên sự kiện</Label>
                 <div className='relative'>
                   <Input
-                    id='publisherName'
-                    placeholder='Tìm theo tên nhà xuất bản'
-                    value={filters.publisherName || ''}
-                    onChange={(e) =>
-                      handleInputChange('publisherName', e.target.value)
+                    id='key'
+                    placeholder='Tìm theo tên sự kiện'
+                    value={filters.key || ''}
+                    onChange={(e) => handleInputChange('key', e.target.value)}
+                  />
+                  {filters.key && (
+                    <Button
+                      variant='ghost'
+                      size='icon'
+                      className='absolute right-0 top-0 h-full'
+                      onClick={() => clearField('key')}
+                    >
+                      <X className='h-4 w-4' />
+                    </Button>
+                  )}
+                </div>
+              </div>
+
+              <div className='space-y-2'>
+                <Label htmlFor='allowAds'>Có quảng cáo</Label>
+                <div className='flex h-10 items-center space-x-2'>
+                  <Switch
+                    id='allowAds'
+                    checked={filters.allowAds}
+                    onCheckedChange={(checked) =>
+                      handleInputChange('allowAds', checked)
                     }
                   />
-                  {filters.publisherName && (
-                    <Button
-                      variant='ghost'
-                      size='icon'
-                      className='absolute right-0 top-0 h-full'
-                      onClick={() => clearField('publisherName')}
-                    >
-                      <X className='h-4 w-4' />
-                    </Button>
-                  )}
+                  <span className='text-sm text-muted-foreground'>
+                    {filters.allowAds ? 'Có' : 'Không'}
+                  </span>
                 </div>
               </div>
 
               <div className='space-y-2'>
-                <Label htmlFor='address'>Địa chỉ</Label>
+                <Label htmlFor='startDate'>Ngày bắt đầu</Label>
                 <div className='relative'>
-                  <Input
-                    id='address'
-                    placeholder='Tìm theo địa chỉ'
-                    value={filters.address || ''}
-                    onChange={(e) =>
-                      handleInputChange('address', e.target.value)
+                  <DatePicker
+                    id='startDate'
+                    value={
+                      filters.startDate
+                        ? new Date(filters.startDate as string)
+                        : null
                     }
+                    onChange={(date) =>
+                      handleInputChange(
+                        'startDate',
+                        date ? date.toISOString().split('T')[0] : null
+                      )
+                    }
+                    format='YYYY-MM-DD'
+                    className='h-10 w-full px-3 py-2'
                   />
-                  {filters.address && (
+                  {filters.startDate && (
                     <Button
                       variant='ghost'
                       size='icon'
                       className='absolute right-0 top-0 h-full'
-                      onClick={() => clearField('address')}
+                      onClick={() => clearField('startDate')}
                     >
                       <X className='h-4 w-4' />
                     </Button>
@@ -118,42 +145,30 @@ const PublisherFilter = ({
               </div>
 
               <div className='space-y-2'>
-                <Label htmlFor='phone'>Số điện thoại</Label>
+                <Label htmlFor='endDate'>Ngày kết thúc</Label>
                 <div className='relative'>
-                  <Input
-                    id='phone'
-                    placeholder='Tìm theo số điện thoại'
-                    value={filters.phone || ''}
-                    onChange={(e) => handleInputChange('phone', e.target.value)}
+                  <DatePicker
+                    id='endDate'
+                    value={
+                      filters.endDate
+                        ? new Date(filters.endDate as string)
+                        : null
+                    }
+                    onChange={(date) =>
+                      handleInputChange(
+                        'endDate',
+                        date ? date.toISOString().split('T')[0] : null
+                      )
+                    }
+                    format='YYYY-MM-DD'
+                    className='h-10 w-full px-3 py-2'
                   />
-                  {filters.phone && (
+                  {filters.endDate && (
                     <Button
                       variant='ghost'
                       size='icon'
                       className='absolute right-0 top-0 h-full'
-                      onClick={() => clearField('phone')}
-                    >
-                      <X className='h-4 w-4' />
-                    </Button>
-                  )}
-                </div>
-              </div>
-
-              <div className='space-y-2'>
-                <Label htmlFor='email'>Email</Label>
-                <div className='relative'>
-                  <Input
-                    id='email'
-                    placeholder='Tìm theo email'
-                    value={filters.email || ''}
-                    onChange={(e) => handleInputChange('email', e.target.value)}
-                  />
-                  {filters.email && (
-                    <Button
-                      variant='ghost'
-                      size='icon'
-                      className='absolute right-0 top-0 h-full'
-                      onClick={() => clearField('email')}
+                      onClick={() => clearField('endDate')}
                     >
                       <X className='h-4 w-4' />
                     </Button>
@@ -167,4 +182,5 @@ const PublisherFilter = ({
     </Card>
   );
 };
-export default PublisherFilter;
+
+export default EventFilter;

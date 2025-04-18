@@ -27,6 +27,7 @@ export enum PATH {
   CALENDAR_EVENT = '/events/calendar',
 
   ZONES = '/zones',
+  ZONE_CREATE = '/zones/create',
 
   VISITOR_STATISTICS = '/visitors/statistics',
   VISITOR_PREDICTION = '/visitors/prediction',

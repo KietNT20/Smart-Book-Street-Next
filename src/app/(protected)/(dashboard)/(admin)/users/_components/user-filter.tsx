@@ -28,37 +28,22 @@ const UserFilter = ({
   onClearSearch,
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [localFilters, setLocalFilters] = useState<SearchFilters>(filters);
-  const debouncedFilters = useDebounce(localFilters, 3000);
-
-  useEffect(() => {
-    setLocalFilters(filters);
-  }, [filters]);
-
-  useEffect(() => {
-    setFilters(debouncedFilters);
-    const hasActiveFilter = Object.values(debouncedFilters).some(
-      (val) => val && val.trim() !== ''
-    );
-
-    if (hasActiveFilter) {
-      onSearch();
-    } else if (isSearching) {
-      onClearSearch();
-    }
-  }, [debouncedFilters, setFilters, onSearch, onClearSearch, isSearching]);
+  const debouncedFilters = useDebounce(filters, 700);
 
   const handleInputChange = (
     field: keyof SearchFilters,
     value: string | null
   ) => {
-    const newFilters = { ...localFilters, [field]: value };
-    setLocalFilters(newFilters);
+    setFilters({ ...filters, [field]: value });
   };
 
   const clearField = (field: keyof SearchFilters) => {
-    handleInputChange(field, '');
+    setFilters({ ...filters, [field]: '' });
   };
+
+  useEffect(() => {
+    onSearch();
+  }, [debouncedFilters, onSearch]);
 
   return (
     <Card className='mb-6'>
@@ -95,12 +80,12 @@ const UserFilter = ({
                   <Input
                     id='userName'
                     placeholder='Tìm theo tên tài khoản'
-                    value={localFilters.userName || ''}
+                    value={filters.userName || ''}
                     onChange={(e) =>
                       handleInputChange('userName', e.target.value)
                     }
                   />
-                  {localFilters.userName && (
+                  {filters.userName && (
                     <Button
                       variant='ghost'
                       size='icon'
@@ -119,12 +104,12 @@ const UserFilter = ({
                   <Input
                     id='fullName'
                     placeholder='Tìm theo tên người dùng'
-                    value={localFilters.fullName || ''}
+                    value={filters.fullName || ''}
                     onChange={(e) =>
                       handleInputChange('fullName', e.target.value)
                     }
                   />
-                  {localFilters.fullName && (
+                  {filters.fullName && (
                     <Button
                       variant='ghost'
                       size='icon'
@@ -143,10 +128,10 @@ const UserFilter = ({
                   <Input
                     id='email'
                     placeholder='Tìm theo email'
-                    value={localFilters.email || ''}
+                    value={filters.email || ''}
                     onChange={(e) => handleInputChange('email', e.target.value)}
                   />
-                  {localFilters.email && (
+                  {filters.email && (
                     <Button
                       variant='ghost'
                       size='icon'
@@ -165,10 +150,10 @@ const UserFilter = ({
                   <Input
                     id='phone'
                     placeholder='Tìm theo số điện thoại'
-                    value={localFilters.phone || ''}
+                    value={filters.phone || ''}
                     onChange={(e) => handleInputChange('phone', e.target.value)}
                   />
-                  {localFilters.phone && (
+                  {filters.phone && (
                     <Button
                       variant='ghost'
                       size='icon'

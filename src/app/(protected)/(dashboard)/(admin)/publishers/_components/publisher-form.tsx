@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { PATH } from '@/enums/path';
+import useDebounce from '@/hooks/use-debounce';
 import { usePublisherMutation } from '@/hooks/use-publisher';
 import { useManagerEmail } from '@/hooks/use-user';
 import { publisherFormSchema, PublisherFormValues } from '@/lib/zod';
@@ -46,7 +47,10 @@ const PublisherForm = ({ publisher }: Props) => {
 
   const { managerId } = useManagerEmail(userEmail);
 
-  const isWorking = createPublisherPending || updatePublisherPending;
+  const isWorking = useDebounce(
+    createPublisherPending || updatePublisherPending,
+    300
+  );
   const router = useRouter();
 
   const form = useForm<PublisherFormValues>({

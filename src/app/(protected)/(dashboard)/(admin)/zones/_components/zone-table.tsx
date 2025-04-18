@@ -25,11 +25,10 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Sort } from '@/enums/enums';
-import { usePublisherMutation } from '@/hooks/use-publisher';
-import { Publisher } from '@/types/publisher-types';
+import { useZoneMutation } from '@/hooks/use-zone';
+import { Zone } from '@/types/zone-types';
 import {
   ArrowUpDown,
-  Eye,
   FileEdit,
   MoreHorizontal,
   SortAsc,
@@ -39,7 +38,7 @@ import {
 import { useState } from 'react';
 
 type Props = {
-  publishers: Publisher[];
+  zones: Zone[];
   isLoading: boolean;
   isSearching: boolean;
   totalPages: number;
@@ -50,12 +49,11 @@ type Props = {
   sortField: string;
   sortOrder: Sort;
   handleSort: (field: string) => void;
-  onViewPublisher: (id: string) => void;
-  onEditPublisher: (id: string) => void;
+  onEditZone: (id: string) => void;
 };
 
-const PublisherTable = ({
-  publishers,
+const ZoneTable = ({
+  zones,
   isLoading,
   isSearching,
   totalPages,
@@ -66,15 +64,12 @@ const PublisherTable = ({
   sortField,
   sortOrder,
   handleSort,
-  onViewPublisher,
-  onEditPublisher,
+  onEditZone,
 }: Props) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [publisherToDelete, setPublisherToDelete] = useState<string | null>(
-    null
-  );
+  const [zoneToDelete, setZoneToDelete] = useState<string | null>(null);
 
-  const { deletePublisher } = usePublisherMutation();
+  const { deleteZone } = useZoneMutation();
 
   // Handle page size change
   const handlePageSizeChange = (value: string) => {
@@ -83,20 +78,19 @@ const PublisherTable = ({
   };
 
   // Handle opening delete dialog
-  const handleDeleteClick = (publisherId: string) => {
-    setPublisherToDelete(publisherId);
+  const handleDeleteClick = (zoneId: string) => {
+    setZoneToDelete(zoneId);
     setDeleteDialogOpen(true);
   };
 
   // Handle delete confirmation
   const handleDeleteConfirm = () => {
-    if (publisherToDelete) {
-      // Call API to delete store with the store ID
-      deletePublisher(publisherToDelete);
+    if (zoneToDelete) {
+      deleteZone(zoneToDelete);
 
       // Close dialog and reset state
       setDeleteDialogOpen(false);
-      setPublisherToDelete(null);
+      setZoneToDelete(null);
     }
   };
 
@@ -110,62 +104,11 @@ const PublisherTable = ({
               <TableHead>No.</TableHead>
               <TableHead
                 className='cursor-pointer'
-                onClick={() => handleSort('PublisherName')}
+                onClick={() => handleSort('ZoneName')}
               >
                 <Button variant='ghost'>
                   Tên Nhà Xuất Bản
-                  {sortField === 'PublisherName' ? (
-                    sortOrder === Sort.ASC ? (
-                      <SortAsc />
-                    ) : (
-                      <SortDesc />
-                    )
-                  ) : (
-                    <ArrowUpDown />
-                  )}
-                </Button>
-              </TableHead>
-              <TableHead
-                className='cursor-pointer'
-                onClick={() => handleSort('Address')}
-              >
-                <Button variant='ghost'>
-                  Địa chỉ
-                  {sortField === 'Address' ? (
-                    sortOrder === Sort.ASC ? (
-                      <SortAsc />
-                    ) : (
-                      <SortDesc />
-                    )
-                  ) : (
-                    <ArrowUpDown />
-                  )}
-                </Button>
-              </TableHead>
-              <TableHead
-                className='cursor-pointer'
-                onClick={() => handleSort('Phone')}
-              >
-                <Button variant='ghost'>
-                  Số điện thoại
-                  {sortField === 'Phone' ? (
-                    sortOrder === Sort.ASC ? (
-                      <SortAsc />
-                    ) : (
-                      <SortDesc />
-                    )
-                  ) : (
-                    <ArrowUpDown />
-                  )}
-                </Button>
-              </TableHead>
-              <TableHead
-                className='cursor-pointer'
-                onClick={() => handleSort('Email')}
-              >
-                <Button variant='ghost'>
-                  Email
-                  {sortField === 'Email' ? (
+                  {sortField === 'ZoneName' ? (
                     sortOrder === Sort.ASC ? (
                       <SortAsc />
                     ) : (
@@ -182,7 +125,7 @@ const PublisherTable = ({
           <TableBody>
             {isLoading ? (
               <TableSkeleton columns={6} rows={pageSize} />
-            ) : publishers.length === 0 ? (
+            ) : zones.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={6} className='py-10 text-center'>
                   Không tìm thấy cửa hàng.{' '}
@@ -190,17 +133,12 @@ const PublisherTable = ({
                 </TableCell>
               </TableRow>
             ) : (
-              publishers.map((publisher, index) => (
-                <TableRow key={publisher.id}>
+              zones.map((zone, index) => (
+                <TableRow key={zone.id}>
                   <TableCell className='text-muted-foreground'>
                     {index + 1 + (pageNumber - 1) * pageSize}
                   </TableCell>
-                  <TableCell className='font-medium'>
-                    {publisher.publisherName}
-                  </TableCell>
-                  <TableCell>{publisher.address}</TableCell>
-                  <TableCell>{publisher.phone}</TableCell>
-                  <TableCell>{publisher.email}</TableCell>
+                  <TableCell className='font-medium'>{zone.zoneName}</TableCell>
                   <TableCell className='text-right'>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -211,20 +149,14 @@ const PublisherTable = ({
                       <DropdownMenuContent align='end'>
                         <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
                         <DropdownMenuItem
-                          onClick={() => onViewPublisher(publisher.id || '')}
-                        >
-                          <Eye className='mr-2 h-4 w-4' />
-                          Xem chi tiết
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() => onEditPublisher(publisher.id || '')}
+                          onClick={() => onEditZone(zone.id || '')}
                         >
                           <FileEdit className='mr-2 h-4 w-4' />
                           Chỉnh sửa
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className='text-destructive'
-                          onClick={() => handleDeleteClick(publisher.id || '')}
+                          onClick={() => handleDeleteClick(zone.id || '')}
                         >
                           <Trash2 className='mr-2 h-4 w-4' />
                           Xóa
@@ -282,4 +214,4 @@ const PublisherTable = ({
   );
 };
 
-export default PublisherTable;
+export default ZoneTable;

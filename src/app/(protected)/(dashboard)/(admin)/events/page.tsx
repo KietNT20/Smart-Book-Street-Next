@@ -1,38 +1,142 @@
 'use client';
 
-import { Separator } from '@/components/ui/separator';
-import { useEventMutaton } from '@/hooks/use-event';
-import EventForm from './_components/event-form';
+import { Button } from '@/components/ui/button';
+import { Sort } from '@/enums/enums';
+import { PATH } from '@/enums/path';
+import { useEventsPagination } from '@/hooks/use-event';
+import { Plus } from 'lucide-react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import EventFilter from './_components/event-filter';
+import EventTable from './_components/event-table';
 
-const EventPage = () => {
-  const { createEvent, isEventPending } = useEventMutaton();
-  const handleFormSubmit = (formData: FormData) => {
-    createEvent(formData);
+export interface SearchFilters {
+  key?: string;
+  allowAds?: boolean;
+  startDate?: Date | string | null;
+  endDate?: Date | string | null;
+  zoneId?: string;
+}
+
+const EventsPage = () => {
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [sortField, setSortField] = useState<string>('');
+  const [sortOrder, setSortOrder] = useState<Sort>(Sort.DESC);
+
+  const [filters, setFilters] = useState<SearchFilters>({
+    key: '',
+    allowAds: false,
+    startDate: null,
+    endDate: null,
+    zoneId: '',
+  });
+
+  const [isSearching, setIsSearching] = useState(false);
+
+  const router = useRouter();
+
+  const buildResultObject = () => {
+    if (!isSearching) return {};
+
+    const result: Record<string, any> = {};
+
+    Object.entries(filters).forEach(([key, value]) => {
+      if (typeof value === 'string' && value.trim() !== '') {
+        result[key] = value;
+      } else if (typeof value === 'boolean') {
+        result[key] = value;
+      } else if (value !== null && (key === 'startDate' || key === 'endDate')) {
+        result[key] = value;
+      }
+    });
+
+    return result;
   };
 
-  const defaultValues = {
-    eventName: '',
-    startDate: '',
-    endDate: '',
-    description: '',
-    isOpen: true,
-    allowAds: false,
-    zoneId: '',
+  const { eventsRes, isLoadingEvents, totalPage } = useEventsPagination({
+    pageNumber,
+    pageSize,
+    sortField,
+    sortOrder,
+    result: buildResultObject(),
+  });
+
+  const handleSort = (field: string) => {
+    if (field === sortField) {
+      setSortOrder(sortOrder === Sort.ASC ? Sort.DESC : Sort.ASC);
+    } else {
+      setSortField(field);
+      setSortOrder(Sort.ASC);
+    }
+  };
+
+  const handleSearch = () => {
+    const hasActiveFilter = Object.values(filters).some((value) => {
+      if (typeof value === 'string') return value && value.trim() !== '';
+      if (typeof value === 'boolean') return value !== false;
+      return value !== null && value !== '';
+    });
+
+    setIsSearching(hasActiveFilter);
+  };
+
+  const clearSearch = () => {
+    setFilters({
+      key: '',
+      allowAds: true,
+      startDate: null,
+      endDate: null,
+      zoneId: '',
+    });
+    setIsSearching(false);
+  };
+
+  const handleEditEvent = (eventId: string) => {
+    router.push(`${PATH.EVENTS}/${eventId}/edit`);
+  };
+
+  const handleViewEventDetail = (eventId: string) => {
+    router.push(`${PATH.EVENTS}/${eventId}`);
   };
 
   return (
-    <div className='container mx-auto md:px-32 md:py-8'>
-      <h1 className='text-3xl font-bold'>Tạo sự kiện mới</h1>
-      <Separator className='my-4' />
-      <div className='rounded-lg border p-6 shadow-md'>
-        <EventForm
-          onSubmit={handleFormSubmit}
-          isSubmitting={isEventPending}
-          defaultValues={defaultValues}
-        />
+    <div className='container mx-auto py-10'>
+      <div className='mb-4 flex items-center justify-between'>
+        <h2 className='text-2xl font-bold'>Quản lý sự kiện</h2>
+        <Link href={PATH.EVENT_CREATE} passHref>
+          <Button>
+            <Plus className='mr-2 h-4 w-4' /> Thêm sự kiện mới
+          </Button>
+        </Link>
       </div>
+
+      <EventFilter
+        filters={filters}
+        setFilters={setFilters}
+        isSearching={isSearching}
+        onSearch={handleSearch}
+        onClearSearch={clearSearch}
+      />
+
+      <EventTable
+        events={eventsRes}
+        isLoading={isLoadingEvents}
+        isSearching={isSearching}
+        totalPages={totalPage || 1}
+        pageNumber={pageNumber}
+        setPageNumber={setPageNumber}
+        pageSize={pageSize}
+        setPageSize={setPageSize}
+        sortField={sortField}
+        sortOrder={sortOrder}
+        handleSort={handleSort}
+        onViewEvent={handleViewEventDetail}
+        onEditEvent={handleEditEvent}
+      />
     </div>
   );
 };
 
-export default EventPage;
+export default EventsPage;

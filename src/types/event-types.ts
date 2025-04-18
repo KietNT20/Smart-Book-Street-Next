@@ -1,4 +1,6 @@
+import { ApiListResponse, ApiResponse, PaginationSchema } from './common-types';
 import { ImageType } from './image-types';
+import { Zone } from './zone-types';
 
 export interface Event {
   id: string;
@@ -11,7 +13,7 @@ export interface Event {
   isOpen: boolean;
   allowAds: boolean;
   isDeleted: boolean;
-  zone: null;
+  zone: Zone;
   images: ImageType[];
 }
 
@@ -25,3 +27,15 @@ export interface EventsInMonth {
 export interface EventDate {
   eventDate: Date;
 }
+
+export interface EventSearchCriteria {
+  key?: string;
+  allowAds?: boolean;
+  startDate?: Date | string | null;
+  endDate?: Date | string | null;
+  zoneId?: string;
+}
+
+export type EventParams = PaginationSchema<EventSearchCriteria>;
+export type EventsResponse = ApiListResponse<Event>;
+export type EventDetailResponse = ApiResponse<Event>;
