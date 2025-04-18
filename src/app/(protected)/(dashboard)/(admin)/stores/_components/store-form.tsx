@@ -21,6 +21,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { PATH } from '@/enums/path';
+import useDebounce from '@/hooks/use-debounce';
 import { useStoreMutation } from '@/hooks/use-store';
 import { storeFormSchema, StoreFormValues } from '@/lib/zod';
 import { StoreData } from '@/types/store-types';
@@ -48,7 +49,7 @@ const StoreForm = ({ storeToEdit }: Props) => {
     string[]
   >([]);
 
-  const isWorking = isCreatingStore || isUpdatingStore;
+  const isWorking = useDebounce(isCreatingStore || isUpdatingStore, 300);
 
   const form = useForm<StoreFormValues>({
     resolver: zodResolver(storeFormSchema),

@@ -8,8 +8,8 @@ export interface StoreData extends BaseEntity {
   address: string;
   phone: string;
   email: string;
-  mainImageFile: File | null;
-  additionalImageFiles: File[] | null;
+  mainImageFile?: File;
+  additionalImageFiles?: File[];
   latitude: number;
   longitude: number;
   type: string;

@@ -191,10 +191,7 @@ export const storeFormSchema = z.object({
     .optional()
     .or(z.string().optional())
     .nullable(),
-  additionalImageFiles: z
-    .array(z.instanceof(File).or(z.string()))
-    .default([])
-    .nullable(),
+  additionalImageFiles: z.array(z.instanceof(File).or(z.string())).default([]),
   latitude: z.number().optional(),
   longitude: z.number().optional(),
   type: z.string().optional(),
@@ -284,3 +281,39 @@ export const eventFormSchema = z.object({
 });
 
 export type EventFormValues = z.infer<typeof eventFormSchema>;
+
+export const userFormSchema = z.object({
+  userName: z.string().min(1, { message: 'Tên đăng nhập không được để trống' }),
+  email: z
+    .string()
+    .min(1, { message: 'Email không được để trống' })
+    .email({ message: 'Email không hợp lệ' }),
+  password: z
+    .string()
+    .min(6, { message: 'Mật khẩu phải có ít nhất 6 ký tự' })
+    .optional(),
+  fullName: z.string().optional(),
+  phone: z
+    .string()
+    .refine(
+      (val) => {
+        if (!val) return true;
+        return REGEX.PHONE_VN.test(val);
+      },
+      {
+        message: 'Số điện thoại không hợp lệ',
+      }
+    )
+    .optional(),
+  dob: z.string().date().optional().nullable(),
+  addresss: z.string().optional(),
+  gender: z.enum([Gender.Male, Gender.Female]).optional(),
+  mainImageFile: z
+    .instanceof(File)
+    .optional()
+    .or(z.string().optional())
+    .nullable(),
+  additionalImageFiles: z.array(z.instanceof(File).or(z.string())).default([]),
+});
+
+export type UserFormValues = z.infer<typeof userFormSchema>;
