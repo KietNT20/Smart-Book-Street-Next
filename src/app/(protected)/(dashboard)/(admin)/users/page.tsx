@@ -129,8 +129,8 @@ export default function UsersPage() {
         sortField={sortField}
         sortOrder={sortOrder}
         handleSort={handleSort}
-        onViewStore={handleViewUser}
-        onEditStore={handleEditUser}
+        onViewUser={handleViewUser}
+        onEditUser={handleEditUser}
       />
     </div>
   );

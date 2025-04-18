@@ -1,4 +1,5 @@
 import { ConfirmModal } from '@/components/confirm-modal';
+import TablePagination from '@/components/pagination/table-pagination';
 import UserRoleSelector from '@/components/select/select-role';
 import { TableSkeleton } from '@/components/table-skeleton';
 import { Button } from '@/components/ui/button';
@@ -9,15 +10,6 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from '@/components/ui/pagination';
 import {
   Select,
   SelectContent,
@@ -34,8 +26,8 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Sort } from '@/enums/enums';
-import { usePublisherMutation } from '@/hooks/use-publisher';
 import { useRoles } from '@/hooks/use-role';
+import { useUserMutation } from '@/hooks/use-user';
 import { formateDateVi } from '@/lib/utils';
 import { User } from '@/types/user-types';
 import {
@@ -61,8 +53,8 @@ type Props = {
   sortField: string;
   sortOrder: Sort;
   handleSort: (field: string) => void;
-  onViewStore: (id: string) => void;
-  onEditStore: (id: string) => void;
+  onViewUser: (id: string) => void;
+  onEditUser: (id: string) => void;
 };
 
 const UserTable = ({
@@ -77,16 +69,13 @@ const UserTable = ({
   sortField,
   sortOrder,
   handleSort,
-  onViewStore,
-  onEditStore,
+  onViewUser,
+  onEditUser,
 }: Props) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [publisherToDelete, setPublisherToDelete] = useState<string | null>(
-    null
-  );
+  const [userToDelete, setUserToDelete] = useState<string | null>(null);
 
-  const { deletePublisher } = usePublisherMutation();
-
+  const { deleteUser } = useUserMutation();
   const { roles, isLoading: isLoadingRoles } = useRoles();
 
   // Handle page size change
@@ -96,32 +85,21 @@ const UserTable = ({
   };
 
   // Handle opening delete dialog
-  const handleDeleteClick = (publisherId: string) => {
-    setPublisherToDelete(publisherId);
+  const handleDeleteClick = (userId: string) => {
+    setUserToDelete(userId);
     setDeleteDialogOpen(true);
   };
 
   // Handle delete confirmation
   const handleDeleteConfirm = () => {
-    if (publisherToDelete) {
-      // Call API to delete store with the store ID
-      deletePublisher(publisherToDelete);
+    if (userToDelete) {
+      deleteUser(userToDelete);
 
       // Close dialog and reset state
       setDeleteDialogOpen(false);
-      setPublisherToDelete(null);
+      setUserToDelete(null);
     }
   };
-
-  const totalPagesCount = totalPages || 10;
-  const pagesToShow = Math.min(5, totalPagesCount);
-  const startPage = Math.max(
-    1,
-    Math.min(
-      pageNumber - Math.floor(pagesToShow / 2),
-      totalPagesCount - pagesToShow + 1
-    )
-  );
 
   return (
     <>
@@ -201,9 +179,25 @@ const UserTable = ({
                     )}
                   </Button>
                 </TableHead>
-                <TableHead className='whitespace-nowrap'>
-                  Date of birth
+                <TableHead
+                  className='whitespace-nowrap'
+                  onClick={() => handleSort('DOB')}
+                >
+                  {' '}
+                  <Button variant='ghost'>
+                    Ngày sinh
+                    {sortField === 'DOB' ? (
+                      sortOrder === Sort.ASC ? (
+                        <SortAsc className='ml-2 h-4 w-4' />
+                      ) : (
+                        <SortDesc className='ml-2 h-4 w-4' />
+                      )
+                    ) : (
+                      <ArrowUpDown className='ml-2 h-4 w-4' />
+                    )}
+                  </Button>
                 </TableHead>
+                <TableHead className='whitespace-nowrap'>Giới tính</TableHead>
                 <TableHead className='whitespace-nowrap'>Vai trò</TableHead>
                 <TableHead className='whitespace-nowrap text-right'>
                   Thao tác
@@ -241,6 +235,9 @@ const UserTable = ({
                     <TableCell className='whitespace-nowrap'>
                       {formateDateVi(user.dob)}
                     </TableCell>
+                    <TableCell className='whitespace-nowrap'>
+                      {user.gender}
+                    </TableCell>
                     <TableCell>
                       <UserRoleSelector
                         userId={user.id || ''}
@@ -259,13 +256,13 @@ const UserTable = ({
                         <DropdownMenuContent align='end'>
                           <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
                           <DropdownMenuItem
-                            onClick={() => onViewStore(user.id || '')}
+                            onClick={() => onViewUser(user.id || '')}
                           >
                             <Eye className='mr-2 h-4 w-4' />
                             Xem chi tiết
                           </DropdownMenuItem>
                           <DropdownMenuItem
-                            onClick={() => onEditStore(user.id || '')}
+                            onClick={() => onEditUser(user.id || '')}
                           >
                             <FileEdit className='mr-2 h-4 w-4' />
                             Chỉnh sửa
@@ -311,89 +308,11 @@ const UserTable = ({
           </Select>
         </div>
 
-        <Pagination className='m-0 flex items-center justify-end'>
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious
-                href='#'
-                onClick={(e) => {
-                  e.preventDefault();
-                  setPageNumber(Math.max(pageNumber - 1, 1));
-                }}
-              />
-            </PaginationItem>
-
-            {pageNumber > 3 && (
-              <>
-                <PaginationItem>
-                  <PaginationLink
-                    href='#'
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setPageNumber(1);
-                    }}
-                  >
-                    1
-                  </PaginationLink>
-                </PaginationItem>
-                {pageNumber > 4 && (
-                  <PaginationItem>
-                    <PaginationEllipsis />
-                  </PaginationItem>
-                )}
-              </>
-            )}
-
-            {Array.from({ length: pagesToShow }).map((_, index) => {
-              const page = startPage + index;
-              return (
-                <PaginationItem key={page}>
-                  <PaginationLink
-                    href='#'
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setPageNumber(page);
-                    }}
-                    isActive={pageNumber === page}
-                  >
-                    {page}
-                  </PaginationLink>
-                </PaginationItem>
-              );
-            })}
-
-            {pageNumber < totalPagesCount - 2 && (
-              <>
-                {pageNumber < totalPagesCount - 3 && (
-                  <PaginationItem>
-                    <PaginationEllipsis />
-                  </PaginationItem>
-                )}
-                <PaginationItem>
-                  <PaginationLink
-                    href='#'
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setPageNumber(totalPagesCount);
-                    }}
-                  >
-                    {totalPagesCount}
-                  </PaginationLink>
-                </PaginationItem>
-              </>
-            )}
-
-            <PaginationItem>
-              <PaginationNext
-                href='#'
-                onClick={(e) => {
-                  e.preventDefault();
-                  setPageNumber(Math.min(pageNumber + 1, totalPagesCount));
-                }}
-              />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+        <TablePagination
+          pageNumber={pageNumber}
+          setPageNumber={setPageNumber}
+          totalPages={totalPages}
+        />
       </div>
 
       {/* Delete Confirmation Dialog */}

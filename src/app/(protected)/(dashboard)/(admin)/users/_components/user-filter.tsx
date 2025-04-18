@@ -7,6 +7,14 @@ import {
 } from '@/components/ui/collapsible';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Gender } from '@/enums/gender';
 import useDebounce from '@/hooks/use-debounce';
 import { ChevronDown, ChevronUp, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -68,7 +76,7 @@ const UserFilter = ({
           </div>
 
           <CollapsibleContent>
-            <div className='grid grid-cols-1 gap-4 pt-2 md:grid-cols-2 lg:grid-cols-4'>
+            <div className='grid grid-cols-1 gap-4 pt-2 md:grid-cols-2 lg:grid-cols-5'>
               <div className='space-y-2'>
                 <Label htmlFor='userName'>Tài khoản</Label>
                 <div className='relative'>
@@ -154,6 +162,37 @@ const UserFilter = ({
                       size='icon'
                       className='absolute right-0 top-0 h-full'
                       onClick={() => clearField('phone')}
+                    >
+                      <X className='h-4 w-4' />
+                    </Button>
+                  )}
+                </div>
+              </div>
+
+              <div className='space-y-2'>
+                <Label htmlFor='gender'>Giới tính</Label>
+                <div className='relative'>
+                  <Select
+                    value={filters.gender || ''}
+                    onValueChange={(value) =>
+                      handleInputChange('gender', value)
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder='Chọn giới tính' />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value='All'>Tất cả</SelectItem>
+                      <SelectItem value={Gender.Male}>Nam</SelectItem>
+                      <SelectItem value={Gender.Female}>Nữ</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {filters.gender && (
+                    <Button
+                      variant='ghost'
+                      size='icon'
+                      className='absolute right-0 top-0 h-full'
+                      onClick={() => clearField('gender')}
                     >
                       <X className='h-4 w-4' />
                     </Button>
