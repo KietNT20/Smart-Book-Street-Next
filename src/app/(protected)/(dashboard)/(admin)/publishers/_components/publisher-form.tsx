@@ -1,5 +1,6 @@
 'use client';
 
+import CancelButton from '@/components/back-btn/cancel-btn';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import {
@@ -18,7 +19,8 @@ import { useManagerEmail } from '@/hooks/use-user';
 import { publisherFormSchema, PublisherFormValues } from '@/lib/zod';
 import { Publisher } from '@/types/publisher-types';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
+import { Image } from 'antd';
+import { X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -36,6 +38,10 @@ const PublisherForm = ({ publisher }: Props) => {
     mainFile: null,
     additionalFiles: [],
   });
+  const [previewMainImage, setPreviewMainImage] = useState<string | null>(null);
+  const [previewAdditionalFiles, setPreviewAdditionalFiles] = useState<
+    string[]
+  >([]);
   const [userEmail, setUserEmail] = useState('');
 
   const {
@@ -51,7 +57,6 @@ const PublisherForm = ({ publisher }: Props) => {
     createPublisherPending || updatePublisherPending,
     300
   );
-  const router = useRouter();
 
   const form = useForm<PublisherFormValues>({
     resolver: zodResolver(publisherFormSchema),
@@ -67,6 +72,17 @@ const PublisherForm = ({ publisher }: Props) => {
       additionalImageFiles: [],
     },
   });
+
+  const removeAdditionalImage = (index: number) => {
+    const currentFiles = form.getValues('additionalImageFiles');
+    const updatedFiles = [...currentFiles];
+    updatedFiles.splice(index, 1);
+    form.setValue('additionalImageFiles', updatedFiles);
+
+    const updatedPreviews = [...previewAdditionalFiles];
+    updatedPreviews.splice(index, 1);
+    setPreviewAdditionalFiles(updatedPreviews);
+  };
 
   useEffect(() => {
     if (managerId) {
@@ -134,10 +150,29 @@ const PublisherForm = ({ publisher }: Props) => {
 
   const handleMainFileChange = (file: File | null) => {
     setFiles((prev) => ({ ...prev, mainFile: file }));
+
+    // Tạo URL để xem trước ảnh
+    if (file) {
+      const fileUrl = URL.createObjectURL(file);
+      setPreviewMainImage(fileUrl);
+    } else {
+      setPreviewMainImage(null);
+    }
   };
 
   const handleAdditionalFilesChange = (newFiles: File[]) => {
     setFiles((prev) => ({ ...prev, additionalFiles: newFiles }));
+
+    // Tạo URL để xem trước các ảnh bổ sung
+    const fileUrls = newFiles.map((file) => URL.createObjectURL(file));
+    setPreviewAdditionalFiles(fileUrls);
+  };
+
+  // Hàm xóa ảnh chính
+  const removeMainImage = () => {
+    setPreviewMainImage(null);
+    form.setValue('mainImageFile', undefined);
+    setFiles((prev) => ({ ...prev, mainFile: null }));
   };
 
   return (
@@ -171,7 +206,7 @@ const PublisherForm = ({ publisher }: Props) => {
               name='email'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Email Nhà Xuất Bản</FormLabel>
                   <FormControl>
                     <Input placeholder='Nhập email nhà xuất bản' {...field} />
                   </FormControl>
@@ -186,18 +221,6 @@ const PublisherForm = ({ publisher }: Props) => {
                   <FormLabel>Số điện thoại</FormLabel>
                   <FormControl>
                     <Input placeholder='Nhập số điện thoại' {...field} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name='email'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input placeholder='Nhập email' {...field} />
                   </FormControl>
                 </FormItem>
               )}
@@ -263,18 +286,40 @@ const PublisherForm = ({ publisher }: Props) => {
                 <FormItem>
                   <FormLabel>Ảnh chính</FormLabel>
                   <FormControl>
-                    <Input
-                      type='file'
-                      accept='image/*'
-                      disabled={isWorking}
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (file) {
-                          handleMainFileChange(file);
-                          field.onChange(file);
-                        }
-                      }}
-                    />
+                    <div className='space-y-2'>
+                      <Input
+                        type='file'
+                        accept='image/*'
+                        disabled={isWorking}
+                        ref={field.ref}
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            handleMainFileChange(file);
+                            field.onChange(file);
+                          }
+                        }}
+                        className='cursor-pointer'
+                      />{' '}
+                      {previewMainImage && (
+                        <div className='relative h-64 w-64 overflow-hidden rounded-md border'>
+                          <Image
+                            src={previewMainImage}
+                            alt='main image preview'
+                            width={200}
+                          />
+                          <Button
+                            type='button'
+                            variant='destructive'
+                            size='icon'
+                            className='absolute right-2 top-2 h-8 w-8 rounded-full'
+                            onClick={removeMainImage}
+                          >
+                            <X className='h-4 w-4' />
+                          </Button>
+                        </div>
+                      )}
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -289,27 +334,54 @@ const PublisherForm = ({ publisher }: Props) => {
                 <FormItem>
                   <FormLabel>Ảnh bổ sung</FormLabel>
                   <FormControl>
-                    <Input
-                      type='file'
-                      multiple
-                      accept='image/*'
-                      onChange={(e) => {
-                        const fileList = e.target.files;
-                        if (fileList && fileList.length > 0) {
-                          const filesArray = Array.from(fileList) as File[];
-                          handleAdditionalFilesChange(filesArray);
-                          field.onChange(filesArray);
-                        }
-                      }}
-                      disabled={isWorking}
-                    />
+                    <div className='space-y-2'>
+                      <Input
+                        type='file'
+                        multiple
+                        accept='image/*'
+                        onChange={(e) => {
+                          const fileList = e.target.files;
+                          if (fileList && fileList.length > 0) {
+                            const filesArray = Array.from(fileList) as File[];
+                            handleAdditionalFilesChange(filesArray);
+                            field.onChange(filesArray);
+                          }
+                        }}
+                        disabled={isWorking}
+                      />
+                      {previewAdditionalFiles.length > 0 && (
+                        <div className='grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4'>
+                          {previewAdditionalFiles.map((url, index) => (
+                            <div
+                              key={index}
+                              className='relative aspect-square w-full overflow-hidden rounded-md border'
+                            >
+                              <Image
+                                src={url}
+                                alt={`Preview ${index + 1}`}
+                                width={200}
+                              />
+                              <Button
+                                type='button'
+                                variant='destructive'
+                                size='icon'
+                                className='absolute right-2 top-2 h-8 w-8 rounded-full'
+                                onClick={() => removeAdditionalImage(index)}
+                              >
+                                <X className='h-4 w-4' />
+                              </Button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   </FormControl>
                   {files.additionalFiles.length > 0 && (
                     <div className='mt-2'>
                       <p className='text-sm font-medium'>
                         Đã chọn {files.additionalFiles.length} file:
                       </p>
-                      <ul className='mt-1 list-disc pl-5 text-sm text-gray-500'>
+                      <ul className='mt-1 list-disc pl-5 text-sm text-zinc-500'>
                         {files.additionalFiles.map((file, index) => (
                           <li key={index}>{file.name}</li>
                         ))}
@@ -323,12 +395,11 @@ const PublisherForm = ({ publisher }: Props) => {
 
             {/* Nút submit */}
             <div className='mt-6 flex items-center justify-end gap-4'>
-              <Button
-                variant={'outline'}
-                onClick={() => router.replace(PATH.PUBLISHERS)}
-              >
-                Hủy
-              </Button>
+              <CancelButton
+                _isPending={isWorking}
+                routerReplace
+                pathUrl={PATH.PUBLISHERS}
+              />
               <Button type='submit' variant={'darker'} disabled={isWorking}>
                 {isWorking
                   ? 'Đang xử lý...'

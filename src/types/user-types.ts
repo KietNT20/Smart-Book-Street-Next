@@ -61,7 +61,7 @@ export interface User extends BaseEntity {
   additionalImageFiles: string[] | null;
   publisher: Publisher;
   userRoles: UserRole[];
-  userStores: any[];
+  userStores: UserStore[];
   images: ImageType[];
 }
 

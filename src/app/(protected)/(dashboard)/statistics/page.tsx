@@ -58,7 +58,7 @@ const StatisticsPage = () => {
           <Card key={camera} className='relative'>
             <CardContent className='p-4'>
               <div className='flex aspect-video items-center justify-center rounded-lg bg-gray-200'>
-                <Camera className='h-12 w-12 text-gray-400' />
+                <Camera className='h-12 w-12 text-zinc-400' />
                 <span className='absolute left-2 top-2 rounded bg-black/50 px-2 py-1 text-sm text-white'>
                   Camera {camera}
                 </span>

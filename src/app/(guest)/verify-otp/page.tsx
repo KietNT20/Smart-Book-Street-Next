@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -9,13 +9,13 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
 import {
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
 } from '@/components/ui/input-otp';
+import { Progress } from '@/components/ui/progress';
+import { useEffect, useState } from 'react';
 
 export default function VerifyOTP() {
   const [otp, setOtp] = useState('');
@@ -77,7 +77,7 @@ export default function VerifyOTP() {
           </div>
           <div className='mt-4'>
             <Progress value={(timeLeft / 120) * 100} className='w-full' />
-            <p className='mt-2 text-center text-sm text-gray-500'>
+            <p className='mt-2 text-center text-sm text-zinc-500'>
               Time remaining: {formatTime(timeLeft)}
             </p>
           </div>

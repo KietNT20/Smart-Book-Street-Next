@@ -21,10 +21,13 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { PATH } from '@/enums/path';
+import useDebounce from '@/hooks/use-debounce';
 import { useStoreMutation } from '@/hooks/use-store';
 import { storeFormSchema, StoreFormValues } from '@/lib/zod';
 import { StoreData } from '@/types/store-types';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Image } from 'antd';
+import { X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -41,8 +44,12 @@ const StoreForm = ({ storeToEdit }: Props) => {
   const router = useRouter();
   const [zoneDialogOpen, setZoneDialogOpen] = useState(false);
   const [selectedZoneName, setSelectedZoneName] = useState('');
+  const [previewMainImage, setPreviewMainImage] = useState<string | null>(null);
+  const [previewAdditionalImages, setPreviewAdditionalImages] = useState<
+    string[]
+  >([]);
 
-  const isWorking = isCreatingStore || isUpdatingStore;
+  const isWorking = useDebounce(isCreatingStore || isUpdatingStore, 300);
 
   const form = useForm<StoreFormValues>({
     resolver: zodResolver(storeFormSchema),
@@ -60,7 +67,6 @@ const StoreForm = ({ storeToEdit }: Props) => {
     },
   });
 
-  // Thêm hàm xử lý khi người dùng chọn một zone từ ZoneSearch
   const handleSelectZone = (zoneId: string, zoneName: string) => {
     form.setValue('zoneId', zoneId, { shouldValidate: true });
     setSelectedZoneName(zoneName);
@@ -142,7 +148,6 @@ const StoreForm = ({ storeToEdit }: Props) => {
     }
   }
 
-  // Handler for file inputs
   const handleFileChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     fieldName: 'mainImageFile' | 'additionalImageFiles'
@@ -152,13 +157,37 @@ const StoreForm = ({ storeToEdit }: Props) => {
     if (!files) return;
 
     if (fieldName === 'mainImageFile' && files[0]) {
-      form.setValue('mainImageFile', files[0], { shouldValidate: true });
+      const file = files[0];
+      form.setValue('mainImageFile', file, { shouldValidate: true });
+      const imageUrl = URL.createObjectURL(file);
+      setPreviewMainImage(imageUrl);
     } else if (fieldName === 'additionalImageFiles') {
       const fileArray = Array.from(files);
       form.setValue('additionalImageFiles', fileArray, {
         shouldValidate: true,
       });
+
+      const imageUrls = fileArray.map((file) => URL.createObjectURL(file));
+      setPreviewAdditionalImages(imageUrls);
     }
+  };
+
+  const removeMainImage = () => {
+    setPreviewMainImage(null);
+    form.setValue('mainImageFile', null, { shouldValidate: true });
+  };
+
+  const removeAdditionalImage = (index: number) => {
+    const currentFiles = form.getValues('additionalImageFiles');
+    const updatedFiles = [...(currentFiles || [])];
+    updatedFiles.splice(index, 1);
+    form.setValue('additionalImageFiles', updatedFiles, {
+      shouldValidate: true,
+    });
+
+    const updatedPreviews = [...previewAdditionalImages];
+    updatedPreviews.splice(index, 1);
+    setPreviewAdditionalImages(updatedPreviews);
   };
 
   return (
@@ -392,11 +421,32 @@ const StoreForm = ({ storeToEdit }: Props) => {
                   accept='image/*'
                   onChange={(e) => handleFileChange(e, 'mainImageFile')}
                   disabled={isWorking}
+                  className='mb-2'
                 />
                 {form.formState.errors.mainImageFile && (
-                  <p className='text-sm text-red-500'>
+                  <p className='mb-2 text-sm text-red-500'>
                     {form.formState.errors.mainImageFile.message?.toString()}
                   </p>
+                )}
+
+                {/* Preview ảnh chính */}
+                {previewMainImage && (
+                  <div className='relative max-h-64 w-64 overflow-hidden rounded-md border'>
+                    <Image
+                      src={previewMainImage}
+                      alt='main image preview'
+                      className='h-full w-full object-cover'
+                    />
+                    <Button
+                      type='button'
+                      variant='destructive'
+                      size='icon'
+                      className='absolute right-2 top-2 h-8 w-8 rounded-full'
+                      onClick={removeMainImage}
+                    >
+                      <X className='h-4 w-4' />
+                    </Button>
+                  </div>
                 )}
               </div>
 
@@ -408,11 +458,39 @@ const StoreForm = ({ storeToEdit }: Props) => {
                   accept='image/*'
                   onChange={(e) => handleFileChange(e, 'additionalImageFiles')}
                   disabled={isWorking}
+                  className='mb-2'
                 />
                 {form.formState.errors.additionalImageFiles && (
-                  <p className='text-sm text-red-500'>
+                  <p className='mb-2 text-sm text-red-500'>
                     {form.formState.errors.additionalImageFiles.message?.toString()}
                   </p>
+                )}
+
+                {/* Preview ảnh bổ sung */}
+                {previewAdditionalImages.length > 0 && (
+                  <div className='mt-2 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4'>
+                    {previewAdditionalImages.map((url, index) => (
+                      <div
+                        key={index}
+                        className='relative aspect-square w-full overflow-hidden rounded-md border'
+                      >
+                        <Image
+                          src={url}
+                          alt={`Preview ${index + 1}`}
+                          className='h-full w-full object-cover'
+                        />
+                        <Button
+                          type='button'
+                          variant='destructive'
+                          size='icon'
+                          className='absolute right-2 top-2 h-8 w-8 rounded-full'
+                          onClick={() => removeAdditionalImage(index)}
+                        >
+                          <X className='h-4 w-4' />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
                 )}
               </div>
             </div>
@@ -424,7 +502,7 @@ const StoreForm = ({ storeToEdit }: Props) => {
             type='button'
             variant='outline'
             disabled={isWorking}
-            onClick={() => router.push(PATH.STORES)}
+            onClick={() => router.replace(PATH.STORES)}
             className='px-7'
           >
             Hủy

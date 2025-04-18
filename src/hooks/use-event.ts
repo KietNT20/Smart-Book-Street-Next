@@ -10,6 +10,7 @@ export const useEventMutaton = () => {
   const router = useRouter();
 
   const createEventMutation = useMutation({
+    mutationKey: ['create-event'],
     mutationFn: (payload: FormData) => eventService.create(payload),
     onSuccess: (data) => {
       if (data) {
@@ -25,6 +26,7 @@ export const useEventMutaton = () => {
   });
 
   const updatEventMutation = useMutation({
+    mutationKey: ['update-event'],
     mutationFn: ({ id, formData }: { id: string; formData: FormData }) =>
       eventService.update(id, formData),
     onSuccess: (data) => {
@@ -41,6 +43,7 @@ export const useEventMutaton = () => {
   });
 
   const deleteEventMutation = useMutation({
+    mutationKey: ['delete-event'],
     mutationFn: (id: string) => eventService.delete(id),
     onSuccess: (data) => {
       if (data) {
@@ -153,7 +156,7 @@ export const useEventsPagination = ({
 
 export const useGetEventById = (id: string) => {
   const { data, error, isLoading } = useQuery({
-    queryKey: ['event', id],
+    queryKey: ['events', id],
     queryFn: async () => eventService.getEventById(id),
     enabled: !!id,
   });

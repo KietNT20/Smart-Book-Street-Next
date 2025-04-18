@@ -22,25 +22,25 @@ const AuthorInfo = ({ author }: Props) => {
         </div>
 
         <div className='p-6 md:w-2/3'>
-          <h1 className='mb-4 text-3xl font-bold text-gray-800'>
+          <h1 className='mb-4 text-3xl font-bold text-zinc-800'>
             {author.authorName}
           </h1>
 
           <div className='mb-6'>
             <div className='mb-2 flex items-center'>
-              <span className='w-32 text-gray-600'>Quốc tịch:</span>
+              <span className='w-32 text-zinc-600'>Quốc tịch:</span>
               <span className='font-medium'>{author.nationality}</span>
             </div>
 
             <div className='mb-2 flex items-center'>
-              <span className='w-32 text-gray-600'>Ngày sinh:</span>
+              <span className='w-32 text-zinc-600'>Ngày sinh:</span>
               <span className='font-medium'>{formateDateVi(author.dob)}</span>
             </div>
           </div>
 
           <div className='mb-6'>
             <h2 className='mb-2 text-xl font-semibold'>Tiểu sử</h2>
-            <p className='leading-relaxed text-gray-700'>{author.biography}</p>
+            <p className='leading-relaxed text-zinc-700'>{author.biography}</p>
           </div>
         </div>
       </div>
@@ -61,7 +61,7 @@ const AuthorInfo = ({ author }: Props) => {
                     {bookAuthor.book.title}
                   </h3>
 
-                  <div className='mb-2 text-sm text-gray-600'>
+                  <div className='mb-2 text-sm text-zinc-600'>
                     <div>Mã sách: {bookAuthor.book.isbn}</div>
                     <div>
                       Xuất bản: {formateDateVi(bookAuthor.book.publicationDate)}
@@ -70,7 +70,7 @@ const AuthorInfo = ({ author }: Props) => {
                     <div>Trạng thái: {bookAuthor.book.status}</div>
                   </div>
 
-                  <p className='line-clamp-3 text-sm text-gray-700'>
+                  <p className='line-clamp-3 text-sm text-zinc-700'>
                     {bookAuthor.book.description}
                   </p>
                 </Link>
@@ -78,7 +78,7 @@ const AuthorInfo = ({ author }: Props) => {
             ))}
           </div>
         ) : (
-          <p className='text-gray-500'>Không có tác phẩm nào được tìm thấy.</p>
+          <p className='text-zinc-500'>Không có tác phẩm nào được tìm thấy.</p>
         )}
       </div>
     </div>

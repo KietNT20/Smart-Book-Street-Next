@@ -46,4 +46,32 @@ export const userService = {
     );
     return res.data;
   },
+  create: async (formData: FormData) => {
+    const res = await axiosInstance.post(`${API_URL.USERS.INDEX}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return res.data;
+  },
+  update: async (id: string, formData: FormData) => {
+    const res = await axiosInstance.put(
+      `${API_URL.USERS.INDEX}/${id}`,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
+    return res.data;
+  },
+  delete: async (id: string) => {
+    const res = await axiosInstance.patch(`${API_URL.USERS.INDEX}/${id}`);
+    return res.data;
+  },
+  getById: async (id: string): Promise<UserProfileResponse> => {
+    const res = await axiosInstance.get(`${API_URL.USERS.INDEX}/${id}`);
+    return res.data;
+  },
 };

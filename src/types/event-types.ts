@@ -15,6 +15,10 @@ export interface Event {
   isDeleted: boolean;
   zone: Zone;
   images: ImageType[];
+  ageChart: any[];
+  genderChart: any[];
+  referenceChart: any[];
+  addressChart: any[];
 }
 
 export interface EventsInMonth {

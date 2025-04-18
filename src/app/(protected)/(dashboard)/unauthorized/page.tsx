@@ -31,11 +31,11 @@ export default function UnauthorizedPage() {
             </div>
           </div>
 
-          <h1 className='mb-3 text-center text-2xl font-bold text-gray-800'>
+          <h1 className='mb-3 text-center text-2xl font-bold text-zinc-800'>
             Truy cập bị từ chối
           </h1>
 
-          <p className='mb-6 text-center text-gray-600'>
+          <p className='mb-6 text-center text-zinc-600'>
             Bạn không có quyền truy cập vào trang này. Vui lòng liên hệ quản trị
             viên nếu bạn cho rằng đây là lỗi.
           </p>
@@ -43,7 +43,7 @@ export default function UnauthorizedPage() {
           <div className='flex flex-col justify-center gap-3 sm:flex-row'>
             <button
               onClick={goBack}
-              className='rounded-md bg-gray-200 px-4 py-2 text-gray-800 transition-colors hover:bg-gray-300'
+              className='rounded-md bg-gray-200 px-4 py-2 text-zinc-800 transition-colors hover:bg-gray-300'
             >
               Quay lại
             </button>
@@ -58,7 +58,7 @@ export default function UnauthorizedPage() {
         </div>
       </div>
 
-      <div className='mt-6 text-sm text-gray-500'>
+      <div className='mt-6 text-sm text-zinc-500'>
         Cần trợ giúp?{' '}
         <Link href='/contact' className='text-blue-500 hover:underline'>
           Liên hệ hỗ trợ

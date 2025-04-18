@@ -2,6 +2,7 @@
 
 import BackButton from '@/components/back-btn/back-button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ImageFallback } from '@/constant/storage';
 import { useStoreById } from '@/hooks/use-store';
 import { Image } from 'antd';
 import { Clock, Mail, Map as MapIcon, MapPin, Phone } from 'lucide-react';
@@ -23,7 +24,7 @@ export default function StorePage({ params }: { params: { storeId: string } }) {
         <h1 className='mb-2 text-2xl font-bold text-red-500'>
           Không tìm thấy cửa hàng
         </h1>
-        <p className='text-gray-600'>
+        <p className='text-zinc-600'>
           Cửa hàng này không tồn tại hoặc đã bị xóa.
         </p>
       </div>
@@ -49,6 +50,7 @@ export default function StorePage({ params }: { params: { storeId: string } }) {
                 src={mainImage}
                 alt={store.storeName}
                 className='h-full w-full object-cover'
+                fallback={ImageFallback.SRC}
               />
               <div className='absolute inset-0 bg-black bg-opacity-30'></div>
             </div>
@@ -85,36 +87,36 @@ export default function StorePage({ params }: { params: { storeId: string } }) {
                 </h2>
                 <div className='space-y-3'>
                   <div className='flex items-start'>
-                    <MapPin className='mr-3 mt-0.5 h-5 w-5 flex-shrink-0 text-gray-500' />
+                    <MapPin className='mr-3 mt-0.5 h-5 w-5 flex-shrink-0 text-zinc-500' />
                     <div>
                       <h3 className='font-medium'>Địa chỉ</h3>
-                      <p className='text-gray-600'>{store.address}</p>
+                      <p className='text-zinc-600'>{store.address}</p>
                     </div>
                   </div>
                   {store.phone && (
                     <div className='flex items-start'>
-                      <Phone className='mr-3 mt-0.5 h-5 w-5 flex-shrink-0 text-gray-500' />
+                      <Phone className='mr-3 mt-0.5 h-5 w-5 flex-shrink-0 text-zinc-500' />
                       <div>
                         <h3 className='font-medium'>Số điện thoại</h3>
-                        <p className='text-gray-600'>{store.phone}</p>
+                        <p className='text-zinc-600'>{store.phone}</p>
                       </div>
                     </div>
                   )}
                   {store.email && (
                     <div className='flex items-start'>
-                      <Mail className='mr-3 mt-0.5 h-5 w-5 flex-shrink-0 text-gray-500' />
+                      <Mail className='mr-3 mt-0.5 h-5 w-5 flex-shrink-0 text-zinc-500' />
                       <div>
                         <h3 className='font-medium'>Email</h3>
-                        <p className='text-gray-600'>{store.email}</p>
+                        <p className='text-zinc-600'>{store.email}</p>
                       </div>
                     </div>
                   )}
                   {(store.openingTime || store.closingTime) && (
                     <div className='flex items-start'>
-                      <Clock className='mr-3 mt-0.5 h-5 w-5 flex-shrink-0 text-gray-500' />
+                      <Clock className='mr-3 mt-0.5 h-5 w-5 flex-shrink-0 text-zinc-500' />
                       <div>
                         <h3 className='font-medium'>Giờ mở cửa</h3>
-                        <p className='text-gray-600'>
+                        <p className='text-zinc-600'>
                           {store.openingTime && store.closingTime
                             ? `${store.openingTime} - ${store.closingTime}`
                             : 'Liên hệ trực tiếp'}
@@ -131,7 +133,7 @@ export default function StorePage({ params }: { params: { storeId: string } }) {
                     <h3 className='mb-2 text-lg font-medium'>
                       {store.zone.zoneName}
                     </h3>
-                    <p className='text-gray-600'>{store.zone.description}</p>
+                    <p className='text-zinc-600'>{store.zone.description}</p>
                   </div>
                 </div>
               )}
@@ -148,8 +150,8 @@ export default function StorePage({ params }: { params: { storeId: string } }) {
               {/* Map placeholder - in a real app, implement an actual map here */}
               <div className='relative flex h-96 items-center justify-center rounded-lg bg-gray-100'>
                 <div className='text-center'>
-                  <MapIcon className='mx-auto mb-2 h-12 w-12 text-gray-400' />
-                  <p className='text-gray-600'>
+                  <MapIcon className='mx-auto mb-2 h-12 w-12 text-zinc-400' />
+                  <p className='text-zinc-600'>
                     Vị trí: {store.latitude}, {store.longitude}
                   </p>
                   <a
@@ -164,7 +166,7 @@ export default function StorePage({ params }: { params: { storeId: string } }) {
               </div>
               <div className='mt-4'>
                 <h3 className='mb-2 font-medium'>Địa chỉ</h3>
-                <p className='text-gray-600'>{store.address}</p>
+                <p className='text-zinc-600'>{store.address}</p>
               </div>
             </div>
           </TabsContent>
@@ -185,15 +187,16 @@ export default function StorePage({ params }: { params: { storeId: string } }) {
                     >
                       <Image
                         src={image.url}
-                        alt={`${store.storeName} - Ảnh ${index + 1}`}
+                        alt={image.altText}
                         className='h-full w-full object-cover'
+                        fallback={ImageFallback.SRC}
                       />
                     </div>
                   ))}
                 </div>
               ) : (
                 <div className='rounded-lg bg-gray-50 py-12 text-center'>
-                  <p className='text-gray-500'>Hiện chưa có hình ảnh</p>
+                  <p className='text-zinc-500'>Hiện chưa có hình ảnh</p>
                 </div>
               )}
             </div>

@@ -72,8 +72,8 @@ const ZoneForm = ({ zoneToEdit }: Props) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className='text-lg'>
-          {zoneToEdit ? 'Cập nhật khu vực' : 'Tạo mới khu vực'}
+        <CardTitle className='text-2xl font-bold'>
+          {zoneToEdit ? 'Cập Nhật Khu Vực' : 'Tạo Mới Khu Vực'}
         </CardTitle>
       </CardHeader>
       <CardContent>

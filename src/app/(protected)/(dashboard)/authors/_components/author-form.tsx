@@ -199,7 +199,7 @@ export function AuthorForm({ authorId }: Props) {
                   />
                 </FormControl>
                 {file.imgFile && (
-                  <div className='mt-1 text-sm text-gray-500'>
+                  <div className='mt-1 text-sm text-zinc-500'>
                     {file.imgFile.name}
                   </div>
                 )}

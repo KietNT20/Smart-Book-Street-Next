@@ -164,8 +164,8 @@ const AddressSearch = ({ form, disabled = false }: AddressSearchProps) => {
   };
 
   // Handle marker drag
-  const onMarkerDragEnd = (event: any) => {
-    const { lngLat } = event;
+  const onMarkerDragEnd = (event: unknown) => {
+    const { lngLat } = event as { lngLat: { lng: number; lat: number } };
     const newLng = lngLat.lng;
     const newLat = lngLat.lat;
 

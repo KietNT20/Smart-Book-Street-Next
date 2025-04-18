@@ -8,7 +8,7 @@ import { toast } from 'sonner';
 
 export const useGetAuthorById = <T>(id: string) => {
   return useQuery<T>({
-    queryKey: ['author', id],
+    queryKey: ['authors', id],
     queryFn: () => authorService.getById(id),
     enabled: !!id,
   });
