@@ -31,6 +31,42 @@ const roleBasedRoutes: RoleRouteMap = {
 const schemasRoleToken =
   'http://schemas.microsoft.com/ws/2008/06/identity/claims/role';
 
+/**
+ * Validates if a token has a valid role
+ * @param token JWT token
+ * @returns Object with validation result and role if valid
+ */
+function validateTokenRole(token: string): {
+  isValid: boolean;
+  userRole?: RoleEnums;
+} {
+  try {
+    const decodedToken = jwtDecode<DecodedToken>(token);
+
+    // Check if token has expired
+    const currentTime = Math.floor(Date.now() / 1000);
+    if (decodedToken.exp < currentTime) {
+      return { isValid: false };
+    }
+
+    // Check if role claim exists and is valid
+    if (
+      !decodedToken[schemasRoleToken] ||
+      !Object.values(RoleEnums).includes(decodedToken[schemasRoleToken])
+    ) {
+      return { isValid: false };
+    }
+
+    return {
+      isValid: true,
+      userRole: decodedToken[schemasRoleToken],
+    };
+  } catch (error) {
+    console.log('Token validation error:', error);
+    return { isValid: false };
+  }
+}
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
@@ -38,50 +74,27 @@ export function middleware(request: NextRequest) {
   const tokenCookie = request.cookies.get(STORAGE.token);
   const isAuthenticated = !!tokenCookie?.value;
 
-  // Handle root path redirection
-  if (pathname === PATH.HOME) {
-    if (isAuthenticated) {
-      // Decode token to get user role
-      try {
-        const decodedToken = jwtDecode<DecodedToken>(tokenCookie.value);
-        const userRole = decodedToken[schemasRoleToken];
-
-        // Redirect to appropriate dashboard based on role
-        switch (userRole) {
-          case RoleEnums.ADMIN:
-            return NextResponse.redirect(new URL(PATH.DASHBOARD, request.url));
-          case RoleEnums.STORE_MANAGER:
-            return NextResponse.redirect(
-              new URL(PATH.STORE_MANAGER_DASHBOARD, request.url)
-            );
-          case RoleEnums.STORE_OWNER:
-            return NextResponse.redirect(
-              new URL(PATH.STORE_OWNER_DASHBOARD, request.url)
-            );
-          default:
-            return NextResponse.redirect(new URL(PATH.LOGIN, request.url));
-        }
-      } catch (error: unknown) {
-        console.log('Error Handle root path:', error);
-        // If token is invalid, redirect to login
-        return NextResponse.redirect(new URL(PATH.LOGIN, request.url));
-      }
-    } else {
-      return NextResponse.redirect(new URL(PATH.LOGIN, request.url));
-    }
-  }
-
   // Check if the requested path is public
   const isPublicPath = publicPaths.some(
     (path) => pathname === path || pathname.startsWith(`${path}/`)
   );
 
-  // If authenticated and trying to access auth pages, redirect to appropriate dashboard
-  if (isAuthenticated && isPublicPath) {
-    try {
-      const decodedToken = jwtDecode<DecodedToken>(tokenCookie.value);
-      const userRole = decodedToken[schemasRoleToken];
+  // Handle root path redirection
+  if (pathname === PATH.HOME) {
+    if (isAuthenticated) {
+      // Validate token and role
+      const { isValid, userRole } = validateTokenRole(tokenCookie.value);
 
+      if (!isValid) {
+        // Invalid token or missing role - clear cookie and redirect to login
+        const response = NextResponse.redirect(
+          new URL(PATH.LOGIN, request.url)
+        );
+        response.cookies.delete(STORAGE.token);
+        return response;
+      }
+
+      // Redirect to appropriate dashboard based on role
       switch (userRole) {
         case RoleEnums.ADMIN:
           return NextResponse.redirect(new URL(PATH.DASHBOARD, request.url));
@@ -94,12 +107,49 @@ export function middleware(request: NextRequest) {
             new URL(PATH.STORE_OWNER_DASHBOARD, request.url)
           );
         default:
-          return NextResponse.redirect(new URL(PATH.LOGIN, request.url));
+          // Should not reach here due to validation, but handle just in case
+          const response = NextResponse.redirect(
+            new URL(PATH.LOGIN, request.url)
+          );
+          response.cookies.delete(STORAGE.token);
+          return response;
       }
-    } catch (error: unknown) {
-      console.log('Error authenticated:', error);
-      // If token decoding fails, redirect to login
+    } else {
       return NextResponse.redirect(new URL(PATH.LOGIN, request.url));
+    }
+  }
+
+  // If authenticated and trying to access auth pages, redirect to appropriate dashboard
+  if (isAuthenticated && isPublicPath) {
+    const { isValid, userRole } = validateTokenRole(tokenCookie.value);
+
+    if (!isValid) {
+      // Invalid token or missing role - clear cookie and redirect to login with error message
+      const loginUrl = new URL(PATH.LOGIN, request.url);
+      loginUrl.searchParams.set('error', 'unauthorized');
+      const response = NextResponse.redirect(loginUrl);
+      response.cookies.delete(STORAGE.token);
+      return response;
+    }
+
+    switch (userRole) {
+      case RoleEnums.ADMIN:
+        return NextResponse.redirect(new URL(PATH.DASHBOARD, request.url));
+      case RoleEnums.STORE_MANAGER:
+        return NextResponse.redirect(
+          new URL(PATH.STORE_MANAGER_DASHBOARD, request.url)
+        );
+      case RoleEnums.STORE_OWNER:
+        return NextResponse.redirect(
+          new URL(PATH.STORE_OWNER_DASHBOARD, request.url)
+        );
+      default:
+        // Should not reach here due to validation, but handle just in case
+        const response = NextResponse.redirect(
+          new URL(PATH.LOGIN, request.url)
+        );
+        response.cookies.delete(STORAGE.token);
+        return response;
     }
   }
 
@@ -113,37 +163,40 @@ export function middleware(request: NextRequest) {
 
   // Role-based access control for authenticated users
   if (isAuthenticated && !isPublicPath) {
-    try {
-      const decodedToken = jwtDecode<DecodedToken>(tokenCookie.value);
-      const userRole = decodedToken[schemasRoleToken];
+    const { isValid, userRole } = validateTokenRole(tokenCookie.value);
 
-      // First, check for exact path matches
-      let requiredRoles = roleBasedRoutes[pathname];
+    if (!isValid) {
+      // Invalid token or missing role - clear cookie and redirect to login
+      const response = NextResponse.redirect(new URL(PATH.LOGIN, request.url));
+      response.cookies.delete(STORAGE.token);
+      return response;
+    }
 
-      // If no exact match, check for pattern matches (e.g., "/books/*")
-      if (!requiredRoles) {
-        const patternMatch = Object.keys(roleBasedRoutes).find((pattern) => {
-          if (pattern.endsWith('/*')) {
-            const basePattern = pattern.slice(0, -2); // Remove the "/*"
-            return pathname.startsWith(basePattern);
-          }
-          return false;
-        });
+    // First, check for exact path matches
+    let requiredRoles = roleBasedRoutes[pathname];
 
-        if (patternMatch) {
-          requiredRoles = roleBasedRoutes[patternMatch];
+    // If no exact match, check for pattern matches (e.g., "/books/*")
+    if (!requiredRoles) {
+      const patternMatch = Object.keys(roleBasedRoutes).find((pattern) => {
+        if (pattern.endsWith('/*')) {
+          const basePattern = pattern.slice(0, -2); // Remove the "/*"
+          return pathname.startsWith(basePattern);
         }
-      }
+        return false;
+      });
 
-      // If we found required roles for this path and user doesn't have permission
+      if (patternMatch) {
+        requiredRoles = roleBasedRoutes[patternMatch];
+      }
+    }
+
+    // If we found required roles for this path and user doesn't have permission
+
+    if (userRole) {
       if (requiredRoles && !requiredRoles.includes(userRole)) {
         // Redirect to unauthorized page
         return NextResponse.redirect(new URL(PATH.UNAUTHORIZED, request.url));
       }
-    } catch (error: unknown) {
-      console.log('Error Role-based access controln:', error);
-      // If token decoding fails, redirect to login
-      return NextResponse.redirect(new URL(PATH.LOGIN, request.url));
     }
   }
 
@@ -158,7 +211,7 @@ export const config = {
      * 2. /_next (Next.js internals)
      * 3. /_static (static files)
      * 4. /_vercel (Vercel internals)
-     * 5. /favicon.ico, /sitemap.xml, /robots.txt (public files)
+     * 5. /favicon.ico, sitemap.xml, robots.txt (public files)
      */
     '/((?!api|_next|_static|_vercel|favicon.ico|sitemap.xml|robots.txt).*)',
   ],

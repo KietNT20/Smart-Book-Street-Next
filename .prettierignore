@@ -1,5 +1,7 @@
 dist
 node_modules
+public
+*.png
 .next
 build
 scripts

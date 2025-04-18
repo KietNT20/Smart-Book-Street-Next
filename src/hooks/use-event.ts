@@ -1,5 +1,5 @@
 import { eventService } from '@/services/eventService';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 export const useEventMutaton = () => {
@@ -20,5 +20,19 @@ export const useEventMutaton = () => {
   return {
     createEvent: createEventMutation.mutate,
     isEventPending: createEventMutation.isPending,
+  };
+};
+
+export const useGetEventsInMonth = (month: number) => {
+  const { data, error, isLoading } = useQuery({
+    queryKey: ['events-in-month', month],
+    queryFn: async () => eventService.getEventsInMonth(month),
+    select: (data) => data.results,
+  });
+
+  return {
+    eventsInMonthData: data,
+    eventsInMonthError: error,
+    eventsInMonthLoading: isLoading,
   };
 };

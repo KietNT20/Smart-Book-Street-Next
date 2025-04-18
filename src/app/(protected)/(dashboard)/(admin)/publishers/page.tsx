@@ -96,7 +96,7 @@ const PublishersPage = () => {
     <div className='container mx-auto py-10'>
       <div className='mb-4 flex items-center justify-between'>
         <h2 className='text-2xl font-bold'>Quản lý nhà xuất bản</h2>
-        <Link href={PATH.STORE_CREATE} passHref>
+        <Link href={PATH.PUBLISHER_CREATE} passHref>
           <Button>
             <Plus /> Thêm nhà xuất bản mới
           </Button>

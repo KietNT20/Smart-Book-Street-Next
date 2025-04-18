@@ -208,7 +208,7 @@ const EventForm = ({
                 <FormLabel>Ngày bắt đầu</FormLabel>
                 <FormControl>
                   <DatePicker
-                    className='w-full px-3 py-2'
+                    className='h-10 w-full px-3 py-2'
                     placeholder='Chọn ngày bắt đầu'
                     format='YYYY-MM-DD'
                     value={field.value ? dayjs(field.value) : null}
@@ -232,7 +232,7 @@ const EventForm = ({
                 <FormLabel>Ngày kết thúc</FormLabel>
                 <FormControl>
                   <DatePicker
-                    className='w-full px-3 py-2'
+                    className='h-10 w-full px-3 py-2'
                     placeholder='Chọn ngày kết thúc'
                     format='YYYY-MM-DD'
                     value={field.value ? dayjs(field.value) : null}
@@ -504,7 +504,7 @@ const EventForm = ({
 
         {/* Nút gửi */}
         <Button type='submit' disabled={isSubmitting}>
-          {isSubmitting ? 'Đang xử lý...' : 'Lưu sự kiện'}
+          {isSubmitting ? 'Đang xử lý...' : 'Tạo sự kiện'}
         </Button>
       </form>
     </Form>

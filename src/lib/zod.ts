@@ -208,9 +208,7 @@ export const publisherFormSchema = z.object({
   publisherName: z
     .string()
     .min(1, { message: 'Tên nhà xuất bản không được để trống' }),
-  managerId: z.string().min(1, {
-    message: 'Vui lòng chọn người quản lý',
-  }),
+  managerId: z.string().optional(),
   phone: z
     .string()
     .refine(

@@ -21,7 +21,7 @@ export const useGetPersonTotal = () => {
     queryFn: () => personService.total(),
   });
 
-  return { total: data?.total, isLoading };
+  return { totalPerson: data, isLoading };
 };
 
 export const useDailyRangeStatistics = ({
@@ -37,4 +37,13 @@ export const useDailyRangeStatistics = ({
   });
 
   return { barData: data?.barData || [], isLoading, error };
+};
+
+export const useGetAverageMinute = () => {
+  const { data, isLoading } = useQuery({
+    queryKey: ['average-minute'],
+    queryFn: () => personService.getAverageMinute(),
+  });
+
+  return { averageMinute: data, isLoading };
 };

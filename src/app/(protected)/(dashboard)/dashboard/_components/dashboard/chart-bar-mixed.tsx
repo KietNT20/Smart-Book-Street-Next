@@ -3,6 +3,7 @@
 import { TrendingUp } from 'lucide-react';
 import { Bar, BarChart, XAxis, YAxis } from 'recharts';
 
+import LoadingSpinner from '@/components/spin/loading-spinner';
 import {
   Card,
   CardContent,
@@ -30,6 +31,7 @@ export interface OrderStaticValue {
 }
 
 export interface OrderStaticsAdmin {
+  orderChart: OrderStaticValue[];
   orderProfit: OrderStaticValue[];
   totalOrder: number;
   totalProfit: number;
@@ -76,6 +78,7 @@ interface ChartBarProps {
   year?: number;
   title?: string;
   description?: string;
+  profilt?: boolean;
 }
 
 export function OrderChartAdmin({
@@ -85,6 +88,7 @@ export function OrderChartAdmin({
   year,
   title,
   description,
+  profilt = true,
 }: ChartBarProps) {
   // Get the current date, month, and year if not provided
   const currentDate = date || new Date().toISOString().split('T')[0];
@@ -150,7 +154,7 @@ export function OrderChartAdmin({
           <CardDescription>{description}</CardDescription>
         </CardHeader>
         <CardContent className='flex h-[300px] items-center justify-center'>
-          <div className='text-muted-foreground'>Đang tải...</div>
+          <LoadingSpinner />
         </CardContent>
       </Card>
     );
@@ -171,8 +175,12 @@ export function OrderChartAdmin({
     );
   }
 
-  const chartData = transformDataForChart(data.orderProfit);
-  const chartConfig = generateChartConfig(data.orderProfit);
+  const chartData = transformDataForChart(
+    profilt ? data.orderProfit : data.orderChart
+  );
+  const chartConfig = generateChartConfig(
+    profilt ? data.orderProfit : data.orderChart
+  );
 
   // Generate appropriate description based on timeframe
   let timeDescription = description;

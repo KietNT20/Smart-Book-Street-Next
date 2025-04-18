@@ -6,14 +6,14 @@ import { LoginCredentials } from '@/types/auth-types';
 import tokenMethod from '@/utils/token';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 export const useLoginForm = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
-
+  const searchParams = useSearchParams();
   const router = useRouter();
 
   const form = useForm<LoginFormValues>({
@@ -69,6 +69,18 @@ export const useLoginForm = () => {
     const { usernameOrEmail, password } = values;
     login.mutate({ usernameOrEmail, password });
   };
+
+  useEffect(() => {
+    const errorParam = searchParams.get('error');
+
+    if (errorParam === 'unauthorized') {
+      // Hiển thị toast thông báo lỗi
+      toast.error('Bạn không có quyền đăng nhập', {
+        description: 'Vui lòng liên hệ quản trị viên để được hỗ trợ',
+        duration: 5000,
+      });
+    }
+  }, [searchParams]);
 
   return {
     login,

@@ -4,6 +4,14 @@ import SubmitBtn from '@/components/button/submit-btn';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import {
   Form,
   FormControl,
   FormField,
@@ -18,8 +26,10 @@ import { storeFormSchema, StoreFormValues } from '@/lib/zod';
 import { StoreData } from '@/types/store-types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import AddressSearch from './address-search';
+import ZoneSearch from './zone-search';
 
 type Props = {
   storeToEdit?: StoreData;
@@ -29,6 +39,8 @@ const StoreForm = ({ storeToEdit }: Props) => {
   const { createStore, updateStore, isCreatingStore, isUpdatingStore } =
     useStoreMutation();
   const router = useRouter();
+  const [zoneDialogOpen, setZoneDialogOpen] = useState(false);
+  const [selectedZoneName, setSelectedZoneName] = useState('');
 
   const isWorking = isCreatingStore || isUpdatingStore;
 
@@ -44,9 +56,16 @@ const StoreForm = ({ storeToEdit }: Props) => {
       latitude: 0,
       longitude: 0,
       type: '',
-      zoneId: '2b3c4d5e-6f7a-8b9c-0d1e-2f3a4b5c6d1e',
+      zoneId: '',
     },
   });
+
+  // Thêm hàm xử lý khi người dùng chọn một zone từ ZoneSearch
+  const handleSelectZone = (zoneId: string, zoneName: string) => {
+    form.setValue('zoneId', zoneId, { shouldValidate: true });
+    setSelectedZoneName(zoneName);
+    setZoneDialogOpen(false);
+  };
 
   function onSubmit(values: StoreFormValues) {
     try {
@@ -95,9 +114,26 @@ const StoreForm = ({ storeToEdit }: Props) => {
         if (!storeToEdit.id) {
           throw new Error('Store ID is missing for update operation');
         }
-        updateStore({ id: storeToEdit.id, data: formData });
+        updateStore(
+          { id: storeToEdit.id, data: formData },
+          {
+            onSuccess: (data) => {
+              if (data) {
+                router.replace(PATH.STORES);
+                form.reset();
+              }
+            },
+          }
+        );
       } else {
-        createStore(formData);
+        createStore(formData, {
+          onSuccess: (data) => {
+            if (data) {
+              router.replace(PATH.STORES);
+              form.reset();
+            }
+          },
+        });
       }
 
       console.log('Form submitted successfully!');
@@ -171,23 +207,51 @@ const StoreForm = ({ storeToEdit }: Props) => {
                 )}
               />
 
-              {/* <FormField
+              <FormField
                 control={form.control}
                 name='zoneId'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>ID Khu vực</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder='ID Khu vực'
-                        disabled={isWorking}
-                        {...field}
-                      />
-                    </FormControl>
+                    <FormLabel>Khu vực</FormLabel>
+                    <div className='flex items-center gap-2'>
+                      <Dialog
+                        open={zoneDialogOpen}
+                        onOpenChange={setZoneDialogOpen}
+                      >
+                        <DialogTrigger asChild>
+                          <Button
+                            type='button'
+                            variant='outline'
+                            disabled={isWorking}
+                          >
+                            Tìm khu vực
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className='sm:max-w-md'>
+                          <DialogHeader>
+                            <DialogTitle>Chọn Khu Vực Cửa Hàng</DialogTitle>
+                            <DialogDescription>
+                              Tìm kiếm và chọn khu vực cho cửa hàng của bạn.
+                            </DialogDescription>
+                          </DialogHeader>
+                          <ZoneSearch
+                            onSelectZone={handleSelectZone}
+                            onClose={() => setZoneDialogOpen(false)}
+                          />
+                        </DialogContent>
+                      </Dialog>
+
+                      {selectedZoneName && (
+                        <div className='ml-2 py-1'>
+                          Đã chọn: {selectedZoneName}
+                        </div>
+                      )}
+                      <input type='hidden' {...field} />
+                    </div>
                     <FormMessage />
                   </FormItem>
                 )}
-              /> */}
+              />
             </div>
           </CardContent>
         </Card>

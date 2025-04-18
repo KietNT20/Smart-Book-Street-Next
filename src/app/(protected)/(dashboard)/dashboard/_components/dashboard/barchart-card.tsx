@@ -113,7 +113,7 @@ const BarchartCard = ({ barData, barConfig, isLoading }: Props) => {
           </div>
           <div className='bg-background'>
             <RangePicker
-              className='px-3 py-2'
+              className='h-10 px-3 py-2'
               value={dateRange}
               onChange={handleRangeChange}
               // disabledDate={disabled7DaysDate}

@@ -37,7 +37,7 @@ export const storeService = {
     return res.data;
   },
   delete: async (id: string) => {
-    const res = await axiosInstance.delete(`${API_URL.STORES.INDEX}/${id}`);
+    const res = await axiosInstance.patch(`${API_URL.STORES.INDEX}/${id}`);
     return res.data;
   },
   searchPagination: async (params: StoreParams): Promise<StoresResponse> => {

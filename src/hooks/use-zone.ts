@@ -1,6 +1,13 @@
+import { Sort } from '@/enums/enums';
+import { PATH } from '@/enums/path';
 import { zoneService } from '@/services/zoneService';
-import { ZoneCreate, ZoneParams } from '@/types/zone-types';
+import {
+  ZoneCreate,
+  ZoneParams,
+  ZoneSearchStoreParams,
+} from '@/types/zone-types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
 export const useNonDeletedZones = () => {
@@ -104,6 +111,7 @@ export const useZones = ({
 
 export const useZoneMutation = () => {
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const createZoneMutation = useMutation({
     mutationKey: ['create-zone'],
@@ -112,6 +120,7 @@ export const useZoneMutation = () => {
       if (data) {
         queryClient.invalidateQueries({ queryKey: ['zones'] });
         toast.success('Tạo khu vực thành công!');
+        router.replace(PATH.ZONES);
       }
     },
     onError: (error: Error) => {
@@ -128,6 +137,7 @@ export const useZoneMutation = () => {
       if (data) {
         queryClient.invalidateQueries({ queryKey: ['zones'] });
         toast.success('Cập nhật khu vực thành công!');
+        router.replace(PATH.ZONES);
       }
     },
     onError: (error: Error) => {
@@ -164,5 +174,61 @@ export const useZoneMutation = () => {
     deleteZone: deleteZoneMutation.mutate,
     isDeletingZone: deleteZoneMutation.isPending,
     errorDeleteZone: deleteZoneMutation.error,
+  };
+};
+
+export const useZonesStore = ({
+  result,
+  pageNumber,
+}: ZoneSearchStoreParams) => {
+  const queryClient = useQueryClient();
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['zones-store', result, pageNumber],
+    queryFn: () =>
+      zoneService.getAll({
+        result,
+        sortField: '',
+        sortOrder: Sort.DEFAULT,
+        pageSize: 5,
+        pageNumber,
+      }),
+  });
+
+  // Prefetching data
+  const totalPage = data?.totalPages || 1;
+
+  if (pageNumber < totalPage) {
+    queryClient.prefetchQuery({
+      queryKey: ['zones-store', result, pageNumber + 1],
+      queryFn: () =>
+        zoneService.getAll({
+          result,
+          sortField: '',
+          sortOrder: Sort.DEFAULT,
+          pageSize: 5,
+          pageNumber: pageNumber + 1,
+        }),
+    });
+  }
+
+  if (pageNumber > 1) {
+    queryClient.prefetchQuery({
+      queryKey: ['zones-store', result, pageNumber - 1],
+      queryFn: () =>
+        zoneService.getAll({
+          result,
+          sortField: '',
+          sortOrder: Sort.DEFAULT,
+          pageSize: 5,
+          pageNumber: pageNumber - 1,
+        }),
+    });
+  }
+
+  return {
+    zonesStoreRes: data?.results || [],
+    isLoadingZonesStore: isLoading,
+    errorZonesStore: error,
+    totalPage,
   };
 };

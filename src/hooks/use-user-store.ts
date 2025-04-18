@@ -25,7 +25,7 @@ export const useUserStoresMutation = () => {
 };
 
 export const useGetContractUser = (userId: string) => {
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ['user-stores', userId],
     queryFn: () => userStoreService.checkUserContract(userId),
     enabled: !!userId,
@@ -33,5 +33,6 @@ export const useGetContractUser = (userId: string) => {
   return {
     userStore: data?.results || [],
     isLoadingUserStore: isLoading,
+    error,
   };
 };

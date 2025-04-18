@@ -161,14 +161,14 @@ const StoreSearch = ({ onSelectStore, value }: Props) => {
               </Button>
             </div>
 
-            <div className='mt-3 h-32 overflow-y-auto'>
+            <div className='mt-3 h-36 overflow-y-auto'>
               {isWorking ? (
                 <p className='py-4 text-center'>Đang tải...</p>
               ) : stores && stores.length > 0 ? (
                 stores.map((store) => (
                   <Card
                     key={store.id}
-                    className='mb-2 cursor-pointer transition-colors hover:bg-slate-50'
+                    className='mb-2 cursor-pointer transition-colors duration-200 hover:bg-zinc-100'
                     onClick={() => handleSelectStore(store)}
                   >
                     <CardContent className='p-4'>
@@ -183,7 +183,7 @@ const StoreSearch = ({ onSelectStore, value }: Props) => {
                   </Card>
                 ))
               ) : (
-                <Card className='mb-2 cursor-pointer transition-colors hover:bg-slate-50'>
+                <Card className='mb-2 cursor-pointer transition-colors duration-200 hover:bg-zinc-100'>
                   <CardContent className='p-4'>
                     <p className='py-4 text-center'>
                       Không tìm thấy cửa hàng nào

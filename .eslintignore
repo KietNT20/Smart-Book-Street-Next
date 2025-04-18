@@ -9,5 +9,6 @@
 *.yml
 *.yaml
 .next
+*.png
 node_modules
 public

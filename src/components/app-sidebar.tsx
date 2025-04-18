@@ -238,13 +238,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       },
       {
         name: 'Dự đoán lượng khách',
-        url: PATH.VISITOR_PREDICTION,
+        url: '#',
         icon: ChartNoAxesCombined,
         roles: [RoleEnums.ADMIN],
       },
       {
         name: 'Khuyến nghị khách',
-        url: PATH.VISITOR_RECOMMENDATION,
+        url: '#',
         icon: Users,
         roles: [RoleEnums.ADMIN],
       },

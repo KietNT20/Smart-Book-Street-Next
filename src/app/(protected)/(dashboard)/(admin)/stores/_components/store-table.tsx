@@ -44,15 +44,14 @@ import {
   SortDesc,
   Trash2,
 } from 'lucide-react';
-import { useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 interface StoreTableProps {
   stores: StoreData[];
   isLoading: boolean;
   isSearching: boolean;
   totalPages: number;
-  pageNumber: number;
-  setPageNumber: (page: number) => void;
   pageSize: number;
   setPageSize: (size: number) => void;
   sortField: string;
@@ -67,8 +66,6 @@ export const StoreTable = ({
   isLoading,
   isSearching,
   totalPages,
-  pageNumber,
-  setPageNumber,
   pageSize,
   setPageSize,
   sortField,
@@ -79,13 +76,46 @@ export const StoreTable = ({
 }: StoreTableProps) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [storeToDelete, setStoreToDelete] = useState<string | null>(null);
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const rawPageNumber = searchParams.get('page')
+    ? parseInt(searchParams.get('page') as string)
+    : 1;
 
   const { deleteStore } = useStoreMutation();
+
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(name, value);
+      return params.toString();
+    },
+    [searchParams]
+  );
+
+  // Use useEffect to handle redirection when page number exceeds total
+  useEffect(() => {
+    if (totalPages > 0 && rawPageNumber > totalPages) {
+      router.replace(
+        `${pathname}?${createQueryString('page', totalPages.toString())}`
+      );
+    }
+  }, [rawPageNumber, totalPages, router, pathname, createQueryString]);
+
+  // Calculate the valid page number without side effects
+  const pageNumber = useMemo(() => {
+    if (!rawPageNumber || rawPageNumber < 1 || isNaN(rawPageNumber)) {
+      return 1;
+    }
+    return Math.min(rawPageNumber, totalPages || 1);
+  }, [rawPageNumber, totalPages]);
 
   // Handle page size change
   const handlePageSizeChange = (value: string) => {
     setPageSize(Number(value));
-    setPageNumber(1); // Reset to first page when changing page size
+    // Optional: Reset to page 1 when changing page size
+    router.replace(`${pathname}?${createQueryString('page', '1')}`);
   };
 
   // Handle opening delete dialog
@@ -106,13 +136,12 @@ export const StoreTable = ({
     }
   };
 
-  const totalPagesCount = totalPages || 10;
-  const pagesToShow = Math.min(5, totalPagesCount);
+  const pagesToShow = Math.min(5, totalPages);
   const startPage = Math.max(
     1,
     Math.min(
       pageNumber - Math.floor(pagesToShow / 2),
-      totalPagesCount - pagesToShow + 1
+      totalPages - pagesToShow + 1
     )
   );
 
@@ -131,12 +160,12 @@ export const StoreTable = ({
                   Tên cửa hàng
                   {sortField === 'StoreName' ? (
                     sortOrder === Sort.ASC ? (
-                      <SortAsc />
+                      <SortAsc className='ml-2 h-4 w-4' />
                     ) : (
-                      <SortDesc />
+                      <SortDesc className='ml-2 h-4 w-4' />
                     )
                   ) : (
-                    <ArrowUpDown />
+                    <ArrowUpDown className='ml-2 h-4 w-4' />
                   )}
                 </Button>
               </TableHead>
@@ -148,12 +177,12 @@ export const StoreTable = ({
                   Địa chỉ
                   {sortField === 'Address' ? (
                     sortOrder === Sort.ASC ? (
-                      <SortAsc />
+                      <SortAsc className='ml-2 h-4 w-4' />
                     ) : (
-                      <SortDesc />
+                      <SortDesc className='ml-2 h-4 w-4' />
                     )
                   ) : (
-                    <ArrowUpDown />
+                    <ArrowUpDown className='ml-2 h-4 w-4' />
                   )}
                 </Button>
               </TableHead>
@@ -165,12 +194,12 @@ export const StoreTable = ({
                   Số điện thoại
                   {sortField === 'Phone' ? (
                     sortOrder === Sort.ASC ? (
-                      <SortAsc />
+                      <SortAsc className='ml-2 h-4 w-4' />
                     ) : (
-                      <SortDesc />
+                      <SortDesc className='ml-2 h-4 w-4' />
                     )
                   ) : (
-                    <ArrowUpDown />
+                    <ArrowUpDown className='ml-2 h-4 w-4' />
                   )}
                 </Button>
               </TableHead>
@@ -182,12 +211,12 @@ export const StoreTable = ({
                   Email
                   {sortField === 'Email' ? (
                     sortOrder === Sort.ASC ? (
-                      <SortAsc />
+                      <SortAsc className='ml-2 h-4 w-4' />
                     ) : (
-                      <SortDesc />
+                      <SortDesc className='ml-2 h-4 w-4' />
                     )
                   ) : (
-                    <ArrowUpDown />
+                    <ArrowUpDown className='ml-2 h-4 w-4' />
                   )}
                 </Button>
               </TableHead>
@@ -255,7 +284,7 @@ export const StoreTable = ({
       <div className='mt-4 flex items-center justify-between'>
         <div className='flex items-center gap-2'>
           <span className='whitespace-nowrap text-sm text-muted-foreground'>
-            Số dòng:
+            Số dòng mỗi trang:
           </span>
           <Select
             value={pageSize.toString()}
@@ -274,89 +303,102 @@ export const StoreTable = ({
           </Select>
         </div>
 
-        <Pagination className='m-0 flex items-center justify-end'>
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious
-                href='#'
-                onClick={(e) => {
-                  e.preventDefault();
-                  setPageNumber(Math.max(pageNumber - 1, 1));
-                }}
-              />
-            </PaginationItem>
+        {totalPages > 0 && (
+          <Pagination className='m-0 flex items-center justify-end'>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  href={
+                    pageNumber > 1
+                      ? pathname +
+                        '?' +
+                        createQueryString('page', (pageNumber - 1).toString())
+                      : '#'
+                  }
+                  className={
+                    pageNumber <= 1 ? 'pointer-events-none opacity-50' : ''
+                  }
+                />
+              </PaginationItem>
 
-            {pageNumber > 3 && (
-              <>
-                <PaginationItem>
-                  <PaginationLink
-                    href='#'
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setPageNumber(1);
-                    }}
-                  >
-                    1
-                  </PaginationLink>
-                </PaginationItem>
-                {pageNumber > 4 && (
+              {pageNumber > 3 && (
+                <>
                   <PaginationItem>
-                    <PaginationEllipsis />
+                    <PaginationLink
+                      href={pathname + '?' + createQueryString('page', '1')}
+                    >
+                      1
+                    </PaginationLink>
                   </PaginationItem>
-                )}
-              </>
-            )}
+                  {pageNumber > 4 && (
+                    <PaginationItem>
+                      <PaginationEllipsis />
+                    </PaginationItem>
+                  )}
+                </>
+              )}
 
-            {Array.from({ length: pagesToShow }).map((_, index) => {
-              const page = startPage + index;
-              return (
-                <PaginationItem key={page}>
-                  <PaginationLink
-                    href='#'
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setPageNumber(page);
-                    }}
-                    isActive={pageNumber === page}
-                  >
-                    {page}
-                  </PaginationLink>
-                </PaginationItem>
-              );
-            })}
+              {Array.from({ length: pagesToShow }).map((_, index) => {
+                const page = startPage + index;
+                if (page <= totalPages) {
+                  return (
+                    <PaginationItem key={page}>
+                      <PaginationLink
+                        href={
+                          pathname +
+                          '?' +
+                          createQueryString('page', page.toString())
+                        }
+                        isActive={pageNumber === page}
+                      >
+                        {page}
+                      </PaginationLink>
+                    </PaginationItem>
+                  );
+                }
+                return null;
+              })}
 
-            {pageNumber < totalPagesCount - 2 && (
-              <>
-                {pageNumber < totalPagesCount - 3 && (
+              {pageNumber < totalPages - 2 && (
+                <>
+                  {pageNumber < totalPages - 3 && (
+                    <PaginationItem>
+                      <PaginationEllipsis />
+                    </PaginationItem>
+                  )}
                   <PaginationItem>
-                    <PaginationEllipsis />
+                    <PaginationLink
+                      href={
+                        pathname +
+                        '?' +
+                        createQueryString('page', totalPages.toString())
+                      }
+                    >
+                      {totalPages}
+                    </PaginationLink>
                   </PaginationItem>
-                )}
-                <PaginationItem>
-                  <PaginationLink
-                    href='#'
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setPageNumber(totalPagesCount);
-                    }}
-                  >
-                    {totalPagesCount}
-                  </PaginationLink>
-                </PaginationItem>
-              </>
-            )}
+                </>
+              )}
 
-            <PaginationItem>
-              <PaginationNext
-                href='#'
-                onClick={(e) => {
-                  e.preventDefault();
-                  setPageNumber(Math.min(pageNumber + 1, totalPagesCount));
-                }}
-              />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+              <PaginationItem>
+                <PaginationNext
+                  href={
+                    pageNumber < totalPages
+                      ? pathname +
+                        '?' +
+                        createQueryString('page', (pageNumber + 1).toString())
+                      : '#'
+                  }
+                  className={
+                    pageNumber >= totalPages
+                      ? 'pointer-events-none opacity-50'
+                      : ''
+                  }
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        )}
       </div>
 
       {/* Delete Confirmation Dialog */}

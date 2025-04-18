@@ -1,5 +1,6 @@
 import { Sort } from '@/enums/enums';
-import { BaseEntity } from './common-types';
+import { Book } from './book-types';
+import { ApiListResponse, ApiResponse, BaseEntity } from './common-types';
 import { ImageType } from './image-types';
 
 export interface Publisher extends BaseEntity {
@@ -10,16 +11,12 @@ export interface Publisher extends BaseEntity {
   description: string;
   website?: string;
   images?: ImageType[];
+  books: Book[];
   managerId?: string;
 }
 
-export type PublishersResponse = {
-  results: Publisher[];
-  totalRecords: number;
-  totalPages: number;
-  isSuccess: boolean;
-  message: string;
-};
+export type PublishersResponse = ApiListResponse<Publisher>;
+export type PublisherResponse = ApiResponse<Publisher>;
 
 export type PublisherSearch = {
   publisherName: string;

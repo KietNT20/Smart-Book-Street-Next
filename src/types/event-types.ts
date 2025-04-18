@@ -14,3 +14,14 @@ export interface Event {
   zone: null;
   images: ImageType[];
 }
+
+export interface EventsInMonth {
+  results: EventDate[];
+  totalRecords: number;
+  isSuccess: boolean;
+  message: string;
+}
+
+export interface EventDate {
+  eventDate: Date;
+}

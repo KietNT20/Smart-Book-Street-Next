@@ -1,6 +1,11 @@
 import { API_ENDPOINT } from '@/enums/endpoint';
 import { DailyPopulationStatistics } from '@/lib/zod';
-import { BarData, DailyVisitorsResponse } from '@/types/person-types';
+import {
+  AverageMinute,
+  BarData,
+  DailyVisitorsResponse,
+  PersonTotal,
+} from '@/types/person-types';
 import axiosInstance from '@/utils/axiosInstance';
 
 enum GenderCount {
@@ -13,7 +18,7 @@ export const personService = {
     const res = await axiosInstance.post(`${API_ENDPOINT.PERSON}/sync`);
     return res.data;
   },
-  total: async (): Promise<{ success: boolean; total: number }> => {
+  total: async (): Promise<PersonTotal> => {
     const res = await axiosInstance.get(`${API_ENDPOINT.PERSON}/stats/total`);
     return res.data;
   },
@@ -78,6 +83,12 @@ export const personService = {
   }): Promise<BarData> => {
     const res = await axiosInstance.get(
       `${API_ENDPOINT.PERSON}/stats/range?startDate=${query.startDate}&endDate=${query.endDate}`
+    );
+    return res.data;
+  },
+  getAverageMinute: async (): Promise<AverageMinute> => {
+    const res = await axiosInstance.get(
+      `${API_ENDPOINT.PERSON}/stats/average-time`
     );
     return res.data;
   },

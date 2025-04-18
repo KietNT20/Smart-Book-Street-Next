@@ -1,4 +1,5 @@
 export interface OrderStaticsDailyAdmin {
+  orderChart: OrderStaticValue[];
   orderProfit: OrderStaticValue[];
   totalOrder: number;
   totalProfit: number;

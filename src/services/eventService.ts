@@ -1,4 +1,5 @@
 import { API_URL } from '@/constant/api-url';
+import { EventsInMonth } from '@/types/event-types';
 import axiosInstance from '@/utils/axiosInstance';
 
 export const eventService = {
@@ -19,6 +20,18 @@ export const eventService = {
           'Content-Type': 'multipart/form-data',
         },
       }
+    );
+    return res.data;
+  },
+  getEventsComing: async (number: number) => {
+    const res = await axiosInstance.get(
+      `${API_URL.EVENTS.COMING}?number=${number}`
+    );
+    return res.data;
+  },
+  getEventsInMonth: async (month: number): Promise<EventsInMonth> => {
+    const res = await axiosInstance.get(
+      `${API_URL.EVENTS.IN_MONTH}?month=${month}`
     );
     return res.data;
   },

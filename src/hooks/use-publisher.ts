@@ -1,6 +1,8 @@
+import { PATH } from '@/enums/path';
 import { publisherService } from '@/services/publisherService';
 import { PublisherParams, PublisherSearch } from '@/types/publisher-types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
 export const usePublishers = ({
@@ -86,6 +88,7 @@ export const usePublishers = ({
 
 export const usePublisherMutation = () => {
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const searchPublisher = useMutation({
     mutationKey: ['publisher-search'],
@@ -100,6 +103,7 @@ export const usePublisherMutation = () => {
       if (data) {
         queryClient.invalidateQueries({ queryKey: ['publishers'] });
         toast.success('Tạo nhà xuất bản thành công');
+        router.replace(PATH.PUBLISHERS);
       }
     },
     onError: (error: Error) => {
@@ -116,6 +120,7 @@ export const usePublisherMutation = () => {
       if (data) {
         queryClient.invalidateQueries({ queryKey: ['publishers'] });
         toast.success('Cập nhật nhà xuất bản thành công');
+        router.replace(PATH.PUBLISHERS);
       }
     },
     onError: (error: Error) => {
@@ -153,5 +158,19 @@ export const usePublisherMutation = () => {
     deletePublisher: deletePublisherMutation.mutate,
     deletePublisherPending: deletePublisherMutation.isPending,
     deletePublisherError: deletePublisherMutation.error,
+  };
+};
+
+export const usePublisherById = (id: string) => {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['publisher', id],
+    queryFn: () => publisherService.getById(id),
+    enabled: !!id,
+  });
+
+  return {
+    publisher: data?.result,
+    isLoadingPublisher: isLoading,
+    errorPublisher: error,
   };
 };

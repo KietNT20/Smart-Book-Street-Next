@@ -1,5 +1,7 @@
 import { Sort } from '@/enums/enums';
 import { BaseEntity } from './common-types';
+import { ImageType } from './image-types';
+import { Zone } from './zone-types';
 
 export interface StoreData extends BaseEntity {
   storeName: string;
@@ -12,6 +14,10 @@ export interface StoreData extends BaseEntity {
   longitude: number;
   type: string;
   zoneId: string;
+  images: ImageType[];
+  openingTime: string | null;
+  closingTime: string | null;
+  zone: Zone | null;
 }
 
 export interface StoreParams {
