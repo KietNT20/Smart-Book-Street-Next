@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import useDebounce from '@/hooks/use-debounce';
 import { ChevronDown, ChevronUp, X } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SearchFilters } from '../page';
 
 type Props = {
@@ -28,18 +28,22 @@ const PublisherFilter = ({
   onClearSearch,
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
-  const filterDebouce = useDebounce(filters, 500);
+  const debouncedFilters = useDebounce(filters, 700);
 
   const handleInputChange = (
     field: keyof SearchFilters,
     value: string | null
   ) => {
-    setFilters({ ...filterDebouce, [field]: value });
+    setFilters({ ...filters, [field]: value });
   };
 
   const clearField = (field: keyof SearchFilters) => {
-    setFilters({ ...filters, [field]: null });
+    setFilters({ ...filters, [field]: '' });
   };
+
+  useEffect(() => {
+    onSearch();
+  }, [debouncedFilters, onSearch]);
 
   return (
     <Card className='mb-6'>
@@ -47,23 +51,17 @@ const PublisherFilter = ({
         <Collapsible open={isOpen} onOpenChange={setIsOpen}>
           <div className='flex items-center justify-end gap-2'>
             {isSearching && (
-              <Button
-                variant='outline'
-                onClick={() => onClearSearch()}
-                size='sm'
-              >
+              <Button variant='outline' onClick={onClearSearch} size='sm'>
                 Xóa bộ lọc
               </Button>
             )}
-            <Button onClick={onSearch} size='sm'>
-              Tìm kiếm
-            </Button>
             <CollapsibleTrigger asChild>
               <Button variant='outline' size='sm'>
+                Bộ lọc{' '}
                 {isOpen ? (
-                  <ChevronUp className='h-4 w-4' />
+                  <ChevronUp className='ml-2 h-4 w-4' />
                 ) : (
-                  <ChevronDown className='h-4 w-4' />
+                  <ChevronDown className='ml-2 h-4 w-4' />
                 )}
               </Button>
             </CollapsibleTrigger>

@@ -1,4 +1,5 @@
 import { Sort } from '@/enums/enums';
+import { ApiListResponse, ApiResponse } from './common-types';
 
 export interface Zone {
   id: string;
@@ -9,22 +10,11 @@ export interface Zone {
 }
 
 export type ZoneCreate = Partial<Omit<Zone, 'id'>> & {
-  streetId: string;
+  streetId: string | null;
 };
 
-export interface ZonesResponse {
-  results: Zone[];
-  totalRecords: number;
-  totalPages: number;
-  isSuccess: boolean;
-  message: string;
-}
-
-export interface ZoneResponse {
-  result: Zone[];
-  isSuccess: boolean;
-  message: string;
-}
+export type ZonesResponse = ApiListResponse<Zone>;
+export type ZoneResponse = ApiResponse<Zone>;
 
 export interface ZoneParams {
   pageNumber: number;
@@ -33,7 +23,7 @@ export interface ZoneParams {
   sortOrder: Sort;
   result: {
     zoneName?: string;
-    streetId?: string;
+    streetId?: string | null;
   };
 }
 

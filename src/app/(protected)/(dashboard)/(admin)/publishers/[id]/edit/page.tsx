@@ -9,7 +9,7 @@ const EditPublisherPage = () => {
   const publisherId = params.id as string;
   const { publisher } = usePublisherById(publisherId);
   return (
-    <div className='md:px-32 md:py-10'>
+    <div className='container mx-auto md:px-32 md:py-8'>
       {publisher && <PublisherForm publisher={publisher} />}
     </div>
   );

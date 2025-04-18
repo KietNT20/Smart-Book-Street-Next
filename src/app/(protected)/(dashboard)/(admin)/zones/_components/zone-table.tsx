@@ -34,7 +34,7 @@ import {
 } from '@/components/ui/table';
 import { Sort } from '@/enums/enums';
 import { usePublisherMutation } from '@/hooks/use-publisher';
-import { Publisher } from '@/types/publisher-types';
+import { Zone } from '@/types/zone-types';
 import {
   ArrowUpDown,
   Eye,
@@ -47,7 +47,7 @@ import {
 import { useState } from 'react';
 
 type Props = {
-  publishers: Publisher[];
+  zones: Zone[];
   isLoading: boolean;
   isSearching: boolean;
   totalPages: number;
@@ -62,8 +62,8 @@ type Props = {
   onEditStore: (id: string) => void;
 };
 
-const PublisherTable = ({
-  publishers,
+const ZoneTable = ({
+  zones,
   isLoading,
   isSearching,
   totalPages,
@@ -127,62 +127,11 @@ const PublisherTable = ({
               <TableHead>No.</TableHead>
               <TableHead
                 className='cursor-pointer'
-                onClick={() => handleSort('PublisherName')}
+                onClick={() => handleSort('ZoneName')}
               >
                 <Button variant='ghost'>
                   Tên Nhà Xuất Bản
-                  {sortField === 'PublisherName' ? (
-                    sortOrder === Sort.ASC ? (
-                      <SortAsc />
-                    ) : (
-                      <SortDesc />
-                    )
-                  ) : (
-                    <ArrowUpDown />
-                  )}
-                </Button>
-              </TableHead>
-              <TableHead
-                className='cursor-pointer'
-                onClick={() => handleSort('Address')}
-              >
-                <Button variant='ghost'>
-                  Địa chỉ
-                  {sortField === 'Address' ? (
-                    sortOrder === Sort.ASC ? (
-                      <SortAsc />
-                    ) : (
-                      <SortDesc />
-                    )
-                  ) : (
-                    <ArrowUpDown />
-                  )}
-                </Button>
-              </TableHead>
-              <TableHead
-                className='cursor-pointer'
-                onClick={() => handleSort('Phone')}
-              >
-                <Button variant='ghost'>
-                  Số điện thoại
-                  {sortField === 'Phone' ? (
-                    sortOrder === Sort.ASC ? (
-                      <SortAsc />
-                    ) : (
-                      <SortDesc />
-                    )
-                  ) : (
-                    <ArrowUpDown />
-                  )}
-                </Button>
-              </TableHead>
-              <TableHead
-                className='cursor-pointer'
-                onClick={() => handleSort('Email')}
-              >
-                <Button variant='ghost'>
-                  Email
-                  {sortField === 'Email' ? (
+                  {sortField === 'ZoneName' ? (
                     sortOrder === Sort.ASC ? (
                       <SortAsc />
                     ) : (
@@ -199,7 +148,7 @@ const PublisherTable = ({
           <TableBody>
             {isLoading ? (
               <TableSkeleton columns={6} rows={pageSize} />
-            ) : publishers.length === 0 ? (
+            ) : zones.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={6} className='py-10 text-center'>
                   Không tìm thấy cửa hàng.{' '}
@@ -207,17 +156,12 @@ const PublisherTable = ({
                 </TableCell>
               </TableRow>
             ) : (
-              publishers.map((publisher, index) => (
-                <TableRow key={publisher.id}>
+              zones.map((zone, index) => (
+                <TableRow key={zone.id}>
                   <TableCell className='text-muted-foreground'>
                     {index + 1 + (pageNumber - 1) * pageSize}
                   </TableCell>
-                  <TableCell className='font-medium'>
-                    {publisher.publisherName}
-                  </TableCell>
-                  <TableCell>{publisher.address}</TableCell>
-                  <TableCell>{publisher.phone}</TableCell>
-                  <TableCell>{publisher.email}</TableCell>
+                  <TableCell className='font-medium'>{zone.zoneName}</TableCell>
                   <TableCell className='text-right'>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -228,20 +172,20 @@ const PublisherTable = ({
                       <DropdownMenuContent align='end'>
                         <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
                         <DropdownMenuItem
-                          onClick={() => onViewStore(publisher.id || '')}
+                          onClick={() => onViewStore(zone.id || '')}
                         >
                           <Eye className='mr-2 h-4 w-4' />
                           Xem chi tiết
                         </DropdownMenuItem>
                         <DropdownMenuItem
-                          onClick={() => onEditStore(publisher.id || '')}
+                          onClick={() => onEditStore(zone.id || '')}
                         >
                           <FileEdit className='mr-2 h-4 w-4' />
                           Chỉnh sửa
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className='text-destructive'
-                          onClick={() => handleDeleteClick(publisher.id || '')}
+                          onClick={() => handleDeleteClick(zone.id || '')}
                         >
                           <Trash2 className='mr-2 h-4 w-4' />
                           Xóa
@@ -389,4 +333,4 @@ const PublisherTable = ({
   );
 };
 
-export default PublisherTable;
+export default ZoneTable;

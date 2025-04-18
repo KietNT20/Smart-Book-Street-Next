@@ -29,7 +29,7 @@ const StoreFilter = ({
 }: StoreFilterProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const debouncedFilters = useDebounce(filters, 500);
+  const debouncedFilters = useDebounce(filters, 700);
 
   const handleInputChange = (
     field: keyof SearchFilters,

@@ -58,9 +58,9 @@ export const useZones = ({
   });
 
   // Prefetching data
-  const totalPages = data?.totalPages || 1;
+  const totalPage = data?.totalPages || 1;
 
-  if (pageNumber < totalPages) {
+  if (pageNumber < totalPage) {
     queryClient.prefetchQuery({
       queryKey: [
         'zones',
@@ -106,6 +106,7 @@ export const useZones = ({
     zonesRes: data?.results || [],
     isLoadingZones: isLoading,
     errorZones: error,
+    totalPage,
   };
 };
 
