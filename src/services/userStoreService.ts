@@ -22,4 +22,10 @@ export const userStoreService = {
     );
     return res.data;
   },
+  deleteUserStore: async (userId: string, storeId: string) => {
+    const res = await axiosInstance.delete(
+      `${API_URL.USER_STORES.INDEX}/${userId}/${storeId}`
+    );
+    return res.data;
+  },
 };

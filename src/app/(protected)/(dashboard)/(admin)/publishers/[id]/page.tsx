@@ -1,12 +1,13 @@
 'use client';
 
 import BackButton from '@/components/back-btn/back-button';
-import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ImageFallback } from '@/constant/storage';
 import useDebounce from '@/hooks/use-debounce';
 import { usePublisherById } from '@/hooks/use-publisher';
 import { Image } from 'antd';
+import { LoadingSkeleton } from './_components/loading-skeleton';
+import PublisherInfo from './_components/publisher-info';
 
 export default function PublisherDetailPage({
   params,
@@ -19,47 +20,7 @@ export default function PublisherDetailPage({
   const isLoading = useDebounce(isLoadingPublisher, 300);
 
   if (isLoading) {
-    return (
-      <div className='container mx-auto p-4'>
-        <div className='flex flex-col gap-6'>
-          <div className='flex flex-col gap-6 md:flex-row'>
-            <Skeleton className='h-64 w-full rounded-lg md:w-1/4' />
-            <div className='w-full space-y-4 md:w-3/4'>
-              <Skeleton className='h-10 w-3/4' />
-              <Skeleton className='h-4 w-full' />
-              <Skeleton className='h-4 w-full' />
-              <Skeleton className='h-4 w-2/3' />
-              <div className='grid grid-cols-2 gap-4'>
-                <div className='space-y-2'>
-                  <Skeleton className='h-4 w-full' />
-                  <Skeleton className='h-4 w-full' />
-                  <Skeleton className='h-4 w-full' />
-                </div>
-                <div className='space-y-2'>
-                  <Skeleton className='h-4 w-full' />
-                  <Skeleton className='h-4 w-full' />
-                  <Skeleton className='h-4 w-full' />
-                </div>
-              </div>
-            </div>
-          </div>
-          <Skeleton className='h-10 w-64' />
-          <div className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-            {Array(8)
-              .fill(0)
-              .map((_, i) => (
-                <div key={i} className='space-y-4'>
-                  <Skeleton className='h-48 w-full rounded-lg' />
-                  <Skeleton className='h-6 w-3/4' />
-                  <Skeleton className='h-4 w-1/2' />
-                  <Skeleton className='h-4 w-full' />
-                  <Skeleton className='h-10 w-1/2' />
-                </div>
-              ))}
-          </div>
-        </div>
-      </div>
-    );
+    return <LoadingSkeleton />;
   }
 
   if (errorPublisher || !publisher) {
@@ -103,60 +64,7 @@ export default function PublisherDetailPage({
           </div>
         </div>
 
-        {/* Publisher Info */}
-        <div className='w-full md:w-3/4'>
-          <div className='h-full rounded-lg bg-white p-6 shadow'>
-            <h1 className='mb-4 text-3xl font-bold text-zinc-800'>
-              {publisher.publisherName}
-            </h1>
-
-            <div className='mb-4 grid grid-cols-1 gap-4'>
-              <div>
-                <h2 className='mb-2 text-lg font-semibold'>
-                  Thông tin liên hệ
-                </h2>
-                <ul className='space-y-2'>
-                  <li className='flex items-start'>
-                    <span className='w-20 font-medium'>Địa chỉ:</span>
-                    <span>{publisher.address}</span>
-                  </li>
-                  <li className='flex items-start'>
-                    <span className='w-20 font-medium'>Điện thoại:</span>
-                    <span>{publisher.phone}</span>
-                  </li>
-                  <li className='flex items-start'>
-                    <span className='w-20 font-medium'>Email:</span>
-                    <span>{publisher.email}</span>
-                  </li>
-                  <li className='flex items-start'>
-                    <span className='w-20 font-medium'>Website:</span>
-                    <a
-                      href={publisher.website}
-                      target='_blank'
-                      rel='noopener noreferrer'
-                      className='text-blue-600 hover:underline'
-                    >
-                      {publisher.website}
-                    </a>
-                  </li>
-                </ul>
-              </div>
-
-              <div>
-                <h2 className='mb-2 text-lg font-semibold'>Tổng quan</h2>
-                <p className='text-zinc-700'>{publisher.description}</p>
-
-                <div className='mt-4'>
-                  <div className='rounded-lg bg-blue-50 p-3'>
-                    <p className='font-medium text-blue-800'>
-                      Số lượng sách xuất bản: {publisher.books?.length || 0}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <PublisherInfo publisher={publisher} />
       </div>
 
       {/* Tabs Navigation and Content using shadcn/ui */}
@@ -174,7 +82,7 @@ export default function PublisherDetailPage({
                   key={book.id}
                   className='overflow-hidden rounded-lg bg-card shadow'
                 >
-                  <div className='flex h-48 items-center justify-center bg-card'>
+                  <div className='flex h-48 items-center justify-center overflow-hidden bg-card'>
                     {book.images ? (
                       <Image.PreviewGroup
                         items={book.images.map((image) => image.url)}

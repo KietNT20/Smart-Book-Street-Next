@@ -1,4 +1,7 @@
-import { BaseEntity } from './common-types';
+import { Book } from './book-types';
+import { ApiListResponse, ApiResponse, BaseEntity } from './common-types';
+import { ImageType } from './image-types';
+import { StoreData } from './store-types';
 
 export interface InventoryItem extends BaseEntity {
   entityId: string;
@@ -19,8 +22,11 @@ export interface Inventory extends BaseEntity {
   storeId: string;
   quantity: number;
   isInStock: boolean;
-  book: null;
+  book: Book;
   souvenir: null;
-  store: null;
-  orderDetails?: null;
+  store: StoreData;
+  images: ImageType[];
 }
+
+export type InventoriesResponse = ApiListResponse<Inventory>;
+export type InventoryResponse = ApiResponse<Inventory>;

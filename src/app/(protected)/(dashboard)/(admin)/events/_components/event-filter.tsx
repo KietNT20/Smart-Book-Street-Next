@@ -32,7 +32,7 @@ const EventFilter = ({
   const [isOpen, setIsOpen] = useState(false);
   const debouncedFilters = useDebounce(filters, 700);
 
-  const handleInputChange = (field: keyof SearchFilters, value: any) => {
+  const handleInputChange = (field: keyof SearchFilters, value: unknown) => {
     console.log('Value:', value);
     setFilters({ ...filters, [field]: value });
   };

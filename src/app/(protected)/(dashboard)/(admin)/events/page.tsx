@@ -40,7 +40,7 @@ const EventsPage = () => {
   const buildResultObject = () => {
     if (!isSearching) return {};
 
-    const result: Record<string, any> = {};
+    const result: Record<string, unknown> = {};
 
     Object.entries(filters).forEach(([key, value]) => {
       if (typeof value === 'string' && value.trim() !== '') {

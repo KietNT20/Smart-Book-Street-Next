@@ -11,7 +11,6 @@ import {
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -152,6 +151,7 @@ export const StoreTable = ({
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead>No.</TableHead>
               <TableHead
                 className='cursor-pointer'
                 onClick={() => handleSort('StoreName')}
@@ -234,8 +234,11 @@ export const StoreTable = ({
                 </TableCell>
               </TableRow>
             ) : (
-              stores.map((store) => (
+              stores.map((store, index) => (
                 <TableRow key={store.id}>
+                  <TableCell className='text-muted-foreground'>
+                    {index + 1}
+                  </TableCell>
                   <TableCell className='font-medium'>
                     {store.storeName}
                   </TableCell>
@@ -321,23 +324,6 @@ export const StoreTable = ({
                 />
               </PaginationItem>
 
-              {pageNumber > 3 && (
-                <>
-                  <PaginationItem>
-                    <PaginationLink
-                      href={pathname + '?' + createQueryString('page', '1')}
-                    >
-                      1
-                    </PaginationLink>
-                  </PaginationItem>
-                  {pageNumber > 4 && (
-                    <PaginationItem>
-                      <PaginationEllipsis />
-                    </PaginationItem>
-                  )}
-                </>
-              )}
-
               {Array.from({ length: pagesToShow }).map((_, index) => {
                 const page = startPage + index;
                 if (page <= totalPages) {
@@ -358,27 +344,6 @@ export const StoreTable = ({
                 }
                 return null;
               })}
-
-              {pageNumber < totalPages - 2 && (
-                <>
-                  {pageNumber < totalPages - 3 && (
-                    <PaginationItem>
-                      <PaginationEllipsis />
-                    </PaginationItem>
-                  )}
-                  <PaginationItem>
-                    <PaginationLink
-                      href={
-                        pathname +
-                        '?' +
-                        createQueryString('page', totalPages.toString())
-                      }
-                    >
-                      {totalPages}
-                    </PaginationLink>
-                  </PaginationItem>
-                </>
-              )}
 
               <PaginationItem>
                 <PaginationNext

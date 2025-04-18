@@ -57,23 +57,18 @@ const UserFilter = ({
             )}
             <CollapsibleTrigger asChild>
               <Button variant='outline' size='sm'>
+                Bộ lọc{' '}
                 {isOpen ? (
-                  <>
-                    <span className='mr-1'>Ẩn bộ lọc</span>
-                    <ChevronUp className='h-4 w-4' />
-                  </>
+                  <ChevronUp className='ml-2 h-4 w-4' />
                 ) : (
-                  <>
-                    <span className='mr-1'>Hiển thị bộ lọc</span>
-                    <ChevronDown className='h-4 w-4' />
-                  </>
+                  <ChevronDown className='ml-2 h-4 w-4' />
                 )}
               </Button>
             </CollapsibleTrigger>
           </div>
 
           <CollapsibleContent>
-            <div className='grid grid-cols-1 gap-4 pt-2 md:grid-cols-2 lg:grid-cols-3'>
+            <div className='grid grid-cols-1 gap-4 pt-2 md:grid-cols-2 lg:grid-cols-4'>
               <div className='space-y-2'>
                 <Label htmlFor='userName'>Tài khoản</Label>
                 <div className='relative'>

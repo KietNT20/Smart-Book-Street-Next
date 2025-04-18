@@ -16,7 +16,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PATH } from '@/enums/path';
 import { StoreRent } from '@/enums/store-rent';
 import useDebounce from '@/hooks/use-debounce';
-import { useGetContractUser } from '@/hooks/use-user-store';
+import {
+  useGetContractUser,
+  useUserStoresMutation,
+} from '@/hooks/use-user-store';
 import { formateDateVi } from '@/lib/utils';
 import { getVietnameseRentLabel } from '@/utils/format';
 import {
@@ -42,8 +45,13 @@ const UserStoreRegisteredPage = ({ params }: Props) => {
   const { userStore, isLoadingUserStore, error } = useGetContractUser(
     params.id
   );
+  const { deleteUserStore, isDeletingUserStore } = useUserStoresMutation();
 
-  const isLoading = useDebounce(isLoadingUserStore, 300);
+  const handleDeleteUserStore = (userId: string, storeId: string) => {
+    deleteUserStore({ userId, storeId });
+  };
+
+  const isLoading = useDebounce(isLoadingUserStore || isDeletingUserStore, 300);
   const router = useRouter();
   const [selectedContractIndex, setSelectedContractIndex] = useState(0);
 
@@ -85,7 +93,7 @@ const UserStoreRegisteredPage = ({ params }: Props) => {
   return (
     <div className='container mx-auto py-6'>
       <div className='mb-6 space-y-2'>
-        <BackButton />
+        <BackButton routeTo={PATH.USER_STORES} />
         <h1 className='text-3xl font-bold'>Thông Tin Hợp Đồng</h1>
         <div className='flex items-center gap-6'>
           <p className='text-muted-foreground'>#{contract.contractNumber}</p>
@@ -204,7 +212,14 @@ const UserStoreRegisteredPage = ({ params }: Props) => {
             </CardContent>
             <CardFooter className='justify-end gap-2'>
               <Button variant='outline'>Chỉnh Sửa</Button>
-              <Button variant='destructive'>Xóa</Button>
+              <Button
+                variant='destructive'
+                onClick={() =>
+                  handleDeleteUserStore(contract.userId, contract.storeId)
+                }
+              >
+                Xóa
+              </Button>
             </CardFooter>
           </Card>
         </TabsContent>

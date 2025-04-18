@@ -37,6 +37,7 @@ const ZoneFilter = ({ filters, setFilters, onSearch }: Props) => {
         <Input
           id='zoneName'
           placeholder='Tìm theo tên khu vực'
+          className='md:w-1/3'
           value={filters.zoneName || ''}
           onChange={(e) => handleInputChange('zoneName', e.target.value)}
         />

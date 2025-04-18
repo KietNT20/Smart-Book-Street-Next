@@ -79,13 +79,13 @@ export const useUserEmail = (email: string) => {
   const queryClient = useQueryClient();
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['user', email],
+    queryKey: ['user-email', email],
     queryFn: () => userService.getByEmail(email),
     enabled: !!email,
   });
 
   if (data) {
-    queryClient.setQueryData(['user', email], data);
+    queryClient.setQueryData(['user-email', email], data);
   }
 
   return {

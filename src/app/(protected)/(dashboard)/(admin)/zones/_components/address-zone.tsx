@@ -164,8 +164,8 @@ const AddressZone = ({ form, disabled = false }: AddressZoneProps) => {
   };
 
   // Handle marker drag
-  const onMarkerDragEnd = (event: any) => {
-    const { lngLat } = event;
+  const onMarkerDragEnd = (event: unknown) => {
+    const { lngLat } = event as { lngLat: { lng: number; lat: number } };
     const newLng = lngLat.lng;
     const newLat = lngLat.lat;
 

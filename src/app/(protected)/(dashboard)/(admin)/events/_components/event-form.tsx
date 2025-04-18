@@ -68,34 +68,34 @@ const EventForm = ({ eventEdit }: Props) => {
   const handleSubmit = (values: EventFormValues) => {
     const formData = new FormData();
 
-    formData.append('eventName', values.eventName);
-    if (values.startDate) formData.append('startDate', values.startDate);
-    if (values.endDate) formData.append('endDate', values.endDate);
-    if (values.description) formData.append('description', values.description);
-    formData.append('zoneId', values.zoneId);
-    formData.append('isOpen', String(values.isOpen || false));
-    formData.append('allowAds', String(values.allowAds || false));
+    formData.append('EventName', values.eventName);
+    if (values.startDate) formData.append('StartDate', values.startDate);
+    if (values.endDate) formData.append('EndDate', values.endDate);
+    if (values.description) formData.append('Description', values.description);
+    formData.append('ZoneId', values.zoneId);
+    formData.append('IsOpen', String(values.isOpen || false));
+    formData.append('AllowAds', String(values.allowAds || false));
 
     if (values.baseImgFile && values.baseImgFile instanceof File) {
-      formData.append('baseImgFile', values.baseImgFile);
+      formData.append('BaseImgFile', values.baseImgFile);
     } else if (typeof values.baseImgFile === 'string') {
-      formData.append('baseImgFileUrl', values.baseImgFile);
+      formData.append('BaseImgFile', values.baseImgFile);
     }
 
     if (values.otherImgFile && values.otherImgFile.length > 0) {
-      values.otherImgFile.forEach((file, index) => {
+      values.otherImgFile.forEach((file) => {
         if (file instanceof File) {
-          formData.append(`otherImgFile`, file);
+          formData.append(`OtherImgFile`, file);
         } else if (typeof file === 'string') {
-          formData.append(`otherImgFileUrl[${index}]`, file);
+          formData.append(`OtherImgFile`, file);
         }
       });
     }
 
     if (values.videoFile && values.videoFile instanceof File) {
-      formData.append('videoFile', values.videoFile);
+      formData.append('VideoFile', values.videoFile);
     } else if (typeof values.videoFile === 'string') {
-      formData.append('videoFileUrl', values.videoFile);
+      formData.append('VideoFile', values.videoFile);
     }
 
     if (eventEdit?.id) {
@@ -348,7 +348,6 @@ const EventForm = ({ eventEdit }: Props) => {
                     ref={ref}
                     onChange={(e) => {
                       handleOtherImagesChange(e);
-                      // For multiple files, convert FileList to array
                       const filesArray = e.target.files
                         ? Array.from(e.target.files)
                         : [];

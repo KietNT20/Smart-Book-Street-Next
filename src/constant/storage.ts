@@ -6,4 +6,4 @@ export const STORAGE = {
 
 export const ImageFallback = {
   SRC: '/No-Image-Placeholder.png',
-};
+} as const;

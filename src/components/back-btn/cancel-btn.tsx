@@ -23,7 +23,12 @@ const CancelButton = ({
     }
   };
   return (
-    <Button variant={'outline'} disabled={_isPending} onClick={_onClick}>
+    <Button
+      type='button'
+      variant={'outline'}
+      disabled={_isPending}
+      onClick={_onClick}
+    >
       Hủy
     </Button>
   );

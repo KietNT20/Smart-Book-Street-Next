@@ -1,9 +1,9 @@
 import { User } from '@/types/user-types';
 
-type Props = { user: User };
+type Props = { userToEdit: User };
 
-const UserForm = ({ user }: Props) => {
-  console.log('user', user);
+const UserForm = ({ userToEdit }: Props) => {
+  console.log('user', userToEdit);
   return <div>User-form</div>;
 };
 
