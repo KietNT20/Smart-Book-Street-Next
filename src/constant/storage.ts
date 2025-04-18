@@ -3,3 +3,7 @@ export const STORAGE = {
   SELECTED_STREET_KEY: 'selected-street-id',
   SELECTED_STORE_KEY: 'selected-store-id',
 };
+
+export const ImageFallback = {
+  SRC: '/No-Image-Placeholder.png',
+};

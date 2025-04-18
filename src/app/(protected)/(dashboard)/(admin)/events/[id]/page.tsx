@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
+import { ImageFallback } from '@/constant/storage';
 import useDebounce from '@/hooks/use-debounce';
 import { useGetEventById } from '@/hooks/use-event';
 import { Image } from 'antd';
@@ -84,7 +85,11 @@ export default function EventDetailPage({
       {/* Hero Section */}
       <div className='relative h-96 w-full overflow-hidden'>
         <div className='absolute inset-0 z-10 bg-black/50'></div>
-        <Image src={eventData.baseImgUrl} alt={eventData.eventName} />
+        <Image
+          src={eventData.baseImgUrl}
+          alt={eventData.eventName}
+          fallback={ImageFallback.SRC}
+        />
         <div className='absolute inset-0 z-20 mx-auto flex max-w-6xl flex-col justify-end p-8 text-white'>
           <Badge
             className={`mb-4 w-fit ${eventData.isOpen ? 'bg-green-500 hover:bg-green-600' : 'bg-red-500 hover:bg-red-600'}`}
@@ -194,6 +199,7 @@ export default function EventDetailPage({
                     <Image
                       src={eventData.baseImgUrl}
                       alt={eventData.eventName || 'Ảnh chính của sự kiện'}
+                      fallback={ImageFallback.SRC}
                     />
                   )}
                   <Image.PreviewGroup
@@ -210,6 +216,7 @@ export default function EventDetailPage({
                               image.url || '/public/No-Image-Placeholder.png'
                             }
                             alt={image.altText || `Hình ảnh ${index + 1}`}
+                            fallback={ImageFallback.SRC}
                           />
                         </div>
                       ))}

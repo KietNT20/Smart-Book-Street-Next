@@ -3,6 +3,7 @@
 import BackButton from '@/components/back-btn/back-button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ImageFallback } from '@/constant/storage';
 import useDebounce from '@/hooks/use-debounce';
 import { usePublisherById } from '@/hooks/use-publisher';
 import { Image } from 'antd';
@@ -88,7 +89,11 @@ export default function PublisherDetailPage({
           <div className='rounded-lg bg-white p-4 shadow'>
             {publisherImage ? (
               <div className='relative flex h-full w-full items-center justify-center overflow-hidden rounded-lg'>
-                <Image src={publisherImage} alt={publisher.publisherName} />
+                <Image
+                  src={publisherImage}
+                  alt={publisher.publisherName}
+                  fallback={ImageFallback.SRC}
+                />
               </div>
             ) : (
               <div className='flex h-64 w-full items-center justify-center rounded bg-gray-200'>
@@ -176,11 +181,9 @@ export default function PublisherDetailPage({
                       >
                         <Image
                           width={200}
-                          src={
-                            book.images[0]?.url ||
-                            '/public/No-Image-Placeholder.png'
-                          }
+                          src={book.images[0]?.url}
                           alt={book.images[0]?.altText || book.title}
+                          fallback={ImageFallback.SRC}
                         />
                       </Image.PreviewGroup>
                     ) : (

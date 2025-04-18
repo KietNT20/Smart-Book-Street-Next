@@ -2,6 +2,7 @@
 
 import BackButton from '@/components/back-btn/back-button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ImageFallback } from '@/constant/storage';
 import { useStoreById } from '@/hooks/use-store';
 import { Image } from 'antd';
 import { Clock, Mail, Map as MapIcon, MapPin, Phone } from 'lucide-react';
@@ -49,6 +50,7 @@ export default function StorePage({ params }: { params: { storeId: string } }) {
                 src={mainImage}
                 alt={store.storeName}
                 className='h-full w-full object-cover'
+                fallback={ImageFallback.SRC}
               />
               <div className='absolute inset-0 bg-black bg-opacity-30'></div>
             </div>
@@ -185,8 +187,9 @@ export default function StorePage({ params }: { params: { storeId: string } }) {
                     >
                       <Image
                         src={image.url}
-                        alt={`${store.storeName} - Ảnh ${index + 1}`}
+                        alt={image.altText}
                         className='h-full w-full object-cover'
+                        fallback={ImageFallback.SRC}
                       />
                     </div>
                   ))}
