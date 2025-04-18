@@ -7,8 +7,9 @@ import {
 } from '@/components/ui/collapsible';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import useDebounce from '@/hooks/use-debounce';
 import { ChevronDown, ChevronUp, X } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SearchFilters } from '../page';
 
 interface StoreFilterProps {
@@ -28,6 +29,8 @@ const StoreFilter = ({
 }: StoreFilterProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
+  const debouncedFilters = useDebounce(filters, 500);
+
   const handleInputChange = (
     field: keyof SearchFilters,
     value: string | null
@@ -36,8 +39,12 @@ const StoreFilter = ({
   };
 
   const clearField = (field: keyof SearchFilters) => {
-    setFilters({ ...filters, [field]: null });
+    setFilters({ ...filters, [field]: '' });
   };
+
+  useEffect(() => {
+    onSearch();
+  }, [debouncedFilters, onSearch]);
 
   return (
     <Card className='mb-6'>
@@ -49,15 +56,13 @@ const StoreFilter = ({
                 Xóa bộ lọc
               </Button>
             )}
-            <Button onClick={onSearch} size='sm'>
-              Tìm kiếm
-            </Button>
             <CollapsibleTrigger asChild>
               <Button variant='outline' size='sm'>
+                Bộ lọc{' '}
                 {isOpen ? (
-                  <ChevronUp className='h-4 w-4' />
+                  <ChevronUp className='ml-2 h-4 w-4' />
                 ) : (
-                  <ChevronDown className='h-4 w-4' />
+                  <ChevronDown className='ml-2 h-4 w-4' />
                 )}
               </Button>
             </CollapsibleTrigger>
@@ -209,4 +214,5 @@ const StoreFilter = ({
     </Card>
   );
 };
+
 export default StoreFilter;

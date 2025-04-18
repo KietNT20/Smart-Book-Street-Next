@@ -6,8 +6,8 @@ import { PATH } from '@/enums/path';
 import { useStores } from '@/hooks/use-store';
 import { Plus } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useCallback, useMemo, useState } from 'react';
 import StoreFilter from './_components/store-filter';
 import { StoreTable } from './_components/store-table';
 
@@ -21,7 +21,6 @@ export interface SearchFilters {
 }
 
 export default function StoresPage() {
-  const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [sortField, setSortField] = useState<string>('');
   const [sortOrder, setSortOrder] = useState<Sort>(Sort.DESC);
@@ -36,8 +35,16 @@ export default function StoresPage() {
   const [isSearching, setIsSearching] = useState(false);
 
   const router = useRouter();
+  const searchParams = useSearchParams();
 
-  const buildResultObject = () => {
+  // Safe parsing of page number
+  const pageNumber = useMemo(() => {
+    const pageParam = searchParams.get('page');
+    const parsed = pageParam ? parseInt(pageParam, 10) : 1;
+    return isNaN(parsed) || parsed < 1 ? 1 : parsed;
+  }, [searchParams]);
+
+  const buildResultObject = useCallback(() => {
     if (!isSearching) return {};
 
     const result: SearchFilters = {};
@@ -48,10 +55,10 @@ export default function StoresPage() {
     });
 
     return result;
-  };
+  }, [filters, isSearching]);
 
   const { stores, isLoading, isPending, totalPages } = useStores({
-    pageNumber,
+    pageNumber: pageNumber,
     pageSize,
     sortField,
     sortOrder,
@@ -73,6 +80,8 @@ export default function StoresPage() {
     );
 
     setIsSearching(hasActiveFilter);
+
+    router.replace(window.location.pathname);
   };
 
   const clearSearch = () => {
@@ -85,6 +94,9 @@ export default function StoresPage() {
       type: '',
     });
     setIsSearching(false);
+
+    // Reset to page 1 when clearing search
+    router.replace(window.location.pathname);
   };
 
   const handleEditStore = (storeId: string) => {
@@ -101,7 +113,7 @@ export default function StoresPage() {
         <h2 className='text-2xl font-bold'>Quản lý cửa hàng</h2>
         <Link href={PATH.STORE_CREATE} passHref>
           <Button>
-            <Plus /> Thêm cửa hàng mới
+            <Plus className='mr-2 h-4 w-4' /> Thêm cửa hàng mới
           </Button>
         </Link>
       </div>
@@ -119,8 +131,6 @@ export default function StoresPage() {
         isLoading={isLoading || isPending}
         isSearching={isSearching}
         totalPages={totalPages || 1}
-        pageNumber={pageNumber}
-        setPageNumber={setPageNumber}
         pageSize={pageSize}
         setPageSize={setPageSize}
         sortField={sortField}

@@ -20,11 +20,14 @@ interface ZoneSearchProps {
 }
 
 const ZoneSearch = ({ onSelectZone, onClose }: ZoneSearchProps) => {
+  const [searchValue, setSearchValue] = useState('');
+
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const streetId = localStorage.getItem(STORAGE.SELECTED_STREET_KEY);
-
-  const [searchValue, setSearchValue] = useState('');
+  const pageNumber = searchParams.get('page')
+    ? parseInt(searchParams.get('page') as string)
+    : 1;
 
   const { zonesStoreRes, isLoadingZonesStore, errorZonesStore, totalPage } =
     useZonesStore({
@@ -32,9 +35,7 @@ const ZoneSearch = ({ onSelectZone, onClose }: ZoneSearchProps) => {
         zoneName: searchValue,
         streetId: streetId || undefined,
       },
-      pageNumber: searchParams.get('page')
-        ? parseInt(searchParams.get('page') as string)
-        : 1,
+      pageNumber: pageNumber,
     });
 
   const _onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,10 +65,6 @@ const ZoneSearch = ({ onSelectZone, onClose }: ZoneSearchProps) => {
   if (isLoadingZonesStore) {
     return <SpinLoading />;
   }
-
-  const pageNumber = searchParams.get('page')
-    ? parseInt(searchParams.get('page') as string)
-    : 1;
 
   return (
     <>
@@ -99,7 +96,7 @@ const ZoneSearch = ({ onSelectZone, onClose }: ZoneSearchProps) => {
           );
         })}
       </div>
-      {/* Pagination using shadcn/ui components */}
+
       {zonesStoreRes?.length > 0 && (
         <Pagination>
           <PaginationContent>

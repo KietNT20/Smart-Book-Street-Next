@@ -3,7 +3,13 @@
 import SubmitBtn from '@/components/button/submit-btn';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import {
   Form,
   FormControl,
@@ -221,6 +227,9 @@ const StoreForm = ({ storeToEdit }: Props) => {
                           </Button>
                         </DialogTrigger>
                         <DialogContent className='sm:max-w-md'>
+                          <DialogHeader>
+                            <DialogTitle>Chọn Khu Vực Cửa Hàng</DialogTitle>
+                          </DialogHeader>
                           <ZoneSearch
                             onSelectZone={handleSelectZone}
                             onClose={() => setZoneDialogOpen(false)}
