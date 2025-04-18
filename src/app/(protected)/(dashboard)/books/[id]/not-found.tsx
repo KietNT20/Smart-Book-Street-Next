@@ -25,10 +25,10 @@ export default function NotFound() {
             />
           </svg>
         </div>
-        <h2 className='text-3xl font-bold text-gray-900'>
+        <h2 className='text-3xl font-bold text-zinc-900'>
           Không tìm thấy sách
         </h2>
-        <p className='max-w-md text-center text-gray-600'>
+        <p className='max-w-md text-center text-zinc-600'>
           Sách bạn đang tìm kiếm không tồn tại hoặc đã bị xóa. Vui lòng kiểm tra
           lại.
         </p>

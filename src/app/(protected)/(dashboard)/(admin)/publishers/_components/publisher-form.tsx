@@ -309,7 +309,7 @@ const PublisherForm = ({ publisher }: Props) => {
                       <p className='text-sm font-medium'>
                         Đã chọn {files.additionalFiles.length} file:
                       </p>
-                      <ul className='mt-1 list-disc pl-5 text-sm text-gray-500'>
+                      <ul className='mt-1 list-disc pl-5 text-sm text-zinc-500'>
                         {files.additionalFiles.map((file, index) => (
                           <li key={index}>{file.name}</li>
                         ))}

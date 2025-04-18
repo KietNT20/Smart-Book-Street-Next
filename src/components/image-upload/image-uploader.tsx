@@ -177,10 +177,10 @@ const ImageUploader = ({ entityId, type }: ImageUploaderProps) => {
                 </div>
               ) : (
                 <div className='text-center'>
-                  <ImageIcon className='mx-auto h-12 w-12 text-gray-400' />
+                  <ImageIcon className='mx-auto h-12 w-12 text-zinc-400' />
                   <div className='mt-2'>
                     <p>Click để chọn ảnh</p>
-                    <p className='text-xs text-gray-500'>
+                    <p className='text-xs text-zinc-500'>
                       PNG, JPG, GIF up to 10MB
                     </p>
                   </div>

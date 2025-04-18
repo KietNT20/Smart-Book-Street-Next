@@ -92,7 +92,7 @@ export default function PublisherDetailPage({
               </div>
             ) : (
               <div className='flex h-64 w-full items-center justify-center rounded bg-gray-200'>
-                <span className='text-gray-500'>Không có hình ảnh</span>
+                <span className='text-zinc-500'>Không có hình ảnh</span>
               </div>
             )}
           </div>
@@ -101,7 +101,7 @@ export default function PublisherDetailPage({
         {/* Publisher Info */}
         <div className='w-full md:w-3/4'>
           <div className='h-full rounded-lg bg-white p-6 shadow'>
-            <h1 className='mb-4 text-3xl font-bold text-gray-800'>
+            <h1 className='mb-4 text-3xl font-bold text-zinc-800'>
               {publisher.publisherName}
             </h1>
 
@@ -139,7 +139,7 @@ export default function PublisherDetailPage({
 
               <div>
                 <h2 className='mb-2 text-lg font-semibold'>Tổng quan</h2>
-                <p className='text-gray-700'>{publisher.description}</p>
+                <p className='text-zinc-700'>{publisher.description}</p>
 
                 <div className='mt-4'>
                   <div className='rounded-lg bg-blue-50 p-3'>
@@ -195,7 +195,7 @@ export default function PublisherDetailPage({
                     <h3 className='mb-2 line-clamp-2 truncate text-ellipsis font-bold'>
                       {book.title}
                     </h3>
-                    <p className='mb-2 text-sm text-gray-500'>
+                    <p className='mb-2 text-sm text-zinc-500'>
                       ISBN: {book.isbn}
                     </p>
                     <p className='mb-3 font-semibold text-red-500'>
@@ -207,7 +207,7 @@ export default function PublisherDetailPage({
 
             {(!publisher.books || publisher.books.length === 0) && (
               <div className='col-span-full py-10 text-center'>
-                <p className='text-gray-500'>
+                <p className='text-zinc-500'>
                   Không có sách nào từ nhà xuất bản này.
                 </p>
               </div>

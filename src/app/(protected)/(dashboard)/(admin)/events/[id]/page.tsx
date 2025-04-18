@@ -92,7 +92,7 @@ export default function EventDetailPage({
             {eventData.isOpen ? 'Đang diễn ra' : 'Đã kết thúc'}
           </Badge>
           <h1 className='mb-4 text-4xl font-bold'>{eventData.eventName}</h1>
-          <div className='flex flex-col gap-4 text-gray-100 sm:flex-row sm:items-center'>
+          <div className='flex flex-col gap-4 text-zinc-100 sm:flex-row sm:items-center'>
             <div className='flex items-center gap-2'>
               <Calendar className='h-5 w-5' />
               <span>{formatDateRange()}</span>
@@ -123,7 +123,7 @@ export default function EventDetailPage({
                 <CardTitle>Thông tin chi tiết</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className='leading-relaxed text-gray-700'>
+                <p className='leading-relaxed text-zinc-700'>
                   {eventData.description}
                 </p>
               </CardContent>
@@ -169,12 +169,12 @@ export default function EventDetailPage({
                   <div className='grid grid-cols-1 gap-6 sm:grid-cols-2'>
                     {/* Charts would go here, simplified for this example */}
                     <div className='flex h-64 items-center justify-center rounded-lg bg-gray-100 p-4'>
-                      <p className='text-gray-500'>
+                      <p className='text-zinc-500'>
                         Biểu đồ độ tuổi người tham gia
                       </p>
                     </div>
                     <div className='flex h-64 items-center justify-center rounded-lg bg-gray-100 p-4'>
-                      <p className='text-gray-500'>
+                      <p className='text-zinc-500'>
                         Biểu đồ giới tính người tham gia
                       </p>
                     </div>
@@ -291,10 +291,10 @@ export default function EventDetailPage({
               </CardHeader>
               <CardContent className='space-y-4'>
                 <div>
-                  <h4 className='font-medium text-gray-900'>
+                  <h4 className='font-medium text-zinc-900'>
                     {eventData.zone.zoneName}
                   </h4>
-                  <p className='mt-1 text-sm text-gray-500'>
+                  <p className='mt-1 text-sm text-zinc-500'>
                     {eventData.zone.street.address}
                   </p>
                 </div>
@@ -302,7 +302,7 @@ export default function EventDetailPage({
                 <div className='h-48 overflow-hidden rounded-lg bg-gray-200'>
                   {/* Map placeholder */}
                   <div className='flex h-full w-full items-center justify-center bg-gray-100'>
-                    <MapPin className='h-8 w-8 text-gray-400' />
+                    <MapPin className='h-8 w-8 text-zinc-400' />
                   </div>
                 </div>
 
@@ -310,7 +310,7 @@ export default function EventDetailPage({
 
                 <div className='space-y-2'>
                   <h4 className='font-medium'>Về địa điểm</h4>
-                  <p className='text-sm text-gray-500'>
+                  <p className='text-sm text-zinc-500'>
                     {eventData.zone.description}
                   </p>
                 </div>
@@ -328,13 +328,13 @@ export default function EventDetailPage({
               <CardContent className='space-y-4'>
                 <div className='flex items-center justify-between'>
                   <div>
-                    <p className='text-sm text-gray-500'>Ngày bắt đầu</p>
+                    <p className='text-sm text-zinc-500'>Ngày bắt đầu</p>
                     <p className='font-medium'>
                       {dayjs(eventData.startDate).format('DD/MM/YYYY')}
                     </p>
                   </div>
                   <div>
-                    <p className='text-sm text-gray-500'>Giờ bắt đầu</p>
+                    <p className='text-sm text-zinc-500'>Giờ bắt đầu</p>
                     <p className='font-medium'>
                       {dayjs(eventData.startDate).format('HH:mm')}
                     </p>
@@ -345,13 +345,13 @@ export default function EventDetailPage({
 
                 <div className='flex items-center justify-between'>
                   <div>
-                    <p className='text-sm text-gray-500'>Ngày kết thúc</p>
+                    <p className='text-sm text-zinc-500'>Ngày kết thúc</p>
                     <p className='font-medium'>
                       {dayjs(eventData.endDate).format('DD/MM/YYYY')}
                     </p>
                   </div>
                   <div>
-                    <p className='text-sm text-gray-500'>Giờ kết thúc</p>
+                    <p className='text-sm text-zinc-500'>Giờ kết thúc</p>
                     <p className='font-medium'>
                       {dayjs(eventData.endDate).format('HH:mm')}
                     </p>

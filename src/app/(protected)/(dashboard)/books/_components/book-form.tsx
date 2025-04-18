@@ -257,7 +257,7 @@ const BookForm = ({ book, onCancel }: Props) => {
                   />
                 </FormControl>
                 {files.mainFile && (
-                  <div className='mt-1 text-sm text-gray-500'>
+                  <div className='mt-1 text-sm text-zinc-500'>
                     {files.mainFile.name}
                   </div>
                 )}
@@ -298,7 +298,7 @@ const BookForm = ({ book, onCancel }: Props) => {
                     <p className='text-sm font-medium'>
                       Đã chọn {files.additionalFiles.length} file:
                     </p>
-                    <ul className='mt-1 list-disc pl-5 text-sm text-gray-500'>
+                    <ul className='mt-1 list-disc pl-5 text-sm text-zinc-500'>
                       {files.additionalFiles.map((file, index) => (
                         <li key={index}>{file.name}</li>
                       ))}
