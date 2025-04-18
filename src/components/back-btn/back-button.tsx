@@ -13,7 +13,7 @@ const BackButton = ({ routeTo, namePage = '' }: Props) => {
   const router = useRouter();
   const _onClick = () => {
     if (routeTo) {
-      router.push(routeTo);
+      router.replace(routeTo);
     } else {
       router.back();
     }

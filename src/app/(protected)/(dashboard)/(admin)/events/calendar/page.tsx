@@ -58,7 +58,7 @@ const EventCalendar = () => {
 
   if (eventsInMonthError)
     return (
-      <div>
+      <div className='flex min-h-screen items-center justify-center'>
         <AlertDestructive
           title='Lỗi xảy ra khi tải sự kiện!'
           description='Vui lòng thử lại sau.'

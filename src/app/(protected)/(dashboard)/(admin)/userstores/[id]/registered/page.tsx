@@ -73,7 +73,7 @@ const UserStoreRegisteredPage = ({ params }: Props) => {
 
   if (error || !userStore || !store) {
     return (
-      <div className='flex w-full items-center justify-center'>
+      <div className='flex min-h-screen items-center justify-center'>
         <AlertDestructive
           title='Có lỗi xảy ra!'
           description='Không thể lấy thông tin hợp đồng. Hoặc hợp đồng không tồn tại.'

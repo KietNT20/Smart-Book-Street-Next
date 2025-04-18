@@ -11,8 +11,8 @@ import {
 } from '@/components/ui/pagination';
 import { STORAGE } from '@/constant/storage';
 import { useZonesStore } from '@/hooks/use-zone';
-import { usePathname, useSearchParams } from 'next/navigation';
-import { useCallback, useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 interface ZoneSearchProps {
   onSelectZone?: (zoneId: string, zoneName: string) => void;
@@ -21,11 +21,11 @@ interface ZoneSearchProps {
 
 const ZoneSearch = ({ onSelectZone, onClose }: ZoneSearchProps) => {
   const [searchValue, setSearchValue] = useState('');
-
+  const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const streetId = localStorage.getItem(STORAGE.SELECTED_STREET_KEY);
-  const pageNumber = searchParams.get('page')
+  const rawPageNumber = searchParams.get('page')
     ? parseInt(searchParams.get('page') as string)
     : 1;
 
@@ -35,12 +35,8 @@ const ZoneSearch = ({ onSelectZone, onClose }: ZoneSearchProps) => {
         zoneName: searchValue,
         streetId: streetId || undefined,
       },
-      pageNumber: pageNumber,
+      pageNumber: rawPageNumber,
     });
-
-  const _onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(e.target.value);
-  };
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
@@ -51,6 +47,26 @@ const ZoneSearch = ({ onSelectZone, onClose }: ZoneSearchProps) => {
     },
     [searchParams]
   );
+
+  // Calculate the valid page number without side effects
+  const pageNumber = useMemo(() => {
+    if (!rawPageNumber || rawPageNumber < 1 || isNaN(rawPageNumber)) {
+      return 1;
+    }
+    return Math.min(rawPageNumber, totalPage || 1);
+  }, [rawPageNumber, totalPage]);
+
+  useEffect(() => {
+    if (totalPage > 0 && rawPageNumber > totalPage) {
+      router.replace(
+        `${pathname}?${createQueryString('page', totalPage.toString())}`
+      );
+    }
+  }, [rawPageNumber, totalPage, router, pathname, createQueryString]);
+
+  const _onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(e.target.value);
+  };
 
   const handleSelectZone = (zoneId: string, zoneName: string) => {
     if (onSelectZone) {
@@ -193,13 +209,15 @@ const ZoneSearch = ({ onSelectZone, onClose }: ZoneSearchProps) => {
             <PaginationItem>
               <PaginationNext
                 href={
-                  pathname +
-                  '?' +
-                  createQueryString('page', (pageNumber + 1).toString())
+                  pageNumber < totalPage
+                    ? pathname +
+                      '?' +
+                      createQueryString('page', (pageNumber + 1).toString())
+                    : '#'
                 }
-                aria-disabled={pageNumber === totalPage}
+                aria-disabled={pageNumber >= totalPage}
                 className={
-                  pageNumber === totalPage
+                  pageNumber >= totalPage
                     ? 'pointer-events-none opacity-50'
                     : ''
                 }

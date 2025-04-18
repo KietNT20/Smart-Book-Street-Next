@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -229,6 +230,9 @@ const StoreForm = ({ storeToEdit }: Props) => {
                         <DialogContent className='sm:max-w-md'>
                           <DialogHeader>
                             <DialogTitle>Chọn Khu Vực Cửa Hàng</DialogTitle>
+                            <DialogDescription>
+                              Tìm kiếm và chọn khu vực cho cửa hàng của bạn.
+                            </DialogDescription>
                           </DialogHeader>
                           <ZoneSearch
                             onSelectZone={handleSelectZone}
