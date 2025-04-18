@@ -1,5 +1,6 @@
 import { Sort } from '@/enums/enums';
 import { ApiListResponse, ApiResponse } from './common-types';
+import { Street } from './street-types';
 
 export interface Zone {
   id: string;
@@ -7,6 +8,7 @@ export interface Zone {
   description: string;
   latitude: number;
   longitude: number;
+  street: Street;
 }
 
 export type ZoneCreate = Partial<Omit<Zone, 'id'>> & {

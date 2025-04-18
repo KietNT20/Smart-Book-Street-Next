@@ -84,14 +84,14 @@ export default function PublisherDetailPage({
       {/* Header Section */}
       <div className='mb-8 flex flex-col gap-6 md:flex-row'>
         {/* Publisher Logo */}
-        <div className='w-full md:w-1/4'>
+        <div className='w-full md:w-1/2'>
           <div className='rounded-lg bg-white p-4 shadow'>
             {publisherImage ? (
-              <div className='relative h-60 w-full'>
+              <div className='relative flex h-full w-full items-center justify-center overflow-hidden rounded-lg'>
                 <Image src={publisherImage} alt={publisher.publisherName} />
               </div>
             ) : (
-              <div className='flex h-60 w-full items-center justify-center rounded bg-gray-200'>
+              <div className='flex h-64 w-full items-center justify-center rounded bg-gray-200'>
                 <span className='text-gray-500'>Không có hình ảnh</span>
               </div>
             )}
@@ -105,7 +105,7 @@ export default function PublisherDetailPage({
               {publisher.publisherName}
             </h1>
 
-            <div className='mb-4 grid grid-cols-1 gap-4 md:grid-cols-2'>
+            <div className='mb-4 grid grid-cols-1 gap-4'>
               <div>
                 <h2 className='mb-2 text-lg font-semibold'>
                   Thông tin liên hệ

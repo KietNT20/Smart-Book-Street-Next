@@ -3,6 +3,7 @@ import { Language } from '@/enums/lang';
 import { BaseEntity } from './common-types';
 import { ImageType } from './image-types';
 import { Publisher } from './publisher-types';
+import { Inventory } from './inventory-types';
 
 export type BookAuthor = {
   id: string;
@@ -39,7 +40,7 @@ export interface Book extends BaseEntity {
   images?: ImageType[];
   bookAuthors: BookAuthor[];
   bookCategories: BookCategories[];
-  inventories?: any[];
+  inventories?: Inventory[];
 }
 
 export type GetAllBooksResponse = {

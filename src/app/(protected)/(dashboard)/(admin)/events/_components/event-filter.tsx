@@ -33,6 +33,7 @@ const EventFilter = ({
   const debouncedFilters = useDebounce(filters, 700);
 
   const handleInputChange = (field: keyof SearchFilters, value: any) => {
+    console.log('Value:', value);
     setFilters({ ...filters, [field]: value });
   };
 
