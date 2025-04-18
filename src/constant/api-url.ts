@@ -50,6 +50,7 @@ export const API_URL = {
     PAGINATED: `${EVENT}/paginated`,
     IN_MONTH: `${EVENT}/event-dates-in-month`,
     IN_DATE: `${EVENT}/events-in-date`,
+    PAGINATION_SEARCH: `${EVENT}/search/paginated`,
   },
   IMAGES: {
     INDEX: `${IMAGE}`,

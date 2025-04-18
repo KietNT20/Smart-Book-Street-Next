@@ -1,4 +1,5 @@
 import { ConfirmModal } from '@/components/confirm-modal';
+import TablePagination from '@/components/pagination/table-pagination';
 import { TableSkeleton } from '@/components/table-skeleton';
 import { Button } from '@/components/ui/button';
 import {
@@ -8,15 +9,6 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from '@/components/ui/pagination';
 import {
   Select,
   SelectContent,
@@ -58,8 +50,8 @@ type Props = {
   sortField: string;
   sortOrder: Sort;
   handleSort: (field: string) => void;
-  onViewStore: (id: string) => void;
-  onEditStore: (id: string) => void;
+  onViewPublisher: (id: string) => void;
+  onEditPublisher: (id: string) => void;
 };
 
 const PublisherTable = ({
@@ -74,8 +66,8 @@ const PublisherTable = ({
   sortField,
   sortOrder,
   handleSort,
-  onViewStore,
-  onEditStore,
+  onViewPublisher,
+  onEditPublisher,
 }: Props) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [publisherToDelete, setPublisherToDelete] = useState<string | null>(
@@ -108,15 +100,6 @@ const PublisherTable = ({
     }
   };
 
-  const totalPagesCount = totalPages || 10;
-  const pagesToShow = Math.min(5, totalPagesCount);
-  const startPage = Math.max(
-    1,
-    Math.min(
-      pageNumber - Math.floor(pagesToShow / 2),
-      totalPagesCount - pagesToShow + 1
-    )
-  );
   return (
     <>
       {/* Table */}
@@ -228,13 +211,13 @@ const PublisherTable = ({
                       <DropdownMenuContent align='end'>
                         <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
                         <DropdownMenuItem
-                          onClick={() => onViewStore(publisher.id || '')}
+                          onClick={() => onViewPublisher(publisher.id || '')}
                         >
                           <Eye className='mr-2 h-4 w-4' />
                           Xem chi tiết
                         </DropdownMenuItem>
                         <DropdownMenuItem
-                          onClick={() => onEditStore(publisher.id || '')}
+                          onClick={() => onEditPublisher(publisher.id || '')}
                         >
                           <FileEdit className='mr-2 h-4 w-4' />
                           Chỉnh sửa
@@ -279,101 +262,11 @@ const PublisherTable = ({
           </Select>
         </div>
 
-        <Pagination className='m-0 flex items-center justify-end'>
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious
-                href='#'
-                onClick={(e) => {
-                  e.preventDefault();
-                  if (pageNumber > 1) {
-                    setPageNumber(Math.max(pageNumber - 1, 1));
-                  }
-                }}
-                className={
-                  pageNumber <= 1 ? 'pointer-events-none opacity-50' : ''
-                }
-              />
-            </PaginationItem>
-
-            {pageNumber > 3 && (
-              <>
-                <PaginationItem>
-                  <PaginationLink
-                    href='#'
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setPageNumber(1);
-                    }}
-                  >
-                    1
-                  </PaginationLink>
-                </PaginationItem>
-                {pageNumber > 4 && (
-                  <PaginationItem>
-                    <PaginationEllipsis />
-                  </PaginationItem>
-                )}
-              </>
-            )}
-
-            {Array.from({ length: pagesToShow }).map((_, index) => {
-              const page = startPage + index;
-              return (
-                <PaginationItem key={page}>
-                  <PaginationLink
-                    href='#'
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setPageNumber(page);
-                    }}
-                    isActive={pageNumber === page}
-                  >
-                    {page}
-                  </PaginationLink>
-                </PaginationItem>
-              );
-            })}
-
-            {pageNumber < totalPagesCount - 2 && (
-              <>
-                {pageNumber < totalPagesCount - 3 && (
-                  <PaginationItem>
-                    <PaginationEllipsis />
-                  </PaginationItem>
-                )}
-                <PaginationItem>
-                  <PaginationLink
-                    href='#'
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setPageNumber(totalPagesCount);
-                    }}
-                  >
-                    {totalPagesCount}
-                  </PaginationLink>
-                </PaginationItem>
-              </>
-            )}
-
-            <PaginationItem>
-              <PaginationNext
-                href='#'
-                onClick={(e) => {
-                  e.preventDefault();
-                  if (pageNumber < totalPagesCount) {
-                    setPageNumber(Math.min(pageNumber + 1, totalPagesCount));
-                  }
-                }}
-                className={
-                  pageNumber >= totalPages
-                    ? 'pointer-events-none opacity-50'
-                    : ''
-                }
-              />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+        <TablePagination
+          pageNumber={pageNumber}
+          setPageNumber={setPageNumber}
+          totalPages={totalPages}
+        />
       </div>
 
       {/* Delete Confirmation Dialog */}

@@ -25,10 +25,12 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Sort } from '@/enums/enums';
-import { useZoneMutation } from '@/hooks/use-zone';
-import { Zone } from '@/types/zone-types';
+import { useEventMutaton } from '@/hooks/use-event';
+import { formateDateVi } from '@/lib/utils';
+import { Event } from '@/types/event-types';
 import {
   ArrowUpDown,
+  Eye,
   FileEdit,
   MoreHorizontal,
   SortAsc,
@@ -38,7 +40,7 @@ import {
 import { useState } from 'react';
 
 type Props = {
-  zones: Zone[];
+  events: Event[];
   isLoading: boolean;
   isSearching: boolean;
   totalPages: number;
@@ -49,11 +51,12 @@ type Props = {
   sortField: string;
   sortOrder: Sort;
   handleSort: (field: string) => void;
-  onEditZone: (id: string) => void;
+  onViewEvent: (id: string) => void;
+  onEditEvent: (id: string) => void;
 };
 
-const ZoneTable = ({
-  zones,
+const EventTable = ({
+  events,
   isLoading,
   isSearching,
   totalPages,
@@ -64,12 +67,12 @@ const ZoneTable = ({
   sortField,
   sortOrder,
   handleSort,
-  onEditZone,
+  onViewEvent,
+  onEditEvent,
 }: Props) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [zoneToDelete, setZoneToDelete] = useState<string | null>(null);
-
-  const { deleteZone } = useZoneMutation();
+  const [eventToDelete, setEventToDelete] = useState<string | null>(null);
+  const { deleteEvent } = useEventMutaton();
 
   // Handle page size change
   const handlePageSizeChange = (value: string) => {
@@ -78,19 +81,18 @@ const ZoneTable = ({
   };
 
   // Handle opening delete dialog
-  const handleDeleteClick = (zoneId: string) => {
-    setZoneToDelete(zoneId);
+  const handleDeleteClick = (publisherId: string) => {
+    setEventToDelete(publisherId);
     setDeleteDialogOpen(true);
   };
 
   // Handle delete confirmation
   const handleDeleteConfirm = () => {
-    if (zoneToDelete) {
-      deleteZone(zoneToDelete);
+    if (eventToDelete) {
+      deleteEvent(eventToDelete);
 
-      // Close dialog and reset state
       setDeleteDialogOpen(false);
-      setZoneToDelete(null);
+      setEventToDelete(null);
     }
   };
 
@@ -104,11 +106,62 @@ const ZoneTable = ({
               <TableHead>No.</TableHead>
               <TableHead
                 className='cursor-pointer'
-                onClick={() => handleSort('ZoneName')}
+                onClick={() => handleSort('EventName')}
               >
                 <Button variant='ghost'>
-                  Tên Nhà Xuất Bản
-                  {sortField === 'ZoneName' ? (
+                  Tên Sự Kiện
+                  {sortField === 'EventName' ? (
+                    sortOrder === Sort.ASC ? (
+                      <SortAsc />
+                    ) : (
+                      <SortDesc />
+                    )
+                  ) : (
+                    <ArrowUpDown />
+                  )}
+                </Button>
+              </TableHead>
+              <TableHead
+                className='cursor-pointer'
+                onClick={() => handleSort('StartDate')}
+              >
+                <Button variant='ghost'>
+                  Ngày bắt đầu
+                  {sortField === 'StartDate' ? (
+                    sortOrder === Sort.ASC ? (
+                      <SortAsc />
+                    ) : (
+                      <SortDesc />
+                    )
+                  ) : (
+                    <ArrowUpDown />
+                  )}
+                </Button>
+              </TableHead>
+              <TableHead
+                className='cursor-pointer'
+                onClick={() => handleSort('EndDate')}
+              >
+                <Button variant='ghost'>
+                  Ngày kết thúc
+                  {sortField === 'EndDate' ? (
+                    sortOrder === Sort.ASC ? (
+                      <SortAsc />
+                    ) : (
+                      <SortDesc />
+                    )
+                  ) : (
+                    <ArrowUpDown />
+                  )}
+                </Button>
+              </TableHead>
+              <TableHead
+                className='cursor-pointer'
+                onClick={() => handleSort('Zone')}
+              >
+                <Button variant='ghost'>
+                  Khu vực
+                  {sortField === 'Zone' ? (
                     sortOrder === Sort.ASC ? (
                       <SortAsc />
                     ) : (
@@ -125,20 +178,27 @@ const ZoneTable = ({
           <TableBody>
             {isLoading ? (
               <TableSkeleton columns={6} rows={pageSize} />
-            ) : zones.length === 0 ? (
+            ) : events.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={6} className='py-10 text-center'>
-                  Không tìm thấy cửa hàng.{' '}
+                  Không tìm thấy sự kiện.{' '}
                   {isSearching && 'Hãy thử một từ khóa tìm kiếm khác.'}
                 </TableCell>
               </TableRow>
             ) : (
-              zones.map((zone, index) => (
-                <TableRow key={zone.id}>
+              events.map((event, index) => (
+                <TableRow key={event.id}>
                   <TableCell className='text-muted-foreground'>
                     {index + 1 + (pageNumber - 1) * pageSize}
                   </TableCell>
-                  <TableCell className='font-medium'>{zone.zoneName}</TableCell>
+                  <TableCell className='font-medium'>
+                    {event.eventName}
+                  </TableCell>
+                  <TableCell>{formateDateVi(event.startDate)}</TableCell>
+                  <TableCell>{formateDateVi(event.endDate)}</TableCell>
+                  <TableCell className='max-w-52 overflow-hidden text-ellipsis whitespace-nowrap'>
+                    {event?.zone?.zoneName}
+                  </TableCell>
                   <TableCell className='text-right'>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -149,14 +209,20 @@ const ZoneTable = ({
                       <DropdownMenuContent align='end'>
                         <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
                         <DropdownMenuItem
-                          onClick={() => onEditZone(zone.id || '')}
+                          onClick={() => onViewEvent(event.id || '')}
+                        >
+                          <Eye className='mr-2 h-4 w-4' />
+                          Xem chi tiết
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => onEditEvent(event.id || '')}
                         >
                           <FileEdit className='mr-2 h-4 w-4' />
                           Chỉnh sửa
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className='text-destructive'
-                          onClick={() => handleDeleteClick(zone.id || '')}
+                          onClick={() => handleDeleteClick(event.id || '')}
                         >
                           <Trash2 className='mr-2 h-4 w-4' />
                           Xóa
@@ -195,9 +261,9 @@ const ZoneTable = ({
         </div>
 
         <TablePagination
+          totalPages={totalPages}
           pageNumber={pageNumber}
           setPageNumber={setPageNumber}
-          totalPages={totalPages}
         />
       </div>
 
@@ -214,4 +280,4 @@ const ZoneTable = ({
   );
 };
 
-export default ZoneTable;
+export default EventTable;

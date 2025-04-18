@@ -57,11 +57,7 @@ const ZonesPage = () => {
     setIsSearching(hasActiveFilter);
   };
 
-  const handleEditPublisher = (zoneId: string) => {
-    router.push(`${PATH.ZONES}/${zoneId}/edit`);
-  };
-
-  const handleViewPublisherDetail = (zoneId: string) => {
+  const handleEditZone = (zoneId: string) => {
     router.push(`${PATH.ZONES}/${zoneId}`);
   };
 
@@ -94,8 +90,7 @@ const ZonesPage = () => {
         sortField={sortField}
         sortOrder={sortOrder}
         handleSort={handleSort}
-        onViewStore={handleViewPublisherDetail}
-        onEditStore={handleEditPublisher}
+        onEditZone={handleEditZone}
       />
     </div>
   );

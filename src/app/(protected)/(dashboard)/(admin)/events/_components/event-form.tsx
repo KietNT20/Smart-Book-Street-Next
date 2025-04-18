@@ -1,5 +1,7 @@
 'use client';
 
+import CancelButton from '@/components/back-btn/cancel-btn';
+import SubmitBtn from '@/components/button/submit-btn';
 import RichTextEditor from '@/components/rich-text-editor';
 import { Button } from '@/components/ui/button';
 import {
@@ -20,8 +22,12 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
+import { PATH } from '@/enums/path';
+import useDebounce from '@/hooks/use-debounce';
+import { useEventMutaton } from '@/hooks/use-event';
 import { useNonDeletedZones } from '@/hooks/use-zone';
 import { eventFormSchema, EventFormValues } from '@/lib/zod';
+import { Event } from '@/types/event-types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { DatePicker } from 'antd';
 import dayjs from 'dayjs';
@@ -31,34 +37,31 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 type Props = {
-  defaultValues?: Partial<EventFormValues>;
-  onSubmit: (data: FormData) => void;
-  isSubmitting?: boolean;
+  eventEdit?: Event;
 };
 
-const EventForm = ({
-  defaultValues,
-  onSubmit,
-  isSubmitting = false,
-}: Props) => {
+const EventForm = ({ eventEdit }: Props) => {
   const [previewBaseImg, setPreviewBaseImg] = useState<string | null>(null);
   const [previewOtherImgs, setPreviewOtherImgs] = useState<string[]>([]);
   const [previewVideo, setPreviewVideo] = useState<string | null>(null);
   const { nonDeletedZones } = useNonDeletedZones();
+  const { createEvent, isEventPending, updateEvent, isEventUpdating } =
+    useEventMutaton();
+  const isSubmitting = useDebounce(isEventPending || isEventUpdating, 300);
 
   const form = useForm<EventFormValues>({
     resolver: zodResolver(eventFormSchema),
     defaultValues: {
-      eventName: defaultValues?.eventName || '',
-      startDate: defaultValues?.startDate || '',
-      endDate: defaultValues?.endDate || '',
-      description: defaultValues?.description || '',
-      baseImgFile: defaultValues?.baseImgFile || undefined,
-      otherImgFile: defaultValues?.otherImgFile || [],
-      videoFile: defaultValues?.videoFile || undefined,
-      isOpen: defaultValues?.isOpen || false,
-      allowAds: defaultValues?.allowAds || false,
-      zoneId: defaultValues?.zoneId || '',
+      eventName: eventEdit?.eventName || '',
+      startDate: dayjs(eventEdit?.startDate).format('YYYY-MM-DD') || null,
+      endDate: dayjs(eventEdit?.endDate).format('YYYY-MM-DD') || null,
+      description: eventEdit?.description || '',
+      baseImgFile: eventEdit?.baseImgUrl || undefined,
+      otherImgFile: [],
+      videoFile: eventEdit?.videoLink || undefined,
+      isOpen: eventEdit?.isOpen || false,
+      allowAds: eventEdit?.allowAds || false,
+      zoneId: eventEdit?.zone.id || '',
     },
   });
 
@@ -95,7 +98,11 @@ const EventForm = ({
       formData.append('videoFileUrl', values.videoFile);
     }
 
-    onSubmit(formData);
+    if (eventEdit?.id) {
+      updateEvent({ id: eventEdit.id, formData });
+    } else {
+      createEvent(formData);
+    }
   };
 
   const handleBaseImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -139,29 +146,6 @@ const EventForm = ({
     updatedPreviews.splice(index, 1);
     setPreviewOtherImgs(updatedPreviews);
   };
-
-  useEffect(() => {
-    if (
-      defaultValues?.baseImgFile &&
-      typeof defaultValues.baseImgFile === 'string'
-    ) {
-      setPreviewBaseImg(defaultValues.baseImgFile);
-    }
-
-    if (defaultValues?.otherImgFile && defaultValues.otherImgFile.length > 0) {
-      const previews = defaultValues.otherImgFile.filter(
-        (file): file is string => typeof file === 'string'
-      );
-      setPreviewOtherImgs(previews);
-    }
-
-    if (
-      defaultValues?.videoFile &&
-      typeof defaultValues.videoFile === 'string'
-    ) {
-      setPreviewVideo(defaultValues.videoFile);
-    }
-  }, [defaultValues]);
 
   useEffect(() => {
     return () => {
@@ -317,7 +301,6 @@ const EventForm = ({
                       onChange(e.target.files?.[0] || null);
                     }}
                     className='cursor-pointer'
-                    // Don't spread the rest of field props which includes value
                   />
                   {previewBaseImg && (
                     <div className='relative h-64 w-64 overflow-hidden rounded-md border'>
@@ -348,7 +331,6 @@ const EventForm = ({
           )}
         />
 
-        {/* Các ảnh khác */}
         <FormField
           control={form.control}
           name='otherImgFile'
@@ -408,7 +390,6 @@ const EventForm = ({
           )}
         />
 
-        {/* Video */}
         <FormField
           control={form.control}
           name='videoFile'
@@ -458,7 +439,6 @@ const EventForm = ({
           )}
         />
 
-        {/* Trạng thái mở */}
         <FormField
           control={form.control}
           name='isOpen'
@@ -502,10 +482,14 @@ const EventForm = ({
           )}
         />
 
-        {/* Nút gửi */}
-        <Button type='submit' disabled={isSubmitting}>
-          {isSubmitting ? 'Đang xử lý...' : 'Tạo sự kiện'}
-        </Button>
+        <div className='flex items-center justify-end gap-4'>
+          <CancelButton
+            _isPending={isSubmitting}
+            routerReplace
+            pathUrl={PATH.EVENTS}
+          />
+          <SubmitBtn ID={eventEdit?.id} _onPending={isSubmitting} />
+        </div>
       </form>
     </Form>
   );
