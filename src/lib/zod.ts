@@ -316,3 +316,30 @@ export const userFormSchema = z.object({
 });
 
 export type UserFormValues = z.infer<typeof userFormSchema>;
+
+// Souvenir form
+export const souvenirFormSchema = z.object({
+  souvenirName: z
+    .string()
+    .min(1, { message: 'Tên quà lưu niệm không được để trống' }),
+  price: z.number().min(0, { message: 'Giá không được âm' }),
+  description: z.string().optional(),
+  baseImgFile: z
+    .instanceof(File)
+    .optional()
+    .or(z.string().optional())
+    .nullable(),
+  otherImgFiles: z.array(z.instanceof(File).or(z.string())).default([]),
+});
+
+export type SouvenirFormValues = z.infer<typeof souvenirFormSchema>;
+
+// Zone form
+export const zoneFormSchema = z.object({
+  zoneName: z.string().min(1, { message: 'Vui lòng nhập tên khu vực' }),
+  description: z.string().optional(),
+  latitude: z.number().min(-90).max(90),
+  longitude: z.number().min(-180).max(180),
+});
+
+export type ZoneFormSchema = z.infer<typeof zoneFormSchema>;

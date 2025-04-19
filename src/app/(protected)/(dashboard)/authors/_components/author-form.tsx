@@ -17,7 +17,6 @@ import { PATH } from '@/enums/path';
 import { useAuthorMutation, useGetAuthorById } from '@/hooks/use-author';
 import { cn } from '@/lib/utils';
 import { authorFormSchema, AuthorFormValues } from '@/lib/zod';
-import { Author } from '@/types/author-types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { DatePicker } from 'antd';
 import dayjs from 'dayjs';
@@ -28,10 +27,6 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 dayjs.locale('vi');
-
-type AuthorData = {
-  result: Author;
-};
 
 type FileState = {
   imgFile: File | null;
@@ -53,8 +48,9 @@ export function AuthorForm({ authorId }: Props) {
     updateAuthor,
     updateAuthorPending,
   } = useAuthorMutation();
-  const { data: authorData, isLoading: isLoadingAuthor } =
-    useGetAuthorById<AuthorData>(authorId || '');
+  const { data: authorData, isLoading: isLoadingAuthor } = useGetAuthorById(
+    authorId || ''
+  );
 
   const form = useForm<AuthorFormValues>({
     resolver: zodResolver(authorFormSchema),

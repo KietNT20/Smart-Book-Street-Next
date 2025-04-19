@@ -1,5 +1,9 @@
 import { API_URL } from '@/constant/api-url';
-import { AuthorSearchPagination, AuthorsResponse } from '@/types/author-types';
+import {
+  AuthorResponse,
+  AuthorSearchPagination,
+  AuthorsResponse,
+} from '@/types/author-types';
 import axiosInstance from '@/utils/axiosInstance';
 
 export const authorService = {
@@ -23,7 +27,7 @@ export const authorService = {
     const res = await axiosInstance.patch(`${API_URL.AUTHORS.INDEX}/${id}`);
     return res.data;
   },
-  getById: async (id: string) => {
+  getById: async (id: string): Promise<AuthorResponse> => {
     const res = await axiosInstance.get(`${API_URL.AUTHORS.INDEX}/${id}`);
     return res.data;
   },

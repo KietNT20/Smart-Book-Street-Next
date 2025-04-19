@@ -3,12 +3,12 @@
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { ZoneFormSchema } from '@/lib/zod';
 import { Loader2, MapPin, Navigation, Search } from 'lucide-react';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { useEffect, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import Map, { Marker } from 'react-map-gl/mapbox';
-import { ZoneFormSchema } from './zone-form';
 
 interface AddressZoneProps {
   form: UseFormReturn<ZoneFormSchema>;

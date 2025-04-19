@@ -20,6 +20,7 @@ export const useInventoryMutation = () => {
   const queryClient = useQueryClient();
 
   const updateQuantityMutation = useMutation({
+    mutationKey: ['update-inventory'],
     mutationFn: ({ entityId, storeId, quantity, isInStock }: InventoryCreate) =>
       inventoryService.create({ entityId, storeId, quantity, isInStock }),
     onSuccess: (data) => {

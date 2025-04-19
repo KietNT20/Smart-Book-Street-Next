@@ -91,13 +91,13 @@ export const usePublisherMutation = () => {
   const router = useRouter();
 
   const searchPublisher = useMutation({
-    mutationKey: ['publisher-search'],
+    mutationKey: ['search-publisher'],
     mutationFn: (search: Partial<PublisherSearch>) =>
       publisherService.search(search),
   });
 
   const createPublisherMutation = useMutation({
-    mutationKey: ['publisher-create'],
+    mutationKey: ['create-publisher'],
     mutationFn: (formData: FormData) => publisherService.create(formData),
     onSuccess: (data) => {
       if (data) {
@@ -113,7 +113,7 @@ export const usePublisherMutation = () => {
   });
 
   const updatePublisherMutation = useMutation({
-    mutationKey: ['publisher-update'],
+    mutationKey: ['update-publisher'],
     mutationFn: ({ id, formData }: { id: string; formData: FormData }) =>
       publisherService.update(id, formData),
     onSuccess: (data) => {
@@ -130,7 +130,7 @@ export const usePublisherMutation = () => {
   });
 
   const deletePublisherMutation = useMutation({
-    mutationKey: ['publisher-delete'],
+    mutationKey: ['delete-publisher'],
     mutationFn: (id: string) => publisherService.delete(id),
     onSuccess: (data) => {
       if (data) {
@@ -163,7 +163,7 @@ export const usePublisherMutation = () => {
 
 export const usePublisherById = (id: string) => {
   const { data, isLoading, error } = useQuery({
-    queryKey: ['publisher', id],
+    queryKey: ['publishers', id],
     queryFn: () => publisherService.getById(id),
     enabled: !!id,
   });
