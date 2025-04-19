@@ -45,8 +45,6 @@ export default function BooksPage() {
     pagination.sortField !== 'LastUpdatedDate' ||
     pagination.sortOrder !== Sort.DESC;
 
-  console.log('hasFilters', hasFilters());
-
   return (
     <div className='space-y-4'>
       <BookToolbar

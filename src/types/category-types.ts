@@ -1,6 +1,6 @@
 import { Sort } from '@/enums/enums';
 import { Book } from './book-types';
-import { BaseEntity } from './common-types';
+import { ApiListResponse, BaseEntity } from './common-types';
 
 export interface Category extends BaseEntity {
   categoryName: string;
@@ -22,3 +22,5 @@ export type CategorySearchPagination = {
     categoryName: string;
   };
 };
+
+export type CategoriesResponse = ApiListResponse<Category>;

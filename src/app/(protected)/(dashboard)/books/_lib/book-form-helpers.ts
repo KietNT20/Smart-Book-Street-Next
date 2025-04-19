@@ -31,38 +31,36 @@ export function prepareInitialBookData(book?: Book) {
     };
   }
 
-  const formattedDate = '';
+  let formattedDate = '';
   if (book.publicationDate) {
-    const dateStr =
-      typeof book.publicationDate === 'string'
-        ? book.publicationDate
-        : dayjs(book.publicationDate).format('YYYY-MM-DD');
+    console.log(book.publicationDate, 'book.publicationDate');
+    const date = dayjs(book.publicationDate);
+    if (date.isValid()) {
+      formattedDate = date.format('YYYY-MM-DD');
 
-    if (
-      /^\d{4}$/.test(dateStr) ||
-      /^\d{4}-\d{2}$/.test(dateStr) ||
-      /^\d{4}-\d{2}-\d{2}$/.test(dateStr)
-    ) {
+      /* const originalFormat = detectDateFormat(book.publicationDate);
+      formattedDate = date.format(originalFormat); */
     }
-
-    return {
-      isbn: book.isbn || '',
-      title: book.title || '',
-      publicationDate: formattedDate,
-      price: book.price || 0,
-      languages: book.languages || '',
-      description: book.description || '',
-      size: book.size || '',
-      status: book.status || '',
-      publisherId: book.publisherId || '',
-      authorIds: book.bookAuthors.map((author) => author.authorId) || [],
-      categoryIds:
-        book.bookCategories.map((category) => category.categoryId) || [],
-      mainImageFile: undefined,
-      additionalImageFiles: [],
-    };
   }
+
+  return {
+    isbn: book.isbn || '',
+    title: book.title || '',
+    publicationDate: formattedDate,
+    price: book.price || 0,
+    languages: book.languages || Language.VIETNAMESE,
+    description: book.description || '',
+    size: book.size || '',
+    status: book.status || '',
+    publisherId: book.publisherId || '',
+    authorIds: book.bookAuthors?.map((author) => author.authorId) || [],
+    categoryIds:
+      book.bookCategories?.map((category) => category.categoryId) || [],
+    mainImageFile: undefined,
+    additionalImageFiles: [],
+  };
 }
+
 // Hàm để sanitize HTML (nếu cần)
 export const sanitizeHtml = (html: string): string => {
   // Bạn có thể sử dụng thư viện như DOMPurify để sanitize HTML

@@ -1,6 +1,6 @@
 import { Sort } from '@/enums/enums';
 import { Book } from './book-types';
-import { BaseEntity } from './common-types';
+import { ApiListResponse, ApiResponse, BaseEntity } from './common-types';
 import { ImageType } from './image-types';
 
 export interface Author extends BaseEntity {
@@ -49,18 +49,5 @@ export type BookAuthorPaginated = {
   bookId: string;
 };
 
-export type AuthorsResponse = {
-  results: Author[];
-  totalPages: number;
-  totalRecords: number;
-  pageNumber: number;
-  pageSize: number;
-  isSuccess: boolean;
-  message: string;
-};
-
-export type AuthorResponse = {
-  result: Author;
-  isSuccess: boolean;
-  message: string;
-};
+export type AuthorsResponse = ApiListResponse<Author>;
+export type AuthorResponse = ApiResponse<Author>;

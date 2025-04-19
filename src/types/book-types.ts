@@ -1,9 +1,9 @@
 import { Sort } from '@/enums/enums';
 import { Language } from '@/enums/lang';
-import { BaseEntity } from './common-types';
+import { ApiListResponse, ApiResponse, BaseEntity } from './common-types';
 import { ImageType } from './image-types';
-import { Publisher } from './publisher-types';
 import { Inventory } from './inventory-types';
+import { Publisher } from './publisher-types';
 
 export type BookAuthor = {
   id: string;
@@ -50,23 +50,8 @@ export type GetAllBooksResponse = {
   message: string;
 };
 
-export type BooksResponse = {
-  results: Book[];
-  totalPages: number;
-  totalRecordsPerPage: number;
-  totalRecords: number;
-  pageNumber: number;
-  pageSize: number;
-  isSuccess: true;
-  message: string;
-};
-
-export type BookResponse = {
-  result: Book;
-  totalRecords: number;
-  isSuccess: true;
-  message: string;
-};
+export type BooksResponse = ApiListResponse<Book>;
+export type BookResponse = ApiResponse<Book>;
 
 export type BookSearchCriteria = {
   isbn?: string;

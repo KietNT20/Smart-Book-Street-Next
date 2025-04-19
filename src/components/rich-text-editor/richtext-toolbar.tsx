@@ -20,12 +20,11 @@ import {
   Underline as UnderlineIcon,
   Undo,
 } from 'lucide-react';
+import ColorPicker from './color-picker';
 
 interface RichTextToolbarProps {
   editor: Editor;
   onAddLink: () => void;
-  // onAddImage: () => void;
-  // onAddTable: () => void;
 }
 
 const RichTextToolbar = ({ editor, onAddLink }: RichTextToolbarProps) => {
@@ -102,6 +101,9 @@ const RichTextToolbar = ({ editor, onAddLink }: RichTextToolbarProps) => {
         <UnderlineIcon className='h-4 w-4' />
       </Button>
 
+      {/* Chọn màu chữ */}
+      <ColorPicker editor={editor} />
+
       {/* Danh sách */}
       <Button
         variant='ghost'
@@ -124,7 +126,7 @@ const RichTextToolbar = ({ editor, onAddLink }: RichTextToolbarProps) => {
         <ListOrdered className='h-4 w-4' />
       </Button>
 
-      {/* Liên kết, hình ảnh, bảng */}
+      {/* Liên kết */}
       <Button
         variant='ghost'
         size='sm'
@@ -135,24 +137,6 @@ const RichTextToolbar = ({ editor, onAddLink }: RichTextToolbarProps) => {
       >
         <LinkIcon className='h-4 w-4' />
       </Button>
-      {/* <Button
-        variant='ghost'
-        size='sm'
-        onClick={onAddImage}
-        type='button'
-        title='Thêm hình ảnh'
-      >
-        <ImageIcon className='h-4 w-4' />
-      </Button> */}
-      {/* <Button
-        variant='ghost'
-        size='sm'
-        onClick={onAddTable}
-        type='button'
-        title='Thêm bảng'
-      >
-        <TableIcon className='h-4 w-4' />
-      </Button> */}
 
       {/* Căn chỉnh văn bản */}
       <Button

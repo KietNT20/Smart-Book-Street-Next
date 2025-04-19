@@ -19,6 +19,14 @@ export const createColumns = ({
   _onDelete,
 }: ColumnHandlers): ColumnDef<Book>[] => [
   {
+    accessorKey: 'no',
+    header: 'No.',
+    cell: ({ row }) => {
+      const index = row.index + 1;
+      return <p className='text-muted-foreground'>{index}</p>;
+    },
+  },
+  {
     accessorKey: 'isbn',
     header: ({ column }) => (
       <Button
@@ -26,7 +34,7 @@ export const createColumns = ({
         onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         className='flex items-center'
       >
-        Mã sách
+        ISPN
         {column.getIsSorted() === 'asc' ? (
           <SortAsc className='ml-1 h-4 w-4 text-blue-500' />
         ) : column.getIsSorted() === 'desc' ? (
@@ -57,6 +65,14 @@ export const createColumns = ({
       </Button>
     ),
     filterFn: 'includesString',
+    cell: ({ row }) => {
+      const book = row.original;
+      return (
+        <p className='max-w-48 overflow-hidden truncate text-ellipsis'>
+          {book.title}
+        </p>
+      );
+    },
   },
   {
     accessorKey: 'price',
@@ -109,26 +125,6 @@ export const createColumns = ({
       </Button>
     ),
     cell: ({ row }) => formateDateVi(row.getValue('publicationDate')),
-  },
-  {
-    accessorKey: 'lastUpdatedDate',
-    header: ({ column }) => (
-      <Button
-        variant='ghost'
-        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        className='flex items-center'
-      >
-        Cập nhật cuối
-        {column.getIsSorted() === 'asc' ? (
-          <ArrowUp className='ml-2 h-4 w-4' />
-        ) : column.getIsSorted() === 'desc' ? (
-          <ArrowDown className='ml-2 h-4 w-4' />
-        ) : (
-          <ArrowUpDown className='ml-2 h-4 w-4' />
-        )}
-      </Button>
-    ),
-    cell: ({ row }) => formateDateVi(row.getValue('lastUpdatedDate')),
   },
   {
     id: 'actions',

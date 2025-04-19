@@ -215,6 +215,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             url: PATH.STORE_HOURS,
             roles: [RoleEnums.STORE_MANAGER, RoleEnums.STORE_OWNER],
           },
+          {
+            title: 'Quản lý tồn kho',
+            url: PATH.INVENTORY,
+            roles: [RoleEnums.STORE_MANAGER, RoleEnums.STORE_OWNER],
+          },
+          {
+            title: 'Quản lý đơn hàng',
+            url: PATH.ORDERS,
+            roles: [RoleEnums.STORE_MANAGER, RoleEnums.STORE_OWNER],
+          },
         ],
       },
     ],

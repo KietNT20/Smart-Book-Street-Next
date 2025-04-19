@@ -23,9 +23,22 @@ const roleBasedRoutes: RoleRouteMap = {
   '/stores/*': [RoleEnums.ADMIN],
   [PATH.STORE_MANAGER_DASHBOARD]: [RoleEnums.STORE_MANAGER, RoleEnums.ADMIN],
   [PATH.STORE_OWNER_DASHBOARD]: [RoleEnums.STORE_OWNER, RoleEnums.ADMIN],
-  '/books/*': [RoleEnums.PUBLISHER, RoleEnums.STORE_MANAGER],
-  '/categories/*': [RoleEnums.PUBLISHER, RoleEnums.STORE_MANAGER],
-  '/authors/*': [RoleEnums.PUBLISHER, RoleEnums.STORE_MANAGER],
+  '/books/*': [
+    RoleEnums.PUBLISHER,
+    RoleEnums.STORE_MANAGER,
+    RoleEnums.STORE_OWNER,
+  ],
+  '/categories/*': [
+    RoleEnums.PUBLISHER,
+    RoleEnums.STORE_MANAGER,
+    RoleEnums.STORE_OWNER,
+  ],
+  '/authors/*': [
+    RoleEnums.PUBLISHER,
+    RoleEnums.STORE_MANAGER,
+    RoleEnums.STORE_OWNER,
+  ],
+  '/orders/*': [RoleEnums.STORE_MANAGER, RoleEnums.STORE_OWNER],
 };
 
 const schemasRoleToken =
