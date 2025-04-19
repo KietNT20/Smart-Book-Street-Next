@@ -33,13 +33,9 @@ export function prepareInitialBookData(book?: Book) {
 
   let formattedDate = '';
   if (book.publicationDate) {
-    console.log(book.publicationDate, 'book.publicationDate');
     const date = dayjs(book.publicationDate);
     if (date.isValid()) {
       formattedDate = date.format('YYYY-MM-DD');
-
-      /* const originalFormat = detectDateFormat(book.publicationDate);
-      formattedDate = date.format(originalFormat); */
     }
   }
 
