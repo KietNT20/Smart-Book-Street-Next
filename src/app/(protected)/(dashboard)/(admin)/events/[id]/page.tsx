@@ -128,9 +128,9 @@ export default function EventDetailPage({
                 <CardTitle>Thông tin chi tiết</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className='leading-relaxed text-zinc-700'>
-                  {eventData.description}
-                </p>
+                <div
+                  dangerouslySetInnerHTML={{ __html: eventData.description }}
+                />
               </CardContent>
             </Card>
 

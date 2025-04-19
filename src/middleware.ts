@@ -39,6 +39,7 @@ const roleBasedRoutes: RoleRouteMap = {
     RoleEnums.STORE_OWNER,
   ],
   '/orders/*': [RoleEnums.STORE_MANAGER, RoleEnums.STORE_OWNER],
+  '/inventory/*': [RoleEnums.STORE_MANAGER, RoleEnums.STORE_OWNER],
 };
 
 const schemasRoleToken =
