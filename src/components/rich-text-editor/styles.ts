@@ -1,5 +1,11 @@
 export const customStyles = `
   .ProseMirror {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    white-space: pre-wrap;
+    overflow-x: hidden;
+
     > * + * {
       margin-top: 0.75em;
     }
@@ -19,6 +25,12 @@ export const customStyles = `
 
     li {
       margin-bottom: 0.5em;
+    }
+    
+    p {
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      word-break: break-word;
     }
 
     table {
@@ -48,5 +60,8 @@ export const customStyles = `
     table p {
       margin: 0;
     }
+  }
+  .ProseMirror-focused {
+    outline: none;
   }
 `;

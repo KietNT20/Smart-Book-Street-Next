@@ -2,15 +2,10 @@ import { cn } from '@/lib/utils';
 import BulletList from '@tiptap/extension-bullet-list';
 import Document from '@tiptap/extension-document';
 import Heading from '@tiptap/extension-heading';
-import Image from '@tiptap/extension-image';
 import Link from '@tiptap/extension-link';
 import OrderedList from '@tiptap/extension-ordered-list';
 import Paragraph from '@tiptap/extension-paragraph';
 import Placeholder from '@tiptap/extension-placeholder';
-import Table from '@tiptap/extension-table';
-import TableCell from '@tiptap/extension-table-cell';
-import TableHeader from '@tiptap/extension-table-header';
-import TableRow from '@tiptap/extension-table-row';
 import Text from '@tiptap/extension-text';
 import TextAlign from '@tiptap/extension-text-align';
 import Underline from '@tiptap/extension-underline';
@@ -85,34 +80,34 @@ const RichTextEditor = ({
           class: 'heading',
         },
       }),
-      Image.configure({
-        HTMLAttributes: {
-          class: 'mx-auto max-w-full rounded-md',
-        },
-      }),
+      // Image.configure({
+      //   HTMLAttributes: {
+      //     class: 'mx-auto max-w-full rounded-md',
+      //   },
+      // }),
       Placeholder.configure({
         placeholder,
       }),
-      Table.configure({
-        HTMLAttributes: {
-          class: 'table-auto border-collapse w-full',
-        },
-      }),
-      TableRow.configure({
-        HTMLAttributes: {
-          class: 'border border-gray-300',
-        },
-      }),
-      TableHeader.configure({
-        HTMLAttributes: {
-          class: 'border border-gray-300 bg-gray-100 p-2 font-bold',
-        },
-      }),
-      TableCell.configure({
-        HTMLAttributes: {
-          class: 'border border-gray-300 p-2',
-        },
-      }),
+      // Table.configure({
+      //   HTMLAttributes: {
+      //     class: 'table-auto border-collapse w-full',
+      //   },
+      // }),
+      // TableRow.configure({
+      //   HTMLAttributes: {
+      //     class: 'border border-gray-300',
+      //   },
+      // }),
+      // TableHeader.configure({
+      //   HTMLAttributes: {
+      //     class: 'border border-gray-300 bg-gray-100 p-2 font-bold',
+      //   },
+      // }),
+      // TableCell.configure({
+      //   HTMLAttributes: {
+      //     class: 'border border-gray-300 p-2',
+      //   },
+      // }),
     ],
     content,
     onUpdate,
@@ -120,7 +115,8 @@ const RichTextEditor = ({
       attributes: {
         class: cn(
           'prose max-w-none focus:outline-none',
-          'min-h-[300px] rounded-md border border-input p-3'
+          'min-h-[300px] rounded-md border border-input p-3',
+          'break-words overflow-wrap-anywhere overflow-x-hidden'
         ),
       },
     },
@@ -164,132 +160,132 @@ const RichTextEditor = ({
     [editor]
   );
 
-  const addImage = useCallback(() => {
-    if (!editor) return;
+  // const addImage = useCallback(() => {
+  //   if (!editor) return;
 
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*';
+  //   const input = document.createElement('input');
+  //   input.type = 'file';
+  //   input.accept = 'image/*';
 
-    input.onchange = (event) => {
-      const file = (event.target as HTMLInputElement).files?.[0];
-      if (file) {
-        const url = URL.createObjectURL(file);
-        editor.chain().focus().setImage({ src: url }).run();
-      }
-    };
+  //   input.onchange = (event) => {
+  //     const file = (event.target as HTMLInputElement).files?.[0];
+  //     if (file) {
+  //       const url = URL.createObjectURL(file);
+  //       editor.chain().focus().setImage({ src: url }).run();
+  //     }
+  //   };
 
-    input.click();
-  }, [editor]);
+  //   input.click();
+  // }, [editor]);
 
-  const addTable = useCallback(() => {
-    if (!editor) return;
-    editor
-      .chain()
-      .focus()
-      .insertContent({
-        type: 'table',
-        content: [
-          {
-            type: 'tableRow',
-            content: [
-              {
-                type: 'tableHeader',
-                content: [
-                  {
-                    type: 'paragraph',
-                    content: [{ type: 'text', text: 'Tiêu đề 1' }],
-                  },
-                ],
-              },
-              {
-                type: 'tableHeader',
-                content: [
-                  {
-                    type: 'paragraph',
-                    content: [{ type: 'text', text: 'Tiêu đề 2' }],
-                  },
-                ],
-              },
-              {
-                type: 'tableHeader',
-                content: [
-                  {
-                    type: 'paragraph',
-                    content: [{ type: 'text', text: 'Tiêu đề 3' }],
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            type: 'tableRow',
-            content: [
-              {
-                type: 'tableCell',
-                content: [
-                  {
-                    type: 'paragraph',
-                    content: [{ type: 'text', text: 'Nội dung' }],
-                  },
-                ],
-              },
-              {
-                type: 'tableCell',
-                content: [
-                  {
-                    type: 'paragraph',
-                    content: [{ type: 'text', text: 'Nội dung' }],
-                  },
-                ],
-              },
-              {
-                type: 'tableCell',
-                content: [
-                  {
-                    type: 'paragraph',
-                    content: [{ type: 'text', text: 'Nội dung' }],
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            type: 'tableRow',
-            content: [
-              {
-                type: 'tableCell',
-                content: [
-                  {
-                    type: 'paragraph',
-                    content: [{ type: 'text', text: 'Nội dung' }],
-                  },
-                ],
-              },
-              {
-                type: 'tableCell',
-                content: [
-                  {
-                    type: 'paragraph',
-                    content: [{ type: 'text', text: 'Nội dung' }],
-                  },
-                ],
-              },
-              {
-                type: 'tableCell',
-                content: [
-                  {
-                    type: 'paragraph',
-                    content: [{ type: 'text', text: 'Nội dung' }],
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      })
-      .run();
-  }, [editor]);
+  // const addTable = useCallback(() => {
+  //   if (!editor) return;
+  //   editor
+  //     .chain()
+  //     .focus()
+  //     .insertContent({
+  //       type: 'table',
+  //       content: [
+  //         {
+  //           type: 'tableRow',
+  //           content: [
+  //             {
+  //               type: 'tableHeader',
+  //               content: [
+  //                 {
+  //                   type: 'paragraph',
+  //                   content: [{ type: 'text', text: 'Tiêu đề 1' }],
+  //                 },
+  //               ],
+  //             },
+  //             {
+  //               type: 'tableHeader',
+  //               content: [
+  //                 {
+  //                   type: 'paragraph',
+  //                   content: [{ type: 'text', text: 'Tiêu đề 2' }],
+  //                 },
+  //               ],
+  //             },
+  //             {
+  //               type: 'tableHeader',
+  //               content: [
+  //                 {
+  //                   type: 'paragraph',
+  //                   content: [{ type: 'text', text: 'Tiêu đề 3' }],
+  //                 },
+  //               ],
+  //             },
+  //           ],
+  //         },
+  //         {
+  //           type: 'tableRow',
+  //           content: [
+  //             {
+  //               type: 'tableCell',
+  //               content: [
+  //                 {
+  //                   type: 'paragraph',
+  //                   content: [{ type: 'text', text: 'Nội dung' }],
+  //                 },
+  //               ],
+  //             },
+  //             {
+  //               type: 'tableCell',
+  //               content: [
+  //                 {
+  //                   type: 'paragraph',
+  //                   content: [{ type: 'text', text: 'Nội dung' }],
+  //                 },
+  //               ],
+  //             },
+  //             {
+  //               type: 'tableCell',
+  //               content: [
+  //                 {
+  //                   type: 'paragraph',
+  //                   content: [{ type: 'text', text: 'Nội dung' }],
+  //                 },
+  //               ],
+  //             },
+  //           ],
+  //         },
+  //         {
+  //           type: 'tableRow',
+  //           content: [
+  //             {
+  //               type: 'tableCell',
+  //               content: [
+  //                 {
+  //                   type: 'paragraph',
+  //                   content: [{ type: 'text', text: 'Nội dung' }],
+  //                 },
+  //               ],
+  //             },
+  //             {
+  //               type: 'tableCell',
+  //               content: [
+  //                 {
+  //                   type: 'paragraph',
+  //                   content: [{ type: 'text', text: 'Nội dung' }],
+  //                 },
+  //               ],
+  //             },
+  //             {
+  //               type: 'tableCell',
+  //               content: [
+  //                 {
+  //                   type: 'paragraph',
+  //                   content: [{ type: 'text', text: 'Nội dung' }],
+  //                 },
+  //               ],
+  //             },
+  //           ],
+  //         },
+  //       ],
+  //     })
+  //     .run();
+  // }, [editor]);
 
   if (!editor) {
     return null;
@@ -306,13 +302,13 @@ const RichTextEditor = ({
       <RichTextToolbar
         editor={editor}
         onAddLink={addLink}
-        onAddImage={addImage}
-        onAddTable={addTable}
+        // onAddImage={addImage}
+        // onAddTable={addTable}
       />
 
       <EditorContent
         editor={editor}
-        className='prose max-w-none overflow-hidden'
+        className={cn('prose max-w-none overflow-hidden', 'max-w-full')}
         disabled={isPending}
       />
 
@@ -325,5 +321,4 @@ const RichTextEditor = ({
     </div>
   );
 };
-
 export default RichTextEditor;

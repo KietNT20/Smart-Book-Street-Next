@@ -1,6 +1,7 @@
 import { REGEX } from '@/constant/regex';
 import { Gender } from '@/enums/gender';
 import { StoreRent } from '@/enums/store-rent';
+import dayjs from 'dayjs';
 import * as z from 'zod';
 
 // Login form
@@ -257,16 +258,14 @@ export const eventFormSchema = z.object({
   eventName: z.string().min(1, { message: 'Tên sự kiện không được để trống' }),
   startDate: z
     .string()
-    .date()
-    .nonempty({
-      message: 'Ngày bắt đầu là bắt buộc',
+    .refine((val) => dayjs(val, 'YYYY-MM-DD HH:mm', true).isValid(), {
+      message: 'Ngày giờ bắt đầu không hợp lệ',
     })
     .nullable(),
   endDate: z
     .string()
-    .date()
-    .nonempty({
-      message: 'Ngày kết thúc là bắt buộc',
+    .refine((val) => dayjs(val, 'YYYY-MM-DD HH:mm', true).isValid(), {
+      message: 'Ngày giờ kết thúc không hợp lệ',
     })
     .nullable(),
   description: z.string().optional(),

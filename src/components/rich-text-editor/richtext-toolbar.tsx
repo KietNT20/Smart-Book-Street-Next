@@ -12,13 +12,11 @@ import {
   AlignLeft,
   AlignRight,
   Bold,
-  Image as ImageIcon,
   Italic,
   Link as LinkIcon,
   List,
   ListOrdered,
   Redo,
-  Table as TableIcon,
   Underline as UnderlineIcon,
   Undo,
 } from 'lucide-react';
@@ -26,16 +24,11 @@ import {
 interface RichTextToolbarProps {
   editor: Editor;
   onAddLink: () => void;
-  onAddImage: () => void;
-  onAddTable: () => void;
+  // onAddImage: () => void;
+  // onAddTable: () => void;
 }
 
-const RichTextToolbar = ({
-  editor,
-  onAddLink,
-  onAddImage,
-  onAddTable,
-}: RichTextToolbarProps) => {
+const RichTextToolbar = ({ editor, onAddLink }: RichTextToolbarProps) => {
   return (
     <div className='flex flex-wrap gap-1 rounded-md border border-input bg-background p-1'>
       {/* Dropdown chọn heading */}
@@ -142,7 +135,7 @@ const RichTextToolbar = ({
       >
         <LinkIcon className='h-4 w-4' />
       </Button>
-      <Button
+      {/* <Button
         variant='ghost'
         size='sm'
         onClick={onAddImage}
@@ -150,8 +143,8 @@ const RichTextToolbar = ({
         title='Thêm hình ảnh'
       >
         <ImageIcon className='h-4 w-4' />
-      </Button>
-      <Button
+      </Button> */}
+      {/* <Button
         variant='ghost'
         size='sm'
         onClick={onAddTable}
@@ -159,7 +152,7 @@ const RichTextToolbar = ({
         title='Thêm bảng'
       >
         <TableIcon className='h-4 w-4' />
-      </Button>
+      </Button> */}
 
       {/* Căn chỉnh văn bản */}
       <Button
