@@ -48,6 +48,8 @@ export enum PATH {
   STORE_HOURS = '/store/hours',
   STORE_HOURS_EDIT = '/store/hours/edit',
 
+  ORDERS = '/orders',
+
   PROFILE = '/profile',
   PROFILE_EDIT = '/profile/edit',
   CHANGE_PASSWORD = '/profile/change-password',

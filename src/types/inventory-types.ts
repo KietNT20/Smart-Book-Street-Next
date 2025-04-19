@@ -18,6 +18,7 @@ export interface InventoryItemCreate {
 }
 
 export interface Inventory extends BaseEntity {
+  id: string;
   entityId: string;
   storeId: string;
   quantity: number;
@@ -30,3 +31,16 @@ export interface Inventory extends BaseEntity {
 
 export type InventoriesResponse = ApiListResponse<Inventory>;
 export type InventoryResponse = ApiResponse<Inventory>;
+
+export interface InventoryCreate {
+  entityId: string;
+  storeId: string;
+  quantity: number;
+  isInStock: boolean;
+}
+
+export type InventoryScan = {
+  isbn: string;
+  storeId: string;
+  quantity: number;
+};

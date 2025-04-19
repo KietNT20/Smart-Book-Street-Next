@@ -59,6 +59,10 @@ export const API_URL = {
   },
   INVENTORIES: {
     INDEX: `${INVENTORY}`,
+    PAGINATIOHN_SEARCH: `${INVENTORY}/search/paginated`,
+    BY_BOOK: `${INVENTORY}/book`,
+    BY_STORE: `${INVENTORY}/store`,
+    SCAN: `${INVENTORY}/scan`,
   },
   PUBLISHERS: {
     INDEX: `${PUBLISHER}`,

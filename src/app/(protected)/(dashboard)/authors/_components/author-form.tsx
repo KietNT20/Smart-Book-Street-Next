@@ -1,7 +1,6 @@
 'use client';
 
 import SubmitBtn from '@/components/button/submit-btn';
-import RichTextEditor from '@/components/rich-text-editor';
 import LoadingSpinner from '@/components/spin/loading-spinner';
 import { Button } from '@/components/ui/button';
 import {
@@ -13,6 +12,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { PATH } from '@/enums/path';
 import { useAuthorMutation, useGetAuthorById } from '@/hooks/use-author';
 import { cn } from '@/lib/utils';
@@ -21,10 +21,13 @@ import { Author } from '@/types/author-types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { DatePicker } from 'antd';
 import dayjs from 'dayjs';
+import 'dayjs/locale/vi';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+
+dayjs.locale('vi');
 
 type AuthorData = {
   result: Author;
@@ -150,7 +153,7 @@ export function AuthorForm({ authorId }: Props) {
                     }}
                     placeholder='Chọn ngày sinh'
                     className={cn(
-                      'w-full px-3 py-2',
+                      'h-10 w-full px-3 py-2',
                       form.formState.errors.dob && 'border-red-500'
                     )}
                     onBlur={field.onBlur}
@@ -216,9 +219,12 @@ export function AuthorForm({ authorId }: Props) {
             <FormItem>
               <FormLabel>Tiểu sử</FormLabel>
               <FormControl>
-                <RichTextEditor
-                  content={field.value || ''}
-                  placeholder='Nhập mô tả chi tiết về sách...'
+                <Textarea
+                  placeholder='Nhập tiểu sử tác giả'
+                  className={cn(
+                    'min-h-60',
+                    form.formState.errors.biography && 'border-red-500'
+                  )}
                   {...field}
                 />
               </FormControl>

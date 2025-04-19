@@ -1,5 +1,6 @@
 import { cn } from '@/lib/utils';
 import BulletList from '@tiptap/extension-bullet-list';
+import Color from '@tiptap/extension-color';
 import Document from '@tiptap/extension-document';
 import Heading from '@tiptap/extension-heading';
 import Link from '@tiptap/extension-link';
@@ -8,6 +9,7 @@ import Paragraph from '@tiptap/extension-paragraph';
 import Placeholder from '@tiptap/extension-placeholder';
 import Text from '@tiptap/extension-text';
 import TextAlign from '@tiptap/extension-text-align';
+import TextStyle from '@tiptap/extension-text-style';
 import Underline from '@tiptap/extension-underline';
 import { Editor, EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
@@ -54,6 +56,10 @@ const RichTextEditor = ({
       Document,
       Paragraph,
       Text,
+      TextStyle,
+      Color.configure({
+        types: ['textStyle'],
+      }),
       BulletList.configure({
         HTMLAttributes: {
           class: 'bullet-list',
@@ -76,38 +82,10 @@ const RichTextEditor = ({
       }),
       Heading.configure({
         levels: [1, 2, 3, 4, 5, 6],
-        HTMLAttributes: {
-          class: 'heading',
-        },
       }),
-      // Image.configure({
-      //   HTMLAttributes: {
-      //     class: 'mx-auto max-w-full rounded-md',
-      //   },
-      // }),
       Placeholder.configure({
         placeholder,
       }),
-      // Table.configure({
-      //   HTMLAttributes: {
-      //     class: 'table-auto border-collapse w-full',
-      //   },
-      // }),
-      // TableRow.configure({
-      //   HTMLAttributes: {
-      //     class: 'border border-gray-300',
-      //   },
-      // }),
-      // TableHeader.configure({
-      //   HTMLAttributes: {
-      //     class: 'border border-gray-300 bg-gray-100 p-2 font-bold',
-      //   },
-      // }),
-      // TableCell.configure({
-      //   HTMLAttributes: {
-      //     class: 'border border-gray-300 p-2',
-      //   },
-      // }),
     ],
     content,
     onUpdate,
@@ -160,133 +138,6 @@ const RichTextEditor = ({
     [editor]
   );
 
-  // const addImage = useCallback(() => {
-  //   if (!editor) return;
-
-  //   const input = document.createElement('input');
-  //   input.type = 'file';
-  //   input.accept = 'image/*';
-
-  //   input.onchange = (event) => {
-  //     const file = (event.target as HTMLInputElement).files?.[0];
-  //     if (file) {
-  //       const url = URL.createObjectURL(file);
-  //       editor.chain().focus().setImage({ src: url }).run();
-  //     }
-  //   };
-
-  //   input.click();
-  // }, [editor]);
-
-  // const addTable = useCallback(() => {
-  //   if (!editor) return;
-  //   editor
-  //     .chain()
-  //     .focus()
-  //     .insertContent({
-  //       type: 'table',
-  //       content: [
-  //         {
-  //           type: 'tableRow',
-  //           content: [
-  //             {
-  //               type: 'tableHeader',
-  //               content: [
-  //                 {
-  //                   type: 'paragraph',
-  //                   content: [{ type: 'text', text: 'Tiêu đề 1' }],
-  //                 },
-  //               ],
-  //             },
-  //             {
-  //               type: 'tableHeader',
-  //               content: [
-  //                 {
-  //                   type: 'paragraph',
-  //                   content: [{ type: 'text', text: 'Tiêu đề 2' }],
-  //                 },
-  //               ],
-  //             },
-  //             {
-  //               type: 'tableHeader',
-  //               content: [
-  //                 {
-  //                   type: 'paragraph',
-  //                   content: [{ type: 'text', text: 'Tiêu đề 3' }],
-  //                 },
-  //               ],
-  //             },
-  //           ],
-  //         },
-  //         {
-  //           type: 'tableRow',
-  //           content: [
-  //             {
-  //               type: 'tableCell',
-  //               content: [
-  //                 {
-  //                   type: 'paragraph',
-  //                   content: [{ type: 'text', text: 'Nội dung' }],
-  //                 },
-  //               ],
-  //             },
-  //             {
-  //               type: 'tableCell',
-  //               content: [
-  //                 {
-  //                   type: 'paragraph',
-  //                   content: [{ type: 'text', text: 'Nội dung' }],
-  //                 },
-  //               ],
-  //             },
-  //             {
-  //               type: 'tableCell',
-  //               content: [
-  //                 {
-  //                   type: 'paragraph',
-  //                   content: [{ type: 'text', text: 'Nội dung' }],
-  //                 },
-  //               ],
-  //             },
-  //           ],
-  //         },
-  //         {
-  //           type: 'tableRow',
-  //           content: [
-  //             {
-  //               type: 'tableCell',
-  //               content: [
-  //                 {
-  //                   type: 'paragraph',
-  //                   content: [{ type: 'text', text: 'Nội dung' }],
-  //                 },
-  //               ],
-  //             },
-  //             {
-  //               type: 'tableCell',
-  //               content: [
-  //                 {
-  //                   type: 'paragraph',
-  //                   content: [{ type: 'text', text: 'Nội dung' }],
-  //                 },
-  //               ],
-  //             },
-  //             {
-  //               type: 'tableCell',
-  //               content: [
-  //                 {
-  //                   type: 'paragraph',
-  //                   content: [{ type: 'text', text: 'Nội dung' }],
-  //                 },
-  //               ],
-  //             },
-  //           ],
-  //         },
-  //       ],
-  //     })
-  //     .run();
-  // }, [editor]);
-
   if (!editor) {
     return null;
   }
@@ -299,12 +150,7 @@ const RichTextEditor = ({
     <div className={cn('space-y-2', className)}>
       <style>{customStyles}</style>
 
-      <RichTextToolbar
-        editor={editor}
-        onAddLink={addLink}
-        // onAddImage={addImage}
-        // onAddTable={addTable}
-      />
+      <RichTextToolbar editor={editor} onAddLink={addLink} />
 
       <EditorContent
         editor={editor}
@@ -321,4 +167,5 @@ const RichTextEditor = ({
     </div>
   );
 };
+
 export default RichTextEditor;

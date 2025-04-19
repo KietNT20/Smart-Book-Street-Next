@@ -102,7 +102,7 @@ const BookPublicationDate = ({ control, disabled = false }: Props) => {
                         : 'Chọn ngày xuất bản'
                   }
                   className={cn(
-                    'w-full px-3 py-2',
+                    'h-10 w-full px-3 py-2',
                     fieldState.error && 'border-red-500'
                   )}
                   onBlur={field.onBlur}

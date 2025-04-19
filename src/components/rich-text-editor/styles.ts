@@ -65,3 +65,15 @@ export const customStyles = `
     outline: none;
   }
 `;
+
+export const COLOR_PRESETS = [
+  '#09090b',
+  '#dc2626',
+  '#22c55e',
+  '#1d4ed8',
+  '#facc15',
+  '#c026d3',
+  '#38bdf8',
+  '#f97316',
+  '#6b7280',
+];

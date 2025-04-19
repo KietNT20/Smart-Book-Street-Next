@@ -24,7 +24,7 @@ const AuthorsPage = () => {
     pageNumber: 1,
     pageSize: 10,
     sortOrder: Sort.DESC,
-    sortField: 'LastUpdateDate',
+    sortField: '',
     result: {
       authorName: '',
     },

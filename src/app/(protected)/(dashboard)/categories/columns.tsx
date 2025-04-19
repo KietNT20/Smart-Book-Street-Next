@@ -37,6 +37,14 @@ export const columns = ({
   onDelete: (id: string) => void;
 }): ColumnDef<CategoryCol>[] => [
   {
+    accessorKey: 'no',
+    header: 'No.',
+    cell: ({ row }) => {
+      const index = row.index + 1;
+      return <p className='text-muted-foreground'>{index}</p>;
+    },
+  },
+  {
     accessorKey: 'categoryName',
     header: ({ column }) => {
       const sorted = column.getIsSorted();

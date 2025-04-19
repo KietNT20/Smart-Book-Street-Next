@@ -7,6 +7,14 @@ import AuthorMenuAction from './_components/author-menu-action';
 
 export const columns: ColumnDef<Author>[] = [
   {
+    accessorKey: 'no',
+    header: 'No.',
+    cell: ({ row }) => {
+      const index = row.index + 1;
+      return <p className='text-muted-foreground'>{index}</p>;
+    },
+  },
+  {
     accessorKey: 'authorName',
     header: 'Tên tác giả',
   },

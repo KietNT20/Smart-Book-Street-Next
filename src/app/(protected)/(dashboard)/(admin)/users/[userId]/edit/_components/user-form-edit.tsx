@@ -9,7 +9,7 @@ const UserFormEdit = () => {
   const userId = params.userId as string;
   const { user } = useUserById(userId);
   return (
-    <div className='container mx-auto md:px-32 md:py-10'>
+    <div className='container mx-auto md:px-20 md:py-4'>
       <div>{user && <UserForm userToEdit={user} />}</div>
     </div>
   );

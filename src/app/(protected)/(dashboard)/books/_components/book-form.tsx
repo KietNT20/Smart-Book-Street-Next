@@ -17,6 +17,8 @@ import { cn } from '@/lib/utils';
 import { BookFormValues, bookSchema } from '@/lib/zod';
 import { Book } from '@/types/book-types';
 import { zodResolver } from '@hookform/resolvers/zod';
+import dayjs from 'dayjs';
+import 'dayjs/locale/vi';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import AuthorCombobox from '../../_components/author-combobox';
@@ -26,6 +28,8 @@ import { prepareInitialBookData } from '../_lib/book-form-helpers';
 import { useBookFormSubmit } from '../_lib/use-book-form-submit';
 import BookPublicationDate from './book-publication-date';
 import BookSelectLang from './book-select-lang';
+
+dayjs.locale('vi');
 
 type Props = {
   book?: Book;
@@ -78,14 +82,14 @@ const BookForm = ({ book, onCancel }: Props) => {
         className='space-y-4'
       >
         <div className='grid grid-cols-2 gap-4'>
-          {/* Mã sách */}
+          {/* ISPN */}
           <FormField
             control={form.control}
             name='isbn'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  Mã sách <span className='text-red-400'>*</span>
+                  ISBN <span className='text-red-400'>*</span>
                 </FormLabel>
                 <FormControl>
                   <Input
