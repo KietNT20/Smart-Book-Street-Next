@@ -34,7 +34,7 @@ export const createColumns = ({
         onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         className='flex items-center'
       >
-        ISPN
+        ISBN
         {column.getIsSorted() === 'asc' ? (
           <SortAsc className='ml-1 h-4 w-4 text-blue-500' />
         ) : column.getIsSorted() === 'desc' ? (

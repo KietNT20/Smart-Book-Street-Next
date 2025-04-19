@@ -89,7 +89,7 @@ const BookForm = ({ book, onCancel }: Props) => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  ISPN <span className='text-red-400'>*</span>
+                  ISBN <span className='text-red-400'>*</span>
                 </FormLabel>
                 <FormControl>
                   <Input
