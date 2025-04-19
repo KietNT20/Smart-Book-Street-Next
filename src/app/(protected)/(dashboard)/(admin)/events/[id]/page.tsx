@@ -1,5 +1,6 @@
 'use client';
 
+import BackButton from '@/components/back-btn/back-button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -13,12 +14,14 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ImageFallback } from '@/constant/storage';
+import { PATH } from '@/enums/path';
 import useDebounce from '@/hooks/use-debounce';
 import { useGetEventById } from '@/hooks/use-event';
 import { Image } from 'antd';
 import dayjs from 'dayjs';
 import 'dayjs/locale/vi';
 import { BarChart4, Calendar, Clock, MapPin, Video } from 'lucide-react';
+import Link from 'next/link';
 
 // Set locale cho dayjs
 dayjs.locale('vi');
@@ -82,6 +85,12 @@ export default function EventDetailPage({
 
   return (
     <div className='min-h-screen bg-background pb-16'>
+      <div className='flex items-center justify-between'>
+        <BackButton />
+        <Link href={`${PATH.EVENTS}/${params.id}/edit`}>
+          <Button variant={'darker'}>Chỉnh sửa</Button>
+        </Link>
+      </div>
       {/* Hero Section */}
       <div className='relative h-96 w-full overflow-hidden'>
         <div className='absolute inset-0 z-10 bg-black/50'></div>

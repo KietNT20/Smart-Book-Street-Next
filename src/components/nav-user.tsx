@@ -18,7 +18,6 @@ import {
 } from '@/components/ui/sidebar';
 import { STORAGE } from '@/constant/storage';
 import { useAuth } from '@/hooks/use-auth';
-import { useAppSelector } from '@/lib/hooks';
 import {
   BadgeCheck,
   Bell,
@@ -31,8 +30,7 @@ import {
 
 export function NavUser() {
   const { isMobile } = useSidebar();
-  const { profile } = useAppSelector((state) => state.user);
-  const { handleLogout } = useAuth();
+  const { handleLogout, profile } = useAuth();
 
   const _onLogout = (): void => {
     handleLogout();

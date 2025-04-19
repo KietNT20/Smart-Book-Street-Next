@@ -1,17 +1,12 @@
 import { PATH } from '@/enums/path';
 import { RoleEnums } from '@/enums/role';
-import {
-  clearUserProfile,
-  hasUserRole,
-  setUserProfile,
-} from '@/lib/features/user/userSlice';
-import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { userService } from '@/services/userService';
 import { RegisterRequestBody } from '@/types/auth-types';
+import { User } from '@/types/user-types';
 import tokenMethod from '@/utils/token';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { toast } from 'sonner';
 
 export const useRegister = () => {
@@ -37,18 +32,10 @@ export const useRegister = () => {
 };
 
 export const useAuth = () => {
-  const dispatch = useAppDispatch();
-  const profile = useAppSelector((state) => state.user.profile);
-  const isAuthenticated = useAppSelector((state) => state.user.isAuthenticated);
   const queryClient = useQueryClient();
   const router = useRouter();
 
-  const {
-    data: response,
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
+  const { data: response, isLoading } = useQuery({
     queryKey: ['user-profile'],
     queryFn: () => userService.getProfile(),
     staleTime: 0,
@@ -56,37 +43,49 @@ export const useAuth = () => {
     enabled: !!tokenMethod.get()?.accessToken,
   });
 
-  if (response?.result) {
-    dispatch(setUserProfile(response.result));
-  }
-
-  useEffect(() => {
-    if (isError && error) {
-      console.error('Error fetching profile:', error);
-      dispatch(clearUserProfile());
-    }
-  }, [isError, error, dispatch]);
-
   const hasRole = useCallback(
     (roles?: RoleEnums | RoleEnums[]): boolean => {
-      return hasUserRole(profile, roles);
+      return hasUserRole(response?.result, roles);
     },
-    [profile]
+    [response]
   );
 
   const handleLogout = () => {
     tokenMethod.remove();
-    dispatch(clearUserProfile());
     queryClient.clear();
     router.replace(PATH.LOGIN);
   };
 
   return {
-    user: profile,
-    profile,
+    user: response?.result,
+    profile: response?.result,
     isLoading,
-    isAuthenticated,
     hasRole,
     handleLogout,
   };
+};
+
+export const hasUserRole = (
+  profile?: User,
+  roles?: RoleEnums | RoleEnums[]
+): boolean => {
+  // If no roles are provided, allow access
+  if (!roles) return true;
+
+  // If user is not authenticated, deny access
+  if (!profile || !profile.userRoles || profile.userRoles.length === 0) {
+    return false;
+  }
+
+  // Get the role names of the user
+  const userRoleNames = profile.userRoles
+    .filter((userRole) => userRole.role)
+    .map((userRole) => userRole.role!.roleName);
+
+  // Check if the user has any of the required roles
+  if (Array.isArray(roles)) {
+    return roles.some((role) => userRoleNames.includes(role));
+  }
+
+  return userRoleNames.includes(roles);
 };

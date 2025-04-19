@@ -1,11 +1,14 @@
 'use client';
 
 import BackButton from '@/components/back-btn/back-button';
+import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ImageFallback } from '@/constant/storage';
+import { PATH } from '@/enums/path';
 import useDebounce from '@/hooks/use-debounce';
 import { usePublisherById } from '@/hooks/use-publisher';
 import { Image } from 'antd';
+import Link from 'next/link';
 import { LoadingSkeleton } from './_components/loading-skeleton';
 import PublisherInfo from './_components/publisher-info';
 
@@ -41,7 +44,12 @@ export default function PublisherDetailPage({
 
   return (
     <div className='container mx-auto p-4'>
-      <BackButton />
+      <div className='flex items-center justify-between'>
+        <BackButton />
+        <Link href={`${PATH.PUBLISHERS}/${params.id}/edit`}>
+          <Button variant={'darker'}>Chỉnh sửa</Button>
+        </Link>
+      </div>
       <h1 className='my-4 text-2xl font-bold'>Thông tin nhà xuất bản</h1>
       {/* Header Section */}
       <div className='mb-8 flex flex-col gap-6 md:flex-row'>
