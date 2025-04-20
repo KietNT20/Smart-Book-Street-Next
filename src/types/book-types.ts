@@ -50,8 +50,8 @@ export type GetAllBooksResponse = {
   message: string;
 };
 
-export type BooksResponse = ApiListResponse<Book>;
-export type BookResponse = ApiResponse<Book>;
+export type BooksResponse = ApiListResponse<Book & { id: string }>;
+export type BookResponse = ApiResponse<Book & { id: string }>;
 
 export type BookSearchCriteria = {
   isbn?: string;

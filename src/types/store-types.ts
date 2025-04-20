@@ -1,5 +1,5 @@
 import { Sort } from '@/enums/enums';
-import { BaseEntity } from './common-types';
+import { ApiListResponse, ApiResponse, BaseEntity } from './common-types';
 import { ImageType } from './image-types';
 import { Trend } from './person-types';
 import { Zone } from './zone-types';
@@ -36,21 +36,8 @@ export interface StoreParams {
   };
 }
 
-export interface StoresResponse {
-  results: StoreData[];
-  totalPages: number;
-  totalRecords: number;
-  pageNumber: number;
-  pageSize: number;
-  isSuccess: boolean;
-  message: string;
-}
-
-export interface StoreResponse {
-  result: StoreData;
-  isSuccess: boolean;
-  message: string;
-}
+export type StoresResponse = ApiListResponse<StoreData & { id: string }>;
+export type StoreResponse = ApiResponse<StoreData & { id: string }>;
 
 export interface StoreSearchCriteria {
   storeName: string;
@@ -59,6 +46,7 @@ export interface StoreSearchCriteria {
   email: string;
   storeTheme: string;
   type: string;
+  zoneId?: string;
 }
 
 export interface StoreStatictisTotal {

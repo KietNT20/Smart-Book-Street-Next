@@ -15,8 +15,8 @@ export interface Publisher extends BaseEntity {
   managerId?: string;
 }
 
-export type PublishersResponse = ApiListResponse<Publisher>;
-export type PublisherResponse = ApiResponse<Publisher>;
+export type PublishersResponse = ApiListResponse<Publisher & { id: string }>;
+export type PublisherResponse = ApiResponse<Publisher & { id: string }>;
 
 export type PublisherSearch = {
   publisherName: string;

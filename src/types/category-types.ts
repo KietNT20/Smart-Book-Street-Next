@@ -23,5 +23,5 @@ export type CategorySearchPagination = {
   };
 };
 
-export type CategoriesResponse = ApiListResponse<Category>;
-export type CategoryResponse = ApiResponse<Category>;
+export type CategoriesResponse = ApiListResponse<Category & { id: string }>;
+export type CategoryResponse = ApiResponse<Category & { id: string }>;

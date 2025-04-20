@@ -49,5 +49,5 @@ export type BookAuthorPaginated = {
   bookId: string;
 };
 
-export type AuthorsResponse = ApiListResponse<Author>;
-export type AuthorResponse = ApiResponse<Author>;
+export type AuthorsResponse = ApiListResponse<Author & { id: string }>;
+export type AuthorResponse = ApiResponse<Author & { id: string }>;

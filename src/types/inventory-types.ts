@@ -29,8 +29,8 @@ export interface Inventory extends BaseEntity {
   images: ImageType[];
 }
 
-export type InventoriesResponse = ApiListResponse<Inventory>;
-export type InventoryResponse = ApiResponse<Inventory>;
+export type InventoriesResponse = ApiListResponse<Inventory & { id: string }>;
+export type InventoryResponse = ApiResponse<Inventory & { id: string }>;
 
 export interface InventoryCreate {
   entityId: string;
