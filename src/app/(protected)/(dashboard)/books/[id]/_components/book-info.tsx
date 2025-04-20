@@ -1,25 +1,12 @@
 import { formateDateVi, formatPrice } from '@/lib/utils';
-import { Author } from '@/types/author-types';
 import { Book } from '@/types/book-types';
-
-interface BookAuthorDataTypes {
-  result: Author;
-}
-
-interface BookCategoryDataTypes {
-  result: {
-    categoryName: string;
-    description: string;
-  };
-}
+import DOMPurify from 'dompurify';
 
 type Props = {
   book: Book;
-  bookAuthorsRes: { data: BookAuthorDataTypes[] };
-  bookCategoriesRes: { data: BookCategoryDataTypes[] };
 };
 
-const BookInfo = ({ book, bookAuthorsRes, bookCategoriesRes }: Props) => {
+const BookInfo = ({ book }: Props) => {
   return (
     <div>
       <div className='mb-4 space-y-2'>
@@ -33,17 +20,13 @@ const BookInfo = ({ book, bookAuthorsRes, bookCategoriesRes }: Props) => {
         <p className='flex items-center gap-2 font-medium'>
           Tác giả:{' '}
           <span className='font-semibold'>
-            {bookAuthorsRes.data
-              ?.map((author) => author?.result?.authorName)
-              .join(', ')}
+            {book?.bookAuthors?.map((author) => author?.authorName).join(', ')}
           </span>
         </p>{' '}
         <p className='flex items-center gap-2 font-medium'>
           Danh mục:{' '}
           <span className='font-semibold'>
-            {bookCategoriesRes.data
-              ?.map((cate) => cate?.result?.categoryName)
-              .join(', ')}
+            {book?.bookCategories?.map((cate) => cate?.categoryName).join(', ')}
           </span>
         </p>{' '}
         <p className='flex items-center gap-2 font-medium'>
@@ -70,7 +53,9 @@ const BookInfo = ({ book, bookAuthorsRes, bookCategoriesRes }: Props) => {
           {book?.description ? (
             <div
               className='prose prose-sm mt-2 max-w-none'
-              dangerouslySetInnerHTML={{ __html: book.description }}
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(book.description),
+              }}
             />
           ) : (
             <p>Không có mô tả cho cuốn sách này</p>

@@ -20,6 +20,7 @@ import { useGetEventById } from '@/hooks/use-event';
 import { Image } from 'antd';
 import dayjs from 'dayjs';
 import 'dayjs/locale/vi';
+import DOMPurify from 'dompurify';
 import { BarChart4, Calendar, Clock, MapPin, Video } from 'lucide-react';
 import Link from 'next/link';
 
@@ -138,7 +139,9 @@ export default function EventDetailPage({
               </CardHeader>
               <CardContent>
                 <div
-                  dangerouslySetInnerHTML={{ __html: eventData.description }}
+                  dangerouslySetInnerHTML={{
+                    __html: DOMPurify.sanitize(eventData.description),
+                  }}
                 />
               </CardContent>
             </Card>
