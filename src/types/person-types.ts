@@ -73,3 +73,10 @@ export interface ChartDatum {
   value: number;
   time: string;
 }
+
+export interface PersonChartDateHours {
+  hour: string;
+  male: number;
+  female: number;
+  total: number;
+}

@@ -12,15 +12,12 @@ import { Camera, Keyboard, XCircle } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { toast } from 'sonner';
 
-interface ISBNInputScannerProps {
+interface Props {
   storeId: string;
   onSubmit: (data: { isbn: string; storeId: string; quantity: number }) => void;
 }
 
-export const ISBNInputScanner = ({
-  storeId,
-  onSubmit,
-}: ISBNInputScannerProps) => {
+export const ISBNInputScanner = ({ storeId, onSubmit }: Props) => {
   const [isScanning, setIsScanning] = useState(false);
   const [showQuantityDialog, setShowQuantityDialog] = useState(false);
   const [scannedISBN, setScannedISBN] = useState('');

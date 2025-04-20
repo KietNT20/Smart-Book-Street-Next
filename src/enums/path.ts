@@ -52,9 +52,8 @@ export enum PATH {
   SOUVENIRS = '/souvenirs',
   SOUVENIR_CREATE = '/souvenirs/create',
 
-  PROFILE = '/profile',
-  PROFILE_EDIT = '/profile/edit',
-  CHANGE_PASSWORD = '/profile/change-password',
+  ACCOUNT = '/account',
+  CHANGE_PASSWORD = '/account/change-password',
 
   SETTINGS = '/settings',
   NOTIFICATIONS = '/notifications',

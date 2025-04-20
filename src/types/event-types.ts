@@ -1,5 +1,6 @@
 import { ApiListResponse, ApiResponse, PaginationSchema } from './common-types';
 import { ImageType } from './image-types';
+import { Trend } from './person-types';
 import { Zone } from './zone-types';
 
 export interface Event {
@@ -43,3 +44,10 @@ export interface EventSearchCriteria {
 export type EventParams = PaginationSchema<EventSearchCriteria>;
 export type EventsResponse = ApiListResponse<Event>;
 export type EventDetailResponse = ApiResponse<Event>;
+
+export interface EventStaticsInMonth {
+  success: boolean;
+  total: number;
+  change: number;
+  direction: Trend;
+}

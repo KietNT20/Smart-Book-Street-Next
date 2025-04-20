@@ -1,13 +1,52 @@
 import { PATH } from '@/enums/path';
 import { RoleEnums } from '@/enums/role';
 import { userService } from '@/services/userService';
-import { RegisterRequestBody } from '@/types/auth-types';
+import { LoginCredentials, RegisterRequestBody } from '@/types/auth-types';
 import { User } from '@/types/user-types';
 import tokenMethod from '@/utils/token';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
 import { toast } from 'sonner';
+
+export const useLogin = () => {
+  const router = useRouter();
+  return useMutation({
+    mutationKey: ['login'],
+    mutationFn: (payload: LoginCredentials) => userService.login(payload),
+    onSuccess: (data) => {
+      if (data.token) {
+        tokenMethod.set({
+          accessToken: data.token,
+        });
+      }
+      if (data.result.userRoles) {
+        const hasAdminRole = data.result.userRoles.some(
+          (role) => role.role?.roleName === RoleEnums.ADMIN
+        );
+        const hasPublisherManagerRole = data.result.userRoles.some(
+          (role) => role.role?.roleName === RoleEnums.PUBLISHER
+        );
+        if (hasAdminRole) {
+          router.push(PATH.DASHBOARD);
+        } else if (hasPublisherManagerRole) {
+          router.push(PATH.BOOKS);
+        } else {
+          router.push(PATH.STORE_OWNER_DASHBOARD);
+        }
+        toast.success('Đăng nhập thành công', {
+          id: 'login-success',
+          description: 'Vui lòng chờ trong giây lát',
+        });
+      }
+    },
+    onError: (error: AxiosError<{ message?: string }>) => {
+      console.log('Error login', error);
+      toast.error(`Đăng nhập thất bại, ${error.response?.data.message}`);
+    },
+  });
+};
 
 export const useRegister = () => {
   const router = useRouter();
@@ -35,7 +74,11 @@ export const useAuth = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
 
-  const { data: response, isLoading } = useQuery({
+  const {
+    data: response,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ['user-profile'],
     queryFn: () => userService.getProfile(),
     staleTime: 0,
@@ -60,6 +103,7 @@ export const useAuth = () => {
     user: response?.result,
     profile: response?.result,
     isLoading,
+    error,
     hasRole,
     handleLogout,
   };

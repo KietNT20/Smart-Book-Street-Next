@@ -1,6 +1,7 @@
 import { Sort } from '@/enums/enums';
 import { BaseEntity } from './common-types';
 import { ImageType } from './image-types';
+import { Trend } from './person-types';
 import { Zone } from './zone-types';
 
 export interface StoreData extends BaseEntity {
@@ -58,4 +59,11 @@ export interface StoreSearchCriteria {
   email: string;
   storeTheme: string;
   type: string;
+}
+
+export interface StoreStatictisTotal {
+  success: boolean;
+  total: number;
+  currentMonthPercentChange: number;
+  changeDirection: Trend;
 }

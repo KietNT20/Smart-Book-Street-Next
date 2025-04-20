@@ -18,6 +18,7 @@ import useDebounce from '@/hooks/use-debounce';
 import { useZoneMutation } from '@/hooks/use-zone';
 import { zoneFormSchema, ZoneFormSchema } from '@/lib/zod';
 import { Zone } from '@/types/zone-types';
+import { getLocalStorageItem } from '@/utils/token';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import AddressZone from './address-zone';
@@ -27,7 +28,7 @@ type Props = {
 };
 
 const ZoneForm = ({ zoneToEdit }: Props) => {
-  const streetId = localStorage.getItem(STORAGE.SELECTED_STREET_KEY);
+  const streetId = getLocalStorageItem(STORAGE.SELECTED_STREET_KEY);
   const form = useForm<ZoneFormSchema>({
     resolver: zodResolver(zoneFormSchema),
     defaultValues: {

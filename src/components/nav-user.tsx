@@ -17,7 +17,9 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import { STORAGE } from '@/constant/storage';
+import { PATH } from '@/enums/path';
 import { useAuth } from '@/hooks/use-auth';
+import { removeLocalStorageItem } from '@/utils/token';
 import {
   BadgeCheck,
   Bell,
@@ -27,6 +29,7 @@ import {
   Settings,
   Sparkles,
 } from 'lucide-react';
+import Link from 'next/link';
 
 export function NavUser() {
   const { isMobile } = useSidebar();
@@ -34,8 +37,8 @@ export function NavUser() {
 
   const _onLogout = (): void => {
     handleLogout();
-    localStorage.removeItem(STORAGE.SELECTED_STREET_KEY);
-    localStorage.removeItem(STORAGE.SELECTED_STORE_KEY);
+    removeLocalStorageItem(STORAGE.SELECTED_STREET_KEY);
+    removeLocalStorageItem(STORAGE.SELECTED_STORE_KEY);
   };
 
   return (
@@ -98,21 +101,23 @@ export function NavUser() {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheck />
-                Account
+              <DropdownMenuItem asChild>
+                <Link href={PATH.ACCOUNT}>
+                  <BadgeCheck />
+                  Tài khoản
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <CreditCard />
-                Billing
+                Thanh toán
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Bell />
-                Notifications
+                Thông báo
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Settings />
-                Setting
+                Cài đặt
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />

@@ -4,6 +4,7 @@ import {
   EventParams,
   EventsInMonth,
   EventsResponse,
+  EventStaticsInMonth,
 } from '@/types/event-types';
 import axiosInstance from '@/utils/axiosInstance';
 
@@ -53,6 +54,12 @@ export const eventService = {
   },
   getEventById: async (id: string): Promise<EventDetailResponse> => {
     const res = await axiosInstance.get(`${API_URL.EVENTS.INDEX}/${id}`);
+    return res.data;
+  },
+  getStatictisInMonth: async (month: number): Promise<EventStaticsInMonth> => {
+    const res = await axiosInstance.get(
+      `${API_URL.EVENTS.INDEX}/statistic/total?month=${month}`
+    );
     return res.data;
   },
 };

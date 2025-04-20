@@ -12,20 +12,50 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import useDebounce from '@/hooks/use-debounce';
+import { useEventStaticsInMonth } from '@/hooks/use-event';
 import { useGetAverageMinute, useGetPersonTotal } from '@/hooks/use-person';
+import { useStoreStaticsTotal } from '@/hooks/use-store';
 import { Trend } from '@/types/person-types';
 import { BookOpen, Clock, UserCheck, Users } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 const SectionCards = () => {
-  const [formattedTotal, setFormattedTotal] = useState<string>('');
+  const [formattedTotal, setFormattedTotal] = useState('');
+  // Get current month (1-12)
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth() + 1;
+
   const { averageMinute, isLoading: isLoadingAverageMinute } =
     useGetAverageMinute();
+  const { eventStaticsDataMonth, eventStaticsLoading } =
+    useEventStaticsInMonth(currentMonth); // Just use the current month
+  const { staticsStore, isLoading: isLoadingStatics } = useStoreStaticsTotal();
+  const totalStores = staticsStore?.total || 0;
+  const changeDirectionStore = staticsStore?.changeDirection || Trend.STABLE;
+  const percentChangeStore = staticsStore?.currentMonthPercentChange;
   const { totalPerson, isLoading: isLoadingTotalPerson } = useGetPersonTotal();
-  const total = totalPerson?.total || 0;
-  const isLoading = isLoadingTotalPerson || isLoadingAverageMinute;
-  const changeDirection = totalPerson?.changeDirection || Trend.STABLE;
-  const percentChange = totalPerson?.currentMonthPercentChange;
+  const totalVisitors = totalPerson?.total || 0;
+  const changeDirectionPerson = totalPerson?.changeDirection || Trend.STABLE;
+  const percentChangePerson = totalPerson?.currentMonthPercentChange;
+
+  // Total events data
+  const totalEvents = eventStaticsDataMonth?.total || 0;
+  const eventChangeDirection =
+    eventStaticsDataMonth?.direction === 'increase'
+      ? Trend.INCREASE
+      : eventStaticsDataMonth?.direction === 'decrease'
+        ? Trend.DECREASE
+        : Trend.STABLE;
+  const eventChange = eventStaticsDataMonth?.change || 0;
+
+  const isLoading = useDebounce(
+    isLoadingTotalPerson ||
+      isLoadingAverageMinute ||
+      isLoadingStatics ||
+      eventStaticsLoading,
+    300
+  );
 
   const formatNumber = (num: number): string => {
     if (!num) return '';
@@ -33,10 +63,10 @@ const SectionCards = () => {
   };
 
   useEffect(() => {
-    if (!isLoading && total !== undefined) {
-      setFormattedTotal(formatNumber(total));
+    if (!isLoading && totalVisitors !== undefined) {
+      setFormattedTotal(formatNumber(totalVisitors));
     }
-  }, [total, isLoading]);
+  }, [totalVisitors, isLoading]);
 
   const getTrendMessage = (trend: Trend): string => {
     switch (trend) {
@@ -59,21 +89,50 @@ const SectionCards = () => {
       return getTrendMessage(trend);
     }
 
-    const absoluteChange = Math.round((total * Math.abs(percentChange)) / 100);
+    let absoluteChange: number;
+    switch (trend) {
+      case Trend.INCREASE:
+        const previousValueIncrease = total / (1 + percentChange / 100);
+        absoluteChange = total - previousValueIncrease;
+        break;
+      case Trend.DECREASE:
+        const previousValueDecrease = total / (1 - percentChange / 100);
+        absoluteChange = previousValueDecrease - total;
+        break;
+      case Trend.STABLE:
+      default:
+        absoluteChange = 0;
+        break;
+    }
+
+    absoluteChange = Math.round(absoluteChange);
     const formattedChange = new Intl.NumberFormat().format(absoluteChange);
 
     switch (trend) {
       case Trend.INCREASE:
-        return `+ ${formattedChange} người so với tháng trước`;
+        return `+ ${formattedChange} so với tháng trước`;
       case Trend.DECREASE:
-        return `- ${formattedChange} người so với tháng trước`;
+        return `- ${formattedChange} so với tháng trước`;
       case Trend.STABLE:
       default:
         return 'Không thay đổi so với tháng trước';
     }
   };
 
-  // Tính tỉ lệ nam/nữ để hiển thị trên biểu đồ
+  // Custom function for event change message
+  const getEventChangeMessage = (direction: Trend, change: number): string => {
+    const formattedChange = new Intl.NumberFormat().format(change);
+    switch (direction) {
+      case Trend.INCREASE:
+        return `+ ${formattedChange} sự kiện so với tháng trước`;
+      case Trend.DECREASE:
+        return `- ${formattedChange} sự kiện so với tháng trước`;
+      case Trend.STABLE:
+      default:
+        return 'Không thay đổi so với tháng trước';
+    }
+  };
+
   const calculateGenderRatio = () => {
     if (!averageMinute?.chartData) return { male: 50, female: 50 };
 
@@ -94,11 +153,11 @@ const SectionCards = () => {
       <Card className='shadow-xs bg-chart-1 from-primary/5 to-card'>
         <CardHeader className='relative'>
           <CardDescription className='text-white'>
-            Tổng số người camera phát hiện
+            Tổng Số Người Qua Camera
           </CardDescription>
           <CardTitle className='flex items-center gap-4 text-2xl font-semibold tabular-nums text-white md:text-3xl'>
             {isLoading ? 'Đang tải' : formattedTotal}
-            <TrendIcon trend={changeDirection} />
+            <TrendIcon trend={changeDirectionPerson} />
           </CardTitle>
           <div className='absolute right-4 top-4'>
             <Users className='text-blue-100' />
@@ -107,7 +166,11 @@ const SectionCards = () => {
         <CardFooter className='flex-col items-start gap-1 text-sm'>
           <div className='line-clamp-1 flex gap-2 font-medium text-card'>
             <span>
-              {getChangeMessage(changeDirection, total, percentChange)}
+              {getChangeMessage(
+                changeDirectionPerson,
+                totalVisitors,
+                percentChangePerson
+              )}
             </span>
           </div>
         </CardFooter>
@@ -115,9 +178,12 @@ const SectionCards = () => {
 
       <Card className='shadow-xs bg-chart-2 from-primary/5 to-card'>
         <CardHeader className='relative'>
-          <CardDescription className='text-white'>Tổng Số Sách</CardDescription>
-          <CardTitle className='text-2xl font-semibold tabular-nums text-white md:text-3xl'>
-            8,432
+          <CardDescription className='text-white'>
+            Tổng Số Sự Kiện Tổ Chức
+          </CardDescription>
+          <CardTitle className='flex items-center gap-4 text-2xl font-semibold tabular-nums text-white md:text-3xl'>
+            {eventStaticsLoading ? 'Đang tải...' : totalEvents}
+            <TrendIcon trend={eventChangeDirection} />
           </CardTitle>
           <div className='absolute right-4 top-4'>
             <BookOpen className='text-purple-100' />
@@ -125,16 +191,21 @@ const SectionCards = () => {
         </CardHeader>
         <CardFooter className='flex-col items-start gap-1 text-sm'>
           <div className='line-clamp-1 flex gap-2 font-medium text-purple-100'>
-            +123 đầu sách mới trong tháng
+            {eventStaticsLoading
+              ? 'Đang tải thông tin...'
+              : getEventChangeMessage(eventChangeDirection, eventChange)}
           </div>
         </CardFooter>
       </Card>
 
       <Card className='shadow-xs bg-chart-3 from-primary/5 to-card'>
         <CardHeader className='relative'>
-          <CardDescription className='text-white'>Các đối tác</CardDescription>
-          <CardTitle className='text-2xl font-semibold tabular-nums text-white md:text-3xl'>
-            46
+          <CardDescription className='text-white'>
+            Tổng Số Cửa Hàng
+          </CardDescription>
+          <CardTitle className='flex items-center gap-4 text-2xl font-semibold tabular-nums text-white md:text-3xl'>
+            {isLoading ? 'Đang tải...' : totalStores}
+            <TrendIcon trend={changeDirectionStore} />
           </CardTitle>
           <div className='absolute right-4 top-4'>
             <UserCheck className='text-green-100' />
@@ -142,7 +213,11 @@ const SectionCards = () => {
         </CardHeader>
         <CardFooter className='flex-col items-start gap-1 text-sm'>
           <div className='line-clamp-1 flex gap-2 font-medium text-purple-100'>
-            +21 đối tác mới trong tháng
+            {getChangeMessage(
+              changeDirectionStore,
+              totalStores,
+              percentChangeStore
+            )}
           </div>
         </CardFooter>
       </Card>
@@ -164,26 +239,6 @@ const SectionCards = () => {
         <CardFooter className='flex-col items-start gap-2 text-sm'>
           {!isLoadingAverageMinute && averageMinute && (
             <>
-              {/* <div className='w-full'>
-                <div className='mb-1 flex justify-between'>
-                  <span className='flex items-center gap-1 font-medium text-card'>
-                    <div className='flex h-3 w-3 items-center justify-center rounded-full bg-blue-500 text-xs text-white'></div>
-                    Nam:
-                  </span>
-                  <span className='font-medium text-card'>
-                    {averageMinute.averageTimeByGender.male}
-                  </span>
-                </div>
-                <div className='flex justify-between'>
-                  <span className='flex items-center gap-1 font-medium text-card'>
-                    <div className='flex h-3 w-3 items-center justify-center rounded-full bg-pink-500 text-xs text-white'></div>
-                    Nữ:
-                  </span>
-                  <span className='font-medium text-card'>
-                    {averageMinute.averageTimeByGender.female}
-                  </span>
-                </div>
-              </div> */}
               <div className='mt-1 w-full'>
                 <div className='relative h-2 w-full overflow-hidden rounded-full bg-gray-700'>
                   <TooltipProvider>

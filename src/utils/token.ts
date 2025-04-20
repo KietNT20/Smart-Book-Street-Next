@@ -69,3 +69,65 @@ const tokenMethod: TokenMethodType = {
 };
 
 export default tokenMethod;
+
+/**
+ * Safely gets an item from localStorage
+ * @param key - The key to retrieve from localStorage
+ * @param defaultValue - The default value to return if key doesn't exist or localStorage is not available
+ * @returns The value from localStorage or the default value
+ */
+export const getLocalStorageItem = (
+  key: string,
+  defaultValue: string = ''
+): string => {
+  if (typeof window === 'undefined') {
+    return defaultValue;
+  }
+
+  try {
+    const item = localStorage.getItem(key);
+    return item !== null ? item : defaultValue;
+  } catch (error) {
+    console.error(`Error accessing localStorage for key "${key}":`, error);
+    return defaultValue;
+  }
+};
+
+/**
+ * Safely sets an item in localStorage
+ * @param key - The key to set in localStorage
+ * @param value - The value to store in localStorage
+ * @returns true if successful, false otherwise
+ */
+export const setLocalStorageItem = (key: string, value: string): boolean => {
+  if (typeof window === 'undefined') {
+    return false;
+  }
+
+  try {
+    localStorage.setItem(key, value);
+    return true;
+  } catch (error) {
+    console.error(`Error setting localStorage for key "${key}":`, error);
+    return false;
+  }
+};
+
+/**
+ * Safely removes an item from localStorage
+ * @param key - The key to remove from localStorage
+ * @returns true if successful, false otherwise
+ */
+export const removeLocalStorageItem = (key: string): boolean => {
+  if (typeof window === 'undefined') {
+    return false;
+  }
+
+  try {
+    localStorage.removeItem(key);
+    return true;
+  } catch (error) {
+    console.error(`Error removing localStorage for key "${key}":`, error);
+    return false;
+  }
+};

@@ -1,32 +1,26 @@
 import useDebounce from '@/hooks/use-debounce';
 import { useUserMutation } from '@/hooks/use-user';
 import { userFormSchema, UserFormValues } from '@/lib/zod';
-import { User } from '@/types/user-types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-type Props = {
-  userToEdit?: User;
-};
-
-export const useUserForm = ({ userToEdit }: Props = {}) => {
+export const useUserForm = () => {
   const [previewMainImage, setPreviewMainImage] = useState<string | null>(null);
-  const { createUser, createUserPending, updateUser, updateUserPending } =
-    useUserMutation();
-  const isWorking = useDebounce(createUserPending || updateUserPending, 300);
+  const { createUser, createUserPending } = useUserMutation();
+  const isWorking = useDebounce(createUserPending, 300);
 
   const form = useForm<UserFormValues>({
     resolver: zodResolver(userFormSchema),
     defaultValues: {
-      userName: userToEdit?.userName || '',
-      email: userToEdit?.email || '',
+      userName: '',
+      email: '',
       password: undefined,
-      fullName: userToEdit?.fullName || '',
-      phone: userToEdit?.phone || '',
-      dob: userToEdit?.dob || null,
-      addresss: userToEdit?.address || '',
-      gender: userToEdit?.gender || undefined,
+      fullName: '',
+      phone: '',
+      dob: null,
+      address: '',
+      gender: undefined,
       mainImageFile: null,
       additionalImageFiles: [],
     },
@@ -60,8 +54,8 @@ export const useUserForm = ({ userToEdit }: Props = {}) => {
         formData.append('Dob', values.dob);
       }
 
-      if (values.addresss) {
-        formData.append('Addresss', values.addresss);
+      if (values.address) {
+        formData.append('Addresss', values.address);
       }
 
       if (values.gender) {
@@ -71,12 +65,7 @@ export const useUserForm = ({ userToEdit }: Props = {}) => {
       if (values.mainImageFile instanceof File) {
         formData.append('MainImageFile', values.mainImageFile);
       }
-
-      if (userToEdit?.id) {
-        updateUser({ id: userToEdit.id, formData });
-      } else {
-        createUser(formData);
-      }
+      createUser(formData);
     } catch (error) {
       console.error('Error submitting form:', error);
     }

@@ -1,7 +1,6 @@
 'use client';
 
 import CancelButton from '@/components/back-btn/cancel-btn';
-import SubmitBtn from '@/components/button/submit-btn';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -22,17 +21,12 @@ import {
 } from '@/components/ui/select';
 import { Gender } from '@/enums/gender';
 import { PATH } from '@/enums/path';
-import { User } from '@/types/user-types';
 import { Image } from 'antd';
 import dayjs from 'dayjs';
 import { X } from 'lucide-react';
 import { useUserForm } from '../_lib/use-user-form';
 
-type Props = {
-  userToEdit?: User;
-};
-
-const UserForm = ({ userToEdit }: Props) => {
+const UserForm = () => {
   const {
     form,
     isWorking,
@@ -40,14 +34,12 @@ const UserForm = ({ userToEdit }: Props) => {
     previewMainImage,
     handleMainFileChange,
     removeMainImage,
-  } = useUserForm({ userToEdit });
+  } = useUserForm();
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>
-          {userToEdit ? 'Chỉnh sửa người dùng' : 'Tạo mới người dùng'}
-        </CardTitle>
+        <CardTitle>{'Tạo mới người dùng'}</CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -64,7 +56,7 @@ const UserForm = ({ userToEdit }: Props) => {
                       <FormControl>
                         <Input
                           placeholder='Nhập tên đăng nhập'
-                          disabled={isWorking || !!userToEdit}
+                          disabled={isWorking}
                           {...field}
                         />
                       </FormControl>
@@ -97,22 +89,13 @@ const UserForm = ({ userToEdit }: Props) => {
                   name='password'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>
-                        {userToEdit
-                          ? 'Mật khẩu mới (để trống nếu không thay đổi)'
-                          : 'Mật khẩu'}
-                      </FormLabel>
+                      <FormLabel>Mật khẩu</FormLabel>
                       <FormControl>
                         <Input
                           type='password'
-                          placeholder={
-                            userToEdit
-                              ? 'Nhập mật khẩu mới nếu muốn thay đổi'
-                              : 'Nhập mật khẩu'
-                          }
+                          placeholder={'Nhập mật khẩu'}
                           disabled={isWorking}
                           {...field}
-                          value={field.value || ''}
                         />
                       </FormControl>
                       <FormMessage />
@@ -131,7 +114,6 @@ const UserForm = ({ userToEdit }: Props) => {
                           placeholder='Nhập họ và tên'
                           disabled={isWorking}
                           {...field}
-                          value={field.value || ''}
                         />
                       </FormControl>
                       <FormMessage />
@@ -153,7 +135,6 @@ const UserForm = ({ userToEdit }: Props) => {
                           placeholder='Nhập số điện thoại'
                           disabled={isWorking}
                           {...field}
-                          value={field.value || ''}
                         />
                       </FormControl>
                       <FormMessage />
@@ -191,7 +172,7 @@ const UserForm = ({ userToEdit }: Props) => {
 
                 <FormField
                   control={form.control}
-                  name='addresss'
+                  name='address'
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Địa chỉ</FormLabel>
@@ -200,7 +181,6 @@ const UserForm = ({ userToEdit }: Props) => {
                           placeholder='Nhập địa chỉ'
                           disabled={isWorking}
                           {...field}
-                          value={field.value || ''}
                         />
                       </FormControl>
                       <FormMessage />
@@ -281,7 +261,9 @@ const UserForm = ({ userToEdit }: Props) => {
                 routerReplace
               />
 
-              <SubmitBtn ID={userToEdit?.id} _onPending={isWorking} />
+              <Button type='submit' disabled={isWorking}>
+                {isWorking ? 'Đang xử lý...' : 'Lưu'}
+              </Button>
             </div>
           </form>
         </Form>

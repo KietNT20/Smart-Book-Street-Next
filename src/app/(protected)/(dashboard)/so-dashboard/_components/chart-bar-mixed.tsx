@@ -24,6 +24,7 @@ import {
   useOrderStaticsMonthlyStore,
   useOrderStaticsYearlyStore,
 } from '@/hooks/use-order';
+import { getLocalStorageItem } from '@/utils/token';
 
 export interface OrderStaticValue {
   label: string;
@@ -95,7 +96,7 @@ export function OrderChartStore({
   const currentMonth = month || new Date().getMonth() + 1;
   const currentYear = year || new Date().getFullYear();
   const thisYear = year || new Date().getFullYear();
-  const storeID = localStorage.getItem(STORAGE.SELECTED_STORE_KEY);
+  const storeID = getLocalStorageItem(STORAGE.SELECTED_STORE_KEY);
 
   // Use appropriate hooks based on timeframe
   const { orderStaticsDailyStore, orderDailyLoading, orderDailyError } =

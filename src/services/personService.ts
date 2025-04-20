@@ -4,6 +4,7 @@ import {
   AverageMinute,
   BarData,
   DailyVisitorsResponse,
+  PersonChartDateHours,
   PersonTotal,
 } from '@/types/person-types';
 import axiosInstance from '@/utils/axiosInstance';
@@ -89,6 +90,12 @@ export const personService = {
   getAverageMinute: async (): Promise<AverageMinute> => {
     const res = await axiosInstance.get(
       `${API_ENDPOINT.PERSON}/stats/average-time`
+    );
+    return res.data;
+  },
+  getStatsHours: async (date: string): Promise<PersonChartDateHours[]> => {
+    const res = await axiosInstance.get(
+      `${API_ENDPOINT.PERSON}/stats/hourly?date=${date}`
     );
     return res.data;
   },

@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { ISBNInputScanner } from './components/isbn-input-scanner';
 import { ScanHistory } from './components/scan-history';
+import { getLocalStorageItem } from '@/utils/token';
 
 export default function InventoryScanPage() {
   const [storeId, setStoreId] = useState<string>('');
@@ -14,9 +15,8 @@ export default function InventoryScanPage() {
     Array<{ isbn: string; quantity: number; timestamp: Date }>
   >([]);
 
-  // Get storeId from localStorage on client side
   useEffect(() => {
-    const storedId = localStorage.getItem(STORAGE.SELECTED_STORE_KEY);
+    const storedId = getLocalStorageItem(STORAGE.SELECTED_STORE_KEY);
     if (storedId) {
       setStoreId(storedId);
     } else {

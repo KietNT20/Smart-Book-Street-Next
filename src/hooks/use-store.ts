@@ -184,3 +184,16 @@ export const useStoreById = (id: string) => {
     error,
   };
 };
+
+export const useStoreStaticsTotal = () => {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['stores', 'statics'],
+    queryFn: () => storeService.getStaticsTotal(),
+  });
+
+  return {
+    staticsStore: data || null,
+    isLoading,
+    error,
+  };
+};

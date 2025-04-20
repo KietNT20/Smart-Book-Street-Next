@@ -3,6 +3,7 @@ import { RoleEnums } from '@/enums/role';
 import { StoreData } from '@/types/store-types';
 import { Street } from '@/types/street-types';
 import { UserStore } from '@/types/user-types';
+import { getLocalStorageItem, setLocalStorageItem } from '@/utils/token';
 import { ChevronsUpDown, Map, Plus } from 'lucide-react';
 import React from 'react';
 import {
@@ -38,7 +39,7 @@ function TeamSwitcherInner({
   // Initialize from localStorage only once after component is mounted
   React.useEffect(() => {
     if (streets.length > 0) {
-      const savedStreetId = localStorage.getItem(STORAGE.SELECTED_STREET_KEY);
+      const savedStreetId = getLocalStorageItem(STORAGE.SELECTED_STREET_KEY);
       const savedStreet = savedStreetId
         ? streets.find((street) => street.id === savedStreetId)
         : null;
@@ -53,7 +54,7 @@ function TeamSwitcherInner({
       hasRole([RoleEnums.STORE_OWNER, RoleEnums.STORE_MANAGER]) &&
       userStore.length > 0
     ) {
-      const savedStoreId = localStorage.getItem(STORAGE.SELECTED_STORE_KEY);
+      const savedStoreId = getLocalStorageItem(STORAGE.SELECTED_STORE_KEY);
       const savedStore = savedStoreId
         ? userStore.find((store) => store.store.id === savedStoreId)?.store
         : undefined;
@@ -67,13 +68,13 @@ function TeamSwitcherInner({
   // Handle street selection
   const handleStreetSelect = (street: Street) => {
     setActiveStreet(street);
-    localStorage.setItem(STORAGE.SELECTED_STREET_KEY, street.id);
+    setLocalStorageItem(STORAGE.SELECTED_STREET_KEY, street.id);
   };
 
   // Handle store selection
   const handleStoreSelect = (store: StoreData) => {
     setActiveStore(store);
-    localStorage.setItem(STORAGE.SELECTED_STORE_KEY, store.id || '');
+    setLocalStorageItem(STORAGE.SELECTED_STORE_KEY, store.id || '');
   };
 
   // If loading streets, show loading state

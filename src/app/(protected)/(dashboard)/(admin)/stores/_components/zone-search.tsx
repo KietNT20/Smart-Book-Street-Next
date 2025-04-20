@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/pagination';
 import { STORAGE } from '@/constant/storage';
 import { useZonesStore } from '@/hooks/use-zone';
+import { getLocalStorageItem } from '@/utils/token';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -24,7 +25,7 @@ const ZoneSearch = ({ onSelectZone, onClose }: ZoneSearchProps) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const streetId = localStorage.getItem(STORAGE.SELECTED_STREET_KEY);
+  const streetId = getLocalStorageItem(STORAGE.SELECTED_STREET_KEY);
   const rawPageNumber = searchParams.get('page')
     ? parseInt(searchParams.get('page') as string)
     : 1;

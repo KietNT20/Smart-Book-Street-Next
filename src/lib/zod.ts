@@ -287,10 +287,7 @@ export const userFormSchema = z.object({
     .string()
     .min(1, { message: 'Email không được để trống' })
     .email({ message: 'Email không hợp lệ' }),
-  password: z
-    .string()
-    .min(6, { message: 'Mật khẩu phải có ít nhất 6 ký tự' })
-    .optional(),
+  password: z.string().min(5, { message: 'Mật khẩu phải có ít nhất 5 ký tự' }),
   fullName: z.string().optional(),
   phone: z
     .string()
@@ -305,7 +302,7 @@ export const userFormSchema = z.object({
     )
     .optional(),
   dob: z.string().date().optional().nullable(),
-  addresss: z.string().optional(),
+  address: z.string().optional(),
   gender: z.enum([Gender.Male, Gender.Female]).optional(),
   mainImageFile: z
     .instanceof(File)

@@ -167,3 +167,16 @@ export const useGetEventById = (id: string) => {
     eventLoading: isLoading,
   };
 };
+
+export const useEventStaticsInMonth = (month: number) => {
+  const { data, error, isLoading } = useQuery({
+    queryKey: ['event-statistics', month],
+    queryFn: async () => eventService.getStatictisInMonth(month),
+  });
+
+  return {
+    eventStaticsDataMonth: data,
+    eventStaticsError: error,
+    eventStaticsLoading: isLoading,
+  };
+};

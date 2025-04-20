@@ -3,7 +3,6 @@ import BulletList from '@tiptap/extension-bullet-list';
 import Color from '@tiptap/extension-color';
 import Document from '@tiptap/extension-document';
 import Heading from '@tiptap/extension-heading';
-import Link from '@tiptap/extension-link';
 import OrderedList from '@tiptap/extension-ordered-list';
 import Paragraph from '@tiptap/extension-paragraph';
 import Placeholder from '@tiptap/extension-placeholder';
@@ -13,8 +12,7 @@ import TextStyle from '@tiptap/extension-text-style';
 import Underline from '@tiptap/extension-underline';
 import { Editor, EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import { useCallback, useEffect, useState } from 'react';
-import LinkModal from './link-modal';
+import { useCallback, useEffect } from 'react';
 import RichTextToolbar from './richtext-toolbar';
 import { customStyles } from './styles';
 
@@ -31,13 +29,10 @@ const RichTextEditor = ({
   content,
   onChange,
   className,
-  placeholder = 'Nhập nội dung...',
+  placeholder = 'Nhập nội dung',
   readOnly = false,
   isPending,
 }: RichTextEditorProps) => {
-  const [linkModalOpen, setLinkModalOpen] = useState(false);
-  const [currentLinkUrl, setCurrentLinkUrl] = useState('');
-
   const onUpdate = useCallback(
     ({ editor }: { editor: Editor }) => {
       onChange(editor.getHTML());
@@ -68,12 +63,6 @@ const RichTextEditor = ({
       OrderedList.configure({
         HTMLAttributes: {
           class: 'ordered-list',
-        },
-      }),
-      Link.configure({
-        openOnClick: false,
-        HTMLAttributes: {
-          class: 'text-blue-500 underline cursor-pointer',
         },
       }),
       TextAlign.configure({
@@ -108,36 +97,6 @@ const RichTextEditor = ({
     }
   }, [editor, content]);
 
-  const addLink = useCallback(() => {
-    if (!editor) return;
-    const previousUrl = editor.getAttributes('link').href || '';
-    setCurrentLinkUrl(previousUrl);
-    setLinkModalOpen(true);
-  }, [editor]);
-
-  const handleLinkSubmit = useCallback(
-    (url: string) => {
-      if (!editor) return;
-
-      if (url === '') {
-        editor.chain().focus().extendMarkRange('link').unsetLink().run();
-        return;
-      }
-
-      if (url && !/^https?:\/\//i.test(url)) {
-        url = 'https://' + url;
-      }
-
-      editor
-        .chain()
-        .focus()
-        .extendMarkRange('link')
-        .setLink({ href: url })
-        .run();
-    },
-    [editor]
-  );
-
   if (!editor) {
     return null;
   }
@@ -150,19 +109,12 @@ const RichTextEditor = ({
     <div className={cn('space-y-2', className)}>
       <style>{customStyles}</style>
 
-      <RichTextToolbar editor={editor} onAddLink={addLink} />
+      <RichTextToolbar editor={editor} />
 
       <EditorContent
         editor={editor}
         className={cn('prose max-w-none overflow-hidden', 'max-w-full')}
         disabled={isPending}
-      />
-
-      <LinkModal
-        isOpen={linkModalOpen}
-        onClose={() => setLinkModalOpen(false)}
-        onSubmit={handleLinkSubmit}
-        initialUrl={currentLinkUrl}
       />
     </div>
   );

@@ -23,13 +23,34 @@ export const inventoryService = {
     );
     return res.data;
   },
+  getBookByStoreId: async (storeId: string): Promise<InventoriesResponse> => {
+    const res = await axiosInstance.get(
+      `${API_URL.INVENTORIES.BY_STORE}/${storeId}/books`
+    );
+    return res.data;
+  },
+  getSouvenirByStoreId: async (
+    storeId: string
+  ): Promise<InventoriesResponse> => {
+    const res = await axiosInstance.get(
+      `${API_URL.INVENTORIES.BY_STORE}/${storeId}/souvenirs`
+    );
+    return res.data;
+  },
   create: async (data: InventoryCreate) => {
     const res = await axiosInstance.post(API_URL.INVENTORIES.INDEX, data);
     return res.data;
   },
-  delete: async (bookId: string, storeId: string) => {
+  update: async (entityId: string, storeId: string, data: FormData) => {
+    const res = await axiosInstance.put(
+      `${API_URL.INVENTORIES.INDEX}/${entityId}/${storeId}`,
+      data
+    );
+    return res.data;
+  },
+  delete: async (entityId: string, storeId: string) => {
     const res = await axiosInstance.patch(
-      `${API_URL.INVENTORIES.INDEX}/${bookId}/${storeId}`
+      `${API_URL.INVENTORIES.INDEX}/${entityId}/${storeId}`
     );
     return res.data;
   },
