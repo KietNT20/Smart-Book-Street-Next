@@ -2,13 +2,16 @@
 
 import {
   ColumnDef,
+  ColumnFiltersState,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   getPaginationRowModel,
   useReactTable,
 } from '@tanstack/react-table';
 
 import { DataTablePagination } from '@/components/data-table-pagination';
+import { Input } from '@/components/ui/input';
 import {
   Table,
   TableBody,
@@ -17,25 +20,48 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { useState } from 'react';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
-export function DataTable<TData, TValue>({
+export function DataTableSouvenir<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
+    state: {
+      columnFilters,
+    },
   });
 
   return (
     <div className=''>
+      <div className='flex items-center py-4'>
+        <Input
+          placeholder='Tìm kiếm theo tên quà lưu niệm'
+          value={
+            (table
+              .getColumn('souvenir.souvenirName')
+              ?.getFilterValue() as string) ?? ''
+          }
+          onChange={(event) =>
+            table
+              .getColumn('souvenir.souvenirName')
+              ?.setFilterValue(event.target.value)
+          }
+          className='max-w-sm'
+        />
+      </div>
       <div className='rounded-md border'>
         <Table>
           <TableHeader>

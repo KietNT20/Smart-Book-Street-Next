@@ -20,13 +20,13 @@ export const useInventoryByStoreId = (storeId: string) => {
 
 export const useInventoryBooksByStoreId = (storeId: string) => {
   const { data, isLoading, error } = useQuery({
-    queryKey: ['inventories', storeId],
+    queryKey: ['inventories-book', storeId],
     queryFn: () => inventoryService.getBookByStoreId(storeId),
     enabled: !!storeId,
   });
 
   return {
-    inventoriesByStoreId: data?.results || [],
+    inventoriesByBook: data?.results || [],
     isLoading,
     error,
   };
@@ -34,13 +34,13 @@ export const useInventoryBooksByStoreId = (storeId: string) => {
 
 export const useInventorySouvenirsByStoreId = (storeId: string) => {
   const { data, isLoading, error } = useQuery({
-    queryKey: ['inventories', storeId],
+    queryKey: ['inventories-souvenir', storeId],
     queryFn: () => inventoryService.getSouvenirByStoreId(storeId),
     enabled: !!storeId,
   });
 
   return {
-    inventoriesByStoreId: data?.results || [],
+    inventoriesBySouvenir: data?.results || [],
     isLoading,
     error,
   };

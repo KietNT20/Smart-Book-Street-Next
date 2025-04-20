@@ -3,7 +3,7 @@ import { Inventory } from '@/types/inventory-types';
 import { ColumnDef } from '@tanstack/react-table';
 import { InventoryQuantityCell } from './_components/inventory-quantity-cell';
 
-export const columns: ColumnDef<Inventory>[] = [
+export const columnsSouvenir: ColumnDef<Inventory>[] = [
   {
     accessorKey: 'no',
     header: 'No.',
@@ -13,31 +13,24 @@ export const columns: ColumnDef<Inventory>[] = [
     },
   },
   {
-    accessorKey: 'book.title',
-    header: 'Tên sách',
+    accessorKey: 'souvenir.souvenirName',
+    header: 'Tên quà lưu niệm',
   },
   {
-    accessorKey: 'book.languages',
-    header: 'Ngôn ngữ',
-  },
-  {
-    accessorKey: 'book.price',
-    header: 'Giá sách',
+    accessorKey: 'souvenir.price',
+    header: 'Giá',
     cell: ({ row }) => {
+      const price = row.original.souvenir?.price;
       return (
         <p className='text-sm font-medium text-muted-foreground'>
-          {formatPrice(row.getValue('book.price') as number)}
+          {price ? formatPrice(price as number) : '---'}
         </p>
       );
     },
   },
   {
-    accessorKey: 'store.storeName',
-    header: 'Cửa hàng',
-  },
-  {
     accessorKey: 'quantity',
-    header: () => <div className='w-full text-right'>Số lượng</div>,
+    header: 'Số lượng',
     cell: ({ row }) => {
       return <InventoryQuantityCell row={row} />;
     },
