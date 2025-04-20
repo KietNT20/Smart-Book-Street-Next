@@ -10,8 +10,10 @@ export interface Souvenir extends BaseEntity {
   description: string;
   baseImgUrl: string;
   price: number;
+  baseImgFile?: string | null;
+  otherImgFiles?: string[] | null;
 }
 
 export type SouvenirParams = PaginationSchema<{ souvenirName?: string }>;
-export type SouvenirResponse = ApiResponse<Souvenir>;
-export type SouvenirsResponse = ApiListResponse<Souvenir>;
+export type SouvenirResponse = ApiResponse<Souvenir & { id: string }>;
+export type SouvenirsResponse = ApiListResponse<Souvenir & { id: string }>;

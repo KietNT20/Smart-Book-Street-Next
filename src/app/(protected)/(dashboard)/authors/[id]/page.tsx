@@ -4,18 +4,11 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { PATH } from '@/enums/path';
 import { useGetAuthorById } from '@/hooks/use-author';
-import { Author } from '@/types/author-types';
 import Link from 'next/link';
 import AuthorInfo from './_components/author-info';
 
-type AuthorDetail = {
-  result: Author;
-  isSuccess: boolean;
-  message: string;
-};
-
 const AuthorDetailPage = ({ params }: { params: { id: string } }) => {
-  const { data: authorRes } = useGetAuthorById<AuthorDetail>(params.id);
+  const { data: authorRes } = useGetAuthorById(params.id);
 
   if (!authorRes?.isSuccess) {
     return (

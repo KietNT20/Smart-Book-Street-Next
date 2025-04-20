@@ -1,6 +1,5 @@
 import { ThemeProvider } from '@/components/theme-provider';
 import QueryProvider from '@/providers/query-provider';
-import StoreProvider from '@/providers/store-provider';
 import { AntdRegistry } from '@ant-design/nextjs-registry';
 
 import type { ReactNode } from 'react';
@@ -13,16 +12,14 @@ const Provider = ({ children }: Props) => {
   return (
     <AntdRegistry>
       <QueryProvider>
-        <StoreProvider>
-          <ThemeProvider
-            attribute='class'
-            defaultTheme='system'
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-          </ThemeProvider>
-        </StoreProvider>
+        <ThemeProvider
+          attribute='class'
+          defaultTheme='system'
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
       </QueryProvider>
     </AntdRegistry>
   );

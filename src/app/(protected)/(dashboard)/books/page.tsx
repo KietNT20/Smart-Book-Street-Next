@@ -42,7 +42,7 @@ export default function BooksPage() {
 
   const hasFilters = () =>
     Object.keys(searchCriteria).length > 0 ||
-    pagination.sortField !== 'LastUpdatedDate' ||
+    pagination.sortField !== '' ||
     pagination.sortOrder !== Sort.DESC;
 
   return (

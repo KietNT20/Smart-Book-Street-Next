@@ -15,8 +15,8 @@ export type ZoneCreate = Partial<Omit<Zone, 'id'>> & {
   streetId: string | null;
 };
 
-export type ZonesResponse = ApiListResponse<Zone>;
-export type ZoneResponse = ApiResponse<Zone>;
+export type ZonesResponse = ApiListResponse<Zone & { id: string }>;
+export type ZoneResponse = ApiResponse<Zone & { id: string }>;
 
 export interface ZoneParams {
   pageNumber: number;

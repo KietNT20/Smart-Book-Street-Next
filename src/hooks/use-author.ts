@@ -6,8 +6,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
-export const useGetAuthorById = <T>(id: string) => {
-  return useQuery<T>({
+export const useGetAuthorById = (id: string) => {
+  return useQuery({
     queryKey: ['authors', id],
     queryFn: () => authorService.getById(id),
     enabled: !!id,

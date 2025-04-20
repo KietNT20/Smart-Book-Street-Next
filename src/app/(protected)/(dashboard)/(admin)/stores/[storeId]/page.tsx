@@ -1,11 +1,14 @@
 'use client';
 
 import BackButton from '@/components/back-btn/back-button';
+import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ImageFallback } from '@/constant/storage';
+import { PATH } from '@/enums/path';
 import { useStoreById } from '@/hooks/use-store';
 import { Image } from 'antd';
 import { Clock, Mail, Map as MapIcon, MapPin, Phone } from 'lucide-react';
+import Link from 'next/link';
 
 export default function StorePage({ params }: { params: { storeId: string } }) {
   const { store, isLoading } = useStoreById(params.storeId);
@@ -40,7 +43,12 @@ export default function StorePage({ params }: { params: { storeId: string } }) {
 
   return (
     <>
-      <BackButton />
+      <div className='flex items-center justify-between'>
+        <BackButton />
+        <Link href={`${PATH.STORES}/${params.storeId}/edit`}>
+          <Button variant={'darker'}>Chỉnh sửa</Button>
+        </Link>
+      </div>
       <div className='container mx-auto max-w-6xl px-4 py-8'>
         {/* Store Header */}
         <div className='mb-6 overflow-hidden rounded-lg bg-white shadow-md'>

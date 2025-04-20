@@ -47,3 +47,12 @@ export const useGetAverageMinute = () => {
 
   return { averageMinute: data, isLoading };
 };
+
+export const useGetPersonStatsHours = (date: string) => {
+  const { data, isLoading } = useQuery({
+    queryKey: ['person-stats-hours', date],
+    queryFn: () => personService.getStatsHours(date),
+  });
+
+  return { statsHours: data, isLoading };
+};

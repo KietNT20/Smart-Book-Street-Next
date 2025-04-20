@@ -1,5 +1,9 @@
 import { API_URL } from '@/constant/api-url';
-import { CategorySearchPagination } from '@/types/category-types';
+import {
+  CategoriesResponse,
+  CategoryResponse,
+  CategorySearchPagination,
+} from '@/types/category-types';
 import axiosInstance from '@/utils/axiosInstance';
 
 export interface CategoryPayload {
@@ -8,7 +12,7 @@ export interface CategoryPayload {
 }
 
 export const categoryService = {
-  getAll: async () => {
+  getAll: async (): Promise<CategoriesResponse> => {
     const res = await axiosInstance.get(API_URL.CATEGORIES.INDEX);
     return res.data;
   },
@@ -27,7 +31,7 @@ export const categoryService = {
     const res = await axiosInstance.patch(`${API_URL.CATEGORIES.INDEX}/${id}`);
     return res.data;
   },
-  getById: async (id: string) => {
+  getById: async (id: string): Promise<CategoryResponse> => {
     const res = await axiosInstance.get(`${API_URL.CATEGORIES.INDEX}/${id}`);
     return res.data;
   },
@@ -35,7 +39,9 @@ export const categoryService = {
     const res = await axiosInstance.post(API_URL.CATEGORIES.SEARCH, payload);
     return res.data;
   },
-  searchPagination: async (payload: Partial<CategorySearchPagination>) => {
+  searchPagination: async (
+    payload: Partial<CategorySearchPagination>
+  ): Promise<CategoriesResponse> => {
     const res = await axiosInstance.post(
       API_URL.CATEGORIES.PAGINATION_SEARCH,
       payload

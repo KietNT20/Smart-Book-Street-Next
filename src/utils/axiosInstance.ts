@@ -40,7 +40,7 @@ axiosInstance.interceptors.response.use(
     // Do something with response error
     if (error.response?.status === 401 || error.response?.status === 403) {
       tokenMethod.remove();
-      window.location.href = PATH.LOGIN;
+      window.location.replace(PATH.LOGIN);
     }
     return Promise.reject(error);
   }

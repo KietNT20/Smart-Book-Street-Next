@@ -16,27 +16,19 @@ import { STORAGE } from '@/constant/storage';
 import { PATH } from '@/enums/path';
 import useDebounce from '@/hooks/use-debounce';
 import { useZoneMutation } from '@/hooks/use-zone';
+import { zoneFormSchema, ZoneFormSchema } from '@/lib/zod';
 import { Zone } from '@/types/zone-types';
+import { getLocalStorageItem } from '@/utils/token';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 import AddressZone from './address-zone';
-
-export const zoneFormSchema = z.object({
-  zoneName: z.string().min(1, { message: 'Vui lòng nhập tên khu vực' }),
-  description: z.string().optional(),
-  latitude: z.number().min(-90).max(90),
-  longitude: z.number().min(-180).max(180),
-});
-
-export type ZoneFormSchema = z.infer<typeof zoneFormSchema>;
 
 type Props = {
   zoneToEdit?: Zone;
 };
 
 const ZoneForm = ({ zoneToEdit }: Props) => {
-  const streetId = localStorage.getItem(STORAGE.SELECTED_STREET_KEY);
+  const streetId = getLocalStorageItem(STORAGE.SELECTED_STREET_KEY);
   const form = useForm<ZoneFormSchema>({
     resolver: zodResolver(zoneFormSchema),
     defaultValues: {
@@ -50,7 +42,6 @@ const ZoneForm = ({ zoneToEdit }: Props) => {
     useZoneMutation();
   const isWorking = useDebounce(isCreatingZone || isUpdatingZone, 300);
 
-  // 2. Define a submit handler.
   function onSubmit(values: ZoneFormSchema) {
     console.log(values);
     if (zoneToEdit) {

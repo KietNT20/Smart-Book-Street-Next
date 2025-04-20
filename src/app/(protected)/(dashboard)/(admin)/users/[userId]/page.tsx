@@ -1,9 +1,16 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { PATH } from '@/enums/path';
 import { useUserById } from '@/hooks/use-user';
+import { getVietnameseRoleLabel } from '@/utils/format';
 import dayjs from 'dayjs';
 import { ArrowLeft, Mail, User } from 'lucide-react';
 import Image from 'next/image';
@@ -53,14 +60,13 @@ export default function UserDetailPage({
           <ArrowLeft className='mr-2 h-4 w-4' />
           Quay lại
         </Button>
-        <h1 className='text-2xl font-bold'>Chi tiết người dùng</h1>
       </div>
 
       <div className='grid gap-6 md:grid-cols-3'>
         {/* Thông tin cơ bản */}
         <Card className='md:col-span-2'>
           <CardHeader>
-            <CardTitle>Thông tin cá nhân</CardTitle>
+            <CardTitle className='text-center'>Thông tin cá nhân</CardTitle>
           </CardHeader>
           <CardContent>
             <div className='grid gap-4 md:grid-cols-2'>
@@ -130,6 +136,32 @@ export default function UserDetailPage({
               )}
             </div>
           </CardContent>
+          <CardFooter>
+            {/* Quyền và vai trò */}
+            {user.userRoles && user.userRoles.length > 0 && (
+              <Card className='w-full'>
+                <CardHeader>
+                  <CardTitle className='text-center'>
+                    Vai trò và quyền hạn
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className='flex flex-wrap gap-2'>
+                    {user.userRoles.map((role, index) => (
+                      <div
+                        key={index}
+                        className='rounded-full bg-darker px-3 py-1 text-base font-medium text-darker-foreground'
+                      >
+                        {role.role
+                          ? getVietnameseRoleLabel(role.role?.roleName)
+                          : 'Chưa có vai trò'}
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+          </CardFooter>
         </Card>
 
         {/* Ảnh đại diện và thông tin nhanh */}
@@ -161,15 +193,9 @@ export default function UserDetailPage({
                 </div>
               )}
 
-              <div className='mt-4 grid w-full grid-cols-2 gap-2'>
+              <div className='mt-4 grid w-full'>
                 <Button
-                  variant='outline'
-                  onClick={() => router.push(`/users/edit/${user.id}`)}
-                >
-                  Chỉnh sửa
-                </Button>
-                <Button
-                  variant='default'
+                  variant='darker'
                   onClick={() =>
                     (window.location.href = `mailto:${user.email}`)
                   }
@@ -180,27 +206,6 @@ export default function UserDetailPage({
             </div>
           </CardContent>
         </Card>
-
-        {/* Quyền và vai trò */}
-        {user.userRoles && user.userRoles.length > 0 && (
-          <Card className='md:col-span-2'>
-            <CardHeader>
-              <CardTitle>Vai trò và quyền hạn</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className='flex flex-wrap gap-2'>
-                {user.userRoles.map((role, index) => (
-                  <div
-                    key={index}
-                    className='rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary'
-                  >
-                    {role.role?.roleName || 'Chưa có vai trò'}
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        )}
       </div>
     </div>
   );

@@ -1,18 +1,52 @@
 import { PATH } from '@/enums/path';
 import { RoleEnums } from '@/enums/role';
-import {
-  clearUserProfile,
-  hasUserRole,
-  setUserProfile,
-} from '@/lib/features/user/userSlice';
-import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { userService } from '@/services/userService';
-import { RegisterRequestBody } from '@/types/auth-types';
+import { LoginCredentials, RegisterRequestBody } from '@/types/auth-types';
+import { User } from '@/types/user-types';
 import tokenMethod from '@/utils/token';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { toast } from 'sonner';
+
+export const useLogin = () => {
+  const router = useRouter();
+  return useMutation({
+    mutationKey: ['login'],
+    mutationFn: (payload: LoginCredentials) => userService.login(payload),
+    onSuccess: (data) => {
+      if (data.token) {
+        tokenMethod.set({
+          accessToken: data.token,
+        });
+      }
+      if (data.result.userRoles) {
+        const hasAdminRole = data.result.userRoles.some(
+          (role) => role.role?.roleName === RoleEnums.ADMIN
+        );
+        const hasPublisherManagerRole = data.result.userRoles.some(
+          (role) => role.role?.roleName === RoleEnums.PUBLISHER
+        );
+        if (hasAdminRole) {
+          router.push(PATH.DASHBOARD);
+        } else if (hasPublisherManagerRole) {
+          router.push(PATH.BOOKS);
+        } else {
+          router.push(PATH.STORE_OWNER_DASHBOARD);
+        }
+        toast.success('Đăng nhập thành công', {
+          id: 'login-success',
+          description: 'Vui lòng chờ trong giây lát',
+        });
+      }
+    },
+    onError: (error: AxiosError<{ message?: string }>) => {
+      console.log('Error login', error);
+      toast.error(`Đăng nhập thất bại, ${error.response?.data.message}`);
+    },
+  });
+};
 
 export const useRegister = () => {
   const router = useRouter();
@@ -37,16 +71,12 @@ export const useRegister = () => {
 };
 
 export const useAuth = () => {
-  const dispatch = useAppDispatch();
-  const profile = useAppSelector((state) => state.user.profile);
-  const isAuthenticated = useAppSelector((state) => state.user.isAuthenticated);
   const queryClient = useQueryClient();
   const router = useRouter();
 
   const {
     data: response,
     isLoading,
-    isError,
     error,
   } = useQuery({
     queryKey: ['user-profile'],
@@ -56,37 +86,50 @@ export const useAuth = () => {
     enabled: !!tokenMethod.get()?.accessToken,
   });
 
-  if (response?.result) {
-    dispatch(setUserProfile(response.result));
-  }
-
-  useEffect(() => {
-    if (isError && error) {
-      console.error('Error fetching profile:', error);
-      dispatch(clearUserProfile());
-    }
-  }, [isError, error, dispatch]);
-
   const hasRole = useCallback(
     (roles?: RoleEnums | RoleEnums[]): boolean => {
-      return hasUserRole(profile, roles);
+      return hasUserRole(response?.result, roles);
     },
-    [profile]
+    [response]
   );
 
   const handleLogout = () => {
     tokenMethod.remove();
-    dispatch(clearUserProfile());
     queryClient.clear();
     router.replace(PATH.LOGIN);
   };
 
   return {
-    user: profile,
-    profile,
+    user: response?.result,
+    profile: response?.result,
     isLoading,
-    isAuthenticated,
+    error,
     hasRole,
     handleLogout,
   };
+};
+
+export const hasUserRole = (
+  profile?: User,
+  roles?: RoleEnums | RoleEnums[]
+): boolean => {
+  // If no roles are provided, allow access
+  if (!roles) return true;
+
+  // If user is not authenticated, deny access
+  if (!profile || !profile.userRoles || profile.userRoles.length === 0) {
+    return false;
+  }
+
+  // Get the role names of the user
+  const userRoleNames = profile.userRoles
+    .filter((userRole) => userRole.role)
+    .map((userRole) => userRole.role!.roleName);
+
+  // Check if the user has any of the required roles
+  if (Array.isArray(roles)) {
+    return roles.some((role) => userRoleNames.includes(role));
+  }
+
+  return userRoleNames.includes(roles);
 };

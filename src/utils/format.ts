@@ -1,8 +1,13 @@
+import { RoleEnums, RoleLabels } from '@/enums/role';
 import { StoreRent, StoreRentLabels } from '@/enums/store-rent';
 import { Trend } from '@/types/person-types';
 
 export const getVietnameseRentLabel = (statusRent: StoreRent): string => {
   return StoreRentLabels[statusRent];
+};
+
+export const getVietnameseRoleLabel = (roleUser: RoleEnums): string => {
+  return RoleLabels[roleUser];
 };
 
 export const getChangeAmount = (

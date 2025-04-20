@@ -10,8 +10,8 @@ const EditEventPage = () => {
   const eventId = params.id as string;
   const { eventData } = useGetEventById(eventId);
   return (
-    <div className='container mx-auto md:px-20 md:py-4'>
-      <h1 className='text-3xl font-bold'>Tạo sự kiện mới</h1>
+    <div className='container mx-auto md:px-14 md:py-4'>
+      <h1 className='text-3xl font-bold'>Chỉnh sửa sự kiện</h1>
       <Separator className='my-4' />
       <div className='rounded-lg border p-6 shadow-md'>
         {eventData && <EventForm eventEdit={eventData} />}

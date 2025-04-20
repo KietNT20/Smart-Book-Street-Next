@@ -13,7 +13,6 @@ import {
   AlignRight,
   Bold,
   Italic,
-  Link as LinkIcon,
   List,
   ListOrdered,
   Redo,
@@ -24,10 +23,9 @@ import ColorPicker from './color-picker';
 
 interface RichTextToolbarProps {
   editor: Editor;
-  onAddLink: () => void;
 }
 
-const RichTextToolbar = ({ editor, onAddLink }: RichTextToolbarProps) => {
+const RichTextToolbar = ({ editor }: RichTextToolbarProps) => {
   return (
     <div className='flex flex-wrap gap-1 rounded-md border border-input bg-background p-1'>
       {/* Dropdown chọn heading */}
@@ -124,18 +122,6 @@ const RichTextToolbar = ({ editor, onAddLink }: RichTextToolbarProps) => {
         title='Danh sách đánh số'
       >
         <ListOrdered className='h-4 w-4' />
-      </Button>
-
-      {/* Liên kết */}
-      <Button
-        variant='ghost'
-        size='sm'
-        onClick={onAddLink}
-        className={editor.isActive('link') ? 'bg-muted' : ''}
-        type='button'
-        title='Thêm liên kết'
-      >
-        <LinkIcon className='h-4 w-4' />
       </Button>
 
       {/* Căn chỉnh văn bản */}

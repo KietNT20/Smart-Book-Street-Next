@@ -1,9 +1,9 @@
-// components/inventory-quantity-cell.tsx
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { STORAGE } from '@/constant/storage';
 import { useInventoryMutation } from '@/hooks/use-inventory';
 import { Inventory } from '@/types/inventory-types';
+import { getLocalStorageItem } from '@/utils/token';
 import { useRef } from 'react';
 import { toast } from 'sonner';
 
@@ -14,7 +14,7 @@ interface InventoryQuantityCellProps {
 }
 
 export const InventoryQuantityCell = ({ row }: InventoryQuantityCellProps) => {
-  const { updateQuantityMutation } = useInventoryMutation();
+  const { updateProductQuantity } = useInventoryMutation();
   const inputRef = useRef<HTMLInputElement>(null);
 
   return (
@@ -22,8 +22,13 @@ export const InventoryQuantityCell = ({ row }: InventoryQuantityCellProps) => {
       onSubmit={(e) => {
         e.preventDefault();
         const form = e.currentTarget;
+        const formData = new FormData(form);
         const input = form.querySelector('input');
         const value = input?.value;
+
+        if (value) {
+          formData.append('quantity', value);
+        }
 
         if (!value || !/^\d+$/.test(value)) {
           toast.error('Vui lòng nhập số hợp lệ');
@@ -37,19 +42,17 @@ export const InventoryQuantityCell = ({ row }: InventoryQuantityCellProps) => {
           return;
         }
 
-        const storeId = localStorage.getItem(STORAGE.SELECTED_STORE_KEY);
+        const storeId = getLocalStorageItem(STORAGE.SELECTED_STORE_KEY);
         if (!storeId) {
           toast.error('Không tìm thấy ID cửa hàng');
           return;
         }
 
-        // Gọi mutation để cập nhật số lượng
         toast.promise(
-          updateQuantityMutation.mutateAsync({
+          updateProductQuantity.mutateAsync({
             entityId: row.original.book.id as string,
             storeId,
-            quantity,
-            isInStock: true,
+            data: formData,
           }),
           {
             loading: `Đang cập nhật số lượng...`,

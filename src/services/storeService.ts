@@ -4,6 +4,7 @@ import {
   StoreResponse,
   StoreSearchCriteria,
   StoresResponse,
+  StoreStatictisTotal,
 } from '@/types/store-types';
 import axiosInstance from '@/utils/axiosInstance';
 
@@ -49,6 +50,10 @@ export const storeService = {
   },
   search: async (payload: StoreSearchCriteria): Promise<StoresResponse> => {
     const res = await axiosInstance.post(API_URL.STORES.SEARCH, payload);
+    return res.data;
+  },
+  getStaticsTotal: async (): Promise<StoreStatictisTotal> => {
+    const res = await axiosInstance.get(`${API_URL.STORES.INDEX}/stats/total`);
     return res.data;
   },
 };

@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import ZoneFilter from './_components/zone-filter';
 import ZoneTable from './_components/zone-table';
+import { getLocalStorageItem } from '@/utils/token';
 
 export interface SearchFilters {
   zoneName?: string;
@@ -27,7 +28,7 @@ const ZonesPage = () => {
   const [isSearching, setIsSearching] = useState(false);
 
   const router = useRouter();
-  const streetId = localStorage.getItem(STORAGE.SELECTED_STREET_KEY);
+  const streetId = getLocalStorageItem(STORAGE.SELECTED_STREET_KEY);
 
   const { zonesRes, isLoadingZones, totalPage } = useZones({
     pageNumber,

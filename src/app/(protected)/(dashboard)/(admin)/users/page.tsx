@@ -90,10 +90,6 @@ export default function UsersPage() {
     setIsSearching(false);
   };
 
-  const handleEditUser = (userId: string) => {
-    router.push(`${PATH.USERS}/${userId}/edit`);
-  };
-
   const handleViewUser = (userId: string) => {
     router.push(`${PATH.USERS}/${userId}`);
   };
@@ -130,7 +126,6 @@ export default function UsersPage() {
         sortOrder={sortOrder}
         handleSort={handleSort}
         onViewUser={handleViewUser}
-        onEditUser={handleEditUser}
       />
     </div>
   );

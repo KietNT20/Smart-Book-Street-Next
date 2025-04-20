@@ -24,7 +24,6 @@ export default function BooksDetailPage({
     bookDetailPending,
     bookDetailLoading,
     book,
-    bookInfoProps,
     router,
     deleteBook,
   } = useBookDetail({ id: params.id });
@@ -72,7 +71,7 @@ export default function BooksDetailPage({
           </TabsList>
 
           <TabsContent value='info' className='space-y-4'>
-            {book && <BookInfo {...bookInfoProps} book={book} />}
+            {book && <BookInfo book={book} />}
           </TabsContent>
 
           <TabsContent value='images'>

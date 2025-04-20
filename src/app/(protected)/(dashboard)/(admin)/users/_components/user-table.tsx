@@ -33,7 +33,6 @@ import { User } from '@/types/user-types';
 import {
   ArrowUpDown,
   Eye,
-  FileEdit,
   MoreHorizontal,
   SortAsc,
   SortDesc,
@@ -54,7 +53,6 @@ type Props = {
   sortOrder: Sort;
   handleSort: (field: string) => void;
   onViewUser: (id: string) => void;
-  onEditUser: (id: string) => void;
 };
 
 const UserTable = ({
@@ -70,7 +68,6 @@ const UserTable = ({
   sortOrder,
   handleSort,
   onViewUser,
-  onEditUser,
 }: Props) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState<string | null>(null);
@@ -261,12 +258,12 @@ const UserTable = ({
                             <Eye className='mr-2 h-4 w-4' />
                             Xem chi tiết
                           </DropdownMenuItem>
-                          <DropdownMenuItem
+                          {/* <DropdownMenuItem
                             onClick={() => onEditUser(user.id || '')}
                           >
                             <FileEdit className='mr-2 h-4 w-4' />
                             Chỉnh sửa
-                          </DropdownMenuItem>
+                          </DropdownMenuItem> */}
                           <DropdownMenuItem
                             className='text-destructive'
                             onClick={() => handleDeleteClick(user.id || '')}

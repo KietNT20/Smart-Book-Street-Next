@@ -53,7 +53,7 @@ export interface User extends BaseEntity {
   password: string;
   email: string;
   fullName: string;
-  dob: string | null;
+  dob: Date | string | null;
   address: string;
   phone: string;
   gender: Gender.Male | Gender.Female;
@@ -66,7 +66,9 @@ export interface User extends BaseEntity {
 }
 
 export interface UserProfileResponse {
-  result: User;
+  result: User & {
+    id: string;
+  };
   isSuccess: boolean;
   message: string;
 }

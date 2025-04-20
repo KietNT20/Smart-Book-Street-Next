@@ -287,10 +287,7 @@ export const userFormSchema = z.object({
     .string()
     .min(1, { message: 'Email không được để trống' })
     .email({ message: 'Email không hợp lệ' }),
-  password: z
-    .string()
-    .min(6, { message: 'Mật khẩu phải có ít nhất 6 ký tự' })
-    .optional(),
+  password: z.string().min(5, { message: 'Mật khẩu phải có ít nhất 5 ký tự' }),
   fullName: z.string().optional(),
   phone: z
     .string()
@@ -305,7 +302,7 @@ export const userFormSchema = z.object({
     )
     .optional(),
   dob: z.string().date().optional().nullable(),
-  addresss: z.string().optional(),
+  address: z.string().optional(),
   gender: z.enum([Gender.Male, Gender.Female]).optional(),
   mainImageFile: z
     .instanceof(File)
@@ -316,3 +313,30 @@ export const userFormSchema = z.object({
 });
 
 export type UserFormValues = z.infer<typeof userFormSchema>;
+
+// Souvenir form
+export const souvenirFormSchema = z.object({
+  souvenirName: z
+    .string()
+    .min(1, { message: 'Tên quà lưu niệm không được để trống' }),
+  price: z.number().min(0, { message: 'Giá không được âm' }),
+  description: z.string().optional(),
+  baseImgFile: z
+    .instanceof(File)
+    .optional()
+    .or(z.string().optional())
+    .nullable(),
+  otherImgFiles: z.array(z.instanceof(File).or(z.string())).default([]),
+});
+
+export type SouvenirFormValues = z.infer<typeof souvenirFormSchema>;
+
+// Zone form
+export const zoneFormSchema = z.object({
+  zoneName: z.string().min(1, { message: 'Vui lòng nhập tên khu vực' }),
+  description: z.string().optional(),
+  latitude: z.number().min(-90).max(90),
+  longitude: z.number().min(-180).max(180),
+});
+
+export type ZoneFormSchema = z.infer<typeof zoneFormSchema>;
