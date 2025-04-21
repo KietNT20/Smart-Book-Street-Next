@@ -3,10 +3,15 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 export const useGetCategories = () => {
-  return useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ['categories'],
     queryFn: () => categoryService.getAll(),
   });
+  return {
+    categoriesData: data?.results || [],
+    isLoading,
+    error,
+  };
 };
 
 export const useGetCategoryById = (id: string) => {

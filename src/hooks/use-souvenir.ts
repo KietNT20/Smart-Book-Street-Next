@@ -1,6 +1,7 @@
 import { PATH } from '@/enums/path';
 import { souvenirService } from '@/services/souvenirService';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { SouvenirParams } from '@/types/souvenir-types';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
@@ -62,5 +63,83 @@ export const useSouvenirMutation = () => {
     isUpdatingSouvenir: updateSouvenirMutation.isPending,
     deleteSouvenir: deleteSouvenirMutation.mutate,
     isDeletingSouvenir: deleteSouvenirMutation.isPending,
+  };
+};
+
+export const useGetSouvenirs = ({
+  sortField,
+  sortOrder,
+  result,
+  pageSize,
+  pageNumber,
+}: SouvenirParams) => {
+  const queryClient = useQueryClient();
+  const {
+    data: souvenirsRes,
+    isLoading,
+    isPending,
+    error,
+  } = useQuery({
+    queryKey: ['souvenirs', sortField, sortOrder, result, pageSize, pageNumber],
+    queryFn: () =>
+      souvenirService.getAllPagination({
+        sortField,
+        sortOrder,
+        result,
+        pageSize,
+        pageNumber,
+      }),
+  });
+
+  const totalPage = souvenirsRes?.totalPages || 1;
+
+  if (pageNumber < totalPage) {
+    queryClient.prefetchQuery({
+      queryKey: [
+        'souvenirs',
+        sortField,
+        sortOrder,
+        result,
+        pageSize,
+        pageNumber + 1,
+      ],
+      queryFn: () =>
+        souvenirService.getAllPagination({
+          sortField,
+          sortOrder,
+          result,
+          pageSize,
+          pageNumber: pageNumber + 1,
+        }),
+    });
+  }
+
+  if (pageNumber > 1) {
+    queryClient.prefetchQuery({
+      queryKey: [
+        'books',
+        sortField,
+        sortOrder,
+        result,
+        pageSize,
+        pageNumber - 1,
+      ],
+      queryFn: () =>
+        souvenirService.getAllPagination({
+          sortField,
+          sortOrder,
+          result,
+          pageSize,
+          pageNumber: pageNumber - 1,
+        }),
+    });
+  }
+
+  return {
+    souvenirsRes: souvenirsRes?.results || [],
+    isLoading,
+    isPending,
+    error,
+    totalPage,
   };
 };

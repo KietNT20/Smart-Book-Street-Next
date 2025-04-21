@@ -21,12 +21,12 @@ export const useInventoryByStoreId = (storeId: string) => {
 export const useInventoryBooksByStoreId = (storeId: string) => {
   const { data, isLoading, error } = useQuery({
     queryKey: ['inventories-book', storeId],
-    queryFn: () => inventoryService.getBookByStoreId(storeId),
+    queryFn: () => inventoryService.getBookNextByStoreId(storeId),
     enabled: !!storeId,
   });
 
   return {
-    inventoriesByBook: data?.results || [],
+    inventoriesByBook: data?.books || [],
     isLoading,
     error,
   };
@@ -35,12 +35,12 @@ export const useInventoryBooksByStoreId = (storeId: string) => {
 export const useInventorySouvenirsByStoreId = (storeId: string) => {
   const { data, isLoading, error } = useQuery({
     queryKey: ['inventories-souvenir', storeId],
-    queryFn: () => inventoryService.getSouvenirByStoreId(storeId),
+    queryFn: () => inventoryService.getSouvenirNextByStoreId(storeId),
     enabled: !!storeId,
   });
 
   return {
-    inventoriesBySouvenir: data?.results || [],
+    inventoriesBySouvenir: data?.souvenirs || [],
     isLoading,
     error,
   };
@@ -56,7 +56,10 @@ export const useInventoryMutation = () => {
     onSuccess: (data) => {
       if (data) {
         queryClient.invalidateQueries({
-          queryKey: ['inventories', data.storeId],
+          queryKey: ['inventories-book'],
+        });
+        queryClient.invalidateQueries({
+          queryKey: ['inventories-souvenir'],
         });
         toast.success('Thêm sản phẩm vào kho thành công');
       }
@@ -81,7 +84,10 @@ export const useInventoryMutation = () => {
     onSuccess: (data) => {
       if (data) {
         queryClient.invalidateQueries({
-          queryKey: ['inventories', data.storeId],
+          queryKey: ['inventories-book'],
+        });
+        queryClient.invalidateQueries({
+          queryKey: ['inventories-souvenir'],
         });
       }
     },

@@ -3,6 +3,7 @@
 import { TrendingUp } from 'lucide-react';
 import { Bar, BarChart, XAxis, YAxis } from 'recharts';
 
+import LoadingSpinner from '@/components/spin/loading-spinner';
 import {
   Card,
   CardContent,
@@ -124,10 +125,8 @@ export function OrderChartStore({
 
   // Get loading state based on timeframe
   const isLoading = useDebounce(
-    (timeframe === 'daily' && orderDailyLoading) ||
-      (timeframe === 'monthly' && orderMonthlyLoading) ||
-      (timeframe === 'yearly' && orderYearLoading),
-    500
+    orderDailyLoading || orderMonthlyLoading || orderYearLoading,
+    300
   );
 
   // Get error based on timeframe
@@ -147,22 +146,6 @@ export function OrderChartStore({
   const data = getActiveData();
   const error = getError();
 
-  // Show loading state
-  if (isLoading) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle>{title}</CardTitle>
-          <CardDescription>{description}</CardDescription>
-        </CardHeader>
-        <CardContent className='flex h-[300px] items-center justify-center'>
-          <div className='text-muted-foreground'>Đang tải...</div>
-        </CardContent>
-      </Card>
-    );
-  }
-
-  // Show error state
   if (error || !data) {
     return (
       <Card>
@@ -171,7 +154,7 @@ export function OrderChartStore({
           <CardDescription>{description}</CardDescription>
         </CardHeader>
         <CardContent className='flex h-[300px] items-center justify-center'>
-          <div className='text-destructive'>{error || 'No data available'}</div>
+          <p className='text-destructive'>{error || 'Chưa có dữ liệu'}</p>
         </CardContent>
       </Card>
     );
@@ -192,6 +175,10 @@ export function OrderChartStore({
     timeDescription = `Thống kê theo Tháng ${month} ${year}`;
   } else if (timeframe === 'yearly' && year) {
     timeDescription = `Thống kê theo Năm ${year}`;
+  }
+
+  if (isLoading) {
+    return <LoadingSpinner />;
   }
 
   return (

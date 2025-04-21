@@ -1,9 +1,9 @@
 import { cn, formatPrice } from '@/lib/utils';
-import { Inventory } from '@/types/inventory-types';
+import { BookNextjs } from '@/types/book-types';
 import { ColumnDef } from '@tanstack/react-table';
 import { InventoryQuantityCell } from './_components/inventory-quantity-cell';
 
-export const columnsBook: ColumnDef<Inventory>[] = [
+export const columnsBook: ColumnDef<BookNextjs>[] = [
   {
     accessorKey: 'no',
     header: 'No.',
@@ -13,22 +13,22 @@ export const columnsBook: ColumnDef<Inventory>[] = [
     },
   },
   {
-    accessorKey: 'book.isbn',
+    accessorKey: 'isbn',
     header: 'ISBN',
   },
   {
-    accessorKey: 'book.title',
+    accessorKey: 'title',
     header: 'Tên sách',
   },
   {
-    accessorKey: 'book.languages',
+    accessorKey: 'languages',
     header: 'Ngôn ngữ',
   },
   {
-    id: 'book.price',
+    id: 'price',
     header: 'Giá sách',
     cell: ({ row }) => {
-      const price = row.original.book?.price;
+      const price = row.original?.price;
       return (
         <p className='text-sm font-medium text-muted-foreground'>
           {price ? formatPrice(price as number) : '---'}

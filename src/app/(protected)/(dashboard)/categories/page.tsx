@@ -14,7 +14,7 @@ import { CategoryCol, columns } from './columns';
 import { DataTable } from './data-table';
 
 export default function CategoriesPage() {
-  const { data: categoriesRes, isLoading } = useGetCategories();
+  const { categoriesData, isLoading } = useGetCategories();
   const {
     createCategory,
     createCategoryPending,
@@ -86,7 +86,7 @@ export default function CategoriesPage() {
     return <LoadingSpinner />;
   }
 
-  if (!categoriesRes) {
+  if (!categoriesData) {
     return <Empty description={'Chưa có dữ liệu'} />;
   }
 
@@ -105,7 +105,7 @@ export default function CategoriesPage() {
           onEdit: handleEdit,
           onDelete: handleDelete,
         })}
-        data={categoriesRes?.results || []}
+        data={categoriesData}
       />
 
       <CategoryFormModal

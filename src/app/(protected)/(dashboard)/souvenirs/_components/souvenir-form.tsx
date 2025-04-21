@@ -1,4 +1,5 @@
-import { Button } from '@/components/ui/button';
+import CancelButton from '@/components/back-btn/cancel-btn';
+import SubmitBtn from '@/components/button/submit-btn';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Form,
@@ -11,6 +12,9 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { PATH } from '@/enums/path';
+import useDebounce from '@/hooks/use-debounce';
+import { useSouvenirMutation } from '@/hooks/use-souvenir';
 import { souvenirFormSchema, SouvenirFormValues } from '@/lib/zod';
 import { Souvenir } from '@/types/souvenir-types';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -27,6 +31,13 @@ const SouvenirForm = ({ souvenirToEdit }: Props) => {
   const [additionalImagesPreview, setAdditionalImagesPreview] = useState<
     string[]
   >([]);
+  const {
+    createSouvenir,
+    updateSouvenir,
+    isCreatingSouvenir,
+    isUpdatingSouvenir,
+  } = useSouvenirMutation();
+  const isPending = useDebounce(isCreatingSouvenir || isUpdatingSouvenir, 300);
 
   const form = useForm<SouvenirFormValues>({
     resolver: zodResolver(souvenirFormSchema),
@@ -42,29 +53,36 @@ const SouvenirForm = ({ souvenirToEdit }: Props) => {
   const onSubmit = (data: SouvenirFormValues) => {
     const formData = new FormData();
 
-    formData.append('souvenirName', data.souvenirName);
-    formData.append('price', data.price.toString());
+    if (data.souvenirName) {
+      formData.append('SouvenirName', data.souvenirName);
+    }
+    if (data.price) {
+      formData.append('Price', data.price.toString());
+    }
     if (data.description) {
-      formData.append('description', data.description);
+      formData.append('Description', data.description);
     }
 
     if (data.baseImgFile instanceof File) {
-      formData.append('baseImgFile', data.baseImgFile);
+      formData.append('BaseImgFile', data.baseImgFile);
     }
 
     if (data.otherImgFiles && data.otherImgFiles.length > 0) {
-      data.otherImgFiles.forEach((file, index) => {
+      data.otherImgFiles.forEach((file) => {
         if (file instanceof File) {
-          formData.append(`otherImgFiles[${index}]`, file);
+          formData.append(`OtherImgFiles`, file);
         }
       });
     }
 
-    // TODO: Gọi API để submit form data
-    // fetch('/api/souvenirs', {
-    //   method: 'POST',
-    //   body: formData,
-    // });
+    if (souvenirToEdit) {
+      updateSouvenir({
+        id: souvenirToEdit?.id as string,
+        data: formData,
+      });
+    } else {
+      createSouvenir(formData);
+    }
   };
 
   const handleMainImageChange = (
@@ -122,7 +140,11 @@ const SouvenirForm = ({ souvenirToEdit }: Props) => {
                 <FormItem>
                   <FormLabel>Tên quà lưu niệm</FormLabel>
                   <FormControl>
-                    <Input placeholder='Nhập tên quà lưu niệm' {...field} />
+                    <Input
+                      placeholder='Nhập tên quà lưu niệm'
+                      disabled={isPending}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -139,6 +161,7 @@ const SouvenirForm = ({ souvenirToEdit }: Props) => {
                     <Input
                       type='number'
                       placeholder='Nhập giá'
+                      disabled={isPending}
                       {...field}
                       onChange={(e) => field.onChange(Number(e.target.value))}
                     />
@@ -158,6 +181,7 @@ const SouvenirForm = ({ souvenirToEdit }: Props) => {
                     <Textarea
                       placeholder='Nhập mô tả cho quà lưu niệm'
                       className='resize-none'
+                      disabled={isPending}
                       {...field}
                     />
                   </FormControl>
@@ -181,6 +205,7 @@ const SouvenirForm = ({ souvenirToEdit }: Props) => {
                         type='file'
                         accept='image/*'
                         onChange={handleMainImageChange}
+                        disabled={isPending}
                       />
                       {mainImagePreview && (
                         <div className='relative flex h-40 w-40 items-center justify-center overflow-hidden'>
@@ -214,6 +239,7 @@ const SouvenirForm = ({ souvenirToEdit }: Props) => {
                         accept='image/*'
                         multiple
                         onChange={handleAdditionalImagesChange}
+                        disabled={isPending}
                       />
                       {additionalImagesPreview.length > 0 && (
                         <div className='grid grid-cols-4 gap-4'>
@@ -242,12 +268,12 @@ const SouvenirForm = ({ souvenirToEdit }: Props) => {
             />
 
             <div className='flex justify-end space-x-4'>
-              <Button type='button' variant='outline'>
-                Hủy
-              </Button>
-              <Button type='submit'>
-                {souvenirToEdit ? 'Cập nhật' : 'Tạo mới'}
-              </Button>
+              <CancelButton
+                _isPending={isPending}
+                pathUrl={PATH.SOUVENIRS}
+                routerReplace
+              />
+              <SubmitBtn _onPending={isPending} ID={souvenirToEdit?.id} />
             </div>
           </form>
         </Form>

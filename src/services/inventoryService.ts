@@ -1,3 +1,5 @@
+import { BooksNextResponse } from '@/app/api/stores/[storeId]/books/route';
+import { SouvenirsNextResponse } from '@/app/api/stores/[storeId]/souvenirs/route';
 import { API_URL } from '@/constant/api-url';
 import {
   InventoriesResponse,
@@ -5,6 +7,7 @@ import {
   InventoryScan,
 } from '@/types/inventory-types';
 import axiosInstance from '@/utils/axiosInstance';
+import axios from 'axios';
 
 export const inventoryService = {
   getAll: async () => {
@@ -35,6 +38,16 @@ export const inventoryService = {
     const res = await axiosInstance.get(
       `${API_URL.INVENTORIES.BY_STORE}/${storeId}/souvenirs`
     );
+    return res.data;
+  },
+  getBookNextByStoreId: async (storeId: string): Promise<BooksNextResponse> => {
+    const res = await axios.get(`/api/stores/${storeId}/books`);
+    return res.data;
+  },
+  getSouvenirNextByStoreId: async (
+    storeId: string
+  ): Promise<SouvenirsNextResponse> => {
+    const res = await axios.get(`/api/stores/${storeId}/souvenirs`);
     return res.data;
   },
   create: async (data: InventoryCreate) => {

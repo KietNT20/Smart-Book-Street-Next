@@ -3,10 +3,6 @@ import { Book, BookSearchCriteria } from '@/types/book-types';
 import { useState } from 'react';
 import { BookTableState } from '../data-table';
 
-type ModalState = {
-  type: 'none' | 'form' | 'search';
-};
-
 export function useBookPageState() {
   const [pagination, setPagination] = useState<BookTableState>({
     pageIndex: 1,
@@ -18,7 +14,6 @@ export function useBookPageState() {
   const [searchCriteria, setSearchCriteria] = useState<
     Partial<BookSearchCriteria>
   >({});
-  const [modalState, setModalState] = useState<ModalState>({ type: 'none' });
   const [selectedBook, setSelectedBook] = useState<Book | undefined>();
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
@@ -37,8 +32,6 @@ export function useBookPageState() {
     setPagination,
     searchCriteria,
     setSearchCriteria,
-    modalState,
-    setModalState,
     selectedBook,
     setSelectedBook,
     deleteId,

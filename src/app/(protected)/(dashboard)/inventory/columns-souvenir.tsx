@@ -1,9 +1,9 @@
 import { cn, formatPrice } from '@/lib/utils';
-import { Inventory } from '@/types/inventory-types';
+import { SouvenirNextjs } from '@/types/souvenir-types';
 import { ColumnDef } from '@tanstack/react-table';
 import { InventoryQuantityCell } from './_components/inventory-quantity-cell';
 
-export const columnsSouvenir: ColumnDef<Inventory>[] = [
+export const columnsSouvenir: ColumnDef<SouvenirNextjs>[] = [
   {
     accessorKey: 'no',
     header: 'No.',
@@ -13,14 +13,14 @@ export const columnsSouvenir: ColumnDef<Inventory>[] = [
     },
   },
   {
-    accessorKey: 'souvenir.souvenirName',
+    accessorKey: 'souvenirName',
     header: 'Tên quà lưu niệm',
   },
   {
-    accessorKey: 'souvenir.price',
+    accessorKey: 'price',
     header: 'Giá',
     cell: ({ row }) => {
-      const price = row.original.souvenir?.price;
+      const price = row.original?.price;
       return (
         <p className='text-sm font-medium text-muted-foreground'>
           {price ? formatPrice(price as number) : '---'}

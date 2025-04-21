@@ -1,5 +1,9 @@
 import { API_URL } from '@/constant/api-url';
-import { SouvenirParams } from '@/types/souvenir-types';
+import {
+  SouvenirParams,
+  SouvenirResponse,
+  SouvenirsResponse,
+} from '@/types/souvenir-types';
 import axiosInstance from '@/utils/axiosInstance';
 
 export const souvenirService = {
@@ -22,11 +26,17 @@ export const souvenirService = {
     const res = await axiosInstance.patch(`${API_URL.SOUVENIRS.INDEX}/${id}`);
     return res.data;
   },
-  getAllPagination: async (params: SouvenirParams) => {
+  getAllPagination: async (
+    params: SouvenirParams
+  ): Promise<SouvenirsResponse> => {
     const res = await axiosInstance.post(
       API_URL.SOUVENIRS.PAGINATION_SEARCH,
       params
     );
+    return res.data;
+  },
+  getSouvenirById: async (id: string): Promise<SouvenirResponse> => {
+    const res = await axiosInstance.get(`${API_URL.SOUVENIRS.INDEX}/${id}`);
     return res.data;
   },
 };

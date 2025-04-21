@@ -1,3 +1,4 @@
+import { DataTablePagination } from '@/components/data-table-pagination';
 import { TableSkeleton } from '@/components/table-skeleton';
 import { Button } from '@/components/ui/button';
 import {
@@ -6,13 +7,6 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import {
   Table,
   TableBody,
@@ -26,6 +20,7 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
+  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
   VisibilityState,
@@ -68,7 +63,7 @@ export function DataTable<TData, TValue>({
     },
     pageCount: pageCount,
     getCoreRowModel: getCoreRowModel(),
-    // getPaginationRowModel: getPaginationRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     manualPagination: true,
     onColumnVisibilityChange: setColumnVisibility,
@@ -199,69 +194,8 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-
-      <div className='flex items-center justify-between py-4'>
-        <div className='flex-1 text-sm text-muted-foreground'>
-          Trang {state.pageIndex} / {pageCount || 1}
-        </div>
-        <div className='flex items-center space-x-6'>
-          <div className='flex items-center space-x-2'>
-            <p className='text-sm font-medium'>Số dòng</p>
-            <Select
-              value={state.pageSize.toString()}
-              onValueChange={(value) => {
-                onStateChange({
-                  ...state,
-                  pageSize: Number(value),
-                  pageIndex: 1,
-                });
-              }}
-            >
-              <SelectTrigger className='h-8 w-24'>
-                <SelectValue>{state.pageSize}</SelectValue>
-              </SelectTrigger>
-              <SelectContent>
-                {[10, 20, 30, 40, 50].map((pageSize) => (
-                  <SelectItem key={pageSize} value={pageSize.toString()}>
-                    {pageSize}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <div className='flex items-center space-x-2'>
-            <Button
-              variant='outline'
-              size='sm'
-              onClick={() => {
-                if (state.pageIndex > 1) {
-                  onStateChange({
-                    ...state,
-                    pageIndex: state.pageIndex - 1,
-                  });
-                }
-              }}
-              disabled={state.pageIndex === 1}
-            >
-              Previous
-            </Button>
-            <Button
-              variant='outline'
-              size='sm'
-              onClick={() => {
-                if (state.pageIndex < (pageCount || 0)) {
-                  onStateChange({
-                    ...state,
-                    pageIndex: state.pageIndex + 1,
-                  });
-                }
-              }}
-              disabled={state.pageIndex === pageCount}
-            >
-              Next
-            </Button>
-          </div>
-        </div>
+      <div className='flex items-center justify-end space-x-2 py-4'>
+        <DataTablePagination table={table} />
       </div>
     </div>
   );

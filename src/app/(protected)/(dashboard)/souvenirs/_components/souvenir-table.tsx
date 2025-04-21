@@ -25,10 +25,11 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Sort } from '@/enums/enums';
-import { useZoneMutation } from '@/hooks/use-zone';
-import { Zone } from '@/types/zone-types';
+import { useSouvenirMutation } from '@/hooks/use-souvenir';
+import { Souvenir } from '@/types/souvenir-types';
 import {
   ArrowUpDown,
+  Eye,
   FileEdit,
   MoreHorizontal,
   SortAsc,
@@ -38,7 +39,7 @@ import {
 import { useState } from 'react';
 
 type Props = {
-  zones: Zone[];
+  souvenirs: Souvenir[];
   isLoading: boolean;
   isSearching: boolean;
   totalPages: number;
@@ -49,11 +50,12 @@ type Props = {
   sortField: string;
   sortOrder: Sort;
   handleSort: (field: string) => void;
-  onEditZone: (id: string) => void;
+  onViewSouvenir: (id: string) => void;
+  onEditSouvenir: (id: string) => void;
 };
 
-const ZoneTable = ({
-  zones,
+const SouvenirTable = ({
+  souvenirs,
   isLoading,
   isSearching,
   totalPages,
@@ -64,12 +66,13 @@ const ZoneTable = ({
   sortField,
   sortOrder,
   handleSort,
-  onEditZone,
+  onViewSouvenir,
+  onEditSouvenir,
 }: Props) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [zoneToDelete, setZoneToDelete] = useState<string | null>(null);
+  const [souvenirToDelete, setSouvenirToDelete] = useState<string | null>(null);
 
-  const { deleteZone } = useZoneMutation();
+  const { deleteSouvenir } = useSouvenirMutation();
 
   // Handle page size change
   const handlePageSizeChange = (value: string) => {
@@ -78,19 +81,20 @@ const ZoneTable = ({
   };
 
   // Handle opening delete dialog
-  const handleDeleteClick = (zoneId: string) => {
-    setZoneToDelete(zoneId);
+  const handleDeleteClick = (souvenirId: string) => {
+    setSouvenirToDelete(souvenirId);
     setDeleteDialogOpen(true);
   };
 
   // Handle delete confirmation
   const handleDeleteConfirm = () => {
-    if (zoneToDelete) {
-      deleteZone(zoneToDelete);
+    if (souvenirToDelete) {
+      // Call API to delete souvenir with the souvenir ID
+      deleteSouvenir(souvenirToDelete);
 
       // Close dialog and reset state
       setDeleteDialogOpen(false);
-      setZoneToDelete(null);
+      setSouvenirToDelete(null);
     }
   };
 
@@ -104,11 +108,28 @@ const ZoneTable = ({
               <TableHead>No.</TableHead>
               <TableHead
                 className='cursor-pointer'
-                onClick={() => handleSort('ZoneName')}
+                onClick={() => handleSort('SouvenirName')}
               >
                 <Button variant='ghost'>
-                  Tên Nhà Xuất Bản
-                  {sortField === 'ZoneName' ? (
+                  Tên Quà Lưu Niệm
+                  {sortField === 'SouvenirName' ? (
+                    sortOrder === Sort.ASC ? (
+                      <SortAsc />
+                    ) : (
+                      <SortDesc />
+                    )
+                  ) : (
+                    <ArrowUpDown />
+                  )}
+                </Button>
+              </TableHead>
+              <TableHead
+                className='cursor-pointer'
+                onClick={() => handleSort('Price')}
+              >
+                <Button variant='ghost'>
+                  Giá
+                  {sortField === 'Price' ? (
                     sortOrder === Sort.ASC ? (
                       <SortAsc />
                     ) : (
@@ -125,7 +146,7 @@ const ZoneTable = ({
           <TableBody>
             {isLoading ? (
               <TableSkeleton columns={6} rows={pageSize} />
-            ) : zones.length === 0 ? (
+            ) : souvenirs.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={6} className='py-10 text-center'>
                   Không tìm thấy cửa hàng.{' '}
@@ -133,12 +154,15 @@ const ZoneTable = ({
                 </TableCell>
               </TableRow>
             ) : (
-              zones.map((zone, index) => (
-                <TableRow key={zone.id}>
+              souvenirs.map((souvenir, index) => (
+                <TableRow key={souvenir?.id || index}>
                   <TableCell className='text-muted-foreground'>
                     {index + 1 + (pageNumber - 1) * pageSize}
                   </TableCell>
-                  <TableCell className='font-medium'>{zone.zoneName}</TableCell>
+                  <TableCell className='font-medium'>
+                    {souvenir.souvenirName}
+                  </TableCell>
+                  <TableCell>{souvenir.price}</TableCell>
                   <TableCell className='text-right'>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -149,14 +173,20 @@ const ZoneTable = ({
                       <DropdownMenuContent align='end'>
                         <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
                         <DropdownMenuItem
-                          onClick={() => onEditZone(zone.id || '')}
+                          onClick={() => onViewSouvenir(souvenir.id || '')}
+                        >
+                          <Eye className='mr-2 h-4 w-4' />
+                          Xem chi tiết
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => onEditSouvenir(souvenir.id || '')}
                         >
                           <FileEdit className='mr-2 h-4 w-4' />
                           Chỉnh sửa
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className='text-destructive'
-                          onClick={() => handleDeleteClick(zone.id || '')}
+                          onClick={() => handleDeleteClick(souvenir.id || '')}
                         >
                           <Trash2 className='mr-2 h-4 w-4' />
                           Xóa
@@ -207,11 +237,11 @@ const ZoneTable = ({
         onClose={() => setDeleteDialogOpen(false)}
         variant='destructive'
         title='Xác nhận xóa'
-        description='Bạn có chắc chắn muốn xóa Khu Vực này không? Hành động này không thể hoàn tác.'
+        description='Bạn có chắc chắn muốn xóa Quà Lưu Niệm này không? Hành động này không thể hoàn tác.'
         onConfirm={handleDeleteConfirm}
       />
     </>
   );
 };
 
-export default ZoneTable;
+export default SouvenirTable;

@@ -94,7 +94,7 @@ const AuthorMenuAction = ({ author }: Props) => {
         onClose={handleModalClose}
         onConfirm={() => _onDelete(author.id)}
         title='Xóa sách'
-        description={`Bạn có chắc chắn muốn xóa ${author.authorName} này? Hành động này không thể hoàn tác.`}
+        description={`Bạn có chắc chắn muốn xóa ${author.authorName}? Hành động này không thể hoàn tác.`}
         confirmText='Xóa'
         cancelText='Hủy'
         variant='destructive'

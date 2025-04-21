@@ -44,7 +44,6 @@ export const createColumns = ({
         )}
       </Button>
     ),
-    filterFn: 'includesString',
   },
   {
     accessorKey: 'title',
@@ -64,7 +63,6 @@ export const createColumns = ({
         )}
       </Button>
     ),
-    filterFn: 'includesString',
     cell: ({ row }) => {
       const book = row.original;
       return (
@@ -97,12 +95,10 @@ export const createColumns = ({
     },
   },
   {
-    id: 'languages',
     accessorKey: 'languages',
     header: 'Ngôn ngữ',
   },
   {
-    id: 'status',
     accessorKey: 'status',
     header: 'Tình trạng',
   },

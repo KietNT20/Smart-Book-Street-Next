@@ -24,3 +24,4 @@ junit.xml
 docs
 ./vscode
 .github
+tailwind.config.ts
