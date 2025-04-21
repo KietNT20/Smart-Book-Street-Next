@@ -2,6 +2,7 @@ import { cn, formatPrice } from '@/lib/utils';
 import { SouvenirNextjs } from '@/types/souvenir-types';
 import { ColumnDef } from '@tanstack/react-table';
 import { InventoryQuantityCell } from './_components/inventory-quantity-cell';
+import MenuColoumn from './_components/menu-col';
 
 export const columnsSouvenir: ColumnDef<SouvenirNextjs>[] = [
   {
@@ -50,6 +51,13 @@ export const columnsSouvenir: ColumnDef<SouvenirNextjs>[] = [
           {isInStock ? 'Còn hàng' : 'Hết hàng'}
         </p>
       );
+    },
+  },
+  {
+    id: 'actions',
+    cell: ({ row }) => {
+      const souvenir = row.original;
+      return <MenuColoumn entityId={souvenir.entityId} />;
     },
   },
 ];

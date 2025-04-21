@@ -188,13 +188,24 @@ const BookSearchFilter = ({ onFilterChange, initialFilter = {} }: Props) => {
           </CollapsibleTrigger>
           <CollapsibleContent>
             <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
-              {/* Tiêu đề */}
+              {/* Tên sách */}
               <div className=''>
-                <Label htmlFor='title'>Tiêu đề</Label>
+                <Label htmlFor='title'>Tên sách</Label>
                 <Input
                   id='title'
                   name='title'
                   value={filter.title || ''}
+                  onChange={handleInputChange}
+                  placeholder='Tìm kiếm tên sách'
+                />
+              </div>
+
+              <div className=''>
+                <Label htmlFor='isbn'>ISBN</Label>
+                <Input
+                  id='isbn'
+                  name='isbn'
+                  value={filter.isbn || ''}
                   onChange={handleInputChange}
                   placeholder='Tìm kiếm tên sách'
                 />

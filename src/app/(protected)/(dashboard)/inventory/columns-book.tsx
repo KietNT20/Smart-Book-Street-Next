@@ -2,6 +2,7 @@ import { cn, formatPrice } from '@/lib/utils';
 import { BookNextjs } from '@/types/book-types';
 import { ColumnDef } from '@tanstack/react-table';
 import { InventoryQuantityCell } from './_components/inventory-quantity-cell';
+import MenuColoumn from './_components/menu-col';
 
 export const columnsBook: ColumnDef<BookNextjs>[] = [
   {
@@ -58,6 +59,13 @@ export const columnsBook: ColumnDef<BookNextjs>[] = [
           {isInStock ? 'Còn hàng' : 'Hết hàng'}
         </p>
       );
+    },
+  },
+  {
+    id: 'actions',
+    cell: ({ row }) => {
+      const book = row.original;
+      return <MenuColoumn entityId={book.entityId} />;
     },
   },
 ];

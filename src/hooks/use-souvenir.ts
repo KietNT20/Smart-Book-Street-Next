@@ -117,7 +117,7 @@ export const useGetSouvenirs = ({
   if (pageNumber > 1) {
     queryClient.prefetchQuery({
       queryKey: [
-        'books',
+        'souvenirs',
         sortField,
         sortOrder,
         result,
@@ -141,5 +141,28 @@ export const useGetSouvenirs = ({
     isPending,
     error,
     totalPage,
+  };
+};
+
+export const useGetSouvenirById = (id: string) => {
+  const queryClient = useQueryClient();
+  const { data, isLoading, isPending, error } = useQuery({
+    queryKey: ['souvenirs', id],
+    queryFn: () => souvenirService.getSouvenirById(id),
+    enabled: !!id,
+  });
+
+  if (id) {
+    queryClient.prefetchQuery({
+      queryKey: ['souvenirs', id],
+      queryFn: () => souvenirService.getSouvenirById(id),
+    });
+  }
+
+  return {
+    souvenir: data?.result,
+    isLoading,
+    isPending,
+    error,
   };
 };

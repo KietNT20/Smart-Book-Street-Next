@@ -6,7 +6,7 @@ import { Sort } from '@/enums/enums';
 import { PATH } from '@/enums/path';
 import useDebounce from '@/hooks/use-debounce';
 import { useGetSouvenirs } from '@/hooks/use-souvenir';
-import { Plus, Search } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -89,10 +89,6 @@ const SouvenirsPage = () => {
   };
 
   const handleEditSouvenir = (souvenirId: string) => {
-    router.push(`${PATH.SOUVENIRS}/${souvenirId}/edit`);
-  };
-
-  const handleViewSouvenirDetail = (souvenirId: string) => {
     router.push(`${PATH.SOUVENIRS}/${souvenirId}`);
   };
 
@@ -115,9 +111,6 @@ const SouvenirsPage = () => {
           placeholder='Tìm kiếm đồ lưu niệm'
           className='max-w-sm flex-1'
         />
-        <Button onClick={handleSearch}>
-          <Search className='mr-2' /> Tìm kiếm
-        </Button>
         {isSearching && (
           <Button variant='outline' onClick={clearSearch}>
             Xóa tìm kiếm
@@ -144,7 +137,6 @@ const SouvenirsPage = () => {
         sortField={sortField}
         sortOrder={sortOrder}
         handleSort={handleSort}
-        onViewSouvenir={handleViewSouvenirDetail}
         onEditSouvenir={handleEditSouvenir}
       />
     </div>

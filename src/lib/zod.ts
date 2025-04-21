@@ -278,10 +278,14 @@ export const souvenirFormSchema = z.object({
   description: z.string().optional(),
   baseImgFile: z
     .instanceof(File)
-    .optional()
-    .or(z.string().optional())
-    .nullable(),
-  otherImgFiles: z.array(z.instanceof(File).or(z.string())).default([]),
+    .refine(
+      (file) => {
+        if (!file) return true;
+        return file.size <= 1024 * 1024 * 10; // 10MB
+      },
+      { message: 'Kích thước ảnh chính không được vượt quá 10MB' }
+    )
+    .or(z.string()),
 });
 
 export type SouvenirFormValues = z.infer<typeof souvenirFormSchema>;

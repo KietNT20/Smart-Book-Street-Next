@@ -254,11 +254,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         ]),
         roles: [RoleEnums.STORE_MANAGER, RoleEnums.STORE_OWNER],
         items: [
-          {
-            title: 'Kho sản phẩm',
-            url: PATH.PACKAGES,
-            roles: [RoleEnums.STORE_MANAGER, RoleEnums.STORE_OWNER],
-          },
+          // {
+          //   title: 'Kho sản phẩm',
+          //   url: PATH.PACKAGES,
+          //   roles: [RoleEnums.STORE_MANAGER, RoleEnums.STORE_OWNER],
+          // },
           {
             title: 'Quản lý quà lưu niệm',
             url: PATH.SOUVENIRS,

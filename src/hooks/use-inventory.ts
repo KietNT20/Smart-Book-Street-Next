@@ -61,12 +61,13 @@ export const useInventoryMutation = () => {
         queryClient.invalidateQueries({
           queryKey: ['inventories-souvenir'],
         });
-        toast.success('Thêm sản phẩm vào kho thành công');
       }
     },
-    onError: (error) => {
-      toast.error(`${error.message}`);
-      console.log('Error adding product to inventory:', error);
+    onError: (error: AxiosError<{ message?: string }>) => {
+      console.log(
+        'Error adding product to inventory:',
+        error.response?.data.message
+      );
     },
   });
 
@@ -97,10 +98,38 @@ export const useInventoryMutation = () => {
     },
   });
 
+  const deleteProductMutation = useMutation({
+    mutationKey: ['delete-inventory'],
+    mutationFn: ({
+      entityId,
+      storeId,
+    }: {
+      entityId: string;
+      storeId: string;
+    }) => inventoryService.delete(entityId, storeId),
+    onSuccess: (data) => {
+      if (data) {
+        queryClient.invalidateQueries({
+          queryKey: ['inventories-book'],
+        });
+        queryClient.invalidateQueries({
+          queryKey: ['inventories-souvenir'],
+        });
+        toast.success('Xóa sản phẩm khỏi kho thành công');
+      }
+    },
+    onError: (error) => {
+      toast.error(`${error.message}`);
+      console.log('Error deleting product to inventory:', error);
+    },
+  });
+
   return {
-    addProductToStore: createQuantityMutation.mutate,
+    addProductToStore: createQuantityMutation,
     addProductPending: createQuantityMutation.isPending,
     updateProductQuantity: updateQuantityMutation,
     updateProductPending: updateQuantityMutation.isPending,
+    deleteProduct: deleteProductMutation.mutate,
+    deleteProductPending: deleteProductMutation.isPending,
   };
 };

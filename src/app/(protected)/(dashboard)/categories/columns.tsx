@@ -102,14 +102,14 @@ export const columns = ({
             <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
             <DropdownMenuItem onClick={() => onEdit(category)}>
               <Edit className='mr-2 h-4 w-4' />
-              Sửa danh mục
+              Chỉnh sửa
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => onDelete(category.id)}
               className='text-red-600 focus:text-red-600'
             >
               <Trash className='mr-2 h-4 w-4' />
-              Xóa danh mục
+              Xóa
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

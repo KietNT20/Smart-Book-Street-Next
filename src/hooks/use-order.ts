@@ -1,5 +1,5 @@
 import { orderService } from '@/services/orderService';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 export const useOrderStaticsDailyAdmin = (date: string) => {
   const { data, isLoading, isError } = useQuery({
@@ -38,11 +38,21 @@ export const useOrderStaticsYearAdmin = (year: number) => {
 };
 
 export const useOrderStaticsDailyStore = (date: string, storeId: string) => {
+  const queryClient = useQueryClient();
+
   const { data, isLoading, isError } = useQuery({
     queryKey: ['orderStaticsDailyStore', date, storeId],
     queryFn: () => orderService.getOrderStaticsDailyStore(date, storeId),
     enabled: !!storeId,
   });
+
+  if (storeId) {
+    queryClient.prefetchQuery({
+      queryKey: ['orderStaticsDailyStore', date, storeId],
+      queryFn: () => orderService.getOrderStaticsDailyStore(date, storeId),
+    });
+  }
+
   return {
     orderStaticsDailyStore: data,
     orderDailyLoading: isLoading,
@@ -55,12 +65,23 @@ export const useOrderStaticsMonthlyStore = (
   year: number,
   storeId: string
 ) => {
+  const queryClient = useQueryClient();
+
   const { data, isLoading, isError } = useQuery({
     queryKey: ['orderStaticsMonthlyStore', month, year, storeId],
     queryFn: () =>
       orderService.getOrderStaticsMonthlyStore(month, year, storeId),
     enabled: !!storeId,
   });
+
+  if (storeId) {
+    queryClient.prefetchQuery({
+      queryKey: ['orderStaticsMonthlyStore', month, year, storeId],
+      queryFn: () =>
+        orderService.getOrderStaticsMonthlyStore(month, year, storeId),
+    });
+  }
+
   return {
     orderStaticsMonthlyStore: data,
     orderMonthlyLoading: isLoading,
@@ -69,11 +90,21 @@ export const useOrderStaticsMonthlyStore = (
 };
 
 export const useOrderStaticsYearlyStore = (year: number, storeId: string) => {
+  const queryClient = useQueryClient();
+
   const { data, isLoading, isError } = useQuery({
     queryKey: ['orderStaticsYearlyStore', year, storeId],
     queryFn: () => orderService.getOrderStaticsYearlyStore(year, storeId),
     enabled: !!storeId,
   });
+
+  if (storeId) {
+    queryClient.prefetchQuery({
+      queryKey: ['orderStaticsYearlyStore', year, storeId],
+      queryFn: () => orderService.getOrderStaticsYearlyStore(year, storeId),
+    });
+  }
+
   return {
     orderStaticsYearlyStore: data,
     orderYearLoading: isLoading,

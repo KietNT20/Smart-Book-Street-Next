@@ -2,13 +2,7 @@ import { Button } from '@/components/ui/button';
 import { formateDateVi, formatPrice } from '@/lib/utils';
 import { Book } from '@/types/book-types';
 import { ColumnDef } from '@tanstack/react-table';
-import {
-  ArrowDown,
-  ArrowUp,
-  ArrowUpDown,
-  SortAsc,
-  SortDesc,
-} from 'lucide-react';
+import { ArrowUpDown, SortAsc, SortDesc } from 'lucide-react';
 import BookMenuAction from './_components/book-menu-action';
 
 type ColumnHandlers = {
@@ -55,9 +49,9 @@ export const createColumns = ({
       >
         Tên sách
         {column.getIsSorted() === 'asc' ? (
-          <ArrowUp className='ml-2 h-4 w-4' />
+          <SortAsc className='ml-2 h-4 w-4' />
         ) : column.getIsSorted() === 'desc' ? (
-          <ArrowDown className='ml-2 h-4 w-4' />
+          <SortDesc className='ml-2 h-4 w-4' />
         ) : (
           <ArrowUpDown className='ml-2 h-4 w-4' />
         )}
@@ -82,9 +76,9 @@ export const createColumns = ({
       >
         Giá (VND)
         {column.getIsSorted() === 'asc' ? (
-          <ArrowUp className='ml-2 h-4 w-4' />
+          <SortAsc className='ml-2 h-4 w-4' />
         ) : column.getIsSorted() === 'desc' ? (
-          <ArrowDown className='ml-2 h-4 w-4' />
+          <SortDesc className='ml-2 h-4 w-4' />
         ) : (
           <ArrowUpDown className='ml-2 h-4 w-4' />
         )}
@@ -112,9 +106,9 @@ export const createColumns = ({
       >
         Ngày xuất bản
         {column.getIsSorted() === 'asc' ? (
-          <ArrowUp className='ml-2 h-4 w-4' />
+          <SortAsc className='ml-2 h-4 w-4' />
         ) : column.getIsSorted() === 'desc' ? (
-          <ArrowDown className='ml-2 h-4 w-4' />
+          <SortDesc className='ml-2 h-4 w-4' />
         ) : (
           <ArrowUpDown className='ml-2 h-4 w-4' />
         )}

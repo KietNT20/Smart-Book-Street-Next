@@ -3,12 +3,22 @@ import TablePagination from '@/components/pagination/table-pagination';
 import { TableSkeleton } from '@/components/table-skeleton';
 import { Button } from '@/components/ui/button';
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
@@ -24,19 +34,25 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { STORAGE } from '@/constant/storage';
 import { Sort } from '@/enums/enums';
+import { useInventoryMutation } from '@/hooks/use-inventory';
 import { useSouvenirMutation } from '@/hooks/use-souvenir';
+import { formatPrice } from '@/lib/utils';
 import { Souvenir } from '@/types/souvenir-types';
+import { getLocalStorageItem } from '@/utils/token';
+import { DialogTitle } from '@radix-ui/react-dialog';
 import {
   ArrowUpDown,
-  Eye,
   FileEdit,
   MoreHorizontal,
+  PackagePlus,
   SortAsc,
   SortDesc,
   Trash2,
 } from 'lucide-react';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 type Props = {
   souvenirs: Souvenir[];
@@ -50,7 +66,6 @@ type Props = {
   sortField: string;
   sortOrder: Sort;
   handleSort: (field: string) => void;
-  onViewSouvenir: (id: string) => void;
   onEditSouvenir: (id: string) => void;
 };
 
@@ -66,13 +81,18 @@ const SouvenirTable = ({
   sortField,
   sortOrder,
   handleSort,
-  onViewSouvenir,
   onEditSouvenir,
 }: Props) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [souvenirToDelete, setSouvenirToDelete] = useState<string | null>(null);
 
+  // State để quản lý dialog cho từng sản phẩm
+  const [openDialog, setOpenDialog] = useState<string | null>(null);
+  const [quantities, setQuantities] = useState<Record<string, string>>({});
+
   const { deleteSouvenir } = useSouvenirMutation();
+  const storeId = getLocalStorageItem(STORAGE.SELECTED_STORE_KEY) as string;
+  const { addProductToStore } = useInventoryMutation();
 
   // Handle page size change
   const handlePageSizeChange = (value: string) => {
@@ -96,6 +116,52 @@ const SouvenirTable = ({
       setDeleteDialogOpen(false);
       setSouvenirToDelete(null);
     }
+  };
+
+  // Hàm mở dialog và khởi tạo quantity nếu chưa có
+  const handleOpenDialog = (souvenirId: string) => {
+    if (!quantities[souvenirId]) {
+      setQuantities((prev) => ({ ...prev, [souvenirId]: '0' }));
+    }
+    setOpenDialog(souvenirId);
+  };
+
+  // Hàm cập nhật quantity cho từng sản phẩm
+  const handleQuantityChange = (souvenirId: string, value: string) => {
+    setQuantities((prev) => ({ ...prev, [souvenirId]: value }));
+  };
+
+  const handleAddToStore = (souvenirId: string) => {
+    const quantity = quantities[souvenirId] || '0';
+
+    if (!quantity || !/^\d+$/.test(quantity)) {
+      toast.error('Vui lòng nhập số hợp lệ');
+      return;
+    }
+
+    const quantityValue = parseInt(quantity);
+
+    if (quantityValue < 0) {
+      toast.error('Số lượng không thể âm');
+      return;
+    }
+
+    toast.promise(
+      addProductToStore.mutateAsync({
+        entityId: souvenirId,
+        storeId: storeId,
+        isInStock: true,
+        quantity: quantityValue,
+      }),
+      {
+        loading: 'Đang thêm vào kho của bạn...',
+        success: () => {
+          setOpenDialog(null);
+          return 'Thêm vào kho thành công';
+        },
+        error: 'Sản phẩm đã tồn tại trong kho',
+      }
+    );
   };
 
   return (
@@ -154,48 +220,112 @@ const SouvenirTable = ({
                 </TableCell>
               </TableRow>
             ) : (
-              souvenirs.map((souvenir, index) => (
-                <TableRow key={souvenir?.id || index}>
-                  <TableCell className='text-muted-foreground'>
-                    {index + 1 + (pageNumber - 1) * pageSize}
-                  </TableCell>
-                  <TableCell className='font-medium'>
-                    {souvenir.souvenirName}
-                  </TableCell>
-                  <TableCell>{souvenir.price}</TableCell>
-                  <TableCell className='text-right'>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant='ghost' size='icon'>
-                          <MoreHorizontal className='h-4 w-4' />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align='end'>
-                        <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
-                        <DropdownMenuItem
-                          onClick={() => onViewSouvenir(souvenir.id || '')}
-                        >
-                          <Eye className='mr-2 h-4 w-4' />
-                          Xem chi tiết
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() => onEditSouvenir(souvenir.id || '')}
-                        >
-                          <FileEdit className='mr-2 h-4 w-4' />
-                          Chỉnh sửa
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          className='text-destructive'
-                          onClick={() => handleDeleteClick(souvenir.id || '')}
-                        >
-                          <Trash2 className='mr-2 h-4 w-4' />
-                          Xóa
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-              ))
+              souvenirs.map((souvenir, index) => {
+                const souvenirId = souvenir.id || '';
+                return (
+                  <TableRow key={souvenirId || index}>
+                    <TableCell className='text-muted-foreground'>
+                      {index + 1 + (pageNumber - 1) * pageSize}
+                    </TableCell>
+                    <TableCell className='font-medium'>
+                      {souvenir.souvenirName}
+                    </TableCell>
+                    <TableCell>{formatPrice(souvenir.price)}</TableCell>
+                    <TableCell className='text-right'>
+                      <Dialog
+                        open={openDialog === souvenirId}
+                        onOpenChange={(open) =>
+                          open
+                            ? handleOpenDialog(souvenirId)
+                            : setOpenDialog(null)
+                        }
+                      >
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant='ghost' size='icon'>
+                              <MoreHorizontal className='h-4 w-4' />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align='end'>
+                            <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
+                            <DropdownMenuItem
+                              onClick={() => onEditSouvenir(souvenirId)}
+                            >
+                              <FileEdit className='mr-2 h-4 w-4' />
+                              Chỉnh sửa
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              className='text-destructive'
+                              onClick={() => handleDeleteClick(souvenirId)}
+                            >
+                              <Trash2 className='mr-2 h-4 w-4' />
+                              Xóa
+                            </DropdownMenuItem>
+                            <DialogTrigger asChild>
+                              <DropdownMenuItem>
+                                <PackagePlus className='mr-2 h-4 w-4' />
+                                <span>Thêm vào kho</span>
+                              </DropdownMenuItem>
+                            </DialogTrigger>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle>Thêm sản phẩm vào kho</DialogTitle>
+                            <DialogDescription>
+                              Nhập số lượng sản phẩm bạn muốn thêm vào kho
+                            </DialogDescription>
+                          </DialogHeader>
+                          <div className='py-4'>
+                            <Label
+                              htmlFor={`quantity-${souvenirId}`}
+                              className='mb-2 block'
+                            >
+                              Số lượng
+                            </Label>
+                            <Input
+                              id={`quantity-${souvenirId}`}
+                              type='text'
+                              value={quantities[souvenirId] || '0'}
+                              onChange={(e) =>
+                                handleQuantityChange(souvenirId, e.target.value)
+                              }
+                              onKeyDown={(e) => {
+                                if (
+                                  !/^\d$/.test(e.key) &&
+                                  e.key !== 'Backspace' &&
+                                  e.key !== 'Enter' &&
+                                  e.key !== 'Tab' &&
+                                  e.key !== 'ArrowLeft' &&
+                                  e.key !== 'ArrowRight'
+                                ) {
+                                  e.preventDefault();
+                                }
+                              }}
+                              placeholder='Nhập số lượng'
+                              className='w-full'
+                            />
+                          </div>
+                          <DialogFooter>
+                            <Button
+                              variant='outline'
+                              onClick={() => setOpenDialog(null)}
+                            >
+                              Hủy
+                            </Button>
+                            <Button
+                              type='button'
+                              onClick={() => handleAddToStore(souvenirId)}
+                            >
+                              Xác nhận thêm vào kho
+                            </Button>
+                          </DialogFooter>
+                        </DialogContent>
+                      </Dialog>
+                    </TableCell>
+                  </TableRow>
+                );
+              })
             )}
           </TableBody>
         </Table>

@@ -14,6 +14,7 @@ import { PATH } from '@/enums/path';
 import { useGetAuthors } from '@/hooks/use-author';
 import useDebounce from '@/hooks/use-debounce';
 import { AuthorSearchPagination } from '@/types/author-types';
+import { Plus } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 import { columns } from './columns';
@@ -80,12 +81,7 @@ const AuthorsPage = () => {
   return (
     <div className='container mx-auto'>
       <div className='space-y-6'>
-        <div className='flex items-center justify-between'>
-          <h2 className='text-2xl font-bold'>Quản lý Tác giả</h2>
-          <Link href={PATH.ADMIN_AUTHOR_CREATE}>
-            <Button>Thêm tác giả</Button>
-          </Link>
-        </div>
+        <h2 className='text-2xl font-bold'>Quản lý Tác giả</h2>
 
         <div className='flex items-end gap-4'>
           <div className='flex-1'>
@@ -140,6 +136,12 @@ const AuthorsPage = () => {
               </SelectContent>
             </Select>
           </div>
+
+          <Link href={PATH.ADMIN_AUTHOR_CREATE}>
+            <Button>
+              <Plus className='mr-2' /> Thêm tác giả
+            </Button>
+          </Link>
         </div>
 
         {error ? (

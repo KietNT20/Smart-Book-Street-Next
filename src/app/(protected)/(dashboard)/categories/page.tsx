@@ -121,7 +121,8 @@ export default function CategoriesPage() {
         onClose={() => setIsDeleteDialogOpen(false)}
         onConfirm={confirmDelete}
         title='Bạn có chắc chắn muốn xóa?'
-        description='Hành động này không thể hoàn tác. Danh mục này sẽ bị xóa khỏi hệ thống.'
+        confirmText='Xác nhận xóa'
+        description={`Hành động này không thể hoàn tác. Danh mục này sẽ bị xóa khỏi hệ thống.`}
         variant='destructive'
         isLoading={deleteCategoryPending}
       />

@@ -1,5 +1,11 @@
+import SouvenirForm from '../_components/souvenir-form';
+
 const Page = () => {
-  return <div>Page</div>;
+  return (
+    <div className='container mx-auto md:px-32 md:py-4'>
+      <SouvenirForm />
+    </div>
+  );
 };
 
 export default Page;
