@@ -62,6 +62,25 @@ export interface StoreSchedulesPayload {
   dayOfWeek: DayOfWeek;
   openTime: string;
   closeTime: string;
+  isClosed?: boolean;
+  specialDate?: Date | string | null;
+}
+
+export interface StoreSchedules extends BaseEntity {
+  storeId: string;
+  store: (StoreData & { id: string }) | null;
+  dayOfWeek: DayOfWeek;
+  openTime: string;
+  closeTime: string;
   isClosed: boolean;
   specialDate: Date | string | null;
 }
+
+export type StoreSchedulesResponse = ApiListResponse<
+  StoreSchedules & { id: string }
+>;
+export type StoreScheduleResponse = ApiResponse<
+  StoreSchedules & { id: string }
+>;
+
+export type StoreSchedulesStoreID = Array<StoreSchedules & { id: string }>;

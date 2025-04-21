@@ -9,7 +9,7 @@ type Props = {
 
 const AuthorInfo = ({ author }: Props) => {
   return (
-    <div className='overflow-hidden rounded-lg bg-white shadow-lg'>
+    <div className='overflow-hidden rounded-lg bg-background shadow-lg'>
       {/* Header với thông tin cơ bản */}
       <div className='md:flex'>
         <div className='flex items-center justify-center p-6 md:w-1/3'>
@@ -22,25 +22,25 @@ const AuthorInfo = ({ author }: Props) => {
         </div>
 
         <div className='p-6 md:w-2/3'>
-          <h1 className='mb-4 text-3xl font-bold text-zinc-800'>
-            {author.authorName}
-          </h1>
+          <h1 className='mb-4 text-3xl font-bold'>{author.authorName}</h1>
 
           <div className='mb-6'>
             <div className='mb-2 flex items-center'>
-              <span className='w-32 text-zinc-600'>Quốc tịch:</span>
+              <span className='w-32 text-lg font-bold'>Quốc tịch:</span>
               <span className='font-medium'>{author.nationality}</span>
             </div>
 
             <div className='mb-2 flex items-center'>
-              <span className='w-32 text-zinc-600'>Ngày sinh:</span>
+              <span className='w-32 text-lg font-bold'>Ngày sinh:</span>
               <span className='font-medium'>{formateDateVi(author.dob)}</span>
             </div>
           </div>
 
           <div className='mb-6'>
             <h2 className='mb-2 text-xl font-semibold'>Tiểu sử</h2>
-            <p className='leading-relaxed text-zinc-700'>{author.biography}</p>
+            <p className='leading-relaxed text-muted-foreground'>
+              {author.biography}
+            </p>
           </div>
         </div>
       </div>
@@ -61,7 +61,7 @@ const AuthorInfo = ({ author }: Props) => {
                     {bookAuthor.book.title}
                   </h3>
 
-                  <div className='mb-2 text-sm text-zinc-600'>
+                  <div className='mb-2 text-sm'>
                     <div>Mã sách: {bookAuthor.book.isbn}</div>
                     <div>
                       Xuất bản: {formateDateVi(bookAuthor.book.publicationDate)}
@@ -70,7 +70,7 @@ const AuthorInfo = ({ author }: Props) => {
                     <div>Trạng thái: {bookAuthor.book.status}</div>
                   </div>
 
-                  <p className='line-clamp-3 text-sm text-zinc-700'>
+                  <p className='line-clamp-3 text-sm text-muted-foreground'>
                     {bookAuthor.book.description}
                   </p>
                 </Link>

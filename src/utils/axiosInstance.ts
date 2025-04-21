@@ -40,7 +40,10 @@ axiosInstance.interceptors.response.use(
     // Do something with response error
     if (error.response?.status === 401 || error.response?.status === 403) {
       tokenMethod.remove();
-      window.location.replace(PATH.LOGIN);
+      if (typeof window !== 'undefined') {
+        // Redirect to login page
+        window.location.replace(PATH.LOGIN);
+      }
     }
     return Promise.reject(error);
   }

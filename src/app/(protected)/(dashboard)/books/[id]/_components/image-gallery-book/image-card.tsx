@@ -40,7 +40,7 @@ const ImageCard = ({ image, bookCode, onClick, onDelete }: Props) => {
                 <Button
                   variant='ghost'
                   size='icon'
-                  className='h-8 w-8 rounded-full bg-white/20 text-white backdrop-blur-sm hover:bg-white/30'
+                  className='h-8 w-8 rounded-full bg-background/20 text-white backdrop-blur-sm hover:bg-background/30'
                 >
                   <MoreHorizontal className='h-4 w-4' />
                 </Button>

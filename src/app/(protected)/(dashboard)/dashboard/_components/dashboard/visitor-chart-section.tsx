@@ -134,7 +134,7 @@ const VisitorChartSection = () => {
                         const total = male + female;
 
                         return (
-                          <div className='rounded-md border border-gray-200 bg-white p-2 shadow-md'>
+                          <div className='rounded-md border border-gray-200 bg-background p-2 shadow-md'>
                             <p className='font-bold'>{`${label}`}</p>
                             <p className='text-chart-1'>{`Nam: ${male}`}</p>
                             <p className='text-chart-2'>{`Nữ: ${female}`}</p>

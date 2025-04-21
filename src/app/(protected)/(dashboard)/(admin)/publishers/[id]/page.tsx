@@ -55,7 +55,7 @@ export default function PublisherDetailPage({
       <div className='mb-8 flex flex-col gap-6 md:flex-row'>
         {/* Publisher Logo */}
         <div className='w-full md:w-1/2'>
-          <div className='rounded-lg bg-white p-4 shadow'>
+          <div className='rounded-lg bg-background p-4 shadow'>
             {publisherImage ? (
               <div className='relative flex h-full w-full items-center justify-center overflow-hidden rounded-lg'>
                 <Image
@@ -88,7 +88,7 @@ export default function PublisherDetailPage({
               publisher.books.map((book) => (
                 <div
                   key={book.id}
-                  className='overflow-hidden rounded-lg bg-card shadow'
+                  className='overflow-hidden rounded-lg border border-ring bg-card shadow'
                 >
                   <div className='flex h-48 items-center justify-center overflow-hidden bg-card'>
                     {book.images ? (
@@ -114,7 +114,7 @@ export default function PublisherDetailPage({
                     <h3 className='mb-2 line-clamp-2 truncate text-ellipsis font-bold'>
                       {book.title}
                     </h3>
-                    <p className='mb-2 text-sm text-zinc-500'>
+                    <p className='mb-2 text-sm text-muted-foreground'>
                       ISBN: {book.isbn}
                     </p>
                     <p className='mb-3 font-semibold text-red-500'>
@@ -126,7 +126,7 @@ export default function PublisherDetailPage({
 
             {(!publisher.books || publisher.books.length === 0) && (
               <div className='col-span-full py-10 text-center'>
-                <p className='text-zinc-500'>
+                <p className='text-muted-foreground'>
                   Không có sách nào từ nhà xuất bản này.
                 </p>
               </div>

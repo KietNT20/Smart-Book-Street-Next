@@ -43,8 +43,9 @@ function TeamSwitcherInner({
       const savedStreet = savedStreetId
         ? streets.find((street) => street.id === savedStreetId)
         : null;
-
-      setActiveStreet(savedStreet || streets[0]);
+      if (savedStreet) {
+        setActiveStreet(savedStreet);
+      }
     }
   }, [streets]); // Only depend on streets array
 
@@ -102,25 +103,36 @@ function TeamSwitcherInner({
     userStore.length > 0 &&
     !activeStore;
 
+  const showPleaseSelectStreet =
+    hasRole([RoleEnums.ADMIN]) && streets.length > 0 && !activeStreet;
+
   return (
     <SidebarMenu>
       <SidebarMenuItem>
         <DropdownMenu>
-          {hasRole(RoleEnums.ADMIN) && activeStreet && (
+          {hasRole(RoleEnums.ADMIN) && (
             <DropdownMenuTrigger asChild>
               <SidebarMenuButton
                 size='lg'
-                className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
+                className={`data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground ${
+                  showPleaseSelectStreet
+                    ? 'animate-pulse bg-sidebar-accent/10'
+                    : ''
+                }`}
               >
                 <div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground'>
                   <Map className='size-4' />
                 </div>
                 <div className='grid flex-1 text-left text-sm leading-tight'>
-                  <span className='truncate font-semibold'>
-                    {activeStreet.streetName}
+                  <span
+                    className={`truncate font-semibold ${showPleaseSelectStreet ? 'text-primary' : ''}`}
+                  >
+                    {activeStreet?.streetName || 'Vui lòng chọn đường sách'}
                   </span>
                   <span className='truncate text-xs'>
-                    {activeStreet.address.split(',')[0]}
+                    {activeStreet?.address
+                      ? activeStreet.address.split(',')[0]
+                      : 'Chọn đường sách của bạn'}
                   </span>
                 </div>
                 <ChevronsUpDown className='ml-auto' />

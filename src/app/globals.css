@@ -18,6 +18,8 @@
     --popover-foreground: 222.2 84% 4.9%;
     --primary: 221.2 83.2% 53.3%;
     --primary-foreground: 210 40% 98%;
+    --matcha: 142.1 76.2% 36.3%;
+    --matcha-foreground: 355.7 100% 97.3%;
     --darker: 240 5.9% 10%;
     --darker-foreground: 0 0% 98%;
     --secondary: 210 40% 96.1%;
@@ -56,6 +58,8 @@
     --popover-foreground: 210 40% 98%;
     --primary: 217.2 91.2% 59.8%;
     --primary-foreground: 222.2 47.4% 11.2%;
+    --matcha: 142.1 70.6% 45.3%;
+    --matcha-foreground: 144.9 80.4% 10%;
     --darker: 0 0% 98%;
     --darker-foreground: 240 5.9% 10%;
     --secondary: 217.2 32.6% 17.5%;

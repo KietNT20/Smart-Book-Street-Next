@@ -9,7 +9,7 @@ export default function UnauthorizedPage() {
 
   return (
     <div className='flex min-h-screen flex-col items-center justify-center bg-gray-50 p-5'>
-      <div className='w-full max-w-md overflow-hidden rounded-lg bg-white shadow-md'>
+      <div className='w-full max-w-md overflow-hidden rounded-lg bg-background shadow-md'>
         <div className='h-2 bg-red-500'></div>
         <div className='p-8'>
           <div className='mb-6 flex justify-center'>
