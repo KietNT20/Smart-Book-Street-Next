@@ -14,7 +14,7 @@ import { CategoryCol, columns } from './columns';
 import { DataTable } from './data-table';
 
 export default function CategoriesPage() {
-  const { data: categoriesRes, isLoading } = useGetCategories();
+  const { categoriesData, isLoading } = useGetCategories();
   const {
     createCategory,
     createCategoryPending,
@@ -86,7 +86,7 @@ export default function CategoriesPage() {
     return <LoadingSpinner />;
   }
 
-  if (!categoriesRes) {
+  if (!categoriesData) {
     return <Empty description={'Chưa có dữ liệu'} />;
   }
 
@@ -105,7 +105,7 @@ export default function CategoriesPage() {
           onEdit: handleEdit,
           onDelete: handleDelete,
         })}
-        data={categoriesRes?.results || []}
+        data={categoriesData}
       />
 
       <CategoryFormModal
@@ -121,7 +121,8 @@ export default function CategoriesPage() {
         onClose={() => setIsDeleteDialogOpen(false)}
         onConfirm={confirmDelete}
         title='Bạn có chắc chắn muốn xóa?'
-        description='Hành động này không thể hoàn tác. Danh mục này sẽ bị xóa khỏi hệ thống.'
+        confirmText='Xác nhận xóa'
+        description={`Hành động này không thể hoàn tác. Danh mục này sẽ bị xóa khỏi hệ thống.`}
         variant='destructive'
         isLoading={deleteCategoryPending}
       />

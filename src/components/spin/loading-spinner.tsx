@@ -1,3 +1,5 @@
+'use client';
+
 const LoadingSpinner = () => {
   return (
     <div className='flex min-h-screen items-center justify-center'>

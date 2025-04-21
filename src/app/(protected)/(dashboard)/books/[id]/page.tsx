@@ -92,7 +92,7 @@ export default function BooksDetailPage({
           setIsDeleteModalOpen(false);
         }}
         title='Xóa sách'
-        description='Bạn có chắc chắn muốn xóa sách này? Hành động này không thể hoàn tác.'
+        description='Bạn có chắc chắn muốn xóa Sách này không? Hành động này không thể hoàn tác.'
         confirmText='Xóa'
         cancelText='Hủy'
         variant='destructive'

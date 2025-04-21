@@ -16,6 +16,7 @@ const INVENTORY = API_ENDPOINT.INVENTORY;
 const STREET = API_ENDPOINT.STREET;
 const ZONE = API_ENDPOINT.ZONE;
 const ORDER = API_ENDPOINT.ORDER;
+const STORE_SCHEDULES = API_ENDPOINT.STORE_SCHEDULES;
 
 export const API_URL = {
   AUTHORS: {
@@ -116,5 +117,9 @@ export const API_URL = {
     STATISTICS_DAILY_SM: `${ORDER}/statics-for-store/daily`,
     STATISTICS_MONTHLY_SM: `${ORDER}/statics-for-store/monthly`,
     STATISTICS_YEARLY_SM: `${ORDER}/statics-for-store/yearly`,
+  },
+  STORE_SCHEDULES: {
+    INDEX: `${STORE_SCHEDULES}`,
+    STORE: `${STORE_SCHEDULES}/store`,
   },
 } as const;

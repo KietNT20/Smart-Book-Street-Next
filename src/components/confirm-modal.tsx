@@ -8,6 +8,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import { Button } from './ui/button';
 
 type Props = {
   isOpen: boolean;
@@ -29,7 +30,7 @@ export const ConfirmModal = ({
   description,
   confirmText = 'Xác nhận',
   cancelText = 'Hủy',
-  variant = 'default',
+  variant = 'destructive',
   isLoading,
 }: Props) => {
   return (
@@ -44,7 +45,7 @@ export const ConfirmModal = ({
             {cancelText}
           </AlertDialogCancel>
           <AlertDialogAction
-            onClick={onConfirm}
+            asChild
             disabled={isLoading}
             className={
               variant === 'destructive'
@@ -52,7 +53,13 @@ export const ConfirmModal = ({
                 : ''
             }
           >
-            {confirmText}
+            <Button
+              className='h-10 w-fit px-3 py-2'
+              onClick={onConfirm}
+              disabled={isLoading}
+            >
+              {confirmText}
+            </Button>
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

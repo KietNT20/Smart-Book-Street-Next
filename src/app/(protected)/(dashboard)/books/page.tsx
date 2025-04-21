@@ -1,10 +1,8 @@
 'use client';
 
 import { ConfirmModal } from '@/components/confirm-modal';
-import { Sort } from '@/enums/enums';
 import { BookSearchCriteria } from '@/types/book-types';
-import { BookToolbar } from './_components/book-toolbar';
-import { SearchBookModal } from './_components/search-book-modal';
+import BookSearchFilter from './_components/book-search-filter';
 import { useBookList } from './_lib/use-book-operations';
 import { useBookPageState } from './_lib/use-book-page-state';
 import { createColumns } from './columns';
@@ -16,11 +14,8 @@ export default function BooksPage() {
     setPagination,
     searchCriteria,
     setSearchCriteria,
-    modalState,
-    setModalState,
     deleteId,
     setDeleteId,
-    resetAllFilters,
   } = useBookPageState();
 
   const { booksRes, isLoadingBooks, handleDelete, deletedLoading, isPending } =
@@ -40,19 +35,12 @@ export default function BooksPage() {
     setPagination((prev) => ({ ...prev, pageIndex: 1 }));
   };
 
-  const hasFilters = () =>
-    Object.keys(searchCriteria).length > 0 ||
-    pagination.sortField !== '' ||
-    pagination.sortOrder !== Sort.DESC;
-
   return (
     <div className='space-y-4'>
-      <BookToolbar
-        hasFilters={hasFilters()}
-        onResetFilters={resetAllFilters}
-        onOpenSearch={() => setModalState({ type: 'search' })}
+      <BookSearchFilter
+        initialFilter={searchCriteria}
+        onFilterChange={handleSearch}
       />
-
       <DataTable
         columns={columns}
         data={booksRes?.results || []}
@@ -60,12 +48,6 @@ export default function BooksPage() {
         state={pagination}
         onStateChange={setPagination}
         isLoading={isLoadingBooks || isPending}
-      />
-
-      <SearchBookModal
-        isOpen={modalState.type === 'search'}
-        onClose={() => setModalState({ type: 'none' })}
-        onSearch={handleSearch}
       />
 
       <ConfirmModal
@@ -78,8 +60,9 @@ export default function BooksPage() {
           }
         }}
         title='Bạn có chắc chắn muốn xóa?'
-        description='Hành động này không thể hoàn tác. Sách này sẽ bị xóa khỏi hệ thống.'
+        description={`Bạn có chắc chắn muốn xóa ${booksRes?.results.find((book) => book.id === deleteId)?.title || 'sách này'} không? Hành động này không thể hoàn tác.`}
         variant='destructive'
+        confirmText='Xác nhận xóa'
         isLoading={deletedLoading}
       />
     </div>

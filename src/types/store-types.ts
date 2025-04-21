@@ -1,3 +1,4 @@
+import { DayOfWeek } from '@/enums/day-of-week';
 import { Sort } from '@/enums/enums';
 import { ApiListResponse, ApiResponse, BaseEntity } from './common-types';
 import { ImageType } from './image-types';
@@ -54,4 +55,13 @@ export interface StoreStatictisTotal {
   total: number;
   currentMonthPercentChange: number;
   changeDirection: Trend;
+}
+
+export interface StoreSchedulesPayload {
+  storeId: string;
+  dayOfWeek: DayOfWeek;
+  openTime: string;
+  closeTime: string;
+  isClosed: boolean;
+  specialDate: Date | string | null;
 }

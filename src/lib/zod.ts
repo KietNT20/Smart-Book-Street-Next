@@ -100,51 +100,6 @@ export const bookSchema = z.object({
 
 export type BookFormValues = z.infer<typeof bookSchema>;
 
-export const searchBookSchema = z
-  .object({
-    isbn: z.string().optional(),
-    title: z.string().optional(),
-    minPrice: z.number().optional(),
-    maxPrice: z.number().optional(),
-    languages: z.string().optional(),
-    size: z.string().optional(),
-    status: z.string().optional(),
-    startDate: z.string().optional(),
-    endDate: z.string().optional(),
-    categoryId: z.string().optional(),
-    authorId: z.string().optional(),
-  })
-  .refine(
-    (data) => {
-      // Only apply this validation if both values are present
-      if (data.minPrice !== undefined && data.maxPrice !== undefined) {
-        return data.maxPrice >= data.minPrice;
-      }
-      // Return true if we don't need to validate
-      return true;
-    },
-    {
-      message: 'Giá tối đa phải lớn hơn hoặc bằng giá tối thiểu',
-      path: ['maxPrice'],
-    }
-  )
-  .refine(
-    (data) => {
-      // Only apply this validation if both values are present
-      if (data.startDate && data.endDate) {
-        return data.endDate >= data.startDate;
-      }
-      // Return true if we don't need to validate
-      return true;
-    },
-    {
-      message: 'Ngày kết thúc phải sau ngày bắt đầu',
-      path: ['endDate'],
-    }
-  );
-
-export type SearchBookFormValues = z.infer<typeof searchBookSchema>;
-
 // Author form
 export const authorFormSchema = z.object({
   authorName: z.string().min(1, 'Tên tác giả là bắt buộc'),
@@ -323,10 +278,14 @@ export const souvenirFormSchema = z.object({
   description: z.string().optional(),
   baseImgFile: z
     .instanceof(File)
-    .optional()
-    .or(z.string().optional())
-    .nullable(),
-  otherImgFiles: z.array(z.instanceof(File).or(z.string())).default([]),
+    .refine(
+      (file) => {
+        if (!file) return true;
+        return file.size <= 1024 * 1024 * 10; // 10MB
+      },
+      { message: 'Kích thước ảnh chính không được vượt quá 10MB' }
+    )
+    .or(z.string()),
 });
 
 export type SouvenirFormValues = z.infer<typeof souvenirFormSchema>;

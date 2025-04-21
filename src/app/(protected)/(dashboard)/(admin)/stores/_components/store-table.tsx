@@ -372,7 +372,7 @@ export const StoreTable = ({
         onClose={() => setDeleteDialogOpen(false)}
         variant='destructive'
         title='Xác nhận xóa'
-        description='Bạn có chắc chắn muốn xóa cửa hàng này không? Hành động này không thể hoàn tác.'
+        description='Bạn có chắc chắn muốn xóa Cửa Hàng này không? Hành động này không thể hoàn tác.'
         onConfirm={handleDeleteConfirm}
       />
     </>

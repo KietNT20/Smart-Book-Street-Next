@@ -53,4 +53,10 @@ export const bookService = {
     );
     return res.data;
   },
+  getGoogleIsbn: async (isbn: string) => {
+    const res = await axiosInstance.get(
+      `${API_URL.BOOKS.INDEX}/google/${isbn}`
+    );
+    return res.data;
+  },
 };

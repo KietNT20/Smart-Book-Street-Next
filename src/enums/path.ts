@@ -49,6 +49,7 @@ export enum PATH {
   STORE_HOURS_EDIT = '/store/hours/edit',
 
   ORDERS = '/orders',
+  PACKAGES = '/packages',
   SOUVENIRS = '/souvenirs',
   SOUVENIR_CREATE = '/souvenirs/create',
 

@@ -29,11 +29,11 @@ export const useLogin = () => {
           (role) => role.role?.roleName === RoleEnums.PUBLISHER
         );
         if (hasAdminRole) {
-          router.push(PATH.DASHBOARD);
+          router.replace(PATH.DASHBOARD);
         } else if (hasPublisherManagerRole) {
-          router.push(PATH.BOOKS);
+          router.replace(PATH.BOOKS);
         } else {
-          router.push(PATH.STORE_OWNER_DASHBOARD);
+          router.replace(PATH.STORE_OWNER_DASHBOARD);
         }
         toast.success('Đăng nhập thành công', {
           id: 'login-success',

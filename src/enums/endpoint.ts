@@ -18,4 +18,5 @@ export enum API_ENDPOINT {
   ZONE = '/zones',
   PERSON = '/persons',
   ORDER = '/orders',
+  STORE_SCHEDULES = '/store-schedules',
 }

@@ -59,13 +59,13 @@ export type BookSearchCriteria = {
   price?: number;
   minPrice?: number;
   maxPrice?: number;
-  languages?: string;
+  languagesList?: string[];
   size?: string;
   status?: string;
   startDate?: string;
   endDate?: string;
-  categoryId?: string;
-  authorId?: string;
+  authorIds?: string[];
+  categoryIds?: string[];
 };
 
 export type BookPaginated = {
@@ -82,3 +82,19 @@ export type BookSearchPagination = {
   sortOrder: Sort;
   result?: Partial<BookSearchCriteria>;
 };
+
+export interface BookNextjs {
+  entityId: string;
+  isbn: string;
+  title: string;
+  publicationDate: Date | string | null;
+  price: number;
+  languages: string;
+  description: string;
+  size: string;
+  status: string;
+  id: string;
+  inventoryId: string;
+  quantity: number;
+  isInStock: boolean;
+}

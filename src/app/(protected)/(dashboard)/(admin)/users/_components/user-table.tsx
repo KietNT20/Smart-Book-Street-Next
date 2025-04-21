@@ -318,7 +318,7 @@ const UserTable = ({
         onClose={() => setDeleteDialogOpen(false)}
         variant='destructive'
         title='Xác nhận xóa'
-        description='Bạn có chắc chắn muốn xóa người dùng này không? Hành động này không thể hoàn tác.'
+        description='Bạn có chắc chắn muốn xóa Tài Khoản này không? Hành động này không thể hoàn tác.'
         onConfirm={handleDeleteConfirm}
       />
     </>

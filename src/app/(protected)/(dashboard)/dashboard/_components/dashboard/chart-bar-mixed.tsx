@@ -125,7 +125,7 @@ export function OrderChartAdmin({
     (timeframe === 'daily' && orderDailyLoading) ||
       (timeframe === 'monthly' && orderMonthlyLoading) ||
       (timeframe === 'yearly' && orderYearLoading),
-    500
+    300
   );
 
   // Get error based on timeframe
@@ -145,21 +145,6 @@ export function OrderChartAdmin({
   const data = getActiveData();
   const error = getError();
 
-  // Show loading state
-  if (isLoading) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle>{title}</CardTitle>
-          <CardDescription>{description}</CardDescription>
-        </CardHeader>
-        <CardContent className='flex h-[300px] items-center justify-center'>
-          <LoadingSpinner />
-        </CardContent>
-      </Card>
-    );
-  }
-
   // Show error state
   if (error || !data) {
     return (
@@ -169,7 +154,7 @@ export function OrderChartAdmin({
           <CardDescription>{description}</CardDescription>
         </CardHeader>
         <CardContent className='flex h-[300px] items-center justify-center'>
-          <div className='text-destructive'>{error || 'No data available'}</div>
+          <p className='text-destructive'>{error || 'No data available'}</p>
         </CardContent>
       </Card>
     );
@@ -190,6 +175,21 @@ export function OrderChartAdmin({
     timeDescription = `Thống kê theo Tháng ${month} ${year}`;
   } else if (timeframe === 'yearly' && year) {
     timeDescription = `Thống kê theo Năm ${year}`;
+  }
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>{title}</CardTitle>
+          <CardDescription>{description}</CardDescription>
+        </CardHeader>
+        <CardContent className='flex h-[300px] items-center justify-center'>
+          <LoadingSpinner />
+        </CardContent>
+      </Card>
+    );
   }
 
   return (

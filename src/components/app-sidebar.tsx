@@ -5,6 +5,7 @@ import {
   CalendarIcon,
   ChartNoAxesCombined,
   LibraryBig,
+  PackagePlus,
   PieChart,
   Store,
   Users,
@@ -208,21 +209,59 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           { url: PATH.STORE_HOURS },
           { url: PATH.INVENTORY },
         ]),
-        roles: [RoleEnums.STORE_MANAGER, RoleEnums.STORE_OWNER],
+        roles: [
+          RoleEnums.STORE_OWNER,
+          RoleEnums.STORE_MANAGER,
+          RoleEnums.STAFF,
+        ],
         items: [
           {
             title: 'Giờ hoạt động',
             url: PATH.STORE_HOURS,
-            roles: [RoleEnums.STORE_MANAGER, RoleEnums.STORE_OWNER],
+            roles: [
+              RoleEnums.STORE_OWNER,
+              RoleEnums.STORE_MANAGER,
+              RoleEnums.STAFF,
+            ],
           },
           {
             title: 'Quản lý tồn kho',
             url: PATH.INVENTORY,
-            roles: [RoleEnums.STORE_MANAGER, RoleEnums.STORE_OWNER],
+            roles: [
+              RoleEnums.STORE_OWNER,
+              RoleEnums.STORE_MANAGER,
+              RoleEnums.STAFF,
+            ],
           },
           {
             title: 'Quản lý đơn hàng',
             url: PATH.ORDERS,
+            roles: [
+              RoleEnums.STORE_OWNER,
+              RoleEnums.STORE_MANAGER,
+              RoleEnums.STAFF,
+            ],
+          },
+        ],
+      },
+      {
+        title: 'Quản lý sản phẩm',
+        url: '#',
+        icon: PackagePlus,
+        isActive: checkActive([
+          { url: PATH.PACKAGES },
+          { url: PATH.SOUVENIRS },
+        ]),
+        roles: [RoleEnums.STORE_MANAGER, RoleEnums.STORE_OWNER],
+        items: [
+          // {
+          //   title: 'Kho sản phẩm',
+          //   url: PATH.PACKAGES,
+          //   roles: [RoleEnums.STORE_MANAGER, RoleEnums.STORE_OWNER],
+          // },
+          {
+            title: 'Quản lý quà lưu niệm',
+            url: PATH.SOUVENIRS,
             roles: [RoleEnums.STORE_MANAGER, RoleEnums.STORE_OWNER],
           },
         ],

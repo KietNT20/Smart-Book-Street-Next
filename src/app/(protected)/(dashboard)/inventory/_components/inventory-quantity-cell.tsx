@@ -2,14 +2,15 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { STORAGE } from '@/constant/storage';
 import { useInventoryMutation } from '@/hooks/use-inventory';
-import { Inventory } from '@/types/inventory-types';
+import { BookNextjs } from '@/types/book-types';
+import { SouvenirNextjs } from '@/types/souvenir-types';
 import { getLocalStorageItem } from '@/utils/token';
 import { useRef } from 'react';
 import { toast } from 'sonner';
 
 interface InventoryQuantityCellProps {
   row: {
-    original: Inventory;
+    original: BookNextjs | SouvenirNextjs;
   };
 }
 
@@ -50,7 +51,7 @@ export const InventoryQuantityCell = ({ row }: InventoryQuantityCellProps) => {
 
         toast.promise(
           updateProductQuantity.mutateAsync({
-            entityId: row.original.book.id as string,
+            entityId: row.original.entityId,
             storeId,
             data: formData,
           }),
@@ -62,14 +63,14 @@ export const InventoryQuantityCell = ({ row }: InventoryQuantityCellProps) => {
         );
       }}
     >
-      <Label htmlFor={`${row.original.id}-quantity`} className='sr-only'>
+      <Label htmlFor={`${row.original.entityId}-quantity`} className='sr-only'>
         Số lượng
       </Label>
       <Input
         ref={inputRef}
         className='h-8 w-16 border-transparent bg-transparent text-right shadow-none hover:bg-input/30 focus-visible:border focus-visible:bg-background'
         defaultValue={row.original.quantity}
-        id={`${row.original.id}-quantity`}
+        id={`${row.original.entityId}-quantity`}
         type='text'
         onKeyDown={(e) => {
           if (

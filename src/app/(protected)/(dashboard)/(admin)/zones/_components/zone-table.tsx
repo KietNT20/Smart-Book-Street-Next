@@ -207,7 +207,7 @@ const ZoneTable = ({
         onClose={() => setDeleteDialogOpen(false)}
         variant='destructive'
         title='Xác nhận xóa'
-        description='Bạn có chắc chắn muốn xóa Nhà Xuất Bản này không? Hành động này không thể hoàn tác.'
+        description='Bạn có chắc chắn muốn xóa Khu Vực này không? Hành động này không thể hoàn tác.'
         onConfirm={handleDeleteConfirm}
       />
     </>

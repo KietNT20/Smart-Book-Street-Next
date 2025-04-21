@@ -1,6 +1,5 @@
 import { Book } from './book-types';
 import { ApiListResponse, ApiResponse, BaseEntity } from './common-types';
-import { ImageType } from './image-types';
 import { Souvenir } from './souvenir-types';
 import { StoreData } from './store-types';
 
@@ -27,7 +26,6 @@ export interface Inventory extends BaseEntity {
   book: Book & { id: string };
   souvenir: Souvenir & { id: string };
   store: StoreData & { id: string };
-  images: ImageType[];
 }
 
 export type InventoriesResponse = ApiListResponse<Inventory & { id: string }>;
