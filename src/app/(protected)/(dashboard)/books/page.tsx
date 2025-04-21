@@ -60,7 +60,7 @@ export default function BooksPage() {
           }
         }}
         title='Bạn có chắc chắn muốn xóa?'
-        description={`Bạn có chắc chắn muốn xóa ${booksRes?.results.find((book) => book.id === deleteId)?.title} không? Hành động này không thể hoàn tác.`}
+        description={`Bạn có chắc chắn muốn xóa ${booksRes?.results.find((book) => book.id === deleteId)?.title || 'sách này'} không? Hành động này không thể hoàn tác.`}
         variant='destructive'
         confirmText='Xác nhận xóa'
         isLoading={deletedLoading}
