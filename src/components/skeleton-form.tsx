@@ -1,6 +1,6 @@
 const SkeletonForm = () => {
   return (
-    <div className='mx-auto w-full max-w-md animate-pulse rounded-lg bg-background p-6 shadow-md'>
+    <div className='mx-auto w-full animate-pulse rounded-lg bg-background p-6 shadow-md'>
       {/* Form Title Skeleton */}
       <div className='mb-6 h-8 w-3/4 rounded-md bg-gray-200'></div>
 

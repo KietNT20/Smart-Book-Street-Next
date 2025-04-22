@@ -22,10 +22,6 @@ export default function PublisherDetailPage({
   );
   const isLoading = useDebounce(isLoadingPublisher, 300);
 
-  if (isLoading) {
-    return <LoadingSkeleton />;
-  }
-
   if (errorPublisher || !publisher) {
     return (
       <div className='container mx-auto p-4'>
@@ -41,6 +37,10 @@ export default function PublisherDetailPage({
   const publisherImage = publisher.images?.find(
     (image) => image.type === 'publisher_main'
   )?.url;
+
+  if (isLoading) {
+    return <LoadingSkeleton />;
+  }
 
   return (
     <div className='container mx-auto p-4'>

@@ -95,12 +95,11 @@ export default function OrderStatisticsPage() {
         </div>
 
         <div className='grid grid-cols-1 gap-6'>
-          {/* Render appropriate OrderChartAdmin based on timeframe */}
           {timeframe === 'daily' && (
             <OrderChartStore
               timeframe='daily'
               date={formattedDate}
-              title='Thống Kê Theo Ngày'
+              title='Thống Kê Lợi Nhuận Theo Ngày'
               description='Doanh thu theo từng khung giờ trong ngày'
             />
           )}
@@ -110,7 +109,7 @@ export default function OrderStatisticsPage() {
               timeframe='monthly'
               month={selectedMonthYear.month() + 1}
               year={selectedMonthYear.year()}
-              title='Thống Kê Theo Tháng'
+              title='Thống Kê Lợi Nhuận Theo Tháng'
               description='Doanh thu theo từng tuần trong tháng'
             />
           )}
@@ -119,12 +118,11 @@ export default function OrderStatisticsPage() {
             <OrderChartStore
               timeframe='yearly'
               year={selectedYear.year()}
-              title='Thống Kê Theo Năm'
+              title='Thống Kê Lợi Nhuận Theo Năm'
               description='Doanh thu theo từng quý trong năm'
             />
           )}
 
-          {/* You can add more OrderChartAdmin components here with different configurations */}
           {timeframe === 'daily' && (
             <OrderChartStore
               timeframe='daily'
