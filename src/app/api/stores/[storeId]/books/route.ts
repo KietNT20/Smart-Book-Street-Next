@@ -16,7 +16,7 @@ export async function GET(
 
     if (!storeId) {
       return NextResponse.json(
-        { error: 'Store ID is required' },
+        { error: 'Yêu cầu chọn thông tin cửa hàng' },
         { status: 400 }
       );
     }
@@ -43,7 +43,7 @@ export async function GET(
   } catch (error: any) {
     console.error('Error fetching books by store ID:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to fetch books' },
+      { error: error.message || 'Không thể lấy sách' },
       { status: 500 }
     );
   }

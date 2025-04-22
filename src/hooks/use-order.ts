@@ -1,5 +1,5 @@
 import { orderService } from '@/services/orderService';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 export const useOrderStaticsDailyAdmin = (date: string) => {
   const { data, isLoading, isError } = useQuery({
@@ -109,5 +109,24 @@ export const useOrderStaticsYearlyStore = (year: number, storeId: string) => {
     orderStaticsYearlyStore: data,
     orderYearLoading: isLoading,
     orderYearError: isError,
+  };
+};
+
+export const useCreateOrder = () => {
+  const queryClient = useQueryClient();
+  const { mutateAsync: createOrder, isPending } = useMutation({
+    mutationKey: ['create-order'],
+    mutationFn: (data: FormData) => orderService.create(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['order-details'] });
+    },
+    onError: (error) => {
+      console.log('Error creating order:', error);
+    },
+  });
+
+  return {
+    createOrder,
+    createOrderPending: isPending,
   };
 };

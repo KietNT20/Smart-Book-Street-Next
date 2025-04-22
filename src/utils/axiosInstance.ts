@@ -25,7 +25,7 @@ axiosInstance.interceptors.request.use(
   },
   function (error: AxiosError) {
     // Do something with request error
-    return Promise.reject(error);
+    return Promise.reject(error.response?.data);
   }
 );
 // Add a response interceptor
@@ -45,7 +45,7 @@ axiosInstance.interceptors.response.use(
         window.location.replace(PATH.LOGIN);
       }
     }
-    return Promise.reject(error);
+    return Promise.reject(error.response?.data);
   }
 );
 

@@ -50,6 +50,10 @@ export const inventoryService = {
     const res = await axios.get(`/api/stores/${storeId}/souvenirs`);
     return res.data;
   },
+  getBookInfoInventory: async (storeId: string, isbn: string) => {
+    const res = await axios.get(`/api/stores/${storeId}/books/${isbn}`);
+    return res.data;
+  },
   create: async (data: InventoryCreate) => {
     const res = await axiosInstance.post(API_URL.INVENTORIES.INDEX, data);
     return res.data;

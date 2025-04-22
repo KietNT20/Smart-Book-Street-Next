@@ -172,7 +172,14 @@ const BookForm = ({ book, onCancel, mode }: Props) => {
           />
 
           {/* Tác giả */}
-          <AuthorCombobox name='authorIds' control={form.control} />
+          <AuthorCombobox
+            name='authorIds'
+            control={form.control}
+            disabled={
+              isLoading ||
+              (mode === 'create' && book?.bookAuthors !== undefined)
+            }
+          />
 
           {/* Ngôn ngữ */}
           <FormField
@@ -199,7 +206,14 @@ const BookForm = ({ book, onCancel, mode }: Props) => {
           />
 
           {/* Thể loại */}
-          <CategoryCombobox name='categoryIds' control={form.control} />
+          <CategoryCombobox
+            name='categoryIds'
+            control={form.control}
+            disabled={
+              isLoading ||
+              (mode === 'create' && book?.bookCategories !== undefined)
+            }
+          />
 
           {/* Kích thước */}
           <FormField

@@ -65,7 +65,7 @@ export const columnsBook: ColumnDef<BookNextjs>[] = [
     id: 'actions',
     cell: ({ row }) => {
       const book = row.original;
-      return <MenuColoumn entityId={book.entityId} />;
+      return <MenuColoumn book={book} />;
     },
   },
 ];

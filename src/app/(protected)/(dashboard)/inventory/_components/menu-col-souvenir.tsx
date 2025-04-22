@@ -28,7 +28,7 @@ import { STORAGE } from '@/constant/storage';
 import useDebounce from '@/hooks/use-debounce';
 import { useInventoryMutation } from '@/hooks/use-inventory';
 import { useOrderDetailMutation } from '@/hooks/use-order-detail';
-import { BookNextjs } from '@/types/book-types';
+import { SouvenirNextjs } from '@/types/souvenir-types';
 import { getLocalStorageItem } from '@/utils/token';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { MoreHorizontal, ShoppingCart, Trash } from 'lucide-react';
@@ -37,10 +37,10 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 type Props = {
-  book: BookNextjs;
+  souvenir: SouvenirNextjs;
 };
 
-const MenuColoumn = ({ book }: Props) => {
+const MenuColoumnSouvenir = ({ souvenir }: Props) => {
   const { deleteProduct } = useInventoryMutation();
   const { createOrderDetail, createOrderDetailPending } =
     useOrderDetailMutation();
@@ -57,8 +57,8 @@ const MenuColoumn = ({ book }: Props) => {
       .refine((val) => Number(val) > 0, {
         message: 'Số lượng phải lớn hơn 0',
       })
-      .refine((val) => Number(val) <= (book?.quantity || 0), {
-        message: `Số lượng vượt quá tồn kho (${book?.quantity || 0} sản phẩm)`,
+      .refine((val) => Number(val) <= (souvenir?.quantity || 0), {
+        message: `Số lượng vượt quá tồn kho (${souvenir?.quantity || 0} sản phẩm)`,
       }),
   });
 
@@ -78,7 +78,7 @@ const MenuColoumn = ({ book }: Props) => {
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     const formData = new FormData();
-    formData.append('InventoryId', book.inventoryId || '');
+    formData.append('InventoryId', souvenir.inventoryId || '');
     formData.append('Quantity', values.quantity);
 
     createOrderDetail(formData);
@@ -98,7 +98,7 @@ const MenuColoumn = ({ book }: Props) => {
           <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem
-            onClick={() => handleDelete(book.entityId || '')}
+            onClick={() => handleDelete(souvenir.entityId || '')}
             className='cursor-pointer text-red-600'
           >
             <Trash className='mr-2 h-4 w-4' />
@@ -117,8 +117,8 @@ const MenuColoumn = ({ book }: Props) => {
         <DialogHeader>
           <DialogTitle>Thêm sách vào đơn hàng</DialogTitle>
           <DialogDescription>
-            Nhập số lượng sách &quot;{book?.title || ''}&quot; bạn muốn thêm vào
-            đơn hàng.
+            Nhập số lượng sách &quot;{souvenir?.souvenirName || ''}&quot; bạn
+            muốn thêm vào đơn hàng.
           </DialogDescription>
         </DialogHeader>
 
@@ -134,7 +134,7 @@ const MenuColoumn = ({ book }: Props) => {
                     <Input type='number' min='1' {...field} />
                   </FormControl>
                   <div className='text-sm text-muted-foreground'>
-                    Số lượng trong kho: {book?.quantity || 0} sản phẩm
+                    Số lượng trong kho: {souvenir?.quantity || 0} sản phẩm
                   </div>
                   <FormMessage />
                 </FormItem>
@@ -151,4 +151,4 @@ const MenuColoumn = ({ book }: Props) => {
   );
 };
 
-export default MenuColoumn;
+export default MenuColoumnSouvenir;

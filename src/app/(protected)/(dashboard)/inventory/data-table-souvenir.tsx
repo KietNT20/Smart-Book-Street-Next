@@ -50,14 +50,10 @@ export function DataTableSouvenir<TData, TValue>({
         <Input
           placeholder='Tìm kiếm theo tên quà lưu niệm'
           value={
-            (table
-              .getColumn('souvenir.souvenirName')
-              ?.getFilterValue() as string) ?? ''
+            (table.getColumn('souvenirName')?.getFilterValue() as string) ?? ''
           }
           onChange={(event) =>
-            table
-              .getColumn('souvenir.souvenirName')
-              ?.setFilterValue(event.target.value)
+            table.getColumn('souvenirName')?.setFilterValue(event.target.value)
           }
           className='max-w-sm'
         />

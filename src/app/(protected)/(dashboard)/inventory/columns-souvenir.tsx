@@ -2,7 +2,7 @@ import { cn, formatPrice } from '@/lib/utils';
 import { SouvenirNextjs } from '@/types/souvenir-types';
 import { ColumnDef } from '@tanstack/react-table';
 import { InventoryQuantityCell } from './_components/inventory-quantity-cell';
-import MenuColoumn from './_components/menu-col';
+import MenuColoumnSouvenir from './_components/menu-col-souvenir';
 
 export const columnsSouvenir: ColumnDef<SouvenirNextjs>[] = [
   {
@@ -57,7 +57,7 @@ export const columnsSouvenir: ColumnDef<SouvenirNextjs>[] = [
     id: 'actions',
     cell: ({ row }) => {
       const souvenir = row.original;
-      return <MenuColoumn entityId={souvenir.entityId} />;
+      return <MenuColoumnSouvenir souvenir={souvenir} />;
     },
   },
 ];

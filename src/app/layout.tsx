@@ -26,7 +26,7 @@ export default function RootLayout({
     <html lang='en' suppressHydrationWarning={true}>
       <body className={`${roboto.variable} antialiased`}>
         <Provider>{children}</Provider>
-        <Toaster richColors />
+        <Toaster richColors expand visibleToasts={3} />
       </body>
     </html>
   );

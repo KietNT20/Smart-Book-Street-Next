@@ -59,4 +59,13 @@ export const orderService = {
     );
     return res.data;
   },
+
+  create: async (data: FormData) => {
+    const res = await axiosInstance.post(API_URL.ORDERS.INDEX, data);
+    return res.data;
+  },
+  getById: async (id: string) => {
+    const res = await axiosInstance.get(`${API_URL.ORDERS.INDEX}/${id}`);
+    return res.data;
+  },
 };
