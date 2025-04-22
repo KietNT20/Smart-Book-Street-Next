@@ -187,7 +187,7 @@ export const useStoreById = (id: string) => {
 
 export const useStoreStaticsTotal = () => {
   const { data, isLoading, error } = useQuery({
-    queryKey: ['stores', 'statics'],
+    queryKey: ['stores-statics'],
     queryFn: () => storeService.getStaticsTotal(),
   });
 

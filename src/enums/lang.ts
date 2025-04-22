@@ -49,3 +49,5 @@ export const VietnameseLanguageLabels: Record<Language, string> = {
   [Language.HINDI]: 'Tiếng Hindi',
   [Language.THAI]: 'Tiếng Thái',
 };
+
+// ! Order Chart tổng đơn, Profit: Lợi nhuận

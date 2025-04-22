@@ -32,11 +32,13 @@ import SelectedCategory from './selected-category';
 type Props<T extends FieldValues> = {
   name: Path<T>;
   control: Control<T>;
+  disabled?: boolean;
 };
 
 const CategoryCombobox = <T extends FieldValues>({
   name,
   control,
+  disabled = false,
 }: Props<T>) => {
   const [input, setInput] = useState('');
   const [results, setResults] = useState<Category[]>([]);
@@ -78,6 +80,7 @@ const CategoryCombobox = <T extends FieldValues>({
                   variant='outline'
                   role='combobox'
                   className='w-full justify-between'
+                  disabled={disabled}
                 >
                   {field.value?.length
                     ? `${field.value?.length} danh mục được chọn`

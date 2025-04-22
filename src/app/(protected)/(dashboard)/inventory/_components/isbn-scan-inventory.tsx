@@ -1,5 +1,6 @@
 'use client';
 
+import { fetchBookIsbnInventory } from '@/api/book';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -8,47 +9,29 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import { API_URL } from '@/constant/api-url';
-import { BASE_URL } from '@/constant/environment';
-import { Book } from '@/types/book-types';
+import { STORAGE } from '@/constant/storage';
+import useDebounce from '@/hooks/use-debounce';
+import { useOrderDetailMutation } from '@/hooks/use-order-detail';
+import { getLocalStorageItem } from '@/utils/token';
 import { BrowserMultiFormatReader } from '@zxing/library';
 import { Camera, Keyboard, Loader2, Search, XCircle } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { toast } from 'sonner';
 
-interface ISBNScannerProps {
-  onBookFound: (book: Book) => void;
-}
-
-const fetchBookByISBN = async (isbn: string): Promise<{ result: Book }> => {
-  try {
-    const response = await fetch(
-      `${BASE_URL}/${API_URL.BOOKS.INDEX}/google/${isbn}`
-    );
-
-    if (!response.ok) {
-      if (response.status === 404) {
-        throw new Error('Không tìm thấy thông tin sách với mã ISBN này');
-      }
-      throw new Error('Có lỗi xảy ra khi tìm kiếm sách');
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Error fetching book data:', error);
-    throw error;
-  }
-};
-
-const ISBNScanner = ({ onBookFound }: ISBNScannerProps) => {
+const ISBNScannerInventory = () => {
   const [isScanning, setIsScanning] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [manualISBN, setManualISBN] = useState('');
   const [inputMode, setInputMode] = useState<'scan' | 'manual'>('scan');
 
   const scannerRef = useRef<BrowserMultiFormatReader | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  const storeId = getLocalStorageItem(STORAGE.SELECTED_STORE_KEY) as string;
+
+  const { createOrderDetail, createOrderDetailPending } =
+    useOrderDetailMutation();
+
+  const isLoading = useDebounce(createOrderDetailPending, 300);
 
   const startScanning = async () => {
     try {
@@ -107,23 +90,25 @@ const ISBNScanner = ({ onBookFound }: ISBNScannerProps) => {
   };
 
   const processISBN = (isbn: string) => {
-    setIsLoading(true);
-
-    toast.promise(fetchBookByISBN(isbn), {
+    toast.promise(fetchBookIsbnInventory(storeId, isbn), {
       loading: 'Đang tìm kiếm thông tin sách...',
       success: (data) => {
-        console.log('Book data:', data);
+        const formData = new FormData();
+        formData.append('InventoryId', data.inventoryId);
+        formData.append('Quantity', '1');
 
-        if (data && data.result) {
-          onBookFound(data.result);
+        try {
+          createOrderDetail(formData);
+          toast.success('Đã thêm sách vào đơn hàng');
+        } catch (error) {
+          console.error('Error creating order detail:', error);
+          toast.error('Không thể thêm sách vào đơn hàng');
         }
 
-        setIsLoading(false);
         setManualISBN('');
-        return 'Đã tìm thấy thông tin sách';
+        return 'Đã tìm thấy và thêm sách vào đơn hàng';
       },
       error: (error) => {
-        setIsLoading(false);
         if (error instanceof Error) {
           return error.message;
         }
@@ -223,4 +208,4 @@ const ISBNScanner = ({ onBookFound }: ISBNScannerProps) => {
   );
 };
 
-export default ISBNScanner;
+export default ISBNScannerInventory;

@@ -49,21 +49,17 @@ export function DataTableBook<TData, TValue>({
       <div className='flex items-center gap-4 py-4'>
         <Input
           placeholder='Tìm kiếm theo isbn'
-          value={
-            (table.getColumn('book.isbn')?.getFilterValue() as string) ?? ''
-          }
+          value={(table.getColumn('isbn')?.getFilterValue() as string) ?? ''}
           onChange={(event) =>
-            table.getColumn('book.isbn')?.setFilterValue(event.target.value)
+            table.getColumn('isbn')?.setFilterValue(event.target.value)
           }
           className='max-w-sm'
         />
         <Input
           placeholder='Tìm kiếm theo tên sách'
-          value={
-            (table.getColumn('book.title')?.getFilterValue() as string) ?? ''
-          }
+          value={(table.getColumn('title')?.getFilterValue() as string) ?? ''}
           onChange={(event) =>
-            table.getColumn('book.title')?.setFilterValue(event.target.value)
+            table.getColumn('title')?.setFilterValue(event.target.value)
           }
           className='max-w-sm'
         />

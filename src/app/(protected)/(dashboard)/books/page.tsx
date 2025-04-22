@@ -41,9 +41,8 @@ export default function BooksPage() {
 
   return (
     <div className='space-y-4'>
-      <div>
+      <div className='flex items-center justify-between'>
         <h3 className='text-2xl font-bold'>Danh sách sách</h3>
-
         <Link href={PATH.BOOK_CREATE}>
           <Button>
             <Plus className='mr-2' /> Thêm sách

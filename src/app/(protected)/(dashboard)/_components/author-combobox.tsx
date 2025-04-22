@@ -32,9 +32,14 @@ import SelectedAuthor from './selected-author';
 type Props<T extends FieldValues> = {
   name: Path<T>;
   control: Control<T>;
+  disabled?: boolean;
 };
 
-const AuthorCombobox = <T extends FieldValues>({ name, control }: Props<T>) => {
+const AuthorCombobox = <T extends FieldValues>({
+  name,
+  control,
+  disabled = false,
+}: Props<T>) => {
   const [input, setInput] = useState('');
   const [searchResults, setSearchResults] = useState<Author[]>([]);
   const { searchAuthorName } = useAuthorMutation();
@@ -84,6 +89,7 @@ const AuthorCombobox = <T extends FieldValues>({ name, control }: Props<T>) => {
                     'w-full justify-between',
                     !field.value && 'text-muted-foreground'
                   )}
+                  disabled={disabled}
                 >
                   {field.value?.length
                     ? `${field.value?.length} tác giả được chọn`
