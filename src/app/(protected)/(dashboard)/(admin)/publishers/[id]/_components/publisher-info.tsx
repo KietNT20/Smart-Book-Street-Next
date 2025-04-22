@@ -7,10 +7,8 @@ export default function PublisherInfo<T extends Publisher>({
 }) {
   return (
     <div className='w-full md:w-3/4'>
-      <div className='h-full rounded-lg bg-white p-6 shadow'>
-        <h1 className='mb-4 text-3xl font-bold text-zinc-800'>
-          {publisher.publisherName}
-        </h1>
+      <div className='h-full rounded-lg bg-background p-6 shadow'>
+        <h1 className='mb-4 text-3xl font-bold'>{publisher.publisherName}</h1>
 
         <div className='mb-4 grid grid-cols-1 gap-4'>
           <div>
@@ -44,7 +42,7 @@ export default function PublisherInfo<T extends Publisher>({
 
           <div>
             <h2 className='mb-2 text-lg font-semibold'>Tổng quan</h2>
-            <p className='text-zinc-700'>{publisher.description}</p>
+            <p className='text-muted-foreground'>{publisher.description}</p>
 
             <div className='mt-4'>
               <div className='rounded-lg bg-blue-50 p-3'>

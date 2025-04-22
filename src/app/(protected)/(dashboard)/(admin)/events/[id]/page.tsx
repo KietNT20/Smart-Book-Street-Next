@@ -86,7 +86,7 @@ export default function EventDetailPage({
 
   return (
     <div className='min-h-screen bg-background pb-16'>
-      <div className='flex items-center justify-between'>
+      <div className='my-4 flex items-center justify-between'>
         <BackButton />
         <Link href={`${PATH.EVENTS}/${params.id}/edit`}>
           <Button variant={'darker'}>Chỉnh sửa</Button>
@@ -310,15 +310,13 @@ export default function EventDetailPage({
               </CardHeader>
               <CardContent className='space-y-4'>
                 <div>
-                  <h4 className='font-medium text-zinc-900'>
-                    {eventData.zone.zoneName}
-                  </h4>
+                  <h4 className='font-semibold'>{eventData.zone.zoneName}</h4>
                   <p className='mt-1 text-sm text-zinc-500'>
                     {eventData.zone.street.address}
                   </p>
                 </div>
 
-                <div className='h-48 overflow-hidden rounded-lg bg-gray-200'>
+                <div className='h-48 overflow-hidden rounded-lg bg-card'>
                   {/* Map placeholder */}
                   <div className='flex h-full w-full items-center justify-center bg-gray-100'>
                     <MapPin className='h-8 w-8 text-zinc-400' />
@@ -328,7 +326,7 @@ export default function EventDetailPage({
                 <Separator />
 
                 <div className='space-y-2'>
-                  <h4 className='font-medium'>Về địa điểm</h4>
+                  <h4 className='font-semibold'>Về địa điểm</h4>
                   <p className='text-sm text-zinc-500'>
                     {eventData.zone.description}
                   </p>

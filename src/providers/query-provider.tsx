@@ -50,7 +50,64 @@ export default function QueryProvider({
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ConfigProvider locale={locale}>{children}</ConfigProvider>
+      <ConfigProvider
+        locale={locale}
+        theme={{
+          components: {
+            DatePicker: {
+              colorPrimary: 'hsl(var(--primary))',
+              colorBgContainer: 'hsl(var(--background))',
+              colorBgElevated: 'hsl(var(--background))',
+              colorBorder: 'hsl(var(--primary))',
+              colorIcon: 'hsl(var(--darker))',
+              colorIconHover: 'hsl(var(--primary))',
+              cellHoverBg: 'hsl(var(--darker)/0.1)',
+              colorTextPlaceholder: 'hsl(var(--muted-foreground)/0.5)',
+              // colorTextLightSolid: 'hsl(var(--darker-foreground))',
+              colorText: 'hsl(var(--text))',
+              colorTextHeading: 'hsl(var(--text))',
+              cellActiveWithRangeBg: 'hsl(var(--darker)/0.1)',
+              colorSplit: 'hsl(var(--primary))',
+              colorTextDisabled: 'hsl(var(--muted-foreground)/0.5)',
+            },
+            Calendar: {
+              colorPrimary: 'hsl(var(--primary))',
+              controlItemBgHover: 'hsl(var(--darker)/0.1)',
+              colorBgContainer: 'hsl(var(--background))',
+              colorText: 'hsl(var(--text))',
+              itemActiveBg: 'hsl(var(--primary)/0.1)',
+              colorTextTertiary: 'hsl(var(--secondary))',
+            },
+            Select: {
+              colorPrimary: 'hsl(var(--primary))',
+              colorBgContainer: 'hsl(var(--background))',
+              colorBgElevated: 'hsl(var(--sidebar-background))',
+              colorText: 'hsl(var(--text))',
+              colorBorder: 'hsl(var(--primary))',
+              colorTextPlaceholder: 'hsl(var(--muted-foreground)/0.5)',
+              colorTextSecondary: 'hsl(var(--muted-foreground)/0.5)',
+              colorTextHeading: 'hsl(var(--text))',
+              optionSelectedBg: 'hsl(var(--primary))',
+            },
+            Radio: {
+              colorPrimary: 'hsl(var(--primary))',
+              colorBgContainer: 'hsl(var(--background))',
+              colorPrimaryActive: 'hsl(var(--foreground))',
+              colorBorder: 'hsl(var(--primary))',
+              colorText: 'hsl(var(--text))',
+              colorBgTextHover: 'hsl(var(--background))',
+              buttonBg: 'hsl(var(--background))',
+              buttonSolidCheckedHoverBg: 'hsl(var(--primary))',
+              buttonSolidCheckedColor: 'hsl(var(--text))',
+            },
+            Badge: {
+              colorText: 'hsl(var(--text))',
+            },
+          },
+        }}
+      >
+        {children}
+      </ConfigProvider>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );

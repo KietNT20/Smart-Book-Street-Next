@@ -13,6 +13,7 @@ export function detectDateFormat(dateString: string): string {
 }
 
 export function prepareInitialBookData(book?: Book) {
+  console.log('book', book);
   if (!book) {
     return {
       isbn: '',
@@ -44,7 +45,7 @@ export function prepareInitialBookData(book?: Book) {
     title: book.title || '',
     publicationDate: formattedDate,
     price: book.price || 0,
-    languages: book.languages || Language.VIETNAMESE,
+    languages: book.languages,
     description: book.description || '',
     size: book.size || '',
     status: book.status || '',
@@ -52,7 +53,7 @@ export function prepareInitialBookData(book?: Book) {
     authorIds: book.bookAuthors?.map((author) => author.authorId) || [],
     categoryIds:
       book.bookCategories?.map((category) => category.categoryId) || [],
-    mainImageFile: undefined,
+    mainImageFile: book.images?.[0]?.url || undefined,
     additionalImageFiles: [],
   };
 }

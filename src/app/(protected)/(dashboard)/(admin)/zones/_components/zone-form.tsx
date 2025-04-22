@@ -12,6 +12,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { STORAGE } from '@/constant/storage';
 import { PATH } from '@/enums/path';
 import useDebounce from '@/hooks/use-debounce';
@@ -33,7 +34,7 @@ const ZoneForm = ({ zoneToEdit }: Props) => {
     resolver: zodResolver(zoneFormSchema),
     defaultValues: {
       zoneName: zoneToEdit?.zoneName || '',
-      description: zoneToEdit?.description || undefined,
+      description: zoneToEdit?.description || '',
       latitude: zoneToEdit?.latitude || 0,
       longitude: zoneToEdit?.longitude || 0,
     },
@@ -78,6 +79,24 @@ const ZoneForm = ({ zoneToEdit }: Props) => {
                   <FormLabel>Tên khu vực</FormLabel>
                   <FormControl>
                     <Input placeholder='Nhập tên khu vực' {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/* Description */}
+            <FormField
+              control={form.control}
+              name='description'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Mô tả</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder='Nhập mô tả'
+                      className='min-h-28'
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

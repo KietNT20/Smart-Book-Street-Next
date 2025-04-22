@@ -185,7 +185,7 @@ const UserStoreForm = () => {
                 <FormLabel>Ngày bắt đầu</FormLabel>
                 <FormControl>
                   <DatePicker
-                    className='w-full px-3 py-2'
+                    className='h-10 w-full px-3 py-2'
                     format='YYYY-MM-DD'
                     placeholder='Chọn ngày bắt đầu'
                     disabled={isRegisteringStore}
@@ -208,7 +208,7 @@ const UserStoreForm = () => {
                 <FormLabel>Ngày kết thúc</FormLabel>
                 <FormControl>
                   <DatePicker
-                    className='w-full px-3 py-2'
+                    className='h-10 w-full px-3 py-2'
                     format='YYYY-MM-DD'
                     placeholder='Chọn ngày kết thúc'
                     disabled={isRegisteringStore}

@@ -3,22 +3,25 @@
 import BackButton from '@/components/back-btn/back-button';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ImageFallback } from '@/constant/storage';
+import { ImageFallback, STORAGE } from '@/constant/storage';
 import { PATH } from '@/enums/path';
 import { useStoreById } from '@/hooks/use-store';
+import { useStoreScheduleByStoreId } from '@/hooks/use-store-schedule';
+import { getLocalStorageItem } from '@/utils/token';
 import { Image } from 'antd';
-import { Clock, Mail, Map as MapIcon, MapPin, Phone } from 'lucide-react';
-import Link from 'next/link';
+import { Clock, Mail, MapPin, Phone } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import StoreScheduleDisplay from './_components/store-schedule-display';
 
-export default function StorePage({ params }: { params: { storeId: string } }) {
-  const { store, isLoading } = useStoreById(params.storeId);
+export default function StoreSchedulePage() {
+  const storeId = getLocalStorageItem(STORAGE.SELECTED_STORE_KEY);
+  const { store, isLoading: storeLoading } = useStoreById(storeId);
+  const { storeSchedulesRes, isLoading: storeScheduleLoading } =
+    useStoreScheduleByStoreId(storeId);
+  const router = useRouter();
 
-  if (isLoading) {
-    return (
-      <div className='flex min-h-screen items-center justify-center'>
-        <div className='h-12 w-12 animate-spin rounded-full border-b-2 border-t-2 border-primary'></div>
-      </div>
-    );
+  if (!storeId) {
+    router.push(PATH.STORE_OWNER_DASHBOARD);
   }
 
   if (!store) {
@@ -27,7 +30,7 @@ export default function StorePage({ params }: { params: { storeId: string } }) {
         <h1 className='mb-2 text-2xl font-bold text-red-500'>
           Không tìm thấy cửa hàng
         </h1>
-        <p className='text-foreground'>
+        <p className='text-zinc-600'>
           Cửa hàng này không tồn tại hoặc đã bị xóa.
         </p>
       </div>
@@ -41,13 +44,24 @@ export default function StorePage({ params }: { params: { storeId: string } }) {
       ? store.images[0].url
       : '/public/No-Image-Placeholder.png');
 
+  if (storeLoading || storeScheduleLoading) {
+    return (
+      <div className='flex min-h-screen items-center justify-center'>
+        <div className='h-12 w-12 animate-spin rounded-full border-b-2 border-t-2 border-primary'></div>
+      </div>
+    );
+  }
+
   return (
-    <>
+    <section>
       <div className='flex items-center justify-between'>
         <BackButton />
-        <Link href={`${PATH.STORES}/${params.storeId}/edit`}>
-          <Button variant={'darker'}>Chỉnh sửa</Button>
-        </Link>
+        <Button
+          variant={'darker'}
+          onClick={() => router.push(PATH.STORE_HOURS_EDIT)}
+        >
+          Chỉnh sửa
+        </Button>
       </div>
       <div className='container mx-auto max-w-6xl px-4 py-8'>
         {/* Store Header */}
@@ -63,11 +77,11 @@ export default function StorePage({ params }: { params: { storeId: string } }) {
               <div className='absolute inset-0 bg-black bg-opacity-30'></div>
             </div>
             <div className='absolute bottom-0 left-0 p-6'>
-              <h1 className='mb-2 text-3xl font-bold text-white md:text-4xl'>
+              <h1 className='mb-2 text-3xl font-bold text-primary-foreground md:text-4xl'>
                 {store.storeName}
               </h1>
-              <div className='flex items-center text-white'>
-                <span className='rounded bg-primary px-2.5 py-0.5 text-sm font-medium text-white'>
+              <div className='flex items-center text-primary-foreground'>
+                <span className='rounded bg-primary px-2.5 py-0.5 text-sm font-medium text-primary-foreground'>
                   {store.type}
                 </span>
               </div>
@@ -79,7 +93,7 @@ export default function StorePage({ params }: { params: { storeId: string } }) {
         <Tabs defaultValue='info' className='mb-6 w-full'>
           <TabsList className='grid w-full grid-cols-3'>
             <TabsTrigger value='info'>Thông tin</TabsTrigger>
-            <TabsTrigger value='map'>Bản đồ</TabsTrigger>
+            <TabsTrigger value='working-hours'>Giờ làm việc</TabsTrigger>
             <TabsTrigger value='photos'>Hình ảnh</TabsTrigger>
           </TabsList>
 
@@ -97,16 +111,20 @@ export default function StorePage({ params }: { params: { storeId: string } }) {
                   <div className='flex items-start'>
                     <MapPin className='mr-3 mt-0.5 h-5 w-5 flex-shrink-0 text-zinc-500' />
                     <div>
-                      <h3 className='font-bold'>Địa chỉ</h3>
-                      <p className='text-foreground'>{store.address}</p>
+                      <h3 className='font-medium text-muted-foreground'>
+                        Địa chỉ
+                      </h3>
+                      <p>{store.address}</p>
                     </div>
                   </div>
                   {store.phone && (
                     <div className='flex items-start'>
                       <Phone className='mr-3 mt-0.5 h-5 w-5 flex-shrink-0 text-zinc-500' />
                       <div>
-                        <h3 className='font-bold'>Số điện thoại</h3>
-                        <p className='text-foreground'>{store.phone}</p>
+                        <h3 className='font-medium text-muted-foreground'>
+                          Số điện thoại
+                        </h3>
+                        <p>{store.phone}</p>
                       </div>
                     </div>
                   )}
@@ -114,8 +132,10 @@ export default function StorePage({ params }: { params: { storeId: string } }) {
                     <div className='flex items-start'>
                       <Mail className='mr-3 mt-0.5 h-5 w-5 flex-shrink-0 text-zinc-500' />
                       <div>
-                        <h3 className='font-bold'>Email</h3>
-                        <p className='text-foreground'>{store.email}</p>
+                        <h3 className='font-medium text-muted-foreground'>
+                          Email
+                        </h3>
+                        <p>{store.email}</p>
                       </div>
                     </div>
                   )}
@@ -123,8 +143,8 @@ export default function StorePage({ params }: { params: { storeId: string } }) {
                     <div className='flex items-start'>
                       <Clock className='mr-3 mt-0.5 h-5 w-5 flex-shrink-0 text-zinc-500' />
                       <div>
-                        <h3 className='font-bold'>Giờ mở cửa</h3>
-                        <p className='text-foreground'>
+                        <h3 className='font-medium'>Giờ mở cửa</h3>
+                        <p className='text-zinc-600'>
                           {store.openingTime && store.closingTime
                             ? `${store.openingTime} - ${store.closingTime}`
                             : 'Liên hệ trực tiếp'}
@@ -137,47 +157,29 @@ export default function StorePage({ params }: { params: { storeId: string } }) {
               {store.zone && (
                 <div>
                   <h2 className='mb-4 text-xl font-bold'>Khu vực</h2>
-                  <div className='rounded-lg border border-ring bg-card p-4'>
+                  <div className='rounded-lg border p-4'>
                     <h3 className='mb-2 text-lg font-semibold'>
                       {store.zone.zoneName}
                     </h3>
-                    <p className='text-muted-foreground'>
-                      {store.zone.description}
-                    </p>
+                    <p>{store.zone.description}</p>
                   </div>
                 </div>
               )}
             </div>
           </TabsContent>
 
-          {/* Map Tab Content */}
+          {/* Working Hours Tab Content */}
           <TabsContent
-            value='map'
+            value='working-hours'
             className='mt-4 rounded-lg bg-background p-6 shadow-md'
           >
             <div className='space-y-4'>
-              <h2 className='mb-4 text-xl font-semibold'>Vị trí cửa hàng</h2>
-              {/* Map placeholder - in a real app, implement an actual map here */}
-              <div className='relative flex h-96 items-center justify-center rounded-lg bg-gray-100'>
-                <div className='text-center'>
-                  <MapIcon className='mx-auto mb-2 h-12 w-12 text-zinc-400' />
-                  <p className='text-foreground'>
-                    Vị trí: {store.latitude}, {store.longitude}
-                  </p>
-                  <a
-                    href={`https://www.google.com/maps?q=${store.latitude},${store.longitude}`}
-                    target='_blank'
-                    rel='noopener noreferrer'
-                    className='mt-4 inline-block rounded bg-primary px-4 py-2 text-white hover:bg-primary/90'
-                  >
-                    Xem trên Google Maps
-                  </a>
-                </div>
-              </div>
-              <div className='mt-4'>
-                <h3 className='mb-2 font-medium'>Địa chỉ</h3>
-                <p className='text-foreground'>{store.address}</p>
-              </div>
+              <h2 className='mb-4 text-xl font-semibold'>Giờ làm việc</h2>
+              <StoreScheduleDisplay
+                storeSchedules={
+                  Array.isArray(storeSchedulesRes) ? storeSchedulesRes : []
+                }
+              />
             </div>
           </TabsContent>
 
@@ -202,7 +204,7 @@ export default function StorePage({ params }: { params: { storeId: string } }) {
                   ))}
                 </div>
               ) : (
-                <div className='rounded-lg py-12 text-center'>
+                <div className='rounded-lg bg-darker py-12 text-center opacity-90'>
                   <p className='text-zinc-500'>Hiện chưa có hình ảnh</p>
                 </div>
               )}
@@ -210,6 +212,6 @@ export default function StorePage({ params }: { params: { storeId: string } }) {
           </TabsContent>
         </Tabs>
       </div>
-    </>
+    </section>
   );
 }

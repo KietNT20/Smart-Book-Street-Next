@@ -1,7 +1,11 @@
 'use client';
 
 import { ConfirmModal } from '@/components/confirm-modal';
+import { Button } from '@/components/ui/button';
+import { PATH } from '@/enums/path';
 import { BookSearchCriteria } from '@/types/book-types';
+import { Plus } from 'lucide-react';
+import Link from 'next/link';
 import BookSearchFilter from './_components/book-search-filter';
 import { useBookList } from './_lib/use-book-operations';
 import { useBookPageState } from './_lib/use-book-page-state';
@@ -37,10 +41,21 @@ export default function BooksPage() {
 
   return (
     <div className='space-y-4'>
+      <div>
+        <h3 className='text-2xl font-bold'>Danh sách sách</h3>
+
+        <Link href={PATH.BOOK_CREATE}>
+          <Button>
+            <Plus className='mr-2' /> Thêm sách
+          </Button>
+        </Link>
+      </div>
+
       <BookSearchFilter
         initialFilter={searchCriteria}
         onFilterChange={handleSearch}
       />
+
       <DataTable
         columns={columns}
         data={booksRes?.results || []}

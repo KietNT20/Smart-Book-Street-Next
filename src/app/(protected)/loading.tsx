@@ -4,7 +4,7 @@ export default function Loading() {
   return (
     <div className='flex h-screen w-full flex-col bg-gray-50 dark:bg-gray-900'>
       {/* Top navigation */}
-      <div className='w-full border-b border-gray-200 bg-white p-3 dark:border-gray-800 dark:bg-gray-950'>
+      <div className='w-full border-b border-gray-200 bg-background p-3 dark:border-gray-800 dark:bg-gray-950'>
         <div className='flex items-center justify-between'>
           <Skeleton className='h-6 w-28' />
           <div className='flex items-center gap-3'>
@@ -16,7 +16,7 @@ export default function Loading() {
 
       <div className='flex flex-1 overflow-hidden'>
         {/* Sidebar */}
-        <div className='w-60 flex-shrink-0 border-r border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-950'>
+        <div className='w-60 flex-shrink-0 border-r border-gray-200 bg-background dark:border-gray-800 dark:bg-gray-950'>
           <div className='border-b border-gray-200 p-4 dark:border-gray-800'>
             <Skeleton className='mb-1 h-8 w-36' />
             <Skeleton className='h-4 w-24' />
@@ -59,7 +59,7 @@ export default function Loading() {
           {/* Stat cards */}
           <div className='mb-6 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4'>
             {/* Card 1 - Visits */}
-            <div className='rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-950'>
+            <div className='rounded-lg border border-gray-200 bg-background p-4 dark:border-gray-800 dark:bg-gray-950'>
               <div className='flex justify-between'>
                 <div>
                   <Skeleton className='mb-2 h-4 w-32' />
@@ -71,7 +71,7 @@ export default function Loading() {
             </div>
 
             {/* Card 2 - Books */}
-            <div className='rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-950'>
+            <div className='rounded-lg border border-gray-200 bg-background p-4 dark:border-gray-800 dark:bg-gray-950'>
               <div className='flex justify-between'>
                 <div>
                   <Skeleton className='mb-2 h-4 w-24' />
@@ -83,7 +83,7 @@ export default function Loading() {
             </div>
 
             {/* Card 3 - Users */}
-            <div className='rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-950'>
+            <div className='rounded-lg border border-gray-200 bg-background p-4 dark:border-gray-800 dark:bg-gray-950'>
               <div className='flex justify-between'>
                 <div>
                   <Skeleton className='mb-2 h-4 w-36' />
@@ -95,7 +95,7 @@ export default function Loading() {
             </div>
 
             {/* Card 4 - Average Time */}
-            <div className='rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-950'>
+            <div className='rounded-lg border border-gray-200 bg-background p-4 dark:border-gray-800 dark:bg-gray-950'>
               <div className='flex justify-between'>
                 <div>
                   <Skeleton className='mb-2 h-4 w-40' />
@@ -110,7 +110,7 @@ export default function Loading() {
           {/* Chart sections */}
           <div className='grid grid-cols-1 gap-6 lg:grid-cols-2'>
             {/* Bar Chart */}
-            <div className='rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-950'>
+            <div className='rounded-lg border border-gray-200 bg-background p-4 dark:border-gray-800 dark:bg-gray-950'>
               <div className='mb-6 flex items-center justify-between'>
                 <div>
                   <Skeleton className='h-6 w-40' />
@@ -141,7 +141,7 @@ export default function Loading() {
             </div>
 
             {/* Donut Chart */}
-            <div className='rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-950'>
+            <div className='rounded-lg border border-gray-200 bg-background p-4 dark:border-gray-800 dark:bg-gray-950'>
               <div className='mb-6 flex items-center justify-between'>
                 <div>
                   <Skeleton className='h-6 w-36' />

@@ -168,7 +168,7 @@ const StoreSearch = ({ onSelectStore, value }: Props) => {
                 stores.map((store) => (
                   <Card
                     key={store.id}
-                    className='mb-2 cursor-pointer transition-colors duration-200 hover:bg-zinc-100'
+                    className='mb-2 cursor-pointer transition-colors duration-200 hover:border hover:border-ring'
                     onClick={() => handleSelectStore(store)}
                   >
                     <CardContent className='p-4'>
@@ -183,7 +183,7 @@ const StoreSearch = ({ onSelectStore, value }: Props) => {
                   </Card>
                 ))
               ) : (
-                <Card className='mb-2 cursor-pointer transition-colors duration-200 hover:bg-zinc-100'>
+                <Card className='mb-2 cursor-pointer transition-colors duration-200 hover:border hover:border-ring'>
                   <CardContent className='p-4'>
                     <p className='py-4 text-center'>
                       Không tìm thấy cửa hàng nào

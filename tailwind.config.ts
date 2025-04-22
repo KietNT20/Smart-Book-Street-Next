@@ -28,6 +28,10 @@ const config: Config = {
           DEFAULT: 'hsl(var(--primary))',
           foreground: 'hsl(var(--primary-foreground))',
         },
+        matcha: {
+          DEFAULT: 'hsl(var(--matcha))',
+          foreground: 'hsl(var(--matcha-foreground))',
+        },
         darker: {
           DEFAULT: 'hsl(var(--darker))',
           foreground: 'hsl(var(--darker-foreground))',

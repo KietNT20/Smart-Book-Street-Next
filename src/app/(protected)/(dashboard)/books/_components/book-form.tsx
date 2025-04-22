@@ -1,4 +1,3 @@
-import SubmitBtn from '@/components/button/submit-btn';
 import RichTextEditor from '@/components/rich-text-editor';
 import { Button } from '@/components/ui/button';
 import {
@@ -19,7 +18,9 @@ import { Book } from '@/types/book-types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import dayjs from 'dayjs';
 import 'dayjs/locale/vi';
+import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import AuthorCombobox from '../../_components/author-combobox';
 import CategoryCombobox from '../../_components/category-combobox';
@@ -31,12 +32,15 @@ import BookSelectLang from './book-select-lang';
 
 dayjs.locale('vi');
 
+type BookFormMode = 'create' | 'edit';
+
 type Props = {
   book?: Book;
   onCancel: () => void;
+  mode: BookFormMode;
 };
 
-const BookForm = ({ book, onCancel }: Props) => {
+const BookForm = ({ book, onCancel, mode }: Props) => {
   const form = useForm<BookFormValues>({
     resolver: zodResolver(bookSchema),
     defaultValues: prepareInitialBookData(book),
@@ -47,9 +51,9 @@ const BookForm = ({ book, onCancel }: Props) => {
   const router = useRouter();
 
   const onSubmit = (formData: FormData) => {
-    if (book) {
+    if (book?.id && mode === 'edit') {
       updateBook(
-        { id: book.id!, formData },
+        { id: book.id, formData },
         {
           onSuccess: () => {
             form.reset();
@@ -73,6 +77,13 @@ const BookForm = ({ book, onCancel }: Props) => {
     handleAdditionalFilesChange,
     handleSubmit,
   } = useBookFormSubmit(onSubmit);
+
+  useEffect(() => {
+    if (book) {
+      const values = prepareInitialBookData(book);
+      form.reset(values);
+    }
+  }, [book, form]);
 
   return (
     <Form {...form}>
@@ -363,7 +374,18 @@ const BookForm = ({ book, onCancel }: Props) => {
           >
             Hủy
           </Button>
-          <SubmitBtn ID={book?.id || ''} _onPending={isLoading} />
+          <Button type='submit'>
+            {isLoading ? (
+              <>
+                <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                Đang xử lý...
+              </>
+            ) : mode === 'edit' ? (
+              'Cập nhật'
+            ) : (
+              'Thêm mới'
+            )}
+          </Button>
         </div>
       </form>
     </Form>
