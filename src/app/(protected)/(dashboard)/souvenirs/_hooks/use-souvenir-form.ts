@@ -1,3 +1,5 @@
+'use client';
+
 import useDebounce from '@/hooks/use-debounce';
 import { useSouvenirMutation } from '@/hooks/use-souvenir';
 import { souvenirFormSchema, SouvenirFormValues } from '@/lib/zod';
@@ -62,7 +64,7 @@ export function useSouvenirForm({ souvenirToEdit }: Props) {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = event.target.files?.[0];
-    if (file) {
+    if (file && typeof window !== 'undefined') {
       const reader = new FileReader();
       reader.onloadend = () => {
         setMainImagePreview(reader.result as string);
