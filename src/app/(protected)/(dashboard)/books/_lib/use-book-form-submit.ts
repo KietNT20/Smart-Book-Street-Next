@@ -48,13 +48,15 @@ export function useBookFormSubmit(onSubmit: (formData: FormData) => void) {
         values.categoryIds.forEach((id) => formData.append('CategoryIds', id));
       }
 
-      if (files.mainFile) {
-        formData.append('MainImageFile', files.mainFile);
+      if (files.mainFile && typeof window !== 'undefined') {
+        formData.set('MainImageFile', files.mainFile);
       }
 
-      files.additionalFiles.forEach((file) => {
-        formData.append('AdditionalImageFiles', file);
-      });
+      if (files.additionalFiles && typeof window !== 'undefined') {
+        files.additionalFiles.forEach((file) => {
+          formData.append('AdditionalImageFiles', file);
+        });
+      }
 
       onSubmit(formData);
     } catch (error) {

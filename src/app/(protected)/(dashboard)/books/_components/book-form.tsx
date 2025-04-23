@@ -1,3 +1,6 @@
+import AuthorCombobox from '@/components/combobox/author-combobox';
+import CategoryCombobox from '@/components/combobox/category-combobox';
+import PublisherCombobox from '@/components/combobox/publisher-combobox';
 import RichTextEditor from '@/components/rich-text-editor';
 import { Button } from '@/components/ui/button';
 import {
@@ -22,9 +25,6 @@ import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import AuthorCombobox from '../../_components/author-combobox';
-import CategoryCombobox from '../../_components/category-combobox';
-import PublisherCombobox from '../../_components/publisher-combobox';
 import { prepareInitialBookData } from '../_lib/book-form-helpers';
 import { useBookFormSubmit } from '../_lib/use-book-form-submit';
 import BookPublicationDate from './book-publication-date';

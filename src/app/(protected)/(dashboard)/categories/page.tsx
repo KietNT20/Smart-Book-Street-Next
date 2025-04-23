@@ -1,86 +1,33 @@
 'use client';
 
-import { Plus } from 'lucide-react';
-import { useState } from 'react';
-
 import { ConfirmModal } from '@/components/confirm-modal';
 import LoadingSpinner from '@/components/spin/loading-spinner';
 import { Button } from '@/components/ui/button';
-import { useCategoryMutation, useGetCategories } from '@/hooks/use-category';
-import { CategoryFormValues } from '@/lib/zod';
 import { Empty } from 'antd';
+import { Plus } from 'lucide-react';
 import { CategoryFormModal } from './_components/cate-form-modal';
-import { CategoryCol, columns } from './columns';
+import { useCategoriesPage } from './_hooks/use-cate-page';
+import { columns } from './columns';
 import { DataTable } from './data-table';
 
 export default function CategoriesPage() {
-  const { categoriesData, isLoading } = useGetCategories();
   const {
-    createCategory,
+    categoriesData,
+    isLoading,
+    isModalOpen,
+    setIsModalOpen,
+    selectedCategory,
+    isDeleteDialogOpen,
+    setIsDeleteDialogOpen,
     createCategoryPending,
-    updateCategory,
     updateCategoryPending,
-    deleteCategory,
     deleteCategoryPending,
-  } = useCategoryMutation();
-
-  // State for modal
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<CategoryCol | null>(
-    null
-  );
-
-  // State for delete confirmation
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
-  const [categoryToDelete, setCategoryToDelete] = useState<string | null>(null);
-
-  const handleCreate = () => {
-    setSelectedCategory(null);
-    setIsModalOpen(true);
-  };
-
-  const handleEdit = (category: CategoryCol) => {
-    setSelectedCategory(category);
-    setIsModalOpen(true);
-  };
-
-  const handleDelete = (id: string) => {
-    setCategoryToDelete(id);
-    setIsDeleteDialogOpen(true);
-  };
-
-  const confirmDelete = () => {
-    if (!categoryToDelete) return;
-    deleteCategory(categoryToDelete, {
-      onSuccess: () => {
-        setIsDeleteDialogOpen(false);
-        setCategoryToDelete(null);
-      },
-    });
-  };
-
-  const handleSubmit = (values: CategoryFormValues) => {
-    if (selectedCategory) {
-      updateCategory(
-        {
-          id: selectedCategory.id,
-          payload: values,
-        },
-        {
-          onSuccess: () => {
-            setIsModalOpen(false);
-            setSelectedCategory(null);
-          },
-        }
-      );
-    } else {
-      createCategory(values, {
-        onSuccess: () => {
-          setIsModalOpen(false);
-        },
-      });
-    }
-  };
+    handleCreate,
+    handleEdit,
+    handleDelete,
+    confirmDelete,
+    handleSubmit,
+  } = useCategoriesPage();
 
   if (!categoriesData) {
     return <Empty description={'Chưa có dữ liệu'} />;

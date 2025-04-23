@@ -1,3 +1,5 @@
+'use client';
+
 import { PATH } from '@/enums/path';
 import useDebounce from '@/hooks/use-debounce';
 import { useStoreMutation } from '@/hooks/use-store';
@@ -57,21 +59,13 @@ export const useStoreForm = ({ storeToEdit }: UseStoreFormProps) => {
         formData.append('Email', values.email);
       }
 
-      if (values.mainImageFile) {
-        formData.append(
-          'MainImageFile',
-          values.mainImageFile instanceof File
-            ? values.mainImageFile
-            : new Blob([values.mainImageFile])
-        );
+      if (values.mainImageFile && typeof window !== 'undefined') {
+        formData.set('MainImageFile', values.mainImageFile);
       }
 
-      if (values.additionalImageFiles) {
+      if (values.additionalImageFiles && typeof window !== 'undefined') {
         values.additionalImageFiles.forEach((file) => {
-          formData.append(
-            'AdditionalImageFiles',
-            file instanceof File ? file : new Blob([file])
-          );
+          formData.append('AdditionalImageFiles', file);
         });
       }
 

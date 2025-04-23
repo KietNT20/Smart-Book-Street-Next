@@ -84,8 +84,8 @@ export function AuthorForm({ authorId }: Props) {
       formData.append('DOB', data.dob || '');
       formData.append('Nationality', data.nationality || '');
       formData.append('Biography', data.biography || '');
-      if (data.imgFile) {
-        formData.append('ImgFile', data.imgFile);
+      if (data.imgFile && typeof window !== 'undefined') {
+        formData.set('ImgFile', data.imgFile);
       }
       if (authorId) {
         updateAuthor({ id: authorId, formData });
@@ -99,7 +99,9 @@ export function AuthorForm({ authorId }: Props) {
   };
 
   const handleImageFileChange = (file: File | null) => {
-    setFile((prev) => ({ ...prev, imgFile: file }));
+    if (typeof window !== 'undefined') {
+      setFile((prev) => ({ ...prev, imgFile: file }));
+    }
   };
 
   if (authorId && isLoadingAuthor) {

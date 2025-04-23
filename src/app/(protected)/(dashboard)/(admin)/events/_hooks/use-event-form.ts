@@ -1,3 +1,5 @@
+'use client';
+
 import useDebounce from '@/hooks/use-debounce';
 import { useEventMutaton } from '@/hooks/use-event';
 import { useNonDeletedZones } from '@/hooks/use-zone';
@@ -57,25 +59,23 @@ export const useEventForm = ({ eventEdit }: UseEventFormProps) => {
     formData.append('IsOpen', String(values.isOpen || false));
     formData.append('AllowAds', String(values.allowAds || false));
 
-    if (values.baseImgFile && values.baseImgFile instanceof File) {
-      formData.append('BaseImgFile', values.baseImgFile);
-    } else if (typeof values.baseImgFile === 'string') {
-      formData.append('BaseImgFile', values.baseImgFile);
+    if (values.baseImgFile && typeof window !== 'undefined') {
+      formData.set('BaseImgFile', values.baseImgFile);
     }
 
-    if (values.otherImgFile && values.otherImgFile.length > 0) {
+    if (
+      values.otherImgFile &&
+      values.otherImgFile.length > 0 &&
+      typeof window !== 'undefined'
+    ) {
       values.otherImgFile.forEach((file) => {
-        if (file instanceof File) {
-          formData.append(`OtherImgFile`, file);
-        } else if (typeof file === 'string') {
+        if (file) {
           formData.append(`OtherImgFile`, file);
         }
       });
     }
 
-    if (values.videoFile && values.videoFile instanceof File) {
-      formData.append('VideoFile', values.videoFile);
-    } else if (typeof values.videoFile === 'string') {
+    if (values.videoFile && typeof window !== 'undefined') {
       formData.append('VideoFile', values.videoFile);
     }
 

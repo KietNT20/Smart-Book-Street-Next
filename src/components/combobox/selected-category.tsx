@@ -1,5 +1,7 @@
+'use client';
+
 import { CommandItem } from '@/components/ui/command';
-import { useGetAuthorById } from '@/hooks/use-author';
+import { useGetCategoryById } from '@/hooks/use-category';
 import { Check } from 'lucide-react';
 
 type Props = {
@@ -7,9 +9,9 @@ type Props = {
   onDeselect: () => void;
 };
 
-const SelectedAuthor = ({ id, onDeselect }: Props) => {
-  const { data: authorRes, isLoading } = useGetAuthorById(id);
-  const author = authorRes?.result;
+const SelectedCategory = ({ id, onDeselect }: Props) => {
+  const { data: categoryRes, isLoading } = useGetCategoryById(id);
+  const categories = categoryRes?.result;
 
   if (isLoading) {
     return (
@@ -20,13 +22,13 @@ const SelectedAuthor = ({ id, onDeselect }: Props) => {
     );
   }
 
-  if (!author) return null;
+  if (!categories) return null;
 
   return (
     <CommandItem onSelect={onDeselect}>
       <Check className='mr-2 h-4 w-4 opacity-100' />
-      {author.authorName}
+      {categories?.categoryName}
     </CommandItem>
   );
 };
-export default SelectedAuthor;
+export default SelectedCategory;

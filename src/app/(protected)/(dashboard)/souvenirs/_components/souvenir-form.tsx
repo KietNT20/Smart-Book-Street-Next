@@ -17,7 +17,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { PATH } from '@/enums/path';
 import { Souvenir } from '@/types/souvenir-types';
 import { Image } from 'antd';
-import { useSouvenirForm } from './use-souvenir-form';
+import { useSouvenirForm } from '../_hooks/use-souvenir-form';
 
 type Props = {
   souvenirToEdit?: Souvenir;

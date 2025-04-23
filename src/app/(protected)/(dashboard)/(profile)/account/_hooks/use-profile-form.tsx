@@ -1,3 +1,5 @@
+'use client';
+
 import { useUserMutation } from '@/hooks/use-user';
 import { userFormSchema, UserFormValues } from '@/lib/zod';
 import { User } from '@/types/user-types';
@@ -61,8 +63,10 @@ export const useProfileForm = ({ user }: UseUserFormProps) => {
       setSelectedImage(file);
       form.setValue('mainImageFile', file as any);
 
-      const fileUrl = URL.createObjectURL(file);
-      setPreviewImage(fileUrl);
+      if (typeof window !== 'undefined') {
+        const fileUrl = URL.createObjectURL(file);
+        setPreviewImage(fileUrl);
+      }
     }
   };
 
@@ -105,15 +109,19 @@ export const useProfileForm = ({ user }: UseUserFormProps) => {
       formData.append('Gender', values.gender);
     }
 
-    if (selectedImage instanceof File) {
-      formData.append('MainImageFile', selectedImage);
-    } else if (values.mainImageFile instanceof File) {
-      formData.append('MainImageFile', values.mainImageFile);
+    if (selectedImage && typeof window !== 'undefined') {
+      formData.set('MainImageFile', selectedImage);
+    } else if (values.mainImageFile && typeof window !== 'undefined') {
+      formData.set('MainImageFile', values.mainImageFile);
     }
 
-    if (values.additionalImageFiles) {
+    if (
+      values.additionalImageFiles &&
+      values.additionalImageFiles.length > 0 &&
+      typeof window !== 'undefined'
+    ) {
       values.additionalImageFiles.forEach((file) => {
-        if (file instanceof File) {
+        if (file) {
           formData.append('AdditionalImageFiles', file);
         }
       });

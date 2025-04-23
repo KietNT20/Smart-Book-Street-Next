@@ -16,7 +16,7 @@ import { PATH } from '@/enums/path';
 import { Publisher } from '@/types/publisher-types';
 import { Image } from 'antd';
 import { X } from 'lucide-react';
-import { usePublisherForm } from '../_lib/use-publisher-form';
+import { usePublisherForm } from '../_hooks/use-publisher-form';
 
 type Props = {
   publisher?: Publisher;

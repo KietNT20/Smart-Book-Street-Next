@@ -28,7 +28,7 @@ import { DatePicker, Image } from 'antd';
 import dayjs from 'dayjs';
 import 'dayjs/locale/vi';
 import { X } from 'lucide-react';
-import { useEventForm } from '../_lib/use-event-form';
+import { useEventForm } from '../_hooks/use-event-form';
 
 // Set locale cho dayjs
 dayjs.locale('vi');

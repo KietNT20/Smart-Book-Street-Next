@@ -1,3 +1,5 @@
+'use client';
+
 import useDebounce from '@/hooks/use-debounce';
 import { usePublisherMutation } from '@/hooks/use-publisher';
 import { useManagerEmail } from '@/hooks/use-user';
@@ -103,21 +105,15 @@ export const usePublisherForm = ({ publisher }: Props = {}) => {
       formData.append('Website', values.website);
     }
 
-    if (values.mainImageFile) {
-      formData.append(
-        'MainImageFile',
-        values.mainImageFile instanceof File
-          ? values.mainImageFile
-          : new Blob([values.mainImageFile])
-      );
+    if (values.mainImageFile && typeof window !== 'undefined') {
+      formData.set('MainImageFile', values.mainImageFile);
     }
 
-    if (values.additionalImageFiles) {
+    if (values.additionalImageFiles && typeof window !== 'undefined') {
       values.additionalImageFiles.forEach((file) => {
-        formData.append(
-          'AdditionalImageFiles',
-          file instanceof File ? file : new Blob([file])
-        );
+        if (file) {
+          formData.append('AdditionalImageFiles', file);
+        }
       });
     }
 
