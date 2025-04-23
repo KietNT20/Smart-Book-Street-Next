@@ -83,7 +83,8 @@ const SectionCards = () => {
   const getChangeMessage = (
     trend: Trend,
     total: number,
-    percentChange?: number
+    percentChange?: number,
+    entity: string = 'người'
   ): string => {
     if (!percentChange) {
       return getTrendMessage(trend);
@@ -110,9 +111,9 @@ const SectionCards = () => {
 
     switch (trend) {
       case Trend.INCREASE:
-        return `+ ${formattedChange} so với tháng trước`;
+        return `+ ${formattedChange} ${entity} so với tháng trước`;
       case Trend.DECREASE:
-        return `- ${formattedChange} so với tháng trước`;
+        return `- ${formattedChange} ${entity} so với tháng trước`;
       case Trend.STABLE:
       default:
         return 'Không thay đổi so với tháng trước';
@@ -216,7 +217,8 @@ const SectionCards = () => {
             {getChangeMessage(
               changeDirectionStore,
               totalStores,
-              percentChangeStore
+              percentChangeStore,
+              'cửa hàng'
             )}
           </div>
         </CardFooter>
