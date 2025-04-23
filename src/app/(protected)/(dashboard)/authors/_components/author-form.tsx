@@ -99,7 +99,9 @@ export function AuthorForm({ authorId }: Props) {
   };
 
   const handleImageFileChange = (file: File | null) => {
-    setFile((prev) => ({ ...prev, imgFile: file }));
+    if (typeof window !== 'undefined') {
+      setFile((prev) => ({ ...prev, imgFile: file }));
+    }
   };
 
   if (authorId && isLoadingAuthor) {
