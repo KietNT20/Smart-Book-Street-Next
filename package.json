@@ -103,7 +103,7 @@
     "hooks": {
       "pre-commit": "lint-staged",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "pre-push": "npm run lint:fix && npm run prettier"
+      "pre-push": "pnpm run lint:fix && pnpm run prettier"
     }
   }
 }
