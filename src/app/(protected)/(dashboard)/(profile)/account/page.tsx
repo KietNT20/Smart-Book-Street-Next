@@ -59,10 +59,6 @@ export default function ProfilePage() {
     setIsClient(true);
   }, []);
 
-  if (userLoading || !isClient) {
-    return <UserDetailSkeleton />;
-  }
-
   if ((userError || !user) && isClient) {
     return (
       <Card className='mx-auto max-w-3xl'>
@@ -85,6 +81,10 @@ export default function ProfilePage() {
 
   if (!isClient) {
     return null;
+  }
+
+  if (userLoading || !isClient) {
+    return <UserDetailSkeleton />;
   }
 
   return (

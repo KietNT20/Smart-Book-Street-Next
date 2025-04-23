@@ -57,7 +57,7 @@ export const useStoreForm = ({ storeToEdit }: UseStoreFormProps) => {
         formData.append('Email', values.email);
       }
 
-      if (values.mainImageFile) {
+      if (values.mainImageFile && typeof window !== 'undefined') {
         formData.append(
           'MainImageFile',
           values.mainImageFile instanceof File
@@ -66,7 +66,7 @@ export const useStoreForm = ({ storeToEdit }: UseStoreFormProps) => {
         );
       }
 
-      if (values.additionalImageFiles) {
+      if (values.additionalImageFiles && typeof window !== 'undefined') {
         values.additionalImageFiles.forEach((file) => {
           formData.append(
             'AdditionalImageFiles',

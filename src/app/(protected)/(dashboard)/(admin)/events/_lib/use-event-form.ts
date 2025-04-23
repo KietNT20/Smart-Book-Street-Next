@@ -57,13 +57,21 @@ export const useEventForm = ({ eventEdit }: UseEventFormProps) => {
     formData.append('IsOpen', String(values.isOpen || false));
     formData.append('AllowAds', String(values.allowAds || false));
 
-    if (values.baseImgFile && values.baseImgFile instanceof File) {
+    if (
+      values.baseImgFile &&
+      values.baseImgFile instanceof File &&
+      typeof window !== 'undefined'
+    ) {
       formData.append('BaseImgFile', values.baseImgFile);
     } else if (typeof values.baseImgFile === 'string') {
       formData.append('BaseImgFile', values.baseImgFile);
     }
 
-    if (values.otherImgFile && values.otherImgFile.length > 0) {
+    if (
+      values.otherImgFile &&
+      values.otherImgFile.length > 0 &&
+      typeof window !== 'undefined'
+    ) {
       values.otherImgFile.forEach((file) => {
         if (file instanceof File) {
           formData.append(`OtherImgFile`, file);
@@ -73,7 +81,11 @@ export const useEventForm = ({ eventEdit }: UseEventFormProps) => {
       });
     }
 
-    if (values.videoFile && values.videoFile instanceof File) {
+    if (
+      values.videoFile &&
+      values.videoFile instanceof File &&
+      typeof window !== 'undefined'
+    ) {
       formData.append('VideoFile', values.videoFile);
     } else if (typeof values.videoFile === 'string') {
       formData.append('VideoFile', values.videoFile);

@@ -62,7 +62,10 @@ export const useUserForm = () => {
         formData.append('Gender', values.gender);
       }
 
-      if (values.mainImageFile instanceof File) {
+      if (
+        values.mainImageFile instanceof File &&
+        typeof window !== 'undefined'
+      ) {
         formData.append('MainImageFile', values.mainImageFile);
       }
       createUser(formData);

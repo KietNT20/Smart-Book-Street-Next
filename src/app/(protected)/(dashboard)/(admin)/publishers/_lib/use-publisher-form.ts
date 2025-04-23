@@ -103,7 +103,7 @@ export const usePublisherForm = ({ publisher }: Props = {}) => {
       formData.append('Website', values.website);
     }
 
-    if (values.mainImageFile) {
+    if (values.mainImageFile && typeof window !== 'undefined') {
       formData.append(
         'MainImageFile',
         values.mainImageFile instanceof File
@@ -112,12 +112,14 @@ export const usePublisherForm = ({ publisher }: Props = {}) => {
       );
     }
 
-    if (values.additionalImageFiles) {
+    if (values.additionalImageFiles && typeof window !== 'undefined') {
       values.additionalImageFiles.forEach((file) => {
-        formData.append(
-          'AdditionalImageFiles',
-          file instanceof File ? file : new Blob([file])
-        );
+        if (file) {
+          formData.append(
+            'AdditionalImageFiles',
+            file instanceof File ? file : new Blob([file])
+          );
+        }
       });
     }
 
