@@ -44,7 +44,7 @@ export function useSouvenirForm({ souvenirToEdit }: Props) {
       formData.append('Description', data.description);
     }
 
-    if (data.baseImgFile instanceof File) {
+    if (data.baseImgFile instanceof File && typeof window !== 'undefined') {
       formData.append('BaseImgFile', data.baseImgFile);
     }
 

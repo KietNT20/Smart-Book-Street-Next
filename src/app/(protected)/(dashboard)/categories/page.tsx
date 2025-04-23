@@ -14,6 +14,14 @@ import { CategoryCol, columns } from './columns';
 import { DataTable } from './data-table';
 
 export default function CategoriesPage() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<CategoryCol | null>(
+    null
+  );
+
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
+  const [categoryToDelete, setCategoryToDelete] = useState<string | null>(null);
+
   const { categoriesData, isLoading } = useGetCategories();
   const {
     createCategory,
@@ -23,16 +31,6 @@ export default function CategoriesPage() {
     deleteCategory,
     deleteCategoryPending,
   } = useCategoryMutation();
-
-  // State for modal
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<CategoryCol | null>(
-    null
-  );
-
-  // State for delete confirmation
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
-  const [categoryToDelete, setCategoryToDelete] = useState<string | null>(null);
 
   const handleCreate = () => {
     setSelectedCategory(null);
