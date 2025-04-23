@@ -1,5 +1,9 @@
 import { Separator } from '@/components/ui/separator';
-import EventForm from '../_components/event-form';
+import dynamic from 'next/dynamic';
+
+const EventForm = dynamic(() => import('../_components/event-form'), {
+  ssr: false,
+});
 
 const EventCreatePage = () => {
   return (

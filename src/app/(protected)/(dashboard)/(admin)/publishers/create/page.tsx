@@ -1,4 +1,8 @@
-import PublisherForm from '../_components/publisher-form';
+import dynamic from 'next/dynamic';
+
+const PublisherForm = dynamic(() => import('../_components/publisher-form'), {
+  ssr: false,
+});
 
 const CreatePublisherPage = () => {
   return (

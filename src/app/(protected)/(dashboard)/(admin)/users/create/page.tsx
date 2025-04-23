@@ -1,4 +1,8 @@
-import UserForm from '../_components/user-form';
+import dynamic from 'next/dynamic';
+
+const UserForm = dynamic(() => import('../_components/user-form'), {
+  ssr: false,
+});
 
 const Page = () => {
   return (

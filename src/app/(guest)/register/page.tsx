@@ -25,7 +25,7 @@ export default function RegisterPage() {
           </div>
           Acme Inc.
         </a>
-        <RegisterForm className='' />
+        <RegisterForm />
       </div>
     </div>
   );

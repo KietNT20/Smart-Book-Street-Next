@@ -1,3 +1,5 @@
+'use client';
+
 import useDebounce from '@/hooks/use-debounce';
 import { usePublisherMutation } from '@/hooks/use-publisher';
 import { useManagerEmail } from '@/hooks/use-user';
