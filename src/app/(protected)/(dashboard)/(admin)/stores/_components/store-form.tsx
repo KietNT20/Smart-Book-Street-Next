@@ -23,7 +23,7 @@ import { Input } from '@/components/ui/input';
 import { StoreData } from '@/types/store-types';
 import { Image } from 'antd';
 import { X } from 'lucide-react';
-import { useStoreForm } from '../_lib/use-store-form';
+import { useStoreForm } from '../_hooks/use-store-form';
 import AddressSearch from './address-search';
 import ZoneSearch from './zone-search';
 

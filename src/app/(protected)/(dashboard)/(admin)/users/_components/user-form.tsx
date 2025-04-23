@@ -24,7 +24,7 @@ import { PATH } from '@/enums/path';
 import { Image } from 'antd';
 import dayjs from 'dayjs';
 import { X } from 'lucide-react';
-import { useUserForm } from '../_lib/use-user-form';
+import { useUserForm } from '../_hooks/use-user-form';
 
 const UserForm = () => {
   const {
