@@ -76,17 +76,17 @@ export default tokenMethod;
  * @param defaultValue - The default value to return if key doesn't exist or localStorage is not available
  * @returns The value from localStorage or the default value
  */
-export const getLocalStorageItem = (
+export const getLocalStorageItem = <T = string>(
   key: string,
-  defaultValue: string = ''
-): string => {
+  defaultValue: T = '' as T
+): T => {
   if (typeof window === 'undefined') {
     return defaultValue;
   }
 
   try {
     const item = localStorage.getItem(key);
-    return item !== null ? item : defaultValue;
+    return item !== null ? (JSON.parse(item) as T) : defaultValue;
   } catch (error) {
     console.error(`Error accessing localStorage for key "${key}":`, error);
     return defaultValue;
@@ -99,13 +99,14 @@ export const getLocalStorageItem = (
  * @param value - The value to store in localStorage
  * @returns true if successful, false otherwise
  */
-export const setLocalStorageItem = (key: string, value: string): boolean => {
+export const setLocalStorageItem = <T>(key: string, value: T): boolean => {
   if (typeof window === 'undefined') {
     return false;
   }
 
   try {
-    localStorage.setItem(key, value);
+    const serializedValue = JSON.stringify(value);
+    localStorage.setItem(key, serializedValue);
     return true;
   } catch (error) {
     console.error(`Error setting localStorage for key "${key}":`, error);
