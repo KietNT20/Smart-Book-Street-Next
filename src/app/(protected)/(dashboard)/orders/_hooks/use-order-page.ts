@@ -9,7 +9,7 @@ import { getLocalStorageItem } from '@/utils/token';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
-export const useOrderDetail = () => {
+export const useOrderPage = () => {
   const storeId = getLocalStorageItem(STORAGE.SELECTED_STORE_KEY);
   const { orderDetailCarts } = useOrderDetailCarts(storeId);
   const { updateOrderDetail, deleteOrderDetail } = useOrderDetailMutation();
@@ -202,11 +202,7 @@ export const useOrderDetail = () => {
   };
 
   const handleDelete = (id: string) => {
-    toast.promise(deleteOrderDetail(id), {
-      loading: 'Đang xóa sản phẩm...',
-      success: 'Xóa sản phẩm thành công',
-      error: 'Xóa sản phẩm thất bại',
-    });
+    deleteOrderDetail(id);
   };
 
   return {

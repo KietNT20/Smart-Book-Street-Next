@@ -14,12 +14,6 @@ import {
 } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PATH } from '@/enums/path';
-import { StoreRent } from '@/enums/store-rent';
-import useDebounce from '@/hooks/use-debounce';
-import {
-  useGetContractUser,
-  useUserStoresMutation,
-} from '@/hooks/use-user-store';
 import { formateDateVi } from '@/lib/utils';
 import { getVietnameseRentLabel } from '@/utils/format';
 import {
@@ -33,51 +27,30 @@ import {
   Store,
   User,
 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 import LoadingSkeleton from './_components/loading-skeleton';
+import { useUserStoreRegistered } from './_hooks/use-userstore-registered';
 
 type Props = {
   params: { id: string };
 };
 
 const UserStoreRegisteredPage = ({ params }: Props) => {
-  const { userStore, isLoadingUserStore, error } = useGetContractUser(
-    params.id
-  );
-  const { deleteUserStore, isDeletingUserStore } = useUserStoresMutation();
-
-  const handleDeleteUserStore = (userId: string, storeId: string) => {
-    deleteUserStore({ userId, storeId });
-  };
-
-  const isLoading = useDebounce(isLoadingUserStore || isDeletingUserStore, 300);
-  const router = useRouter();
-  const [selectedContractIndex, setSelectedContractIndex] = useState(0);
-
-  const contract = userStore[selectedContractIndex];
-  const store = contract?.store;
-  const user = contract?.user;
-
-  const startDate = formateDateVi(contract?.startDate);
-  const endDate = formateDateVi(contract?.endDate);
-
-  const getStatusColor = (status: StoreRent) => {
-    switch (status) {
-      case StoreRent.ACTIVE:
-        return 'bg-green-100 text-green-800';
-      case StoreRent.EXPIRED:
-        return 'bg-red-100 text-red-800';
-      case StoreRent.TERMINATED:
-        return 'bg-yellow-100 text-yellow-800';
-      default:
-        return 'bg-gray-100 text-zinc-800';
-    }
-  };
-
-  if (isLoading) {
-    return <LoadingSkeleton />;
-  }
+  const userId = params.id as string;
+  const {
+    userStore,
+    isLoading,
+    error,
+    contract,
+    store,
+    user,
+    startDate,
+    endDate,
+    getStatusColor,
+    selectedContractIndex,
+    setSelectedContractIndex,
+    handleDeleteUserStore,
+    router,
+  } = useUserStoreRegistered({ userId });
 
   if (error || !userStore || !store) {
     return (
@@ -88,6 +61,10 @@ const UserStoreRegisteredPage = ({ params }: Props) => {
         />
       </div>
     );
+  }
+
+  if (isLoading) {
+    return <LoadingSkeleton />;
   }
 
   return (

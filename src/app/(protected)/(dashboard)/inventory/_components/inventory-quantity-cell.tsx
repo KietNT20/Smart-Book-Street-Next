@@ -45,7 +45,7 @@ export const InventoryQuantityCell = ({ row }: InventoryQuantityCellProps) => {
 
         const storeId = getLocalStorageItem(STORAGE.SELECTED_STORE_KEY);
         if (!storeId) {
-          toast.error('Không tìm thấy ID cửa hàng');
+          toast.error('Không tìm thấy cửa hàng');
           return;
         }
 

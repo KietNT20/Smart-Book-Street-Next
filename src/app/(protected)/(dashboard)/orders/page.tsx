@@ -18,7 +18,7 @@ import { formatPrice } from '@/lib/utils';
 import { Empty } from 'antd';
 import { Minus, Plus, Trash2 } from 'lucide-react';
 import Image from 'next/image';
-import { useOrderDetail } from './_lib/use-order-detail';
+import { useOrderPage } from './_hooks/use-order-page';
 
 const Page = () => {
   const {
@@ -35,7 +35,7 @@ const Page = () => {
     handleCreateOrder,
     setPaymentMethod,
     createOrderPending,
-  } = useOrderDetail();
+  } = useOrderPage();
 
   return (
     <div className='container mx-auto py-8'>

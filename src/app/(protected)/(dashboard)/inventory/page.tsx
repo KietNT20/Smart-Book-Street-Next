@@ -1,26 +1,45 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { STORAGE } from '@/constant/storage';
+import { PATH } from '@/enums/path';
 import {
   useInventoryBooksByStoreId,
   useInventorySouvenirsByStoreId,
 } from '@/hooks/use-inventory';
+import { useOrderDetailCarts } from '@/hooks/use-order-detail';
 import { getLocalStorageItem } from '@/utils/token';
+import { Badge } from 'antd';
+import { ShoppingCart } from 'lucide-react';
+import Link from 'next/link';
 import ISBNScannerInventory from './_components/isbn-scan-inventory';
 import { columnsBook } from './columns-book';
 import { columnsSouvenir } from './columns-souvenir';
 import { DataTableBook } from './data-table-book';
 import { DataTableSouvenir } from './data-table-souvenir';
 
+const storeId = getLocalStorageItem(STORAGE.SELECTED_STORE_KEY);
+
 const InventoryPage = () => {
-  const storeId = getLocalStorageItem(STORAGE.SELECTED_STORE_KEY);
   const { inventoriesByBook } = useInventoryBooksByStoreId(storeId as string);
   const { inventoriesBySouvenir } = useInventorySouvenirsByStoreId(
     storeId as string
   );
+  const { totalItem } = useOrderDetailCarts(storeId as string);
+
   return (
-    <div className='container mx-auto py-10'>
+    <div className='container relative mx-auto py-10'>
+      <div className='mb-4 flex items-center justify-end px-3'>
+        {' '}
+        <Link href={PATH.ORDERS}>
+          <Badge count={totalItem}>
+            <Button>
+              <ShoppingCart className='mr-2 h-4 w-4' /> Đơn hàng
+            </Button>
+          </Badge>
+        </Link>
+      </div>
       <Tabs defaultValue='book' className='w-full'>
         <TabsList className='grid w-full grid-cols-2'>
           <TabsTrigger value='book'>Sách</TabsTrigger>

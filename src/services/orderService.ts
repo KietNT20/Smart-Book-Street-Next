@@ -1,5 +1,5 @@
 import { API_URL } from '@/constant/api-url';
-import { OrderStaticsDailyAdmin } from '@/types/order-types';
+import { OrderResponse, OrderStaticsDailyAdmin } from '@/types/order-types';
 import axiosInstance from '@/utils/axiosInstance';
 
 export const orderService = {
@@ -60,7 +60,7 @@ export const orderService = {
     return res.data;
   },
 
-  create: async (data: FormData) => {
+  create: async (data: FormData): Promise<OrderResponse> => {
     const res = await axiosInstance.post(API_URL.ORDERS.INDEX, data);
     return res.data;
   },
