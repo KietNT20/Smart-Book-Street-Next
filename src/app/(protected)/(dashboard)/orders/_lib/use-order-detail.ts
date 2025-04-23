@@ -20,31 +20,25 @@ export const useOrderDetail = () => {
     [key: string]: number | string;
   }>({});
 
-  // State để lưu phương thức thanh toán
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | null>(
     null
   );
 
-  // Tính tổng tiền đơn hàng
   const totalAmount =
     orderDetailCarts?.reduce((total, item) => {
       return total + item.price * item.quantity;
     }, 0) || 0;
 
-  // Hàm xử lý tạo đơn hàng
   const handleCreateOrder = () => {
-    // Kiểm tra xem đã chọn phương thức thanh toán chưa
     if (!paymentMethod) {
       toast.error('Vui lòng chọn phương thức thanh toán');
       return;
     }
 
-    // Tạo đối tượng FormData
     const formData = new FormData();
     formData.append('StoreId', storeId);
     formData.append('PaymentMethod', paymentMethod);
 
-    // Gọi API tạo đơn hàng
     toast.promise(createOrder(formData), {
       loading: 'Đang tạo đơn hàng...',
       success: 'Tạo đơn hàng thành công',
@@ -67,7 +61,6 @@ export const useOrderDetail = () => {
     return quantities[id] as number;
   };
 
-  // Hàm tăng số lượng
   const handleIncrement = (id: string, currentQuantity: number | string) => {
     // Chuyển đổi về số nếu là chuỗi rỗng hoặc số
     const numQuantity = currentQuantity === '' ? 0 : Number(currentQuantity);
@@ -82,11 +75,9 @@ export const useOrderDetail = () => {
       [id]: newQuantity,
     });
 
-    // Gọi API cập nhật số lượng
     handleUpdateQuantity(id, newQuantity, originalValue);
   };
 
-  // Hàm giảm số lượng
   const handleDecrement = (id: string, currentQuantity: number | string) => {
     // Chuyển đổi về số nếu là chuỗi rỗng hoặc số
     const numQuantity = currentQuantity === '' ? 2 : Number(currentQuantity);
@@ -103,7 +94,6 @@ export const useOrderDetail = () => {
         [id]: newQuantity,
       });
 
-      // Gọi API cập nhật số lượng
       handleUpdateQuantity(id, newQuantity, originalValue);
     }
   };
@@ -131,7 +121,6 @@ export const useOrderDetail = () => {
     }
   };
 
-  // Hàm xử lý khi input mất focus
   const handleQuantityBlur = (
     id: string,
     value: string,
@@ -139,7 +128,7 @@ export const useOrderDetail = () => {
   ) => {
     // Xử lý khi input rỗng hoặc giá trị bằng 0
     if (value === '' || value === '0') {
-      // Reset về giá trị 1 khi mất focus
+      // Reset về giá trị 1 khi out focus
       setQuantities({
         ...quantities,
         [id]: 1,
@@ -202,7 +191,7 @@ export const useOrderDetail = () => {
             [id]: originalQuantity,
           });
         }
-        throw error; // Ném lỗi để toast hiển thị lỗi
+        throw error;
       }),
       {
         loading: 'Đang cập nhật số lượng...',
@@ -212,7 +201,6 @@ export const useOrderDetail = () => {
     );
   };
 
-  // Hàm xóa sản phẩm
   const handleDelete = (id: string) => {
     toast.promise(deleteOrderDetail(id), {
       loading: 'Đang xóa sản phẩm...',

@@ -2,17 +2,11 @@ import { AuthorFormValues } from '@/lib/zod';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
-type FileState = {
-  imgFile: File | null;
-};
-
 export function useBookFormSubmit(onSubmit: (formData: FormData) => void) {
-  const [file, setFile] = useState<FileState>({
-    imgFile: null,
-  });
+  const [file, setFile] = useState<File | null>(null);
 
   const handleImageFileChange = (file: File | null) => {
-    setFile((prev) => ({ ...prev, imgFile: file }));
+    setFile(file);
   };
 
   const handleSubmit = async (values: AuthorFormValues) => {
@@ -22,8 +16,8 @@ export function useBookFormSubmit(onSubmit: (formData: FormData) => void) {
       formData.append('DOB', values.dob || '');
       formData.append('Nationality', values.nationality || '');
       formData.append('Biography', values.biography || '');
-      if (values.imgFile) {
-        formData.append('ImgFile', values.imgFile);
+      if (values.imgFile && typeof window !== 'undefined') {
+        formData.set('ImgFile', values.imgFile);
       }
       onSubmit(formData);
     } catch (error: unknown) {

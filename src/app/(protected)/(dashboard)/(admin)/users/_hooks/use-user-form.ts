@@ -64,11 +64,8 @@ export const useUserForm = () => {
         formData.append('Gender', values.gender);
       }
 
-      if (
-        values.mainImageFile instanceof File &&
-        typeof window !== 'undefined'
-      ) {
-        formData.append('MainImageFile', values.mainImageFile);
+      if (values.mainImageFile && typeof window !== 'undefined') {
+        formData.set('MainImageFile', values.mainImageFile);
       }
       createUser(formData);
     } catch (error) {
@@ -81,8 +78,10 @@ export const useUserForm = () => {
     if (file) {
       form.setValue('mainImageFile', file, { shouldValidate: true });
 
-      const imageUrl = URL.createObjectURL(file);
-      setPreviewMainImage(imageUrl);
+      if (typeof window !== 'undefined') {
+        const fileUrl = URL.createObjectURL(file);
+        setPreviewMainImage(fileUrl);
+      }
     }
   };
 

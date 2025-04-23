@@ -109,13 +109,10 @@ export const useProfileForm = ({ user }: UseUserFormProps) => {
       formData.append('Gender', values.gender);
     }
 
-    if (selectedImage instanceof File && typeof window !== 'undefined') {
-      formData.append('MainImageFile', selectedImage);
-    } else if (
-      values.mainImageFile instanceof File &&
-      typeof window !== 'undefined'
-    ) {
-      formData.append('MainImageFile', values.mainImageFile);
+    if (selectedImage && typeof window !== 'undefined') {
+      formData.set('MainImageFile', selectedImage);
+    } else if (values.mainImageFile && typeof window !== 'undefined') {
+      formData.set('MainImageFile', values.mainImageFile);
     }
 
     if (
@@ -124,7 +121,7 @@ export const useProfileForm = ({ user }: UseUserFormProps) => {
       typeof window !== 'undefined'
     ) {
       values.additionalImageFiles.forEach((file) => {
-        if (file instanceof File) {
+        if (file) {
           formData.append('AdditionalImageFiles', file);
         }
       });

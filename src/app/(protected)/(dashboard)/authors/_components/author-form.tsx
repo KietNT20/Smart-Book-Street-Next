@@ -84,8 +84,8 @@ export function AuthorForm({ authorId }: Props) {
       formData.append('DOB', data.dob || '');
       formData.append('Nationality', data.nationality || '');
       formData.append('Biography', data.biography || '');
-      if (data.imgFile instanceof File && typeof window !== 'undefined') {
-        formData.append('ImgFile', data.imgFile);
+      if (data.imgFile && typeof window !== 'undefined') {
+        formData.set('ImgFile', data.imgFile);
       }
       if (authorId) {
         updateAuthor({ id: authorId, formData });

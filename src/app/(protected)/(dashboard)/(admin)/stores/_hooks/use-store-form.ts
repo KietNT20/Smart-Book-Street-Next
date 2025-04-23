@@ -77,22 +77,12 @@ export const useStoreForm = ({ storeToEdit }: UseStoreFormProps = {}) => {
       }
 
       if (values.mainImageFile && typeof window !== 'undefined') {
-        formData.append(
-          'MainImageFile',
-          values.mainImageFile instanceof File
-            ? values.mainImageFile
-            : new Blob([values.mainImageFile])
-        );
+        formData.set('MainImageFile', values.mainImageFile);
       }
 
       if (values.additionalImageFiles && typeof window !== 'undefined') {
         values.additionalImageFiles.forEach((file) => {
-          if (file) {
-            formData.append(
-              'AdditionalImageFiles',
-              file instanceof File ? file : new Blob([file])
-            );
-          }
+          formData.append('AdditionalImageFiles', file);
         });
       }
 
