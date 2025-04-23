@@ -1,3 +1,5 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
 import {
   Command,
@@ -20,14 +22,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { useAuthorMutation } from '@/hooks/use-author';
+import { useCategoryMutation } from '@/hooks/use-category';
 import useDebounce from '@/hooks/use-debounce';
-import { cn, formateDateVi } from '@/lib/utils';
-import { Author } from '@/types/author-types';
+import { cn } from '@/lib/utils';
+import { Category } from '@/types/category-types';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { useState } from 'react';
 import { Control, FieldValues, Path } from 'react-hook-form';
-import SelectedAuthor from './selected-author';
+import SelectedCategory from './selected-category';
 
 type Props<T extends FieldValues> = {
   name: Path<T>;
@@ -35,39 +37,33 @@ type Props<T extends FieldValues> = {
   disabled?: boolean;
 };
 
-const AuthorCombobox = <T extends FieldValues>({
+const CategoryCombobox = <T extends FieldValues>({
   name,
   control,
   disabled = false,
 }: Props<T>) => {
   const [input, setInput] = useState('');
-  const [searchResults, setSearchResults] = useState<Author[]>([]);
-  const { searchAuthorName } = useAuthorMutation();
+  const [results, setResults] = useState<Category[]>([]);
+  const { searchCategoryName } = useCategoryMutation();
+  const debouncedResults = useDebounce(results, 300);
 
-  const debouncedResults = useDebounce(searchResults, 300);
-
-  const handleSearch = (value: string) => {
+  const handleSearch = async (value: string) => {
     setInput(value);
 
     if (!value) {
-      setSearchResults([]);
+      setResults([]);
       return;
     }
 
-    searchAuthorName.mutate(
-      {
-        authorName: value,
-      },
-      {
-        onSuccess: (data) => {
-          setSearchResults(data.results || []);
-        },
-        onError: (error) => {
-          console.error('Failed to search author:', error);
-          setSearchResults([]);
-        },
-      }
-    );
+    try {
+      const { results } = await searchCategoryName.mutateAsync({
+        categoryName: value,
+      });
+      setResults(results);
+    } catch (error) {
+      console.error('Failed to search category:', error);
+      setResults([]);
+    }
   };
 
   return (
@@ -77,7 +73,7 @@ const AuthorCombobox = <T extends FieldValues>({
       render={({ field }) => (
         <FormItem>
           <FormLabel>
-            Tác giả <span className='text-red-400'>*</span>
+            Danh mục <span className='text-red-400'>*</span>
           </FormLabel>
           <Popover>
             <PopoverTrigger asChild>
@@ -85,15 +81,12 @@ const AuthorCombobox = <T extends FieldValues>({
                 <Button
                   variant='outline'
                   role='combobox'
-                  className={cn(
-                    'w-full justify-between',
-                    !field.value && 'text-muted-foreground'
-                  )}
+                  className='w-full justify-between'
                   disabled={disabled}
                 >
                   {field.value?.length
-                    ? `${field.value?.length} tác giả được chọn`
-                    : 'Chọn tác giả...'}
+                    ? `${field.value?.length} danh mục được chọn`
+                    : 'Chọn danh mục...'}
                   <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
                 </Button>
               </FormControl>
@@ -104,7 +97,7 @@ const AuthorCombobox = <T extends FieldValues>({
             >
               <Command shouldFilter={false}>
                 <CommandInput
-                  placeholder='Tìm tác giả...'
+                  placeholder='Tìm danh mục...'
                   value={input}
                   onValueChange={handleSearch}
                 />
@@ -113,13 +106,13 @@ const AuthorCombobox = <T extends FieldValues>({
                     <>
                       <CommandGroup heading='Đã chọn'>
                         {field.value.map((id: string) => (
-                          <SelectedAuthor
+                          <SelectedCategory
                             key={id}
                             id={id}
                             onDeselect={() => {
                               field.onChange(
                                 field.value.filter(
-                                  (authorId: string) => authorId !== id
+                                  (categoryId: string) => categoryId !== id
                                 )
                               );
                             }}
@@ -131,41 +124,41 @@ const AuthorCombobox = <T extends FieldValues>({
                   )}
 
                   <CommandGroup className='max-h-80 overflow-y-auto'>
-                    {searchAuthorName.isPending && (
+                    {searchCategoryName.isPending && (
                       <CommandItem disabled className='text-muted-foreground'>
                         <span className='loading loading-spinner loading-sm mr-2' />
                         Đang tải...
                       </CommandItem>
                     )}
-                    {!searchAuthorName.isPending &&
+                    {!searchCategoryName.isPending &&
                       !debouncedResults?.length &&
                       input && (
-                        <CommandEmpty>Không tìm thấy tác giả.</CommandEmpty>
+                        <CommandEmpty>Không tìm thấy danh mục.</CommandEmpty>
                       )}
-                    {!searchAuthorName.isPending &&
-                      debouncedResults?.map((author) => (
+                    {!searchCategoryName.isPending &&
+                      debouncedResults?.map((category) => (
                         <CommandItem
-                          key={author.id}
+                          key={category.id}
                           onSelect={() => {
                             const values = (field.value as string[]) || [];
                             field.onChange(
-                              values?.includes(author.id)
+                              values?.includes(category.id!)
                                 ? values?.filter(
-                                    (id: string) => id !== author.id
+                                    (id: string) => id !== category.id
                                   )
-                                : [...values, author.id]
+                                : [...values, category.id]
                             );
                           }}
                         >
                           <Check
                             className={cn(
                               'mr-2 h-4 w-4',
-                              (field.value as string[])?.includes(author.id)
+                              (field.value as string[])?.includes(category.id!)
                                 ? 'opacity-100'
                                 : 'opacity-0'
                             )}
                           />
-                          {author.authorName} ({formateDateVi(author.dob)})
+                          {category.categoryName}
                         </CommandItem>
                       ))}
                   </CommandGroup>
@@ -180,4 +173,4 @@ const AuthorCombobox = <T extends FieldValues>({
   );
 };
 
-export default AuthorCombobox;
+export default CategoryCombobox;
