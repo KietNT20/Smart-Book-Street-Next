@@ -1,3 +1,5 @@
+'use client';
+
 import { Separator } from '@/components/ui/separator';
 import { Suspense } from 'react';
 import { AuthorForm } from '../_components/author-form';

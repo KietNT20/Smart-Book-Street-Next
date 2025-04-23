@@ -1,3 +1,5 @@
+'use client';
+
 import { PATH } from '@/enums/path';
 import useDebounce from '@/hooks/use-debounce';
 import { useStoreMutation } from '@/hooks/use-store';

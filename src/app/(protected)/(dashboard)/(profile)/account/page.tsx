@@ -35,7 +35,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import UserDetailSkeleton from '../_components/user-skeleton';
-import useProfileForm, { UseUserFormProps } from './_lib/use-profile-form';
+import useProfileForm, { UseUserFormProps } from './_hooks/use-profile-form';
 
 export default function ProfilePage() {
   const { user, isLoading: userLoading, error: userError } = useAuth();

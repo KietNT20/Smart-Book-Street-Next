@@ -61,8 +61,10 @@ export const useProfileForm = ({ user }: UseUserFormProps) => {
       setSelectedImage(file);
       form.setValue('mainImageFile', file as any);
 
-      const fileUrl = URL.createObjectURL(file);
-      setPreviewImage(fileUrl);
+      if (typeof window !== 'undefined') {
+        const fileUrl = URL.createObjectURL(file);
+        setPreviewImage(fileUrl);
+      }
     }
   };
 
@@ -107,7 +109,10 @@ export const useProfileForm = ({ user }: UseUserFormProps) => {
 
     if (selectedImage instanceof File && typeof window !== 'undefined') {
       formData.append('MainImageFile', selectedImage);
-    } else if (values.mainImageFile instanceof File) {
+    } else if (
+      values.mainImageFile instanceof File &&
+      typeof window !== 'undefined'
+    ) {
       formData.append('MainImageFile', values.mainImageFile);
     }
 
