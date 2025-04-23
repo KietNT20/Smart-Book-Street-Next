@@ -82,12 +82,12 @@ export default function CategoriesPage() {
     }
   };
 
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
-
   if (!categoriesData) {
     return <Empty description={'Chưa có dữ liệu'} />;
+  }
+
+  if (isLoading) {
+    return <LoadingSpinner />;
   }
 
   return (

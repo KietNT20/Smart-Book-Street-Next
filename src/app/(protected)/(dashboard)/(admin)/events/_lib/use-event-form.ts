@@ -1,5 +1,3 @@
-'use client';
-
 import useDebounce from '@/hooks/use-debounce';
 import { useEventMutaton } from '@/hooks/use-event';
 import { useNonDeletedZones } from '@/hooks/use-zone';

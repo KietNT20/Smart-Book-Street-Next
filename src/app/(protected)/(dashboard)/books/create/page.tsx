@@ -1,5 +1,9 @@
 import { Separator } from '@/components/ui/separator';
-import BookFormCreate from './_components/book-form-create';
+import dynamic from 'next/dynamic';
+
+const BookFormCreate = dynamic(() => import('./_components/book-form-create'), {
+  ssr: false,
+});
 
 export default function CreateBookPage() {
   return (

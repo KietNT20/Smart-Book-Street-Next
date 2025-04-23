@@ -1,5 +1,9 @@
 import { Separator } from '@/components/ui/separator';
-import StoreForm from '../_components/store-form';
+import dynamic from 'next/dynamic';
+
+const StoreForm = dynamic(() => import('../_components/store-form'), {
+  ssr: false,
+});
 
 const CreateStorePage = () => {
   return (

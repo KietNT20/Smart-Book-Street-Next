@@ -1,4 +1,8 @@
-import SouvenirForm from '../_components/souvenir-form';
+import dynamic from 'next/dynamic';
+
+const SouvenirForm = dynamic(() => import('../_components/souvenir-form'), {
+  ssr: false,
+});
 
 const Page = () => {
   return (
