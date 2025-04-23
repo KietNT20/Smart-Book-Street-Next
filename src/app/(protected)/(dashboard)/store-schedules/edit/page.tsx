@@ -1,4 +1,8 @@
-import StoreFormEdit from './_components/store-form-edit';
+import dynamic from 'next/dynamic';
+
+const StoreFormEdit = dynamic(() => import('./_components/store-form-edit'), {
+  ssr: false,
+});
 
 export default function Page() {
   return (

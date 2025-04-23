@@ -1,5 +1,3 @@
-'use client';
-
 import useDebounce from '@/hooks/use-debounce';
 import { useUserMutation } from '@/hooks/use-user';
 import { userFormSchema, UserFormValues } from '@/lib/zod';
