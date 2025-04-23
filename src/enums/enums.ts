@@ -9,6 +9,12 @@ export enum PaymentMethod {
   TRANSFER = 'Transfer',
 }
 
+export enum OrderStatus {
+  IN_PROGRESS = 'InProgress',
+  COMPLETED = 'Completed',
+  CANCELLED = 'Cancelled',
+}
+
 export const PaymentMethodLabel = {
   [PaymentMethod.CASH]: 'Tiền mặt',
   [PaymentMethod.TRANSFER]: 'Chuyển khoản',

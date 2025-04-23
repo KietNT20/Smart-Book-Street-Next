@@ -18,6 +18,8 @@ import { Camera, Keyboard, Loader2, Search, XCircle } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { toast } from 'sonner';
 
+const storeId = getLocalStorageItem(STORAGE.SELECTED_STORE_KEY) as string;
+
 const ISBNScannerInventory = () => {
   const [isScanning, setIsScanning] = useState(false);
   const [manualISBN, setManualISBN] = useState('');
@@ -25,8 +27,6 @@ const ISBNScannerInventory = () => {
 
   const scannerRef = useRef<BrowserMultiFormatReader | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-
-  const storeId = getLocalStorageItem(STORAGE.SELECTED_STORE_KEY) as string;
 
   const { createOrderDetail, createOrderDetailPending } =
     useOrderDetailMutation();
@@ -99,14 +99,13 @@ const ISBNScannerInventory = () => {
 
         try {
           createOrderDetail(formData);
-          toast.success('Đã thêm sách vào đơn hàng');
+          toast.success(`Đã thêm 1 sách "${data.title}" vào đơn hàng`);
         } catch (error) {
           console.error('Error creating order detail:', error);
           toast.error('Không thể thêm sách vào đơn hàng');
         }
-
         setManualISBN('');
-        return 'Đã tìm thấy và thêm sách vào đơn hàng';
+        return 'Đã tìm thấy thông tin sách';
       },
       error: (error) => {
         if (error instanceof Error) {

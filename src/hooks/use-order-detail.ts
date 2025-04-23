@@ -49,7 +49,7 @@ export const useOrderDetailMutation = () => {
 
   return {
     createOrderDetail: createOrderDetailMutation.mutateAsync,
-    deleteOrderDetail: deleteOrderDetailMutation.mutateAsync,
+    deleteOrderDetail: deleteOrderDetailMutation.mutate,
     updateOrderDetail: updateOrderDetailMutation.mutateAsync,
     createOrderDetailPending: createOrderDetailMutation.isPending,
     deleteOrderDetailPending: deleteOrderDetailMutation.isPending,
@@ -69,6 +69,7 @@ export const useOrderDetailCarts = (storeId: string) => {
 
   return {
     orderDetailCarts: data?.results || [],
+    totalItem: data?.totalRecords || 0,
     isLoadingOrderDetailCarts: isLoading,
     orderDetailCartsError: error,
   };

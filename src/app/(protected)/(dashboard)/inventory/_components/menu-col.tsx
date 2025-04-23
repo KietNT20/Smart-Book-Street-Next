@@ -1,3 +1,5 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -34,6 +36,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { MoreHorizontal, ShoppingCart, Trash } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
 type Props = {
@@ -41,12 +44,12 @@ type Props = {
 };
 
 const MenuColoumn = ({ book }: Props) => {
+  const [open, setOpen] = useState(false);
   const { deleteProduct } = useInventoryMutation();
   const { createOrderDetail, createOrderDetailPending } =
     useOrderDetailMutation();
   const storeId = getLocalStorageItem(STORAGE.SELECTED_STORE_KEY) as string;
   const isLoading = useDebounce(createOrderDetailPending, 300);
-  const [open, setOpen] = useState(false);
 
   const formSchema = z.object({
     quantity: z
@@ -81,7 +84,14 @@ const MenuColoumn = ({ book }: Props) => {
     formData.append('InventoryId', book.inventoryId || '');
     formData.append('Quantity', values.quantity);
 
-    createOrderDetail(formData);
+    createOrderDetail(formData, {
+      onSuccess: () => {
+        toast.success(
+          `Thêm ${values.quantity} sản phẩm "${book.title}" vào đơn hàng thành công`
+        );
+      },
+    });
+
     setOpen(false);
   };
 
