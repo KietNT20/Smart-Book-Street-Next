@@ -35,6 +35,35 @@ export default function EventDetailPage({
   const { eventData, eventLoading } = useGetEventById(params.id);
   const isLoading = useDebounce(eventLoading, 300);
 
+  const formatTime = (dateString: string | Date | null): string => {
+    return dayjs(dateString).format('HH:mm');
+  };
+
+  if (!eventData) {
+    return (
+      <div className='flex min-h-screen items-center justify-center p-4'>
+        <Alert variant='destructive' className='max-w-lg'>
+          <AlertTitle>Không tìm thấy sự kiện</AlertTitle>
+          <AlertDescription>
+            Không thể tìm thấy thông tin sự kiện đã cung cấp.
+          </AlertDescription>
+        </Alert>
+      </div>
+    );
+  }
+
+  // Format range dates
+  const formatDateRange = () => {
+    const startDate = dayjs(eventData.startDate);
+    const endDate = dayjs(eventData.endDate);
+
+    if (startDate.isSame(endDate, 'day')) {
+      return startDate.format('DD/MM/YYYY');
+    }
+
+    return `${startDate.format('DD/MM/YYYY')} - ${endDate.format('DD/MM/YYYY')}`;
+  };
+
   if (isLoading) {
     return (
       <div className='mx-auto mt-8 max-w-6xl p-4'>
@@ -54,35 +83,6 @@ export default function EventDetailPage({
       </div>
     );
   }
-
-  if (!eventData) {
-    return (
-      <div className='flex min-h-screen items-center justify-center p-4'>
-        <Alert variant='destructive' className='max-w-lg'>
-          <AlertTitle>Không tìm thấy sự kiện</AlertTitle>
-          <AlertDescription>
-            Không thể tìm thấy thông tin sự kiện đã cung cấp.
-          </AlertDescription>
-        </Alert>
-      </div>
-    );
-  }
-
-  const formatTime = (dateString: string | Date | null): string => {
-    return dayjs(dateString).format('HH:mm');
-  };
-
-  // Format range dates
-  const formatDateRange = () => {
-    const startDate = dayjs(eventData.startDate);
-    const endDate = dayjs(eventData.endDate);
-
-    if (startDate.isSame(endDate, 'day')) {
-      return startDate.format('DD/MM/YYYY');
-    }
-
-    return `${startDate.format('DD/MM/YYYY')} - ${endDate.format('DD/MM/YYYY')}`;
-  };
 
   return (
     <div className='min-h-screen bg-background pb-16'>

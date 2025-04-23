@@ -1,5 +1,11 @@
+import SkeletonForm from '@/components/skeleton-form';
+
 function Loading() {
-  return <div>Đang tải...</div>;
+  return (
+    <div>
+      <SkeletonForm />
+    </div>
+  );
 }
 
 export default Loading;

@@ -1,6 +1,7 @@
 'use client';
 
 import BackButton from '@/components/back-btn/back-button';
+import LoadingSpinner from '@/components/spin/loading-spinner';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ImageFallback } from '@/constant/storage';
@@ -12,14 +13,6 @@ import Link from 'next/link';
 
 export default function StorePage({ params }: { params: { storeId: string } }) {
   const { store, isLoading } = useStoreById(params.storeId);
-
-  if (isLoading) {
-    return (
-      <div className='flex min-h-screen items-center justify-center'>
-        <div className='h-12 w-12 animate-spin rounded-full border-b-2 border-t-2 border-primary'></div>
-      </div>
-    );
-  }
 
   if (!store) {
     return (
@@ -40,6 +33,10 @@ export default function StorePage({ params }: { params: { storeId: string } }) {
     (store.images?.length > 0
       ? store.images[0].url
       : '/public/No-Image-Placeholder.png');
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <>

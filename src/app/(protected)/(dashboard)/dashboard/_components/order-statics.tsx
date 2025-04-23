@@ -98,7 +98,6 @@ export default function OrderStatisticsPage() {
         </div>
 
         <div className='grid grid-cols-1 gap-6'>
-          {/* Render appropriate OrderChartAdmin based on timeframe */}
           {timeframe === 'daily' && (
             <OrderChartAdmin
               timeframe='daily'
@@ -127,7 +126,6 @@ export default function OrderStatisticsPage() {
             />
           )}
 
-          {/* You can add more OrderChartAdmin components here with different configurations */}
           {timeframe === 'daily' && (
             <OrderChartAdmin
               timeframe='daily'
