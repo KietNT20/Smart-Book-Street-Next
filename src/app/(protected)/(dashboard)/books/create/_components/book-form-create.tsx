@@ -1,14 +1,11 @@
 'use client';
 
-import { PATH } from '@/enums/path';
 import { Book } from '@/types/book-types';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import BookForm from '../../_components/book-form';
 import ISBNScanner from '../../_components/isbn-scanner';
 
 const BookCreationPage = () => {
-  const router = useRouter();
   const [scannedBook, setScannedBook] = useState<Book | null>(null);
 
   const enhancedScanner = () => {
@@ -30,14 +27,7 @@ const BookCreationPage = () => {
         </div>
       )}
 
-      <BookForm
-        book={scannedBook || undefined}
-        mode='create'
-        onCancel={() => {
-          setScannedBook(null);
-          router.push(PATH.BOOKS);
-        }}
-      />
+      <BookForm book={scannedBook || undefined} mode='create' />
     </div>
   );
 };

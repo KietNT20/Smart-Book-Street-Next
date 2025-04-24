@@ -1,5 +1,9 @@
 import { API_URL } from '@/constant/api-url';
-import { OrderResponse, OrderStaticsDailyAdmin } from '@/types/order-types';
+import {
+  OrderInfoResponse,
+  OrderResponse,
+  OrderStaticsDailyAdmin,
+} from '@/types/order-types';
 import axiosInstance from '@/utils/axiosInstance';
 
 export const orderService = {
@@ -64,7 +68,7 @@ export const orderService = {
     const res = await axiosInstance.post(API_URL.ORDERS.INDEX, data);
     return res.data;
   },
-  getById: async (id: string) => {
+  getById: async (id: string): Promise<OrderInfoResponse> => {
     const res = await axiosInstance.get(`${API_URL.ORDERS.INDEX}/${id}`);
     return res.data;
   },

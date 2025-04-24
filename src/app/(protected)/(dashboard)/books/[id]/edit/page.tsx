@@ -1,5 +1,9 @@
 import { Separator } from '@/components/ui/separator';
-import BookFormEdit from './_components/book-form-edit';
+import dynamic from 'next/dynamic';
+
+const BookFormEdit = dynamic(() => import('./_components/book-form-edit'), {
+  ssr: false,
+});
 
 export default function EditBookPage() {
   return (

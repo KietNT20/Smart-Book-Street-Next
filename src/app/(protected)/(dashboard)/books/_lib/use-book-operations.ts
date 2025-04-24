@@ -1,5 +1,4 @@
 import { useGetBooks } from '@/hooks/use-book-search';
-import { useBookMutations } from '@/hooks/use-books';
 import useDebounce from '@/hooks/use-debounce';
 import { BookSearchCriteria } from '@/types/book-types';
 
@@ -26,18 +25,9 @@ export function useBookList({ pagination, searchCriteria }: UseBookListProps) {
 
   const isLoadingBooks = useDebounce(isLoading, 300);
 
-  const { deleteBook, deleteBookPending } = useBookMutations();
-  const deletedLoading = useDebounce(deleteBookPending, 300);
-
-  const handleDelete = (id: string) => {
-    deleteBook(id);
-  };
-
   return {
     booksRes,
     isLoadingBooks,
     isPending,
-    handleDelete,
-    deletedLoading,
   };
 }

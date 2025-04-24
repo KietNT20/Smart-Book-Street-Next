@@ -1,17 +1,17 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
 import { formateDateVi, formatPrice } from '@/lib/utils';
 import { Book } from '@/types/book-types';
 import { ColumnDef } from '@tanstack/react-table';
 import { ArrowUpDown, SortAsc, SortDesc } from 'lucide-react';
-import BookMenuAction from './_components/book-menu-action';
+import dynamic from 'next/dynamic';
 
-type ColumnHandlers = {
-  _onDelete: (id: string) => void;
-};
+const BookMenuAction = dynamic(() => import('./_components/book-menu-action'), {
+  ssr: false,
+});
 
-export const createColumns = ({
-  _onDelete,
-}: ColumnHandlers): ColumnDef<Book>[] => [
+export const columns: ColumnDef<Book>[] = [
   {
     accessorKey: 'no',
     header: 'No.',
@@ -121,9 +121,7 @@ export const createColumns = ({
     header: 'Thao tác',
     cell: ({ row }) => {
       const book = row.original;
-      const bookProps = { book, _onDelete };
-
-      return <BookMenuAction {...bookProps} />;
+      return <BookMenuAction book={book} />;
     },
   },
 ];

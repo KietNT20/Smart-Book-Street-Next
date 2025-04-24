@@ -1,3 +1,5 @@
+'use client';
+
 import { useGetBookByID } from '@/hooks/use-book-search';
 import { useBookMutations } from '@/hooks/use-books';
 import useDebounce from '@/hooks/use-debounce';

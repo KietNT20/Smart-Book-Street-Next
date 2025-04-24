@@ -13,11 +13,9 @@ const StoreFormEdit = () => {
   const { store } = useStoreById(storeId);
   return (
     <Suspense fallback={<Loading />}>
-      <div className='md:px-32 md:py-10'>
-        <h2 className='text-2xl font-bold'>Chỉnh sửa cửa hàng</h2>
-        <Separator className='my-4' />
-        <div>{store && <StoreForm storeToEdit={store} />}</div>
-      </div>
+      <h2 className='text-2xl font-bold'>Chỉnh sửa cửa hàng</h2>
+      <Separator className='my-4' />
+      <div>{store && <StoreForm storeToEdit={store} />}</div>
     </Suspense>
   );
 };

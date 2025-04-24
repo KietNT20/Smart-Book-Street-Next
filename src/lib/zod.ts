@@ -30,7 +30,7 @@ export type RegisterFormValues = z.infer<typeof registerSchema>;
 
 // Register form
 export const registerSchema = z.object({
-  userName: z.string().min(1, { message: 'Vui lòng nghĩ tên đăng nhập' }),
+  userName: z.string().optional(),
   email: z
     .string()
     .min(1, { message: 'Vui lòng nhập email' })
@@ -51,9 +51,13 @@ export const registerSchema = z.object({
     .regex(REGEX.SPECIAL_CHAR, {
       message: 'Mật khẩu cần ít nhất 1 kí tự đặc biệt',
     }),
-  fullName: z.string().min(1, { message: 'Vui lòng nhập họ và tên' }),
+  fullName: z
+    .string()
+    .min(1, { message: 'Vui lòng nhập họ và tên' })
+    .optional(),
   phone: z
     .string()
+    .min(1, { message: 'Vui lòng nhập số điện thoại' })
     .refine(
       (val) => {
         if (!val) return true;
@@ -62,8 +66,7 @@ export const registerSchema = z.object({
       {
         message: 'Số điện thoại không hợp lệ',
       }
-    )
-    .optional(),
+    ),
   gender: z.enum([Gender.Male, Gender.Female]).optional(),
 });
 

@@ -53,8 +53,20 @@ export interface Order {
   createdDate: Date | string;
   store: StoreData;
   paymentLink: string;
-  orderDetails: OrderDetail[];
+  orderDetails?: OrderDetail[];
 }
 
 export type OrderList = ApiListResponse<Order>;
 export type OrderResponse = ApiResponse<Order>;
+
+export interface OrderInfo {
+  id: string;
+  totalAmount: number;
+  paymentMethod: string;
+  status: string;
+  store: string;
+  createDate: Date;
+  orderDetails: Cart[];
+}
+
+export type OrderInfoResponse = ApiResponse<OrderInfo>;
