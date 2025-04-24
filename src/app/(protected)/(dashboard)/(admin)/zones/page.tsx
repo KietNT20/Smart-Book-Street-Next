@@ -5,13 +5,12 @@ import { STORAGE } from '@/constant/storage';
 import { Sort } from '@/enums/enums';
 import { PATH } from '@/enums/path';
 import { useZones } from '@/hooks/use-zone';
+import { getLocalStorageItem } from '@/utils/token';
 import { Plus } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import ZoneFilter from './_components/zone-filter';
 import ZoneTable from './_components/zone-table';
-import { getLocalStorageItem } from '@/utils/token';
 
 export interface SearchFilters {
   zoneName?: string;
@@ -27,7 +26,6 @@ const ZonesPage = () => {
   });
   const [isSearching, setIsSearching] = useState(false);
 
-  const router = useRouter();
   const streetId = getLocalStorageItem(STORAGE.SELECTED_STREET_KEY);
 
   const { zonesRes, isLoadingZones, totalPage } = useZones({
@@ -56,10 +54,6 @@ const ZonesPage = () => {
     );
 
     setIsSearching(hasActiveFilter);
-  };
-
-  const handleEditZone = (zoneId: string) => {
-    router.push(`${PATH.ZONES}/${zoneId}`);
   };
 
   return (
@@ -91,7 +85,6 @@ const ZonesPage = () => {
         sortField={sortField}
         sortOrder={sortOrder}
         handleSort={handleSort}
-        onEditZone={handleEditZone}
       />
     </div>
   );

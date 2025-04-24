@@ -36,12 +36,20 @@ export const useOrderPage = () => {
     }
 
     const formData = new FormData();
-    formData.append('StoreId', storeId);
-    formData.append('PaymentMethod', paymentMethod);
+    formData.set('StoreId', storeId);
+    formData.set('PaymentMethod', paymentMethod);
 
     toast.promise(createOrder(formData), {
       loading: 'Đang tạo đơn hàng...',
-      success: 'Tạo đơn hàng thành công',
+      success: (data) => {
+        const { paymentLink } = data.result;
+        if (paymentLink) {
+          window.open(paymentLink, '_blank');
+        } else {
+          toast.error('Đơn hàng không có liên kết thanh toán');
+        }
+        return 'Tạo đơn hàng thành công';
+      },
       error: 'Tạo đơn hàng thất bại',
     });
   };

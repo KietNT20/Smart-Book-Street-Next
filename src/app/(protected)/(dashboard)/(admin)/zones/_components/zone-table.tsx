@@ -25,6 +25,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Sort } from '@/enums/enums';
+import { PATH } from '@/enums/path';
 import { useZoneMutation } from '@/hooks/use-zone';
 import { Zone } from '@/types/zone-types';
 import {
@@ -35,6 +36,7 @@ import {
   SortDesc,
   Trash2,
 } from 'lucide-react';
+import Link from 'next/link';
 import { useState } from 'react';
 
 type Props = {
@@ -49,7 +51,6 @@ type Props = {
   sortField: string;
   sortOrder: Sort;
   handleSort: (field: string) => void;
-  onEditZone: (id: string) => void;
 };
 
 const ZoneTable = ({
@@ -64,7 +65,6 @@ const ZoneTable = ({
   sortField,
   sortOrder,
   handleSort,
-  onEditZone,
 }: Props) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [zoneToDelete, setZoneToDelete] = useState<string | null>(null);
@@ -148,11 +148,11 @@ const ZoneTable = ({
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align='end'>
                         <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
-                        <DropdownMenuItem
-                          onClick={() => onEditZone(zone.id || '')}
-                        >
-                          <FileEdit className='mr-2 h-4 w-4' />
-                          Chỉnh sửa
+                        <DropdownMenuItem asChild className='cursor-pointer'>
+                          <Link href={`${PATH.ZONES}/${zone.id}`}>
+                            <FileEdit className='mr-2 h-4 w-4' />
+                            Chỉnh sửa
+                          </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className='text-destructive'

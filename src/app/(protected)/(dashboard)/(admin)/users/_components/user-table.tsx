@@ -26,6 +26,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Sort } from '@/enums/enums';
+import { PATH } from '@/enums/path';
 import { useRoles } from '@/hooks/use-role';
 import { useUserMutation } from '@/hooks/use-user';
 import { formateDateVi } from '@/lib/utils';
@@ -38,6 +39,7 @@ import {
   SortDesc,
   Trash2,
 } from 'lucide-react';
+import Link from 'next/link';
 import { useState } from 'react';
 
 type Props = {
@@ -52,7 +54,6 @@ type Props = {
   sortField: string;
   sortOrder: Sort;
   handleSort: (field: string) => void;
-  onViewUser: (id: string) => void;
 };
 
 const UserTable = ({
@@ -67,7 +68,6 @@ const UserTable = ({
   sortField,
   sortOrder,
   handleSort,
-  onViewUser,
 }: Props) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState<string | null>(null);
@@ -252,11 +252,11 @@ const UserTable = ({
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align='end'>
                           <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
-                          <DropdownMenuItem
-                            onClick={() => onViewUser(user.id || '')}
-                          >
-                            <Eye className='mr-2 h-4 w-4' />
-                            Xem chi tiết
+                          <DropdownMenuItem asChild className='cursor-pointer'>
+                            <Link href={`${PATH.USERS}/${user.id}`}>
+                              <Eye className='mr-2 h-4 w-4' />
+                              Xem chi tiết
+                            </Link>
                           </DropdownMenuItem>
                           {/* <DropdownMenuItem
                             onClick={() => onEditUser(user.id || '')}

@@ -1,3 +1,5 @@
+'use client';
+
 import { ConfirmModal } from '@/components/confirm-modal';
 import { Button } from '@/components/ui/button';
 import {
@@ -12,7 +14,6 @@ import { useAuthorMutation } from '@/hooks/use-author';
 import { Author } from '@/types/author-types';
 import { Edit, Eye, MoreHorizontal, Trash2 } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -24,7 +25,6 @@ const AuthorMenuAction = ({ author }: Props) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
-  const router = useRouter();
   const { deleteAuthor, deleteAuthorPending } = useAuthorMutation();
 
   const _onDelete = async (id: string) => {
@@ -67,14 +67,11 @@ const AuthorMenuAction = ({ author }: Props) => {
               Xem chi tiết
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => {
-              router.push(`${PATH.ADMIN_AUTHORS}/${author.id}/edit`);
-            }}
-            className='cursor-pointer'
-          >
-            <Edit className='mr-2 h-4 w-4' />
-            Chỉnh sửa
+          <DropdownMenuItem asChild className='cursor-pointer'>
+            <Link href={`${PATH.ADMIN_AUTHORS}/${author.id}/edit`}>
+              <Edit className='mr-2 h-4 w-4' />
+              Chỉnh sửa
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => {

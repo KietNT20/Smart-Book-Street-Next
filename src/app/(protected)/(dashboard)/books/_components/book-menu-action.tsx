@@ -1,3 +1,5 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -24,7 +26,6 @@ import { Book } from '@/types/book-types';
 import { getLocalStorageItem } from '@/utils/token';
 import { Edit, Eye, MoreHorizontal, PackagePlus, Trash } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -34,7 +35,6 @@ type Props = {
 };
 
 const BookMenuAction = ({ book, _onDelete }: Props) => {
-  const router = useRouter();
   const storeId = getLocalStorageItem(STORAGE.SELECTED_STORE_KEY) as string;
   const { addProductToStore } = useInventoryMutation();
   const [quantity, setQuantity] = useState('0');
@@ -87,12 +87,11 @@ const BookMenuAction = ({ book, _onDelete }: Props) => {
               Xem chi tiết
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => router.push(`${PATH.BOOKS}/${book.id}/edit`)}
-            className='cursor-pointer'
-          >
-            <Edit className='mr-2 h-4 w-4' />
-            Chỉnh sửa
+          <DropdownMenuItem asChild className='cursor-pointer'>
+            <Link href={`${PATH.BOOKS}/${book.id}/edit`}>
+              <Edit className='mr-2 h-4 w-4' />
+              Chỉnh sửa
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => _onDelete(book.id!)}

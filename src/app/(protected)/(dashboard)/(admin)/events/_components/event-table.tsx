@@ -25,6 +25,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Sort } from '@/enums/enums';
+import { PATH } from '@/enums/path';
 import { useEventMutaton } from '@/hooks/use-event';
 import { formateDateVi } from '@/lib/utils';
 import { Event } from '@/types/event-types';
@@ -37,6 +38,7 @@ import {
   SortDesc,
   Trash2,
 } from 'lucide-react';
+import Link from 'next/link';
 import { useState } from 'react';
 
 type Props = {
@@ -51,8 +53,6 @@ type Props = {
   sortField: string;
   sortOrder: Sort;
   handleSort: (field: string) => void;
-  onViewEvent: (id: string) => void;
-  onEditEvent: (id: string) => void;
 };
 
 const EventTable = ({
@@ -67,8 +67,6 @@ const EventTable = ({
   sortField,
   sortOrder,
   handleSort,
-  onViewEvent,
-  onEditEvent,
 }: Props) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [eventToDelete, setEventToDelete] = useState<string | null>(null);
@@ -208,17 +206,17 @@ const EventTable = ({
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align='end'>
                         <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
-                        <DropdownMenuItem
-                          onClick={() => onViewEvent(event.id || '')}
-                        >
-                          <Eye className='mr-2 h-4 w-4' />
-                          Xem chi tiết
+                        <DropdownMenuItem asChild className='cursor-pointer'>
+                          <Link href={`${PATH.EVENTS}/${event.id}`}>
+                            <Eye className='mr-2 h-4 w-4' />
+                            Xem chi tiết
+                          </Link>
                         </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() => onEditEvent(event.id || '')}
-                        >
-                          <FileEdit className='mr-2 h-4 w-4' />
-                          Chỉnh sửa
+                        <DropdownMenuItem asChild className='cursor-pointer'>
+                          <Link href={`${PATH.EVENTS}/${event.id}/edit`}>
+                            <FileEdit className='mr-2 h-4 w-4' />
+                            Chỉnh sửa
+                          </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className='text-destructive'
