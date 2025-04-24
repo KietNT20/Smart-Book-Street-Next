@@ -19,6 +19,7 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import GoogleBtn from '../google-button/google-btn';
+import { Button } from '../ui/button';
 import {
   Form,
   FormControl,
@@ -28,9 +29,8 @@ import {
   FormMessage,
 } from '../ui/form';
 import { Input } from '../ui/input';
-import { Button } from '../ui/button';
-import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 import { Label } from '../ui/label';
+import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 
 export function RegisterForm({
   className,
@@ -54,10 +54,10 @@ export function RegisterForm({
 
   const onSubmit = async (values: RegisterFormValues) => {
     const requestData: RegisterRequestBody = {
-      userName: values.userName,
+      userName: values.userName || '',
       email: values.email,
       password: values.password,
-      fullName: values.fullName,
+      fullName: values.fullName || '',
       ...(values.phone && values.phone !== '' && { phone: values.phone }),
       ...(values.gender && { gender: values.gender }),
     };
@@ -96,9 +96,7 @@ export function RegisterForm({
                     name='userName'
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>
-                          Tên tài khoản <span className='text-red-500'>*</span>
-                        </FormLabel>
+                        <FormLabel>Tên tài khoản</FormLabel>
                         <FormControl>
                           <Input
                             placeholder='Tên tài khoản'
@@ -206,7 +204,9 @@ export function RegisterForm({
                     name='phone'
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Số điện thoại</FormLabel>
+                        <FormLabel>
+                          Số điện thoại <span className='text-red-500'>*</span>
+                        </FormLabel>
                         <FormControl>
                           <Input
                             placeholder='Số điện thoại'

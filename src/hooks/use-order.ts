@@ -127,3 +127,16 @@ export const useCreateOrder = () => {
     createOrderPending: isPending,
   };
 };
+
+export const useGetOrderById = (orderId: string) => {
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['order', orderId],
+    queryFn: () => orderService.getById(orderId),
+    enabled: !!orderId,
+  });
+  return {
+    order: data?.result,
+    orderLoading: isLoading,
+    orderError: isError,
+  };
+};

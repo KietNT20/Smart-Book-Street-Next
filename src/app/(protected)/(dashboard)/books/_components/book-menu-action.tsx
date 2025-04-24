@@ -94,13 +94,13 @@ const BookMenuAction = ({ book }: Props) => {
           </DropdownMenuTrigger>
           <DropdownMenuContent align='end'>
             <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
-            <DropdownMenuItem asChild className='cursor-pointer'>
+            <DropdownMenuItem asChild>
               <Link href={`${PATH.BOOKS}/${book.id}`}>
                 <Eye className='mr-2 h-4 w-4' />
                 Xem chi tiết
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem asChild className='cursor-pointer'>
+            <DropdownMenuItem asChild>
               <Link href={`${PATH.BOOKS}/${book.id}/edit`}>
                 <Edit className='mr-2 h-4 w-4' />
                 Chỉnh sửa
