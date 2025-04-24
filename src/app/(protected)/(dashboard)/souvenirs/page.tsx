@@ -8,7 +8,6 @@ import useDebounce from '@/hooks/use-debounce';
 import { useGetSouvenirs } from '@/hooks/use-souvenir';
 import { Plus } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import SouvenirTable from './_components/souvenir-table';
 
@@ -27,8 +26,6 @@ const SouvenirsPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isSearching, setIsSearching] = useState(false);
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
-
-  const router = useRouter();
 
   useEffect(() => {
     if (isSearching) {
@@ -88,10 +85,6 @@ const SouvenirsPage = () => {
     }
   };
 
-  const handleEditSouvenir = (souvenirId: string) => {
-    router.push(`${PATH.SOUVENIRS}/${souvenirId}`);
-  };
-
   return (
     <div className='container mx-auto py-10'>
       <div className='mb-4 flex items-center justify-between'>
@@ -137,7 +130,6 @@ const SouvenirsPage = () => {
         sortField={sortField}
         sortOrder={sortOrder}
         handleSort={handleSort}
-        onEditSouvenir={handleEditSouvenir}
       />
     </div>
   );

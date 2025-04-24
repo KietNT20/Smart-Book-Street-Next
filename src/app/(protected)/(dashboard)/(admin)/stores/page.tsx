@@ -6,7 +6,7 @@ import { PATH } from '@/enums/path';
 import { useStores } from '@/hooks/use-store';
 import { Plus } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useCallback, useMemo, useState } from 'react';
 import StoreFilter from './_components/store-filter';
 import { StoreTable } from './_components/store-table';
@@ -34,7 +34,7 @@ export default function StoresPage() {
   });
   const [isSearching, setIsSearching] = useState(false);
 
-  const router = useRouter();
+  // const router = useRouter();
   const searchParams = useSearchParams();
 
   // Safe parsing of page number
@@ -81,7 +81,7 @@ export default function StoresPage() {
 
     setIsSearching(hasActiveFilter);
 
-    router.replace(window.location.pathname);
+    // router.replace(window.location.pathname);
   };
 
   const clearSearch = () => {
@@ -95,16 +95,8 @@ export default function StoresPage() {
     });
     setIsSearching(false);
 
-    // Reset to page 1 when clearing search
-    router.replace(window.location.pathname);
-  };
-
-  const handleEditStore = (storeId: string) => {
-    router.push(`${PATH.STORES}/${storeId}/edit`);
-  };
-
-  const handleViewStore = (storeId: string) => {
-    router.push(`${PATH.STORES}/${storeId}`);
+    // // Reset to page 1 when clearing search
+    // router.replace(window.location.pathname);
   };
 
   return (
@@ -136,8 +128,6 @@ export default function StoresPage() {
         sortField={sortField}
         sortOrder={sortOrder}
         handleSort={handleSort}
-        onViewStore={handleViewStore}
-        onEditStore={handleEditStore}
       />
     </div>
   );

@@ -6,7 +6,6 @@ import { PATH } from '@/enums/path';
 import { usePublishers } from '@/hooks/use-publisher';
 import { Plus } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import PublisherFilter from './_components/publisher-filter';
 import PublisherTable from './_components/publisher-table';
@@ -32,8 +31,6 @@ const PublishersPage = () => {
     website: '',
   });
   const [isSearching, setIsSearching] = useState(false);
-
-  const router = useRouter();
 
   const buildResultObject = () => {
     if (!isSearching) return {};
@@ -84,14 +81,6 @@ const PublishersPage = () => {
     setIsSearching(false);
   };
 
-  const handleEditPublisher = (publisherId: string) => {
-    router.push(`${PATH.PUBLISHERS}/${publisherId}/edit`);
-  };
-
-  const handleViewPublisherDetail = (publisherId: string) => {
-    router.push(`${PATH.PUBLISHERS}/${publisherId}`);
-  };
-
   return (
     <div className='container mx-auto py-10'>
       <div className='mb-4 flex items-center justify-between'>
@@ -123,8 +112,6 @@ const PublishersPage = () => {
         sortField={sortField}
         sortOrder={sortOrder}
         handleSort={handleSort}
-        onViewPublisher={handleViewPublisherDetail}
-        onEditPublisher={handleEditPublisher}
       />
     </div>
   );

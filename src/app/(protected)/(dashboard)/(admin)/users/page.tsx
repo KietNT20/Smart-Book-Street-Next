@@ -6,7 +6,6 @@ import { PATH } from '@/enums/path';
 import { useUsersParams } from '@/hooks/use-user';
 import { Plus } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import UserFilter from './_components/user-filter';
 import UserTable from './_components/user-table';
@@ -36,8 +35,6 @@ export default function UsersPage() {
     gender: '',
   });
   const [isSearching, setIsSearching] = useState(false);
-
-  const router = useRouter();
 
   const buildResultObject = () => {
     if (!isSearching) return {};
@@ -90,10 +87,6 @@ export default function UsersPage() {
     setIsSearching(false);
   };
 
-  const handleViewUser = (userId: string) => {
-    router.push(`${PATH.USERS}/${userId}`);
-  };
-
   return (
     <div className='container mx-auto py-10'>
       <div className='mb-4 flex items-center justify-between'>
@@ -125,7 +118,6 @@ export default function UsersPage() {
         sortField={sortField}
         sortOrder={sortOrder}
         handleSort={handleSort}
-        onViewUser={handleViewUser}
       />
     </div>
   );

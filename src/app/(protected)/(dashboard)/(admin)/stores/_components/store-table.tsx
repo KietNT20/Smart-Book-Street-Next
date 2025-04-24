@@ -32,6 +32,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Sort } from '@/enums/enums';
+import { PATH } from '@/enums/path';
 import { useStoreMutation } from '@/hooks/use-store';
 import { StoreData } from '@/types/store-types';
 import {
@@ -43,6 +44,7 @@ import {
   SortDesc,
   Trash2,
 } from 'lucide-react';
+import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -56,8 +58,6 @@ interface StoreTableProps {
   sortField: string;
   sortOrder: Sort;
   handleSort: (field: string) => void;
-  onViewStore: (id: string) => void;
-  onEditStore: (id: string) => void;
 }
 
 export const StoreTable = ({
@@ -70,8 +70,6 @@ export const StoreTable = ({
   sortField,
   sortOrder,
   handleSort,
-  onViewStore,
-  onEditStore,
 }: StoreTableProps) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [storeToDelete, setStoreToDelete] = useState<string | null>(null);
@@ -254,17 +252,17 @@ export const StoreTable = ({
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align='end'>
                         <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
-                        <DropdownMenuItem
-                          onClick={() => onViewStore(store.id || '')}
-                        >
-                          <Eye className='mr-2 h-4 w-4' />
-                          Xem chi tiết
+                        <DropdownMenuItem asChild className='cursor-pointer'>
+                          <Link href={`${PATH.STORES}/${store.id}`}>
+                            <Eye className='mr-2 h-4 w-4' />
+                            Xem chi tiết
+                          </Link>
                         </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() => onEditStore(store.id || '')}
-                        >
-                          <FileEdit className='mr-2 h-4 w-4' />
-                          Chỉnh sửa
+                        <DropdownMenuItem asChild className='cursor-pointer'>
+                          <Link href={`${PATH.STORES}/${store.id}/edit`}>
+                            <FileEdit className='mr-2 h-4 w-4' />
+                            Chỉnh sửa
+                          </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className='text-destructive'

@@ -36,6 +36,7 @@ import {
 } from '@/components/ui/table';
 import { STORAGE } from '@/constant/storage';
 import { Sort } from '@/enums/enums';
+import { PATH } from '@/enums/path';
 import { useInventoryMutation } from '@/hooks/use-inventory';
 import { useSouvenirMutation } from '@/hooks/use-souvenir';
 import { formatPrice } from '@/lib/utils';
@@ -51,6 +52,7 @@ import {
   SortDesc,
   Trash2,
 } from 'lucide-react';
+import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -66,7 +68,6 @@ type Props = {
   sortField: string;
   sortOrder: Sort;
   handleSort: (field: string) => void;
-  onEditSouvenir: (id: string) => void;
 };
 
 const SouvenirTable = ({
@@ -81,7 +82,6 @@ const SouvenirTable = ({
   sortField,
   sortOrder,
   handleSort,
-  onEditSouvenir,
 }: Props) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [souvenirToDelete, setSouvenirToDelete] = useState<string | null>(null);
@@ -249,10 +249,13 @@ const SouvenirTable = ({
                           <DropdownMenuContent align='end'>
                             <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
                             <DropdownMenuItem
-                              onClick={() => onEditSouvenir(souvenirId)}
+                              className='cursor-pointer'
+                              asChild
                             >
-                              <FileEdit className='mr-2 h-4 w-4' />
-                              Chỉnh sửa
+                              <Link href={`${PATH.SOUVENIRS}/${souvenirId}`}>
+                                <FileEdit className='mr-2 h-4 w-4' />
+                                Chỉnh sửa
+                              </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem
                               className='text-destructive'

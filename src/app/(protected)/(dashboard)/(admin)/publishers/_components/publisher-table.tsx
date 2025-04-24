@@ -25,6 +25,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Sort } from '@/enums/enums';
+import { PATH } from '@/enums/path';
 import { usePublisherMutation } from '@/hooks/use-publisher';
 import { Publisher } from '@/types/publisher-types';
 import {
@@ -36,6 +37,7 @@ import {
   SortDesc,
   Trash2,
 } from 'lucide-react';
+import Link from 'next/link';
 import { useState } from 'react';
 
 type Props = {
@@ -50,8 +52,6 @@ type Props = {
   sortField: string;
   sortOrder: Sort;
   handleSort: (field: string) => void;
-  onViewPublisher: (id: string) => void;
-  onEditPublisher: (id: string) => void;
 };
 
 const PublisherTable = ({
@@ -66,8 +66,6 @@ const PublisherTable = ({
   sortField,
   sortOrder,
   handleSort,
-  onViewPublisher,
-  onEditPublisher,
 }: Props) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [publisherToDelete, setPublisherToDelete] = useState<string | null>(
@@ -210,17 +208,19 @@ const PublisherTable = ({
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align='end'>
                         <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
-                        <DropdownMenuItem
-                          onClick={() => onViewPublisher(publisher.id || '')}
-                        >
-                          <Eye className='mr-2 h-4 w-4' />
-                          Xem chi tiết
+                        <DropdownMenuItem asChild className='cursor-pointer'>
+                          <Link href={`${PATH.PUBLISHERS}/${publisher.id}`}>
+                            <Eye className='mr-2 h-4 w-4' />
+                            Xem chi tiết
+                          </Link>
                         </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() => onEditPublisher(publisher.id || '')}
-                        >
-                          <FileEdit className='mr-2 h-4 w-4' />
-                          Chỉnh sửa
+                        <DropdownMenuItem asChild className='cursor-pointer'>
+                          <Link
+                            href={`${PATH.PUBLISHERS}/${publisher.id}/edit`}
+                          >
+                            <FileEdit className='mr-2 h-4 w-4' />
+                            Chỉnh sửa
+                          </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className='text-destructive'

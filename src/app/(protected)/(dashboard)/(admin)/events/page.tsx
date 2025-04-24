@@ -6,7 +6,6 @@ import { PATH } from '@/enums/path';
 import { useEventsPagination } from '@/hooks/use-event';
 import { Plus } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import EventFilter from './_components/event-filter';
 import EventTable from './_components/event-table';
@@ -34,8 +33,6 @@ const EventsPage = () => {
   });
 
   const [isSearching, setIsSearching] = useState(false);
-
-  const router = useRouter();
 
   const buildResultObject = () => {
     if (!isSearching) return {};
@@ -93,14 +90,6 @@ const EventsPage = () => {
     setIsSearching(false);
   };
 
-  const handleEditEvent = (eventId: string) => {
-    router.push(`${PATH.EVENTS}/${eventId}/edit`);
-  };
-
-  const handleViewEventDetail = (eventId: string) => {
-    router.push(`${PATH.EVENTS}/${eventId}`);
-  };
-
   return (
     <div className='container mx-auto py-10'>
       <div className='mb-4 flex items-center justify-between'>
@@ -132,8 +121,6 @@ const EventsPage = () => {
         sortField={sortField}
         sortOrder={sortOrder}
         handleSort={handleSort}
-        onViewEvent={handleViewEventDetail}
-        onEditEvent={handleEditEvent}
       />
     </div>
   );

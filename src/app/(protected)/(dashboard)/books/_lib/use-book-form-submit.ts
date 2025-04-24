@@ -1,6 +1,6 @@
 import { BookFormValues } from '@/lib/zod';
+import DOMPurify from 'dompurify';
 import { useState } from 'react';
-import { sanitizeHtml } from './book-form-helpers';
 
 type FileState = {
   mainFile: File | null;
@@ -27,7 +27,7 @@ export function useBookFormSubmit(onSubmit: (formData: FormData) => void) {
 
       // Sanitize HTML content from rich text editor
       const sanitizedDescription = values.description
-        ? sanitizeHtml(values.description)
+        ? DOMPurify.sanitize(values.description)
         : '';
 
       formData.append('ISBN', values.isbn || '');
