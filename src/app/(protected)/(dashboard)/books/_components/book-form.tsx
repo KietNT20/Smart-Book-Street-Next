@@ -1,3 +1,6 @@
+'use client';
+
+import CancelButton from '@/components/back-btn/cancel-btn';
 import AuthorCombobox from '@/components/combobox/author-combobox';
 import CategoryCombobox from '@/components/combobox/category-combobox';
 import PublisherCombobox from '@/components/combobox/publisher-combobox';
@@ -36,11 +39,10 @@ type BookFormMode = 'create' | 'edit';
 
 type Props = {
   book?: Book;
-  onCancel: () => void;
   mode: BookFormMode;
 };
 
-const BookForm = ({ book, onCancel, mode }: Props) => {
+const BookForm = ({ book, mode }: Props) => {
   const form = useForm<BookFormValues>({
     resolver: zodResolver(bookSchema),
     defaultValues: prepareInitialBookData(book),
@@ -379,15 +381,11 @@ const BookForm = ({ book, onCancel, mode }: Props) => {
 
         {/* Nút điều khiển */}
         <div className='flex justify-end gap-2'>
-          <Button
-            type='button'
-            variant='outline'
-            disabled={isLoading}
-            onClick={onCancel}
-            className='px-7'
-          >
-            Hủy
-          </Button>
+          <CancelButton
+            _isPending={isLoading}
+            pathUrl={PATH.BOOKS}
+            routerReplace
+          />
           <Button type='submit'>
             {isLoading ? (
               <>

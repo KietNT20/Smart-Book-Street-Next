@@ -1,8 +1,8 @@
 'use client';
 
+import CancelButton from '@/components/back-btn/cancel-btn';
 import SubmitBtn from '@/components/button/submit-btn';
 import LoadingSpinner from '@/components/spin/loading-spinner';
-import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -15,13 +15,13 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { PATH } from '@/enums/path';
 import { useAuthorMutation, useGetAuthorById } from '@/hooks/use-author';
+import useDebounce from '@/hooks/use-debounce';
 import { cn } from '@/lib/utils';
 import { authorFormSchema, AuthorFormValues } from '@/lib/zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { DatePicker } from 'antd';
 import dayjs from 'dayjs';
 import 'dayjs/locale/vi';
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -41,7 +41,6 @@ export function AuthorForm({ authorId }: Props) {
     imgFile: null,
   });
 
-  const router = useRouter();
   const {
     createAuthor,
     createAuthorPending,
@@ -50,6 +49,11 @@ export function AuthorForm({ authorId }: Props) {
   } = useAuthorMutation();
   const { data: authorData, isLoading: isLoadingAuthor } = useGetAuthorById(
     authorId || ''
+  );
+
+  const isSubmitting = useDebounce(
+    createAuthorPending || updateAuthorPending,
+    300
   );
 
   const form = useForm<AuthorFormValues>({
@@ -128,6 +132,7 @@ export function AuthorForm({ authorId }: Props) {
                     className={cn(
                       form.formState.errors.authorName && 'border-red-500'
                     )}
+                    disabled={isSubmitting}
                     {...field}
                   />
                 </FormControl>
@@ -155,6 +160,7 @@ export function AuthorForm({ authorId }: Props) {
                       form.formState.errors.dob && 'border-red-500'
                     )}
                     onBlur={field.onBlur}
+                    disabled={isSubmitting}
                   />
                 </FormControl>
                 <FormMessage />
@@ -169,7 +175,11 @@ export function AuthorForm({ authorId }: Props) {
               <FormItem>
                 <FormLabel>Quốc tịch</FormLabel>
                 <FormControl>
-                  <Input placeholder='Nhập quốc tịch' {...field} />
+                  <Input
+                    placeholder='Nhập quốc tịch'
+                    disabled={isSubmitting}
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -197,6 +207,7 @@ export function AuthorForm({ authorId }: Props) {
                     className={cn(
                       form.formState.errors.imgFile && 'border-red-500'
                     )}
+                    disabled={isSubmitting}
                   />
                 </FormControl>
                 {file.imgFile && (
@@ -223,6 +234,7 @@ export function AuthorForm({ authorId }: Props) {
                     'min-h-60',
                     form.formState.errors.biography && 'border-red-500'
                   )}
+                  disabled={isSubmitting}
                   {...field}
                 />
               </FormControl>
@@ -232,17 +244,12 @@ export function AuthorForm({ authorId }: Props) {
         />
 
         <div className='flex justify-end gap-4'>
-          <Button
-            type='button'
-            variant='outline'
-            onClick={() => router.push(PATH.ADMIN_AUTHORS)}
-          >
-            Hủy
-          </Button>
-          <SubmitBtn
-            ID={authorId}
-            _onPending={createAuthorPending || updateAuthorPending}
+          <CancelButton
+            _isPending={isSubmitting}
+            routerReplace
+            pathUrl={PATH.ADMIN_AUTHORS}
           />
+          <SubmitBtn ID={authorId} _onPending={isSubmitting} />
         </div>
       </form>
     </Form>

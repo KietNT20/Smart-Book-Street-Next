@@ -1,5 +1,7 @@
+import { ImageFallback } from '@/constant/storage';
 import { formateDateVi, formatPrice } from '@/lib/utils';
 import { Author } from '@/types/author-types';
+import DOMPurify from 'dompurify';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -14,7 +16,7 @@ const AuthorInfo = ({ author }: Props) => {
       <div className='md:flex'>
         <div className='flex items-center justify-center p-6 md:w-1/3'>
           <Image
-            src={`${author.baseImgUrl}`}
+            src={`${author.baseImgUrl || ImageFallback.SRC}`}
             alt={author.authorName}
             width={500}
             height={500}
@@ -47,7 +49,7 @@ const AuthorInfo = ({ author }: Props) => {
 
       {/* Danh sách tác phẩm */}
       <div className='border-t border-gray-200 p-6'>
-        <h2 className='mb-4 text-2xl font-semibold'>Tác phẩm</h2>
+        <h2 className='mb-4 text-2xl font-semibold'>Các Tác Phẩm</h2>
 
         {author.bookAuthors && author.bookAuthors.length > 0 ? (
           <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
@@ -69,10 +71,12 @@ const AuthorInfo = ({ author }: Props) => {
                     <div>Giá: {formatPrice(bookAuthor.book.price)}</div>
                     <div>Trạng thái: {bookAuthor.book.status}</div>
                   </div>
-
-                  <p className='line-clamp-3 text-sm text-muted-foreground'>
-                    {bookAuthor.book.description}
-                  </p>
+                  <div
+                    className='line-clamp-3 text-sm text-muted-foreground'
+                    dangerouslySetInnerHTML={{
+                      __html: DOMPurify.sanitize(bookAuthor.book.description),
+                    }}
+                  ></div>
                 </Link>
               </div>
             ))}

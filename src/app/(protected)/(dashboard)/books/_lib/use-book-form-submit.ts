@@ -1,3 +1,5 @@
+'use client';
+
 import { BookFormValues } from '@/lib/zod';
 import DOMPurify from 'dompurify';
 import { useState } from 'react';

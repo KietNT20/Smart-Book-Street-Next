@@ -1,3 +1,5 @@
+'use client';
+
 import { Sort } from '@/enums/enums';
 import { Book, BookSearchCriteria } from '@/types/book-types';
 import { useState } from 'react';
@@ -15,7 +17,6 @@ export function useBookPageState() {
     Partial<BookSearchCriteria>
   >({});
   const [selectedBook, setSelectedBook] = useState<Book | undefined>();
-  const [deleteId, setDeleteId] = useState<string | null>(null);
 
   const resetAllFilters = () => {
     setPagination({
@@ -34,8 +35,6 @@ export function useBookPageState() {
     setSearchCriteria,
     selectedBook,
     setSelectedBook,
-    deleteId,
-    setDeleteId,
     resetAllFilters,
   };
 }

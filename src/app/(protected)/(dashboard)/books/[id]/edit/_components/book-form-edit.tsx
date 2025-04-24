@@ -1,23 +1,21 @@
 'use client';
 
+import { useGetBookByID } from '@/hooks/use-book-search';
+import { useParams } from 'next/navigation';
 import { Suspense } from 'react';
 import BookForm from '../../../_components/book-form';
 import Loading from '../loading';
-import { useEditPage } from '../use-edit-page';
 
 const BookFormEdit = () => {
-  const { book, router } = useEditPage();
+  const params = useParams();
+  const bookId = params.id as string;
+
+  const { data: book } = useGetBookByID(bookId);
 
   return (
     <Suspense fallback={<Loading />}>
       <div className='relative'>
-        {book && (
-          <BookForm
-            book={book.result}
-            onCancel={() => router.back()}
-            mode='edit'
-          />
-        )}
+        {book && <BookForm book={book.result} mode='edit' />}
       </div>
     </Suspense>
   );
