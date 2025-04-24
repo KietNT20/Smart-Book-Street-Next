@@ -43,14 +43,15 @@ type Props = {
 };
 
 const BookForm = ({ book, mode }: Props) => {
-  const form = useForm<BookFormValues>({
-    resolver: zodResolver(bookSchema),
-    defaultValues: prepareInitialBookData(book),
-  });
   const { createBook, createBookPending, updateBook, updateBookPending } =
     useBookMutations();
   const isLoading = useDebounce(createBookPending || updateBookPending, 300);
   const router = useRouter();
+
+  const form = useForm<BookFormValues>({
+    resolver: zodResolver(bookSchema),
+    defaultValues: prepareInitialBookData(book),
+  });
 
   const onSubmit = (formData: FormData) => {
     if (book?.id && mode === 'edit') {

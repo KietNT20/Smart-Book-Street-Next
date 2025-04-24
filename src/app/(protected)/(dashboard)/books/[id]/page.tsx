@@ -47,7 +47,6 @@ export default function BooksDetailPage({
           </Link>
           <Button
             variant='destructive'
-            size='sm'
             onClick={() => setIsDeleteModalOpen(true)}
           >
             Xóa sách
