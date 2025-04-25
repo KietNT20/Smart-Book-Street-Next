@@ -3,7 +3,6 @@
 import {
   BookOpen,
   CalendarIcon,
-  ChartNoAxesCombined,
   LibraryBig,
   PackagePlus,
   PieChart,
@@ -280,23 +279,23 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         url: PATH.STORE_OWNER_DASHBOARD,
         icon: PieChart,
         roles: [
-          RoleEnums.ADMIN,
+          // RoleEnums.ADMIN,
           RoleEnums.STORE_OWNER,
           RoleEnums.STORE_MANAGER,
         ],
       },
-      {
-        name: 'Dự đoán lượng khách',
-        url: '#',
-        icon: ChartNoAxesCombined,
-        roles: [RoleEnums.ADMIN],
-      },
-      {
-        name: 'Khuyến nghị khách',
-        url: '#',
-        icon: Users,
-        roles: [RoleEnums.ADMIN],
-      },
+      // {
+      //   name: 'Dự đoán lượng khách',
+      //   url: '#',
+      //   icon: ChartNoAxesCombined,
+      //   roles: [RoleEnums.ADMIN],
+      // },
+      // {
+      //   name: 'Khuyến nghị khách',
+      //   url: '#',
+      //   icon: Users,
+      //   roles: [RoleEnums.ADMIN],
+      // },
     ],
   };
 

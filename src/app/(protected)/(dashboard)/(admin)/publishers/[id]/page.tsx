@@ -93,12 +93,12 @@ export default function PublisherDetailPage({
                   <div className='flex h-48 items-center justify-center overflow-hidden bg-card'>
                     {book.images ? (
                       <Image.PreviewGroup
-                        items={book.images.map((image) => image.url)}
+                        items={book.images?.map((image) => image.url)}
                       >
                         <Image
                           width={200}
-                          src={book.images[0]?.url}
-                          alt={book.images[0]?.altText || book.title}
+                          src={book.images?.[0]?.url}
+                          alt={book.images?.[0]?.altText || book.title}
                           fallback={ImageFallback.SRC}
                         />
                       </Image.PreviewGroup>

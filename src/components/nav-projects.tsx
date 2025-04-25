@@ -25,9 +25,9 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
+import { useAuth } from '@/hooks/use-auth';
 import Link from 'next/link';
 import { useMemo } from 'react';
-import { useAuth } from '@/hooks/use-auth';
 
 type ProjectItemProps = {
   name: string;
@@ -98,12 +98,12 @@ export function NavProjects({ projects }: Props) {
             </DropdownMenu>
           </SidebarMenuItem>
         ))}
-        <SidebarMenuItem>
+        {/* <SidebarMenuItem>
           <SidebarMenuButton className='text-sidebar-foreground/70'>
             <MoreHorizontal className='text-sidebar-foreground/70' />
             <span>More</span>
           </SidebarMenuButton>
-        </SidebarMenuItem>
+        </SidebarMenuItem> */}
       </SidebarMenu>
     </SidebarGroup>
   );

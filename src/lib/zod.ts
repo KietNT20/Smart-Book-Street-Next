@@ -93,8 +93,46 @@ export const bookSchema = z.object({
   description: z.string().optional(),
   size: z.string().optional(),
   status: z.string().optional(),
-  mainImageFile: z.instanceof(File).optional().or(z.string().optional()),
-  additionalImageFiles: z.array(z.instanceof(File).or(z.string())).default([]),
+  mainImageFile: z
+    .union([
+      z
+        .instanceof(File)
+        .refine((file) => file.size <= 5 * 1024 * 1024, {
+          message: 'File phải nhỏ hơn 5MB',
+        })
+        .refine(
+          (file) =>
+            ['image/jpeg', 'image/png', 'image/webp'].includes(file.type),
+          {
+            message: 'Chỉ chấp nhận JPG, PNG, WEBP',
+          }
+        ),
+      z.string(),
+      z.undefined(),
+    ])
+    .optional(),
+  additionalImageFiles: z
+    .array(
+      z.union([
+        z
+          .instanceof(File)
+          .refine((file) => file.size <= 5 * 1024 * 1024, {
+            message: 'Mỗi file phải nhỏ hơn 5MB',
+          })
+          .refine(
+            (file) =>
+              ['image/jpeg', 'image/png', 'image/webp'].includes(file.type),
+            {
+              message: 'Chỉ chấp nhận JPG, PNG, WEBP',
+            }
+          ),
+        z.string(),
+      ])
+    )
+    .default([])
+    .refine((files) => files.length <= 3, {
+      message: 'Chỉ có thể tải lên tối đa 3 hình ảnh bổ sung',
+    }),
   publisherId: z.string().optional(),
   authorIds: z.array(z.string()).optional(),
   categoryIds: z.array(z.string()).optional(),
@@ -109,7 +147,24 @@ export const authorFormSchema = z.object({
   dob: z.string().date().optional(),
   nationality: z.string().optional(),
   biography: z.string().optional(),
-  imgFile: z.instanceof(File).optional().or(z.string().optional()),
+  imgFile: z
+    .union([
+      z
+        .instanceof(File)
+        .refine((file) => file.size <= 2 * 1024 * 1024, {
+          message: 'File phải nhỏ hơn 2MB',
+        })
+        .refine(
+          (file) =>
+            ['image/jpeg', 'image/png', 'image/webp'].includes(file.type),
+          {
+            message: 'Chỉ chấp nhận JPG, PNG, WEBP',
+          }
+        ),
+      z.string(),
+      z.null(),
+    ])
+    .optional(),
 });
 
 export type AuthorFormValues = z.infer<typeof authorFormSchema>;
@@ -119,7 +174,7 @@ export const categoryFormSchema = z.object({
   categoryName: z
     .string()
     .min(2, { message: 'Tên danh mục phải có ít nhất 2 ký tự' })
-    .max(50, { message: 'Tên danh mục không được vượt quá 50 ký tự' }),
+    .max(20, { message: 'Tên danh mục không được vượt quá 20 ký tự' }),
   description: z
     .string()
     .max(500, { message: 'Mô tả không được vượt quá 500 ký tự' })
@@ -146,11 +201,45 @@ export const storeFormSchema = z.object({
     .optional(),
   email: z.string().email({ message: 'Email không hợp lệ' }).optional(),
   mainImageFile: z
-    .instanceof(File)
-    .optional()
-    .or(z.string().optional())
-    .nullable(),
-  additionalImageFiles: z.array(z.instanceof(File).or(z.string())).default([]),
+    .union([
+      z
+        .instanceof(File)
+        .refine((file) => file.size <= 5 * 1024 * 1024, {
+          message: 'File phải nhỏ hơn 5MB',
+        })
+        .refine(
+          (file) =>
+            ['image/jpeg', 'image/png', 'image/webp'].includes(file.type),
+          {
+            message: 'Chỉ chấp nhận JPG, PNG, WEBP',
+          }
+        ),
+      z.string(),
+      z.null(),
+    ])
+    .optional(),
+  additionalImageFiles: z
+    .array(
+      z.union([
+        z
+          .instanceof(File)
+          .refine((file) => file.size <= 5 * 1024 * 1024, {
+            message: 'Mỗi file phải nhỏ hơn 5MB',
+          })
+          .refine(
+            (file) =>
+              ['image/jpeg', 'image/png', 'image/webp'].includes(file.type),
+            {
+              message: 'Chỉ chấp nhận JPG, PNG, WEBP',
+            }
+          ),
+        z.string(),
+      ])
+    )
+    .default([])
+    .refine((files) => files.length <= 3, {
+      message: 'Chỉ có thể tải lên tối đa 3 hình ảnh bổ sung',
+    }),
   latitude: z.number().optional(),
   longitude: z.number().optional(),
   type: z.string().optional(),
@@ -181,8 +270,46 @@ export const publisherFormSchema = z.object({
   address: z.string().optional(),
   description: z.string().optional(),
   website: z.string().optional(),
-  mainImageFile: z.instanceof(File).optional().or(z.string().optional()),
-  additionalImageFiles: z.array(z.instanceof(File).or(z.string())).default([]),
+  mainImageFile: z
+    .union([
+      z
+        .instanceof(File)
+        .refine((file) => file.size <= 5 * 1024 * 1024, {
+          message: 'File phải nhỏ hơn 5MB',
+        })
+        .refine(
+          (file) =>
+            ['image/jpeg', 'image/png', 'image/webp'].includes(file.type),
+          {
+            message: 'Chỉ chấp nhận JPG, PNG, WEBP',
+          }
+        ),
+      z.string(),
+      z.null(),
+    ])
+    .optional(),
+  additionalImageFiles: z
+    .array(
+      z.union([
+        z
+          .instanceof(File)
+          .refine((file) => file.size <= 5 * 1024 * 1024, {
+            message: 'Mỗi file phải nhỏ hơn 5MB',
+          })
+          .refine(
+            (file) =>
+              ['image/jpeg', 'image/png', 'image/webp'].includes(file.type),
+            {
+              message: 'Chỉ chấp nhận JPG, PNG, WEBP',
+            }
+          ),
+        z.string(),
+      ])
+    )
+    .default([])
+    .refine((files) => files.length <= 3, {
+      message: 'Chỉ có thể tải lên tối đa 3 hình ảnh bổ sung',
+    }),
 });
 
 export type PublisherFormValues = z.infer<typeof publisherFormSchema>;
@@ -212,30 +339,101 @@ export const dailyPopulationSchema = z.object({
 
 export type DailyPopulationStatistics = z.infer<typeof dailyPopulationSchema>;
 
-export const eventFormSchema = z.object({
-  eventName: z.string().min(1, { message: 'Tên sự kiện không được để trống' }),
-  startDate: z
-    .string()
-    .refine((val) => dayjs(val, 'YYYY-MM-DD HH:mm', true).isValid(), {
-      message: 'Ngày giờ bắt đầu không hợp lệ',
-    })
-    .nullable(),
-  endDate: z
-    .string()
-    .refine((val) => dayjs(val, 'YYYY-MM-DD HH:mm', true).isValid(), {
-      message: 'Ngày giờ kết thúc không hợp lệ',
-    })
-    .nullable(),
-  description: z.string().optional(),
-  baseImgFile: z.instanceof(File).optional().or(z.string().optional()),
-  otherImgFile: z.array(z.instanceof(File).or(z.string())).default([]),
-  videoFile: z.instanceof(File).optional().or(z.string().optional()),
-  isOpen: z.boolean().optional(),
-  allowAds: z.boolean().optional(),
-  zoneId: z.string().min(1, {
-    message: 'Vui lòng chọn khu vực tổ chức sự kiện',
-  }),
-});
+export const eventFormSchema = z
+  .object({
+    eventName: z
+      .string()
+      .min(1, { message: 'Tên sự kiện không được để trống' }),
+    startDate: z
+      .string()
+      .refine((val) => dayjs(val, 'YYYY-MM-DD HH:mm', true).isValid(), {
+        message: 'Ngày giờ bắt đầu không hợp lệ',
+      })
+      .nullable(),
+    endDate: z
+      .string()
+      .refine((val) => dayjs(val, 'YYYY-MM-DD HH:mm', true).isValid(), {
+        message: 'Ngày giờ kết thúc không hợp lệ',
+      })
+      .nullable(),
+    description: z.string().optional(),
+    baseImgFile: z
+      .union([
+        z
+          .instanceof(File)
+          .refine((file) => file.size <= 10 * 1024 * 1024, {
+            message: 'Ảnh chính phải nhỏ hơn 10MB',
+          })
+          .refine(
+            (file) =>
+              ['image/jpeg', 'image/png', 'image/webp'].includes(file.type),
+            {
+              message: 'Chỉ chấp nhận JPG, PNG, WEBP chất lượng cao',
+            }
+          ),
+        z.string(),
+        z.null(),
+      ])
+      .optional(),
+    otherImgFile: z
+      .array(
+        z.union([
+          z
+            .instanceof(File)
+            .refine((file) => file.size <= 8 * 1024 * 1024, {
+              message: 'Mỗi ảnh bổ sung phải nhỏ hơn 8MB',
+            })
+            .refine(
+              (file) =>
+                ['image/jpeg', 'image/png', 'image/webp'].includes(file.type),
+              {
+                message: 'Chỉ chấp nhận JPG, PNG, WEBP chất lượng cao',
+              }
+            ),
+          z.string(),
+        ])
+      )
+      .default([])
+      .refine((files) => files.length <= 10, {
+        message: 'Chỉ có thể tải lên tối đa 10 ảnh bổ sung',
+      }),
+    videoFile: z
+      .union([
+        z
+          .instanceof(File)
+          .refine((file) => file.size <= 100 * 1024 * 1024, {
+            message: 'Video phải nhỏ hơn 100MB',
+          })
+          .refine(
+            (file) =>
+              ['video/mp4', 'video/webm', 'video/quicktime'].includes(
+                file.type
+              ),
+            {
+              message: 'Chỉ chấp nhận video định dạng MP4, WebM hoặc QuickTime',
+            }
+          ),
+        z.string(),
+        z.null(),
+      ])
+      .optional(),
+    isOpen: z.boolean().optional().default(true),
+    allowAds: z.boolean().optional().default(false),
+    zoneId: z.string().min(1, {
+      message: 'Vui lòng chọn khu vực tổ chức sự kiện',
+    }),
+  })
+  .superRefine((data, ctx) => {
+    if (data.startDate && data.endDate) {
+      if (!dayjs(data.endDate).isAfter(dayjs(data.startDate))) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Ngày kết thúc phải sau ngày bắt đầu',
+          path: ['endDate'],
+        });
+      }
+    }
+  });
 
 export type EventFormValues = z.infer<typeof eventFormSchema>;
 
@@ -263,11 +461,45 @@ export const userFormSchema = z.object({
   address: z.string().optional(),
   gender: z.enum([Gender.Male, Gender.Female]).optional(),
   mainImageFile: z
-    .instanceof(File)
-    .optional()
-    .or(z.string().optional())
-    .nullable(),
-  additionalImageFiles: z.array(z.instanceof(File).or(z.string())).default([]),
+    .union([
+      z
+        .instanceof(File)
+        .refine((file) => file.size <= 2 * 1024 * 1024, {
+          message: 'File phải nhỏ hơn 2MB',
+        })
+        .refine(
+          (file) =>
+            ['image/jpeg', 'image/png', 'image/webp'].includes(file.type),
+          {
+            message: 'Chỉ chấp nhận JPG, PNG, WEBP',
+          }
+        ),
+      z.string(),
+      z.null(),
+    ])
+    .optional(),
+  additionalImageFiles: z
+    .array(
+      z.union([
+        z
+          .instanceof(File)
+          .refine((file) => file.size <= 2 * 1024 * 1024, {
+            message: 'Mỗi file phải nhỏ hơn 2MB',
+          })
+          .refine(
+            (file) =>
+              ['image/jpeg', 'image/png', 'image/webp'].includes(file.type),
+            {
+              message: 'Chỉ chấp nhận JPG, PNG, WEBP',
+            }
+          ),
+        z.string(),
+      ])
+    )
+    .default([])
+    .refine((files) => files.length <= 3, {
+      message: 'Chỉ có thể tải lên tối đa 3 hình ảnh bổ sung',
+    }),
 });
 
 export type UserFormValues = z.infer<typeof userFormSchema>;
@@ -280,15 +512,23 @@ export const souvenirFormSchema = z.object({
   price: z.number().min(0, { message: 'Giá không được âm' }),
   description: z.string().optional(),
   baseImgFile: z
-    .instanceof(File)
-    .refine(
-      (file) => {
-        if (!file) return true;
-        return file.size <= 1024 * 1024 * 10; // 10MB
-      },
-      { message: 'Kích thước ảnh chính không được vượt quá 10MB' }
-    )
-    .or(z.string()),
+    .union([
+      z
+        .instanceof(File)
+        .refine((file) => file.size <= 5 * 1024 * 1024, {
+          message: 'File phải nhỏ hơn 5MB',
+        })
+        .refine(
+          (file) =>
+            ['image/jpeg', 'image/png', 'image/webp'].includes(file.type),
+          {
+            message: 'Chỉ chấp nhận JPG, PNG, WEBP',
+          }
+        ),
+      z.string(),
+      z.null(),
+    ])
+    .optional(),
 });
 
 export type SouvenirFormValues = z.infer<typeof souvenirFormSchema>;
