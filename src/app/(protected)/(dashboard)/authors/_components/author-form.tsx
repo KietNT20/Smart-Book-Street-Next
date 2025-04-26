@@ -6,6 +6,7 @@ import LoadingSpinner from '@/components/spin/loading-spinner';
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -210,8 +211,11 @@ export function AuthorForm({ authorId }: Props) {
                     disabled={isSubmitting}
                   />
                 </FormControl>
+                <FormDescription>
+                  Yêu cầu upload ảnh 600x600 px.
+                </FormDescription>
                 {file.imgFile && (
-                  <div className='mt-1 text-sm text-zinc-500'>
+                  <div className='mt-1 text-sm text-muted'>
                     {file.imgFile.name}
                   </div>
                 )}

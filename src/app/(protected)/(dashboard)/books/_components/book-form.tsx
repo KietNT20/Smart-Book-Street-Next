@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -288,6 +289,9 @@ const BookForm = ({ book, mode }: Props) => {
                     disabled={isLoading}
                   />
                 </FormControl>
+                <FormDescription>
+                  Yêu cầu upload ảnh (600x600, tối đa 5 mb).
+                </FormDescription>
                 {files.mainFile && (
                   <div className='mt-1 text-sm text-zinc-500'>
                     {files.mainFile.name}
@@ -325,6 +329,9 @@ const BookForm = ({ book, mode }: Props) => {
                     disabled={isLoading}
                   />
                 </FormControl>
+                <FormDescription>
+                  Yêu cầu upload ảnh (600x600, tối đa 5 mb).
+                </FormDescription>
                 {files.additionalFiles.length > 0 && (
                   <div className='mt-2'>
                     <p className='text-sm font-medium'>
@@ -344,19 +351,6 @@ const BookForm = ({ book, mode }: Props) => {
         </div>
 
         {/* Mô tả */}
-        {/* <FormField
-          control={form.control}
-          name='description'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Mô tả</FormLabel>
-              <FormControl>
-                <Textarea placeholder='Nhập mô tả' {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        /> */}
         <FormField
           control={form.control}
           name='description'

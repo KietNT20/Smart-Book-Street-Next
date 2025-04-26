@@ -26,11 +26,7 @@ const BookSelectLang = ({
   className,
 }: Props) => {
   return (
-    <Select
-      disabled={disabled}
-      value={value || Language.VIETNAMESE}
-      onValueChange={onValueChange}
-    >
+    <Select disabled={disabled} value={value} onValueChange={onValueChange}>
       <SelectTrigger
         className={cn('w-full', !value && 'text-muted-foreground', className)}
       >

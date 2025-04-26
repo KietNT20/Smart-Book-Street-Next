@@ -96,8 +96,8 @@ export default function EventDetailPage({
       <div className='relative h-96 w-full overflow-hidden'>
         <div className='absolute inset-0 z-10 bg-black/50'></div>
         <Image
-          src={eventData.baseImgUrl}
-          alt={eventData.eventName}
+          src={eventData?.baseImgUrl}
+          alt={eventData?.eventName}
           fallback={ImageFallback.SRC}
         />
         <div className='absolute inset-0 z-20 mx-auto flex max-w-6xl flex-col justify-end p-8 text-white'>
@@ -201,39 +201,42 @@ export default function EventDetailPage({
             )}
 
             {/* Gallery */}
-            {eventData.baseImgUrl && (
+            {eventData?.baseImgUrl && (
               <Card>
                 <CardHeader>
                   <CardTitle>Hình ảnh sự kiện</CardTitle>
                 </CardHeader>
                 <CardContent>
+                  {/* Ảnh */}
                   {eventData.baseImgUrl && (
                     <Image
-                      src={eventData.baseImgUrl}
-                      alt={eventData.eventName || 'Ảnh chính của sự kiện'}
+                      src={eventData?.baseImgUrl}
+                      alt={eventData?.eventName}
                       fallback={ImageFallback.SRC}
                     />
                   )}
-                  <Image.PreviewGroup
-                    items={eventData.images.map((image) => image.url)}
-                  >
-                    <div className='mt-4 grid grid-cols-2 gap-4 md:grid-cols-3'>
-                      {eventData.images.map((image, index) => (
-                        <div
-                          key={index}
-                          className='aspect-square overflow-hidden rounded-lg'
-                        >
-                          <Image
-                            src={
-                              image.url || '/public/No-Image-Placeholder.png'
-                            }
-                            alt={image.altText || `Hình ảnh ${index + 1}`}
-                            fallback={ImageFallback.SRC}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  </Image.PreviewGroup>
+
+                  {/* Gallery */}
+                  {eventData?.images && eventData?.images?.length > 0 && (
+                    <Image.PreviewGroup
+                      items={eventData.images?.map((image) => image?.url)}
+                    >
+                      <div className='mt-4 grid grid-cols-2 gap-4 md:grid-cols-3'>
+                        {eventData.images?.map((image, index) => (
+                          <div
+                            key={index}
+                            className='aspect-square overflow-hidden rounded-lg'
+                          >
+                            <Image
+                              src={image?.url}
+                              alt={image?.altText || `Hình ảnh ${index + 1}`}
+                              fallback={ImageFallback.SRC}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </Image.PreviewGroup>
+                  )}
                 </CardContent>
               </Card>
             )}

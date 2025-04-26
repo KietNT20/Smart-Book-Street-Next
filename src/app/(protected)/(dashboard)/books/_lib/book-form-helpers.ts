@@ -45,7 +45,7 @@ export function prepareInitialBookData(book?: Book) {
     title: book.title || '',
     publicationDate: formattedDate,
     price: book.price || 0,
-    languages: book.languages,
+    languages: book.languages || Language.VIETNAMESE,
     description: book.description || '',
     size: book.size || '',
     status: book.status || '',
