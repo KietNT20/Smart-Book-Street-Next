@@ -89,8 +89,8 @@ export const bookSchema = z.object({
   title: z.string().min(1, { message: 'Tên sách không được để trống' }),
   publicationDate: bookPublishedDatedSchema,
   price: z.number().min(0, { message: 'Giá không được âm' }),
-  languages: z.string().refine((value) => value.length > 0, {
-    message: 'Ngôn ngữ không được để trống',
+  languages: z.string().nonempty({
+    message: 'Vui lòng chọn ngôn ngữ sách',
   }),
   description: z.string().optional(),
   size: z.string().optional(),
