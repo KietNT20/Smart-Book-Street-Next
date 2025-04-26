@@ -1,5 +1,6 @@
 import { orderService } from '@/services/orderService';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { OrderParams } from './../types/order-types';
 
 export const useOrderStaticsDailyAdmin = (date: string) => {
   const { data, isLoading, isError } = useQuery({
@@ -116,6 +117,7 @@ export const useCreateOrder = () => {
     mutationFn: (data: FormData) => orderService.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['order-details'] });
+      queryClient.invalidateQueries({ queryKey: ['orders'] });
     },
     onError: (error) => {
       console.log('Error creating order:', error);
@@ -130,7 +132,7 @@ export const useCreateOrder = () => {
 
 export const useGetOrderById = (orderId: string) => {
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['order', orderId],
+    queryKey: ['orders', orderId],
     queryFn: () => orderService.getById(orderId),
     enabled: !!orderId,
   });
@@ -138,5 +140,119 @@ export const useGetOrderById = (orderId: string) => {
     order: data?.result,
     orderLoading: isLoading,
     orderError: isError,
+  };
+};
+
+export const useGetOrdersSearchPagination = ({
+  result,
+  sortField,
+  sortOrder,
+  pageSize,
+  pageNumber,
+}: OrderParams) => {
+  const queryClient = useQueryClient();
+
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['orders', result, sortField, sortOrder, pageSize, pageNumber],
+    queryFn: () =>
+      orderService.getSearchPagination({
+        result,
+        sortField,
+        sortOrder,
+        pageSize,
+        pageNumber,
+      }),
+  });
+
+  const totalPage = data?.totalPages || 0;
+
+  if (totalPage > pageNumber) {
+    queryClient.prefetchQuery({
+      queryKey: [
+        'orders',
+        result,
+        sortField,
+        sortOrder,
+        pageSize,
+        pageNumber + 1,
+      ],
+      queryFn: () =>
+        orderService.getSearchPagination({
+          result,
+          sortField,
+          sortOrder,
+          pageSize,
+          pageNumber: pageNumber + 1,
+        }),
+    });
+  }
+
+  if (pageNumber > 1) {
+    queryClient.prefetchQuery({
+      queryKey: [
+        'orders',
+        result,
+        sortField,
+        sortOrder,
+        pageSize,
+        pageNumber - 1,
+      ],
+      queryFn: () =>
+        orderService.getSearchPagination({
+          result,
+          sortField,
+          sortOrder,
+          pageSize,
+          pageNumber: pageNumber - 1,
+        }),
+    });
+  }
+
+  return {
+    orders: data?.results || [],
+    ordersLoading: isLoading,
+    ordersError: isError,
+    totalPage,
+  };
+};
+
+export const useOrderStatusMuatation = () => {
+  const queryClient = useQueryClient();
+
+  const {
+    mutateAsync: updateOrderStatus,
+    isPending: updateOrderStatusPending,
+  } = useMutation({
+    mutationKey: ['update-order-status'],
+    mutationFn: (orderId: string) => orderService.confirmOrder(orderId),
+    onSuccess: (data) => {
+      if (data) {
+        queryClient.invalidateQueries({ queryKey: ['orders'] });
+      }
+    },
+    onError: (error) => {
+      console.log('Error confirm order:', error);
+    },
+  });
+
+  const { mutateAsync: cancelOrderStatus, isPending: isOrderCancelPending } =
+    useMutation({
+      mutationKey: ['cancel-order-status'],
+      mutationFn: (orderId: string) => orderService.cancelOrder(orderId),
+      onSuccess: (data) => {
+        if (data) {
+          queryClient.invalidateQueries({ queryKey: ['orders'] });
+        }
+      },
+      onError: (error) => {
+        console.log('Error cancel order:', error);
+      },
+    });
+
+  return {
+    updateOrderStatus,
+    updateOrderStatusPending,
+    cancelOrderStatus,
+    isOrderCancelPending,
   };
 };

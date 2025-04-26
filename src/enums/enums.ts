@@ -19,3 +19,9 @@ export const PaymentMethodLabel = {
   [PaymentMethod.CASH]: 'Tiền mặt',
   [PaymentMethod.TRANSFER]: 'Chuyển khoản',
 };
+
+export const OrderStatusLabel = {
+  [OrderStatus.IN_PROGRESS]: 'Đang xử lý',
+  [OrderStatus.COMPLETED]: 'Hoàn thành',
+  [OrderStatus.CANCELLED]: 'Đã hủy',
+};
