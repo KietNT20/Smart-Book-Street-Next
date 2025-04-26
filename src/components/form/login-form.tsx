@@ -25,7 +25,7 @@ import {
 import { Input } from '../ui/input';
 import { useLoginForm } from './use-login-form';
 
-export function LoginForm({
+export default function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<'div'>) {
