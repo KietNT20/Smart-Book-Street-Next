@@ -33,9 +33,6 @@ const BookSelectLang = ({
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value='Chọn Ngôn Ngữ' disabled>
-          {placeholder}
-        </SelectItem>
         {Object.entries(Language).map(([key, langValue]) => (
           <SelectItem key={key} value={langValue}>
             {LanguageLabels[langValue as Language]}
