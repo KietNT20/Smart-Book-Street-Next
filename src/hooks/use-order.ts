@@ -1,5 +1,6 @@
 import { orderService } from '@/services/orderService';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import { OrderParams } from './../types/order-types';
 
 export const useOrderStaticsDailyAdmin = (date: string) => {
@@ -228,10 +229,12 @@ export const useOrderStatusMuatation = () => {
     onSuccess: (data) => {
       if (data) {
         queryClient.invalidateQueries({ queryKey: ['orders'] });
+        toast.success('Xác nhận đơn hàng thành công');
       }
     },
     onError: (error) => {
       console.log('Error confirm order:', error);
+      toast.error('Xác nhận đơn hàng thất bại');
     },
   });
 
@@ -242,10 +245,12 @@ export const useOrderStatusMuatation = () => {
       onSuccess: (data) => {
         if (data) {
           queryClient.invalidateQueries({ queryKey: ['orders'] });
+          toast.success('Đơn hàng đã được hủy');
         }
       },
       onError: (error) => {
         console.log('Error cancel order:', error);
+        toast.error('Đơn hàng không thể hủy');
       },
     });
 
