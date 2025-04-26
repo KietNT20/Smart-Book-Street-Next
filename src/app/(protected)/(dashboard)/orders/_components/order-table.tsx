@@ -35,6 +35,7 @@ import {
   Sort,
 } from '@/enums/enums';
 import { PATH } from '@/enums/path';
+import { formatPrice } from '@/lib/utils';
 import dayjs from 'dayjs';
 import {
   ArrowUpDown,
@@ -185,12 +186,7 @@ const OrderTable = () => {
                   <TableCell className='font-medium'>
                     {order.id.substring(0, 8)}...
                   </TableCell>
-                  <TableCell>
-                    {new Intl.NumberFormat('vi-VN', {
-                      style: 'currency',
-                      currency: 'VND',
-                    }).format(order.totalAmount)}
-                  </TableCell>
+                  <TableCell>{formatPrice(order.totalAmount)}</TableCell>
                   <TableCell>
                     {PaymentMethodLabel[order.paymentMethod as PaymentMethod] ||
                       order.paymentMethod}

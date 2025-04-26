@@ -16,28 +16,26 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { STORAGE } from '@/constant/storage';
 import {
   OrderStatus,
   OrderStatusLabel,
   PaymentMethod,
   PaymentMethodLabel,
 } from '@/enums/enums';
-import useDebounce from '@/hooks/use-debounce';
 import { OrderParamsResult } from '@/types/order-types';
 import { DatePicker } from 'antd';
 import dayjs from 'dayjs';
 import 'dayjs/locale/vi';
 import { ChevronDown, ChevronUp, X } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { useOrderFilter } from '../_hooks/use-order-filter';
 dayjs.locale('vi');
 
-interface OrderFilterProps {
+export interface OrderFilterProps {
   onFilterChange: (filterValues: OrderParamsResult) => void;
   initialStoreId?: string;
 }
 
-type FilterState = {
+export type FilterState = {
   storeId: string;
   minAmount: string;
   maxAmount: string;
@@ -47,128 +45,25 @@ type FilterState = {
   endDate: dayjs.Dayjs | null;
 };
 
-type FilterValue<K extends keyof FilterState> = FilterState[K];
+export type FilterValue<K extends keyof FilterState> = FilterState[K];
 
-type FilterChangeFunction = (filterValues: OrderParamsResult) => void;
+export type FilterChangeFunction = (filterValues: OrderParamsResult) => void;
 
 const ALL_VALUE = 'all';
 
 const OrderFilter = ({ onFilterChange, initialStoreId }: OrderFilterProps) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const prevPropsRef = useRef<{
-    onFilterChange?: FilterChangeFunction;
-    initialStoreId?: string;
-  }>({});
-
-  const [filters, setFilters] = useState<FilterState>({
-    storeId: initialStoreId || '',
-    minAmount: '',
-    maxAmount: '',
-    paymentMethod: ALL_VALUE,
-    status: ALL_VALUE,
-    startDate: null,
-    endDate: null,
+  const {
+    isOpen,
+    setIsOpen,
+    filters,
+    handleInputChange,
+    clearField,
+    clearAllFilters,
+    isFiltering,
+  } = useOrderFilter({
+    onFilterChange,
+    initialStoreId,
   });
-
-  useEffect(() => {
-    prevPropsRef.current = { onFilterChange, initialStoreId };
-  });
-
-  const isFiltering =
-    filters.minAmount !== '' ||
-    filters.maxAmount !== '' ||
-    filters.paymentMethod !== ALL_VALUE ||
-    filters.status !== ALL_VALUE ||
-    filters.startDate !== null ||
-    filters.endDate !== null;
-
-  useEffect(() => {
-    if (initialStoreId !== prevPropsRef.current.initialStoreId) {
-      if (initialStoreId) {
-        setFilters((prev) => ({ ...prev, storeId: initialStoreId }));
-      } else {
-        const storedStoreId = localStorage.getItem(STORAGE.SELECTED_STORE_KEY);
-        if (storedStoreId) {
-          setFilters((prev) => ({ ...prev, storeId: storedStoreId }));
-        }
-      }
-    }
-  }, [initialStoreId]);
-
-  const debouncedFilters = useDebounce(filters, 700);
-
-  const isFirstRender = useRef(true);
-
-  useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    }
-
-    const filterValues: OrderParamsResult = {
-      storeId: debouncedFilters.storeId || '',
-    };
-
-    if (debouncedFilters.minAmount) {
-      filterValues.minAmount = Number(debouncedFilters.minAmount);
-    }
-
-    if (debouncedFilters.maxAmount) {
-      filterValues.maxAmount = Number(debouncedFilters.maxAmount);
-    }
-
-    if (
-      debouncedFilters.paymentMethod &&
-      debouncedFilters.paymentMethod !== ALL_VALUE
-    ) {
-      filterValues.paymentMethod =
-        debouncedFilters.paymentMethod as PaymentMethod;
-    }
-
-    if (debouncedFilters.status && debouncedFilters.status !== ALL_VALUE) {
-      filterValues.status = debouncedFilters.status as OrderStatus;
-    }
-
-    if (debouncedFilters.startDate) {
-      filterValues.startDate = debouncedFilters.startDate.toDate();
-    }
-
-    if (debouncedFilters.endDate) {
-      filterValues.endDate = debouncedFilters.endDate.toDate();
-    }
-
-    onFilterChange(filterValues);
-  }, [debouncedFilters, onFilterChange]);
-
-  const handleInputChange = <K extends keyof FilterState>(
-    field: K,
-    value: FilterValue<K>
-  ): void => {
-    setFilters((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const clearField = (field: keyof typeof filters): void => {
-    if (field === 'startDate' || field === 'endDate') {
-      setFilters((prev) => ({ ...prev, [field]: null }));
-    } else if (field === 'paymentMethod' || field === 'status') {
-      setFilters((prev) => ({ ...prev, [field]: ALL_VALUE }));
-    } else {
-      setFilters((prev) => ({ ...prev, [field]: '' }));
-    }
-  };
-
-  const clearAllFilters = (): void => {
-    setFilters({
-      storeId: filters.storeId,
-      minAmount: '',
-      maxAmount: '',
-      paymentMethod: ALL_VALUE,
-      status: ALL_VALUE,
-      startDate: null,
-      endDate: null,
-    });
-  };
 
   return (
     <Card className='mb-6'>
@@ -201,6 +96,7 @@ const OrderFilter = ({ onFilterChange, initialStoreId }: OrderFilterProps) => {
                   <Input
                     id='minAmount'
                     type='number'
+                    min={0}
                     placeholder='Nhập số tiền tối thiểu'
                     value={filters.minAmount}
                     onChange={(e) =>
@@ -227,6 +123,7 @@ const OrderFilter = ({ onFilterChange, initialStoreId }: OrderFilterProps) => {
                 <div className='relative'>
                   <Input
                     id='maxAmount'
+                    min={0}
                     type='number'
                     placeholder='Nhập số tiền tối đa'
                     value={filters.maxAmount}
