@@ -15,6 +15,23 @@ export enum Language {
   THAI = 'th',
 }
 
+export const LANGUAGE_VALUES = [
+  Language.VIETNAMESE,
+  Language.ENGLISH,
+  Language.FRENCH,
+  Language.GERMAN,
+  Language.SPANISH,
+  Language.CHINESE,
+  Language.JAPANESE,
+  Language.KOREAN,
+  Language.RUSSIAN,
+  Language.PORTUGUESE,
+  Language.ITALIAN,
+  Language.ARABIC,
+  Language.HINDI,
+  Language.THAI,
+] as const;
+
 export const LanguageLabels: Record<Language, string> = {
   [Language.VIETNAMESE]: 'Tiếng Việt (Vietnamese)',
   [Language.ENGLISH]: 'English',

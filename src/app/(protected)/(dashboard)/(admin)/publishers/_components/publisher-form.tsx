@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -185,6 +186,9 @@ const PublisherForm = ({ publisher }: Props) => {
                       )}
                     </div>
                   </FormControl>
+                  <FormDescription>
+                    Yêu cầu upload ảnh 600x600 px
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -245,7 +249,7 @@ const PublisherForm = ({ publisher }: Props) => {
                       <p className='text-sm font-medium'>
                         Đã chọn {files.additionalFiles.length} file:
                       </p>
-                      <ul className='mt-1 list-disc pl-5 text-sm text-zinc-500'>
+                      <ul className='mt-1 list-disc pl-5 text-sm text-muted-foreground'>
                         {files.additionalFiles.map((file, index) => (
                           <li key={index}>{file.name}</li>
                         ))}

@@ -89,28 +89,28 @@ export const bookSchema = z.object({
   title: z.string().min(1, { message: 'Tên sách không được để trống' }),
   publicationDate: bookPublishedDatedSchema,
   price: z.number().min(0, { message: 'Giá không được âm' }),
-  languages: z.string(),
+  languages: z.string().refine((value) => value.length > 0, {
+    message: 'Ngôn ngữ không được để trống',
+  }),
   description: z.string().optional(),
   size: z.string().optional(),
   status: z.string().optional(),
-  mainImageFile: z
-    .union([
-      z
-        .instanceof(File)
-        .refine((file) => file.size <= 5 * 1024 * 1024, {
-          message: 'File phải nhỏ hơn 5MB',
-        })
-        .refine(
-          (file) =>
-            ['image/jpeg', 'image/png', 'image/webp'].includes(file.type),
-          {
-            message: 'Chỉ chấp nhận JPG, PNG, WEBP',
-          }
-        ),
-      z.string(),
-      z.undefined(),
-    ])
-    .optional(),
+  mainImageFile: z.union([
+    z
+      .instanceof(File, { message: 'Vui lòng tải lên ảnh chính' })
+      .refine((file) => file.size <= 5 * 1024 * 1024, {
+        message: 'File phải nhỏ hơn 5MB',
+      })
+      .refine(
+        (file) => ['image/jpeg', 'image/png', 'image/webp'].includes(file.type),
+        {
+          message: 'Chỉ chấp nhận JPG, PNG, WEBP',
+        }
+      ),
+    z.string().nonempty({
+      message: 'Vui lòng tải lên ảnh chính',
+    }),
+  ]),
   additionalImageFiles: z
     .array(
       z.union([
@@ -134,9 +134,12 @@ export const bookSchema = z.object({
       message: 'Chỉ có thể tải lên tối đa 3 hình ảnh bổ sung',
     }),
   publisherId: z.string().optional(),
-  authorIds: z.array(z.string()).optional(),
-  categoryIds: z.array(z.string()).optional(),
-  id: z.string().optional(),
+  authorIds: z.array(z.string()).min(1, {
+    message: 'Vui lòng chọn tác giả',
+  }),
+  categoryIds: z.array(z.string()).min(1, {
+    message: 'Vui lòng thêm danh mục',
+  }),
 });
 
 export type BookFormValues = z.infer<typeof bookSchema>;
@@ -511,24 +514,22 @@ export const souvenirFormSchema = z.object({
     .min(1, { message: 'Tên quà lưu niệm không được để trống' }),
   price: z.number().min(0, { message: 'Giá không được âm' }),
   description: z.string().optional(),
-  baseImgFile: z
-    .union([
-      z
-        .instanceof(File)
-        .refine((file) => file.size <= 5 * 1024 * 1024, {
-          message: 'File phải nhỏ hơn 5MB',
-        })
-        .refine(
-          (file) =>
-            ['image/jpeg', 'image/png', 'image/webp'].includes(file.type),
-          {
-            message: 'Chỉ chấp nhận JPG, PNG, WEBP',
-          }
-        ),
-      z.string(),
-      z.null(),
-    ])
-    .optional(),
+  baseImgFile: z.union([
+    z
+      .instanceof(File, { message: 'Vui lòng tải lên ảnh chính' })
+      .refine((file) => file.size <= 5 * 1024 * 1024, {
+        message: 'File phải nhỏ hơn 5MB',
+      })
+      .refine(
+        (file) => ['image/jpeg', 'image/png', 'image/webp'].includes(file.type),
+        {
+          message: 'Chỉ chấp nhận JPG, PNG, WEBP',
+        }
+      ),
+    z.string().nonempty({
+      message: 'Vui lòng tải lên ảnh chính',
+    }),
+  ]),
 });
 
 export type SouvenirFormValues = z.infer<typeof souvenirFormSchema>;

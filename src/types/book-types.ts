@@ -26,7 +26,7 @@ export interface Book extends BaseEntity {
   title: string;
   publicationDate: Date | string | null;
   price: number;
-  languages: Language;
+  languages: Language | string;
   description: string;
   size: string;
   status: string;

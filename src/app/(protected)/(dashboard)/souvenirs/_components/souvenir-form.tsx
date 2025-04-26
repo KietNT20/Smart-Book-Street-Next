@@ -116,7 +116,7 @@ const SouvenirForm = ({ souvenirToEdit }: Props) => {
                           <Image
                             src={mainImagePreview}
                             alt='Preview'
-                            className='h-full w-full rounded-md object-cover'
+                            className='h-auto max-w-full'
                           />
                         </div>
                       )}
@@ -132,7 +132,8 @@ const SouvenirForm = ({ souvenirToEdit }: Props) => {
                     </div>
                   </FormControl>
                   <FormDescription>
-                    Tải lên ảnh chính cho quà lưu niệm (tùy chọn)
+                    Tải lên ảnh chính cho quà lưu niệm, yêu cầu 600x600 px (tùy
+                    chọn)
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

@@ -26,17 +26,16 @@ const BookSelectLang = ({
   className,
 }: Props) => {
   return (
-    <Select
-      disabled={disabled}
-      value={value || Language.VIETNAMESE}
-      onValueChange={onValueChange}
-    >
+    <Select disabled={disabled} value={value} onValueChange={onValueChange}>
       <SelectTrigger
         className={cn('w-full', !value && 'text-muted-foreground', className)}
       >
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
+        <SelectItem value='Chọn Ngôn Ngữ' disabled>
+          {placeholder}
+        </SelectItem>
         {Object.entries(Language).map(([key, langValue]) => (
           <SelectItem key={key} value={langValue}>
             {LanguageLabels[langValue as Language]}
