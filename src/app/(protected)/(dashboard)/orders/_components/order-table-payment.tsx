@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { RadioGroupItem } from '@/components/ui/radio-group';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import {
   Table,
   TableBody,
@@ -15,7 +15,6 @@ import {
 } from '@/components/ui/table';
 import { PaymentMethod, PaymentMethodLabel } from '@/enums/enums';
 import { formatPrice } from '@/lib/utils';
-import { RadioGroup } from '@radix-ui/react-dropdown-menu';
 import { Empty } from 'antd';
 import { Minus, Plus, Trash2 } from 'lucide-react';
 import Image from 'next/image';
@@ -164,13 +163,13 @@ const OrderTablePayment = () => {
               Phương thức thanh toán
             </h2>
             <RadioGroup
-              value={paymentMethod || ''}
+              value={paymentMethod || 'CASH'}
               onValueChange={(value) =>
                 setPaymentMethod(value as PaymentMethod)
               }
               className='ml-4 flex items-center space-x-4'
             >
-              <div className='mb-2 flex items-center space-x-2'>
+              <div className='flex items-center space-x-2'>
                 <RadioGroupItem value={PaymentMethod.CASH} id='payment-cash' />
                 <Label htmlFor='payment-cash'>
                   {PaymentMethodLabel[PaymentMethod.CASH]}

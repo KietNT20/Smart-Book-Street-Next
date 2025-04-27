@@ -21,6 +21,10 @@ const roleBasedRoutes: RoleRouteMap = {
   [PATH.DASHBOARD]: [RoleEnums.ADMIN],
   '/publishers/*': [RoleEnums.ADMIN],
   '/stores/*': [RoleEnums.ADMIN],
+  '/users/*': [RoleEnums.ADMIN],
+  '/events/*': [RoleEnums.ADMIN],
+  '/userstores/*': [RoleEnums.ADMIN],
+  '/zones/*': [RoleEnums.ADMIN],
   [PATH.STORE_MANAGER_DASHBOARD]: [RoleEnums.STORE_MANAGER, RoleEnums.ADMIN],
   [PATH.STORE_OWNER_DASHBOARD]: [RoleEnums.STORE_OWNER, RoleEnums.ADMIN],
   '/books/*': [
@@ -38,8 +42,22 @@ const roleBasedRoutes: RoleRouteMap = {
     RoleEnums.STORE_MANAGER,
     RoleEnums.STORE_OWNER,
   ],
-  '/orders/*': [RoleEnums.STORE_MANAGER, RoleEnums.STORE_OWNER],
-  '/inventory/*': [RoleEnums.STORE_MANAGER, RoleEnums.STORE_OWNER],
+  '/orders/*': [
+    RoleEnums.STORE_MANAGER,
+    RoleEnums.STORE_OWNER,
+    RoleEnums.STAFF,
+  ],
+  '/inventory/*': [
+    RoleEnums.STORE_MANAGER,
+    RoleEnums.STORE_OWNER,
+    RoleEnums.PUBLISHER,
+    RoleEnums.STAFF,
+  ],
+  '/store-schedules/*': [
+    RoleEnums.STORE_MANAGER,
+    RoleEnums.STORE_OWNER,
+    RoleEnums.STAFF,
+  ],
 };
 
 const schemasRoleToken =
@@ -120,6 +138,10 @@ export function middleware(request: NextRequest) {
           return NextResponse.redirect(
             new URL(PATH.STORE_OWNER_DASHBOARD, request.url)
           );
+        case RoleEnums.PUBLISHER:
+          return NextResponse.redirect(new URL(PATH.BOOKS, request.url));
+        case RoleEnums.STAFF:
+          return NextResponse.redirect(new URL(PATH.EVENT_DATE, request.url));
         default:
           // Should not reach here due to validation, but handle just in case
           const response = NextResponse.redirect(
@@ -157,6 +179,10 @@ export function middleware(request: NextRequest) {
         return NextResponse.redirect(
           new URL(PATH.STORE_OWNER_DASHBOARD, request.url)
         );
+      case RoleEnums.PUBLISHER:
+        return NextResponse.redirect(new URL(PATH.BOOKS, request.url));
+      case RoleEnums.STAFF:
+        return NextResponse.redirect(new URL(PATH.EVENT_DATE, request.url));
       default:
         // Should not reach here due to validation, but handle just in case
         const response = NextResponse.redirect(

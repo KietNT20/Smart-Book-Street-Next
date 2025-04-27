@@ -20,9 +20,10 @@ import {
   SidebarHeader,
   SidebarRail,
 } from '@/components/ui/sidebar';
+import { STORAGE } from '@/constant/storage';
 import { PATH } from '@/enums/path';
 import { RoleEnums } from '@/enums/role';
-import tokenMethod from '@/utils/token';
+import tokenMethod, { getLocalStorageItem } from '@/utils/token';
 import { jwtDecode } from 'jwt-decode';
 import { usePathname } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -41,6 +42,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
   const [userRoles, setUserRoles] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const streetId = getLocalStorageItem(STORAGE.SELECTED_STREET_KEY);
 
   // Get user roles from JWT token
   useEffect(() => {
@@ -92,6 +94,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           { url: PATH.STORES },
           { url: PATH.ZONES },
         ]),
+        disable: !streetId,
         roles: [RoleEnums.ADMIN],
         items: [
           {
@@ -198,6 +201,26 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           },
         ],
       },
+      // STAFF CHECKOUT USER
+
+      {
+        title: 'Quản lý người đăng ký sự kiện',
+        url: '#',
+        icon: PackagePlus,
+        isActive: checkActive([
+          {
+            url: PATH.EVENT_DATE,
+          },
+        ]),
+        roles: [RoleEnums.STAFF],
+        items: [
+          {
+            title: 'Điểm danh sự kiện',
+            url: PATH.EVENT_DATE,
+            roles: [RoleEnums.STAFF],
+          },
+        ],
+      },
 
       // STORE MANAGER MENUS
       {
@@ -208,38 +231,22 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           { url: PATH.STORE_HOURS },
           { url: PATH.INVENTORY },
         ]),
-        roles: [
-          RoleEnums.STORE_OWNER,
-          RoleEnums.STORE_MANAGER,
-          RoleEnums.STAFF,
-        ],
+        roles: [RoleEnums.STORE_OWNER, RoleEnums.STORE_MANAGER],
         items: [
           {
             title: 'Giờ hoạt động',
             url: PATH.STORE_HOURS,
-            roles: [
-              RoleEnums.STORE_OWNER,
-              RoleEnums.STORE_MANAGER,
-              RoleEnums.STAFF,
-            ],
+            roles: [RoleEnums.STORE_OWNER, RoleEnums.STORE_MANAGER],
           },
           {
             title: 'Quản lý tồn kho',
             url: PATH.INVENTORY,
-            roles: [
-              RoleEnums.STORE_OWNER,
-              RoleEnums.STORE_MANAGER,
-              RoleEnums.STAFF,
-            ],
+            roles: [RoleEnums.STORE_OWNER, RoleEnums.STORE_MANAGER],
           },
           {
             title: 'Quản lý đơn hàng',
             url: PATH.ORDERS,
-            roles: [
-              RoleEnums.STORE_OWNER,
-              RoleEnums.STORE_MANAGER,
-              RoleEnums.STAFF,
-            ],
+            roles: [RoleEnums.STORE_OWNER, RoleEnums.STORE_MANAGER],
           },
         ],
       },

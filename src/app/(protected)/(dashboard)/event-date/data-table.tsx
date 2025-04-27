@@ -27,7 +27,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
 }
 
-export function DataTableBook<TData, TValue>({
+export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
@@ -46,20 +46,14 @@ export function DataTableBook<TData, TValue>({
 
   return (
     <div className=''>
-      <div className='flex items-center gap-4 py-4'>
+      <div className='flex items-center py-4'>
         <Input
-          placeholder='Tìm kiếm theo isbn'
-          value={(table.getColumn('isbn')?.getFilterValue() as string) ?? ''}
-          onChange={(event) =>
-            table.getColumn('isbn')?.setFilterValue(event.target.value)
+          placeholder='Tên sự kiện'
+          value={
+            (table.getColumn('eventName')?.getFilterValue() as string) ?? ''
           }
-          className='max-w-sm'
-        />
-        <Input
-          placeholder='Tìm kiếm theo tên sách'
-          value={(table.getColumn('title')?.getFilterValue() as string) ?? ''}
           onChange={(event) =>
-            table.getColumn('title')?.setFilterValue(event.target.value)
+            table.getColumn('eventName')?.setFilterValue(event.target.value)
           }
           className='max-w-sm'
         />

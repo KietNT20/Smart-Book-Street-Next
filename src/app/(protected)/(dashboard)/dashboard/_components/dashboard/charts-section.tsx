@@ -3,9 +3,7 @@
 import { ChartConfig } from '@/components/ui/chart';
 import { useDailyRangeStatistics } from '@/hooks/use-person';
 import dayjs from 'dayjs';
-import * as React from 'react';
 import BarchartCard from './barchart-card';
-import PiechartCard from './piechart-card';
 
 const barConfig = {
   male: {
@@ -19,39 +17,39 @@ const barConfig = {
 } satisfies ChartConfig;
 
 // Data cho Pie Chart
-const pieData = [
-  { category: 'vanHoc', visitors: 275, fill: 'hsl(var(--chart-1))' },
-  { category: 'thieuNhi', visitors: 200, fill: 'hsl(var(--chart-2))' },
-  { category: 'giaoKhoa', visitors: 287, fill: 'hsl(var(--chart-3))' },
-  { category: 'kyNang', visitors: 173, fill: 'hsl(var(--chart-4))' },
-  { category: 'other', visitors: 190, fill: 'hsl(var(--chart-5))' },
-];
+// const pieData = [
+//   { category: 'vanHoc', visitors: 275, fill: 'hsl(var(--chart-1))' },
+//   { category: 'thieuNhi', visitors: 200, fill: 'hsl(var(--chart-2))' },
+//   { category: 'giaoKhoa', visitors: 287, fill: 'hsl(var(--chart-3))' },
+//   { category: 'kyNang', visitors: 173, fill: 'hsl(var(--chart-4))' },
+//   { category: 'other', visitors: 190, fill: 'hsl(var(--chart-5))' },
+// ];
 
-const pieConfig = {
-  visitors: {
-    label: 'Số lượng',
-  },
-  vanHoc: {
-    label: 'Văn học',
-    color: 'hsl(var(--chart-1))',
-  },
-  thieuNhi: {
-    label: 'Thiếu nhi',
-    color: 'hsl(var(--chart-2))',
-  },
-  giaoKhoa: {
-    label: 'Giáo khoa',
-    color: 'hsl(var(--chart-3))',
-  },
-  kyNang: {
-    label: 'Kỹ năng',
-    color: 'hsl(var(--chart-4))',
-  },
-  other: {
-    label: 'Khác',
-    color: 'hsl(var(--chart-5))',
-  },
-} satisfies ChartConfig;
+// const pieConfig = {
+//   visitors: {
+//     label: 'Số lượng',
+//   },
+//   vanHoc: {
+//     label: 'Văn học',
+//     color: 'hsl(var(--chart-1))',
+//   },
+//   thieuNhi: {
+//     label: 'Thiếu nhi',
+//     color: 'hsl(var(--chart-2))',
+//   },
+//   giaoKhoa: {
+//     label: 'Giáo khoa',
+//     color: 'hsl(var(--chart-3))',
+//   },
+//   kyNang: {
+//     label: 'Kỹ năng',
+//     color: 'hsl(var(--chart-4))',
+//   },
+//   other: {
+//     label: 'Khác',
+//     color: 'hsl(var(--chart-5))',
+//   },
+// } satisfies ChartConfig;
 
 const ChartsSection = () => {
   const endDate = dayjs(new Date()).format('YYYY-MM-DD');
@@ -61,23 +59,23 @@ const ChartsSection = () => {
     endDate: endDate,
   });
 
-  const totalMale = barData.reduce((sum, item) => sum + item.male, 0);
-  const totalFemale = barData.reduce((sum, item) => sum + item.female, 0);
-  const totalVisitors = totalMale + totalFemale;
+  // const totalMale = barData.reduce((sum, item) => sum + item.male, 0);
+  // const totalFemale = barData.reduce((sum, item) => sum + item.female, 0);
+  // const totalVisitors = totalMale + totalFemale;
 
-  const totalBooks = React.useMemo(() => {
-    return pieData.reduce((acc, curr) => acc + curr.visitors, 0);
-  }, []);
+  // const totalBooks = React.useMemo(() => {
+  //   return pieData.reduce((acc, curr) => acc + curr.visitors, 0);
+  // }, []);
 
-  const pieProps = {
-    pieData,
-    pieConfig,
-    totalBooks,
-    totalVisitors,
-  };
+  // const pieProps = {
+  //   pieData,
+  //   pieConfig,
+  //   totalBooks,
+  //   totalVisitors,
+  // };
 
   return (
-    <div className='mt-4 gap-4 lg:flex'>
+    <div className='gap-4 lg:flex'>
       {/* Bar Chart Container */}
       <BarchartCard
         barData={barData}
@@ -86,7 +84,7 @@ const ChartsSection = () => {
       />
 
       {/* Pie Chart Container */}
-      <PiechartCard {...pieProps} />
+      {/* <PiechartCard {...pieProps} /> */}
 
       {error && (
         <div className='rounded bg-red-50 p-4 text-red-500'>

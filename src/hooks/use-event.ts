@@ -171,12 +171,26 @@ export const useGetEventById = (id: string) => {
 export const useEventStaticsInMonth = (month: number) => {
   const { data, error, isLoading } = useQuery({
     queryKey: ['event-statistics', month],
-    queryFn: async () => eventService.getStatictisInMonth(month),
+    queryFn: async () => eventService.getStatisticInMonth(month),
   });
 
   return {
     eventStaticsDataMonth: data,
     eventStaticsError: error,
     eventStaticsLoading: isLoading,
+  };
+};
+
+export const useGetEventsInDate = (date: string) => {
+  const { data, error, isLoading } = useQuery({
+    queryKey: ['events-in-date', date],
+    queryFn: async () => eventService.getEventInDate(date),
+    enabled: !!date,
+  });
+
+  return {
+    eventsInDateData: data?.results || [],
+    eventsInDateError: error,
+    eventsInDateLoading: isLoading,
   };
 };

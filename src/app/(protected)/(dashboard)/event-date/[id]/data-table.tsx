@@ -27,7 +27,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
 }
 
-export function DataTableBook<TData, TValue>({
+export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
@@ -48,18 +48,42 @@ export function DataTableBook<TData, TValue>({
     <div className=''>
       <div className='flex items-center gap-4 py-4'>
         <Input
-          placeholder='Tìm kiếm theo isbn'
-          value={(table.getColumn('isbn')?.getFilterValue() as string) ?? ''}
+          placeholder='Họ và tên'
+          value={
+            (table.getColumn('registrantName')?.getFilterValue() as string) ??
+            ''
+          }
           onChange={(event) =>
-            table.getColumn('isbn')?.setFilterValue(event.target.value)
+            table
+              .getColumn('registrantName')
+              ?.setFilterValue(event.target.value)
           }
           className='max-w-sm'
         />
         <Input
-          placeholder='Tìm kiếm theo tên sách'
-          value={(table.getColumn('title')?.getFilterValue() as string) ?? ''}
+          placeholder='Email'
+          value={
+            (table.getColumn('registrantEmail')?.getFilterValue() as string) ??
+            ''
+          }
           onChange={(event) =>
-            table.getColumn('title')?.setFilterValue(event.target.value)
+            table
+              .getColumn('registrantEmail')
+              ?.setFilterValue(event.target.value)
+          }
+          className='max-w-sm'
+        />
+        <Input
+          placeholder='Số điện thoại'
+          value={
+            (table
+              .getColumn('registrantPhoneNumber')
+              ?.getFilterValue() as string) ?? ''
+          }
+          onChange={(event) =>
+            table
+              .getColumn('registrantPhoneNumber')
+              ?.setFilterValue(event.target.value)
           }
           className='max-w-sm'
         />

@@ -101,7 +101,7 @@ export function DataTableSouvenir<TData, TValue>({
                   colSpan={columns.length}
                   className='h-24 text-center'
                 >
-                  No results.
+                  Chưa có dữ liệu.
                 </TableCell>
               </TableRow>
             )}

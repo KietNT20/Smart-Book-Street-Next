@@ -106,7 +106,7 @@ const BarchartCard = ({ barData, barConfig, isLoading }: Props) => {
       <CardHeader>
         <div className='md:flex md:items-center md:justify-between'>
           <div className='mb-4 md:mb-0'>
-            <CardTitle>Thống kê lượt tham quan</CardTitle>
+            <CardTitle>Lượt tham quan</CardTitle>
             <CardDescription className='mt-3'>
               {getDescriptionText()}
             </CardDescription>

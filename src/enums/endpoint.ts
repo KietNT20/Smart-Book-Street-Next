@@ -20,4 +20,5 @@ export enum API_ENDPOINT {
   ORDER = '/orders',
   ORDER_DETAILS = '/order-details',
   STORE_SCHEDULES = '/store-schedules',
+  EVENT_REGISTRATION = '/event-registrations',
 }
