@@ -1,6 +1,7 @@
 import { API_URL } from '@/constant/api-url';
 import {
   EventDetailResponse,
+  EventInDateResponse,
   EventParams,
   EventsInMonth,
   EventsResponse,
@@ -56,9 +57,15 @@ export const eventService = {
     const res = await axiosInstance.get(`${API_URL.EVENTS.INDEX}/${id}`);
     return res.data;
   },
-  getStatictisInMonth: async (month: number): Promise<EventStaticsInMonth> => {
+  getStatisticInMonth: async (month: number): Promise<EventStaticsInMonth> => {
     const res = await axiosInstance.get(
       `${API_URL.EVENTS.INDEX}/statistic/total?month=${month}`
+    );
+    return res.data;
+  },
+  getEventInDate: async (date: string): Promise<EventInDateResponse> => {
+    const res = await axiosInstance.get(
+      `${API_URL.EVENTS.INDEX}/events-in-date?date=${date}`
     );
     return res.data;
   },

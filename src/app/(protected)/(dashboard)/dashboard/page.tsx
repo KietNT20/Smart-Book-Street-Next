@@ -34,9 +34,9 @@ export default function DashboardPage() {
       <SectionCards />
       <div className='flex flex-col gap-4 py-4 md:gap-6 md:py-6'>
         <ChartAreaInteractive />
-        <ChartsSection />
       </div>
-      <div className='mt-4'>
+      <div className='mt-4 grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6'>
+        <ChartsSection />
         <VisitorChartSection />
       </div>
       <div>

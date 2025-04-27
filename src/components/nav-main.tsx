@@ -37,6 +37,7 @@ type NavMainItemProps = {
   isActive?: boolean;
   roles?: RoleEnums[];
   items?: NavItemProps[];
+  disable?: boolean;
 };
 
 type Props = {
@@ -92,9 +93,14 @@ export function NavMain({ items }: Props) {
               <CollapsibleContent>
                 <SidebarMenuSub>
                   {item.items?.map((subItem) => (
-                    <SidebarMenuSubItem key={subItem.title}>
+                    <SidebarMenuSubItem
+                      key={subItem.title}
+                      className={cn(
+                        item.disable && 'pointer-events-none opacity-50'
+                      )}
+                    >
                       <SidebarMenuSubButton asChild>
-                        <Link href={subItem.url}>
+                        <Link href={subItem.url} passHref>
                           <span
                             className={cn(
                               pathname === subItem.url ? 'text-primary' : ''

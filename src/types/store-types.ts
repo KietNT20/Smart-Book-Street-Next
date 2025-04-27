@@ -50,7 +50,7 @@ export interface StoreSearchCriteria {
   zoneId?: string;
 }
 
-export interface StoreStatictisTotal {
+export interface StoreStatisticTotal {
   success: boolean;
   total: number;
   currentMonthPercentChange: number;

@@ -51,3 +51,17 @@ export interface EventStaticsInMonth {
   change: number;
   direction: Trend;
 }
+
+export interface EventInDate {
+  id: string;
+  eventName: string;
+  description: string;
+  startDate: Date | string;
+  endDate: Date | string;
+  baseImgUrl: string;
+  videoLink: string;
+  isOpen: boolean;
+  allowAds: boolean;
+}
+
+export type EventInDateResponse = ApiListResponse<EventInDate>;

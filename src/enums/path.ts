@@ -9,6 +9,8 @@ export enum PATH {
   STORE_MANAGER_DASHBOARD = '/sm-dashboard',
   STATISTICS = '/statistics',
 
+  EVENT_DATE = '/event-date',
+
   // ADMIN
   PUBLISHERS = '/publishers',
   PUBLISHER_CREATE = '/publishers/create',
