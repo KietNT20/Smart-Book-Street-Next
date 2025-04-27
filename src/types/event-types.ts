@@ -3,6 +3,11 @@ import { ImageType } from './image-types';
 import { Trend } from './person-types';
 import { Zone } from './zone-types';
 
+export interface EventStatistics {
+  label: string;
+  value: number;
+}
+
 export interface Event {
   id: string;
   eventName: string;
@@ -16,10 +21,11 @@ export interface Event {
   isDeleted: boolean;
   zone: Zone;
   images: ImageType[];
-  ageChart: any[];
-  genderChart: any[];
-  referenceChart: any[];
-  addressChart: any[];
+  ageChart: EventStatistics[];
+  genderChart: EventStatistics[];
+  referenceChart: EventStatistics[];
+  addressChart: EventStatistics[];
+  totalRegistrations: number;
 }
 
 export interface EventsInMonth {
