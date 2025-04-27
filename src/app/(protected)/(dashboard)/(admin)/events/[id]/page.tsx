@@ -23,6 +23,7 @@ import 'dayjs/locale/vi';
 import DOMPurify from 'dompurify';
 import { BarChart4, Calendar, Clock, MapPin, Video } from 'lucide-react';
 import Link from 'next/link';
+import EventChart from './_components/event-statistics-charts';
 
 // Set locale cho dayjs
 dayjs.locale('vi');
@@ -93,13 +94,19 @@ export default function EventDetailPage({
         </Link>
       </div>
       {/* Hero Section */}
-      <div className='relative h-96 w-full overflow-hidden'>
+      <div className='container relative mx-auto h-96 overflow-hidden px-4'>
         <div className='absolute inset-0 z-10 bg-black/50'></div>
-        <Image
-          src={eventData?.baseImgUrl}
-          alt={eventData?.eventName}
-          fallback={ImageFallback.SRC}
-        />
+        <div className='flex h-full items-center justify-center'>
+          <Image
+            src={eventData?.baseImgUrl}
+            alt={eventData?.eventName}
+            fallback={ImageFallback.SRC}
+            style={{
+              height: 'auto',
+              maxWidth: '100%',
+            }}
+          />
+        </div>
         <div className='absolute inset-0 z-20 mx-auto flex max-w-6xl flex-col justify-end p-8 text-white'>
           <Badge
             className={`mb-4 w-fit ${eventData.isOpen ? 'bg-green-500 hover:bg-green-600' : 'bg-red-500 hover:bg-red-600'}`}
@@ -170,36 +177,6 @@ export default function EventDetailPage({
               </Card>
             )}
 
-            {/* Statistics */}
-            {(eventData.ageChart?.length > 0 ||
-              eventData.genderChart?.length > 0 ||
-              eventData.referenceChart?.length > 0 ||
-              eventData.addressChart?.length > 0) && (
-              <Card>
-                <CardHeader>
-                  <CardTitle className='flex items-center gap-2'>
-                    <BarChart4 className='h-5 w-5' />
-                    Thống kê người tham gia
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className='grid grid-cols-1 gap-6 sm:grid-cols-2'>
-                    {/* Charts would go here, simplified for this example */}
-                    <div className='flex h-64 items-center justify-center rounded-lg bg-gray-100 p-4'>
-                      <p className='text-zinc-500'>
-                        Biểu đồ độ tuổi người tham gia
-                      </p>
-                    </div>
-                    <div className='flex h-64 items-center justify-center rounded-lg bg-gray-100 p-4'>
-                      <p className='text-zinc-500'>
-                        Biểu đồ giới tính người tham gia
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-
             {/* Gallery */}
             {eventData?.baseImgUrl && (
               <Card>
@@ -236,6 +213,71 @@ export default function EventDetailPage({
                         ))}
                       </div>
                     </Image.PreviewGroup>
+                  )}
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Statistics */}
+            {(eventData?.ageChart?.length > 0 ||
+              eventData?.genderChart?.length > 0 ||
+              eventData?.referenceChart?.length > 0 ||
+              eventData?.addressChart?.length > 0) && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className='flex items-center gap-2'>
+                    <BarChart4 className='h-5 w-5' />
+                    Thống kê người tham gia
+                  </CardTitle>
+                  <CardDescription>
+                    Tổng số người đăng ký: {eventData?.totalRegistrations || 0}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className='space-y-6'>
+                  {/* Age Chart */}
+                  {eventData?.ageChart?.length > 0 && (
+                    <EventChart
+                      data={eventData.ageChart}
+                      title='Phân bố độ tuổi'
+                      description='Thống kê độ tuổi người tham gia'
+                      type='bar'
+                      height={250}
+                    />
+                  )}
+
+                  {/* Gender Chart */}
+                  {eventData?.genderChart?.length > 0 && (
+                    <EventChart
+                      data={eventData.genderChart}
+                      title='Phân bố giới tính'
+                      description='Thống kê giới tính người tham gia'
+                      type='pie'
+                      height={250}
+                      colors={['hsl(var(--chart-1))', 'hsl(var(--chart-2))']}
+                    />
+                  )}
+
+                  {/* Reference Chart */}
+                  {eventData?.referenceChart?.length > 0 && (
+                    <EventChart
+                      data={eventData.referenceChart}
+                      title='Nguồn tham khảo'
+                      description='Người tham gia biết về sự kiện qua đâu'
+                      type='horizontalBar'
+                      height={250}
+                      colors={['hsl(var(--chart-1))']}
+                    />
+                  )}
+
+                  {/* Address Chart */}
+                  {eventData?.addressChart?.length > 0 && (
+                    <EventChart
+                      data={eventData.addressChart}
+                      title='Phân bố địa điểm'
+                      description='Thống kê nơi đến của người tham gia'
+                      type='pie'
+                      height={250}
+                    />
                   )}
                 </CardContent>
               </Card>
