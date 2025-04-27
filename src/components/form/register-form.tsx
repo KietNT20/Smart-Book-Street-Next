@@ -32,7 +32,7 @@ import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 
-export function RegisterForm({
+export default function RegisterForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<'div'>) {

@@ -1,7 +1,6 @@
-import { PaymentMethod } from '@/enums/enums';
-import { ApiListResponse, ApiResponse } from './common-types';
+import { OrderStatus, PaymentMethod } from '@/enums/enums';
+import { ApiListResponse, ApiResponse, PaginationSchema } from './common-types';
 import { Inventory } from './inventory-types';
-import { StoreData } from './store-types';
 
 export interface OrderStaticsDailyAdmin {
   orderChart: OrderStaticValue[];
@@ -29,7 +28,7 @@ export interface Cart {
 
 export type OrderCarts = ApiListResponse<Cart>;
 
-export interface OrderParams {
+export interface OrderParamsResult {
   minAmount?: number;
   maxAmount?: number;
   paymentMethod?: PaymentMethod;
@@ -39,34 +38,39 @@ export interface OrderParams {
   storeId: string;
 }
 
+export type OrderParams = PaginationSchema<OrderParamsResult>;
+
 export interface OrderDetail {
   id: string;
-  orderId: string;
-  createDate: Date | string;
+  productName: string;
+  price: number;
+  imgUrl: string;
   quantity: number;
+  orderId: string;
+  createdDate: Date | string;
   inventory: Inventory;
 }
 export interface Order {
   id: string;
   totalAmount: number;
   paymentMethod: PaymentMethod;
+  status: OrderStatus;
+  store: string;
   createdDate: Date | string;
-  store: StoreData;
   paymentLink: string;
-  orderDetails?: OrderDetail[];
+  orderDetails: OrderDetail[];
 }
-
 export type OrderList = ApiListResponse<Order>;
 export type OrderResponse = ApiResponse<Order>;
 
 export interface OrderInfo {
   id: string;
   totalAmount: number;
-  paymentMethod: string;
-  status: string;
+  paymentMethod: PaymentMethod;
+  status: OrderStatus;
   store: string;
-  createDate: Date;
+  createdDate: Date | string;
   orderDetails: Cart[];
 }
 
-export type OrderInfoResponse = ApiResponse<OrderInfo>;
+export type OrderInfoResponse = ApiListResponse<OrderInfo>;

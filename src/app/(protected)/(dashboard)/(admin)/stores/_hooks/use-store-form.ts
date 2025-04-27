@@ -15,25 +15,19 @@ type UseStoreFormProps = {
 };
 
 export const useStoreForm = ({ storeToEdit }: UseStoreFormProps = {}) => {
-  // Router
-  const router = useRouter();
-
-  // States
   const [zoneDialogOpen, setZoneDialogOpen] = useState(false);
   const [selectedZoneName, setSelectedZoneName] = useState('');
   const [previewMainImage, setPreviewMainImage] = useState<string | null>(null);
   const [previewAdditionalImages, setPreviewAdditionalImages] = useState<
     string[]
   >([]);
+  const router = useRouter();
 
-  // Mutations
   const { createStore, updateStore, isCreatingStore, isUpdatingStore } =
     useStoreMutation();
 
-  // Debounced working state
   const isWorking = useDebounce(isCreatingStore || isUpdatingStore, 300);
 
-  // Form initialization
   const form = useForm<StoreFormValues>({
     resolver: zodResolver(storeFormSchema),
     defaultValues: storeToEdit || {
@@ -50,7 +44,6 @@ export const useStoreForm = ({ storeToEdit }: UseStoreFormProps = {}) => {
     },
   });
 
-  // Zone handlers
   const handleSelectZone = (zoneId: string, zoneName: string) => {
     form.setValue('zoneId', zoneId, { shouldValidate: true });
     setSelectedZoneName(zoneName);
@@ -61,7 +54,6 @@ export const useStoreForm = ({ storeToEdit }: UseStoreFormProps = {}) => {
     setZoneDialogOpen((prev) => !prev);
   };
 
-  // Form submission handler
   const onSubmit = (values: StoreFormValues) => {
     try {
       const formData = new FormData();

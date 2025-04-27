@@ -1,12 +1,13 @@
 'use client';
 
-import { RegisterForm } from '@/components/form/register-form';
 import LoadingSpinner from '@/components/spin/loading-spinner';
 import { PATH } from '@/enums/path';
 import tokenMethod from '@/utils/token';
 import { GalleryVerticalEnd } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { Suspense, useEffect } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
+
+const RegisterForm = lazy(() => import('@/components/form/register-form'));
 
 export default function RegisterPage() {
   const router = useRouter();

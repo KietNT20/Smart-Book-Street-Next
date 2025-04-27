@@ -1,6 +1,7 @@
 import { API_URL } from '@/constant/api-url';
 import {
   OrderInfoResponse,
+  OrderParams,
   OrderResponse,
   OrderStaticsDailyAdmin,
 } from '@/types/order-types';
@@ -24,7 +25,6 @@ export const orderService = {
     );
     return res.data;
   },
-
   getOrderStaticsYearlyAdmin: async (
     year: number
   ): Promise<OrderStaticsDailyAdmin> => {
@@ -42,7 +42,6 @@ export const orderService = {
     );
     return res.data;
   },
-
   getOrderStaticsMonthlyStore: async (
     month: number,
     year: number,
@@ -53,7 +52,6 @@ export const orderService = {
     );
     return res.data;
   },
-
   getOrderStaticsYearlyStore: async (
     year: number,
     storeId: string
@@ -63,13 +61,29 @@ export const orderService = {
     );
     return res.data;
   },
-
   create: async (data: FormData): Promise<OrderResponse> => {
     const res = await axiosInstance.post(API_URL.ORDERS.INDEX, data);
     return res.data;
   },
-  getById: async (id: string): Promise<OrderInfoResponse> => {
+  getById: async (id: string): Promise<OrderResponse> => {
     const res = await axiosInstance.get(`${API_URL.ORDERS.INDEX}/${id}`);
+    return res.data;
+  },
+  confirmOrder: async (id: string) => {
+    const res = await axiosInstance.patch(`${API_URL.ORDERS.CONFIRM}/${id}`);
+    return res.data;
+  },
+  cancelOrder: async (id: string) => {
+    const res = await axiosInstance.patch(`${API_URL.ORDERS.CANCEL}/${id}`);
+    return res.data;
+  },
+  getSearchPagination: async (
+    params: OrderParams
+  ): Promise<OrderInfoResponse> => {
+    const res = await axiosInstance.post(
+      API_URL.ORDERS.PAGINATION_SEARCH,
+      params
+    );
     return res.data;
   },
 };

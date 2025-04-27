@@ -112,6 +112,8 @@ export const API_URL = {
     INDEX: `${ORDER}`,
     PAGINATION_SEARCH: `${ORDER}/search/paginated`,
     SEARCH: `${ORDER}/search`,
+    CONFIRM: `${ORDER}/confirm-order`,
+    CANCEL: `${ORDER}/cancel-order`,
     STATISTICS_DAILY: `${ORDER}/statics-for-admin/daily`,
     STATISTICS_MONTHLY: `${ORDER}/statics-for-admin/monthly`,
     STATISTICS_YEARLY: `${ORDER}/statics-for-admin/yearly`,
