@@ -231,38 +231,22 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           { url: PATH.STORE_HOURS },
           { url: PATH.INVENTORY },
         ]),
-        roles: [
-          RoleEnums.STORE_OWNER,
-          RoleEnums.STORE_MANAGER,
-          RoleEnums.STAFF,
-        ],
+        roles: [RoleEnums.STORE_OWNER, RoleEnums.STORE_MANAGER],
         items: [
           {
             title: 'Giờ hoạt động',
             url: PATH.STORE_HOURS,
-            roles: [
-              RoleEnums.STORE_OWNER,
-              RoleEnums.STORE_MANAGER,
-              RoleEnums.STAFF,
-            ],
+            roles: [RoleEnums.STORE_OWNER, RoleEnums.STORE_MANAGER],
           },
           {
             title: 'Quản lý tồn kho',
             url: PATH.INVENTORY,
-            roles: [
-              RoleEnums.STORE_OWNER,
-              RoleEnums.STORE_MANAGER,
-              RoleEnums.STAFF,
-            ],
+            roles: [RoleEnums.STORE_OWNER, RoleEnums.STORE_MANAGER],
           },
           {
             title: 'Quản lý đơn hàng',
             url: PATH.ORDERS,
-            roles: [
-              RoleEnums.STORE_OWNER,
-              RoleEnums.STORE_MANAGER,
-              RoleEnums.STAFF,
-            ],
+            roles: [RoleEnums.STORE_OWNER, RoleEnums.STORE_MANAGER],
           },
         ],
       },
