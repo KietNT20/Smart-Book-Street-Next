@@ -45,18 +45,18 @@ const CheckedInput = ({ user }: Props) => {
         checked={isChecked}
         onChange={handleCheckboxChange}
         disabled={isCheckingPending}
-        className='h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500'
+        className='h-4 w-4 rounded border text-primary focus:ring-ring'
       />
       <label
         htmlFor={`attendance-${user.id}`}
-        className='cursor-pointer text-sm font-medium text-gray-700'
+        className='cursor-pointer text-sm font-medium text-primary-foreground'
       >
         {isChecked ? 'Có' : 'Vắng'}
       </label>
 
       {isCheckingPending && (
         <div className='ml-2'>
-          <div className='h-4 w-4 animate-spin rounded-full border-2 border-blue-500 border-t-transparent'></div>
+          <div className='h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent'></div>
         </div>
       )}
     </div>
