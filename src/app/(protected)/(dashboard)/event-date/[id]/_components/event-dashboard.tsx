@@ -3,6 +3,7 @@
 import { AlertCircle, BarChart4, Calendar, Users } from 'lucide-react';
 import { Label, Pie, PieChart } from 'recharts';
 
+import LoadingSpinner from '@/components/spin/loading-spinner';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import {
   Card,
@@ -39,9 +40,10 @@ interface DashboardData {
 
 interface DashboardProps {
   data?: DashboardData;
+  isPending?: boolean;
 }
 
-export default function Dashboard({ data }: DashboardProps) {
+export default function Dashboard({ data, isPending }: DashboardProps) {
   if (!data) {
     return (
       <Alert variant='destructive'>
@@ -191,6 +193,10 @@ export default function Dashboard({ data }: DashboardProps) {
       </Card>
     );
   };
+
+  if (isPending) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div className='flex flex-col space-y-6 p-8'>

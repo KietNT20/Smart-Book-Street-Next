@@ -1,4 +1,4 @@
-import SpinLoading from '@/components/spin/spin-loading';
+import LoadingSpinner from '@/components/spin/loading-spinner';
 import { Input } from '@/components/ui/input';
 import {
   Pagination,
@@ -80,7 +80,7 @@ const ZoneSearch = ({ onSelectZone, onClose }: ZoneSearchProps) => {
   };
 
   if (isLoadingZonesStore) {
-    return <SpinLoading />;
+    return <LoadingSpinner />;
   }
 
   return (
