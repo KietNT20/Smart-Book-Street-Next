@@ -1,23 +1,12 @@
 'use client';
 
 import LoadingSpinner from '@/components/spin/loading-spinner';
-import { PATH } from '@/enums/path';
-import tokenMethod from '@/utils/token';
 import { GalleryVerticalEnd } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { lazy, Suspense, useEffect } from 'react';
+import { lazy, Suspense } from 'react';
 
 const LoginForm = lazy(() => import('@/components/form/login-form'));
 
 export default function LoginPage() {
-  const router = useRouter();
-
-  useEffect(() => {
-    if (tokenMethod.get()) {
-      router.push(PATH.HOME);
-    }
-  }, [router]);
-
   return (
     <Suspense
       fallback={
