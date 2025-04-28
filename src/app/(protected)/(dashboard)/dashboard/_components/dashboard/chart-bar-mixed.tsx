@@ -40,7 +40,7 @@ export interface OrderStaticsAdmin {
 // Transform data for chart rendering
 const transformDataForChart = (data: OrderStaticValue[]) => {
   return data.map((item, index) => {
-    const colorIndex = (index % 5) + 1;
+    const colorIndex = index % 12;
     return {
       id: index,
       label: item.label,
@@ -51,15 +51,18 @@ const transformDataForChart = (data: OrderStaticValue[]) => {
 };
 
 // Dynamic chart config based on data
-const generateChartConfig = (data: OrderStaticValue[]): ChartConfig => {
+const generateChartConfig = (
+  profit: boolean,
+  data: OrderStaticValue[]
+): ChartConfig => {
   const config: ChartConfig = {
     value: {
-      label: 'Profit',
+      label: profit ? 'Doanh Thu' : 'Tổng Đơn',
     },
   };
 
   data.forEach((item, index) => {
-    const colorIndex = (index % 5) + 1;
+    const colorIndex = (index % 12) + 1;
     config[`${index}`] = {
       label: item.label,
       color: `hsl(var(--chart-${colorIndex}))`,
@@ -164,6 +167,7 @@ export function OrderChartAdmin({
     profilt ? data.orderProfit : data.orderChart
   );
   const chartConfig = generateChartConfig(
+    profilt,
     profilt ? data.orderProfit : data.orderChart
   );
 
@@ -239,7 +243,7 @@ export function OrderChartAdmin({
           <TrendingUp className='h-4 w-4' />
         </div>
         <div className='leading-none text-muted-foreground'>
-          Tổng Lợi Nhuận: ${data.totalProfit.toLocaleString()}
+          Tổng Doanh Thu: ${data.totalProfit.toLocaleString()}
         </div>
       </CardFooter>
     </Card>

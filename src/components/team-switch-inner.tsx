@@ -70,12 +70,18 @@ function TeamSwitcherInner({
   const handleStreetSelect = (street: Street) => {
     setActiveStreet(street);
     setLocalStorageItem(STORAGE.SELECTED_STREET_KEY, street.id);
+
+    // Dispatch custom event to notify other components
+    window.dispatchEvent(new Event('teamSwitched'));
   };
 
   // Handle store selection
   const handleStoreSelect = (store: StoreData) => {
     setActiveStore(store);
     setLocalStorageItem(STORAGE.SELECTED_STORE_KEY, store.id || '');
+
+    // Dispatch custom event to notify other components
+    window.dispatchEvent(new Event('teamSwitched'));
   };
 
   // If loading streets, show loading state

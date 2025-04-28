@@ -77,6 +77,7 @@ export default function QueryProvider({
               colorText: 'hsl(var(--text))',
               itemActiveBg: 'hsl(var(--primary)/0.1)',
               colorTextTertiary: 'hsl(var(--secondary))',
+              colorTextDisabled: 'hsl(var(--muted-foreground)/0.5)',
             },
             Select: {
               colorPrimary: 'hsl(var(--primary))',
@@ -101,7 +102,7 @@ export default function QueryProvider({
               buttonSolidCheckedColor: 'hsl(var(--text))',
             },
             Badge: {
-              colorText: 'hsl(var(--text))',
+              colorText: 'hsl(var(--matcha))',
             },
           },
         }}

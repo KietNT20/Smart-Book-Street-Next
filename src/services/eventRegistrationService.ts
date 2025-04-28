@@ -1,5 +1,8 @@
 import { API_URL } from '@/constant/api-url';
-import { EventRegistrationsResponse } from '@/types/event-registrations-types';
+import {
+  EventRegistrationsResponse,
+  EventRegistrationStatistic,
+} from '@/types/event-registrations-types';
 import axiosInstance from '@/utils/axiosInstance';
 
 export const eventRegistrationService = {
@@ -9,7 +12,7 @@ export const eventRegistrationService = {
     );
     return res.data;
   },
-  statistic: async (eventId: string) => {
+  statistic: async (eventId: string): Promise<EventRegistrationStatistic> => {
     const res = await axiosInstance.get(
       `${API_URL.EVENT_REGISTRATIONS.STATISTIC}/${eventId}`
     );

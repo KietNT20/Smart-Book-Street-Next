@@ -26,6 +26,9 @@ export const useCheckAttendend = () => {
       onSuccess: (data) => {
         if (data) {
           queryClient.invalidateQueries({ queryKey: ['event-registrations'] });
+          queryClient.invalidateQueries({
+            queryKey: ['event-registrations-statistic'],
+          });
           toast.success('Cập nhật thành công');
         }
       },
@@ -36,4 +39,17 @@ export const useCheckAttendend = () => {
     });
 
   return { checkedAttendend, isCheckingPending };
+};
+
+export const useGetStatisticEventRegistrations = (eventId: string) => {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['event-registrations-statistic', eventId],
+    queryFn: () => eventRegistrationService.statistic(eventId),
+  });
+
+  return {
+    statisticData: data,
+    isLoading,
+    error,
+  };
 };
