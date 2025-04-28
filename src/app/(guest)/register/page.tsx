@@ -14,7 +14,7 @@ export default function RegisterPage() {
 
   useEffect(() => {
     if (tokenMethod.get()) {
-      router.push(PATH.DASHBOARD);
+      router.push(PATH.HOME);
     }
   }, [router]);
 
