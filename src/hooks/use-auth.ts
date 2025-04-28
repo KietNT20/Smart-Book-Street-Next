@@ -28,10 +28,15 @@ export const useLogin = () => {
         const hasPublisherManagerRole = data.result.userRoles.some(
           (role) => role.role?.roleName === RoleEnums.PUBLISHER
         );
+        const hasStaffRole = data.result.userRoles.some(
+          (role) => role.role?.roleName === RoleEnums.STAFF
+        );
         if (hasAdminRole) {
           router.replace(PATH.DASHBOARD);
         } else if (hasPublisherManagerRole) {
           router.replace(PATH.BOOKS);
+        } else if (hasStaffRole) {
+          router.replace(PATH.EVENT_DATE);
         } else {
           router.replace(PATH.STORE_OWNER_DASHBOARD);
         }

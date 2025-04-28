@@ -17,7 +17,7 @@ export const eventRegistrationService = {
   },
   checkAttendend: async (payload: { id: string; isAttended: boolean }) => {
     const res = await axiosInstance.put(
-      `${API_URL.EVENT_REGISTRATIONS.INDEX}/check-attended`,
+      `${API_URL.EVENT_REGISTRATIONS.INDEX}/check-attendend`,
       payload
     );
     return res.data;
