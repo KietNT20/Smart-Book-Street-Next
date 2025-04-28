@@ -8,8 +8,8 @@ export default function UnauthorizedPage() {
   };
 
   return (
-    <div className='flex min-h-screen flex-col items-center justify-center bg-gray-50 p-5'>
-      <div className='w-full max-w-md overflow-hidden rounded-lg bg-background shadow-md'>
+    <div className='flex min-h-screen flex-col items-center justify-center bg-background p-5'>
+      <div className='w-full max-w-md overflow-hidden rounded-lg border bg-background shadow-md'>
         <div className='h-2 bg-red-500'></div>
         <div className='p-8'>
           <div className='mb-6 flex justify-center'>
@@ -31,11 +31,11 @@ export default function UnauthorizedPage() {
             </div>
           </div>
 
-          <h1 className='mb-3 text-center text-2xl font-bold text-zinc-800'>
+          <h1 className='mb-3 text-center text-2xl font-bold text-card-foreground'>
             Truy cập bị từ chối
           </h1>
 
-          <p className='mb-6 text-center text-zinc-600'>
+          <p className='mb-6 text-center text-muted-foreground'>
             Bạn không có quyền truy cập vào trang này. Vui lòng liên hệ quản trị
             viên nếu bạn cho rằng đây là lỗi.
           </p>
@@ -43,14 +43,14 @@ export default function UnauthorizedPage() {
           <div className='flex flex-col justify-center gap-3 sm:flex-row'>
             <button
               onClick={goBack}
-              className='rounded-md bg-gray-200 px-4 py-2 text-zinc-800 transition-colors hover:bg-gray-300'
+              className='rounded-md bg-gray-200 px-4 py-2 text-zinc-800 transition-colors duration-200 hover:bg-gray-300'
             >
               Quay lại
             </button>
 
             <Link
               href='/'
-              className='rounded-md bg-blue-600 px-4 py-2 text-center text-white transition-colors hover:bg-blue-700'
+              className='rounded-md bg-blue-600 px-4 py-2 text-center text-white transition-colors duration-200 hover:bg-blue-700'
             >
               Về trang chủ
             </Link>
@@ -58,7 +58,7 @@ export default function UnauthorizedPage() {
         </div>
       </div>
 
-      <div className='mt-6 text-sm text-zinc-500'>
+      <div className='mt-6 text-sm text-muted-foreground'>
         Cần trợ giúp?{' '}
         <Link href='/contact' className='text-blue-500 hover:underline'>
           Liên hệ hỗ trợ
