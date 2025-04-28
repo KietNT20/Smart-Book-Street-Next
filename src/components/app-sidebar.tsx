@@ -43,6 +43,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const [userRoles, setUserRoles] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const streetId = getLocalStorageItem(STORAGE.SELECTED_STREET_KEY);
+  const storeId = getLocalStorageItem(STORAGE.SELECTED_STORE_KEY);
 
   // Get user roles from JWT token
   useEffect(() => {
@@ -118,6 +119,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         title: 'Sự kiện',
         url: '#',
         icon: CalendarIcon,
+        disable: !streetId,
         isActive: checkActive([
           { url: PATH.EVENTS },
           { url: PATH.CALENDAR_EVENT },
@@ -227,6 +229,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         title: 'Quản lý cửa hàng',
         url: '#',
         icon: Store,
+        disable: !storeId,
         isActive: checkActive([
           { url: PATH.STORE_HOURS },
           { url: PATH.INVENTORY },
@@ -254,6 +257,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         title: 'Quản lý sản phẩm',
         url: '#',
         icon: PackagePlus,
+        disable: !storeId,
         isActive: checkActive([
           { url: PATH.PACKAGES },
           { url: PATH.SOUVENIRS },
