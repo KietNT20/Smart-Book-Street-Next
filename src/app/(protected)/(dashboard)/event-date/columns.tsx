@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { PATH } from '@/enums/path';
 import { ColumnDef } from '@tanstack/react-table';
+import dayjs from 'dayjs';
 import { MoreHorizontal } from 'lucide-react';
 import Link from 'next/link';
 
@@ -36,10 +37,18 @@ export const columns: ColumnDef<Event>[] = [
   {
     accessorKey: 'startDate',
     header: 'Ngày Bắt Đầu',
+    cell: ({ row }) => {
+      const event = row.original;
+      return <p>{dayjs(event.startDate).format('DD/MM/YYYY - HH:mm A')}</p>;
+    },
   },
   {
     accessorKey: 'endDate',
     header: 'Ngày Kết Thúc',
+    cell: ({ row }) => {
+      const event = row.original;
+      return <p>{dayjs(event.endDate).format('DD/MM/YYYY - HH:mm A')}</p>;
+    },
   },
   {
     id: 'actions',

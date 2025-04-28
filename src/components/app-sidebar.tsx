@@ -42,8 +42,36 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
   const [userRoles, setUserRoles] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const streetId = getLocalStorageItem(STORAGE.SELECTED_STREET_KEY);
-  const storeId = getLocalStorageItem(STORAGE.SELECTED_STORE_KEY);
+  const [streetId, setStreetId] = useState<string | null>(null);
+  const [storeId, setStoreId] = useState<string | null>(null);
+
+  // Get street and store IDs from local storage
+  const updateStorageValues = useCallback(() => {
+    const currentStreetId = getLocalStorageItem(STORAGE.SELECTED_STREET_KEY);
+    const currentStoreId = getLocalStorageItem(STORAGE.SELECTED_STORE_KEY);
+    setStreetId(currentStreetId);
+    setStoreId(currentStoreId);
+  }, []);
+
+  // Initial load and set up event listener for storage changes
+  useEffect(() => {
+    updateStorageValues();
+
+    // Listen for storage changes
+    const handleStorageChange = () => {
+      updateStorageValues();
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+
+    // Custom event for when the team switcher changes values
+    window.addEventListener('teamSwitched', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('teamSwitched', handleStorageChange);
+    };
+  }, [updateStorageValues]);
 
   // Get user roles from JWT token
   useEffect(() => {

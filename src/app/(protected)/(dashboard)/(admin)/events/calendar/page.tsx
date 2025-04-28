@@ -38,7 +38,6 @@ const EventCalendar = () => {
     }
   };
 
-  // Xử lý khi chọn một ngày/tháng cụ thể
   const handleSelect = (value: Dayjs) => {
     const newMonth = value.month() + 1;
     const newYear = value.year();
@@ -83,7 +82,7 @@ const EventCalendar = () => {
       return [
         {
           type: 'success',
-          content: `${events.length} sự kiện`,
+          content: `Có sự kiện`,
         },
       ];
     }

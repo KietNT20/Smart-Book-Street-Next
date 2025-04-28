@@ -97,12 +97,12 @@ export default function OrderStatisticsPage() {
           </Card>
         </div>
 
-        <div className='md:gri grid grid-cols-1 gap-4 md:grid-cols-2'>
+        <div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
           {timeframe === 'daily' && (
             <OrderChartAdmin
               timeframe='daily'
               date={formattedDate}
-              title='Lợi Nhuận Cửa Hàng Theo Ngày'
+              title='Doanh Thu Cửa Hàng Theo Ngày'
               description='Doanh thu theo từng khung giờ trong ngày'
             />
           )}
@@ -112,7 +112,7 @@ export default function OrderStatisticsPage() {
               timeframe='monthly'
               month={selectedMonthYear.month() + 1}
               year={selectedMonthYear.year()}
-              title='Lợi Nhuận Cửa Hàng Theo Tháng'
+              title='Doanh Thu Cửa Hàng Theo Tháng'
               description='Doanh thu theo từng tuần trong tháng'
             />
           )}
@@ -121,7 +121,7 @@ export default function OrderStatisticsPage() {
             <OrderChartAdmin
               timeframe='yearly'
               year={selectedYear.year()}
-              title='Lợi Nhuận Cửa Hàng Theo Năm'
+              title='Doanh Thu Cửa Hàng Theo Năm'
               description='Doanh thu theo từng quý trong năm'
             />
           )}

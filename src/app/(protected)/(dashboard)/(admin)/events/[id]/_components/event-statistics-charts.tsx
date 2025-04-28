@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import React, { FC, useMemo } from 'react';
+import { useMemo } from 'react';
 import {
   Bar,
   BarChart,
@@ -38,12 +38,11 @@ export interface ChartProps {
   height?: number | string;
 }
 
-// Custom tooltip component
-const CustomTooltip: React.FC<TooltipProps<number, string>> = ({
+const CustomTooltip = ({
   active,
   payload,
   label,
-}) => {
+}: TooltipProps<number, string>) => {
   if (active && payload && payload.length) {
     return (
       <div className='rounded-md border border-gray-200 bg-white p-2 shadow-sm'>
@@ -61,6 +60,13 @@ const DEFAULT_COLORS = [
   'hsl(var(--chart-3))',
   'hsl(var(--chart-4))',
   'hsl(var(--chart-5))',
+  'hsl(var(--chart-6))',
+  'hsl(var(--chart-7))',
+  'hsl(var(--chart-8))',
+  'hsl(var(--chart-9))',
+  'hsl(var(--chart-10))',
+  'hsl(var(--chart-11))',
+  'hsl(var(--chart-12))',
   '#0088FE',
   '#00C49F',
   '#FFBB28',
@@ -74,7 +80,7 @@ const DEFAULT_COLORS = [
 /**
  * Chart component that can render different types of charts based on props
  */
-const EventChart: FC<ChartProps> = ({
+const EventChart = ({
   data,
   title,
   description,
@@ -82,7 +88,7 @@ const EventChart: FC<ChartProps> = ({
   colors = DEFAULT_COLORS,
   className = '',
   height = 300,
-}) => {
+}: ChartProps) => {
   const renderPieLabel = (props: any) => {
     const { cx, cy, midAngle, outerRadius, name, value } = props;
     const RADIAN = Math.PI / 180;
