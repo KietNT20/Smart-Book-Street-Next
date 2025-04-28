@@ -8,6 +8,7 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
+  DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
 import {
@@ -42,7 +43,6 @@ import { useSouvenirMutation } from '@/hooks/use-souvenir';
 import { formatPrice } from '@/lib/utils';
 import { Souvenir } from '@/types/souvenir-types';
 import { getLocalStorageItem } from '@/utils/token';
-import { DialogTitle } from '@radix-ui/react-dialog';
 import {
   ArrowUpDown,
   FileEdit,
