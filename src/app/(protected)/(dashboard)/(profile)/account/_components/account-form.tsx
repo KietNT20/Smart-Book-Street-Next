@@ -27,23 +27,17 @@ import {
 } from '@/components/ui/select';
 import { Gender } from '@/enums/gender';
 import { useAuth } from '@/hooks/use-auth';
+import dayjs from 'dayjs';
 import { CalendarIcon, User } from 'lucide-react';
 import Image from 'next/image';
 import useProfileForm, { UseUserFormProps } from '../_hooks/use-profile-form';
-import dayjs from 'dayjs';
 
 const AccountForm = () => {
   const { user } = useAuth();
-  const {
-    form,
-    isSubmitting,
-    previewImage,
-    handleImageChange,
-    onSubmit,
-    cancelEdit,
-  } = useProfileForm({
-    user: user as UseUserFormProps['user'],
-  });
+  const { form, isSubmitting, previewImage, handleImageChange, onSubmit } =
+    useProfileForm({
+      user: user as UseUserFormProps['user'],
+    });
   return (
     <Form {...form}>
       <form
@@ -204,9 +198,6 @@ const AccountForm = () => {
             </div>
           </CardContent>
           <CardFooter className='flex justify-end space-x-2'>
-            <Button type='button' variant='outline' onClick={cancelEdit}>
-              Hủy
-            </Button>
             <Button type='submit' variant={'darker'} disabled={isSubmitting}>
               {isSubmitting ? 'Đang lưu...' : 'Lưu thay đổi'}
             </Button>

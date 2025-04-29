@@ -187,9 +187,9 @@ const BookSearchFilter = ({ onFilterChange, initialFilter = {} }: Props) => {
             </div>
           </CollapsibleTrigger>
           <CollapsibleContent>
-            <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+            <div className='grid grid-cols-1 gap-4 md:grid-cols-12'>
               {/* Tên sách */}
-              <div className=''>
+              <div className='col-span-4'>
                 <Label htmlFor='title'>Tên sách</Label>
                 <Input
                   id='title'
@@ -200,7 +200,7 @@ const BookSearchFilter = ({ onFilterChange, initialFilter = {} }: Props) => {
                 />
               </div>
 
-              <div className=''>
+              <div className='col-span-4'>
                 <Label htmlFor='isbn'>ISBN</Label>
                 <Input
                   id='isbn'
@@ -212,7 +212,7 @@ const BookSearchFilter = ({ onFilterChange, initialFilter = {} }: Props) => {
               </div>
 
               {/* Khoảng giá */}
-              <div className=''>
+              <div className='col-span-4'>
                 <Label htmlFor='priceRange'>Khoảng giá</Label>
                 <Select
                   value={priceRangeIndex.toString()}
@@ -232,7 +232,11 @@ const BookSearchFilter = ({ onFilterChange, initialFilter = {} }: Props) => {
               </div>
 
               {/* Ngôn ngữ - Accordion Checkbox */}
-              <Accordion type='single' collapsible className='w-full'>
+              <Accordion
+                type='single'
+                collapsible
+                className='col-span-6 w-full'
+              >
                 <AccordionItem value='languages'>
                   <AccordionTrigger>
                     <div className='flex w-full justify-between'>
@@ -273,7 +277,11 @@ const BookSearchFilter = ({ onFilterChange, initialFilter = {} }: Props) => {
               </Accordion>
 
               {/* Thể loại - Accordion Checkbox */}
-              <Accordion type='single' collapsible className='w-full'>
+              <Accordion
+                type='single'
+                collapsible
+                className='col-span-6 w-full'
+              >
                 <AccordionItem value='categories'>
                   <AccordionTrigger>
                     <div className='flex w-full justify-between'>
