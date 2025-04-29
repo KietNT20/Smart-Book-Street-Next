@@ -229,11 +229,15 @@ const SectionCards = () => {
         </CardHeader>
         <CardFooter className='flex-col items-start gap-1 text-sm'>
           <div className='line-clamp-1 flex gap-2 font-medium text-purple-100'>
-            {getChangeMessage(
-              changeDirectionStore,
-              totalStores,
-              percentChangeStore,
-              'cửa hàng'
+            {isLoading ? (
+              <Loader className='size-6 animate-spin md:size-8' />
+            ) : (
+              getChangeMessage(
+                changeDirectionStore,
+                totalStores,
+                percentChangeStore,
+                'cửa hàng'
+              )
             )}
           </div>
         </CardFooter>
