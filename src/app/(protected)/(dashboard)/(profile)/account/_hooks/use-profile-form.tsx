@@ -19,6 +19,7 @@ export const useProfileForm = ({ user }: UseUserFormProps) => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string>('');
   const { updateUser, updateUserPending } = useUserMutation();
+  console.log('isEditing', isEditing);
 
   const form = useForm({
     resolver: zodResolver(userFormSchema),

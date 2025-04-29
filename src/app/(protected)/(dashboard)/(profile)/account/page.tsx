@@ -8,50 +8,27 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { PATH } from '@/enums/path';
 import { useAuth } from '@/hooks/use-auth';
 import { getVietnameseRoleLabel } from '@/utils/format';
 import dayjs from 'dayjs';
 import { ArrowLeft, Mail, User } from 'lucide-react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import AccountForm from './_components/account-form';
 import UserDetailSkeleton from './_components/user-skeleton';
 import useProfileForm, { UseUserFormProps } from './_hooks/use-profile-form';
 
 export default function ProfilePage() {
-  const { user, isLoading: userLoading, error: userError } = useAuth();
-  const router = useRouter();
+  const { user, isLoading: userLoading } = useAuth();
   const [isClient, setIsClient] = useState(false);
 
-  const { isEditing, startEditing } = useProfileForm({
+  const { isEditing, startEditing, cancelEdit } = useProfileForm({
     user: user as UseUserFormProps['user'],
   });
 
   useEffect(() => {
     setIsClient(true);
   }, []);
-
-  if ((userError || !user) && isClient) {
-    return (
-      <Card className='mx-auto max-w-3xl'>
-        <CardHeader>
-          <CardTitle className='text-center'>
-            Không tìm thấy thông tin
-          </CardTitle>
-        </CardHeader>
-        <CardContent className='pt-6'>
-          <p className='mb-6 text-muted-foreground'>
-            Thông tin người dùng không tồn tại hoặc đã bị xóa
-          </p>
-          <Button onClick={() => router.replace(PATH.USERS)}>
-            Quay lại danh sách
-          </Button>
-        </CardContent>
-      </Card>
-    );
-  }
 
   if (!isClient) {
     return null;
@@ -64,14 +41,12 @@ export default function ProfilePage() {
   return (
     <div className='container py-8'>
       <div className='mb-6 flex items-center'>
-        <Button
-          variant='ghost'
-          className='mr-4'
-          onClick={() => router.push(PATH.ACCOUNT)}
-        >
-          <ArrowLeft className='mr-2 h-4 w-4' />
-          Quay lại
-        </Button>
+        {isEditing && (
+          <Button variant='ghost' className='mr-4' onClick={cancelEdit}>
+            <ArrowLeft className='mr-2 h-4 w-4' />
+            Quay lại
+          </Button>
+        )}
       </div>
 
       {!isEditing ? (

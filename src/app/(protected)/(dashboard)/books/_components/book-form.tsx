@@ -291,7 +291,7 @@ const BookForm = ({ book, mode }: Props) => {
                   />
                 </FormControl>
                 <FormDescription>
-                  Yêu cầu upload ảnh (600x600, tối đa 5 mb).
+                  Yêu cầu upload ảnh (600x600px, tối đa 5 mb).
                 </FormDescription>
                 {files.mainFile && (
                   <div className='mt-1 text-sm text-zinc-500'>
@@ -331,7 +331,8 @@ const BookForm = ({ book, mode }: Props) => {
                   />
                 </FormControl>
                 <FormDescription>
-                  Yêu cầu upload ảnh (600x600, tối đa 5 mb).
+                  Yêu cầu upload ảnh (600x600px, tối đa 5 mb mỗi ảnh, tải tối đa
+                  3 hình).
                 </FormDescription>
                 {files.additionalFiles.length > 0 && (
                   <div className='mt-2'>

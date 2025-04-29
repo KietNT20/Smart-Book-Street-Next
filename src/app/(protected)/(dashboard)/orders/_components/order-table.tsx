@@ -88,27 +88,10 @@ const OrderTable = () => {
               <TableHead>No.</TableHead>
               <TableHead
                 className='cursor-pointer'
-                onClick={() => handleSort('id')}
-              >
-                <Button variant='ghost'>
-                  Order ID
-                  {sortField === 'id' ? (
-                    sortOrder === Sort.ASC ? (
-                      <SortAsc className='ml-2 h-4 w-4' />
-                    ) : (
-                      <SortDesc className='ml-2 h-4 w-4' />
-                    )
-                  ) : (
-                    <ArrowUpDown className='ml-2 h-4 w-4' />
-                  )}
-                </Button>
-              </TableHead>
-              <TableHead
-                className='cursor-pointer'
                 onClick={() => handleSort('totalAmount')}
               >
                 <Button variant='ghost'>
-                  Total Amount
+                  Số tiền
                   {sortField === 'totalAmount' ? (
                     sortOrder === Sort.ASC ? (
                       <SortAsc className='ml-2 h-4 w-4' />
@@ -125,7 +108,7 @@ const OrderTable = () => {
                 onClick={() => handleSort('paymentMethod')}
               >
                 <Button variant='ghost'>
-                  Payment Method
+                  Phương thức thanh toán
                   {sortField === 'paymentMethod' ? (
                     sortOrder === Sort.ASC ? (
                       <SortAsc className='ml-2 h-4 w-4' />
@@ -142,7 +125,7 @@ const OrderTable = () => {
                 onClick={() => handleSort('status')}
               >
                 <Button variant='ghost'>
-                  Status
+                  Tình trạng
                   {sortField === 'status' ? (
                     sortOrder === Sort.ASC ? (
                       <SortAsc className='ml-2 h-4 w-4' />
@@ -159,7 +142,7 @@ const OrderTable = () => {
                 onClick={() => handleSort('createdDate')}
               >
                 <Button variant='ghost'>
-                  Created Date
+                  Ngày tạo
                   {sortField === 'createdDate' ? (
                     sortOrder === Sort.ASC ? (
                       <SortAsc className='ml-2 h-4 w-4' />
@@ -182,9 +165,6 @@ const OrderTable = () => {
                 <TableRow key={order.id}>
                   <TableCell className='text-muted-foreground'>
                     {index + 1 + (pageNumber - 1) * pageSize}
-                  </TableCell>
-                  <TableCell className='font-medium'>
-                    {order.id.substring(0, 8)}...
                   </TableCell>
                   <TableCell>{formatPrice(order.totalAmount)}</TableCell>
                   <TableCell>

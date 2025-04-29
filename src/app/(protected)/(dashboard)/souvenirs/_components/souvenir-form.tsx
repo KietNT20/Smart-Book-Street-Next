@@ -112,7 +112,7 @@ const SouvenirForm = ({ souvenirToEdit }: Props) => {
                         disabled={isPending}
                       />
                       {mainImagePreview && (
-                        <div className='relative flex h-40 w-40 items-center justify-center overflow-hidden'>
+                        <div className='relative flex h-80 w-80 items-center justify-center overflow-hidden'>
                           <Image
                             src={mainImagePreview}
                             alt='Preview'
@@ -121,7 +121,7 @@ const SouvenirForm = ({ souvenirToEdit }: Props) => {
                         </div>
                       )}
                       {souvenirToEdit?.baseImgUrl && (
-                        <div className='relative flex h-40 w-40 items-center justify-center overflow-hidden'>
+                        <div className='relative flex h-80 w-80 items-center justify-center overflow-hidden'>
                           <Image
                             src={souvenirToEdit.baseImgUrl}
                             alt={souvenirToEdit.souvenirName}
@@ -132,8 +132,7 @@ const SouvenirForm = ({ souvenirToEdit }: Props) => {
                     </div>
                   </FormControl>
                   <FormDescription>
-                    Tải lên ảnh chính cho quà lưu niệm, yêu cầu 600x600 px (tùy
-                    chọn)
+                    Tải lên ảnh chính cho quà lưu niệm, yêu cầu 600x600px
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
