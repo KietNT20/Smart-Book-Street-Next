@@ -19,7 +19,6 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart';
 import { STORAGE } from '@/constant/storage';
-import useDebounce from '@/hooks/use-debounce';
 import {
   useOrderStaticsDailyStore,
   useOrderStaticsMonthlyStore,
@@ -127,10 +126,8 @@ export function OrderChartStore({
   };
 
   // Get loading state based on timeframe
-  const isLoading = useDebounce(
-    orderDailyLoading || orderMonthlyLoading || orderYearLoading,
-    300
-  );
+  const isLoading =
+    orderDailyLoading || orderMonthlyLoading || orderYearLoading;
 
   // Get error based on timeframe
   const getError = () => {

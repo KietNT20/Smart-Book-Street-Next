@@ -1,6 +1,5 @@
 'use client';
 
-import useDebounce from '@/hooks/use-debounce';
 import { useEventMutaton } from '@/hooks/use-event';
 import { useNonDeletedZones } from '@/hooks/use-zone';
 import { eventFormSchema, EventFormValues } from '@/lib/zod';
@@ -24,7 +23,7 @@ export const useEventForm = ({ eventEdit }: UseEventFormProps) => {
   const { nonDeletedZones } = useNonDeletedZones();
   const { createEvent, isEventPending, updateEvent, isEventUpdating } =
     useEventMutaton();
-  const isSubmitting = useDebounce(isEventPending || isEventUpdating, 300);
+  const isSubmitting = isEventPending || isEventUpdating;
 
   // Form initialization
   const form = useForm<EventFormValues>({

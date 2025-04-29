@@ -16,7 +16,6 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { PATH } from '@/enums/path';
 import { useAuthorMutation, useGetAuthorById } from '@/hooks/use-author';
-import useDebounce from '@/hooks/use-debounce';
 import { cn } from '@/lib/utils';
 import { authorFormSchema, AuthorFormValues } from '@/lib/zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -52,10 +51,7 @@ export function AuthorForm({ authorId }: Props) {
     authorId || ''
   );
 
-  const isSubmitting = useDebounce(
-    createAuthorPending || updateAuthorPending,
-    300
-  );
+  const isSubmitting = createAuthorPending || updateAuthorPending;
 
   const form = useForm<AuthorFormValues>({
     resolver: zodResolver(authorFormSchema),

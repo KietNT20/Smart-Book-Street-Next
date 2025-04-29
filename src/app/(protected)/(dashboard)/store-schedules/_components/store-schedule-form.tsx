@@ -20,7 +20,6 @@ import {
 } from '@/components/ui/select';
 import { STORAGE } from '@/constant/storage';
 import { DayOfWeek, DayOfWeekLabels } from '@/enums/day-of-week';
-import useDebounce from '@/hooks/use-debounce';
 import { useStoreScheduleMuatation } from '@/hooks/use-store-schedule';
 import { StoreSchedules } from '@/types/store-types';
 import { getLocalStorageItem } from '@/utils/token';
@@ -57,10 +56,7 @@ export default function StoreSchedulesForm({ storeSchedule }: Props) {
     updateStoreSchedule,
     updateStoreSchedulePeding,
   } = useStoreScheduleMuatation();
-  const isWorking = useDebounce(
-    createStoreSchedulePeding || updateStoreSchedulePeding,
-    300
-  );
+  const isWorking = createStoreSchedulePeding || updateStoreSchedulePeding;
 
   // Xử lý specialDate để tránh lỗi Invalid Date
   const getSpecialDateValue = () => {

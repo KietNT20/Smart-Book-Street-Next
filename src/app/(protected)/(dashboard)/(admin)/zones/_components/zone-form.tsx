@@ -15,7 +15,6 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { STORAGE } from '@/constant/storage';
 import { PATH } from '@/enums/path';
-import useDebounce from '@/hooks/use-debounce';
 import { useZoneMutation } from '@/hooks/use-zone';
 import { zoneFormSchema, ZoneFormSchema } from '@/lib/zod';
 import { Zone } from '@/types/zone-types';
@@ -41,7 +40,7 @@ const ZoneForm = ({ zoneToEdit }: Props) => {
   });
   const { createZone, isCreatingZone, updateZone, isUpdatingZone } =
     useZoneMutation();
-  const isWorking = useDebounce(isCreatingZone || isUpdatingZone, 300);
+  const isWorking = isCreatingZone || isUpdatingZone;
 
   function onSubmit(values: ZoneFormSchema) {
     console.log(values);

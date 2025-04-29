@@ -2,7 +2,6 @@
 
 import { useGetBookByID } from '@/hooks/use-book-search';
 import { useBookMutations } from '@/hooks/use-books';
-import useDebounce from '@/hooks/use-debounce';
 import { useRouter } from 'next/navigation';
 
 export const useBookDetail = ({ id }: { id: string }) => {
@@ -15,7 +14,7 @@ export const useBookDetail = ({ id }: { id: string }) => {
 
   const { deleteBook, deleteBookPending } = useBookMutations();
 
-  const deletedLoading = useDebounce(deleteBookPending, 300);
+  const deletedLoading = deleteBookPending;
 
   const book = bookDetailData?.result;
 

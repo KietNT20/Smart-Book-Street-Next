@@ -18,7 +18,6 @@ import {
 import { Input } from '@/components/ui/input';
 import { PATH } from '@/enums/path';
 import { useBookMutations } from '@/hooks/use-books';
-import useDebounce from '@/hooks/use-debounce';
 import { cn } from '@/lib/utils';
 import { BookFormValues, bookSchema } from '@/lib/zod';
 import { Book } from '@/types/book-types';
@@ -46,7 +45,7 @@ type Props = {
 const BookForm = ({ book, mode }: Props) => {
   const { createBook, createBookPending, updateBook, updateBookPending } =
     useBookMutations();
-  const isLoading = useDebounce(createBookPending || updateBookPending, 300);
+  const isLoading = createBookPending || updateBookPending;
   const router = useRouter();
 
   const form = useForm<BookFormValues>({

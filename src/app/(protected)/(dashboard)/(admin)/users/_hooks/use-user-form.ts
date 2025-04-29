@@ -1,6 +1,5 @@
 'use client';
 
-import useDebounce from '@/hooks/use-debounce';
 import { useUserMutation } from '@/hooks/use-user';
 import { userFormSchema, UserFormValues } from '@/lib/zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -10,7 +9,7 @@ import { useForm } from 'react-hook-form';
 export const useUserForm = () => {
   const [previewMainImage, setPreviewMainImage] = useState<string | null>(null);
   const { createUser, createUserPending } = useUserMutation();
-  const isWorking = useDebounce(createUserPending, 300);
+  const isWorking = createUserPending;
 
   const form = useForm<UserFormValues>({
     resolver: zodResolver(userFormSchema),

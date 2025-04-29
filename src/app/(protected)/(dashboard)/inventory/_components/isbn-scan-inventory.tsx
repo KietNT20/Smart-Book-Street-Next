@@ -10,7 +10,6 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { STORAGE } from '@/constant/storage';
-import useDebounce from '@/hooks/use-debounce';
 import { useOrderDetailMutation } from '@/hooks/use-order-detail';
 import { getLocalStorageItem } from '@/utils/token';
 import { BrowserMultiFormatReader } from '@zxing/library';
@@ -31,7 +30,7 @@ const ISBNScannerInventory = () => {
   const { createOrderDetail, createOrderDetailPending } =
     useOrderDetailMutation();
 
-  const isLoading = useDebounce(createOrderDetailPending, 300);
+  const isLoading = createOrderDetailPending;
 
   const startScanning = async () => {
     try {
