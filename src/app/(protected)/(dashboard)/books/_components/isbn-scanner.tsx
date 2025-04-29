@@ -1,5 +1,6 @@
 'use client';
 
+import { fetchBookByISBN } from '@/api/book';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -8,8 +9,6 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import { API_URL } from '@/constant/api-url';
-import { BASE_URL } from '@/constant/environment';
 import { Book } from '@/types/book-types';
 import { BrowserMultiFormatReader } from '@zxing/library';
 import { Camera, Keyboard, Loader2, Search, XCircle } from 'lucide-react';
@@ -19,27 +18,6 @@ import { toast } from 'sonner';
 interface ISBNScannerProps {
   onBookFound: (book: Book) => void;
 }
-
-const fetchBookByISBN = async (isbn: string): Promise<{ result: Book }> => {
-  try {
-    const response = await fetch(
-      `${BASE_URL}/${API_URL.BOOKS.INDEX}/google/${isbn}`
-    );
-
-    if (!response.ok) {
-      if (response.status === 404) {
-        throw new Error('Không tìm thấy thông tin sách với mã ISBN này');
-      }
-      throw new Error('Có lỗi xảy ra khi tìm kiếm sách');
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Error fetching book data:', error);
-    throw error;
-  }
-};
 
 const ISBNScanner = ({ onBookFound }: ISBNScannerProps) => {
   const [isScanning, setIsScanning] = useState(false);
