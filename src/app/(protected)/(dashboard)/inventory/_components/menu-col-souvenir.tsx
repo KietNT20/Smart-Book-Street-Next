@@ -33,6 +33,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { MoreHorizontal, ShoppingCart, Trash } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
 type Props = {
@@ -80,7 +81,13 @@ const MenuColoumnSouvenir = ({ souvenir }: Props) => {
     formData.append('InventoryId', souvenir.inventoryId || '');
     formData.append('Quantity', values.quantity);
 
-    createOrderDetail(formData);
+    createOrderDetail(formData, {
+      onSuccess: () => {
+        toast.success(
+          `Thêm ${values.quantity} sản phẩm "${souvenir.souvenirName}" vào đơn hàng thành công`
+        );
+      },
+    });
     setOpen(false);
   };
 
