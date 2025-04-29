@@ -149,7 +149,11 @@ const BookForm = ({ book, mode }: Props) => {
           />
 
           {/* Nhà xuất bản */}
-          <PublisherCombobox name='publisherId' control={form.control} />
+          <PublisherCombobox
+            name='publisherId'
+            control={form.control}
+            description={book?.publisher?.publisherName}
+          />
 
           {/* Giá */}
           <FormField
@@ -179,10 +183,9 @@ const BookForm = ({ book, mode }: Props) => {
           <AuthorCombobox
             name='authorIds'
             control={form.control}
-            disabled={
-              isLoading ||
-              (mode === 'create' && book?.bookAuthors !== undefined)
-            }
+            description={book?.bookAuthors
+              .map((item) => item.authorName)
+              .join(', ')}
           />
 
           {/* Ngôn ngữ */}
@@ -213,10 +216,9 @@ const BookForm = ({ book, mode }: Props) => {
           <CategoryCombobox
             name='categoryIds'
             control={form.control}
-            disabled={
-              isLoading ||
-              (mode === 'create' && book?.bookCategories !== undefined)
-            }
+            description={book?.bookCategories
+              .map((item) => item.categoryName)
+              .join(', ')}
           />
 
           {/* Kích thước */}

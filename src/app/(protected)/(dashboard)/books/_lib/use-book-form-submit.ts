@@ -23,7 +23,7 @@ export function useBookFormSubmit(onSubmit: (formData: FormData) => void) {
     setFiles((prev) => ({ ...prev, additionalFiles: newFiles }));
   };
 
-  const handleSubmit = async (values: BookFormValues) => {
+  const handleSubmit = (values: BookFormValues) => {
     try {
       const formData = new FormData();
 
@@ -40,7 +40,9 @@ export function useBookFormSubmit(onSubmit: (formData: FormData) => void) {
       formData.append('Description', sanitizedDescription);
       formData.append('Size', values.size || '');
       formData.append('Status', values.status || '');
-      formData.append('PublisherId', values.publisherId || '');
+      if (values.publisherId) {
+        formData.append('PublisherId', values.publisherId);
+      }
 
       if (values.authorIds && values.authorIds.length > 0) {
         values.authorIds.forEach((id) => formData.append('AuthorIds', id));

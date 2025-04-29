@@ -8,7 +8,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import useDebounce from '@/hooks/use-debounce';
-import { ChevronDown, ChevronUp, X } from 'lucide-react';
+import { ChevronDown, ChevronUp, Filter, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { SearchFilters } from '../page';
 
@@ -57,7 +57,7 @@ const PublisherFilter = ({
             )}
             <CollapsibleTrigger asChild>
               <Button variant='outline' size='sm'>
-                Bộ lọc{' '}
+                <Filter /> Bộ lọc{' '}
                 {isOpen ? (
                   <ChevronUp className='ml-2 h-4 w-4' />
                 ) : (

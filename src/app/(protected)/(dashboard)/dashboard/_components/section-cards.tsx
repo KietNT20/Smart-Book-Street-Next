@@ -17,7 +17,7 @@ import { useEventStaticsInMonth } from '@/hooks/use-event';
 import { useGetAverageMinute, useGetPersonTotal } from '@/hooks/use-person';
 import { useStoreStaticsTotal } from '@/hooks/use-store';
 import { Trend } from '@/types/person-types';
-import { BookOpen, Clock, UserCheck, Users } from 'lucide-react';
+import { BookOpen, Clock, Loader, UserCheck, Users } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 const SectionCards = () => {
@@ -157,7 +157,11 @@ const SectionCards = () => {
             Tổng Số Người Qua Camera
           </CardDescription>
           <CardTitle className='flex items-center gap-4 text-2xl font-semibold tabular-nums text-white md:text-3xl'>
-            {isLoading ? 'Đang tải' : formattedTotal}
+            {isLoading ? (
+              <Loader className='size-6 animate-spin md:size-8' />
+            ) : (
+              formattedTotal
+            )}
             <TrendIcon trend={changeDirectionPerson} />
           </CardTitle>
           <div className='absolute right-4 top-4'>
@@ -183,7 +187,11 @@ const SectionCards = () => {
             Tổng Số Sự Kiện Tổ Chức
           </CardDescription>
           <CardTitle className='flex items-center gap-4 text-2xl font-semibold tabular-nums text-white md:text-3xl'>
-            {eventStaticsLoading ? 'Đang tải...' : totalEvents}
+            {eventStaticsLoading ? (
+              <Loader className='size-6 animate-spin md:size-8' />
+            ) : (
+              totalEvents
+            )}
             <TrendIcon trend={eventChangeDirection} />
           </CardTitle>
           <div className='absolute right-4 top-4'>
@@ -192,9 +200,11 @@ const SectionCards = () => {
         </CardHeader>
         <CardFooter className='flex-col items-start gap-1 text-sm'>
           <div className='line-clamp-1 flex gap-2 font-medium text-purple-100'>
-            {eventStaticsLoading
-              ? 'Đang tải thông tin...'
-              : getEventChangeMessage(eventChangeDirection, eventChange)}
+            {eventStaticsLoading ? (
+              <Loader className='size-6 animate-spin md:size-8' />
+            ) : (
+              getEventChangeMessage(eventChangeDirection, eventChange)
+            )}
           </div>
         </CardFooter>
       </Card>
@@ -205,7 +215,11 @@ const SectionCards = () => {
             Tổng Số Cửa Hàng
           </CardDescription>
           <CardTitle className='flex items-center gap-4 text-2xl font-semibold tabular-nums text-white md:text-3xl'>
-            {isLoading ? 'Đang tải...' : totalStores}
+            {isLoading ? (
+              <Loader className='size-6 animate-spin md:size-8' />
+            ) : (
+              totalStores
+            )}
             <TrendIcon trend={changeDirectionStore} />
           </CardTitle>
           <div className='absolute right-4 top-4'>
@@ -230,9 +244,11 @@ const SectionCards = () => {
             Thời Gian Tham Quan Trung Bình
           </CardDescription>
           <CardTitle className='text-2xl font-semibold tabular-nums text-white md:text-3xl'>
-            {isLoadingAverageMinute
-              ? 'Đang tải...'
-              : averageMinute?.averageTime || '45 phút'}
+            {isLoadingAverageMinute ? (
+              <Loader className='size-6 animate-spin md:size-8' />
+            ) : (
+              averageMinute?.averageTime || '45 phút'
+            )}
           </CardTitle>
           <div className='absolute right-4 top-4'>
             <Clock className='text-orange-100' />
@@ -272,18 +288,18 @@ const SectionCards = () => {
                 </div>
                 <div className='mt-1 flex justify-between text-xs'>
                   <span className='text-card'>
-                    {averageMinute.chartData[0].value} người
+                    {averageMinute.chartData?.[0]?.value} người
                   </span>
                   <span className='text-card'>
-                    {averageMinute.chartData[1].value} người
+                    {averageMinute.chartData?.[1]?.value} người
                   </span>
                 </div>
               </div>
             </>
           )}
           {isLoadingAverageMinute && (
-            <div className='line-clamp-1 flex gap-2 font-medium text-card'>
-              Đang tải thông tin...
+            <div className='line-clamp-1 flex gap-2 text-card'>
+              <Loader className='size-6 animate-spin md:size-8' />
             </div>
           )}
         </CardFooter>
