@@ -8,11 +8,11 @@ export const useInventoryByStoreId = (storeId: string) => {
   const { data, isLoading, error } = useQuery({
     queryKey: ['inventories', storeId],
     queryFn: () => inventoryService.getByStoreId(storeId),
-    enabled: !!storeId,
   });
 
   return {
     inventoriesByStoreId: data?.results || [],
+    totalItems: data?.totalRecords || 0,
     isLoading,
     error,
   };
@@ -22,7 +22,6 @@ export const useInventoryBooksByStoreId = (storeId: string) => {
   const { data, isLoading, error } = useQuery({
     queryKey: ['inventories-book', storeId],
     queryFn: () => inventoryService.getBookNextByStoreId(storeId),
-    enabled: !!storeId,
   });
 
   return {
@@ -36,7 +35,6 @@ export const useInventorySouvenirsByStoreId = (storeId: string) => {
   const { data, isLoading, error } = useQuery({
     queryKey: ['inventories-souvenir', storeId],
     queryFn: () => inventoryService.getSouvenirNextByStoreId(storeId),
-    enabled: !!storeId,
   });
 
   return {

@@ -10,7 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import useDebounce from '@/hooks/use-debounce';
 import { DatePicker } from 'antd';
-import { ChevronDown, ChevronUp, X } from 'lucide-react';
+import { ChevronDown, ChevronUp, Filter, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { SearchFilters } from '../page';
 
@@ -63,7 +63,7 @@ const EventFilter = ({
             )}
             <CollapsibleTrigger asChild>
               <Button variant='outline' size='sm'>
-                Bộ lọc{' '}
+                <Filter /> Bộ lọc{' '}
                 {isOpen ? (
                   <ChevronUp className='ml-2 h-4 w-4' />
                 ) : (

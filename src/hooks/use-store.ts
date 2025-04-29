@@ -197,3 +197,16 @@ export const useStoreStaticsTotal = () => {
     error,
   };
 };
+
+export const useStoreStaticsProduct = (storeId: string) => {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['stores-statics-products', storeId],
+    queryFn: () => storeService.getStatisticProducts(storeId),
+  });
+
+  return {
+    staticsStore: data || null,
+    isLoading,
+    error,
+  };
+};

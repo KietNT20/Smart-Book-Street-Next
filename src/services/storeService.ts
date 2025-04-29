@@ -56,4 +56,16 @@ export const storeService = {
     const res = await axiosInstance.get(`${API_URL.STORES.INDEX}/stats/total`);
     return res.data;
   },
+  getStatisticProducts: async (
+    storeId: string
+  ): Promise<{
+    bookCount: number;
+    souvenirCount: number;
+    totalCount: number;
+  }> => {
+    const res = await axiosInstance.get(
+      `${API_URL.STORES.INDEX}/${storeId}/stats/products`
+    );
+    return res.data;
+  },
 };

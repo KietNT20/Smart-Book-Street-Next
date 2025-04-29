@@ -20,12 +20,10 @@ const BookCreationPage = () => {
 
   return (
     <div className='space-y-6'>
-      {!scannedBook && (
-        <div className='mb-6'>
-          <h2 className='mb-2 text-lg font-medium'>Quét mã ISBN</h2>
-          {enhancedScanner()}
-        </div>
-      )}
+      <div className='mb-6'>
+        <h2 className='mb-2 text-lg font-medium'>Quét mã ISBN</h2>
+        {enhancedScanner()}
+      </div>
 
       <BookForm book={scannedBook || undefined} mode='create' />
     </div>

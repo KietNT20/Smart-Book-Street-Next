@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/command';
 import {
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -33,11 +34,13 @@ import { Control, FieldValues, Path } from 'react-hook-form';
 type Props<T extends FieldValues> = {
   name: Path<T>;
   control: Control<T>;
+  description?: string;
 };
 
 const PublisherCombobox = <T extends FieldValues>({
   name,
   control,
+  description,
 }: Props<T>) => {
   const [searchInputs, setSearchInputs] = useState({
     publisherName: '',
@@ -101,9 +104,11 @@ const PublisherCombobox = <T extends FieldValues>({
                     <span className='flex items-center gap-2'>
                       <span>{publisherInfo.publisherName}</span>
                       <span className='text-sm text-muted-foreground'>
-                        ({publisherInfo.email} - {publisherInfo.phone})
+                        ({publisherInfo.email})
                       </span>
                     </span>
+                  ) : field.value?.length ? (
+                    `NXB được chọn`
                   ) : (
                     'Chọn nhà xuất bản...'
                   )}
@@ -193,6 +198,13 @@ const PublisherCombobox = <T extends FieldValues>({
               </Command>
             </PopoverContent>
           </Popover>
+          <FormDescription>
+            {publisherInfo
+              ? publisherInfo.publisherName
+              : description
+                ? description
+                : 'Chọn nhà xuất bản'}
+          </FormDescription>
           <FormMessage />
         </FormItem>
       )}

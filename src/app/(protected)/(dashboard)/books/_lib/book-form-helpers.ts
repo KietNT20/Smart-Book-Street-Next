@@ -13,7 +13,6 @@ export function detectDateFormat(dateString: string): string {
 }
 
 export function prepareInitialBookData(book?: Book) {
-  console.log('book', book);
   if (!book) {
     return {
       isbn: '',
@@ -49,10 +48,13 @@ export function prepareInitialBookData(book?: Book) {
     description: book.description || '',
     size: book.size || '',
     status: book.status || '',
-    publisherId: book.publisherId || '',
-    authorIds: book.bookAuthors?.map((author) => author.authorId) || [],
-    categoryIds:
-      book.bookCategories?.map((category) => category.categoryId) || [],
+    publisherId: book.id ? book.publisher?.id : '',
+    authorIds: book.id
+      ? book.bookAuthors?.map((author) => author.authorId)
+      : [],
+    categoryIds: book.id
+      ? book.bookCategories?.map((category) => category.categoryId)
+      : [],
     mainImageFile: book.images?.[0]?.url || undefined,
     additionalImageFiles: [],
   };

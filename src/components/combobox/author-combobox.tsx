@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/command';
 import {
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -34,13 +35,15 @@ import SelectedAuthor from './selected-author';
 type Props<T extends FieldValues> = {
   name: Path<T>;
   control: Control<T>;
-  disabled?: boolean;
+  description?: string;
+  mode?: 'create' | 'update';
 };
 
 const AuthorCombobox = <T extends FieldValues>({
   name,
   control,
-  disabled = false,
+  description,
+  mode = 'create',
 }: Props<T>) => {
   const [input, setInput] = useState('');
   const [searchResults, setSearchResults] = useState<Author[]>([]);
@@ -91,19 +94,15 @@ const AuthorCombobox = <T extends FieldValues>({
                     'w-full justify-between',
                     !field.value && 'text-muted-foreground'
                   )}
-                  disabled={disabled}
                 >
-                  {field.value?.length
+                  {field.value?.length && mode === 'update'
                     ? `${field.value?.length} tác giả được chọn`
                     : 'Chọn tác giả...'}
                   <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
                 </Button>
               </FormControl>
             </PopoverTrigger>
-            <PopoverContent
-              align='start'
-              className='w-[200px] p-0 lg:w-[500px]'
-            >
+            <PopoverContent align='start' className='max-w-56 p-0 lg:max-w-lg'>
               <Command shouldFilter={false}>
                 <CommandInput
                   placeholder='Tìm tác giả...'
@@ -175,6 +174,13 @@ const AuthorCombobox = <T extends FieldValues>({
               </Command>
             </PopoverContent>
           </Popover>
+          <FormDescription>
+            {searchResults && searchResults.length > 0
+              ? searchResults.map((result) => result.authorName).join(', ')
+              : description
+                ? description
+                : 'Chọn tác giả'}
+          </FormDescription>
           <FormMessage />
         </FormItem>
       )}

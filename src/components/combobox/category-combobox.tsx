@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/command';
 import {
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -34,13 +35,13 @@ import SelectedCategory from './selected-category';
 type Props<T extends FieldValues> = {
   name: Path<T>;
   control: Control<T>;
-  disabled?: boolean;
+  description?: string;
 };
 
 const CategoryCombobox = <T extends FieldValues>({
   name,
   control,
-  disabled = false,
+  description,
 }: Props<T>) => {
   const [input, setInput] = useState('');
   const [results, setResults] = useState<Category[]>([]);
@@ -82,7 +83,6 @@ const CategoryCombobox = <T extends FieldValues>({
                   variant='outline'
                   role='combobox'
                   className='w-full justify-between'
-                  disabled={disabled}
                 >
                   {field.value?.length
                     ? `${field.value?.length} danh mục được chọn`
@@ -91,10 +91,7 @@ const CategoryCombobox = <T extends FieldValues>({
                 </Button>
               </FormControl>
             </PopoverTrigger>
-            <PopoverContent
-              align='start'
-              className='w-[200px] p-0 lg:w-[500px]'
-            >
+            <PopoverContent align='start' className='max-w-56 p-0 lg:max-w-lg'>
               <Command shouldFilter={false}>
                 <CommandInput
                   placeholder='Tìm danh mục...'
@@ -166,6 +163,13 @@ const CategoryCombobox = <T extends FieldValues>({
               </Command>
             </PopoverContent>
           </Popover>
+          <FormDescription>
+            {results && results.length > 0
+              ? results.map((result) => result.categoryName).join(', ')
+              : description
+                ? description
+                : 'Chọn danh mục cho sách'}
+          </FormDescription>
           <FormMessage />
         </FormItem>
       )}

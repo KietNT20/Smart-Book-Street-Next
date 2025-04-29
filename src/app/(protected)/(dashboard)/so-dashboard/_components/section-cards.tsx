@@ -1,100 +1,107 @@
-import { TrendingDownIcon, TrendingUpIcon } from 'lucide-react';
+'use client';
 
-import { Badge } from '@/components/ui/badge';
+import { Loader } from 'lucide-react';
+
 import {
   Card,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { useSectionCardSoDashboard } from '../_hooks/use-section-card';
 
 export function SectionCards() {
+  const { staticsStore, inventoriesByStoreLoading } =
+    useSectionCardSoDashboard();
   return (
     <div className='shadow-xs grid grid-cols-1 gap-4 bg-card px-4 md:grid-cols-2 lg:grid-cols-4 lg:px-6'>
       <Card className='@container/card'>
         <CardHeader className='relative'>
-          <CardDescription>Total Revenue</CardDescription>
-          <CardTitle className='@[250px]/card:text-3xl text-2xl font-semibold tabular-nums'>
-            $1,250.00
+          <CardDescription>Tổng Sản Phẩm</CardDescription>
+          <CardTitle className='@[250px]/card:text-4xl text-3xl font-semibold tabular-nums'>
+            {inventoriesByStoreLoading ? (
+              <Loader className='size-4 animate-spin' />
+            ) : (
+              staticsStore?.totalCount
+            )}
           </CardTitle>
-          <div className='absolute right-4 top-4'>
+          {/* <div className='absolute right-4 top-4'>
             <Badge variant='outline' className='flex gap-1 rounded-lg text-xs'>
               <TrendingUpIcon className='size-3' />
               +12.5%
             </Badge>
-          </div>
+          </div> */}
         </CardHeader>
-        <CardFooter className='flex-col items-start gap-1 text-sm'>
+        {/* <CardFooter className='flex-col items-start gap-1 text-sm'>
           <div className='line-clamp-1 flex gap-2 font-medium'>
             Trending up this month <TrendingUpIcon className='size-4' />
           </div>
           <div className='text-muted-foreground'>
             Visitors for the last 6 months
           </div>
-        </CardFooter>
+        </CardFooter> */}
       </Card>
       <Card className='@container/card'>
         <CardHeader className='relative'>
-          <CardDescription>New Customers</CardDescription>
-          <CardTitle className='@[250px]/card:text-3xl text-2xl font-semibold tabular-nums'>
+          <CardDescription>Số Đơn Hàng</CardDescription>
+          <CardTitle className='@[250px]/card:text-4xl text-3xl font-semibold tabular-nums'>
             1,234
           </CardTitle>
-          <div className='absolute right-4 top-4'>
+          {/* <div className='absolute right-4 top-4'>
             <Badge variant='outline' className='flex gap-1 rounded-lg text-xs'>
               <TrendingDownIcon className='size-3' />
               -20%
             </Badge>
-          </div>
+          </div> */}
         </CardHeader>
-        <CardFooter className='flex-col items-start gap-1 text-sm'>
+        {/* <CardFooter className='flex-col items-start gap-1 text-sm'>
           <div className='line-clamp-1 flex gap-2 font-medium'>
             Down 20% this period <TrendingDownIcon className='size-4' />
           </div>
           <div className='text-muted-foreground'>
             Acquisition needs attention
           </div>
-        </CardFooter>
+        </CardFooter> */}
       </Card>
       <Card className='@container/card'>
         <CardHeader className='relative'>
-          <CardDescription>Active Accounts</CardDescription>
-          <CardTitle className='@[250px]/card:text-3xl text-2xl font-semibold tabular-nums'>
+          <CardDescription>Doanh Thu</CardDescription>
+          <CardTitle className='@[250px]/card:text-4xl text-3xl font-semibold tabular-nums'>
             45,678
           </CardTitle>
-          <div className='absolute right-4 top-4'>
+          {/* <div className='absolute right-4 top-4'>
             <Badge variant='outline' className='flex gap-1 rounded-lg text-xs'>
               <TrendingUpIcon className='size-3' />
               +12.5%
             </Badge>
-          </div>
+          </div> */}
         </CardHeader>
-        <CardFooter className='flex-col items-start gap-1 text-sm'>
+        {/* <CardFooter className='flex-col items-start gap-1 text-sm'>
           <div className='line-clamp-1 flex gap-2 font-medium'>
             Strong user retention <TrendingUpIcon className='size-4' />
           </div>
           <div className='text-muted-foreground'>Engagement exceed targets</div>
-        </CardFooter>
+        </CardFooter> */}
       </Card>
       <Card className='@container/card'>
         <CardHeader className='relative'>
-          <CardDescription>Growth Rate</CardDescription>
-          <CardTitle className='@[250px]/card:text-3xl text-2xl font-semibold tabular-nums'>
+          <CardDescription>Thời Hạn Hợp Đồng</CardDescription>
+          <CardTitle className='@[250px]/card:text-4xl text-3xl font-semibold tabular-nums'>
             4.5%
           </CardTitle>
-          <div className='absolute right-4 top-4'>
+          {/* <div className='absolute right-4 top-4'>
             <Badge variant='outline' className='flex gap-1 rounded-lg text-xs'>
               <TrendingUpIcon className='size-3' />
               +4.5%
             </Badge>
-          </div>
+          </div> */}
         </CardHeader>
-        <CardFooter className='flex-col items-start gap-1 text-sm'>
+        {/* <CardFooter className='flex-col items-start gap-1 text-sm'>
           <div className='line-clamp-1 flex gap-2 font-medium'>
             Steady performance <TrendingUpIcon className='size-4' />
           </div>
           <div className='text-muted-foreground'>Meets growth projections</div>
-        </CardFooter>
+        </CardFooter> */}
       </Card>
     </div>
   );
