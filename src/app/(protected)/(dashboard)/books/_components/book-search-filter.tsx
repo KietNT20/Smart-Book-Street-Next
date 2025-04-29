@@ -1,5 +1,11 @@
 'use client';
 
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -174,9 +180,9 @@ const BookSearchFilter = ({
           </div>
 
           <CollapsibleContent>
-            <div className='grid grid-cols-1 gap-4 pt-2 md:grid-cols-2 lg:grid-cols-3'>
+            <div className='grid grid-cols-1 gap-4 pt-2 md:grid-cols-12'>
               {/* Tên sách */}
-              <div className='space-y-2'>
+              <div className='col-span-1 space-y-2 md:col-span-4'>
                 <Label htmlFor='title'>Tên sách</Label>
                 <div className='relative'>
                   <Input
@@ -199,7 +205,7 @@ const BookSearchFilter = ({
               </div>
 
               {/* ISBN */}
-              <div className='space-y-2'>
+              <div className='col-span-1 space-y-2 md:col-span-4'>
                 <Label htmlFor='isbn'>ISBN</Label>
                 <div className='relative'>
                   <Input
@@ -222,7 +228,7 @@ const BookSearchFilter = ({
               </div>
 
               {/* Khoảng giá */}
-              <div className='space-y-2'>
+              <div className='col-span-1 space-y-2 md:col-span-4'>
                 <Label htmlFor='priceRange'>Khoảng giá</Label>
                 <div className='relative'>
                   <Select
@@ -258,114 +264,103 @@ const BookSearchFilter = ({
                 </div>
               </div>
 
-              {/* Ngôn ngữ */}
-              <div className='space-y-2'>
-                <Label htmlFor='languages'>Ngôn ngữ</Label>
-                <div className='relative'>
-                  <Select value='languages' onValueChange={() => {}}>
-                    <SelectTrigger id='languages'>
-                      <SelectValue placeholder={getSelectedLanguagesLabel()} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <ScrollArea className='h-60'>
-                        <div className='space-y-2 p-2'>
-                          {Object.values(Language).map((lang) => (
+              {/* Ngôn ngữ - Accordion Checkbox */}
+              <Accordion
+                type='single'
+                collapsible
+                className='col-span-1 w-full md:col-span-6'
+              >
+                <AccordionItem value='languages'>
+                  <AccordionTrigger>
+                    <div className='flex w-full justify-between'>
+                      <span>Ngôn ngữ</span>
+                      <span className='pr-4 text-sm text-muted-foreground'>
+                        {getSelectedLanguagesLabel()}
+                      </span>
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <ScrollArea className='h-60 pr-4'>
+                      <div className='space-y-2'>
+                        {Object.values(Language).map((lang) => (
+                          <div
+                            key={lang}
+                            className='flex items-center space-x-2'
+                          >
+                            <Checkbox
+                              id={`lang-${lang}`}
+                              checked={(filters.languagesList || []).includes(
+                                lang
+                              )}
+                              onCheckedChange={() => handleLanguageToggle(lang)}
+                            />
+                            <Label
+                              htmlFor={`lang-${lang}`}
+                              className='flex-grow cursor-pointer'
+                            >
+                              {VietnameseLanguageLabels[lang]}
+                            </Label>
+                            {(filters.languagesList || []).includes(lang) && (
+                              <Check className='h-4 w-4 text-primary' />
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </ScrollArea>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+
+              {/* Thể loại - Accordion Checkbox */}
+              <Accordion
+                type='single'
+                collapsible
+                className='col-span-1 w-full md:col-span-6'
+              >
+                <AccordionItem value='categories'>
+                  <AccordionTrigger>
+                    <div className='flex w-full justify-between'>
+                      <span>Thể loại</span>
+                      <span className='pr-4 text-sm text-muted-foreground'>
+                        {getSelectedCategoriesLabel()}
+                      </span>
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <ScrollArea className='h-60 pr-4'>
+                      <div className='space-y-2'>
+                        {!isCategoriesLoading &&
+                          categoriesData.map((category) => (
                             <div
-                              key={lang}
+                              key={category.id}
                               className='flex items-center space-x-2'
                             >
                               <Checkbox
-                                id={`lang-${lang}`}
-                                checked={(filters.languagesList || []).includes(
-                                  lang
+                                id={`cat-${category.id}`}
+                                checked={(filters.categoryIds || []).includes(
+                                  category.id
                                 )}
                                 onCheckedChange={() =>
-                                  handleLanguageToggle(lang)
+                                  handleCategoryToggle(category.id)
                                 }
                               />
                               <Label
-                                htmlFor={`lang-${lang}`}
+                                htmlFor={`cat-${category.id}`}
                                 className='flex-grow cursor-pointer'
+                                title={category.description}
                               >
-                                {VietnameseLanguageLabels[lang]}
+                                {category.categoryName}
                               </Label>
-                              {(filters.languagesList || []).includes(lang) && (
-                                <Check className='h-4 w-4 text-primary' />
-                              )}
+                              {(filters.categoryIds || []).includes(
+                                category.id
+                              ) && <Check className='h-4 w-4 text-primary' />}
                             </div>
                           ))}
-                        </div>
-                      </ScrollArea>
-                    </SelectContent>
-                  </Select>
-                  {filters.languagesList &&
-                    filters.languagesList.length > 0 && (
-                      <Button
-                        variant='ghost'
-                        size='icon'
-                        className='absolute right-0 top-0 h-full'
-                        onClick={() => clearField('languagesList')}
-                      >
-                        <X className='h-4 w-4' />
-                      </Button>
-                    )}
-                </div>
-              </div>
-
-              {/* Thể loại */}
-              <div className='space-y-2'>
-                <Label htmlFor='categories'>Thể loại</Label>
-                <div className='relative'>
-                  <Select value='categories' onValueChange={() => {}}>
-                    <SelectTrigger id='categories'>
-                      <SelectValue placeholder={getSelectedCategoriesLabel()} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <ScrollArea className='h-60'>
-                        <div className='space-y-2 p-2'>
-                          {!isCategoriesLoading &&
-                            categoriesData.map((category) => (
-                              <div
-                                key={category.id}
-                                className='flex items-center space-x-2'
-                              >
-                                <Checkbox
-                                  id={`cat-${category.id}`}
-                                  checked={(filters.categoryIds || []).includes(
-                                    category.id
-                                  )}
-                                  onCheckedChange={() =>
-                                    handleCategoryToggle(category.id)
-                                  }
-                                />
-                                <Label
-                                  htmlFor={`cat-${category.id}`}
-                                  className='flex-grow cursor-pointer'
-                                  title={category.description}
-                                >
-                                  {category.categoryName}
-                                </Label>
-                                {(filters.categoryIds || []).includes(
-                                  category.id
-                                ) && <Check className='h-4 w-4 text-primary' />}
-                              </div>
-                            ))}
-                        </div>
-                      </ScrollArea>
-                    </SelectContent>
-                  </Select>
-                  {filters.categoryIds && filters.categoryIds.length > 0 && (
-                    <Button
-                      variant='ghost'
-                      size='icon'
-                      className='absolute right-0 top-0 h-full'
-                      onClick={() => clearField('categoryIds')}
-                    >
-                      <X className='h-4 w-4' />
-                    </Button>
-                  )}
-                </div>
-              </div>
+                      </div>
+                    </ScrollArea>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
             </div>
           </CollapsibleContent>
         </Collapsible>
