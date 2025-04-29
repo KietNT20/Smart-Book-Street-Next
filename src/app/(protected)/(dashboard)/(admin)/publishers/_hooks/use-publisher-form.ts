@@ -28,6 +28,7 @@ export const usePublisherForm = ({ publisher }: Props = {}) => {
     string[]
   >([]);
   const [userEmail, setUserEmail] = useState('');
+  const [shouldCheckEmail, setShouldCheckEmail] = useState(false);
 
   const {
     createPublisher,
@@ -36,8 +37,10 @@ export const usePublisherForm = ({ publisher }: Props = {}) => {
     updatePublisherPending,
   } = usePublisherMutation();
 
-  const { managerId, managerLoading, managerError } =
-    useManagerEmail(userEmail);
+  // Only call useManagerEmail when we have an email AND shouldCheckEmail is true
+  const { managerId, managerLoading, managerError } = useManagerEmail(
+    shouldCheckEmail ? userEmail : ''
+  );
 
   const isWorking =
     createPublisherPending || updatePublisherPending || managerLoading;
@@ -65,6 +68,20 @@ export const usePublisherForm = ({ publisher }: Props = {}) => {
     },
   });
 
+  // Only update managerId in the form when it changes AND we've requested it
+  useEffect(() => {
+    if (managerId && shouldCheckEmail) {
+      form.setValue('managerId', managerId);
+    }
+  }, [managerId, form, shouldCheckEmail]);
+
+  // Function to validate manager email - call this explicitly when needed
+  const validateManagerEmail = () => {
+    if (userEmail.trim()) {
+      setShouldCheckEmail(true);
+    }
+  };
+
   const removeAdditionalImage = (index: number) => {
     const currentFiles = form.getValues('additionalImageFiles');
     const updatedFiles = [...currentFiles];
@@ -75,12 +92,6 @@ export const usePublisherForm = ({ publisher }: Props = {}) => {
     updatedPreviews.splice(index, 1);
     setPreviewAdditionalFiles(updatedPreviews);
   };
-
-  useEffect(() => {
-    if (managerId) {
-      form.setValue('managerId', managerId);
-    }
-  }, [managerId, form]);
 
   function _onSubmit(values: PublisherFormValues) {
     const formData = new FormData();
@@ -137,7 +148,6 @@ export const usePublisherForm = ({ publisher }: Props = {}) => {
   const handleMainFileChange = (file: File | null) => {
     setFiles((prev) => ({ ...prev, mainFile: file }));
 
-    // Tạo URL để xem trước ảnh
     if (file) {
       const fileUrl = URL.createObjectURL(file);
       setPreviewMainImage(fileUrl);
@@ -149,12 +159,10 @@ export const usePublisherForm = ({ publisher }: Props = {}) => {
   const handleAdditionalFilesChange = (newFiles: File[]) => {
     setFiles((prev) => ({ ...prev, additionalFiles: newFiles }));
 
-    // Tạo URL để xem trước các ảnh bổ sung
     const fileUrls = newFiles.map((file) => URL.createObjectURL(file));
     setPreviewAdditionalFiles(fileUrls);
   };
 
-  // Hàm xóa ảnh chính
   const removeMainImage = () => {
     setPreviewMainImage(null);
     form.setValue('mainImageFile', undefined);
@@ -172,6 +180,7 @@ export const usePublisherForm = ({ publisher }: Props = {}) => {
     removeMainImage,
     removeAdditionalImage,
     setUserEmail,
+    validateManagerEmail,
     files,
     userEmail,
     managerId,
