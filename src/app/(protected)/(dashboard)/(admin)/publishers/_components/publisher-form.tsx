@@ -91,7 +91,7 @@ const PublisherForm = ({ publisher }: Props) => {
               )}
             />
             <div>
-              <FormLabel>Email User</FormLabel>
+              <FormLabel>Email người phụ trách</FormLabel>
               <FormControl>
                 <Input
                   placeholder='Nhập email của người phụ trách'

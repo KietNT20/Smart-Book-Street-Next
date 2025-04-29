@@ -7,6 +7,7 @@ import { Publisher } from '@/types/publisher-types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 type FileState = {
   mainFile: File | null;
@@ -35,9 +36,19 @@ export const usePublisherForm = ({ publisher }: Props = {}) => {
     updatePublisherPending,
   } = usePublisherMutation();
 
-  const { managerId } = useManagerEmail(userEmail);
+  const { managerId, managerLoading, managerError } =
+    useManagerEmail(userEmail);
 
-  const isWorking = createPublisherPending || updatePublisherPending;
+  const isWorking =
+    createPublisherPending || updatePublisherPending || managerLoading;
+
+  useEffect(() => {
+    if (managerError) {
+      toast.error(
+        'Email người phụ trách không có trong hệ thống hoặc nhập sai.'
+      );
+    }
+  }, [managerError]);
 
   const form = useForm<PublisherFormValues>({
     resolver: zodResolver(publisherFormSchema),
