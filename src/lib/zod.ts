@@ -318,18 +318,36 @@ export const publisherFormSchema = z.object({
 export type PublisherFormValues = z.infer<typeof publisherFormSchema>;
 
 // User Store form
-export const userStoreFormSchema = z.object({
-  storeId: z.string().min(1, { message: 'Vui lòng chọn cửa hàng' }),
-  contractNumber: z.string().min(1, { message: 'Số hợp đồng là bắt buộc' }),
-  startDate: z.string().date().nonempty({
-    message: 'Ngày bắt đầu là bắt buộc',
-  }),
-  endDate: z.string().date().nonempty({
-    message: 'Ngày kết thúc là bắt buộc',
-  }),
-  status: z.enum([StoreRent.ACTIVE, StoreRent.TERMINATED, StoreRent.EXPIRED]),
-  notes: z.string().optional(),
-});
+export const userStoreFormSchema = z
+  .object({
+    storeId: z.string().min(1, { message: 'Vui lòng chọn cửa hàng' }),
+    contractNumber: z.string().min(1, { message: 'Số hợp đồng là bắt buộc' }),
+    startDate: z
+      .string()
+      .refine((val) => dayjs(val, 'YYYY-MM-DD', true).isValid(), {
+        message: 'Ngày giờ bắt đầu không hợp lệ',
+      })
+      .nullable(),
+    endDate: z
+      .string()
+      .refine((val) => dayjs(val, 'YYYY-MM-DD', true).isValid(), {
+        message: 'Ngày giờ kết thúc không hợp lệ',
+      })
+      .nullable(),
+    status: z.enum([StoreRent.ACTIVE, StoreRent.TERMINATED, StoreRent.EXPIRED]),
+    notes: z.string().optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.startDate && data.endDate) {
+      if (!dayjs(data.endDate).isAfter(dayjs(data.startDate))) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Ngày kết thúc phải sau ngày bắt đầu',
+          path: ['endDate'],
+        });
+      }
+    }
+  });
 
 export type UserStoreFormValues = z.infer<typeof userStoreFormSchema>;
 

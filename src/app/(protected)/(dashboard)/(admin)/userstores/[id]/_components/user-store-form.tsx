@@ -57,8 +57,8 @@ const UserStoreForm = () => {
     const payload = {
       storeId: values.storeId,
       contractNumber: values.contractNumber,
-      startDate: values.startDate,
-      endDate: values.endDate,
+      startDate: dayjs(values.startDate).format('YYYY-MM-DD'),
+      endDate: dayjs(values.endDate).format('YYYY-MM-DD'),
       status: values.status,
       notes: values.notes,
       userId: userId,

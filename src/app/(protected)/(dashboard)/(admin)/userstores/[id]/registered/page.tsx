@@ -187,8 +187,7 @@ const UserStoreRegisteredPage = ({ params }: Props) => {
                 </div>
               </div>
             </CardContent>
-            <CardFooter className='justify-end gap-2'>
-              <Button variant='outline'>Chỉnh Sửa</Button>
+            <CardFooter className='justify-end'>
               <Button
                 variant='destructive'
                 onClick={() =>

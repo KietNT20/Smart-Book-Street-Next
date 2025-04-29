@@ -23,7 +23,7 @@ export const userStoreService = {
     return res.data;
   },
   deleteUserStore: async (userId: string, storeId: string) => {
-    const res = await axiosInstance.delete(
+    const res = await axiosInstance.patch(
       `${API_URL.USER_STORES.INDEX}/${userId}/${storeId}`
     );
     return res.data;
