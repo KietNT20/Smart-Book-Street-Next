@@ -52,11 +52,11 @@ export function useBookFormSubmit(onSubmit: (formData: FormData) => void) {
         values.categoryIds.forEach((id) => formData.append('CategoryIds', id));
       }
 
-      if (files.mainFile && typeof window !== 'undefined') {
+      if (files.mainFile instanceof File) {
         formData.set('MainImageFile', files.mainFile);
       }
 
-      if (files.additionalFiles && typeof window !== 'undefined') {
+      if (Array.isArray(files.additionalFiles)) {
         files.additionalFiles.forEach((file) => {
           formData.append('AdditionalImageFiles', file);
         });
