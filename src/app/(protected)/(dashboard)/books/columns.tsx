@@ -5,11 +5,8 @@ import { formateDateVi, formatPrice } from '@/lib/utils';
 import { Book } from '@/types/book-types';
 import { ColumnDef } from '@tanstack/react-table';
 import { ArrowUpDown, SortAsc, SortDesc } from 'lucide-react';
-import dynamic from 'next/dynamic';
-
-const BookMenuAction = dynamic(() => import('./_components/book-menu-action'), {
-  ssr: false,
-});
+import { Suspense } from 'react';
+import BookMenuAction from './_components/book-menu-action';
 
 export const columns: ColumnDef<Book>[] = [
   {
@@ -121,7 +118,11 @@ export const columns: ColumnDef<Book>[] = [
     header: 'Thao tác',
     cell: ({ row }) => {
       const book = row.original;
-      return <BookMenuAction book={book} />;
+      return (
+        <Suspense>
+          <BookMenuAction book={book} />
+        </Suspense>
+      );
     },
   },
 ];
