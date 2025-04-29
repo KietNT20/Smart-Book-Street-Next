@@ -79,13 +79,11 @@ export default function BooksPage() {
     });
 
     setIsSearching(hasActiveFilter);
-    setPageNumber(1); // Reset to first page when searching
   };
 
   const clearSearch = () => {
     setFilters({});
     setIsSearching(false);
-    setPageNumber(1); // Reset to first page when clearing search
   };
 
   return (
