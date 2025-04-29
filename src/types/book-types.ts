@@ -56,7 +56,6 @@ export type BookResponse = ApiResponse<Book & { id: string }>;
 export type BookSearchCriteria = {
   isbn?: string;
   title?: string;
-  price?: number;
   minPrice?: number;
   maxPrice?: number;
   languagesList?: string[];
@@ -80,7 +79,7 @@ export type BookSearchPagination = {
   pageSize: number;
   sortField?: string;
   sortOrder: Sort;
-  result?: Partial<BookSearchCriteria>;
+  result: Partial<BookSearchCriteria>;
 };
 
 export interface BookNextjs {

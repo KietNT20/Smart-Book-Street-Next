@@ -6,30 +6,30 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PATH } from '@/enums/path';
+import { useGetBookByID } from '@/hooks/use-book-search';
 import Link from 'next/link';
 import BookInfo from './_components/book-info';
 import ImageGalleryBook from './_components/image-gallery-book';
-import { useBookDetail } from './_lib/use-book-detail';
 
 export default function BooksDetailPage({
   params,
 }: {
   params: { id: string };
 }) {
-  const { bookDetailPending, bookDetailLoading, book } = useBookDetail({
-    id: params.id,
-  });
+  const { bookData: book, isLoading: bookDetailLoading } = useGetBookByID(
+    params.id as string
+  );
 
-  if (bookDetailPending || bookDetailLoading) {
+  if (bookDetailLoading) {
     return <LoadingSpinner />;
   }
 
   return (
     <div className='space-y-6'>
       <div className='flex items-center justify-between'>
-        <BackButton routeTo={PATH.BOOKS} />
+        <BackButton />
         <div className='flex gap-2'>
-          <Link href={`${PATH.BOOKS}/${params.id}/edit`}>
+          <Link href={`${PATH.BOOKS}/${params.id}/edit`} passHref>
             <Button>Sửa thông tin</Button>
           </Link>
         </div>
