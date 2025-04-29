@@ -35,6 +35,7 @@ const PublisherForm = ({ publisher }: Props) => {
     removeMainImage,
     removeAdditionalImage,
     setUserEmail,
+    validateManagerEmail, // Đã thêm hàm này từ hook đã sửa
     files,
     managerId,
     userEmail,
@@ -92,14 +93,23 @@ const PublisherForm = ({ publisher }: Props) => {
             />
             <div>
               <FormLabel>Email người phụ trách</FormLabel>
-              <FormControl>
+              <div className='flex gap-2'>
                 <Input
                   placeholder='Nhập email của người phụ trách'
                   disabled={isWorking}
                   value={userEmail}
                   onChange={(e) => setUserEmail(e.target.value)}
+                  className='flex-grow'
                 />
-              </FormControl>
+                <Button
+                  type='button'
+                  variant='outline'
+                  onClick={validateManagerEmail}
+                  disabled={isWorking || !userEmail.trim()}
+                >
+                  Xác thực
+                </Button>
+              </div>
               {managerId && (
                 <p className='mt-1 text-sm text-green-600'>
                   Đã tìm thấy tài khoản
@@ -268,7 +278,11 @@ const PublisherForm = ({ publisher }: Props) => {
                 routerReplace
                 pathUrl={PATH.PUBLISHERS}
               />
-              <Button type='submit' variant={'darker'} disabled={isWorking}>
+              <Button
+                type='submit'
+                variant={'darker'}
+                disabled={isWorking || (userEmail.trim() !== '' && !managerId)}
+              >
                 {isWorking
                   ? 'Đang xử lý...'
                   : publisher
