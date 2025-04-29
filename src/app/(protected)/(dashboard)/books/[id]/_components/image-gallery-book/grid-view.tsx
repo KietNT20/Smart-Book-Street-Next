@@ -1,3 +1,5 @@
+'use client';
+
 import { ImageType } from '@/types/image-types';
 import ImageCard from './image-card';
 

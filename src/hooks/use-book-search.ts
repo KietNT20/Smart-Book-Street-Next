@@ -72,17 +72,23 @@ export const useGetBooks = ({
   }
 
   return {
-    booksRes,
+    booksData: booksRes?.results || [],
     isLoading,
     isPending,
     error,
+    totalPage,
   };
 };
 
 export const useGetBookByID = (id: string) => {
-  return useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['books', id],
     queryFn: () => bookService.getByID(id),
     enabled: !!id,
   });
+
+  return {
+    bookData: data?.result,
+    isLoading,
+  };
 };

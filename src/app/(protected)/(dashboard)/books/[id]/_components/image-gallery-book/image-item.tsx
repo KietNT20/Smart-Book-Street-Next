@@ -1,3 +1,5 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
 import { ImageType } from '@/types/image-types';
 import { Trash2 } from 'lucide-react';

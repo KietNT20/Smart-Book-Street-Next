@@ -1,19 +1,19 @@
 'use client';
 
 import { Separator } from '@/components/ui/separator';
-import dynamic from 'next/dynamic';
+import { useGetBookByID } from '@/hooks/use-book-search';
+import BookForm from '../../_components/book-form';
 
-const BookFormEdit = dynamic(() => import('./_components/book-form-edit'), {
-  ssr: false,
-});
-
-export default function EditBookPage() {
+export default function EditBookPage({ params }: { params: { id: string } }) {
+  const { bookData } = useGetBookByID(params.id as string);
   return (
     <div className='container relative mx-auto overflow-hidden'>
       <div className='rounded-lg border-2 md:px-20 md:pb-7 md:pt-10'>
         <h3 className='text-2xl font-bold'>Cập nhật sách</h3>
         <Separator className='my-4' />
-        <BookFormEdit />
+        <div className='relative'>
+          {bookData && <BookForm book={bookData} mode='edit' />}
+        </div>
       </div>
     </div>
   );

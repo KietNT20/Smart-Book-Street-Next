@@ -1,6 +1,8 @@
+'use client';
+
 import { ScrollArea } from '@/components/ui/scroll-area';
-import ImageItem from './image-item';
 import { ImageType } from '@/types/image-types';
+import ImageItem from './image-item';
 
 type Props = {
   images: ImageType[];
