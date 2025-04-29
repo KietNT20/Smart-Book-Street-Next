@@ -229,7 +229,7 @@ export function OrderChartStore({
           <TrendingUp className='h-4 w-4' />
         </div>
         <div className='leading-none text-muted-foreground'>
-          Tổng Lợi Nhuận: ${data.totalProfit.toLocaleString()}
+          Tổng Doanh Thu: ${data.totalProfit.toLocaleString()}
         </div>
       </CardFooter>
     </Card>

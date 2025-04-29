@@ -7,6 +7,7 @@ export const useOrderStaticsDailyAdmin = (date: string) => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ['orderStaticsDailyAdmin', date],
     queryFn: () => orderService.getOrderStaticsDailyAdmin(date),
+    staleTime: 0,
   });
   return {
     orderStaticsDailyAdmin: data,
@@ -19,6 +20,7 @@ export const useOrderStaticsMonthlyAdmin = (month: number, year: number) => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ['orderStaticsMonthlyAdmin', month, year],
     queryFn: () => orderService.getOrderStaticsMonthlyAdmin(month, year),
+    staleTime: 0,
   });
   return {
     orderStaticsMonthlyAdmin: data,
@@ -31,6 +33,7 @@ export const useOrderStaticsYearAdmin = (year: number) => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ['orderStaticsYearAdmin', year],
     queryFn: () => orderService.getOrderStaticsYearlyAdmin(year),
+    staleTime: 0,
   });
   return {
     orderStaticsYearAdmin: data,
@@ -45,12 +48,14 @@ export const useOrderStaticsDailyStore = (date: string, storeId: string) => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ['orderStaticsDailyStore', date, storeId],
     queryFn: () => orderService.getOrderStaticsDailyStore(date, storeId),
+    staleTime: 0,
   });
 
   if (storeId) {
     queryClient.prefetchQuery({
       queryKey: ['orderStaticsDailyStore', date, storeId],
       queryFn: () => orderService.getOrderStaticsDailyStore(date, storeId),
+      staleTime: 0,
     });
   }
 
@@ -72,6 +77,7 @@ export const useOrderStaticsMonthlyStore = (
     queryKey: ['orderStaticsMonthlyStore', month, year, storeId],
     queryFn: () =>
       orderService.getOrderStaticsMonthlyStore(month, year, storeId),
+    staleTime: 0,
   });
 
   if (storeId) {
@@ -79,6 +85,7 @@ export const useOrderStaticsMonthlyStore = (
       queryKey: ['orderStaticsMonthlyStore', month, year, storeId],
       queryFn: () =>
         orderService.getOrderStaticsMonthlyStore(month, year, storeId),
+      staleTime: 0,
     });
   }
 
@@ -95,12 +102,14 @@ export const useOrderStaticsYearlyStore = (year: number, storeId: string) => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ['orderStaticsYearlyStore', year, storeId],
     queryFn: () => orderService.getOrderStaticsYearlyStore(year, storeId),
+    staleTime: 0,
   });
 
   if (storeId) {
     queryClient.prefetchQuery({
       queryKey: ['orderStaticsYearlyStore', year, storeId],
       queryFn: () => orderService.getOrderStaticsYearlyStore(year, storeId),
+      staleTime: 0,
     });
   }
 

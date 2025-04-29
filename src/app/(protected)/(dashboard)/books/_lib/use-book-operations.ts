@@ -1,3 +1,5 @@
+'use client';
+
 import { useGetBooks } from '@/hooks/use-book-search';
 import { BookSearchCriteria } from '@/types/book-types';
 
