@@ -2,7 +2,7 @@
 
 import BackButton from '@/components/back-btn/back-button';
 import { ConfirmModal } from '@/components/confirm-modal';
-import SpinLoading from '@/components/spin/spin-loading';
+import LoadingSpinner from '@/components/spin/loading-spinner';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -34,7 +34,7 @@ export default function BooksDetailPage({
   };
 
   if (bookDetailPending || bookDetailLoading) {
-    return <SpinLoading />;
+    return <LoadingSpinner />;
   }
 
   return (

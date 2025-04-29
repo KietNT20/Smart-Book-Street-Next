@@ -1,7 +1,7 @@
 'use client';
 
 import { AlertDestructive } from '@/components/alert/alert-destructive';
-import SpinLoading from '@/components/spin/spin-loading';
+import LoadingSpinner from '@/components/spin/loading-spinner';
 import { useGetEventsInMonth } from '@/hooks/use-event';
 import type { BadgeProps, CalendarProps } from 'antd';
 import { Badge, Calendar } from 'antd';
@@ -51,7 +51,7 @@ const EventCalendar = () => {
   if (eventsInMonthLoading)
     return (
       <div>
-        <SpinLoading />
+        <LoadingSpinner />
       </div>
     );
 

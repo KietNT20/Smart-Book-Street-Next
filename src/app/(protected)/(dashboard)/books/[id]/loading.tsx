@@ -1,6 +1,6 @@
 'use client';
 
-import SpinLoading from '@/components/spin/spin-loading';
+import LoadingSpinner from '@/components/spin/loading-spinner';
 import { Separator } from '@/components/ui/separator';
 
 export default function Loading() {
@@ -38,7 +38,7 @@ export default function Loading() {
         </div>
       </div>
       <div className='flex justify-center'>
-        <SpinLoading />
+        <LoadingSpinner />
       </div>
     </div>
   );
