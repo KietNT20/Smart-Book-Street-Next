@@ -102,6 +102,7 @@ export const useManagerEmail = (email: string) => {
   const { data, isLoading, error } = useQuery({
     queryKey: ['manager', email],
     queryFn: () => userService.getByEmail(email),
+    enabled: !!email,
   });
 
   return {
