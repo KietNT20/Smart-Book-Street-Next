@@ -23,7 +23,6 @@ import { Label } from '@/components/ui/label';
 import { STORAGE } from '@/constant/storage';
 import { PATH } from '@/enums/path';
 import { useBookMutations } from '@/hooks/use-books';
-import useDebounce from '@/hooks/use-debounce';
 import { useInventoryMutation } from '@/hooks/use-inventory';
 import { Book } from '@/types/book-types';
 import { getLocalStorageItem } from '@/utils/token';
@@ -44,7 +43,7 @@ const BookMenuAction = ({ book }: Props) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const { deleteBook, deleteBookPending } = useBookMutations();
-  const isSubmitting = useDebounce(deleteBookPending, 300);
+  const isSubmitting = deleteBookPending;
 
   const handleAddToStore = () => {
     if (!quantity || !/^\d+$/.test(quantity)) {

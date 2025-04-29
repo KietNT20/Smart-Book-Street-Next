@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ImageFallback } from '@/constant/storage';
 import { PATH } from '@/enums/path';
-import useDebounce from '@/hooks/use-debounce';
 import { usePublisherById } from '@/hooks/use-publisher';
 import { Image } from 'antd';
 import Link from 'next/link';
@@ -20,7 +19,7 @@ export default function PublisherDetailPage({
   const { publisher, isLoadingPublisher, errorPublisher } = usePublisherById(
     params.id
   );
-  const isLoading = useDebounce(isLoadingPublisher, 300);
+  const isLoading = isLoadingPublisher;
 
   if (errorPublisher || !publisher) {
     return (

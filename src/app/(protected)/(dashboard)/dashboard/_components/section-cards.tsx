@@ -12,7 +12,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import useDebounce from '@/hooks/use-debounce';
 import { useEventStaticsInMonth } from '@/hooks/use-event';
 import { useGetAverageMinute, useGetPersonTotal } from '@/hooks/use-person';
 import { useStoreStaticsTotal } from '@/hooks/use-store';
@@ -49,13 +48,11 @@ const SectionCards = () => {
         : Trend.STABLE;
   const eventChange = eventStaticsDataMonth?.change || 0;
 
-  const isLoading = useDebounce(
+  const isLoading =
     isLoadingTotalPerson ||
-      isLoadingAverageMinute ||
-      isLoadingStatics ||
-      eventStaticsLoading,
-    300
-  );
+    isLoadingAverageMinute ||
+    isLoadingStatics ||
+    eventStaticsLoading;
 
   const formatNumber = (num: number): string => {
     if (!num) return '';
@@ -137,8 +134,8 @@ const SectionCards = () => {
   const calculateGenderRatio = () => {
     if (!averageMinute?.chartData) return { male: 50, female: 50 };
 
-    const maleCount = averageMinute.chartData[0].value;
-    const femaleCount = averageMinute.chartData[1].value;
+    const maleCount = averageMinute?.chartData?.[0].value;
+    const femaleCount = averageMinute?.chartData?.[1].value;
     const total = maleCount + femaleCount;
 
     return {
@@ -170,13 +167,17 @@ const SectionCards = () => {
         </CardHeader>
         <CardFooter className='flex-col items-start gap-1 text-sm'>
           <div className='line-clamp-1 flex gap-2 font-medium text-card'>
-            <span>
-              {getChangeMessage(
-                changeDirectionPerson,
-                totalVisitors,
-                percentChangePerson
-              )}
-            </span>
+            {isLoading ? (
+              <Loader className='size-6 animate-spin md:size-8' />
+            ) : (
+              <span>
+                {getChangeMessage(
+                  changeDirectionPerson,
+                  totalVisitors,
+                  percentChangePerson
+                )}
+              </span>
+            )}
           </div>
         </CardFooter>
       </Card>

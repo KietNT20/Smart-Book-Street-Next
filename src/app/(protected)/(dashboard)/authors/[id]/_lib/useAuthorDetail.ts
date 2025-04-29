@@ -1,5 +1,4 @@
 import { useGetAuthorById } from '@/hooks/use-author';
-import useDebounce from '@/hooks/use-debounce';
 import { useRouter } from 'next/navigation';
 
 export const useAuthorDetail = ({ id }: { id: string }) => {
@@ -7,6 +6,6 @@ export const useAuthorDetail = ({ id }: { id: string }) => {
   const { data: authorData, isLoading: authorLoading } = useGetAuthorById(id);
   const author = authorData?.result;
 
-  const authorPending = useDebounce(authorLoading, 300);
+  const authorPending = authorLoading;
   return { router, author, authorPending };
 };

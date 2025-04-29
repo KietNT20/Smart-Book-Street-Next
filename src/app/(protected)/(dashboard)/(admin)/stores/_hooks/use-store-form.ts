@@ -1,7 +1,6 @@
 'use client';
 
 import { PATH } from '@/enums/path';
-import useDebounce from '@/hooks/use-debounce';
 import { useStoreMutation } from '@/hooks/use-store';
 import { storeFormSchema, StoreFormValues } from '@/lib/zod';
 import { StoreData } from '@/types/store-types';
@@ -26,7 +25,7 @@ export const useStoreForm = ({ storeToEdit }: UseStoreFormProps = {}) => {
   const { createStore, updateStore, isCreatingStore, isUpdatingStore } =
     useStoreMutation();
 
-  const isWorking = useDebounce(isCreatingStore || isUpdatingStore, 300);
+  const isWorking = isCreatingStore || isUpdatingStore;
 
   const form = useForm<StoreFormValues>({
     resolver: zodResolver(storeFormSchema),

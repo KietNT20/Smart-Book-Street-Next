@@ -1,6 +1,5 @@
 'use client';
 
-import useDebounce from '@/hooks/use-debounce';
 import { useSouvenirMutation } from '@/hooks/use-souvenir';
 import { souvenirFormSchema, SouvenirFormValues } from '@/lib/zod';
 import { Souvenir } from '@/types/souvenir-types';
@@ -21,7 +20,7 @@ export function useSouvenirForm({ souvenirToEdit }: Props) {
     isCreatingSouvenir,
     isUpdatingSouvenir,
   } = useSouvenirMutation();
-  const isPending = useDebounce(isCreatingSouvenir || isUpdatingSouvenir, 300);
+  const isPending = isCreatingSouvenir || isUpdatingSouvenir;
 
   const form = useForm<SouvenirFormValues>({
     resolver: zodResolver(souvenirFormSchema),

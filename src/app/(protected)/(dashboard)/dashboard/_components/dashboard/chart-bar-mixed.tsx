@@ -128,7 +128,7 @@ export function OrderChartAdmin({
     (timeframe === 'daily' && orderDailyLoading) ||
       (timeframe === 'monthly' && orderMonthlyLoading) ||
       (timeframe === 'yearly' && orderYearLoading),
-    300
+    100
   );
 
   // Get error based on timeframe

@@ -1,7 +1,6 @@
 'use client';
 
 import { StoreRent } from '@/enums/store-rent';
-import useDebounce from '@/hooks/use-debounce';
 import {
   useGetContractUser,
   useUserStoresMutation,
@@ -20,7 +19,7 @@ export const useUserStoreRegistered = ({ userId }: Props) => {
   const { userStore, isLoadingUserStore, error } = useGetContractUser(userId);
   const { deleteUserStore, isDeletingUserStore } = useUserStoresMutation();
 
-  const isLoading = useDebounce(isLoadingUserStore || isDeletingUserStore, 300);
+  const isLoading = isLoadingUserStore || isDeletingUserStore;
 
   const handleDeleteUserStore = (userId: string, storeId: string) => {
     deleteUserStore({ userId, storeId });

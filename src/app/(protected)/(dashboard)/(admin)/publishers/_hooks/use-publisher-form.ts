@@ -1,6 +1,5 @@
 'use client';
 
-import useDebounce from '@/hooks/use-debounce';
 import { usePublisherMutation } from '@/hooks/use-publisher';
 import { useManagerEmail } from '@/hooks/use-user';
 import { publisherFormSchema, PublisherFormValues } from '@/lib/zod';
@@ -38,10 +37,7 @@ export const usePublisherForm = ({ publisher }: Props = {}) => {
 
   const { managerId } = useManagerEmail(userEmail);
 
-  const isWorking = useDebounce(
-    createPublisherPending || updatePublisherPending,
-    300
-  );
+  const isWorking = createPublisherPending || updatePublisherPending;
 
   const form = useForm<PublisherFormValues>({
     resolver: zodResolver(publisherFormSchema),

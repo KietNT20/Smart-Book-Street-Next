@@ -15,7 +15,6 @@ import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ImageFallback } from '@/constant/storage';
 import { PATH } from '@/enums/path';
-import useDebounce from '@/hooks/use-debounce';
 import { useGetEventById } from '@/hooks/use-event';
 import { Image } from 'antd';
 import dayjs from 'dayjs';
@@ -34,7 +33,7 @@ export default function EventDetailPage({
   params: { id: string };
 }) {
   const { eventData, eventLoading } = useGetEventById(params.id);
-  const isLoading = useDebounce(eventLoading, 300);
+  const isLoading = eventLoading;
 
   const formatTime = (dateString: string | Date | null): string => {
     return dayjs(dateString).format('HH:mm');

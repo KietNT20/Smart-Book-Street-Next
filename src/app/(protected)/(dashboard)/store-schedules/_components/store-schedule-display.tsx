@@ -20,7 +20,6 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { DayOfWeek, DayOfWeekLabels } from '@/enums/day-of-week';
-import useDebounce from '@/hooks/use-debounce';
 import { useStoreScheduleMuatation } from '@/hooks/use-store-schedule';
 import { formateDateVi } from '@/lib/utils';
 import { StoreSchedules } from '@/types/store-types';
@@ -53,7 +52,7 @@ export default function StoreScheduleDisplay({ storeSchedules }: Props) {
   const { deleteStoreSchedule, deleteStoreSchedulePeding } =
     useStoreScheduleMuatation();
 
-  const isDeleting = useDebounce(deleteStoreSchedulePeding, 300);
+  const isDeleting = deleteStoreSchedulePeding;
 
   const validSchedules = Array.isArray(storeSchedules)
     ? storeSchedules.filter((schedule) => schedule)

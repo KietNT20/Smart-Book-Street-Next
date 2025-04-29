@@ -27,7 +27,6 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { STORAGE } from '@/constant/storage';
-import useDebounce from '@/hooks/use-debounce';
 import { useInventoryMutation } from '@/hooks/use-inventory';
 import { useOrderDetailMutation } from '@/hooks/use-order-detail';
 import { BookNextjs } from '@/types/book-types';
@@ -49,7 +48,7 @@ const MenuColoumn = ({ book }: Props) => {
   const { createOrderDetail, createOrderDetailPending } =
     useOrderDetailMutation();
   const storeId = getLocalStorageItem(STORAGE.SELECTED_STORE_KEY) as string;
-  const isLoading = useDebounce(createOrderDetailPending, 300);
+  const isLoading = createOrderDetailPending;
 
   const formSchema = z.object({
     quantity: z
