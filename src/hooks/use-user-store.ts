@@ -59,3 +59,15 @@ export const useGetContractUser = (userId: string) => {
     error,
   };
 };
+
+export const useGetContractStore = (storeId: string) => {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['user-stores', storeId],
+    queryFn: () => userStoreService.checkStoreContract(storeId),
+  });
+  return {
+    storeContract: data?.results || [],
+    isLoadingStoreContract: isLoading,
+    error,
+  };
+};

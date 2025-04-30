@@ -2,17 +2,27 @@
 
 import { Loader } from 'lucide-react';
 
+import { Badge } from '@/components/ui/badge';
 import {
   Card,
   CardDescription,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { formatPrice } from '@/lib/utils';
+import dayjs from 'dayjs';
 import { useSectionCardSoDashboard } from '../_hooks/use-section-card';
 
 export function SectionCards() {
-  const { staticsStore, inventoriesByStoreLoading } =
-    useSectionCardSoDashboard();
+  const {
+    staticsStore,
+    inventoriesByStoreLoading,
+    storeContract,
+    isLoadingStoreContract,
+    orderStaticsYearlyStore,
+    orderYearLoading,
+    currentYear,
+  } = useSectionCardSoDashboard();
   return (
     <div className='shadow-xs grid grid-cols-1 gap-4 bg-card px-4 md:grid-cols-2 lg:grid-cols-4 lg:px-6'>
       <Card className='@container/card'>
@@ -20,7 +30,7 @@ export function SectionCards() {
           <CardDescription>Tổng Sản Phẩm</CardDescription>
           <CardTitle className='@[250px]/card:text-4xl text-3xl font-semibold tabular-nums'>
             {inventoriesByStoreLoading ? (
-              <Loader className='size-4 animate-spin' />
+              <Loader className='size-6 animate-spin' />
             ) : (
               staticsStore?.totalCount
             )}
@@ -45,14 +55,17 @@ export function SectionCards() {
         <CardHeader className='relative'>
           <CardDescription>Số Đơn Hàng</CardDescription>
           <CardTitle className='@[250px]/card:text-4xl text-3xl font-semibold tabular-nums'>
-            1,234
+            {orderYearLoading ? (
+              <Loader className='size-6 animate-spin' />
+            ) : (
+              orderStaticsYearlyStore?.totalOrder
+            )}
           </CardTitle>
-          {/* <div className='absolute right-4 top-4'>
+          <div className='absolute right-4 top-4'>
             <Badge variant='outline' className='flex gap-1 rounded-lg text-xs'>
-              <TrendingDownIcon className='size-3' />
-              -20%
+              {currentYear}
             </Badge>
-          </div> */}
+          </div>
         </CardHeader>
         {/* <CardFooter className='flex-col items-start gap-1 text-sm'>
           <div className='line-clamp-1 flex gap-2 font-medium'>
@@ -67,14 +80,19 @@ export function SectionCards() {
         <CardHeader className='relative'>
           <CardDescription>Doanh Thu</CardDescription>
           <CardTitle className='@[250px]/card:text-4xl text-3xl font-semibold tabular-nums'>
-            45,678
+            {isLoadingStoreContract ? (
+              <Loader className='size-6 animate-spin' />
+            ) : orderStaticsYearlyStore?.totalOrder ? (
+              formatPrice(orderStaticsYearlyStore?.totalOrder)
+            ) : (
+              '0'
+            )}
           </CardTitle>
-          {/* <div className='absolute right-4 top-4'>
+          <div className='absolute right-4 top-4'>
             <Badge variant='outline' className='flex gap-1 rounded-lg text-xs'>
-              <TrendingUpIcon className='size-3' />
-              +12.5%
+              {currentYear}
             </Badge>
-          </div> */}
+          </div>
         </CardHeader>
         {/* <CardFooter className='flex-col items-start gap-1 text-sm'>
           <div className='line-clamp-1 flex gap-2 font-medium'>
@@ -87,7 +105,11 @@ export function SectionCards() {
         <CardHeader className='relative'>
           <CardDescription>Thời Hạn Hợp Đồng</CardDescription>
           <CardTitle className='@[250px]/card:text-4xl text-3xl font-semibold tabular-nums'>
-            4.5%
+            {isLoadingStoreContract ? (
+              <Loader className='size-6 animate-spin' />
+            ) : (
+              dayjs(storeContract?.[0]?.endDate).format('DD/MM/YYYY')
+            )}
           </CardTitle>
           {/* <div className='absolute right-4 top-4'>
             <Badge variant='outline' className='flex gap-1 rounded-lg text-xs'>
