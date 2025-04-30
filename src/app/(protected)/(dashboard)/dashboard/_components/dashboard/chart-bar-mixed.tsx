@@ -3,7 +3,6 @@
 import { TrendingUp } from 'lucide-react';
 import { Bar, BarChart, XAxis, YAxis } from 'recharts';
 
-import LoadingSpinner from '@/components/spin/loading-spinner';
 import {
   Card,
   CardContent,
@@ -18,7 +17,6 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
-import useDebounce from '@/hooks/use-debounce';
 import {
   useOrderStaticsDailyAdmin,
   useOrderStaticsMonthlyAdmin,
@@ -100,13 +98,13 @@ export function OrderChartAdmin({
   const thisYear = year || new Date().getFullYear();
 
   // Use appropriate hooks based on timeframe
-  const { orderStaticsDailyAdmin, orderDailyLoading, orderDailyError } =
+  const { orderStaticsDailyAdmin, orderDailyError } =
     useOrderStaticsDailyAdmin(currentDate);
 
-  const { orderStaticsMonthlyAdmin, orderMonthlyLoading, orderMonthlyError } =
+  const { orderStaticsMonthlyAdmin, orderMonthlyError } =
     useOrderStaticsMonthlyAdmin(currentMonth, currentYear);
 
-  const { orderStaticsYearAdmin, orderYearLoading, orderYearError } =
+  const { orderStaticsYearAdmin, orderYearError } =
     useOrderStaticsYearAdmin(thisYear);
 
   // Determine which data to use based on timeframe
@@ -122,14 +120,6 @@ export function OrderChartAdmin({
         return null;
     }
   };
-
-  // Get loading state based on timeframe
-  const isLoading = useDebounce(
-    (timeframe === 'daily' && orderDailyLoading) ||
-      (timeframe === 'monthly' && orderMonthlyLoading) ||
-      (timeframe === 'yearly' && orderYearLoading),
-    100
-  );
 
   // Get error based on timeframe
   const getError = () => {
@@ -179,21 +169,6 @@ export function OrderChartAdmin({
     timeDescription = `Thống kê theo Tháng ${month} ${year}`;
   } else if (timeframe === 'yearly' && year) {
     timeDescription = `Thống kê theo Năm ${year}`;
-  }
-
-  // Show loading state
-  if (isLoading) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle>{title}</CardTitle>
-          <CardDescription>{description}</CardDescription>
-        </CardHeader>
-        <CardContent className='flex h-[300px] items-center justify-center'>
-          <LoadingSpinner />
-        </CardContent>
-      </Card>
-    );
   }
 
   return (

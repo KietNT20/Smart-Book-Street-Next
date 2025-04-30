@@ -3,7 +3,6 @@
 import { TrendingUp } from 'lucide-react';
 import { Bar, BarChart, XAxis, YAxis } from 'recharts';
 
-import LoadingSpinner from '@/components/spin/loading-spinner';
 import {
   Card,
   CardContent,
@@ -102,13 +101,15 @@ export function OrderChartStore({
   const storeID = getLocalStorageItem(STORAGE.SELECTED_STORE_KEY);
 
   // Use appropriate hooks based on timeframe
-  const { orderStaticsDailyStore, orderDailyLoading, orderDailyError } =
-    useOrderStaticsDailyStore(currentDate, storeID || '');
+  const { orderStaticsDailyStore, orderDailyError } = useOrderStaticsDailyStore(
+    currentDate,
+    storeID || ''
+  );
 
-  const { orderStaticsMonthlyStore, orderMonthlyLoading, orderMonthlyError } =
+  const { orderStaticsMonthlyStore, orderMonthlyError } =
     useOrderStaticsMonthlyStore(currentMonth, currentYear, storeID || '');
 
-  const { orderStaticsYearlyStore, orderYearLoading, orderYearError } =
+  const { orderStaticsYearlyStore, orderYearError } =
     useOrderStaticsYearlyStore(thisYear, storeID || '');
 
   // Determine which data to use based on timeframe
@@ -124,10 +125,6 @@ export function OrderChartStore({
         return null;
     }
   };
-
-  // Get loading state based on timeframe
-  const isLoading =
-    orderDailyLoading || orderMonthlyLoading || orderYearLoading;
 
   // Get error based on timeframe
   const getError = () => {
@@ -176,10 +173,6 @@ export function OrderChartStore({
     timeDescription = `Thống kê theo Tháng ${month} ${year}`;
   } else if (timeframe === 'yearly' && year) {
     timeDescription = `Thống kê theo Năm ${year}`;
-  }
-
-  if (isLoading) {
-    return <LoadingSpinner />;
   }
 
   return (

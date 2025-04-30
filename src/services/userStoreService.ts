@@ -16,7 +16,7 @@ export const userStoreService = {
     );
     return res.data;
   },
-  checkStoreContract: async (storeId: string) => {
+  checkStoreContract: async (storeId: string): Promise<UserStoreResponse> => {
     const res = await axiosInstance.get(
       `${API_URL.USER_STORES.STORE}/${storeId}`
     );
