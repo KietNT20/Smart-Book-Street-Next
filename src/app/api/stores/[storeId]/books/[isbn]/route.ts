@@ -26,10 +26,20 @@ export async function GET(
     const inventoriesResponse =
       await inventoryService.getBookByStoreId(storeId);
 
-    // Find ISBN in inventory of store
-    const inventoryWithBook = inventoriesResponse.results.find(
+    // Focus on obtaining accurate search results, especially when hyphens appear in the data.
+    let inventoryWithBook = inventoriesResponse.results.find(
       (inventory) => inventory.book && inventory.book.isbn === isbn
     );
+
+    // If not found, try searching by removing hyphens
+    if (!inventoryWithBook) {
+      const normalizedIsbn = isbn.replace(/-/g, '');
+      inventoryWithBook = inventoriesResponse.results.find(
+        (inventory) =>
+          inventory.book &&
+          inventory.book.isbn.replace(/-/g, '') === normalizedIsbn
+      );
+    }
 
     if (!inventoryWithBook || !inventoryWithBook.book) {
       return NextResponse.json(

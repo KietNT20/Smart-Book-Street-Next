@@ -2,6 +2,7 @@ import { API_URL } from '@/constant/api-url';
 import {
   AuthorResponse,
   AuthorSearchPagination,
+  AuthorSearchResponse,
   AuthorsResponse,
 } from '@/types/author-types';
 import axiosInstance from '@/utils/axiosInstance';
@@ -31,7 +32,10 @@ export const authorService = {
     const res = await axiosInstance.get(`${API_URL.AUTHORS.INDEX}/${id}`);
     return res.data;
   },
-  search: async (payload: { authorName: string; categoryId?: string }) => {
+  search: async (payload: {
+    authorName: string;
+    categoryId?: string;
+  }): Promise<AuthorSearchResponse> => {
     const res = await axiosInstance.post(API_URL.AUTHORS.SEARCH, payload);
     return res.data;
   },

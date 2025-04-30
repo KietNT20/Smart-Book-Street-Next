@@ -49,5 +49,15 @@ export type BookAuthorPaginated = {
   bookId: string;
 };
 
+export type AuthorSearchData = {
+  id: string;
+  authorName: string;
+  dob: Date | string;
+  nationality: string;
+  biography: string;
+  baseImgUrl?: string;
+};
+
 export type AuthorsResponse = ApiListResponse<Author & { id: string }>;
 export type AuthorResponse = ApiResponse<Author & { id: string }>;
+export type AuthorSearchResponse = ApiListResponse<AuthorSearchData>;

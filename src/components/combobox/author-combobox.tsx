@@ -23,10 +23,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { useAuthorMutation } from '@/hooks/use-author';
+import { useSearchAuthorName } from '@/hooks/use-author';
 import useDebounce from '@/hooks/use-debounce';
 import { cn, formateDateVi } from '@/lib/utils';
-import { Author } from '@/types/author-types';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { useState } from 'react';
 import { Control, FieldValues, Path } from 'react-hook-form';
@@ -36,154 +35,141 @@ type Props<T extends FieldValues> = {
   name: Path<T>;
   control: Control<T>;
   description?: string;
-  mode?: 'create' | 'update';
 };
 
 const AuthorCombobox = <T extends FieldValues>({
   name,
   control,
   description,
-  mode = 'create',
 }: Props<T>) => {
   const [input, setInput] = useState('');
-  const [searchResults, setSearchResults] = useState<Author[]>([]);
-  const { searchAuthorName } = useAuthorMutation();
+  const debouncedInput = useDebounce(input, 300);
 
-  const debouncedResults = useDebounce(searchResults, 300);
+  const { authors, authorsLoading } = useSearchAuthorName(debouncedInput);
 
   const handleSearch = (value: string) => {
     setInput(value);
-
-    if (!value) {
-      setSearchResults([]);
-      return;
-    }
-
-    searchAuthorName.mutate(
-      {
-        authorName: value,
-      },
-      {
-        onSuccess: (data) => {
-          setSearchResults(data.results || []);
-        },
-        onError: (error) => {
-          console.error('Failed to search author:', error);
-          setSearchResults([]);
-        },
-      }
-    );
   };
 
   return (
     <FormField
       control={control}
       name={name}
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel>
-            Tác giả <span className='text-red-400'>*</span>
-          </FormLabel>
-          <Popover>
-            <PopoverTrigger asChild>
-              <FormControl>
-                <Button
-                  variant='outline'
-                  role='combobox'
-                  className={cn(
-                    'w-full justify-between',
-                    !field.value && 'text-muted-foreground'
-                  )}
-                >
-                  {field.value?.length && mode === 'update'
-                    ? `${field.value?.length} tác giả được chọn`
-                    : 'Chọn tác giả...'}
-                  <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
-                </Button>
-              </FormControl>
-            </PopoverTrigger>
-            <PopoverContent align='start' className='max-w-56 p-0 lg:max-w-lg'>
-              <Command shouldFilter={false}>
-                <CommandInput
-                  placeholder='Tìm tác giả...'
-                  value={input}
-                  onValueChange={handleSearch}
-                />
-                <CommandList>
-                  {field.value?.length > 0 && !input && (
-                    <>
-                      <CommandGroup heading='Đã chọn'>
-                        {field.value.map((id: string) => (
-                          <SelectedAuthor
-                            key={id}
-                            id={id}
-                            onDeselect={() => {
-                              field.onChange(
-                                field.value.filter(
-                                  (authorId: string) => authorId !== id
-                                )
-                              );
-                            }}
-                          />
-                        ))}
-                      </CommandGroup>
-                      <CommandSeparator />
-                    </>
-                  )}
+      render={({ field }) => {
+        // Convert field.value to array if it's undefined
+        const selectedAuthors = (field.value as string[]) || [];
 
-                  <CommandGroup className='max-h-80 overflow-y-auto'>
-                    {searchAuthorName.isPending && (
-                      <CommandItem disabled className='text-muted-foreground'>
-                        <span className='loading loading-spinner loading-sm mr-2' />
-                        Đang tải...
-                      </CommandItem>
+        return (
+          <FormItem>
+            <FormLabel>
+              Tác giả <span className='text-red-400'>*</span>
+            </FormLabel>
+            <Popover>
+              <PopoverTrigger asChild>
+                <FormControl>
+                  <Button
+                    variant='outline'
+                    role='combobox'
+                    className={cn(
+                      'w-full justify-between',
+                      !selectedAuthors.length && 'text-muted-foreground'
                     )}
-                    {!searchAuthorName.isPending &&
-                      !debouncedResults?.length &&
-                      input && (
-                        <CommandEmpty>Không tìm thấy tác giả.</CommandEmpty>
-                      )}
-                    {!searchAuthorName.isPending &&
-                      debouncedResults?.map((author) => (
-                        <CommandItem
-                          key={author.id}
-                          onSelect={() => {
-                            const values = (field.value as string[]) || [];
-                            field.onChange(
-                              values?.includes(author.id)
-                                ? values?.filter(
-                                    (id: string) => id !== author.id
+                  >
+                    {selectedAuthors?.length
+                      ? `${selectedAuthors?.length} tác giả được chọn`
+                      : 'Chọn tác giả...'}
+                    <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
+                  </Button>
+                </FormControl>
+              </PopoverTrigger>
+              <PopoverContent
+                align='start'
+                className='max-w-56 p-0 lg:max-w-lg'
+              >
+                <Command shouldFilter={false}>
+                  <CommandInput
+                    placeholder='Tìm tác giả...'
+                    value={input}
+                    onValueChange={handleSearch}
+                  />
+                  <CommandList>
+                    {selectedAuthors.length > 0 && !input && (
+                      <>
+                        <CommandGroup heading='Đã chọn'>
+                          {selectedAuthors.map((id: string) => (
+                            <SelectedAuthor
+                              key={id}
+                              id={id}
+                              onDeselect={() => {
+                                field.onChange(
+                                  selectedAuthors.filter(
+                                    (authorId: string) => authorId !== id
                                   )
-                                : [...values, author.id]
-                            );
-                          }}
-                        >
-                          <Check
-                            className={cn(
-                              'mr-2 h-4 w-4',
-                              (field.value as string[])?.includes(author.id)
-                                ? 'opacity-100'
-                                : 'opacity-0'
-                            )}
-                          />
-                          {author.authorName} ({formateDateVi(author.dob)})
+                                );
+                              }}
+                            />
+                          ))}
+                        </CommandGroup>
+                        <CommandSeparator />
+                      </>
+                    )}
+
+                    <CommandGroup>
+                      {authorsLoading && (
+                        <CommandItem disabled className='text-muted-foreground'>
+                          <span className='loading loading-spinner loading-sm mr-2' />
+                          Đang tải...
                         </CommandItem>
-                      ))}
-                  </CommandGroup>
-                </CommandList>
-              </Command>
-            </PopoverContent>
-          </Popover>
-          <FormDescription>
-            {searchResults && searchResults.length > 0
-              ? searchResults.map((result) => result.authorName).join(', ')
-              : description
-                ? description
-                : 'Chọn tác giả'}
-          </FormDescription>
-          <FormMessage />
-        </FormItem>
-      )}
+                      )}
+                      {!authorsLoading &&
+                        !authors?.length &&
+                        debouncedInput && (
+                          <CommandEmpty>Không tìm thấy tác giả.</CommandEmpty>
+                        )}
+                      {!authorsLoading &&
+                        authors?.map((author) => {
+                          const isSelected = selectedAuthors.includes(
+                            author.id
+                          );
+
+                          return (
+                            <CommandItem
+                              key={author.id}
+                              onSelect={() => {
+                                field.onChange(
+                                  isSelected
+                                    ? selectedAuthors.filter(
+                                        (id) => id !== author.id
+                                      )
+                                    : [...selectedAuthors, author.id]
+                                );
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  'mr-2 h-4 w-4',
+                                  isSelected ? 'opacity-100' : 'opacity-0'
+                                )}
+                              />
+                              {author.authorName} ({formateDateVi(author.dob)})
+                            </CommandItem>
+                          );
+                        })}
+                    </CommandGroup>
+                  </CommandList>
+                </Command>
+              </PopoverContent>
+            </Popover>
+            <FormDescription>
+              {description ||
+                (selectedAuthors.length > 0
+                  ? `${selectedAuthors.length} tác giả được chọn`
+                  : 'Chọn tác giả')}
+            </FormDescription>
+            <FormMessage />
+          </FormItem>
+        );
+      }}
     />
   );
 };

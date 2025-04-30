@@ -1,13 +1,24 @@
 import { personService } from '@/services/personService';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 export const useSyncPersonData = () => {
+  const queryClient = useQueryClient();
   const { mutate, isPending } = useMutation({
     mutationFn: () => personService.syncData(),
     onSuccess: (data) => {
       if (data.isSuccess) {
         toast.success(`${data.message}`);
+        queryClient.invalidateQueries({ queryKey: ['person'] });
+        queryClient.invalidateQueries({ queryKey: ['average-minute'] });
+        queryClient.invalidateQueries({ queryKey: ['person-total'] });
+        queryClient.invalidateQueries({ queryKey: ['person-stats-hours'] });
+        queryClient.invalidateQueries({ queryKey: ['daily-range'] });
+      }
+    },
+    onError: (error: Error) => {
+      if (error) {
+        toast.error(`${error.message}`);
       }
     },
   });
