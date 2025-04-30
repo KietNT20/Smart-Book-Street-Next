@@ -93,19 +93,13 @@ export const useAuthorMutation = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
 
-  const searchAuthorName = useMutation({
-    mutationKey: ['search-author-name'],
-    mutationFn: (payload: { authorName: string; categoryId?: string }) =>
-      authorService.search(payload),
-  });
-
   const createAuthor = useMutation({
     mutationKey: ['create-author'],
     mutationFn: (formData: FormData) => authorService.create(formData),
     onSuccess: (data) => {
       if (data) {
         toast.success('Thêm tác giả thành công');
-        router.push(PATH.ADMIN_AUTHORS);
+        router.replace(PATH.ADMIN_AUTHORS);
       }
       queryClient.invalidateQueries({ queryKey: ['authors'] });
     },
@@ -121,7 +115,7 @@ export const useAuthorMutation = () => {
     onSuccess: (data) => {
       if (data) {
         toast.success('Cập nhật tác giả thành công');
-        router.push(`${PATH.ADMIN_AUTHORS}/${data.result.id}`);
+        router.replace(`${PATH.ADMIN_AUTHORS}/${data.result.id}`);
       }
       queryClient.invalidateQueries({ queryKey: ['authors'] });
     },
@@ -151,7 +145,18 @@ export const useAuthorMutation = () => {
     // Delete Author
     deleteAuthor: deleteAuthor.mutate,
     deleteAuthorPending: deleteAuthor.isPending,
-    // Search Author
-    searchAuthorName,
+  };
+};
+
+export const useSearchAuthorName = (authorName: string) => {
+  const { data, isLoading } = useQuery({
+    queryKey: ['search-author', authorName],
+    queryFn: () => authorService.search({ authorName }),
+    enabled: !!authorName,
+  });
+
+  return {
+    authors: data?.results || [],
+    authorsLoading: isLoading,
   };
 };
