@@ -82,8 +82,8 @@ export function SectionCards() {
           <CardTitle className='@[250px]/card:text-4xl text-3xl font-semibold tabular-nums'>
             {isLoadingStoreContract ? (
               <Loader className='size-6 animate-spin' />
-            ) : orderStaticsYearlyStore?.totalOrder ? (
-              formatPrice(orderStaticsYearlyStore?.totalOrder)
+            ) : orderStaticsYearlyStore?.totalProfit ? (
+              formatPrice(orderStaticsYearlyStore?.totalProfit)
             ) : (
               '0'
             )}
