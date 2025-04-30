@@ -177,7 +177,7 @@ const ISBNScanner = ({ onBookFound }: ISBNScannerProps) => {
         open={isScanning}
         onOpenChange={(open) => !open && stopScanning()}
       >
-        <DialogContent className='md:max-w-3xl'>
+        <DialogContent className='md:max-w-72'>
           <DialogHeader>
             <DialogTitle>Quét mã ISBN</DialogTitle>
           </DialogHeader>

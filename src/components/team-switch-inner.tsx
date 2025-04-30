@@ -5,7 +5,8 @@ import { Street } from '@/types/street-types';
 import { UserStore } from '@/types/user-types';
 import { getLocalStorageItem, setLocalStorageItem } from '@/utils/token';
 import { ChevronsUpDown, Map, Store } from 'lucide-react';
-import React from 'react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,13 +32,15 @@ function TeamSwitcherInner({
   isLoadingStreets: boolean;
 }) {
   // State initialization that doesn't depend on props
-  const [activeStreet, setActiveStreet] = React.useState<Street | null>(null);
-  const [activeStore, setActiveStore] = React.useState<StoreData | undefined>(
+  const [activeStreet, setActiveStreet] = useState<Street | null>(null);
+  const [activeStore, setActiveStore] = useState<StoreData | undefined>(
     undefined
   );
 
+  const router = useRouter();
+
   // Initialize from localStorage only once after component is mounted
-  React.useEffect(() => {
+  useEffect(() => {
     if (streets.length > 0) {
       const savedStreetId = getLocalStorageItem(STORAGE.SELECTED_STREET_KEY);
       const savedStreet = savedStreetId
@@ -50,7 +53,7 @@ function TeamSwitcherInner({
   }, [streets]); // Only depend on streets array
 
   // Separate effect for store initialization
-  React.useEffect(() => {
+  useEffect(() => {
     if (
       hasRole([RoleEnums.STORE_OWNER, RoleEnums.STORE_MANAGER]) &&
       userStore.length > 0
@@ -73,6 +76,7 @@ function TeamSwitcherInner({
 
     // Dispatch custom event to notify other components
     window.dispatchEvent(new Event('teamSwitched'));
+    router.refresh();
   };
 
   // Handle store selection
@@ -82,6 +86,7 @@ function TeamSwitcherInner({
 
     // Dispatch custom event to notify other components
     window.dispatchEvent(new Event('teamSwitched'));
+    router.refresh();
   };
 
   // If loading streets, show loading state

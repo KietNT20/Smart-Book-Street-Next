@@ -19,6 +19,28 @@ import { toast } from 'sonner';
 
 const storeId = getLocalStorageItem(STORAGE.SELECTED_STORE_KEY) as string;
 
+/**
+ * Hàm định dạng ISBN thành dạng có gạch ngang
+ * Ví dụ: "9786045784860" → "978-604-57-8486-0"
+ */
+const formatISBN = (isbn: string): string => {
+  // Loại bỏ tất cả dấu gạch ngang hiện có
+  const cleanIsbn = isbn.replace(/-/g, '');
+
+  // Nếu là ISBN-13 (13 chữ số)
+  if (cleanIsbn.length === 13) {
+    return `${cleanIsbn.slice(0, 3)}-${cleanIsbn.slice(3, 6)}-${cleanIsbn.slice(6, 8)}-${cleanIsbn.slice(8, 12)}-${cleanIsbn.slice(12)}`;
+  }
+
+  // Nếu là ISBN-10 (10 chữ số)
+  if (cleanIsbn.length === 10) {
+    return `${cleanIsbn.slice(0, 1)}-${cleanIsbn.slice(1, 4)}-${cleanIsbn.slice(4, 9)}-${cleanIsbn.slice(9)}`;
+  }
+
+  // Trả về nguyên gốc nếu không đúng định dạng
+  return isbn;
+};
+
 const ISBNScannerInventory = () => {
   const [isScanning, setIsScanning] = useState(false);
   const [manualISBN, setManualISBN] = useState('');
@@ -52,8 +74,10 @@ const ISBNScannerInventory = () => {
         videoRef.current!,
         (result, error) => {
           if (result) {
-            const isbn = result.getText();
-            handleScanSuccess(isbn);
+            const rawIsbn = result.getText();
+            // Định dạng ISBN thành dạng có gạch ngang
+            const formattedIsbn = formatISBN(rawIsbn);
+            handleScanSuccess(formattedIsbn);
           }
           if (error && error.name !== 'NotFoundException') {
             console.error(error);
@@ -85,10 +109,13 @@ const ISBNScannerInventory = () => {
       return;
     }
 
-    processISBN(manualISBN);
+    // Định dạng ISBN nhập tay thành dạng có gạch ngang
+    const formattedIsbn = formatISBN(manualISBN);
+    processISBN(formattedIsbn);
   };
 
   const processISBN = (isbn: string) => {
+    // Giữ nguyên ISBN có dấu gạch ngang khi gửi request
     toast.promise(fetchBookIsbnInventory(storeId, isbn), {
       loading: 'Đang tìm kiếm thông tin sách...',
       success: (data) => {
@@ -157,7 +184,7 @@ const ISBNScannerInventory = () => {
           <Input
             value={manualISBN}
             onChange={(e) => setManualISBN(e.target.value)}
-            placeholder='Nhập mã ISBN'
+            placeholder='Nhập mã ISBN (VD: 978-604-57-8486-0)'
             className='flex-1'
             disabled={isLoading}
             onKeyDown={(e) => {
@@ -182,7 +209,7 @@ const ISBNScannerInventory = () => {
         open={isScanning}
         onOpenChange={(open) => !open && stopScanning()}
       >
-        <DialogContent className='md:max-w-3xl'>
+        <DialogContent className='md:max-w-72'>
           <DialogHeader>
             <DialogTitle>Quét mã ISBN</DialogTitle>
           </DialogHeader>

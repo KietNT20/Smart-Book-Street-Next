@@ -35,7 +35,7 @@ const PublisherForm = ({ publisher }: Props) => {
     removeMainImage,
     removeAdditionalImage,
     setUserEmail,
-    validateManagerEmail, // Đã thêm hàm này từ hook đã sửa
+    validateManagerEmail,
     files,
     managerId,
     userEmail,
@@ -64,6 +64,7 @@ const PublisherForm = ({ publisher }: Props) => {
                   <FormControl>
                     <Input placeholder='Tên Nhà xuất bản' {...field} />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -76,6 +77,7 @@ const PublisherForm = ({ publisher }: Props) => {
                   <FormControl>
                     <Input placeholder='Nhập email nhà xuất bản' {...field} />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -88,6 +90,7 @@ const PublisherForm = ({ publisher }: Props) => {
                   <FormControl>
                     <Input placeholder='Nhập số điện thoại' {...field} />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -126,6 +129,7 @@ const PublisherForm = ({ publisher }: Props) => {
                   <FormControl>
                     <Input placeholder='Nhập địa chỉ' {...field} />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -138,6 +142,7 @@ const PublisherForm = ({ publisher }: Props) => {
                   <FormControl>
                     <Input placeholder='Nhập mô tả' {...field} />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -150,6 +155,7 @@ const PublisherForm = ({ publisher }: Props) => {
                   <FormControl>
                     <Input type='url' placeholder='Nhập website' {...field} />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
