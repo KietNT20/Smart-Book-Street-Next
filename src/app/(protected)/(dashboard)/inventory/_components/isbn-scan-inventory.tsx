@@ -185,7 +185,7 @@ const ISBNScannerInventory = () => {
             value={manualISBN}
             onChange={(e) => setManualISBN(e.target.value)}
             placeholder='Nhập mã ISBN (VD: 978-604-57-8486-0)'
-            className='flex-1'
+            className='flex-1 lg:w-80'
             disabled={isLoading}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
