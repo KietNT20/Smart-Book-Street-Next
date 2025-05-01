@@ -1,5 +1,6 @@
 import { Toaster } from '@/components/ui/sonner';
 import { AntdRegistry } from '@ant-design/nextjs-registry';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import type { Metadata } from 'next';
 import { Roboto } from 'next/font/google';
@@ -29,8 +30,8 @@ export default function RootLayout({
         <AntdRegistry>
           <Provider>{children}</Provider>
         </AntdRegistry>
-
         <Toaster richColors expand visibleToasts={3} />
+        <SpeedInsights />
       </body>
     </html>
   );
