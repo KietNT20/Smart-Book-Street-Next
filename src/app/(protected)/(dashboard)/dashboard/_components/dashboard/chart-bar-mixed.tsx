@@ -147,7 +147,7 @@ export function OrderChartAdmin({
           <CardDescription>{description}</CardDescription>
         </CardHeader>
         <CardContent className='flex h-[300px] items-center justify-center'>
-          <p className='text-destructive'>{error || 'No data available'}</p>
+          <p className='text-destructive'>{error || 'Chưa có dữ liệu'}</p>
         </CardContent>
       </Card>
     );

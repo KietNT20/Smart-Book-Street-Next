@@ -1,7 +1,6 @@
 import { inventoryService } from '@/services/inventoryService';
 import { InventoryCreate } from '@/types/inventory-types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
 import { toast } from 'sonner';
 
 export const useInventoryByStoreId = (storeId: string) => {
@@ -61,11 +60,8 @@ export const useInventoryMutation = () => {
         });
       }
     },
-    onError: (error: AxiosError<{ message?: string }>) => {
-      console.log(
-        'Error adding product to inventory:',
-        error.response?.data.message
-      );
+    onError: (error: Error) => {
+      console.log('Error adding product to inventory:', error.message);
     },
   });
 
@@ -90,8 +86,8 @@ export const useInventoryMutation = () => {
         });
       }
     },
-    onError: (error: AxiosError<{ message?: string }>) => {
-      toast.error(`${error.response?.data?.message}`);
+    onError: (error: Error) => {
+      toast.error(`${error.message}`);
       console.log('Error updating quantity product:', error);
     },
   });

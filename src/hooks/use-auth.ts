@@ -5,7 +5,6 @@ import { LoginCredentials, RegisterRequestBody } from '@/types/auth-types';
 import { User } from '@/types/user-types';
 import tokenMethod from '@/utils/token';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
 import { toast } from 'sonner';
@@ -46,9 +45,9 @@ export const useLogin = () => {
         });
       }
     },
-    onError: (error: AxiosError<{ message?: string }>) => {
-      console.log('Error login', error);
-      toast.error(`Đăng nhập thất bại, ${error.response?.data.message}`);
+    onError: (error: Error) => {
+      console.log('Error login', error.message);
+      toast.error(`Đăng nhập thất bại`);
     },
   });
 };
@@ -70,7 +69,7 @@ export const useRegister = () => {
     },
     onError: (error: Error) => {
       console.log('Error register', error);
-      toast.error('Đăng ký thất bại');
+      toast.error('Đăng ký tài khoản thất bại');
     },
   });
 };
