@@ -80,3 +80,22 @@ export interface PersonChartDateHours {
   female: number;
   total: number;
 }
+
+export interface StatisticPersonAvgTime {
+  success: boolean;
+  averageTime: string;
+  averageTimeByGender: AverageTimeByGender;
+  chartData: ChartDatum[];
+  averageTimeMinutes: number;
+}
+
+export interface AverageTimeByGender {
+  male: string;
+  female: string;
+}
+
+export interface ChartDatum {
+  label: string;
+  value: number;
+  time: string;
+}

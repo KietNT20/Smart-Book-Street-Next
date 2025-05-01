@@ -96,7 +96,9 @@ export default function RegisterForm({
                     name='userName'
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Tên tài khoản</FormLabel>
+                        <FormLabel>
+                          Tên tài khoản <span className='text-red-500'>*</span>
+                        </FormLabel>
                         <FormControl>
                           <Input
                             placeholder='Tên tài khoản'

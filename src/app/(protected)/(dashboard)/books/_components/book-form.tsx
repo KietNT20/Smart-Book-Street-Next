@@ -183,7 +183,7 @@ const BookForm = ({ book, mode }: Props) => {
             name='authorIds'
             control={form.control}
             description={book?.bookAuthors
-              .map((item) => item.authorName)
+              ?.map((item) => item?.authorName)
               .join(', ')}
           />
 
@@ -215,9 +215,11 @@ const BookForm = ({ book, mode }: Props) => {
           <CategoryCombobox
             name='categoryIds'
             control={form.control}
-            description={book?.bookCategories
-              .map((item) => item.categoryName)
-              .join(', ')}
+            description={
+              book?.bookCategories
+                ?.map((item) => item.categoryName)
+                .join(', ') || ''
+            }
           />
 
           {/* Kích thước */}

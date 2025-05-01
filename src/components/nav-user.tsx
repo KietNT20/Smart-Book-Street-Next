@@ -27,7 +27,6 @@ import {
   CreditCard,
   LogOut,
   Settings,
-  Sparkles,
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -92,14 +91,14 @@ export function NavUser() {
                 </div>
               </div>
             </DropdownMenuLabel>
-            <DropdownMenuSeparator />
+            {/* <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <Sparkles />
                 Upgrade to Pro
               </DropdownMenuItem>
             </DropdownMenuGroup>
-            <DropdownMenuSeparator />
+            <DropdownMenuSeparator /> */}
             <DropdownMenuGroup>
               <DropdownMenuItem asChild>
                 <Link href={PATH.ACCOUNT}>

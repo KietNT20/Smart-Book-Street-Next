@@ -75,9 +75,21 @@ const AuthorCombobox = <T extends FieldValues>({
                       !selectedAuthors.length && 'text-muted-foreground'
                     )}
                   >
-                    {selectedAuthors?.length
-                      ? `${selectedAuthors?.length} tác giả được chọn`
-                      : 'Chọn tác giả...'}
+                    {/* {selectedAuthors.length > 0
+                      ? `${selectedAuthors.length} tác giả được chọn thay thế ${description}`
+                      : description
+                        ? description
+                        : 'Chọn tác giả...'} */}
+                    {selectedAuthors.length > 0
+                      ? authors
+                          .filter((author) =>
+                            selectedAuthors.includes(author.id)
+                          )
+                          .map((author) => author.authorName)
+                          .join(', ')
+                      : description
+                        ? description
+                        : 'Chọn tác giả...'}
                     <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
                   </Button>
                 </FormControl>
@@ -95,7 +107,7 @@ const AuthorCombobox = <T extends FieldValues>({
                   <CommandList>
                     {selectedAuthors.length > 0 && !input && (
                       <>
-                        <CommandGroup heading='Đã chọn'>
+                        <CommandGroup heading='Thay đổi tác giả'>
                           {selectedAuthors.map((id: string) => (
                             <SelectedAuthor
                               key={id}
@@ -161,10 +173,15 @@ const AuthorCombobox = <T extends FieldValues>({
               </PopoverContent>
             </Popover>
             <FormDescription>
-              {description ||
-                (selectedAuthors.length > 0
-                  ? `${selectedAuthors.length} tác giả được chọn`
-                  : 'Chọn tác giả')}
+              Tác giả được chọn:{' '}
+              {selectedAuthors.length > 0
+                ? authors
+                    .filter((author) => selectedAuthors.includes(author.id))
+                    .map((author) => author.authorName)
+                    .join(', ')
+                : description
+                  ? description
+                  : 'Chọn tác giả'}
             </FormDescription>
             <FormMessage />
           </FormItem>
