@@ -30,7 +30,7 @@ export type RegisterFormValues = z.infer<typeof registerSchema>;
 
 // Register form
 export const registerSchema = z.object({
-  userName: z.string().optional(),
+  userName: z.string().min(1, { message: 'Vui lòng nhập tên tài khoản' }),
   email: z
     .string()
     .min(1, { message: 'Vui lòng nhập email' })
@@ -134,12 +134,8 @@ export const bookSchema = z.object({
       message: 'Chỉ có thể tải lên tối đa 3 hình ảnh bổ sung',
     }),
   publisherId: z.string().optional(),
-  authorIds: z.array(z.string()).min(1, {
-    message: 'Vui lòng chọn tác giả',
-  }),
-  categoryIds: z.array(z.string()).min(1, {
-    message: 'Vui lòng thêm danh mục',
-  }),
+  authorIds: z.array(z.string()).optional(),
+  categoryIds: z.array(z.string()).optional(),
 });
 
 export type BookFormValues = z.infer<typeof bookSchema>;

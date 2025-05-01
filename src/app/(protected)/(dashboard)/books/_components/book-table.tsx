@@ -38,6 +38,7 @@ import {
 } from '@/components/ui/table';
 import { STORAGE } from '@/constant/storage';
 import { Sort } from '@/enums/enums';
+import { Language, VietnameseLanguageLabels } from '@/enums/lang';
 import { PATH } from '@/enums/path';
 import { useBookMutations } from '@/hooks/use-books';
 import { useInventoryMutation } from '@/hooks/use-inventory';
@@ -274,7 +275,9 @@ const BookTable = ({
                   </TableCell>
                   <TableCell className='font-medium'>{book.isbn}</TableCell>
                   <TableCell>{book.title}</TableCell>
-                  <TableCell>{book.languages}</TableCell>
+                  <TableCell>
+                    {VietnameseLanguageLabels[book.languages as Language]}
+                  </TableCell>
                   <TableCell>{formateDateVi(book.publicationDate)}</TableCell>
                   <TableCell>{formatPrice(book.price)}</TableCell>
                   <TableCell className='text-right'>
