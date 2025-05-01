@@ -33,25 +33,39 @@ const VisitorChartSection = () => {
   const { statsHours, isLoading } = useGetPersonStatsHours(dateString);
 
   // Calculate total visitors and find peak hours
+  // Calculate total visitors and find peak hours
   const calculateChartStatistics = () => {
     let totalVisitors = 0;
     let maxVisitors = 0;
-    let peakHour = '';
+    let peakHours: string[] = [];
+    let hoursWithVisitors = 0;
 
     statsHours?.forEach((data) => {
       totalVisitors += data.total;
+
+      if (data.total > 0) {
+        hoursWithVisitors++;
+      }
+
+      // Xử lý giờ cao điểm
       if (data.total > maxVisitors) {
         maxVisitors = data.total;
-        peakHour = data.hour;
+        peakHours = [data.hour];
+      } else if (data.total === maxVisitors && maxVisitors > 0) {
+        peakHours.push(data.hour);
       }
     });
 
-    // Calculate average visitors per hour
-    const avgVisitorsPerHour = Math.round(totalVisitors / 24);
+    // Format peak hours string
+    const peakHourStr = peakHours.join(', ');
+
+    // Calculate average visitors per hour (chỉ tính trên số giờ có khách)
+    const avgVisitorsPerHour =
+      hoursWithVisitors > 0 ? Math.round(totalVisitors / hoursWithVisitors) : 0;
 
     return {
       totalVisitors,
-      peakHour,
+      peakHour: peakHourStr,
       avgVisitorsPerHour,
       maxVisitors,
     };
@@ -176,8 +190,9 @@ const VisitorChartSection = () => {
             {stats.peakHour && <TrendingUp className='h-4 w-4' />}
           </div>
           <div className='leading-none text-muted-foreground'>
-            Trung bình {stats.avgVisitorsPerHour} khách/giờ | Tỷ lệ Nam/Nữ:{' '}
-            {genderRatio.male}%/{genderRatio.female}%
+            Trung bình {stats.avgVisitorsPerHour} khách/giờ{' '}
+            {stats.avgVisitorsPerHour > 0 && `(tính trên các giờ có khách)`} |
+            Tỷ lệ Nam/Nữ: {genderRatio.male}%/{genderRatio.female}%
           </div>
         </CardFooter>
       </Card>
