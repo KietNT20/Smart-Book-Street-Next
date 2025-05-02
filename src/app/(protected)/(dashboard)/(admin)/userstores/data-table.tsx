@@ -54,40 +54,38 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className=''>
-      <div className='flex items-center gap-2 py-4'>
+    <div>
+      <div className='flex flex-wrap items-center gap-2 py-4'>
         <Input
-          placeholder='Nhập Email'
+          placeholder='Tìm theo Email'
           value={(table.getColumn('email')?.getFilterValue() as string) ?? ''}
           onChange={(event) =>
             table.getColumn('email')?.setFilterValue(event.target.value)
           }
-          className='max-w-sm'
+          className='max-w-xs'
         />
         <Input
-          placeholder='Nhập tên tài khoản'
+          placeholder='Tìm theo tên tài khoản'
           value={
             (table.getColumn('userName')?.getFilterValue() as string) ?? ''
           }
           onChange={(event) =>
             table.getColumn('userName')?.setFilterValue(event.target.value)
           }
-          className='ml-4 max-w-sm'
+          className='max-w-xs'
         />
         <Input
-          placeholder='Nhập số điện thoại'
-          value={
-            (table.getColumn('phoneNumber')?.getFilterValue() as string) ?? ''
-          }
+          placeholder='Tìm theo số điện thoại'
+          value={(table.getColumn('phone')?.getFilterValue() as string) ?? ''}
           onChange={(event) =>
-            table.getColumn('phoneNumber')?.setFilterValue(event.target.value)
+            table.getColumn('phone')?.setFilterValue(event.target.value)
           }
-          className='ml-4 max-w-sm'
+          className='max-w-xs'
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant='outline' className='ml-auto'>
-              Columns
+              Hiển thị cột
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align='end'>

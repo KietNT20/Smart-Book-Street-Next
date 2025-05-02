@@ -1,4 +1,6 @@
+import { STORAGE } from '@/constant/storage';
 import { orderService } from '@/services/orderService';
+import { getLocalStorageItem } from '@/utils/token';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { OrderParams } from './../types/order-types';
@@ -42,8 +44,9 @@ export const useOrderStaticsYearAdmin = (year: number) => {
   };
 };
 
-export const useOrderStaticsDailyStore = (date: string, storeId: string) => {
+export const useOrderStaticsDailyStore = (date: string) => {
   const queryClient = useQueryClient();
+  const storeId = getLocalStorageItem(STORAGE.SELECTED_STORE_KEY);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['orderStaticsDailyStore', date, storeId],
@@ -56,7 +59,6 @@ export const useOrderStaticsDailyStore = (date: string, storeId: string) => {
     queryClient.prefetchQuery({
       queryKey: ['orderStaticsDailyStore', date, storeId],
       queryFn: () => orderService.getOrderStaticsDailyStore(date, storeId),
-      staleTime: 0,
     });
   }
 
@@ -67,12 +69,9 @@ export const useOrderStaticsDailyStore = (date: string, storeId: string) => {
   };
 };
 
-export const useOrderStaticsMonthlyStore = (
-  month: number,
-  year: number,
-  storeId: string
-) => {
+export const useOrderStaticsMonthlyStore = (month: number, year: number) => {
   const queryClient = useQueryClient();
+  const storeId = getLocalStorageItem(STORAGE.SELECTED_STORE_KEY);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['orderStaticsMonthlyStore', month, year, storeId],
@@ -87,7 +86,6 @@ export const useOrderStaticsMonthlyStore = (
       queryKey: ['orderStaticsMonthlyStore', month, year, storeId],
       queryFn: () =>
         orderService.getOrderStaticsMonthlyStore(month, year, storeId),
-      staleTime: 0,
     });
   }
 
@@ -98,8 +96,9 @@ export const useOrderStaticsMonthlyStore = (
   };
 };
 
-export const useOrderStaticsYearlyStore = (year: number, storeId: string) => {
+export const useOrderStaticsYearlyStore = (year: number) => {
   const queryClient = useQueryClient();
+  const storeId = getLocalStorageItem(STORAGE.SELECTED_STORE_KEY);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['orderStaticsYearlyStore', year, storeId],
@@ -112,7 +111,6 @@ export const useOrderStaticsYearlyStore = (year: number, storeId: string) => {
     queryClient.prefetchQuery({
       queryKey: ['orderStaticsYearlyStore', year, storeId],
       queryFn: () => orderService.getOrderStaticsYearlyStore(year, storeId),
-      staleTime: 0,
     });
   }
 

@@ -1,4 +1,6 @@
+import { STORAGE } from '@/constant/storage';
 import { orderDetailService } from '@/services/orderDetailService';
+import { getLocalStorageItem } from '@/utils/token';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
@@ -60,11 +62,12 @@ export const useOrderDetailMutation = () => {
   };
 };
 
-export const useOrderDetailCarts = (storeId: string) => {
+export const useOrderDetailCarts = () => {
+  const storeKey = getLocalStorageItem(STORAGE.SELECTED_STORE_KEY);
   const { data, isLoading, error } = useQuery({
-    queryKey: ['order-details', storeId],
-    queryFn: () => orderDetailService.cart(storeId),
-    enabled: !!storeId,
+    queryKey: ['order-details', storeKey],
+    queryFn: () => orderDetailService.cart(storeKey),
+    enabled: !!storeKey,
   });
 
   return {

@@ -1,12 +1,16 @@
+import { STORAGE } from '@/constant/storage';
 import { inventoryService } from '@/services/inventoryService';
 import { InventoryCreate } from '@/types/inventory-types';
+import { getLocalStorageItem } from '@/utils/token';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 export const useInventoryByStoreId = (storeId: string) => {
+  const storeKey = getLocalStorageItem(STORAGE.SELECTED_STORE_KEY);
   const { data, isLoading, error } = useQuery({
     queryKey: ['inventories', storeId],
     queryFn: () => inventoryService.getByStoreId(storeId),
+    enabled: !!storeKey,
   });
 
   return {
@@ -17,10 +21,12 @@ export const useInventoryByStoreId = (storeId: string) => {
   };
 };
 
-export const useInventoryBooksByStoreId = (storeId: string) => {
+export const useInventoryBooksByStoreId = () => {
+  const storeKey = getLocalStorageItem(STORAGE.SELECTED_STORE_KEY);
   const { data, isLoading, error } = useQuery({
-    queryKey: ['inventories-book', storeId],
-    queryFn: () => inventoryService.getBookNextByStoreId(storeId),
+    queryKey: ['inventories-book', storeKey],
+    queryFn: () => inventoryService.getBookNextByStoreId(storeKey),
+    enabled: !!storeKey,
   });
 
   return {
@@ -30,10 +36,12 @@ export const useInventoryBooksByStoreId = (storeId: string) => {
   };
 };
 
-export const useInventorySouvenirsByStoreId = (storeId: string) => {
+export const useInventorySouvenirsByStoreId = () => {
+  const storeKey = getLocalStorageItem(STORAGE.SELECTED_STORE_KEY);
   const { data, isLoading, error } = useQuery({
-    queryKey: ['inventories-souvenir', storeId],
-    queryFn: () => inventoryService.getSouvenirNextByStoreId(storeId),
+    queryKey: ['inventories-souvenir', storeKey],
+    queryFn: () => inventoryService.getSouvenirNextByStoreId(storeKey),
+    enabled: !!storeKey,
   });
 
   return {

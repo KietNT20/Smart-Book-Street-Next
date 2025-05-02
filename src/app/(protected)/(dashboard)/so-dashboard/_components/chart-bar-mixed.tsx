@@ -17,13 +17,11 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
-import { STORAGE } from '@/constant/storage';
 import {
   useOrderStaticsDailyStore,
   useOrderStaticsMonthlyStore,
   useOrderStaticsYearlyStore,
 } from '@/hooks/use-order';
-import { getLocalStorageItem } from '@/utils/token';
 
 export interface OrderStaticValue {
   label: string;
@@ -98,19 +96,16 @@ export function OrderChartStore({
   const currentMonth = month || new Date().getMonth() + 1;
   const currentYear = year || new Date().getFullYear();
   const thisYear = year || new Date().getFullYear();
-  const storeID = getLocalStorageItem(STORAGE.SELECTED_STORE_KEY);
 
   // Use appropriate hooks based on timeframe
-  const { orderStaticsDailyStore, orderDailyError } = useOrderStaticsDailyStore(
-    currentDate,
-    storeID || ''
-  );
+  const { orderStaticsDailyStore, orderDailyError } =
+    useOrderStaticsDailyStore(currentDate);
 
   const { orderStaticsMonthlyStore, orderMonthlyError } =
-    useOrderStaticsMonthlyStore(currentMonth, currentYear, storeID || '');
+    useOrderStaticsMonthlyStore(currentMonth, currentYear);
 
   const { orderStaticsYearlyStore, orderYearError } =
-    useOrderStaticsYearlyStore(thisYear, storeID || '');
+    useOrderStaticsYearlyStore(thisYear);
 
   // Determine which data to use based on timeframe
   const getActiveData = () => {

@@ -5,11 +5,18 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { PATH } from '@/enums/path';
 import { useGetAuthorById } from '@/hooks/use-author';
+import { useEntityBreadcrumb } from '@/hooks/use-breadcrumb-page';
 import Link from 'next/link';
 import AuthorInfo from './_components/author-info';
 
 const AuthorDetailPage = ({ params }: { params: { id: string } }) => {
   const { data: authorRes } = useGetAuthorById(params.id);
+  useEntityBreadcrumb(
+    PATH.ADMIN_AUTHORS,
+    'Tác giả',
+    params.id,
+    authorRes?.result.authorName
+  );
 
   if (!authorRes?.isSuccess) {
     return (

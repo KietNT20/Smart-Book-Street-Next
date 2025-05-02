@@ -45,13 +45,16 @@ const EventForm = ({ eventEdit }: Props) => {
     previewOtherImgs,
     previewVideo,
     nonDeletedZones,
+    baseImgInputRef,
+    otherImgsInputRef,
+    videoInputRef,
     handleSubmit,
     handleBaseImageChange,
     handleOtherImagesChange,
     handleVideoChange,
-    removeOtherImage,
-    removeBaseImage,
-    removeVideo,
+    handleRemoveBaseImage,
+    handleRemoveOtherImage,
+    handleRemoveVideo,
     handleStartDateChange,
     handleEndDateChange,
   } = useEventForm({ eventEdit });
@@ -219,7 +222,12 @@ const EventForm = ({ eventEdit }: Props) => {
                     type='file'
                     accept='image/*'
                     disabled={isSubmitting}
-                    ref={ref}
+                    ref={(e) => {
+                      ref(e);
+                      if (e) {
+                        baseImgInputRef.current = e;
+                      }
+                    }}
                     onChange={(e) => {
                       handleBaseImageChange(e);
                       onChange(e.target.files?.[0] || null);
@@ -227,18 +235,19 @@ const EventForm = ({ eventEdit }: Props) => {
                     className='cursor-pointer'
                   />
                   {previewBaseImg && (
-                    <div className='relative w-64 overflow-hidden rounded-md border'>
+                    <div className='relative flex h-72 items-center justify-center overflow-hidden rounded-md border'>
                       <Image
                         src={previewBaseImg}
                         alt='Base image preview'
-                        className='h-full w-full object-cover'
+                        className='object-cover'
+                        height={275}
                       />
                       <Button
                         type='button'
                         variant='destructive'
                         size='icon'
                         className='absolute right-2 top-2 h-8 w-8 rounded-full'
-                        onClick={removeBaseImage}
+                        onClick={handleRemoveBaseImage}
                       >
                         <X className='h-4 w-4' />
                       </Button>
@@ -266,7 +275,12 @@ const EventForm = ({ eventEdit }: Props) => {
                     accept='image/*'
                     multiple
                     disabled={isSubmitting}
-                    ref={ref}
+                    ref={(e) => {
+                      ref(e);
+                      if (e) {
+                        otherImgsInputRef.current = e;
+                      }
+                    }}
                     onChange={(e) => {
                       handleOtherImagesChange(e);
                       const filesArray = e.target.files
@@ -282,19 +296,23 @@ const EventForm = ({ eventEdit }: Props) => {
                       {previewOtherImgs.map((url, index) => (
                         <div
                           key={index}
-                          className='relative aspect-square w-full overflow-hidden rounded-md border'
+                          className='relative flex aspect-video w-full items-center overflow-hidden rounded-md border'
                         >
                           <Image
                             src={url}
                             alt={`Preview ${index + 1}`}
-                            className='h-full w-full object-cover'
+                            style={{
+                              objectFit: 'cover',
+                              width: '100%',
+                              height: '100%',
+                            }}
                           />
                           <Button
                             type='button'
                             variant='destructive'
                             size='icon'
                             className='absolute right-2 top-2 h-8 w-8 rounded-full'
-                            onClick={() => removeOtherImage(index)}
+                            onClick={() => handleRemoveOtherImage(index)}
                           >
                             <X className='h-4 w-4' />
                           </Button>
@@ -323,7 +341,12 @@ const EventForm = ({ eventEdit }: Props) => {
                     type='file'
                     accept='video/*'
                     disabled={isSubmitting}
-                    ref={ref}
+                    ref={(e) => {
+                      ref(e);
+                      if (e) {
+                        videoInputRef.current = e;
+                      }
+                    }}
                     onChange={(e) => {
                       handleVideoChange(e);
                       onChange(e.target.files?.[0] || null);
@@ -332,7 +355,7 @@ const EventForm = ({ eventEdit }: Props) => {
                   />
 
                   {previewVideo && (
-                    <div className='relative w-full max-w-md overflow-hidden rounded-md border'>
+                    <div className='relative aspect-video w-full overflow-hidden rounded-md border'>
                       <video
                         src={previewVideo}
                         controls
@@ -343,7 +366,7 @@ const EventForm = ({ eventEdit }: Props) => {
                         variant='destructive'
                         size='icon'
                         className='absolute right-2 top-2 h-8 w-8 rounded-full'
-                        onClick={removeVideo}
+                        onClick={handleRemoveVideo}
                       >
                         <X className='h-4 w-4' />
                       </Button>

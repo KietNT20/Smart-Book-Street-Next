@@ -66,8 +66,8 @@ export default function StoreSchedulePage() {
       <div className='container mx-auto max-w-6xl px-4 py-8'>
         {/* Store Header */}
         <div className='mb-6 overflow-hidden rounded-lg bg-background shadow-md'>
-          <div className='relative h-64 md:h-80'>
-            <div className='absolute inset-0'>
+          <div className='relative flex h-64 items-center justify-center md:h-80'>
+            <div className='absolute inset-0 flex items-center justify-center'>
               <Image
                 src={mainImage}
                 alt={store.storeName}

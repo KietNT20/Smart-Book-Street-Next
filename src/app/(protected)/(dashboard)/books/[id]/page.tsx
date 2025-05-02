@@ -7,6 +7,7 @@ import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PATH } from '@/enums/path';
 import { useGetBookByID } from '@/hooks/use-book-search';
+import { useEntityBreadcrumb } from '@/hooks/use-breadcrumb-page';
 import Link from 'next/link';
 import BookInfo from './_components/book-info';
 import ImageGalleryBook from './_components/image-gallery-book';
@@ -18,6 +19,13 @@ export default function BooksDetailPage({
 }) {
   const { bookData: book, isLoading: bookDetailLoading } = useGetBookByID(
     params.id as string
+  );
+
+  useEntityBreadcrumb(
+    PATH.BOOKS,
+    'Sách',
+    params.id,
+    book?.title || 'Chi tiết sách'
   );
 
   if (bookDetailLoading) {

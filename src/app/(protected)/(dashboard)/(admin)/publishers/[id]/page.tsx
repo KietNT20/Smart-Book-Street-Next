@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ImageFallback } from '@/constant/storage';
 import { PATH } from '@/enums/path';
+import { useEntityBreadcrumb } from '@/hooks/use-breadcrumb-page';
 import { usePublisherById } from '@/hooks/use-publisher';
 import { Image } from 'antd';
 import Link from 'next/link';
@@ -20,6 +21,12 @@ export default function PublisherDetailPage({
     params.id
   );
   const isLoading = isLoadingPublisher;
+  useEntityBreadcrumb(
+    PATH.PUBLISHERS,
+    'Nhà xuất bản',
+    params.id,
+    publisher?.publisherName
+  );
 
   if (errorPublisher || !publisher) {
     return (

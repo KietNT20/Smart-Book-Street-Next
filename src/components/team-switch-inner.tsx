@@ -36,7 +36,6 @@ function TeamSwitcherInner({
   const [activeStore, setActiveStore] = useState<StoreData | undefined>(
     undefined
   );
-
   const router = useRouter();
 
   // Initialize from localStorage only once after component is mounted

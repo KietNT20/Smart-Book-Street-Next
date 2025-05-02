@@ -45,7 +45,7 @@ export function DataTableBook<TData, TValue>({
   });
 
   return (
-    <div className=''>
+    <div>
       <div className='flex items-center gap-4 py-4'>
         <Input
           placeholder='Tìm kiếm theo isbn'

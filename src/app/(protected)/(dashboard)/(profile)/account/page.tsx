@@ -8,7 +8,11 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { PATH } from '@/enums/path';
 import { useAuth } from '@/hooks/use-auth';
+import { useEntityBreadcrumb } from '@/hooks/use-breadcrumb-page';
 import { getVietnameseRoleLabel } from '@/utils/format';
 import dayjs from 'dayjs';
 import { ArrowLeft, Mail, User } from 'lucide-react';
@@ -25,6 +29,13 @@ export default function ProfilePage() {
   const { isEditing, startEditing, cancelEdit } = useProfileForm({
     user: user as UseUserFormProps['user'],
   });
+
+  useEntityBreadcrumb(
+    PATH.ACCOUNT,
+    'Thông tin tài khoản',
+    'Tài khoản',
+    user?.userName || user?.email
+  );
 
   useEffect(() => {
     setIsClient(true);
@@ -57,72 +68,81 @@ export default function ProfilePage() {
             <CardHeader>
               <CardTitle className='text-center'>Thông tin cá nhân</CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className='grid gap-4 md:grid-cols-2'>
-                {user?.userName && (
-                  <div>
-                    <h3 className='mb-1 text-sm font-medium text-muted-foreground'>
-                      Tên đăng nhập
-                    </h3>
-                    <p className='font-medium'>{user.userName}</p>
-                  </div>
-                )}
+            <CardContent className='pt-5'>
+              <div className='grid gap-6 md:grid-cols-2'>
+                <div className='grid gap-2'>
+                  <Label className='text-sm font-medium text-muted-foreground'>
+                    Tên đăng nhập
+                  </Label>
+                  <Input
+                    value={user?.userName || 'Chưa có'}
+                    className='pointer-events-none bg-background text-card-foreground'
+                  />
+                </div>
 
-                {user?.email && (
-                  <div>
-                    <h3 className='mb-1 text-sm font-medium text-muted-foreground'>
-                      Email
-                    </h3>
-                    <p className='font-medium'>{user.email}</p>
-                  </div>
-                )}
+                <div className='grid gap-2'>
+                  <Label className='text-sm font-medium text-muted-foreground'>
+                    Email
+                  </Label>
+                  <Input
+                    value={user?.email || 'Chưa có'}
+                    className='pointer-events-none bg-background text-card-foreground'
+                  />
+                </div>
 
-                {user?.fullName && (
-                  <div>
-                    <h3 className='mb-1 text-sm font-medium text-muted-foreground'>
-                      Họ và tên
-                    </h3>
-                    <p className='font-medium'>{user.fullName}</p>
-                  </div>
-                )}
+                <div className='grid gap-2'>
+                  <Label className='text-sm font-medium text-muted-foreground'>
+                    Họ và tên
+                  </Label>
+                  <Input
+                    value={user?.fullName || 'Chưa có'}
+                    className='pointer-events-none bg-background text-card-foreground'
+                  />
+                </div>
 
-                {user?.phone && (
-                  <div>
-                    <h3 className='mb-1 text-sm font-medium text-muted-foreground'>
-                      Số điện thoại
-                    </h3>
-                    <p className='font-medium'>{user.phone}</p>
-                  </div>
-                )}
+                <div className='grid gap-2'>
+                  <Label className='text-sm font-medium text-muted-foreground'>
+                    Số điện thoại
+                  </Label>
+                  <Input
+                    value={user?.phone || 'Chưa có'}
+                    className='pointer-events-none bg-background text-card-foreground'
+                  />
+                </div>
 
-                {user?.gender && (
-                  <div>
-                    <h3 className='mb-1 text-sm font-medium text-muted-foreground'>
-                      Giới tính
-                    </h3>
-                    <p className='font-medium'>{user.gender}</p>
-                  </div>
-                )}
+                <div className='grid gap-2'>
+                  <Label className='text-sm font-medium text-muted-foreground'>
+                    Giới tính
+                  </Label>
+                  <Input
+                    value={user?.gender || 'Chưa có'}
+                    className='pointer-events-none bg-background text-card-foreground'
+                  />
+                </div>
 
-                {user?.dob && (
-                  <div>
-                    <h3 className='mb-1 text-sm font-medium text-muted-foreground'>
-                      Ngày sinh
-                    </h3>
-                    <p className='font-medium'>
-                      {dayjs(user.dob).format('DD/MM/YYYY')}
-                    </p>
-                  </div>
-                )}
+                <div className='grid gap-2'>
+                  <Label className='text-sm font-medium text-muted-foreground'>
+                    Ngày sinh
+                  </Label>
+                  <Input
+                    value={
+                      user?.dob
+                        ? dayjs(user?.dob).format('DD/MM/YYYY')
+                        : 'Chưa có'
+                    }
+                    className='pointer-events-none bg-background text-card-foreground'
+                  />
+                </div>
 
-                {user?.address && (
-                  <div className='md:col-span-2'>
-                    <h3 className='mb-1 text-sm font-medium text-muted-foreground'>
-                      Địa chỉ
-                    </h3>
-                    <p className='font-medium'>{user.address}</p>
-                  </div>
-                )}
+                <div className='grid gap-2 md:col-span-2'>
+                  <Label className='text-sm font-medium text-muted-foreground'>
+                    Địa chỉ
+                  </Label>
+                  <Input
+                    value={user?.address || 'Chưa có'}
+                    className='pointer-events-none bg-background text-card-foreground'
+                  />
+                </div>
               </div>
             </CardContent>
             <CardFooter>

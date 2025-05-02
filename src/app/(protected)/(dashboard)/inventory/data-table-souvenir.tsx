@@ -45,7 +45,7 @@ export function DataTableSouvenir<TData, TValue>({
   });
 
   return (
-    <div className=''>
+    <div>
       <div className='flex items-center py-4'>
         <Input
           placeholder='Tìm kiếm theo tên quà lưu niệm'

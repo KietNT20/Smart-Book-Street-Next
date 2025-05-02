@@ -15,6 +15,7 @@ import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ImageFallback } from '@/constant/storage';
 import { PATH } from '@/enums/path';
+import { useEntityBreadcrumb } from '@/hooks/use-breadcrumb-page';
 import { useGetEventById } from '@/hooks/use-event';
 import { Image } from 'antd';
 import dayjs from 'dayjs';
@@ -34,6 +35,7 @@ export default function EventDetailPage({
 }) {
   const { eventData, eventLoading } = useGetEventById(params.id);
   const isLoading = eventLoading;
+  useEntityBreadcrumb(PATH.EVENTS, 'Sự kiện', params.id, eventData?.eventName);
 
   const formatTime = (dateString: string | Date | null): string => {
     return dayjs(dateString).format('HH:mm');

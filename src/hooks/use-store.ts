@@ -1,5 +1,7 @@
+import { STORAGE } from '@/constant/storage';
 import { storeService } from '@/services/storeService';
 import { StoreParams, StoreSearchCriteria } from '@/types/store-types';
+import { getLocalStorageItem } from '@/utils/token';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
@@ -198,7 +200,8 @@ export const useStoreStaticsTotal = () => {
   };
 };
 
-export const useStoreStaticsProduct = (storeId: string) => {
+export const useStoreStaticsProduct = () => {
+  const storeId = getLocalStorageItem(STORAGE.SELECTED_STORE_KEY);
   const { data, isLoading, error } = useQuery({
     queryKey: ['stores-statics-products', storeId],
     queryFn: () => storeService.getStatisticProducts(storeId),

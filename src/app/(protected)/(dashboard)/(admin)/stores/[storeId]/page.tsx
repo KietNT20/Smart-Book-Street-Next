@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ImageFallback } from '@/constant/storage';
 import { PATH } from '@/enums/path';
+import { useEntityBreadcrumb } from '@/hooks/use-breadcrumb-page';
 import { useStoreById } from '@/hooks/use-store';
 import { Image } from 'antd';
 import { Clock, Mail, Map as MapIcon, MapPin, Phone } from 'lucide-react';
@@ -13,6 +14,12 @@ import Link from 'next/link';
 
 export default function StorePage({ params }: { params: { storeId: string } }) {
   const { store, isLoading } = useStoreById(params.storeId);
+  useEntityBreadcrumb(
+    PATH.STORES,
+    'Cửa hàng',
+    params.storeId,
+    store?.storeName
+  );
 
   if (!store) {
     return (

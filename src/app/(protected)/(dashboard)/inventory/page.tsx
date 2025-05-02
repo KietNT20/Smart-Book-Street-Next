@@ -2,14 +2,12 @@
 
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { STORAGE } from '@/constant/storage';
 import { PATH } from '@/enums/path';
 import {
   useInventoryBooksByStoreId,
   useInventorySouvenirsByStoreId,
 } from '@/hooks/use-inventory';
 import { useOrderDetailCarts } from '@/hooks/use-order-detail';
-import { getLocalStorageItem } from '@/utils/token';
 import { Badge } from 'antd';
 import { ShoppingCart } from 'lucide-react';
 import Link from 'next/link';
@@ -19,14 +17,10 @@ import { columnsSouvenir } from './columns-souvenir';
 import { DataTableBook } from './data-table-book';
 import { DataTableSouvenir } from './data-table-souvenir';
 
-const storeId = getLocalStorageItem(STORAGE.SELECTED_STORE_KEY);
-
 const InventoryPage = () => {
-  const { inventoriesByBook } = useInventoryBooksByStoreId(storeId as string);
-  const { inventoriesBySouvenir } = useInventorySouvenirsByStoreId(
-    storeId as string
-  );
-  const { totalItem } = useOrderDetailCarts(storeId as string);
+  const { inventoriesByBook } = useInventoryBooksByStoreId();
+  const { inventoriesBySouvenir } = useInventorySouvenirsByStoreId();
+  const { totalItem } = useOrderDetailCarts();
 
   return (
     <div className='container relative mx-auto py-10'>

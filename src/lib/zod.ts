@@ -130,8 +130,8 @@ export const bookSchema = z.object({
       ])
     )
     .default([])
-    .refine((files) => files.length <= 3, {
-      message: 'Chỉ có thể tải lên tối đa 3 hình ảnh bổ sung',
+    .refine((files) => files.length <= 4, {
+      message: 'Chỉ có thể tải lên tối đa 4 hình ảnh bổ sung',
     }),
   publisherId: z.string().optional(),
   authorIds: z.array(z.string()).optional(),
@@ -418,8 +418,8 @@ export const eventFormSchema = z
       .union([
         z
           .instanceof(File)
-          .refine((file) => file.size <= 100 * 1024 * 1024, {
-            message: 'Video phải nhỏ hơn 100MB',
+          .refine((file) => file.size <= 50 * 1024 * 1024, {
+            message: 'Video phải nhỏ hơn 50MB',
           })
           .refine(
             (file) =>
@@ -429,7 +429,35 @@ export const eventFormSchema = z
             {
               message: 'Chỉ chấp nhận video định dạng MP4, WebM hoặc QuickTime',
             }
-          ),
+          )
+          .superRefine(async (file, ctx) => {
+            try {
+              const url = URL.createObjectURL(file);
+              const video = document.createElement('video');
+
+              await new Promise<void>((resolve, reject) => {
+                video.onloadedmetadata = () => {
+                  URL.revokeObjectURL(url);
+                  if (video.videoWidth < 1280 || video.videoHeight < 720) {
+                    ctx.addIssue({
+                      code: z.ZodIssueCode.custom,
+                      message:
+                        'Video phải có độ phân giải tối thiểu 720p (1280x720)',
+                    });
+                  }
+                  resolve();
+                };
+                video.onerror = () =>
+                  reject(new Error('Failed to load video metadata'));
+                video.src = url;
+              });
+            } catch {
+              ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                message: 'Không thể xác định chất lượng video',
+              });
+            }
+          }),
         z.string(),
         z.null(),
       ])

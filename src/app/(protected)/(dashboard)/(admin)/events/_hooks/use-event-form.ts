@@ -1,12 +1,10 @@
-'use client';
-
 import { useEventMutaton } from '@/hooks/use-event';
 import { useNonDeletedZones } from '@/hooks/use-zone';
 import { eventFormSchema, EventFormValues } from '@/lib/zod';
 import { Event } from '@/types/event-types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import dayjs from 'dayjs';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 type UseEventFormProps = {
@@ -14,10 +12,17 @@ type UseEventFormProps = {
 };
 
 export const useEventForm = ({ eventEdit }: UseEventFormProps) => {
-  // States
   const [previewBaseImg, setPreviewBaseImg] = useState<string | null>(null);
   const [previewOtherImgs, setPreviewOtherImgs] = useState<string[]>([]);
   const [previewVideo, setPreviewVideo] = useState<string | null>(null);
+
+  const [baseImgFile, setBaseImgFile] = useState<File | null>(null);
+  const [otherImgFiles, setOtherImgFiles] = useState<File[]>([]);
+  const [videoFile, setVideoFile] = useState<File | null>(null);
+
+  const baseImgInputRef = useRef<HTMLInputElement | null>(null);
+  const otherImgsInputRef = useRef<HTMLInputElement | null>(null);
+  const videoInputRef = useRef<HTMLInputElement | null>(null);
 
   // Hooks
   const { nonDeletedZones } = useNonDeletedZones();
@@ -58,7 +63,11 @@ export const useEventForm = ({ eventEdit }: UseEventFormProps) => {
     formData.append('IsOpen', String(values.isOpen || false));
     formData.append('AllowAds', String(values.allowAds || false));
 
-    if (values.baseImgFile && typeof window !== 'undefined') {
+    if (
+      values.baseImgFile &&
+      typeof values.baseImgFile === 'object' &&
+      typeof window !== 'undefined'
+    ) {
       formData.set('BaseImgFile', values.baseImgFile);
     }
 
@@ -74,7 +83,11 @@ export const useEventForm = ({ eventEdit }: UseEventFormProps) => {
       });
     }
 
-    if (values.videoFile && typeof window !== 'undefined') {
+    if (
+      values.videoFile &&
+      typeof values.videoFile === 'object' &&
+      typeof window !== 'undefined'
+    ) {
       formData.append('VideoFile', values.videoFile);
     }
 
@@ -89,6 +102,7 @@ export const useEventForm = ({ eventEdit }: UseEventFormProps) => {
   const handleBaseImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      setBaseImgFile(file); // Lưu trữ file
       form.setValue('baseImgFile', file);
       setPreviewBaseImg(URL.createObjectURL(file));
     }
@@ -98,9 +112,18 @@ export const useEventForm = ({ eventEdit }: UseEventFormProps) => {
     const files = e.target.files;
     if (files && files.length > 0) {
       const fileArray = Array.from(files);
-      const currentFiles = form.getValues('otherImgFile');
-      const newFiles = [...currentFiles, ...fileArray];
-      form.setValue('otherImgFile', newFiles);
+
+      // Cập nhật state files
+      const currentStateFiles = [...otherImgFiles];
+      const newStateFiles = [...currentStateFiles, ...fileArray];
+      setOtherImgFiles(newStateFiles);
+
+      // Cập nhật form
+      const currentFormFiles = form.getValues('otherImgFile') || [];
+      const newFormFiles = [...currentFormFiles, ...fileArray];
+      form.setValue('otherImgFile', newFormFiles);
+
+      // Cập nhật previews
       const newPreviewUrls = fileArray.map((file) => URL.createObjectURL(file));
       setPreviewOtherImgs((prev) => [...prev, ...newPreviewUrls]);
     }
@@ -110,6 +133,7 @@ export const useEventForm = ({ eventEdit }: UseEventFormProps) => {
   const handleVideoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      setVideoFile(file); // Lưu trữ file
       form.setValue('videoFile', file);
       setPreviewVideo(URL.createObjectURL(file));
     }
@@ -117,24 +141,59 @@ export const useEventForm = ({ eventEdit }: UseEventFormProps) => {
 
   // Remove handlers
   const removeOtherImage = (index: number) => {
-    const currentFiles = form.getValues('otherImgFile');
-    const updatedFiles = [...currentFiles];
-    updatedFiles.splice(index, 1);
-    form.setValue('otherImgFile', updatedFiles);
+    // Cập nhật state files
+    const updatedStateFiles = [...otherImgFiles];
+    updatedStateFiles.splice(index, 1);
+    setOtherImgFiles(updatedStateFiles);
 
+    // Cập nhật form
+    const updatedFormFiles = [...(form.getValues('otherImgFile') || [])];
+    updatedFormFiles.splice(index, 1);
+    form.setValue('otherImgFile', updatedFormFiles);
+
+    // Cập nhật previews
     const updatedPreviews = [...previewOtherImgs];
     updatedPreviews.splice(index, 1);
     setPreviewOtherImgs(updatedPreviews);
   };
 
   const removeBaseImage = () => {
+    // Cập nhật state
+    setBaseImgFile(null);
+    // Cập nhật form
     form.setValue('baseImgFile', undefined);
+    // Xóa preview
     setPreviewBaseImg(null);
   };
 
   const removeVideo = () => {
+    // Cập nhật state
+    setVideoFile(null);
+    // Cập nhật form
     form.setValue('videoFile', undefined);
+    // Xóa preview
     setPreviewVideo(null);
+  };
+
+  const handleRemoveBaseImage = () => {
+    removeBaseImage();
+    if (baseImgInputRef.current) {
+      baseImgInputRef.current.value = '';
+    }
+  };
+
+  const handleRemoveOtherImage = (index: number) => {
+    removeOtherImage(index);
+    if (previewOtherImgs.length <= 1 && otherImgsInputRef.current) {
+      otherImgsInputRef.current.value = '';
+    }
+  };
+
+  const handleRemoveVideo = () => {
+    removeVideo();
+    if (videoInputRef.current) {
+      videoInputRef.current.value = '';
+    }
   };
 
   // Date validation
@@ -207,5 +266,14 @@ export const useEventForm = ({ eventEdit }: UseEventFormProps) => {
     removeVideo,
     handleStartDateChange,
     handleEndDateChange,
+    baseImgFile,
+    otherImgFiles,
+    videoFile,
+    baseImgInputRef,
+    otherImgsInputRef,
+    videoInputRef,
+    handleRemoveBaseImage,
+    handleRemoveOtherImage,
+    handleRemoveVideo,
   };
 };
