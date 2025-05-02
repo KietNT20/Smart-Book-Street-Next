@@ -1,7 +1,5 @@
 'use client';
 
-import { Loader } from 'lucide-react';
-
 import { Badge } from '@/components/ui/badge';
 import {
   Card,
@@ -11,6 +9,7 @@ import {
 } from '@/components/ui/card';
 import { formatPrice } from '@/lib/utils';
 import dayjs from 'dayjs';
+import { Loader } from 'lucide-react';
 import { useSectionCardSoDashboard } from '../_hooks/use-section-card';
 
 export function SectionCards() {
@@ -32,7 +31,7 @@ export function SectionCards() {
             {inventoriesByStoreLoading ? (
               <Loader className='size-6 animate-spin' />
             ) : (
-              staticsStore?.totalCount
+              (staticsStore?.totalCount ?? 0)
             )}
           </CardTitle>
           {/* <div className='absolute right-4 top-4'>
@@ -58,9 +57,10 @@ export function SectionCards() {
             {orderYearLoading ? (
               <Loader className='size-6 animate-spin' />
             ) : (
-              orderStaticsYearlyStore?.totalOrder
+              (orderStaticsYearlyStore?.totalOrder ?? 0)
             )}
           </CardTitle>
+
           <div className='absolute right-4 top-4'>
             <Badge variant='outline' className='flex gap-1 rounded-lg text-xs'>
               {currentYear}
@@ -107,8 +107,10 @@ export function SectionCards() {
           <CardTitle className='@[250px]/card:text-4xl text-3xl font-semibold tabular-nums'>
             {isLoadingStoreContract ? (
               <Loader className='size-6 animate-spin' />
+            ) : storeContract?.[0]?.endDate ? (
+              dayjs(storeContract[0].endDate).format('DD/MM/YYYY')
             ) : (
-              dayjs(storeContract?.[0]?.endDate).format('DD/MM/YYYY')
+              'chưa có'
             )}
           </CardTitle>
           {/* <div className='absolute right-4 top-4'>

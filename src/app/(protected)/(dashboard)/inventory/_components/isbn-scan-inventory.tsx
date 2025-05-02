@@ -1,6 +1,5 @@
 'use client';
 
-import { fetchBookIsbnInventory } from '@/api/book';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -9,137 +8,96 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import { STORAGE } from '@/constant/storage';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { useOrderDetailMutation } from '@/hooks/use-order-detail';
-import { getLocalStorageItem } from '@/utils/token';
-import { BrowserMultiFormatReader } from '@zxing/library';
-import { Camera, Keyboard, Loader2, Search, XCircle } from 'lucide-react';
-import { useRef, useState } from 'react';
+import {
+  Camera,
+  CameraOff,
+  Keyboard,
+  Loader2,
+  Search,
+  SwitchCamera,
+  XCircle,
+} from 'lucide-react';
 import { toast } from 'sonner';
-
-const storeId = getLocalStorageItem(STORAGE.SELECTED_STORE_KEY) as string;
-
-/**
- * Hàm định dạng ISBN thành dạng có gạch ngang
- * Ví dụ: "9786045784860" → "978-604-57-8486-0"
- */
-const formatISBN = (isbn: string): string => {
-  // Loại bỏ tất cả dấu gạch ngang hiện có
-  const cleanIsbn = isbn.replace(/-/g, '');
-
-  // Nếu là ISBN-13 (13 chữ số)
-  if (cleanIsbn.length === 13) {
-    return `${cleanIsbn.slice(0, 3)}-${cleanIsbn.slice(3, 6)}-${cleanIsbn.slice(6, 8)}-${cleanIsbn.slice(8, 12)}-${cleanIsbn.slice(12)}`;
-  }
-
-  // Nếu là ISBN-10 (10 chữ số)
-  if (cleanIsbn.length === 10) {
-    return `${cleanIsbn.slice(0, 1)}-${cleanIsbn.slice(1, 4)}-${cleanIsbn.slice(4, 9)}-${cleanIsbn.slice(9)}`;
-  }
-
-  // Trả về nguyên gốc nếu không đúng định dạng
-  return isbn;
-};
+import { useIsbnScanner } from '../_hooks/use-isbhn-scanner';
 
 const ISBNScannerInventory = () => {
-  const [isScanning, setIsScanning] = useState(false);
-  const [manualISBN, setManualISBN] = useState('');
-  const [inputMode, setInputMode] = useState<'scan' | 'manual'>('scan');
-
-  const scannerRef = useRef<BrowserMultiFormatReader | null>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const {
+    isScanning,
+    manualISBN,
+    inputMode,
+    cameraDevices,
+    selectedCameraId,
+    cameraError,
+    videoRef,
+    setManualISBN,
+    setInputMode,
+    setSelectedCameraId,
+    startScanning,
+    stopScanning,
+    handleManualSubmit,
+    switchCamera,
+    getSelectedCameraName,
+  } = useIsbnScanner({
+    onScanSuccess: (isbn) => {
+      // Handle when a book is scanned successfully
+      processISBN(isbn);
+    },
+  });
 
   const { createOrderDetail, createOrderDetailPending } =
     useOrderDetailMutation();
 
   const isLoading = createOrderDetailPending;
 
-  const startScanning = async () => {
-    try {
-      setIsScanning(true);
-      const codeReader = new BrowserMultiFormatReader();
-      scannerRef.current = codeReader;
-
-      const videoInputDevices = await codeReader.listVideoInputDevices();
-      if (videoInputDevices.length === 0) {
-        toast.error('Không tìm thấy camera');
-        setIsScanning(false);
-        return;
-      }
-
-      const selectedDeviceId = videoInputDevices[0].deviceId;
-
-      await codeReader.decodeFromVideoDevice(
-        selectedDeviceId,
-        videoRef.current!,
-        (result, error) => {
-          if (result) {
-            const rawIsbn = result.getText();
-            // Định dạng ISBN thành dạng có gạch ngang
-            const formattedIsbn = formatISBN(rawIsbn);
-            handleScanSuccess(formattedIsbn);
-          }
-          if (error && error.name !== 'NotFoundException') {
-            console.error(error);
-          }
-        }
-      );
-    } catch (err) {
-      toast.error('Không thể khởi động camera');
-      console.error(err);
-      setIsScanning(false);
-    }
-  };
-
-  const stopScanning = () => {
-    if (scannerRef.current) {
-      scannerRef.current.reset();
-    }
-    setIsScanning(false);
-  };
-
-  const handleScanSuccess = async (isbn: string) => {
-    stopScanning();
-    processISBN(isbn);
-  };
-
-  const handleManualSubmit = () => {
-    if (!manualISBN) {
-      toast.error('Vui lòng nhập mã ISBN');
-      return;
-    }
-
-    // Định dạng ISBN nhập tay thành dạng có gạch ngang
-    const formattedIsbn = formatISBN(manualISBN);
-    processISBN(formattedIsbn);
-  };
-
   const processISBN = (isbn: string) => {
-    // Giữ nguyên ISBN có dấu gạch ngang khi gửi request
-    toast.promise(fetchBookIsbnInventory(storeId, isbn), {
-      loading: 'Đang tìm kiếm thông tin sách...',
-      success: (data) => {
-        const formData = new FormData();
-        formData.append('InventoryId', data.inventoryId);
-        formData.append('Quantity', '1');
-
+    toast.promise(
+      async () => {
         try {
+          const response = await fetch(`/api/inventory/books/isbn/${isbn}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+          });
+
+          if (!response.ok) {
+            throw new Error('Không tìm thấy thông tin sách với mã ISBN này');
+          }
+
+          const data = await response.json();
+
+          const formData = new FormData();
+          formData.append('InventoryId', data.inventoryId);
+          formData.append('Quantity', '1');
+
           createOrderDetail(formData);
-          toast.success(`Đã thêm 1 sách "${data.title}" vào đơn hàng`);
+          return data;
         } catch (error) {
-          console.error('Error creating order detail:', error);
-          toast.error('Không thể thêm sách vào đơn hàng');
+          console.error('Error:', error);
+          throw error;
         }
-        setManualISBN('');
-        return 'Đã tìm thấy thông tin sách';
       },
-      error: (error) => {
-        if (error instanceof Error) {
-          return error.message;
-        }
-        return 'Có lỗi xảy ra khi tìm kiếm thông tin sách';
-      },
-    });
+      {
+        loading: 'Đang tìm kiếm thông tin sách...',
+        success: (data) => {
+          toast.success(`Đã thêm 1 sách "${data.title}" vào đơn hàng`);
+          setManualISBN('');
+          return 'Đã tìm thấy thông tin sách';
+        },
+        error: (error) => {
+          if (error instanceof Error) {
+            return error.message;
+          }
+          return 'Có lỗi xảy ra khi tìm kiếm thông tin sách';
+        },
+      }
+    );
   };
 
   return (
@@ -166,19 +124,58 @@ const ISBNScannerInventory = () => {
       </div>
 
       {inputMode === 'scan' ? (
-        <Button onClick={startScanning} className='gap-2' disabled={isLoading}>
-          {isLoading ? (
-            <>
-              <Loader2 className='h-4 w-4 animate-spin' />
-              Đang xử lý...
-            </>
+        <>
+          {cameraDevices.length > 0 ? (
+            <div className='flex flex-wrap items-center gap-2'>
+              {cameraDevices.length > 1 ? (
+                <Select
+                  value={selectedCameraId}
+                  onValueChange={setSelectedCameraId}
+                  disabled={isLoading || isScanning}
+                >
+                  <SelectTrigger className='w-48'>
+                    <SelectValue placeholder='Chọn camera' />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {cameraDevices.map((device) => (
+                      <SelectItem key={device.deviceId} value={device.deviceId}>
+                        {device.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              ) : (
+                <div className='text-sm text-muted-foreground'>
+                  {getSelectedCameraName()}
+                </div>
+              )}
+              <Button
+                onClick={startScanning}
+                className='w-full gap-2 md:w-auto'
+                disabled={isLoading || !selectedCameraId || isScanning}
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className='h-4 w-4 animate-spin' />
+                    Đang xử lý...
+                  </>
+                ) : (
+                  <>
+                    <Camera className='h-4 w-4' />
+                    Quét mã ISBN
+                  </>
+                )}
+              </Button>
+            </div>
           ) : (
-            <>
-              <Camera className='h-4 w-4' />
-              Quét mã ISBN
-            </>
+            <div className='flex items-center gap-2'>
+              <Button disabled variant='outline'>
+                <CameraOff className='mr-2 h-4 w-4' />
+                {cameraError || 'Không tìm thấy camera'}
+              </Button>
+            </div>
           )}
-        </Button>
+        </>
       ) : (
         <div className='flex gap-2'>
           <Input
@@ -209,23 +206,54 @@ const ISBNScannerInventory = () => {
         open={isScanning}
         onOpenChange={(open) => !open && stopScanning()}
       >
-        <DialogContent className='md:max-w-72'>
+        <DialogContent className='sm:max-w-[400px]'>
           <DialogHeader>
             <DialogTitle>Quét mã ISBN</DialogTitle>
           </DialogHeader>
           <div className='relative'>
-            <video ref={videoRef} className='h-auto w-full rounded-lg' />
-            <Button
-              variant='ghost'
-              size='icon'
-              className='absolute right-2 top-2'
-              onClick={stopScanning}
-            >
-              <XCircle className='h-4 w-4' />
-            </Button>
+            {cameraError ? (
+              <div className='flex h-[200px] items-center justify-center rounded-lg bg-muted p-4'>
+                <p className='text-center text-sm text-muted-foreground'>
+                  {cameraError}
+                </p>
+              </div>
+            ) : (
+              <div className='overflow-hidden rounded-lg bg-black'>
+                <video
+                  ref={videoRef}
+                  className='h-auto w-full'
+                  autoPlay
+                  playsInline
+                  muted
+                />
+              </div>
+            )}
+            <div className='absolute right-2 top-2 flex gap-2'>
+              {cameraDevices.length > 1 && (
+                <Button
+                  variant='secondary'
+                  size='icon'
+                  className='h-8 w-8 opacity-80'
+                  onClick={switchCamera}
+                >
+                  <SwitchCamera className='h-4 w-4' />
+                </Button>
+              )}
+              <Button
+                variant='ghost'
+                size='icon'
+                className='h-8 w-8 opacity-80'
+                onClick={stopScanning}
+              >
+                <XCircle className='h-4 w-4' />
+              </Button>
+            </div>
           </div>
           <p className='text-center text-sm text-muted-foreground'>
             Hướng camera vào mã vạch ISBN trên sách
+          </p>
+          <p className='text-center text-xs text-muted-foreground'>
+            Đang sử dụng: {getSelectedCameraName()}
           </p>
         </DialogContent>
       </Dialog>

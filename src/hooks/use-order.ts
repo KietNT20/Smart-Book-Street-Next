@@ -49,6 +49,7 @@ export const useOrderStaticsDailyStore = (date: string, storeId: string) => {
     queryKey: ['orderStaticsDailyStore', date, storeId],
     queryFn: () => orderService.getOrderStaticsDailyStore(date, storeId),
     staleTime: 0,
+    enabled: !!storeId,
   });
 
   if (storeId) {
@@ -78,6 +79,7 @@ export const useOrderStaticsMonthlyStore = (
     queryFn: () =>
       orderService.getOrderStaticsMonthlyStore(month, year, storeId),
     staleTime: 0,
+    enabled: !!storeId,
   });
 
   if (storeId) {
@@ -103,6 +105,7 @@ export const useOrderStaticsYearlyStore = (year: number, storeId: string) => {
     queryKey: ['orderStaticsYearlyStore', year, storeId],
     queryFn: () => orderService.getOrderStaticsYearlyStore(year, storeId),
     staleTime: 0,
+    enabled: !!storeId,
   });
 
   if (storeId) {
