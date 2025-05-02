@@ -80,8 +80,6 @@ export default function StoresPage() {
     );
 
     setIsSearching(hasActiveFilter);
-
-    // router.replace(window.location.pathname);
   };
 
   const clearSearch = () => {
@@ -94,9 +92,6 @@ export default function StoresPage() {
       type: '',
     });
     setIsSearching(false);
-
-    // // Reset to page 1 when clearing search
-    // router.replace(window.location.pathname);
   };
 
   return (

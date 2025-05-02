@@ -1,6 +1,5 @@
 'use client';
 
-import { fetchBookByISBN } from '@/api/book';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -17,7 +16,6 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Book } from '@/types/book-types';
-import { BrowserMultiFormatReader } from '@zxing/library';
 import {
   Camera,
   CameraOff,
@@ -27,304 +25,39 @@ import {
   SwitchCamera,
   XCircle,
 } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
-import { toast } from 'sonner';
+import { useISBNScanner } from '../_lib/use-isbn-scanner';
 
 interface ISBNScannerProps {
   onBookFound: (book: Book) => void;
 }
 
-interface CameraDevice {
-  deviceId: string;
-  label: string;
-  isFrontCamera: boolean;
-}
-
 const ISBNScanner = ({ onBookFound }: ISBNScannerProps) => {
-  const [isScanning, setIsScanning] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [manualISBN, setManualISBN] = useState('');
-  const [inputMode, setInputMode] = useState<'scan' | 'manual'>('scan');
-  const [cameraDevices, setCameraDevices] = useState<CameraDevice[]>([]);
-  const [selectedCameraId, setSelectedCameraId] = useState<string>('');
-  const [isCameraPermissionGranted, setIsCameraPermissionGranted] =
-    useState<boolean>(false);
-  const [cameraError, setCameraError] = useState<string | null>(null);
+  const {
+    // States
+    isScanning,
+    isLoading,
+    manualISBN,
+    inputMode,
+    cameraDevices,
+    selectedCameraId,
+    cameraError,
 
-  const scannerRef = useRef<BrowserMultiFormatReader | null>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const activeStreamRef = useRef<MediaStream | null>(null);
+    // Refs
+    videoRef,
 
-  // Kiểm tra và liệt kê thiết bị camera có sẵn
-  useEffect(() => {
-    const checkCameraPermission = async () => {
-      try {
-        // Yêu cầu quyền truy cập camera
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: true,
-        });
-
-        // Dừng stream sau khi đã kiểm tra quyền truy cập
-        stream.getTracks().forEach((track) => track.stop());
-
-        setIsCameraPermissionGranted(true);
-        setCameraError(null);
-
-        // Lấy danh sách thiết bị camera
-        const devices = await navigator.mediaDevices.enumerateDevices();
-        const videoDevices = devices.filter(
-          (device) => device.kind === 'videoinput'
-        );
-
-        if (videoDevices.length === 0) {
-          setCameraError('Không tìm thấy camera');
-          return;
-        }
-
-        const formattedDevices = videoDevices.map((device) => {
-          // Xác định camera trước/sau dựa trên label
-          const isFrontCamera =
-            device.label.toLowerCase().includes('front') ||
-            device.label.toLowerCase().includes('trước') ||
-            device.label.toLowerCase().includes('user') ||
-            device.label.toLowerCase().includes('selfie');
-
-          return {
-            deviceId: device.deviceId,
-            label:
-              device.label || (isFrontCamera ? 'Camera trước' : 'Camera sau'),
-            isFrontCamera,
-          };
-        });
-
-        setCameraDevices(formattedDevices);
-
-        // Mặc định chọn camera sau (nếu có)
-        const backCamera = formattedDevices.find(
-          (device) => !device.isFrontCamera
-        );
-        if (backCamera) {
-          setSelectedCameraId(backCamera.deviceId);
-        } else if (formattedDevices.length > 0) {
-          setSelectedCameraId(formattedDevices[0].deviceId);
-        }
-      } catch (err) {
-        console.error('Không thể truy cập camera:', err);
-        setIsCameraPermissionGranted(false);
-        setCameraError(
-          'Không thể truy cập camera. Vui lòng kiểm tra lại quyền truy cập.'
-        );
-      }
-    };
-
-    checkCameraPermission();
-
-    // Cleanup khi component unmount
-    return () => {
-      if (activeStreamRef.current) {
-        activeStreamRef.current.getTracks().forEach((track) => track.stop());
-        activeStreamRef.current = null;
-      }
-    };
-  }, []);
-
-  const startScanning = async () => {
-    if (!isCameraPermissionGranted) {
-      toast.error('Camera chưa được cấp quyền truy cập');
-      return;
-    }
-
-    // Trước tiên, sử dụng getUserMedia để khởi tạo camera và kiểm tra xem có hoạt động không
-    try {
-      if (activeStreamRef.current) {
-        activeStreamRef.current.getTracks().forEach((track) => track.stop());
-        activeStreamRef.current = null;
-      }
-
-      // Khởi tạo stream mới với camera được chọn
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: {
-          deviceId: { exact: selectedCameraId },
-        },
-      });
-
-      activeStreamRef.current = stream;
-
-      // Hiển thị stream trên video element trước
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        await videoRef.current.play().catch((e) => {
-          console.error('Video play error:', e);
-          throw new Error('Không thể phát video từ camera');
-        });
-      }
-
-      setIsScanning(true);
-      const codeReader = new BrowserMultiFormatReader();
-      scannerRef.current = codeReader;
-
-      setTimeout(() => {
-        // Bắt đầu quét mã sau khi đã hiển thị video
-        codeReader.decodeFromVideoDevice(
-          selectedCameraId,
-          videoRef.current!,
-          (result, error) => {
-            if (result) {
-              const isbn = result.getText();
-              handleScanSuccess(isbn);
-            }
-            if (error && error.name !== 'NotFoundException') {
-              console.error('Scanner error:', error);
-            }
-          }
-        );
-      }, 1000); // Đợi 1 giây để đảm bảo video đã được hiển thị
-
-      setCameraError(null);
-    } catch (err) {
-      console.error('Không thể khởi động camera:', err);
-      setCameraError(
-        'Không thể khởi động camera. Vui lòng thử lại hoặc chọn camera khác.'
-      );
-      toast.error('Không thể khởi động camera');
-      setIsScanning(false);
-    }
-  };
-
-  const stopScanning = () => {
-    if (scannerRef.current) {
-      scannerRef.current.reset();
-      scannerRef.current = null;
-    }
-
-    if (activeStreamRef.current) {
-      activeStreamRef.current.getTracks().forEach((track) => track.stop());
-      activeStreamRef.current = null;
-    }
-
-    if (videoRef.current) {
-      videoRef.current.srcObject = null;
-    }
-
-    setIsScanning(false);
-  };
-
-  const handleScanSuccess = async (isbn: string) => {
-    stopScanning();
-    processISBN(isbn);
-  };
-
-  const handleManualSubmit = () => {
-    if (!manualISBN) {
-      toast.error('Vui lòng nhập mã ISBN');
-      return;
-    }
-
-    processISBN(manualISBN);
-  };
-
-  const processISBN = (isbn: string) => {
-    setIsLoading(true);
-
-    toast.promise(fetchBookByISBN(isbn), {
-      loading: 'Đang tìm kiếm thông tin sách...',
-      success: (data) => {
-        console.log('Book data:', data);
-
-        if (data && data.result) {
-          onBookFound(data.result);
-        }
-
-        setIsLoading(false);
-        setManualISBN('');
-        return 'Đã tìm thấy thông tin sách';
-      },
-      error: (error) => {
-        setIsLoading(false);
-        if (error instanceof Error) {
-          return error.message;
-        }
-        return 'Có lỗi xảy ra khi tìm kiếm thông tin sách';
-      },
-    });
-  };
-
-  // Đổi camera
-  const switchCamera = async () => {
-    if (cameraDevices.length <= 1) return;
-
-    const currentIndex = cameraDevices.findIndex(
-      (device) => device.deviceId === selectedCameraId
-    );
-    const nextIndex = (currentIndex + 1) % cameraDevices.length;
-    const newCameraId = cameraDevices[nextIndex].deviceId;
-
-    // Dừng scanning hiện tại
-    if (scannerRef.current) {
-      scannerRef.current.reset();
-      scannerRef.current = null;
-    }
-
-    if (activeStreamRef.current) {
-      activeStreamRef.current.getTracks().forEach((track) => track.stop());
-      activeStreamRef.current = null;
-    }
-
-    setSelectedCameraId(newCameraId);
-
-    // Khởi động lại camera với thiết bị mới
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: {
-          deviceId: { exact: newCameraId },
-        },
-      });
-
-      activeStreamRef.current = stream;
-
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        await videoRef.current.play();
-      }
-
-      // Khởi động lại scanner
-      setTimeout(() => {
-        const codeReader = new BrowserMultiFormatReader();
-        scannerRef.current = codeReader;
-
-        codeReader.decodeFromVideoDevice(
-          newCameraId,
-          videoRef.current!,
-          (result, error) => {
-            if (result) {
-              const isbn = result.getText();
-              handleScanSuccess(isbn);
-            }
-            if (error && error.name !== 'NotFoundException') {
-              console.error(error);
-            }
-          }
-        );
-      }, 500);
-
-      setCameraError(null);
-    } catch (err) {
-      console.error('Không thể chuyển camera:', err);
-      setCameraError('Không thể chuyển camera. Vui lòng thử lại.');
-      toast.error('Không thể chuyển camera');
-    }
-  };
-
-  // Hiển thị tên camera đã chọn
-  const getSelectedCameraName = () => {
-    const selected = cameraDevices.find(
-      (device) => device.deviceId === selectedCameraId
-    );
-    return selected ? selected.label : 'Chọn camera';
-  };
+    // Methods
+    setManualISBN,
+    setInputMode,
+    setSelectedCameraId,
+    startScanning,
+    stopScanning,
+    handleManualSubmit,
+    switchCamera,
+    getSelectedCameraName,
+  } = useISBNScanner({ onBookFound });
 
   return (
-    <div className='flex flex-col gap-4 md:flex-row'>
+    <div className='flex flex-col gap-4 lg:flex-row'>
       <div className='flex items-center justify-center gap-2'>
         <Button
           variant={inputMode === 'scan' ? 'default' : 'outline'}
@@ -374,7 +107,7 @@ const ISBNScanner = ({ onBookFound }: ISBNScannerProps) => {
               )}
               <Button
                 onClick={startScanning}
-                className='gap-2'
+                className='w-full gap-2 md:w-auto'
                 disabled={isLoading || !selectedCameraId || isScanning}
               >
                 {isLoading ? (
@@ -424,7 +157,7 @@ const ISBNScanner = ({ onBookFound }: ISBNScannerProps) => {
         </div>
       )}
 
-      {/* Dialog quét camera */}
+      {/* Camera scanning dialog */}
       <Dialog
         open={isScanning}
         onOpenChange={(open) => !open && stopScanning()}

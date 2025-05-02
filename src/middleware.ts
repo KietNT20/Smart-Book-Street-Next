@@ -159,6 +159,14 @@ export function middleware(request: NextRequest) {
 
   // If authenticated and trying to access auth pages, redirect to appropriate dashboard
   if (isAuthenticated && isPublicPath) {
+    const allowAccess =
+      request.nextUrl.searchParams.get('allowAccess') === 'true';
+
+    // If allowAccess is true, proceed to the requested page
+    if (allowAccess) {
+      return NextResponse.next();
+    }
+
     const { isValid, userRole } = validateTokenRole(tokenCookie.value);
 
     if (!isValid) {

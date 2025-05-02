@@ -64,6 +64,7 @@ export const useGetContractStore = (storeId: string) => {
   const { data, isLoading, error } = useQuery({
     queryKey: ['user-stores', storeId],
     queryFn: () => userStoreService.checkStoreContract(storeId),
+    enabled: !!storeId,
   });
   return {
     storeContract: data?.results || [],
