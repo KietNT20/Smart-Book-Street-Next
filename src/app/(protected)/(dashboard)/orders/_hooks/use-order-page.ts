@@ -11,7 +11,7 @@ import { toast } from 'sonner';
 
 export const useOrderPage = () => {
   const storeId = getLocalStorageItem(STORAGE.SELECTED_STORE_KEY);
-  const { orderDetailCarts } = useOrderDetailCarts(storeId);
+  const { orderDetailCarts } = useOrderDetailCarts();
   const { updateOrderDetail, deleteOrderDetail } = useOrderDetailMutation();
   const { createOrder, createOrderPending } = useCreateOrder();
 
