@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PATH } from '@/enums/path';
+import { useEntityBreadcrumb } from '@/hooks/use-breadcrumb-page';
 import { formateDateVi } from '@/lib/utils';
 import { getVietnameseRentLabel } from '@/utils/format';
 import {
@@ -51,14 +52,23 @@ const UserStoreRegisteredPage = ({ params }: Props) => {
     handleDeleteUserStore,
     router,
   } = useUserStoreRegistered({ userId });
+  useEntityBreadcrumb(
+    PATH.USER_STORES,
+    'Cửa hàng của người dùng',
+    userId,
+    user?.fullName
+  );
 
   if (error || !userStore || !store) {
     return (
-      <div className='flex min-h-screen items-center justify-center'>
-        <AlertDestructive
-          title='Có lỗi xảy ra!'
-          description='Không thể lấy thông tin hợp đồng. Hoặc hợp đồng không tồn tại.'
-        />
+      <div>
+        <BackButton routeTo={PATH.USER_STORES} />
+        <div className='flex min-h-screen flex-col items-center justify-center'>
+          <AlertDestructive
+            title='Có lỗi xảy ra!'
+            description='Không thể lấy thông tin hợp đồng. Hoặc hợp đồng không tồn tại.'
+          />
+        </div>
       </div>
     );
   }

@@ -75,11 +75,6 @@ const AuthorCombobox = <T extends FieldValues>({
                       !selectedAuthors.length && 'text-muted-foreground'
                     )}
                   >
-                    {/* {selectedAuthors.length > 0
-                      ? `${selectedAuthors.length} tác giả được chọn thay thế ${description}`
-                      : description
-                        ? description
-                        : 'Chọn tác giả...'} */}
                     {selectedAuthors.length > 0
                       ? authors
                           .filter((author) =>

@@ -43,8 +43,10 @@ const StoreForm = ({ storeToEdit }: Props) => {
     toggleZoneDialog,
     onSubmit,
     handleFileChange,
-    removeMainImage,
-    removeAdditionalImage,
+    mainImageInputRef,
+    additionalImagesInputRef,
+    handleRemoveMainImage,
+    handleRemoveAdditionalImage,
     handleCancel,
   } = useStoreForm({ storeToEdit });
 
@@ -280,6 +282,7 @@ const StoreForm = ({ storeToEdit }: Props) => {
                   onChange={(e) => handleFileChange(e, 'mainImageFile')}
                   disabled={isWorking}
                   className='mb-2'
+                  ref={mainImageInputRef}
                 />
                 {form.formState.errors.mainImageFile && (
                   <p className='mb-2 text-sm text-red-500'>
@@ -289,18 +292,19 @@ const StoreForm = ({ storeToEdit }: Props) => {
 
                 {/* Preview ảnh chính */}
                 {previewMainImage && (
-                  <div className='relative max-h-64 w-64 overflow-hidden rounded-md border'>
+                  <div className='relative flex h-72 items-center justify-center overflow-hidden rounded-md border'>
                     <Image
                       src={previewMainImage}
                       alt='main image preview'
-                      className='h-full w-full object-cover'
+                      height={275}
+                      className='object-cover'
                     />
                     <Button
                       type='button'
                       variant='destructive'
                       size='icon'
                       className='absolute right-2 top-2 h-8 w-8 rounded-full'
-                      onClick={removeMainImage}
+                      onClick={handleRemoveMainImage}
                     >
                       <X className='h-4 w-4' />
                     </Button>
@@ -317,6 +321,7 @@ const StoreForm = ({ storeToEdit }: Props) => {
                   onChange={(e) => handleFileChange(e, 'additionalImageFiles')}
                   disabled={isWorking}
                   className='mb-2'
+                  ref={additionalImagesInputRef}
                 />
                 {form.formState.errors.additionalImageFiles && (
                   <p className='mb-2 text-sm text-red-500'>
@@ -326,15 +331,16 @@ const StoreForm = ({ storeToEdit }: Props) => {
 
                 {/* Preview ảnh bổ sung */}
                 {previewAdditionalImages.length > 0 && (
-                  <div className='mt-2 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4'>
+                  <div className='mt-2 grid grid-cols-2 gap-4 md:grid-cols-3'>
                     {previewAdditionalImages.map((url, index) => (
                       <div
                         key={index}
-                        className='relative aspect-square w-full overflow-hidden rounded-md border'
+                        className='relative flex aspect-video items-center overflow-hidden rounded-md border'
                       >
                         <Image
                           src={url}
                           alt={`Preview ${index + 1}`}
+                          height={275}
                           className='h-full w-full object-cover'
                         />
                         <Button
@@ -342,7 +348,7 @@ const StoreForm = ({ storeToEdit }: Props) => {
                           variant='destructive'
                           size='icon'
                           className='absolute right-2 top-2 h-8 w-8 rounded-full'
-                          onClick={() => removeAdditionalImage(index)}
+                          onClick={() => handleRemoveAdditionalImage(index)}
                         >
                           <X className='h-4 w-4' />
                         </Button>

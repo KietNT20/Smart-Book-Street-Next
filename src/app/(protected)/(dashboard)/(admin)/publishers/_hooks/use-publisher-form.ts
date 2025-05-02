@@ -5,7 +5,7 @@ import { useManagerEmail } from '@/hooks/use-user';
 import { publisherFormSchema, PublisherFormValues } from '@/lib/zod';
 import { Publisher } from '@/types/publisher-types';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
@@ -29,6 +29,8 @@ export const usePublisherForm = ({ publisher }: Props = {}) => {
   >([]);
   const [userEmail, setUserEmail] = useState('');
   const [shouldCheckEmail, setShouldCheckEmail] = useState(false);
+  const mainImageInputRef = useRef<HTMLInputElement>(null);
+  const additionalImagesInputRef = useRef<HTMLInputElement>(null);
 
   const {
     createPublisher,
@@ -44,6 +46,27 @@ export const usePublisherForm = ({ publisher }: Props = {}) => {
 
   const isWorking =
     createPublisherPending || updatePublisherPending || managerLoading;
+
+  // Modified removeMainImage function to reset the file input
+  const handleRemoveMainImage = () => {
+    removeMainImage();
+    // Reset the file input value
+    if (mainImageInputRef.current) {
+      mainImageInputRef.current.value = '';
+    }
+  };
+
+  // Modified removeAdditionalImage function to reset the file input
+  const handleRemoveAdditionalImage = (index: number) => {
+    removeAdditionalImage(index);
+    // If all images are removed, reset the file input
+    if (
+      previewAdditionalFiles.length <= 1 &&
+      additionalImagesInputRef.current
+    ) {
+      additionalImagesInputRef.current.value = '';
+    }
+  };
 
   useEffect(() => {
     if (managerError) {
@@ -82,12 +105,34 @@ export const usePublisherForm = ({ publisher }: Props = {}) => {
     }
   };
 
-  const removeAdditionalImage = (index: number) => {
-    const currentFiles = form.getValues('additionalImageFiles');
-    const updatedFiles = [...currentFiles];
-    updatedFiles.splice(index, 1);
-    form.setValue('additionalImageFiles', updatedFiles);
+  const removeMainImage = () => {
+    // Clear preview
+    setPreviewMainImage(null);
 
+    // Clear form value
+    form.setValue('mainImageFile', undefined);
+
+    // Clear files state
+    setFiles((prev) => ({ ...prev, mainFile: null }));
+  };
+
+  const removeAdditionalImage = (index: number) => {
+    // Get current files from form state
+    const currentFiles = [...files.additionalFiles];
+
+    // Remove the file at the specified index
+    currentFiles.splice(index, 1);
+
+    // Update files state
+    setFiles((prev) => ({
+      ...prev,
+      additionalFiles: currentFiles,
+    }));
+
+    // Update form value
+    form.setValue('additionalImageFiles', currentFiles);
+
+    // Update previews
     const updatedPreviews = [...previewAdditionalFiles];
     updatedPreviews.splice(index, 1);
     setPreviewAdditionalFiles(updatedPreviews);
@@ -163,12 +208,6 @@ export const usePublisherForm = ({ publisher }: Props = {}) => {
     setPreviewAdditionalFiles(fileUrls);
   };
 
-  const removeMainImage = () => {
-    setPreviewMainImage(null);
-    form.setValue('mainImageFile', undefined);
-    setFiles((prev) => ({ ...prev, mainFile: null }));
-  };
-
   return {
     form,
     isWorking,
@@ -184,5 +223,10 @@ export const usePublisherForm = ({ publisher }: Props = {}) => {
     files,
     userEmail,
     managerId,
+    setShouldCheckEmail,
+    mainImageInputRef,
+    additionalImagesInputRef,
+    handleRemoveMainImage,
+    handleRemoveAdditionalImage,
   };
 };

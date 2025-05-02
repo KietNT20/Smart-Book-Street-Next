@@ -34,6 +34,7 @@ const UserForm = () => {
     previewMainImage,
     handleMainFileChange,
     removeMainImage,
+    fileInputRef,
   } = useUserForm();
 
   return (
@@ -227,6 +228,7 @@ const UserForm = () => {
                     accept='image/*'
                     onChange={handleMainFileChange}
                     disabled={isWorking}
+                    ref={fileInputRef}
                     className='mb-2'
                   />
                   {form.formState.errors.mainImageFile && (
@@ -238,7 +240,7 @@ const UserForm = () => {
 
                 {/* Xem trước ảnh đại diện */}
                 {previewMainImage && (
-                  <div className='relative mt-4 w-40 shrink-0 overflow-hidden rounded-md border md:mt-0'>
+                  <div className='relative mt-4 flex w-40 shrink-0 items-center overflow-hidden rounded-md border md:mt-0'>
                     <Image src={previewMainImage} alt='Ảnh đại diện' />
                     <Button
                       type='button'

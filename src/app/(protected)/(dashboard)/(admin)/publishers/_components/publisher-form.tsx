@@ -32,13 +32,15 @@ const PublisherForm = ({ publisher }: Props) => {
     previewAdditionalFiles,
     handleMainFileChange,
     handleAdditionalFilesChange,
-    removeMainImage,
-    removeAdditionalImage,
     setUserEmail,
     validateManagerEmail,
     files,
     managerId,
     userEmail,
+    mainImageInputRef,
+    additionalImagesInputRef,
+    handleRemoveMainImage,
+    handleRemoveAdditionalImage,
   } = usePublisherForm({ publisher });
 
   return (
@@ -172,7 +174,7 @@ const PublisherForm = ({ publisher }: Props) => {
                         type='file'
                         accept='image/*'
                         disabled={isWorking}
-                        ref={field.ref}
+                        ref={mainImageInputRef}
                         onChange={(e) => {
                           const file = e.target.files?.[0];
                           if (file) {
@@ -183,18 +185,18 @@ const PublisherForm = ({ publisher }: Props) => {
                         className='cursor-pointer'
                       />{' '}
                       {previewMainImage && (
-                        <div className='relative h-64 w-64 overflow-hidden rounded-md border'>
+                        <div className='relative flex h-72 w-full items-center justify-center overflow-hidden rounded-md border'>
                           <Image
                             src={previewMainImage}
                             alt='main image preview'
-                            width={200}
+                            height={275}
                           />
                           <Button
                             type='button'
                             variant='destructive'
                             size='icon'
-                            className='absolute right-2 top-2 h-8 w-8 rounded-full'
-                            onClick={removeMainImage}
+                            className='absolute right-2 top-2 h-6 w-6 rounded-full'
+                            onClick={handleRemoveMainImage}
                           >
                             <X className='h-4 w-4' />
                           </Button>
@@ -223,6 +225,7 @@ const PublisherForm = ({ publisher }: Props) => {
                         type='file'
                         multiple
                         accept='image/*'
+                        ref={additionalImagesInputRef}
                         onChange={(e) => {
                           const fileList = e.target.files;
                           if (fileList && fileList.length > 0) {
@@ -234,23 +237,25 @@ const PublisherForm = ({ publisher }: Props) => {
                         disabled={isWorking}
                       />
                       {previewAdditionalFiles.length > 0 && (
-                        <div className='grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4'>
-                          {previewAdditionalFiles.map((url, index) => (
+                        <div className='grid grid-cols-2 gap-4 lg:grid-cols-4'>
+                          {previewAdditionalFiles?.map((url, index) => (
                             <div
                               key={index}
-                              className='relative aspect-square w-full overflow-hidden rounded-md border'
+                              className='relative flex aspect-square items-center overflow-hidden rounded-md border'
                             >
                               <Image
                                 src={url}
                                 alt={`Preview ${index + 1}`}
-                                width={200}
+                                className='h-full w-full object-cover'
                               />
                               <Button
                                 type='button'
                                 variant='destructive'
                                 size='icon'
                                 className='absolute right-2 top-2 h-8 w-8 rounded-full'
-                                onClick={() => removeAdditionalImage(index)}
+                                onClick={() =>
+                                  handleRemoveAdditionalImage(index)
+                                }
                               >
                                 <X className='h-4 w-4' />
                               </Button>
@@ -266,7 +271,7 @@ const PublisherForm = ({ publisher }: Props) => {
                         Đã chọn {files.additionalFiles.length} file:
                       </p>
                       <ul className='mt-1 list-disc pl-5 text-sm text-muted-foreground'>
-                        {files.additionalFiles.map((file, index) => (
+                        {files.additionalFiles?.map((file, index) => (
                           <li key={index}>{file.name}</li>
                         ))}
                       </ul>

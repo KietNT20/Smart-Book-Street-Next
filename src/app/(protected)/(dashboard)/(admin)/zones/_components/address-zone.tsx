@@ -189,7 +189,7 @@ const AddressZone = ({ form, disabled = false }: AddressZoneProps) => {
         />
       </div>
 
-      <div className='flex items-center justify-between gap-2'>
+      <div className='flex flex-col gap-2 md:flex-row md:items-center md:justify-between'>
         <div className='flex gap-2'>
           <Button
             type='button'

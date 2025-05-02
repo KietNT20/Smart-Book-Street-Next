@@ -7,6 +7,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { useMemo } from 'react';
 
 interface Props {
@@ -16,7 +17,14 @@ interface Props {
 }
 
 const TablePagination = ({ pageNumber, totalPages, setPageNumber }: Props) => {
+  const isMobile = useIsMobile();
+
   const paginationItems = useMemo(() => {
+    // If the screen is mobile, do not show pagination items
+    if (isMobile) {
+      return [];
+    }
+
     const items = [];
 
     // Display the first 3 pages
@@ -38,7 +46,7 @@ const TablePagination = ({ pageNumber, totalPages, setPageNumber }: Props) => {
       );
     }
 
-    // If totalPages > 3, show the 4th page and ellipsis if totalPages > 8
+    // If the total pages are more than 8, show the next pages
     if (totalPages > 8) {
       items.push(
         <PaginationItem key='ellipsis'>
@@ -47,11 +55,10 @@ const TablePagination = ({ pageNumber, totalPages, setPageNumber }: Props) => {
       );
     }
 
-    // Display all pages from 4 to totalPages - 4 if totalPages > 8
+    // Display the last pages
     if (totalPages > 8) {
       const startLastPages = Math.max(totalPages - 4, 4);
       for (let i = startLastPages; i <= totalPages; i++) {
-        // Not display the last 3 pages if total pages <= 8
         if (i > 3) {
           items.push(
             <PaginationItem key={`last-${i}`}>
@@ -70,7 +77,6 @@ const TablePagination = ({ pageNumber, totalPages, setPageNumber }: Props) => {
         }
       }
     } else if (totalPages > 3) {
-      // If total pages <= 8 and > 3, show the remaining pages after the first 3
       for (let i = 4; i <= totalPages; i++) {
         items.push(
           <PaginationItem key={`middle-${i}`}>
@@ -90,11 +96,11 @@ const TablePagination = ({ pageNumber, totalPages, setPageNumber }: Props) => {
     }
 
     return items;
-  }, [pageNumber, totalPages, setPageNumber]);
+  }, [pageNumber, totalPages, setPageNumber, isMobile]);
 
   return (
     <Pagination className='m-0 flex items-center justify-end'>
-      <PaginationContent>
+      <PaginationContent className={isMobile ? 'gap-2' : ''}>
         <PaginationItem>
           <PaginationPrevious
             href='#'
@@ -108,7 +114,7 @@ const TablePagination = ({ pageNumber, totalPages, setPageNumber }: Props) => {
           />
         </PaginationItem>
 
-        {paginationItems}
+        {!isMobile && paginationItems}
 
         <PaginationItem>
           <PaginationNext

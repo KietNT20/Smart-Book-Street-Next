@@ -3,6 +3,7 @@
 import CancelButton from '@/components/back-btn/cancel-btn';
 import SubmitBtn from '@/components/button/submit-btn';
 import LoadingSpinner from '@/components/spin/loading-spinner';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -15,97 +16,33 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { PATH } from '@/enums/path';
-import { useAuthorMutation, useGetAuthorById } from '@/hooks/use-author';
 import { cn } from '@/lib/utils';
-import { authorFormSchema, AuthorFormValues } from '@/lib/zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { DatePicker } from 'antd';
+import { Author } from '@/types/author-types';
+import { DatePicker, Image } from 'antd';
 import dayjs from 'dayjs';
 import 'dayjs/locale/vi';
-import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
+import { X } from 'lucide-react'; // Import X icon for remove button
+import { useAuthorForm } from '../_hooks/use-author-form';
 
 dayjs.locale('vi');
 
-type FileState = {
-  imgFile: File | null;
-};
-
 type Props = {
-  authorId?: string;
+  author?: Author;
+  isLoadingAuthor?: boolean;
 };
 
-export function AuthorForm({ authorId }: Props) {
-  const [file, setFile] = useState<FileState>({
-    imgFile: null,
-  });
-
+export function AuthorForm({ author, isLoadingAuthor }: Props) {
   const {
-    createAuthor,
-    createAuthorPending,
-    updateAuthor,
-    updateAuthorPending,
-  } = useAuthorMutation();
-  const { data: authorData, isLoading: isLoadingAuthor } = useGetAuthorById(
-    authorId || ''
-  );
+    form,
+    file,
+    isSubmitting,
+    fileInputRef,
+    onSubmit,
+    handleImageFileChange,
+    handleRemoveImage,
+  } = useAuthorForm({ author });
 
-  const isSubmitting = createAuthorPending || updateAuthorPending;
-
-  const form = useForm<AuthorFormValues>({
-    resolver: zodResolver(authorFormSchema),
-    defaultValues: {
-      authorName: '',
-      nationality: '',
-      biography: '',
-      dob: '',
-      imgFile: undefined,
-    },
-  });
-
-  useEffect(() => {
-    if (authorData) {
-      form.reset({
-        authorName: authorData.result.authorName,
-        dob: authorData.result.dob
-          ? dayjs(authorData.result.dob).format('YYYY-MM-DD')
-          : '',
-        nationality: authorData.result.nationality,
-        biography: authorData.result.biography,
-        imgFile: undefined,
-      });
-    }
-  }, [authorData, form]);
-
-  const onSubmit = (data: AuthorFormValues) => {
-    try {
-      const formData = new FormData();
-      formData.append('AuthorName', data.authorName);
-      formData.append('DOB', data.dob || '');
-      formData.append('Nationality', data.nationality || '');
-      formData.append('Biography', data.biography || '');
-      if (data.imgFile && typeof window !== 'undefined') {
-        formData.set('ImgFile', data.imgFile);
-      }
-      if (authorId) {
-        updateAuthor({ id: authorId, formData });
-      } else if (!authorId) {
-        createAuthor(formData);
-      }
-    } catch (error: unknown) {
-      console.error('Error author submit:', error);
-      toast.error('Có lỗi xảy ra. Vui lòng thử lại.');
-    }
-  };
-
-  const handleImageFileChange = (file: File | null) => {
-    if (typeof window !== 'undefined') {
-      setFile((prev) => ({ ...prev, imgFile: file }));
-    }
-  };
-
-  if (authorId && isLoadingAuthor) {
+  if (author?.id && isLoadingAuthor) {
     return <LoadingSpinner />;
   }
 
@@ -190,22 +127,47 @@ export function AuthorForm({ authorId }: Props) {
               <FormItem>
                 <FormLabel>Ảnh</FormLabel>
                 <FormControl>
-                  <Input
-                    type='file'
-                    accept='image/*'
-                    placeholder='Chọn ảnh'
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (file) {
-                        handleImageFileChange(file);
-                        field.onChange(file);
-                      }
-                    }}
-                    className={cn(
-                      form.formState.errors.imgFile && 'border-red-500'
+                  <div className='space-y-2'>
+                    <Input
+                      type='file'
+                      accept='image/*'
+                      placeholder='Chọn ảnh'
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          handleImageFileChange(file);
+                          field.onChange(file);
+                        }
+                      }}
+                      className={cn(
+                        form.formState.errors.imgFile && 'border-red-500'
+                      )}
+                      disabled={isSubmitting}
+                      ref={fileInputRef}
+                    />
+
+                    {file.previewUrl && (
+                      <div className='relative mt-2'>
+                        <div className='group relative flex items-center justify-center border'>
+                          <Image
+                            src={file.previewUrl}
+                            alt='Ảnh xem trước'
+                            width={200}
+                          />
+                          <Button
+                            type='button'
+                            variant='destructive'
+                            size='icon'
+                            className='absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full'
+                            onClick={handleRemoveImage}
+                            disabled={isSubmitting}
+                          >
+                            <X className='h-4 w-4' />
+                          </Button>
+                        </div>
+                      </div>
                     )}
-                    disabled={isSubmitting}
-                  />
+                  </div>
                 </FormControl>
                 <FormDescription>
                   Yêu cầu upload ảnh 600x600 px.
@@ -249,7 +211,7 @@ export function AuthorForm({ authorId }: Props) {
             routerReplace
             pathUrl={PATH.ADMIN_AUTHORS}
           />
-          <SubmitBtn ID={authorId} _onPending={isSubmitting} />
+          <SubmitBtn ID={author?.id} _onPending={isSubmitting} />
         </div>
       </form>
     </Form>

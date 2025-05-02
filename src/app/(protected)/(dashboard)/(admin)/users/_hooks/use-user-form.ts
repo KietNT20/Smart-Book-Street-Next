@@ -3,12 +3,14 @@
 import { useUserMutation } from '@/hooks/use-user';
 import { userFormSchema, UserFormValues } from '@/lib/zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 export const useUserForm = () => {
   const [previewMainImage, setPreviewMainImage] = useState<string | null>(null);
   const { createUser, createUserPending } = useUserMutation();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const isWorking = createUserPending;
 
   const form = useForm<UserFormValues>({
@@ -85,8 +87,17 @@ export const useUserForm = () => {
   };
 
   const removeMainImage = () => {
+    if (previewMainImage) {
+      URL.revokeObjectURL(previewMainImage);
+    }
+
     setPreviewMainImage(null);
     form.setValue('mainImageFile', null, { shouldValidate: true });
+
+    // Reset using the ref
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   };
 
   return {
@@ -96,5 +107,6 @@ export const useUserForm = () => {
     previewMainImage,
     handleMainFileChange,
     removeMainImage,
+    fileInputRef,
   };
 };

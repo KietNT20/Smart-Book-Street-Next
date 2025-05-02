@@ -8,7 +8,10 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { PATH } from '@/enums/path';
+import { useEntityBreadcrumb } from '@/hooks/use-breadcrumb-page';
 import { useUserById } from '@/hooks/use-user';
 import { getVietnameseRoleLabel } from '@/utils/format';
 import dayjs from 'dayjs';
@@ -24,6 +27,12 @@ export default function UserDetailPage({
 }) {
   const { user, userLoading, userError } = useUserById(params.userId);
   const router = useRouter();
+  useEntityBreadcrumb(
+    PATH.USERS,
+    'Người dùng',
+    params.userId,
+    user?.userName || user?.email || 'Tài khoản'
+  );
 
   if (userLoading) {
     return <UserDetailSkeleton />;
@@ -68,72 +77,114 @@ export default function UserDetailPage({
           <CardHeader>
             <CardTitle className='text-center'>Thông tin cá nhân</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className='grid gap-4 md:grid-cols-2'>
-              {user.userName && (
-                <div>
-                  <h3 className='mb-1 text-sm font-medium text-muted-foreground'>
-                    Tên đăng nhập
-                  </h3>
-                  <p className='font-medium'>{user.userName}</p>
-                </div>
-              )}
+          <CardContent className='pt-5'>
+            <div className='grid gap-6 md:grid-cols-2'>
+              <div className='grid gap-2'>
+                <Label
+                  htmlFor='username'
+                  className='text-sm font-medium text-muted-foreground'
+                >
+                  Tên đăng nhập
+                </Label>
+                <Input
+                  id='username'
+                  value={user?.userName || 'Chưa có'}
+                  disabled
+                  className='bg-muted/50'
+                />
+              </div>
 
-              {user.email && (
-                <div>
-                  <h3 className='mb-1 text-sm font-medium text-muted-foreground'>
-                    Email
-                  </h3>
-                  <p className='font-medium'>{user.email}</p>
-                </div>
-              )}
+              <div className='grid gap-2'>
+                <Label
+                  htmlFor='email'
+                  className='text-sm font-medium text-muted-foreground'
+                >
+                  Email
+                </Label>
+                <Input
+                  id='email'
+                  value={user?.email || 'Chưa có'}
+                  disabled
+                  className='bg-muted/50'
+                />
+              </div>
 
-              {user.fullName && (
-                <div>
-                  <h3 className='mb-1 text-sm font-medium text-muted-foreground'>
-                    Họ và tên
-                  </h3>
-                  <p className='font-medium'>{user.fullName}</p>
-                </div>
-              )}
+              <div className='grid gap-2'>
+                <Label
+                  htmlFor='fullname'
+                  className='text-sm font-medium text-muted-foreground'
+                >
+                  Họ và tên
+                </Label>
+                <Input
+                  id='fullname'
+                  value={user?.fullName || 'Chưa có'}
+                  disabled
+                  className='bg-muted/50'
+                />
+              </div>
 
-              {user.phone && (
-                <div>
-                  <h3 className='mb-1 text-sm font-medium text-muted-foreground'>
-                    Số điện thoại
-                  </h3>
-                  <p className='font-medium'>{user.phone}</p>
-                </div>
-              )}
+              <div className='grid gap-2'>
+                <Label
+                  htmlFor='phone'
+                  className='text-sm font-medium text-muted-foreground'
+                >
+                  Số điện thoại
+                </Label>
+                <Input
+                  id='phone'
+                  value={user?.phone || 'Chưa có'}
+                  disabled
+                  className='bg-muted/50'
+                />
+              </div>
 
-              {user.gender && (
-                <div>
-                  <h3 className='mb-1 text-sm font-medium text-muted-foreground'>
-                    Giới tính
-                  </h3>
-                  <p className='font-medium'>{user.gender}</p>
-                </div>
-              )}
+              <div className='grid gap-2'>
+                <Label
+                  htmlFor='gender'
+                  className='text-sm font-medium text-muted-foreground'
+                >
+                  Giới tính
+                </Label>
+                <Input
+                  id='gender'
+                  value={user?.gender || 'Chưa có'}
+                  disabled
+                  className='bg-muted/50'
+                />
+              </div>
 
-              {user.dob && (
-                <div>
-                  <h3 className='mb-1 text-sm font-medium text-muted-foreground'>
-                    Ngày sinh
-                  </h3>
-                  <p className='font-medium'>
-                    {dayjs(user.dob).format('DD/MM/YYYY')}
-                  </p>
-                </div>
-              )}
+              <div className='grid gap-2'>
+                <Label
+                  htmlFor='dob'
+                  className='text-sm font-medium text-muted-foreground'
+                >
+                  Ngày sinh
+                </Label>
+                <Input
+                  id='dob'
+                  value={
+                    user?.dob ? dayjs(user.dob).format('DD/MM/YYYY') : 'Chưa có'
+                  }
+                  disabled
+                  className='bg-muted/50'
+                />
+              </div>
 
-              {user.address && (
-                <div className='md:col-span-2'>
-                  <h3 className='mb-1 text-sm font-medium text-muted-foreground'>
-                    Địa chỉ
-                  </h3>
-                  <p className='font-medium'>{user.address}</p>
-                </div>
-              )}
+              <div className='grid gap-2 md:col-span-2'>
+                <Label
+                  htmlFor='address'
+                  className='text-sm font-medium text-muted-foreground'
+                >
+                  Địa chỉ
+                </Label>
+                <Input
+                  id='address'
+                  value={user?.address || 'Chưa có'}
+                  disabled
+                  className='bg-muted/50'
+                />
+              </div>
             </div>
           </CardContent>
           <CardFooter>

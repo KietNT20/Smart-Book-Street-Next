@@ -95,7 +95,7 @@ const ZoneSearch = ({ onSelectZone, onClose }: ZoneSearchProps) => {
       </div>
       {errorZonesStore && (
         <div className='mb-4 text-red-500'>
-          Error: {errorZonesStore.message || 'lỗi không xác định'}
+          Lỗi: {errorZonesStore.message || 'lỗi không xác định'}
         </div>
       )}
       <div className='h-36 overflow-y-auto'>
@@ -132,7 +132,7 @@ const ZoneSearch = ({ onSelectZone, onClose }: ZoneSearchProps) => {
             </PaginationItem>
             {/* First page */}
             {pageNumber > 2 && (
-              <PaginationItem>
+              <PaginationItem className='hidden md:block'>
                 <PaginationLink
                   href={pathname + '?' + createQueryString('page', '1')}
                 >
@@ -142,13 +142,13 @@ const ZoneSearch = ({ onSelectZone, onClose }: ZoneSearchProps) => {
             )}
             {/* Ellipsis if needed */}
             {pageNumber > 3 && (
-              <PaginationItem>
+              <PaginationItem className='hidden md:block'>
                 <PaginationEllipsis />
               </PaginationItem>
             )}
             {/* Previous page if not on first page */}
             {pageNumber > 1 && (
-              <PaginationItem>
+              <PaginationItem className='hidden md:block'>
                 <PaginationLink
                   href={
                     pathname +
@@ -161,7 +161,7 @@ const ZoneSearch = ({ onSelectZone, onClose }: ZoneSearchProps) => {
               </PaginationItem>
             )}
             {/* Current page */}
-            <PaginationItem>
+            <PaginationItem className='hidden md:block'>
               <PaginationLink
                 isActive
                 href={
@@ -175,7 +175,7 @@ const ZoneSearch = ({ onSelectZone, onClose }: ZoneSearchProps) => {
             </PaginationItem>
             {/* Next page if not on last page */}
             {pageNumber < totalPage && (
-              <PaginationItem>
+              <PaginationItem className='hidden md:block'>
                 <PaginationLink
                   href={
                     pathname +
@@ -189,13 +189,13 @@ const ZoneSearch = ({ onSelectZone, onClose }: ZoneSearchProps) => {
             )}
             {/* Ellipsis if needed */}
             {pageNumber < totalPage - 2 && (
-              <PaginationItem>
+              <PaginationItem className='hidden md:block'>
                 <PaginationEllipsis />
               </PaginationItem>
             )}
             {/* Last page */}
             {pageNumber < totalPage - 1 && totalPage > 1 && (
-              <PaginationItem>
+              <PaginationItem className='hidden md:block'>
                 <PaginationLink
                   href={
                     pathname +

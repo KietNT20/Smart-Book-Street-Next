@@ -1,6 +1,8 @@
+import { STORAGE } from '@/constant/storage';
 import { PATH } from '@/enums/path';
 import { userStoreService } from '@/services/userStoreService';
 import { UserStorePayload } from '@/types/user-types';
+import { getLocalStorageItem } from '@/utils/token';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
@@ -60,7 +62,9 @@ export const useGetContractUser = (userId: string) => {
   };
 };
 
-export const useGetContractStore = (storeId: string) => {
+export const useGetContractStore = () => {
+  const storeId = getLocalStorageItem(STORAGE.SELECTED_STORE_KEY);
+
   const { data, isLoading, error } = useQuery({
     queryKey: ['user-stores', storeId],
     queryFn: () => userStoreService.checkStoreContract(storeId),

@@ -22,11 +22,12 @@ import { cn } from '@/lib/utils';
 import { BookFormValues, bookSchema } from '@/lib/zod';
 import { Book } from '@/types/book-types';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Image } from 'antd';
 import dayjs from 'dayjs';
 import 'dayjs/locale/vi';
-import { Loader2 } from 'lucide-react';
+import { Loader2, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { prepareInitialBookData } from '../_lib/book-form-helpers';
 import { useBookFormSubmit } from '../_lib/use-book-form-submit';
@@ -47,6 +48,10 @@ const BookForm = ({ book, mode }: Props) => {
     useBookMutations();
   const isLoading = createBookPending || updateBookPending;
   const router = useRouter();
+
+  // Create refs for file inputs
+  const mainFileInputRef = useRef<HTMLInputElement>(null);
+  const additionalFilesInputRef = useRef<HTMLInputElement>(null);
 
   const form = useForm<BookFormValues>({
     resolver: zodResolver(bookSchema),
@@ -78,8 +83,10 @@ const BookForm = ({ book, mode }: Props) => {
     files,
     handleMainFileChange,
     handleAdditionalFilesChange,
+    handleRemoveMainImage,
+    handleRemoveAdditionalImage,
     handleSubmit,
-  } = useBookFormSubmit(onSubmit);
+  } = useBookFormSubmit(onSubmit, book?.images?.[0]?.url);
 
   useEffect(() => {
     if (book) {
@@ -267,18 +274,20 @@ const BookForm = ({ book, mode }: Props) => {
               </FormItem>
             )}
           />
-
-          {/* Ảnh chính */}
-          <FormField
-            control={form.control}
-            name='mainImageFile'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Ảnh chính</FormLabel>
-                <FormControl>
+        </div>
+        {/* Ảnh chính */}
+        <FormField
+          control={form.control}
+          name='mainImageFile'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Ảnh chính</FormLabel>
+              <FormControl>
+                <div className='space-y-2'>
                   <Input
                     type='file'
                     accept='image/*'
+                    ref={mainFileInputRef}
                     onChange={(e) => {
                       const file = e.target.files?.[0];
                       if (file) {
@@ -291,32 +300,62 @@ const BookForm = ({ book, mode }: Props) => {
                     )}
                     disabled={isLoading}
                   />
-                </FormControl>
-                <FormDescription>
-                  Yêu cầu upload ảnh (600x600px, tối đa 5 mb).
-                </FormDescription>
-                {files.mainFile && (
-                  <div className='mt-1 text-sm text-zinc-500'>
-                    {files.mainFile.name}
-                  </div>
-                )}
-                <FormMessage />
-              </FormItem>
-            )}
-          />
 
-          {/* Ảnh bổ sung */}
-          <FormField
-            control={form.control}
-            name='additionalImageFiles'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Ảnh bổ sung</FormLabel>
-                <FormControl>
+                  {/* Preview for main image */}
+                  {files.mainPreviewUrl && (
+                    <div className='relative mt-2'>
+                      <div className='group relative flex items-center justify-center border'>
+                        <Image
+                          src={files.mainPreviewUrl}
+                          alt='Ảnh xem trước'
+                          width={300}
+                          height={275}
+                        />
+                        <Button
+                          type='button'
+                          variant='destructive'
+                          size='icon'
+                          className='absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full'
+                          onClick={() => {
+                            handleRemoveMainImage(mainFileInputRef);
+                            field.onChange(undefined);
+                          }}
+                          disabled={isLoading}
+                        >
+                          <X className='h-4 w-4' />
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </FormControl>
+              <FormDescription>
+                Yêu cầu upload ảnh (600x600px, tối đa 5 mb).
+              </FormDescription>
+              {files.mainFile && (
+                <div className='mt-1 text-sm text-zinc-500'>
+                  {files.mainFile.name}
+                </div>
+              )}
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Ảnh bổ sung */}
+        <FormField
+          control={form.control}
+          name='additionalImageFiles'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Ảnh bổ sung</FormLabel>
+              <FormControl>
+                <div className='space-y-2'>
                   <Input
                     type='file'
                     multiple
                     accept='image/*'
+                    ref={additionalFilesInputRef}
                     onChange={(e) => {
                       const fileList = e.target.files;
                       if (fileList && fileList.length > 0) {
@@ -331,28 +370,62 @@ const BookForm = ({ book, mode }: Props) => {
                     )}
                     disabled={isLoading}
                   />
-                </FormControl>
-                <FormDescription>
-                  Yêu cầu upload ảnh (600x600px, tối đa 5 mb mỗi ảnh, tải tối đa
-                  3 hình).
-                </FormDescription>
-                {files.additionalFiles.length > 0 && (
-                  <div className='mt-2'>
-                    <p className='text-sm font-medium'>
-                      Đã chọn {files.additionalFiles.length} file:
-                    </p>
-                    <ul className='mt-1 list-disc pl-5 text-sm text-zinc-500'>
-                      {files.additionalFiles.map((file, index) => (
-                        <li key={index}>{file.name}</li>
+
+                  {/* Preview for additional images */}
+                  {files.additionalPreviewUrls.length > 0 && (
+                    <div className='mt-2 grid grid-cols-2 gap-2 lg:grid-cols-4'>
+                      {files.additionalPreviewUrls.map((url, index) => (
+                        <div
+                          key={index}
+                          className='group relative flex items-center justify-center border'
+                        >
+                          <Image src={url} alt={`Ảnh bổ sung ${index + 1}`} />
+                          <Button
+                            type='button'
+                            variant='destructive'
+                            size='icon'
+                            className='absolute right-0 top-0 -mr-2 -mt-2 flex h-5 w-5 items-center justify-center rounded-full'
+                            onClick={() => {
+                              handleRemoveAdditionalImage(
+                                index,
+                                additionalFilesInputRef
+                              );
+                              const newFiles = [...files.additionalFiles];
+                              newFiles.splice(index, 1);
+                              field.onChange(
+                                newFiles.length > 0 ? newFiles : undefined
+                              );
+                            }}
+                            disabled={isLoading}
+                          >
+                            <X className='h-3 w-3' />
+                          </Button>
+                        </div>
                       ))}
-                    </ul>
-                  </div>
-                )}
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
+                    </div>
+                  )}
+                </div>
+              </FormControl>
+              <FormDescription>
+                Yêu cầu upload ảnh (600x600px png, tối đa 5 mb mỗi ảnh, tải tối
+                đa 4 hình).
+              </FormDescription>
+              {files.additionalFiles.length > 0 && (
+                <div className='mt-2'>
+                  <p className='text-sm font-medium'>
+                    Đã chọn {files.additionalFiles.length} file:
+                  </p>
+                  <ul className='mt-1 list-disc pl-5 text-sm text-zinc-500'>
+                    {files.additionalFiles.map((file, index) => (
+                      <li key={index}>{file.name}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         {/* Mô tả */}
         <FormField

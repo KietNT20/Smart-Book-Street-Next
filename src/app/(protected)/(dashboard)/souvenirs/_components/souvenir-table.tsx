@@ -338,7 +338,7 @@ const SouvenirTable = ({
       <div className='mt-4 flex items-center justify-between'>
         <div className='flex items-center gap-2'>
           <span className='whitespace-nowrap text-sm text-muted-foreground'>
-            Số dòng mỗi trang:
+            Số dòng:
           </span>
           <Select
             value={pageSize.toString()}

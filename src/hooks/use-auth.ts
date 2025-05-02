@@ -1,3 +1,4 @@
+import { useBreadcrumb } from '@/context/breadcrumb-context';
 import { PATH } from '@/enums/path';
 import { RoleEnums } from '@/enums/role';
 import { userService } from '@/services/userService';
@@ -77,6 +78,7 @@ export const useRegister = () => {
 export const useAuth = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
+  const { clearLabels } = useBreadcrumb();
 
   const {
     data: response,
@@ -100,6 +102,7 @@ export const useAuth = () => {
   const handleLogout = () => {
     tokenMethod.remove();
     queryClient.clear();
+    clearLabels();
     router.replace(PATH.LOGIN);
   };
 

@@ -45,7 +45,7 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className=''>
+    <div>
       <div className='flex items-center py-4'>
         <Input
           placeholder='Tên sự kiện'
