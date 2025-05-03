@@ -2,7 +2,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 const LoadingSkeleton = () => {
   return (
-    <div className='container mx-auto py-6'>
+    <div className='container mx-auto'>
       <div className='mb-6 flex items-center justify-between'>
         <div>
           <Skeleton className='h-10 w-64' />

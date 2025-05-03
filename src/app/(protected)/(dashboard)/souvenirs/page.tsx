@@ -86,7 +86,7 @@ const SouvenirsPage = () => {
   };
 
   return (
-    <div className='container mx-auto py-10'>
+    <div className='container mx-auto'>
       <div className='mb-4 flex items-center justify-between'>
         <h2 className='text-2xl font-bold'>Quản lý đồ lưu niệm</h2>
         <Link href={PATH.SOUVENIR_CREATE} passHref>

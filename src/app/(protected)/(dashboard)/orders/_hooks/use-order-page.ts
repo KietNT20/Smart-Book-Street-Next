@@ -15,7 +15,8 @@ export const useOrderPage = () => {
   const { updateOrderDetail, deleteOrderDetail } = useOrderDetailMutation();
   const { createOrder, createOrderPending } = useCreateOrder();
 
-  // State để quản lý số lượng sản phẩm tạm thời
+  // State for managing quantities of products in the cart
+  // This state is used to store the quantities of products that are being updated
   const [quantities, setQuantities] = useState<{
     [key: string]: number | string;
   }>({});
@@ -54,27 +55,27 @@ export const useOrderPage = () => {
     });
   };
 
-  // Hàm lấy số lượng hiện tại (từ state hoặc từ dữ liệu ban đầu)
+  // This function is used to get the current quantity of a product in the cart or a default value if it doesn't exist in the quantities state
   const getCurrentQuantity = (id: string, defaultQuantity: number) => {
     if (!(id in quantities)) {
       return defaultQuantity;
     }
 
-    // Nếu là chuỗi rỗng thì hiển thị rỗng (đang nhập)
+    // If the quantity is an empty string, return an empty string (to indicate that the input is empty)
     if (quantities[id] === '') {
       return '';
     }
 
-    // Trường hợp khác trả về số
+    // Otherwise, return the quantity as a number
     return quantities[id] as number;
   };
 
   const handleIncrement = (id: string, currentQuantity: number | string) => {
-    // Chuyển đổi về số nếu là chuỗi rỗng hoặc số
+    // Convert the current quantity to a number, defaulting to 0 if it's an empty string
     const numQuantity = currentQuantity === '' ? 0 : Number(currentQuantity);
     const newQuantity = numQuantity + 1;
 
-    // Lưu giá trị gốc trước khi cập nhật
+    // Save the original value before updating
     const originalValue =
       orderDetailCarts?.find((item) => item.id === id)?.quantity || 1;
 
@@ -87,13 +88,13 @@ export const useOrderPage = () => {
   };
 
   const handleDecrement = (id: string, currentQuantity: number | string) => {
-    // Chuyển đổi về số nếu là chuỗi rỗng hoặc số
+    // Convert the current quantity to a number, defaulting to 0 if it's an empty string
     const numQuantity = currentQuantity === '' ? 2 : Number(currentQuantity);
 
     if (numQuantity > 1) {
       const newQuantity = numQuantity - 1;
 
-      // Lưu giá trị gốc trước khi cập nhật
+      // Save the original value before updating
       const originalValue =
         orderDetailCarts?.find((item) => item.id === id)?.quantity || 1;
 
@@ -106,12 +107,12 @@ export const useOrderPage = () => {
     }
   };
 
-  // Hàm xử lý khi người dùng nhập vào input
+  // This function is used when the user types in the input field for quantity
   const handleQuantityChange = (id: string, value: string) => {
-    // Chỉ cho phép nhập số
+    // Remove all non-numeric characters from the input value
     const cleanedValue = value.replace(/[^0-9]/g, '');
 
-    // Cho phép giá trị trống trong quá trình nhập
+    // Allow empty value during input
     if (cleanedValue === '') {
       setQuantities({
         ...quantities,
@@ -124,7 +125,7 @@ export const useOrderPage = () => {
     if (!isNaN(numValue)) {
       setQuantities({
         ...quantities,
-        [id]: numValue === 0 ? 0 : numValue, // Cho phép giá trị 0 trong quá trình nhập
+        [id]: numValue === 0 ? 0 : numValue, // Allow value 0 during input
       });
     }
   };
@@ -134,24 +135,24 @@ export const useOrderPage = () => {
     value: string,
     defaultQuantity: number
   ) => {
-    // Xử lý khi input rỗng hoặc giá trị bằng 0
+    // Handle when input is empty or value is 0
     if (value === '' || value === '0') {
-      // Reset về giá trị 1 khi out focus
+      // Reset to value 1 when out of focus
       setQuantities({
         ...quantities,
         [id]: 1,
       });
-      // Lấy giá trị gốc
+      // Get original value
       const originalValue =
         orderDetailCarts?.find((item) => item.id === id)?.quantity || 1;
-      // Cập nhật API với số lượng là 1
+      // Update API with value 1
       handleUpdateQuantity(id, 1, originalValue);
       return;
     }
 
     const numValue = parseInt(value);
     if (isNaN(numValue) || numValue < 1) {
-      // Nếu giá trị không hợp lệ, reset về giá trị trước đó
+      // If the value is invalid, reset to the previous value
       setQuantities({
         ...quantities,
         [id]: defaultQuantity,
@@ -159,20 +160,20 @@ export const useOrderPage = () => {
       return;
     }
 
-    // Lấy giá trị gốc
+    // Get original value
     const originalValue =
       orderDetailCarts?.find((item) => item.id === id)?.quantity || 1;
-    // Gọi API cập nhật số lượng
+    // Update API with value
     handleUpdateQuantity(id, numValue, originalValue);
   };
 
-  // Hàm xử lý phím tắt
+  // Handle keyboard shortcuts
   const handleQuantityKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,
     id: string,
     currentQuantity: number | string
   ) => {
-    // Xử lý phím tăng/giảm
+    // Handle increment/decrement keys
     if (e.key === 'ArrowUp') {
       e.preventDefault();
       handleIncrement(id, currentQuantity);
@@ -180,11 +181,11 @@ export const useOrderPage = () => {
       e.preventDefault();
       handleDecrement(id, currentQuantity);
     } else if (e.key === 'Enter') {
-      e.currentTarget.blur(); // Khi nhấn Enter sẽ mất focus để trigger onBlur
+      e.currentTarget.blur(); // When pressing Enter, lose focus to trigger onBlur
     }
   };
 
-  // Hàm cập nhật số lượng sản phẩm
+  // Handle updating product quantity
   const handleUpdateQuantity = (
     id: string,
     quantity: number,
@@ -192,7 +193,7 @@ export const useOrderPage = () => {
   ) => {
     toast.promise(
       updateOrderDetail({ id, quantity }).catch((error) => {
-        // Khi có lỗi, reset về giá trị ban đầu nếu có
+        // When there is an error, reset to the original value if available
         if (originalQuantity !== undefined) {
           setQuantities({
             ...quantities,

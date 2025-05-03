@@ -1,7 +1,6 @@
 'use client';
 
 import { Map } from 'lucide-react';
-import * as React from 'react';
 
 import {
   SidebarMenu,
@@ -12,6 +11,7 @@ import {
 import { useAuth } from '@/hooks/use-auth';
 import { useGetStreetsAll } from '@/hooks/use-street';
 import { useGetContractUser } from '@/hooks/use-user-store';
+import { useMemo } from 'react';
 import TeamSwitcherInner from './team-switch-inner';
 
 export function TeamSwitcher() {
@@ -21,7 +21,7 @@ export function TeamSwitcher() {
   const { userStore } = useGetContractUser(profile?.id || '');
 
   // Use useMemo to memoize the streets array
-  const streets = React.useMemo(() => streetsRes || [], [streetsRes]);
+  const streets = useMemo(() => streetsRes || [], [streetsRes]);
 
   // Show loading state directly from this component
   if (isLoadingStreets) {

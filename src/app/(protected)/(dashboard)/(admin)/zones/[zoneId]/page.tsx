@@ -15,7 +15,7 @@ const Page = ({ params }: { params: { zoneId: string } }) => {
     true
   );
   return (
-    <div className='container mx-auto md:px-8 md:py-8'>
+    <div className='container mx-auto p-4 md:px-8 md:py-8'>
       {zoneDetail && <ZoneForm zoneToEdit={zoneDetail} />}
     </div>
   );

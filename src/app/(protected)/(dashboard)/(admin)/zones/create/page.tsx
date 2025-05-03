@@ -6,7 +6,7 @@ const ZoneForm = dynamic(() => import('../_components/zone-form'), {
 
 const Page = () => {
   return (
-    <div className='container mx-auto md:px-8 md:py-8'>
+    <div className='container mx-auto p-4 md:px-8 md:py-8'>
       <ZoneForm />
     </div>
   );

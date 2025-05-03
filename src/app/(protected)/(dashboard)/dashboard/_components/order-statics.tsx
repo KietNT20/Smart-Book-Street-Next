@@ -32,7 +32,7 @@ export default function OrderStatisticsPage() {
   const formattedDate = selectedDate.format('YYYY-MM-DD');
 
   return (
-    <div className='container mx-auto space-y-6 py-6'>
+    <div className='space-y-6 py-6'>
       <h1 className='text-3xl font-bold'>Thống Kê Đơn Hàng</h1>
 
       <Tabs

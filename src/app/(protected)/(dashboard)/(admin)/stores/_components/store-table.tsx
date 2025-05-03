@@ -237,10 +237,12 @@ export const StoreTable = ({
                   <TableCell className='text-muted-foreground'>
                     {index + 1}
                   </TableCell>
-                  <TableCell className='font-medium'>
-                    {store.storeName}
+                  <TableCell className='overflow-hidden font-medium'>
+                    <p className='line-clamp-2'>{store.storeName}</p>
                   </TableCell>
-                  <TableCell>{store.address}</TableCell>
+                  <TableCell className='overflow-hidden'>
+                    <p className='line-clamp-2'>{store.address}</p>
+                  </TableCell>
                   <TableCell>{store.phone}</TableCell>
                   <TableCell>{store.email}</TableCell>
                   <TableCell className='text-right'>

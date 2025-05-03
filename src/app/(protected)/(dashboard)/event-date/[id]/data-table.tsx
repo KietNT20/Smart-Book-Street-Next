@@ -46,9 +46,9 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className='flex items-center gap-4 py-4'>
+      <div className='flex flex-col gap-4 py-4 lg:flex-row lg:items-center'>
         <Input
-          placeholder='Họ và tên'
+          placeholder='Tìm Tên người đăng ký'
           value={
             (table.getColumn('registrantName')?.getFilterValue() as string) ??
             ''
@@ -58,10 +58,10 @@ export function DataTable<TData, TValue>({
               .getColumn('registrantName')
               ?.setFilterValue(event.target.value)
           }
-          className='max-w-sm'
+          className='w-full md:max-w-sm'
         />
         <Input
-          placeholder='Email'
+          placeholder='Tìm Email'
           value={
             (table.getColumn('registrantEmail')?.getFilterValue() as string) ??
             ''
@@ -71,10 +71,10 @@ export function DataTable<TData, TValue>({
               .getColumn('registrantEmail')
               ?.setFilterValue(event.target.value)
           }
-          className='max-w-sm'
+          className='w-full md:max-w-sm'
         />
         <Input
-          placeholder='Số điện thoại'
+          placeholder='Tìm Số điện thoại'
           value={
             (table
               .getColumn('registrantPhoneNumber')
@@ -85,7 +85,7 @@ export function DataTable<TData, TValue>({
               .getColumn('registrantPhoneNumber')
               ?.setFilterValue(event.target.value)
           }
-          className='max-w-sm'
+          className='w-full md:max-w-sm'
         />
       </div>
       <div className='rounded-md border'>

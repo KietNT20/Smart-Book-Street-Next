@@ -63,7 +63,7 @@ export default function StoreSchedulePage() {
           Chỉnh sửa
         </Button>
       </div>
-      <div className='container mx-auto max-w-6xl px-4 py-8'>
+      <div className='container mx-auto p-4 md:px-4 md:py-8'>
         {/* Store Header */}
         <div className='mb-6 overflow-hidden rounded-lg bg-background shadow-md'>
           <div className='relative flex h-64 items-center justify-center md:h-80'>

@@ -49,7 +49,7 @@ const GENDER_COLORS = ['hsl(var(--chart-1))', 'hsl(var(--chart-2))'];
 
 const StatisticsPage = () => {
   return (
-    <div className='container mx-auto space-y-6 p-6'>
+    <div className='container mx-auto space-y-6 p-4'>
       <h1 className='mb-6 text-3xl font-bold'>Thống Kê Đường Sách</h1>
 
       {/* Camera Grid */}

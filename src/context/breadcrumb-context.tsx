@@ -36,6 +36,10 @@ export const API_MAPPING: Record<string, { singular: string; plural: string }> =
       singular: 'Đồ lưu niệm',
       plural: 'Đồ lưu niệm',
     },
+    'event-date': {
+      singular: 'Sự kiện hôm nay',
+      plural: 'Sự kiện hôm nay',
+    },
   };
 
 export const ACTION_MAPPING: Record<string, string> = {

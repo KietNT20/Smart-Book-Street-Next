@@ -31,7 +31,7 @@ export default function DashboardLayout({
                   </div>
                 </div>
               </header>
-              <main className='p-2'>{children}</main>
+              <main className='overflow-auto p-2'>{children}</main>
             </div>
           </BreadcrumbProvider>
         </SidebarInset>

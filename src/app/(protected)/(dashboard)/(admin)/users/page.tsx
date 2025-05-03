@@ -88,7 +88,7 @@ export default function UsersPage() {
   };
 
   return (
-    <div className='container mx-auto py-10'>
+    <div className='container mx-auto'>
       <div className='mb-4 flex items-center justify-between'>
         <h2 className='text-2xl font-bold'>Quản lý tài khoản</h2>
         <Link href={PATH.USER_CREATE} passHref>
