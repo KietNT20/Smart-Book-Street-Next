@@ -68,7 +68,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className='flex items-center py-4'>
+      <div className='flex items-center gap-4 py-4'>
         <Input
           placeholder={`Tìm kiếm tên danh mục...`}
           value={

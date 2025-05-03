@@ -7,7 +7,7 @@ const EventForm = dynamic(() => import('../_components/event-form'), {
 
 const EventCreatePage = () => {
   return (
-    <div className='container mx-auto md:px-14 md:py-4'>
+    <div className='container mx-auto md:p-4'>
       <h1 className='text-3xl font-bold'>Tạo sự kiện mới</h1>
       <Separator className='my-4' />
       <div className='rounded-lg border p-6 shadow-md'>

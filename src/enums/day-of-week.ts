@@ -10,10 +10,10 @@ export enum DayOfWeek {
 
 export const DayOfWeekLabels: Record<DayOfWeek, string> = {
   [DayOfWeek.Sunday]: 'Chủ nhật',
-  [DayOfWeek.Monday]: 'Thứ hai',
-  [DayOfWeek.Tuesday]: 'Thứ ba',
-  [DayOfWeek.Wednesday]: 'Thứ tư',
-  [DayOfWeek.Thursday]: 'Thứ năm',
-  [DayOfWeek.Friday]: 'Thứ sáu',
-  [DayOfWeek.Saturday]: 'Thứ bảy',
+  [DayOfWeek.Monday]: 'Thứ 2',
+  [DayOfWeek.Tuesday]: 'Thứ 3',
+  [DayOfWeek.Wednesday]: 'Thứ 4',
+  [DayOfWeek.Thursday]: 'Thứ 5',
+  [DayOfWeek.Friday]: 'Thứ 6',
+  [DayOfWeek.Saturday]: 'Thứ 7',
 };

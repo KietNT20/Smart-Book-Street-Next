@@ -53,7 +53,7 @@ export default function StorePage({ params }: { params: { storeId: string } }) {
           <Button variant={'darker'}>Chỉnh sửa</Button>
         </Link>
       </div>
-      <div className='container mx-auto max-w-6xl px-4 py-8'>
+      <div className='container mx-auto p-4'>
         {/* Store Header */}
         <div className='mb-6 overflow-hidden rounded-lg bg-background shadow-md'>
           <div className='relative h-64 md:h-80'>

@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
@@ -83,27 +84,27 @@ const AuthorsPage = () => {
       <div className='space-y-6'>
         <h2 className='text-2xl font-bold'>Quản lý Tác giả</h2>
 
-        <div className='flex items-end gap-4'>
-          <div className='flex-1'>
-            <label
-              className='mb-2 block text-sm font-medium'
+        <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:flex lg:items-end'>
+          <div className='lg:flex-1'>
+            <Label
+              className='mb-2 hidden text-sm font-medium lg:block'
               htmlFor='search-author'
             >
               Tìm tác giả
-            </label>
+            </Label>
             <Input
               placeholder='Nhập tên tác giả...'
               value={searchParams.result.authorName}
               onChange={(e) => handleAuthorNameChange(e.target.value)}
-              className='max-w-sm'
+              className='w-full lg:max-w-sm'
               id='search-author'
             />
           </div>
 
-          <div className='w-48'>
-            <label className='mb-2 block text-sm font-medium'>
+          <div className='lg:w-48'>
+            <Label className='mb-2 hidden text-sm font-medium lg:block'>
               Chọn trường sắp xếp
-            </label>
+            </Label>
             <Select
               value={searchParams.sortField}
               onValueChange={handleSortFieldChange}
@@ -119,10 +120,10 @@ const AuthorsPage = () => {
             </Select>
           </div>
 
-          <div className='w-48'>
-            <label className='mb-2 block text-sm font-medium'>
+          <div className='lg:w-48'>
+            <Label className='mb-2 hidden text-sm font-medium lg:block'>
               Chọn kiểu sắp xếp
-            </label>
+            </Label>
             <Select
               value={searchParams.sortOrder.toString()}
               onValueChange={handleSortOrderChange}
@@ -137,8 +138,12 @@ const AuthorsPage = () => {
             </Select>
           </div>
 
-          <Link href={PATH.ADMIN_AUTHOR_CREATE}>
-            <Button>
+          <Link
+            href={PATH.ADMIN_AUTHOR_CREATE}
+            className='flex items-center'
+            passHref
+          >
+            <Button className='w-full md:max-w-sm'>
               <Plus className='mr-2' /> Thêm tác giả
             </Button>
           </Link>

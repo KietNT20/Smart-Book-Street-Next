@@ -18,7 +18,7 @@ const EditPublisherPage = () => {
     true
   );
   return (
-    <div className='container mx-auto md:px-32 md:py-4'>
+    <div className='container mx-auto p-4 md:px-32 md:py-4'>
       {publisher && <PublisherForm publisher={publisher} />}
     </div>
   );

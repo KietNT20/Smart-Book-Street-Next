@@ -2,7 +2,7 @@ import UserForm from '../_components/user-form';
 
 const Page = () => {
   return (
-    <div className='container mx-auto md:px-20 md:py-4'>
+    <div className='container mx-auto p-4 md:px-20 md:py-4'>
       <UserForm />
     </div>
   );

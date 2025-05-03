@@ -38,7 +38,7 @@ export default function CategoriesPage() {
   }
 
   return (
-    <div className='container mx-auto py-10'>
+    <div className='container mx-auto'>
       <div className='flex items-center justify-between'>
         <h2 className='text-2xl font-bold'>Quản lý danh mục</h2>
         <Button onClick={handleCreate}>
