@@ -1,5 +1,3 @@
-'use client';
-
 import { usePublisherMutation } from '@/hooks/use-publisher';
 import { useManagerEmail } from '@/hooks/use-user';
 import { publisherFormSchema, PublisherFormValues } from '@/lib/zod';

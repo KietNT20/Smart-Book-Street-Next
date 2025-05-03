@@ -12,24 +12,25 @@ export interface CameraDevice {
 }
 
 /**
- * Hàm định dạng ISBN thành dạng có gạch ngang
- * Ví dụ: "9786045784860" → "978-604-57-8486-0"
+ * Function to format ISBN to dashed format.
+ * @param {string} isbn - ISBN string to format.
+ * Example: "9786045784860" → "978-604-57-8486-0"
  */
 export const formatISBN = (isbn: string): string => {
-  // Loại bỏ tất cả dấu gạch ngang hiện có
+  // Remove all existing dashes
   const cleanIsbn = isbn.replace(/-/g, '');
 
-  // Nếu là ISBN-13 (13 chữ số)
+  // If it's ISBN-13 (13 digits)
   if (cleanIsbn.length === 13) {
     return `${cleanIsbn.slice(0, 3)}-${cleanIsbn.slice(3, 6)}-${cleanIsbn.slice(6, 8)}-${cleanIsbn.slice(8, 12)}-${cleanIsbn.slice(12)}`;
   }
 
-  // Nếu là ISBN-10 (10 chữ số)
+  // If it's ISBN-10 (10 digits)
   if (cleanIsbn.length === 10) {
     return `${cleanIsbn.slice(0, 1)}-${cleanIsbn.slice(1, 4)}-${cleanIsbn.slice(4, 9)}-${cleanIsbn.slice(9)}`;
   }
 
-  // Trả về nguyên gốc nếu không đúng định dạng
+  // Return original if not in correct format
   return isbn;
 };
 
@@ -53,22 +54,22 @@ export const useIsbnScanner = ({ onScanSuccess }: UseIsbnScannerProps = {}) => {
 
   const storeId = getLocalStorageItem(STORAGE.SELECTED_STORE_KEY) as string;
 
-  // Kiểm tra và liệt kê thiết bị camera có sẵn
+  // Check and list available camera devices
   useEffect(() => {
     const checkCameraPermission = async () => {
       try {
-        // Yêu cầu quyền truy cập camera
+        // Request camera access
         const stream = await navigator.mediaDevices.getUserMedia({
           video: true,
         });
 
-        // Dừng stream sau khi đã kiểm tra quyền truy cập
+        // Stop stream after checking access
         stream.getTracks().forEach((track) => track.stop());
 
         setIsCameraPermissionGranted(true);
         setCameraError(null);
 
-        // Lấy danh sách thiết bị camera
+        // Check and list available camera devices
         const devices = await navigator.mediaDevices.enumerateDevices();
         const videoDevices = devices.filter(
           (device) => device.kind === 'videoinput'
@@ -80,7 +81,7 @@ export const useIsbnScanner = ({ onScanSuccess }: UseIsbnScannerProps = {}) => {
         }
 
         const formattedDevices = videoDevices.map((device) => {
-          // Xác định camera trước/sau dựa trên label
+          // Determine front/back camera based on label
           const isFrontCamera =
             device.label.toLowerCase().includes('front') ||
             device.label.toLowerCase().includes('trước') ||
@@ -97,7 +98,7 @@ export const useIsbnScanner = ({ onScanSuccess }: UseIsbnScannerProps = {}) => {
 
         setCameraDevices(formattedDevices);
 
-        // Mặc định chọn camera sau (nếu có)
+        // Default select rear camera (if available)
         const backCamera = formattedDevices.find(
           (device) => !device.isFrontCamera
         );
@@ -117,7 +118,6 @@ export const useIsbnScanner = ({ onScanSuccess }: UseIsbnScannerProps = {}) => {
 
     checkCameraPermission();
 
-    // Cleanup khi component unmount
     return () => {
       if (activeStreamRef.current) {
         activeStreamRef.current.getTracks().forEach((track) => track.stop());
@@ -137,14 +137,14 @@ export const useIsbnScanner = ({ onScanSuccess }: UseIsbnScannerProps = {}) => {
       return;
     }
 
-    // Trước tiên, sử dụng getUserMedia để khởi tạo camera và kiểm tra xem có hoạt động không
+    // First, use getUserMedia to initialize the camera and check if it works.
     try {
       if (activeStreamRef.current) {
         activeStreamRef.current.getTracks().forEach((track) => track.stop());
         activeStreamRef.current = null;
       }
 
-      // Khởi tạo stream mới với camera được chọn
+      // Initiate a new stream with the selected camera
       const stream = await navigator.mediaDevices.getUserMedia({
         video: {
           deviceId: { exact: selectedCameraId },
@@ -153,7 +153,7 @@ export const useIsbnScanner = ({ onScanSuccess }: UseIsbnScannerProps = {}) => {
 
       activeStreamRef.current = stream;
 
-      // Hiển thị stream trên video element trước
+      // Display the stream on the video element
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
         await videoRef.current.play().catch((e) => {
@@ -167,7 +167,7 @@ export const useIsbnScanner = ({ onScanSuccess }: UseIsbnScannerProps = {}) => {
       scannerRef.current = codeReader;
 
       setTimeout(() => {
-        // Bắt đầu quét mã sau khi đã hiển thị video
+        // Start scanning after a short delay to ensure video is ready
         if (videoRef.current) {
           codeReader.decodeFromVideoDevice(
             selectedCameraId,
@@ -175,7 +175,7 @@ export const useIsbnScanner = ({ onScanSuccess }: UseIsbnScannerProps = {}) => {
             (result, error) => {
               if (result) {
                 const rawIsbn = result.getText();
-                // Định dạng ISBN thành dạng có gạch ngang
+                // Format ISBN to dashed form
                 const formattedIsbn = formatISBN(rawIsbn);
                 handleScanSuccess(formattedIsbn);
               }
@@ -185,7 +185,7 @@ export const useIsbnScanner = ({ onScanSuccess }: UseIsbnScannerProps = {}) => {
             }
           );
         }
-      }, 1000); // Đợi 1 giây để đảm bảo video đã được hiển thị
+      }, 1000); // Wait 1 second to ensure video is displayed
 
       setCameraError(null);
     } catch (err) {
@@ -219,11 +219,11 @@ export const useIsbnScanner = ({ onScanSuccess }: UseIsbnScannerProps = {}) => {
   const handleScanSuccess = (isbn: string) => {
     stopScanning();
 
-    // Nếu có callback từ bên ngoài thì gọi
+    // If there is a callback from outside, call it
     if (onScanSuccess) {
       onScanSuccess(isbn);
     } else {
-      // Xử lý mặc định
+      // Default handling
       processISBN(isbn);
     }
   };
@@ -234,21 +234,21 @@ export const useIsbnScanner = ({ onScanSuccess }: UseIsbnScannerProps = {}) => {
       return;
     }
 
-    // Định dạng ISBN nhập tay thành dạng có gạch ngang
+    // Format ISBN to dashed form
     const formattedIsbn = formatISBN(manualISBN);
 
-    // Nếu có callback từ bên ngoài thì gọi
+    // If there is a callback from outside, call it
     if (onScanSuccess) {
       onScanSuccess(formattedIsbn);
       setManualISBN('');
     } else {
-      // Xử lý mặc định
+      // Default handling
       processISBN(formattedIsbn);
     }
   };
 
   const processISBN = (isbn: string) => {
-    // Giữ nguyên ISBN có dấu gạch ngang khi gửi request
+    // Keep the ISBN with dashes when sending the request
     toast.promise(fetchBookIsbnInventory(storeId, isbn), {
       loading: 'Đang tìm kiếm thông tin sách...',
       success: (data) => {
@@ -264,7 +264,7 @@ export const useIsbnScanner = ({ onScanSuccess }: UseIsbnScannerProps = {}) => {
     });
   };
 
-  // Đổi camera
+  // Change camera
   const switchCamera = async () => {
     if (cameraDevices.length <= 1) return;
 
@@ -274,7 +274,7 @@ export const useIsbnScanner = ({ onScanSuccess }: UseIsbnScannerProps = {}) => {
     const nextIndex = (currentIndex + 1) % cameraDevices.length;
     const newCameraId = cameraDevices[nextIndex].deviceId;
 
-    // Dừng scanning hiện tại
+    // Stop the current scanner and stream
     if (scannerRef.current) {
       scannerRef.current.reset();
       scannerRef.current = null;
@@ -287,9 +287,9 @@ export const useIsbnScanner = ({ onScanSuccess }: UseIsbnScannerProps = {}) => {
 
     setSelectedCameraId(newCameraId);
 
-    // Chỉ khởi động lại camera với thiết bị mới nếu đang trong chế độ scanning
+    // Only restart the camera with the new device if in scanning mode
     if (isScanning && videoRef.current) {
-      // Khởi động lại camera với thiết bị mới
+      // Restart the camera with the new device
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
           video: {
@@ -304,7 +304,7 @@ export const useIsbnScanner = ({ onScanSuccess }: UseIsbnScannerProps = {}) => {
           await videoRef.current.play();
         }
 
-        // Khởi động lại scanner
+        // Restart the scanner
         setTimeout(() => {
           if (!videoRef.current) return;
 
@@ -336,7 +336,7 @@ export const useIsbnScanner = ({ onScanSuccess }: UseIsbnScannerProps = {}) => {
     }
   };
 
-  // Hiển thị tên camera đã chọn
+  // Display the selected camera name in the UI
   const getSelectedCameraName = () => {
     const selected = cameraDevices.find(
       (device) => device.deviceId === selectedCameraId

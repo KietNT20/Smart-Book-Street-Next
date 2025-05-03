@@ -25,7 +25,7 @@ import {
   SwitchCamera,
   XCircle,
 } from 'lucide-react';
-import { useISBNScanner } from '../_lib/use-isbn-scanner';
+import { useISBNScannerBook } from '../_lib/use-isbn-scanner';
 
 interface ISBNScannerProps {
   onBookFound: (book: Book) => void;
@@ -54,7 +54,7 @@ const ISBNScanner = ({ onBookFound }: ISBNScannerProps) => {
     handleManualSubmit,
     switchCamera,
     getSelectedCameraName,
-  } = useISBNScanner({ onBookFound });
+  } = useISBNScannerBook({ onBookFound });
 
   return (
     <div className='flex flex-col gap-4 lg:flex-row'>

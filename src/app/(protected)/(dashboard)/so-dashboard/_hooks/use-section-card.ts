@@ -1,5 +1,3 @@
-'use client';
-
 import { useOrderStaticsYearlyStore } from '@/hooks/use-order';
 import { useStoreStaticsProduct } from '@/hooks/use-store';
 import { useGetContractStore } from '@/hooks/use-user-store';

@@ -1,5 +1,3 @@
-'use client';
-
 import { StoreRent } from '@/enums/store-rent';
 import {
   useGetContractUser,

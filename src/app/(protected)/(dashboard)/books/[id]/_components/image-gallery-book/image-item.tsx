@@ -14,13 +14,13 @@ type Props = {
 
 const ImageItem = ({ image, bookCode, onClick, onDelete }: Props) => {
   return (
-    <div className='flex items-center space-x-4 rounded-md p-2 hover:bg-accent'>
-      <div className='relative h-16 w-16 shrink-0 overflow-hidden rounded-md'>
+    <div className='flex items-center space-x-4 border border-darker p-2'>
+      <div className='relative h-36 w-32 shrink-0 overflow-hidden rounded-md'>
         <Image
           src={image.url}
           alt={image.altText || `Ảnh sách ${bookCode || ''}`}
           fill
-          className='object-cover'
+          className='h-full w-full object-cover'
           sizes='64px'
         />
       </div>
@@ -36,7 +36,7 @@ const ImageItem = ({ image, bookCode, onClick, onDelete }: Props) => {
       </div>
       <div className='flex space-x-1'>
         <Button
-          variant='ghost'
+          variant='outline'
           size='icon'
           className='h-8 w-8'
           onClick={() => onClick(image)}
@@ -60,7 +60,7 @@ const ImageItem = ({ image, bookCode, onClick, onDelete }: Props) => {
           <span className='sr-only'>Xem</span>
         </Button>
         <Button
-          variant='ghost'
+          variant='outline'
           size='icon'
           className='h-8 w-8 text-red-600 hover:text-red-700'
           onClick={() => onDelete(image.id)}

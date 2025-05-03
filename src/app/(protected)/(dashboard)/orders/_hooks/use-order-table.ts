@@ -1,5 +1,3 @@
-'use client';
-
 import { STORAGE } from '@/constant/storage';
 import { OrderStatus, Sort } from '@/enums/enums';
 import {

@@ -1,5 +1,3 @@
-'use client';
-
 import { PATH } from '@/enums/path';
 import { useStoreMutation } from '@/hooks/use-store';
 import { storeFormSchema, StoreFormValues } from '@/lib/zod';

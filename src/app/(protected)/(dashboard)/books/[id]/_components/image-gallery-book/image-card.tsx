@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,16 +24,17 @@ type Props = {
 const ImageCard = ({ image, bookCode, onClick, onDelete }: Props) => {
   return (
     <Card
-      className='group relative cursor-pointer overflow-hidden transition-all duration-200 hover:shadow-md'
+      className='group relative cursor-pointer overflow-hidden bg-accent p-2 transition-all duration-200 hover:shadow-md'
       onClick={() => onClick(image)}
     >
-      <div className='relative aspect-square'>
+      <CardContent className='relative flex h-72 items-center justify-center overflow-hidden p-0'>
         <Image
           src={image.url}
           alt={image.altText || `Ảnh sách ${bookCode || ''}`}
-          fill
-          className='object-cover transition-transform duration-300 group-hover:scale-105'
-          sizes='(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 20vw'
+          width={200}
+          height={300}
+          priority
+          className='absolute h-auto max-w-full transition-transform duration-300 group-hover:scale-105'
         />
         <div className='absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100'>
           <div className='absolute bottom-2 right-2'>
@@ -71,7 +72,7 @@ const ImageCard = ({ image, bookCode, onClick, onDelete }: Props) => {
             </DropdownMenu>
           </div>
         </div>
-      </div>
+      </CardContent>
     </Card>
   );
 };
