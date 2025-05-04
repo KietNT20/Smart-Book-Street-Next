@@ -141,7 +141,7 @@ const OrderTablePayment = () => {
             <TableFooter>
               <TableRow>
                 <TableCell colSpan={4} className='text-right font-medium'>
-                  Tổng tiền đơn hàng:
+                  Tổng tiền:
                 </TableCell>
                 <TableCell className='text-lg font-bold text-primary'>
                   {formatPrice(totalAmount)}
