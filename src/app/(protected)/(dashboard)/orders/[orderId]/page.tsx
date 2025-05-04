@@ -66,7 +66,7 @@ export default function OrderInfoPage({
         <TableFooter>
           <TableRow>
             <TableCell colSpan={4} className='text-right font-medium'>
-              Tổng tiền đơn hàng:
+              Tổng tiền:
             </TableCell>
             <TableCell className='text-lg font-bold text-primary'>
               {order && formatPrice(order.totalAmount)}

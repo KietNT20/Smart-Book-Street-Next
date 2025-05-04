@@ -1,5 +1,3 @@
-'use client';
-
 import { useUserMutation } from '@/hooks/use-user';
 import { userFormSchema, UserFormValues } from '@/lib/zod';
 import { User } from '@/types/user-types';

@@ -1,5 +1,3 @@
-'use client';
-
 import { useSouvenirMutation } from '@/hooks/use-souvenir';
 import { souvenirFormSchema, SouvenirFormValues } from '@/lib/zod';
 import { Souvenir } from '@/types/souvenir-types';

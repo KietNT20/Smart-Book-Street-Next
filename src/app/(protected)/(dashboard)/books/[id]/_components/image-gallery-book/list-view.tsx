@@ -13,7 +13,7 @@ type Props = {
 
 const ListView = ({ images, bookCode, onImageClick, onDelete }: Props) => {
   return (
-    <div className='rounded-md border'>
+    <div className='rounded-md border-4'>
       <ScrollArea className='h-[400px]'>
         <div className='space-y-1 p-1'>
           {images.map((image) => (

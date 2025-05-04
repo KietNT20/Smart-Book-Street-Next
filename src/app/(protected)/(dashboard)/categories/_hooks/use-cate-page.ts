@@ -1,5 +1,3 @@
-'use client';
-
 import { useCategoryMutation, useGetCategories } from '@/hooks/use-category';
 import { CategoryFormValues } from '@/lib/zod';
 import { useState } from 'react';

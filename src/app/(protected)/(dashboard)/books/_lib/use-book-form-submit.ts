@@ -1,5 +1,3 @@
-'use client';
-
 import { BookFormValues } from '@/lib/zod';
 import DOMPurify from 'dompurify';
 import { useEffect, useState } from 'react';
@@ -43,7 +41,7 @@ export function useBookFormSubmit(
         }
       });
     };
-  }, [initialMainImageUrl]);
+  }, [initialMainImageUrl, files.mainPreviewUrl, files.additionalPreviewUrls]);
 
   const handleMainFileChange = (file: File | null) => {
     // Cleanup previous object URL if it exists

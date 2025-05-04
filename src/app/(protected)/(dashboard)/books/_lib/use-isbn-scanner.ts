@@ -1,4 +1,3 @@
-// useISBNScanner.ts
 import { fetchBookByISBN } from '@/api/book';
 import { Book } from '@/types/book-types';
 import { BrowserMultiFormatReader } from '@zxing/library';
@@ -40,10 +39,9 @@ export interface UseISBNScannerReturn {
   getSelectedCameraName: () => string;
 }
 
-export const useISBNScanner = ({
+export const useISBNScannerBook = ({
   onBookFound,
 }: UseISBNScannerProps): UseISBNScannerReturn => {
-  // States
   const [isScanning, setIsScanning] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [manualISBN, setManualISBN] = useState('');

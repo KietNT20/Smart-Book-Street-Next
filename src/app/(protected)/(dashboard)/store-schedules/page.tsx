@@ -20,10 +20,6 @@ export default function StoreSchedulePage() {
     useStoreScheduleByStoreId(storeId);
   const router = useRouter();
 
-  if (!storeId) {
-    router.push(PATH.STORE_OWNER_DASHBOARD);
-  }
-
   if (!store) {
     return (
       <div className='flex min-h-screen flex-col items-center justify-center p-4'>
