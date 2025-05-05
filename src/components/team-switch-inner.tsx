@@ -59,7 +59,7 @@ function TeamSwitcherInner({
     ) {
       const savedStoreId = getLocalStorageItem(STORAGE.SELECTED_STORE_KEY);
       const savedStore = savedStoreId
-        ? userStore.find((store) => store.store.id === savedStoreId)?.store
+        ? userStore.find((store) => store.store?.id === savedStoreId)?.store
         : undefined;
 
       if (savedStore) {
@@ -80,6 +80,7 @@ function TeamSwitcherInner({
 
   // Handle store selection
   const handleStoreSelect = (store: StoreData) => {
+    if (!store) return;
     setActiveStore(store);
     setLocalStorageItem(STORAGE.SELECTED_STORE_KEY, store.id || '');
 
@@ -207,14 +208,18 @@ function TeamSwitcherInner({
               <>
                 {userStore.map((storeItem, index) => (
                   <DropdownMenuItem
-                    key={storeItem.store.id}
-                    onClick={() => handleStoreSelect(storeItem.store)}
+                    key={storeItem.store?.id}
+                    onClick={() => {
+                      if (storeItem?.store) {
+                        handleStoreSelect(storeItem.store);
+                      }
+                    }}
                     className='gap-2 p-2'
                   >
                     <div className='flex size-6 items-center justify-center rounded-sm border'>
                       <Store className='size-4 shrink-0' />
                     </div>
-                    {storeItem.store.storeName}
+                    {storeItem?.store?.storeName}
                     <DropdownMenuShortcut>⌘{index + 1}</DropdownMenuShortcut>
                   </DropdownMenuItem>
                 ))}
