@@ -232,19 +232,19 @@ export const StoreTable = ({
                 </TableCell>
               </TableRow>
             ) : (
-              stores.map((store, index) => (
-                <TableRow key={store.id}>
+              stores?.map((store, index) => (
+                <TableRow key={store?.id}>
                   <TableCell className='text-muted-foreground'>
                     {index + 1}
                   </TableCell>
                   <TableCell className='overflow-hidden font-medium'>
-                    <p className='line-clamp-2'>{store.storeName}</p>
+                    <p className='line-clamp-2'>{store?.storeName}</p>
                   </TableCell>
                   <TableCell className='overflow-hidden'>
-                    <p className='line-clamp-2'>{store.address}</p>
+                    <p className='line-clamp-2'>{store?.address}</p>
                   </TableCell>
-                  <TableCell>{store.phone}</TableCell>
-                  <TableCell>{store.email}</TableCell>
+                  <TableCell>{store?.phone}</TableCell>
+                  <TableCell>{store?.email}</TableCell>
                   <TableCell className='text-right'>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -255,20 +255,20 @@ export const StoreTable = ({
                       <DropdownMenuContent align='end'>
                         <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
                         <DropdownMenuItem asChild className='cursor-pointer'>
-                          <Link href={`${PATH.STORES}/${store.id}`}>
+                          <Link href={`${PATH.STORES}/${store?.id}`}>
                             <Eye className='mr-2 h-4 w-4' />
                             Xem chi tiết
                           </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem asChild className='cursor-pointer'>
-                          <Link href={`${PATH.STORES}/${store.id}/edit`}>
+                          <Link href={`${PATH.STORES}/${store?.id}/edit`}>
                             <FileEdit className='mr-2 h-4 w-4' />
                             Chỉnh sửa
                           </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className='text-destructive'
-                          onClick={() => handleDeleteClick(store.id || '')}
+                          onClick={() => handleDeleteClick(store?.id || '')}
                         >
                           <Trash2 className='mr-2 h-4 w-4' />
                           Xóa

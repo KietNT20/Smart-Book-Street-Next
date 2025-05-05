@@ -36,3 +36,10 @@ export interface ApiResponse<T> {
   isSuccess: boolean;
   message: string;
 }
+
+export interface ApiResponseAll<T> {
+  results: T[];
+  totalRecords: number;
+  isSuccess: boolean;
+  message: string;
+}

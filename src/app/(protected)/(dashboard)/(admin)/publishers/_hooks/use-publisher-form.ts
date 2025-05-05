@@ -166,13 +166,13 @@ export const usePublisherForm = ({ publisher }: Props = {}) => {
       formData.append('Website', values.website);
     }
 
-    if (values.mainImageFile && typeof window !== 'undefined') {
+    if (values.mainImageFile instanceof File && typeof window !== 'undefined') {
       formData.set('MainImageFile', values.mainImageFile);
     }
 
     if (values.additionalImageFiles && typeof window !== 'undefined') {
       values.additionalImageFiles.forEach((file) => {
-        if (file) {
+        if (file instanceof File) {
           formData.append('AdditionalImageFiles', file);
         }
       });

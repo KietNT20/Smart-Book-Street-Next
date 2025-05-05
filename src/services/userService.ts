@@ -7,6 +7,7 @@ import {
 import {
   UserParams,
   UserProfileResponse,
+  UserResponseAll,
   UsersResponse,
 } from '@/types/user-types';
 import axiosInstance from '@/utils/axiosInstance';
@@ -29,7 +30,7 @@ export const userService = {
     });
     return res.data;
   },
-  getAll: async (): Promise<UsersResponse> => {
+  getAll: async (): Promise<UserResponseAll> => {
     const res = await axiosInstance.get(API_URL.USERS.INDEX);
     return res.data;
   },

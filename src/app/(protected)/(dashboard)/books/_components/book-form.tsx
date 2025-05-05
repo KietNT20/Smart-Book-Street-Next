@@ -250,30 +250,6 @@ const BookForm = ({ book, mode }: Props) => {
               </FormItem>
             )}
           />
-
-          {/* Trạng thái */}
-          <FormField
-            control={form.control}
-            name='status'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>
-                  Trạng thái <span className='text-red-400'>*</span>
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder='Nhập trạng thái'
-                    disabled={isLoading}
-                    className={cn(
-                      form.formState.errors.status && 'border-red-500'
-                    )}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
         </div>
         {/* Ảnh chính */}
         <FormField

@@ -1,3 +1,4 @@
+import { Language, VietnameseLanguageLabels } from '@/enums/lang';
 import { formateDateVi, formatPrice } from '@/lib/utils';
 import { Book } from '@/types/book-types';
 import DOMPurify from 'dompurify';
@@ -31,7 +32,9 @@ const BookInfo = ({ book }: Props) => {
         </p>{' '}
         <p className='flex items-center gap-2 font-medium'>
           Nhà xuất bản:{' '}
-          <span className='font-semibold'>{book.publisher?.publisherName}</span>
+          <span className='font-semibold'>
+            {book?.publisher?.publisherName}
+          </span>
         </p>
         <p className='flex items-center gap-2 font-medium'>
           Giá:{' '}
@@ -43,10 +46,7 @@ const BookInfo = ({ book }: Props) => {
           Kích thước: {book?.size}
         </p>
         <p className='flex items-center gap-2 font-medium'>
-          Ngôn ngữ: {book?.languages}
-        </p>
-        <p className='flex items-center gap-2 font-medium'>
-          Tình trạng: <span className='text-blue-500'>{book?.status}</span>
+          Ngôn ngữ: {VietnameseLanguageLabels[book?.languages as Language]}
         </p>
         <div className='rounded-md border p-2'>
           <p className='font-semibold'>Mô tả:</p>
@@ -54,7 +54,7 @@ const BookInfo = ({ book }: Props) => {
             <div
               className='prose prose-sm mt-2 max-w-none'
               dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(book.description),
+                __html: DOMPurify.sanitize(book?.description),
               }}
             />
           ) : (
@@ -64,10 +64,10 @@ const BookInfo = ({ book }: Props) => {
       </div>
       <div className='space-y-2'>
         <h3 className='text-xl font-semibold'>Thông tin thêm</h3>
-        <p>Ngày xuất bản: {formateDateVi(book.publicationDate)}</p>
+        <p>Ngày xuất bản: {formateDateVi(book?.publicationDate)}</p>
         <p>
           Lần cập nhật cuối:{' '}
-          {book.lastUpdatedDate ? formateDateVi(book.lastUpdatedDate) : ''}
+          {book.lastUpdatedDate ? formateDateVi(book?.lastUpdatedDate) : ''}
         </p>
       </div>
     </div>

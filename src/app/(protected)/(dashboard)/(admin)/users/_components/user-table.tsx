@@ -204,24 +204,24 @@ const UserTable = ({
                   </TableCell>
                 </TableRow>
               ) : (
-                users.map((user, index) => (
-                  <TableRow key={user.id || index}>
+                users?.map((user, index) => (
+                  <TableRow key={user?.id || index}>
                     <TableCell className='text-muted-foreground'>
                       {index + 1 + (pageNumber - 1) * pageSize}
                     </TableCell>
                     <TableCell className='font-medium'>
-                      {user.userName}
+                      {user?.userName}
                     </TableCell>
-                    <TableCell className=''>{user.fullName}</TableCell>
-                    <TableCell className=''>{user.email}</TableCell>
-                    <TableCell className=''>{user.phone}</TableCell>
+                    <TableCell className=''>{user?.fullName}</TableCell>
+                    <TableCell className=''>{user?.email}</TableCell>
+                    <TableCell className=''>{user?.phone}</TableCell>
                     <TableCell className=''>
-                      {formateDateVi(user.dob)}
+                      {formateDateVi(user?.dob)}
                     </TableCell>
                     <TableCell>
                       <UserRoleSelector
-                        userId={user.id || ''}
-                        userRoles={user.userRoles || []}
+                        userId={user?.id || ''}
+                        userRoles={user?.userRoles || []}
                         availableRoles={roles}
                         isLoading={isLoadingRoles}
                       />
@@ -236,7 +236,7 @@ const UserTable = ({
                         <DropdownMenuContent align='end'>
                           <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
                           <DropdownMenuItem asChild className='cursor-pointer'>
-                            <Link href={`${PATH.USERS}/${user.id}`}>
+                            <Link href={`${PATH.USERS}/${user?.id}`}>
                               <Eye className='mr-2 h-4 w-4' />
                               Xem chi tiết
                             </Link>
@@ -249,7 +249,7 @@ const UserTable = ({
                           </DropdownMenuItem> */}
                           <DropdownMenuItem
                             className='text-destructive'
-                            onClick={() => handleDeleteClick(user.id || '')}
+                            onClick={() => handleDeleteClick(user?.id || '')}
                           >
                             <Trash2 className='mr-2 h-4 w-4' />
                             Xóa

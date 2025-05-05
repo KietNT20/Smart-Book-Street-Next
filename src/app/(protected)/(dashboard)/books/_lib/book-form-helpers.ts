@@ -22,7 +22,7 @@ export function prepareInitialBookData(book?: Book) {
       languages: Language.VIETNAMESE,
       description: '',
       size: '',
-      status: '',
+      status: null,
       publisherId: '',
       authorIds: [],
       categoryIds: [],
@@ -47,7 +47,6 @@ export function prepareInitialBookData(book?: Book) {
     languages: book.languages || Language.VIETNAMESE,
     description: book.description || '',
     size: book.size || '',
-    status: book.status || '',
     publisherId: book.id ? book.publisher?.id : '',
     authorIds: book.id
       ? book.bookAuthors?.map((author) => author.authorId)

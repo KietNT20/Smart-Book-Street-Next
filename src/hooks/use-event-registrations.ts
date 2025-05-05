@@ -1,4 +1,5 @@
 import { eventRegistrationService } from '@/services/eventRegistrationService';
+import { CheckedAttendendPayload } from '@/types/event-registrations-types';
 import {
   keepPreviousData,
   useMutation,
@@ -27,7 +28,7 @@ export const useCheckAttendend = () => {
   const { mutate: checkedAttendend, isPending: isCheckingPending } =
     useMutation({
       mutationKey: ['check-attendend'],
-      mutationFn: (payload: { id: string; isAttended: boolean }) =>
+      mutationFn: (payload: CheckedAttendendPayload) =>
         eventRegistrationService.checkAttendend(payload),
       onSuccess: (data) => {
         if (data) {
@@ -35,12 +36,12 @@ export const useCheckAttendend = () => {
           queryClient.invalidateQueries({
             queryKey: ['event-registrations-statistic'],
           });
-          toast.success('Cập nhật thành công');
+          toast.success('Điểm danh thành công');
         }
       },
       onError: (error) => {
         console.error('Error checking attendance:', error);
-        toast.error('Cập nhật không thành công');
+        toast.error(`${error}`);
       },
     });
 

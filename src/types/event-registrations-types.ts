@@ -32,3 +32,9 @@ export interface EventRegistrationStatistic {
   participation: number;
   participationRate: string;
 }
+
+export type CheckedAttendendPayload = Array<{
+  id: string;
+  isAttended: boolean;
+  ticketCode?: string | null;
+}>;

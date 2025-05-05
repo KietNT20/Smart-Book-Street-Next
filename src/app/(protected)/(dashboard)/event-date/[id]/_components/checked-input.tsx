@@ -1,4 +1,9 @@
+'use client';
+
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
 import { useCheckAttendend } from '@/hooks/use-event-registrations';
+import { Loader2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 type UserSignEvent = {
@@ -17,48 +22,40 @@ const CheckedInput = ({ user }: Props) => {
   const { checkedAttendend, isCheckingPending } = useCheckAttendend();
   const [isChecked, setIsChecked] = useState(user.isAttended);
 
-  // Handle checkbox change
-  const handleCheckboxChange = () => {
-    // Toggle the checked state
-    const newAttendanceStatus = !isChecked;
-
-    // Call the attendance checking function with id and new status
-    checkedAttendend({
-      id: user.id,
-      isAttended: newAttendanceStatus,
-    });
-
-    // Update local state
-    setIsChecked(newAttendanceStatus);
-  };
-
-  // Update local state if the prop changes
   useEffect(() => {
     setIsChecked(user.isAttended);
   }, [user.isAttended]);
 
+  const handleToggleAttendance = (checked: boolean) => {
+    setIsChecked(checked);
+
+    checkedAttendend([
+      {
+        id: user.id,
+        ticketCode: null,
+        isAttended: checked,
+      },
+    ]);
+  };
+
   return (
     <div className='flex items-center space-x-2'>
-      <input
-        type='checkbox'
-        id={`attendance-${user.id}`}
+      <Checkbox
+        id={`checkbox-${user.id}`}
         checked={isChecked}
-        onChange={handleCheckboxChange}
+        onCheckedChange={(checked) =>
+          handleToggleAttendance(checked as boolean)
+        }
         disabled={isCheckingPending}
-        className='h-4 w-4 rounded border text-primary focus:ring-ring'
       />
-      <label
-        htmlFor={`attendance-${user.id}`}
-        className='cursor-pointer text-sm font-medium text-primary-foreground'
+      <Label
+        htmlFor={`checkbox-${user.id}`}
+        className='cursor-pointer text-sm font-medium'
       >
         {isChecked ? 'Có' : 'Vắng'}
-      </label>
+      </Label>
 
-      {isCheckingPending && (
-        <div className='ml-2'>
-          <div className='h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent'></div>
-        </div>
-      )}
+      {isCheckingPending && <Loader2 className='ml-2 size-4 animate-spin' />}
     </div>
   );
 };

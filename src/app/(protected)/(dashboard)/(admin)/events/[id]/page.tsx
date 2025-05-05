@@ -56,8 +56,8 @@ export default function EventDetailPage({
 
   // Format range dates
   const formatDateRange = () => {
-    const startDate = dayjs(eventData.startDate);
-    const endDate = dayjs(eventData.endDate);
+    const startDate = dayjs(eventData?.startDate);
+    const endDate = dayjs(eventData?.endDate);
 
     if (startDate.isSame(endDate, 'day')) {
       return startDate.format('DD/MM/YYYY');
@@ -110,11 +110,11 @@ export default function EventDetailPage({
         </div>
         <div className='absolute inset-0 z-20 mx-auto flex max-w-6xl flex-col justify-end p-8 text-white'>
           <Badge
-            className={`mb-4 w-fit ${eventData.isOpen ? 'bg-green-500 hover:bg-green-600' : 'bg-red-500 hover:bg-red-600'}`}
+            className={`mb-4 w-fit ${eventData?.isOpen ? 'bg-green-500 hover:bg-green-600' : 'bg-red-500 hover:bg-red-600'}`}
           >
-            {eventData.isOpen ? 'Đang diễn ra' : 'Đã kết thúc'}
+            {eventData?.isOpen ? 'Đang diễn ra' : 'Đã kết thúc'}
           </Badge>
-          <h1 className='mb-4 text-4xl font-bold'>{eventData.eventName}</h1>
+          <h1 className='mb-4 text-4xl font-bold'>{eventData?.eventName}</h1>
           <div className='flex flex-col gap-4 text-zinc-100 sm:flex-row sm:items-center'>
             <div className='flex items-center gap-2'>
               <Calendar className='h-5 w-5' />
@@ -123,13 +123,13 @@ export default function EventDetailPage({
             <div className='flex items-center gap-2'>
               <Clock className='h-5 w-5' />
               <span>
-                {formatTime(eventData.startDate)} -{' '}
-                {formatTime(eventData.endDate)}
+                {formatTime(eventData?.startDate)} -{' '}
+                {formatTime(eventData?.endDate)}
               </span>
             </div>
             <div className='flex items-center gap-2'>
               <MapPin className='h-5 w-5' />
-              <span>{eventData.zone.zoneName}</span>
+              <span>{eventData?.zone?.zoneName}</span>
             </div>
           </div>
         </div>
@@ -148,14 +148,14 @@ export default function EventDetailPage({
               <CardContent>
                 <div
                   dangerouslySetInnerHTML={{
-                    __html: DOMPurify.sanitize(eventData.description),
+                    __html: DOMPurify.sanitize(eventData?.description),
                   }}
                 />
               </CardContent>
             </Card>
 
             {/* Video Preview */}
-            {eventData.videoLink && (
+            {eventData?.videoLink && (
               <Card>
                 <CardHeader>
                   <CardTitle className='flex items-center gap-2'>
@@ -166,10 +166,10 @@ export default function EventDetailPage({
                 <CardContent>
                   <div className='aspect-video overflow-hidden rounded-lg'>
                     <video
-                      src={eventData.videoLink}
+                      src={eventData?.videoLink}
                       controls
                       className='h-full w-full object-cover'
-                      poster={eventData.baseImgUrl}
+                      poster={eventData?.baseImgUrl}
                     >
                       Trình duyệt của bạn không hỗ trợ video.
                     </video>
@@ -186,7 +186,7 @@ export default function EventDetailPage({
                 </CardHeader>
                 <CardContent>
                   {/* Ảnh */}
-                  {eventData.baseImgUrl && (
+                  {eventData?.baseImgUrl && (
                     <Image
                       src={eventData?.baseImgUrl}
                       alt={eventData?.eventName}
@@ -197,10 +197,10 @@ export default function EventDetailPage({
                   {/* Gallery */}
                   {eventData?.images && eventData?.images?.length > 0 && (
                     <Image.PreviewGroup
-                      items={eventData.images?.map((image) => image?.url)}
+                      items={eventData?.images?.map((image) => image?.url)}
                     >
                       <div className='mt-4 grid grid-cols-2 gap-4 md:grid-cols-3'>
-                        {eventData.images?.map((image, index) => (
+                        {eventData?.images?.map((image, index) => (
                           <div
                             key={index}
                             className='aspect-square overflow-hidden rounded-lg'
@@ -238,7 +238,7 @@ export default function EventDetailPage({
                   {/* Age Chart */}
                   {eventData?.ageChart?.length > 0 && (
                     <EventChart
-                      data={eventData.ageChart}
+                      data={eventData?.ageChart}
                       title='Phân bố độ tuổi'
                       description='Thống kê độ tuổi người tham gia'
                       type='bar'
@@ -249,7 +249,7 @@ export default function EventDetailPage({
                   {/* Gender Chart */}
                   {eventData?.genderChart?.length > 0 && (
                     <EventChart
-                      data={eventData.genderChart}
+                      data={eventData?.genderChart}
                       title='Phân bố giới tính'
                       description='Thống kê giới tính người tham gia'
                       type='pie'
@@ -261,7 +261,7 @@ export default function EventDetailPage({
                   {/* Reference Chart */}
                   {eventData?.referenceChart?.length > 0 && (
                     <EventChart
-                      data={eventData.referenceChart}
+                      data={eventData?.referenceChart}
                       title='Nguồn tham khảo'
                       description='Người tham gia biết về sự kiện qua đâu'
                       type='horizontalBar'
@@ -273,7 +273,7 @@ export default function EventDetailPage({
                   {/* Address Chart */}
                   {eventData?.addressChart?.length > 0 && (
                     <EventChart
-                      data={eventData.addressChart}
+                      data={eventData?.addressChart}
                       title='Phân bố địa điểm'
                       description='Thống kê nơi đến của người tham gia'
                       type='pie'
@@ -291,7 +291,7 @@ export default function EventDetailPage({
             <Card>
               <CardHeader>
                 <CardTitle>Tham gia sự kiện</CardTitle>
-                {!eventData.isOpen && (
+                {!eventData?.isOpen && (
                   <CardDescription className='text-red-500'>
                     Sự kiện này đã kết thúc
                   </CardDescription>
@@ -356,9 +356,9 @@ export default function EventDetailPage({
               </CardHeader>
               <CardContent className='space-y-4'>
                 <div>
-                  <h4 className='font-semibold'>{eventData.zone.zoneName}</h4>
+                  <h4 className='font-semibold'>{eventData?.zone?.zoneName}</h4>
                   <p className='mt-1 text-sm text-zinc-500'>
-                    {eventData.zone.street.address}
+                    {eventData?.zone?.street?.address}
                   </p>
                 </div>
 
@@ -374,7 +374,7 @@ export default function EventDetailPage({
                 <div className='space-y-2'>
                   <h4 className='font-semibold'>Về địa điểm</h4>
                   <p className='text-sm text-zinc-500'>
-                    {eventData.zone.description}
+                    {eventData?.zone?.description}
                   </p>
                 </div>
               </CardContent>
@@ -393,13 +393,13 @@ export default function EventDetailPage({
                   <div>
                     <p className='text-sm text-zinc-500'>Ngày bắt đầu</p>
                     <p className='font-medium'>
-                      {dayjs(eventData.startDate).format('DD/MM/YYYY')}
+                      {dayjs(eventData?.startDate).format('DD/MM/YYYY')}
                     </p>
                   </div>
                   <div>
                     <p className='text-sm text-zinc-500'>Giờ bắt đầu</p>
                     <p className='font-medium'>
-                      {dayjs(eventData.startDate).format('HH:mm')}
+                      {dayjs(eventData?.startDate).format('HH:mm')}
                     </p>
                   </div>
                 </div>
@@ -410,13 +410,13 @@ export default function EventDetailPage({
                   <div>
                     <p className='text-sm text-zinc-500'>Ngày kết thúc</p>
                     <p className='font-medium'>
-                      {dayjs(eventData.endDate).format('DD/MM/YYYY')}
+                      {dayjs(eventData?.endDate).format('DD/MM/YYYY')}
                     </p>
                   </div>
                   <div>
                     <p className='text-sm text-zinc-500'>Giờ kết thúc</p>
                     <p className='font-medium'>
-                      {dayjs(eventData.endDate).format('HH:mm')}
+                      {dayjs(eventData?.endDate).format('HH:mm')}
                     </p>
                   </div>
                 </div>
