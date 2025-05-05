@@ -1,1 +1,9 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Initialize fnm in the hook
+export PATH="/path/to/fnm:$PATH"
+eval "$(fnm env --use-on-cd)"
+
+# Now run your command
 npx lint-staged
