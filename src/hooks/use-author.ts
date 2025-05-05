@@ -2,7 +2,12 @@ import { PATH } from '@/enums/path';
 import { authorService } from '@/services/authorService';
 import { AuthorSearchPagination } from '@/types/author-types';
 
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
@@ -36,6 +41,7 @@ export const useGetAuthors = ({
         sortOrder,
         result,
       }),
+    placeholderData: keepPreviousData,
   });
   // Prefetching
   const totalPage = data?.totalPages || 1;

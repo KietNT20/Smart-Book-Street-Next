@@ -1,7 +1,12 @@
 import { PATH } from '@/enums/path';
 import { eventService } from '@/services/eventService';
 import { EventParams } from '@/types/event-types';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
@@ -99,6 +104,7 @@ export const useEventsPagination = ({
         pageSize,
         pageNumber,
       }),
+    placeholderData: keepPreviousData,
   });
 
   // Prefetching data

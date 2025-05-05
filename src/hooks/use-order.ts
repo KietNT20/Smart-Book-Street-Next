@@ -1,7 +1,12 @@
 import { STORAGE } from '@/constant/storage';
 import { orderService } from '@/services/orderService';
 import { getLocalStorageItem } from '@/utils/token';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { OrderParams } from './../types/order-types';
 
@@ -173,6 +178,7 @@ export const useGetOrdersSearchPagination = ({
         pageSize,
         pageNumber,
       }),
+    placeholderData: keepPreviousData,
   });
 
   const totalPage = data?.totalPages || 0;

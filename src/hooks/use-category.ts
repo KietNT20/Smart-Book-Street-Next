@@ -1,11 +1,17 @@
 import { categoryService } from '@/services/categoryService';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 export const useGetCategories = () => {
   const { data, isLoading, error } = useQuery({
     queryKey: ['categories'],
     queryFn: () => categoryService.getAll(),
+    placeholderData: keepPreviousData,
   });
   return {
     categoriesData: data?.results || [],

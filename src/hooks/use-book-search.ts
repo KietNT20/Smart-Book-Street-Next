@@ -1,6 +1,10 @@
 import { bookService } from '@/services/bookService';
 import { BookSearchPagination } from '@/types/book-types';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  keepPreviousData,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 
 export const useGetBooks = ({
   sortField,
@@ -25,6 +29,7 @@ export const useGetBooks = ({
         pageSize,
         pageNumber,
       }),
+    placeholderData: keepPreviousData,
   });
 
   const totalPage = booksRes?.totalPages || 1;
