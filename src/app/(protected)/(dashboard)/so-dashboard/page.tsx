@@ -1,6 +1,4 @@
-import LoadingSpinner from '@/components/spin/loading-spinner';
 import dynamic from 'next/dynamic';
-import { Suspense } from 'react';
 
 const OrderStatisticsPage = dynamic(
   () => import('./_components/order-statics'),
@@ -24,14 +22,10 @@ const StoreDashboardPage = () => {
     <div className='flex flex-1 flex-col'>
       <div className='@container/main flex flex-1 flex-col gap-2'>
         <div className='flex flex-col gap-4 py-4 md:gap-6 md:py-6'>
-          <Suspense fallback={<LoadingSpinner />}>
-            <SectionCards />
-          </Suspense>
+          <SectionCards />
         </div>
         <div>
-          <Suspense fallback={<LoadingSpinner />}>
-            <OrderStatisticsPage />
-          </Suspense>
+          <OrderStatisticsPage />
         </div>
       </div>
     </div>

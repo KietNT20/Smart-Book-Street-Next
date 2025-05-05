@@ -21,7 +21,7 @@ import {
 } from '@/components/ui/select';
 import { Gender } from '@/enums/gender';
 import { PATH } from '@/enums/path';
-import { Image } from 'antd';
+import { DatePicker, Image } from 'antd';
 import dayjs from 'dayjs';
 import { X } from 'lucide-react';
 import { useUserForm } from '../_hooks/use-user-form';
@@ -35,6 +35,8 @@ const UserForm = () => {
     handleMainFileChange,
     removeMainImage,
     fileInputRef,
+    useDefaultPassword,
+    toggleDefaultPassword,
   } = useUserForm();
 
   return (
@@ -45,7 +47,7 @@ const UserForm = () => {
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
-            <div className='grid grid-cols-1 gap-6 md:grid-cols-2'>
+            <div className='grid grid-cols-1 gap-6'>
               {/* Thông tin cơ bản - Cột trái */}
               <div className='space-y-6'>
                 <FormField
@@ -89,17 +91,45 @@ const UserForm = () => {
                   control={form.control}
                   name='password'
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className='space-y-2'>
                       <FormLabel>Mật khẩu</FormLabel>
-                      <FormControl>
-                        <Input
-                          type='password'
-                          placeholder={'Nhập mật khẩu'}
-                          disabled={isWorking}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
+                      <div className='flex flex-col space-y-2'>
+                        <FormControl>
+                          <Input
+                            type='password'
+                            placeholder={'Nhập mật khẩu'}
+                            disabled={isWorking || useDefaultPassword}
+                            {...field}
+                          />
+                        </FormControl>
+
+                        <div className='flex items-start'>
+                          <div className='flex h-5 items-center'>
+                            <input
+                              type='checkbox'
+                              id='useDefaultPassword'
+                              checked={useDefaultPassword}
+                              onChange={toggleDefaultPassword}
+                              className='h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary'
+                            />
+                          </div>
+                          <div className='ml-2 text-sm'>
+                            <label
+                              htmlFor='useDefaultPassword'
+                              className='font-medium text-gray-700'
+                            >
+                              Sử dụng mật khẩu mặc định
+                            </label>
+                            {useDefaultPassword && (
+                              <p className='mt-1 text-sm text-muted-foreground'>
+                                Mật khẩu mặc định: User@12345
+                              </p>
+                            )}
+                          </div>
+                        </div>
+
+                        <FormMessage />
+                      </div>
                     </FormItem>
                   )}
                 />
@@ -150,18 +180,15 @@ const UserForm = () => {
                     <FormItem>
                       <FormLabel>Ngày sinh</FormLabel>
                       <FormControl>
-                        <Input
-                          type='date'
+                        <DatePicker
+                          className='h-10 w-full px-3 py-2'
+                          placeholder='Chọn ngày giờ bắt đầu'
+                          format='DD/MM/YYYY'
                           disabled={isWorking}
-                          {...field}
-                          value={
-                            field.value
-                              ? dayjs(field.value).format('YYYY-MM-DD')
-                              : ''
-                          }
-                          onChange={(e) => {
+                          value={field.value ? dayjs(field.value) : null}
+                          onChange={(date) => {
                             field.onChange(
-                              e.target.value ? e.target.value : null
+                              dayjs(date).format('YYYY-MM-DD') ?? null
                             );
                           }}
                         />

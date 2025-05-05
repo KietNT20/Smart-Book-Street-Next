@@ -488,7 +488,10 @@ export const userFormSchema = z.object({
     .string()
     .min(1, { message: 'Email không được để trống' })
     .email({ message: 'Email không hợp lệ' }),
-  password: z.string().min(5, { message: 'Mật khẩu phải có ít nhất 5 ký tự' }),
+  password: z
+    .string()
+    .min(8, { message: 'Mật khẩu phải có ít nhất 8 ký tự' })
+    .default('User@12345'),
   fullName: z.string().optional(),
   phone: z
     .string()
@@ -502,7 +505,34 @@ export const userFormSchema = z.object({
       }
     )
     .optional(),
-  dob: z.string().date().optional().nullable(),
+  dob: z
+    .string()
+    .refine(
+      (val) => {
+        if (!val) return true;
+        const birthDate = new Date(val);
+        const today = new Date();
+
+        // Calculate age
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+
+        // Adjust age if birthday hasn't occurred yet this year
+        if (
+          monthDiff < 0 ||
+          (monthDiff === 0 && today.getDate() < birthDate.getDate())
+        ) {
+          age--;
+        }
+
+        return age >= 18;
+      },
+      {
+        message: 'Người dùng phải từ 18 tuổi trở lên',
+      }
+    )
+    .optional()
+    .nullable(),
   address: z.string().optional(),
   gender: z.enum([Gender.Male, Gender.Female]).optional(),
   mainImageFile: z

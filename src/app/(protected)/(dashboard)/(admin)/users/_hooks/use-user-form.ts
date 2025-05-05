@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 
 export const useUserForm = () => {
   const [previewMainImage, setPreviewMainImage] = useState<string | null>(null);
+  const [useDefaultPassword, setUseDefaultPassword] = useState(true);
   const { createUser, createUserPending } = useUserMutation();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -16,7 +17,7 @@ export const useUserForm = () => {
     defaultValues: {
       userName: '',
       email: '',
-      password: undefined,
+      password: 'User@12345',
       fullName: '',
       phone: '',
       dob: null,
@@ -98,6 +99,17 @@ export const useUserForm = () => {
     }
   };
 
+  const toggleDefaultPassword = () => {
+    setUseDefaultPassword((prev) => !prev);
+    if (useDefaultPassword) {
+      // If using default password, set it to empty string
+      form.setValue('password', '', { shouldValidate: true });
+    } else {
+      // If not using default password and selected again, set to default password
+      form.setValue('password', 'User@12345', { shouldValidate: true });
+    }
+  };
+
   return {
     form,
     isWorking,
@@ -106,5 +118,7 @@ export const useUserForm = () => {
     handleMainFileChange,
     removeMainImage,
     fileInputRef,
+    toggleDefaultPassword,
+    useDefaultPassword,
   };
 };

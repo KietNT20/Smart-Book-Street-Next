@@ -105,11 +105,9 @@ const UserTable = ({
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className='whitespace-nowrap text-right'>
-                  No.
-                </TableHead>
+                <TableHead className='text-right'>No.</TableHead>
                 <TableHead
-                  className='cursor-pointer whitespace-nowrap'
+                  className='cursor-pointer'
                   onClick={() => handleSort('UserName')}
                 >
                   <Button variant='ghost'>
@@ -126,7 +124,7 @@ const UserTable = ({
                   </Button>
                 </TableHead>
                 <TableHead
-                  className='cursor-pointer whitespace-nowrap'
+                  className='cursor-pointer'
                   onClick={() => handleSort('FullName')}
                 >
                   <Button variant='ghost'>
@@ -143,7 +141,7 @@ const UserTable = ({
                   </Button>
                 </TableHead>
                 <TableHead
-                  className='cursor-pointer whitespace-nowrap'
+                  className='cursor-pointer'
                   onClick={() => handleSort('Email')}
                 >
                   <Button variant='ghost'>
@@ -160,7 +158,7 @@ const UserTable = ({
                   </Button>
                 </TableHead>
                 <TableHead
-                  className='cursor-pointer whitespace-nowrap'
+                  className='cursor-pointer'
                   onClick={() => handleSort('Phone')}
                 >
                   <Button variant='ghost'>
@@ -176,10 +174,7 @@ const UserTable = ({
                     )}
                   </Button>
                 </TableHead>
-                <TableHead
-                  className='whitespace-nowrap'
-                  onClick={() => handleSort('DOB')}
-                >
+                <TableHead className='' onClick={() => handleSort('DOB')}>
                   {' '}
                   <Button variant='ghost'>
                     Ngày sinh
@@ -194,11 +189,8 @@ const UserTable = ({
                     )}
                   </Button>
                 </TableHead>
-                <TableHead className='whitespace-nowrap'>Giới tính</TableHead>
-                <TableHead className='whitespace-nowrap'>Vai trò</TableHead>
-                <TableHead className='whitespace-nowrap text-right'>
-                  Thao tác
-                </TableHead>
+                <TableHead className=''>Vai trò</TableHead>
+                <TableHead className='text-right'>Thao tác</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -214,26 +206,17 @@ const UserTable = ({
               ) : (
                 users.map((user, index) => (
                   <TableRow key={user.id || index}>
-                    <TableCell className='whitespace-nowrap text-muted-foreground'>
+                    <TableCell className='text-muted-foreground'>
                       {index + 1 + (pageNumber - 1) * pageSize}
                     </TableCell>
-                    <TableCell className='whitespace-nowrap font-medium'>
+                    <TableCell className='font-medium'>
                       {user.userName}
                     </TableCell>
-                    <TableCell className='whitespace-nowrap'>
-                      {user.fullName}
-                    </TableCell>
-                    <TableCell className='whitespace-nowrap'>
-                      {user.email}
-                    </TableCell>
-                    <TableCell className='whitespace-nowrap'>
-                      {user.phone}
-                    </TableCell>
-                    <TableCell className='whitespace-nowrap'>
+                    <TableCell className=''>{user.fullName}</TableCell>
+                    <TableCell className=''>{user.email}</TableCell>
+                    <TableCell className=''>{user.phone}</TableCell>
+                    <TableCell className=''>
                       {formateDateVi(user.dob)}
-                    </TableCell>
-                    <TableCell className='whitespace-nowrap'>
-                      {user.gender}
                     </TableCell>
                     <TableCell>
                       <UserRoleSelector
@@ -243,7 +226,7 @@ const UserTable = ({
                         isLoading={isLoadingRoles}
                       />
                     </TableCell>
-                    <TableCell className='whitespace-nowrap text-right'>
+                    <TableCell className='text-right'>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button variant='ghost' size='icon'>
@@ -285,9 +268,7 @@ const UserTable = ({
       {/* Pagination and page size controls */}
       <div className='mt-4 flex flex-col items-center justify-between gap-4 sm:flex-row'>
         <div className='flex items-center gap-2'>
-          <span className='whitespace-nowrap text-sm text-muted-foreground'>
-            Số dòng:
-          </span>
+          <span className='text-sm text-muted-foreground'>Số dòng:</span>
           <Select
             value={pageSize.toString()}
             onValueChange={handlePageSizeChange}
