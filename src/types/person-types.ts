@@ -45,7 +45,7 @@ export interface BarDatum {
 export enum Trend {
   INCREASE = 'increase',
   DECREASE = 'decrease',
-  STABLE = 'stable',
+  STABLE = 'unchanged',
 }
 
 export interface PersonTotal {

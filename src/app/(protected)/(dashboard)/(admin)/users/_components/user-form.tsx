@@ -23,8 +23,11 @@ import { Gender } from '@/enums/gender';
 import { PATH } from '@/enums/path';
 import { DatePicker, Image } from 'antd';
 import dayjs from 'dayjs';
+import 'dayjs/locale/vi';
 import { X } from 'lucide-react';
 import { useUserForm } from '../_hooks/use-user-form';
+
+dayjs.locale('vi');
 
 const UserForm = () => {
   const {

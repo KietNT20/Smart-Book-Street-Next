@@ -1,3 +1,5 @@
+'use client';
+
 import TrendIcon from '@/components/trend-icon';
 import {
   Card,
