@@ -15,7 +15,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { STORAGE } from '@/constant/storage';
 import { useOrderDetailMutation } from '@/hooks/use-order-detail';
+import { getLocalStorageItem } from '@/utils/token';
 import {
   Camera,
   CameraOff,
@@ -54,6 +56,7 @@ const ISBNScannerInventory = () => {
 
   const { createOrderDetail, createOrderDetailPending } =
     useOrderDetailMutation();
+  const storeId = getLocalStorageItem(STORAGE.SELECTED_STORE_KEY);
 
   const isLoading = createOrderDetailPending;
 
@@ -61,7 +64,7 @@ const ISBNScannerInventory = () => {
     toast.promise(
       async () => {
         try {
-          const response = await fetch(`/api/inventory/books/isbn/${isbn}`, {
+          const response = await fetch(`/api/stores/${storeId}/books/${isbn}`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
           });

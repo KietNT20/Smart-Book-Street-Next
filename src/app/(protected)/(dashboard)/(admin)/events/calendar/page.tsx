@@ -121,11 +121,11 @@ const EventCalendar = () => {
 
     return (
       <ul className='events'>
-        {listData.map((item, index) => (
+        {listData?.map((item, index) => (
           <li key={index}>
             <Badge
-              status={item.type as BadgeProps['status']}
-              text={item.content}
+              status={item?.type as BadgeProps['status']}
+              text={item?.content}
             />
           </li>
         ))}

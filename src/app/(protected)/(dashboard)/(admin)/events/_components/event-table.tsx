@@ -184,16 +184,16 @@ const EventTable = ({
                 </TableCell>
               </TableRow>
             ) : (
-              events.map((event, index) => (
-                <TableRow key={event.id}>
+              events?.map((event, index) => (
+                <TableRow key={event?.id}>
                   <TableCell className='text-muted-foreground'>
                     {index + 1 + (pageNumber - 1) * pageSize}
                   </TableCell>
                   <TableCell className='font-medium'>
-                    {event.eventName}
+                    {event?.eventName}
                   </TableCell>
-                  <TableCell>{formateDateVi(event.startDate)}</TableCell>
-                  <TableCell>{formateDateVi(event.endDate)}</TableCell>
+                  <TableCell>{formateDateVi(event?.startDate)}</TableCell>
+                  <TableCell>{formateDateVi(event?.endDate)}</TableCell>
                   <TableCell className='max-w-52 overflow-hidden text-ellipsis whitespace-nowrap'>
                     {event?.zone?.zoneName}
                   </TableCell>
@@ -207,20 +207,20 @@ const EventTable = ({
                       <DropdownMenuContent align='end'>
                         <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
                         <DropdownMenuItem asChild className='cursor-pointer'>
-                          <Link href={`${PATH.EVENTS}/${event.id}`}>
+                          <Link href={`${PATH.EVENTS}/${event?.id}`}>
                             <Eye className='mr-2 h-4 w-4' />
                             Xem chi tiết
                           </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem asChild className='cursor-pointer'>
-                          <Link href={`${PATH.EVENTS}/${event.id}/edit`}>
+                          <Link href={`${PATH.EVENTS}/${event?.id}/edit`}>
                             <FileEdit className='mr-2 h-4 w-4' />
                             Chỉnh sửa
                           </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className='text-destructive'
-                          onClick={() => handleDeleteClick(event.id || '')}
+                          onClick={() => handleDeleteClick(event?.id || '')}
                         >
                           <Trash2 className='mr-2 h-4 w-4' />
                           Xóa
