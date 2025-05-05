@@ -2,7 +2,12 @@ import { STORAGE } from '@/constant/storage';
 import { inventoryService } from '@/services/inventoryService';
 import { InventoryCreate } from '@/types/inventory-types';
 import { getLocalStorageItem } from '@/utils/token';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 export const useInventoryByStoreId = (storeId: string) => {
@@ -27,6 +32,7 @@ export const useInventoryBooksByStoreId = () => {
     queryKey: ['inventories-book', storeKey],
     queryFn: () => inventoryService.getBookNextByStoreId(storeKey),
     enabled: !!storeKey,
+    placeholderData: keepPreviousData,
   });
 
   return {
@@ -42,6 +48,7 @@ export const useInventorySouvenirsByStoreId = () => {
     queryKey: ['inventories-souvenir', storeKey],
     queryFn: () => inventoryService.getSouvenirNextByStoreId(storeKey),
     enabled: !!storeKey,
+    placeholderData: keepPreviousData,
   });
 
   return {

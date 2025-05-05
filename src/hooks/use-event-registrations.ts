@@ -1,11 +1,17 @@
 import { eventRegistrationService } from '@/services/eventRegistrationService';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 export const useGetAllEventRegistrations = (eventId: string) => {
   const { data, isLoading, error } = useQuery({
     queryKey: ['event-registrations', eventId],
     queryFn: () => eventRegistrationService.getAll(eventId),
+    placeholderData: keepPreviousData,
   });
 
   return {
