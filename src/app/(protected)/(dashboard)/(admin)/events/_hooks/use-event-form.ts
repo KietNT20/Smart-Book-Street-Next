@@ -124,7 +124,9 @@ export const useEventForm = ({ eventEdit }: UseEventFormProps) => {
       form.setValue('otherImgFile', newFormFiles);
 
       // Cập nhật previews
-      const newPreviewUrls = fileArray.map((file) => URL.createObjectURL(file));
+      const newPreviewUrls = fileArray?.map((file) =>
+        URL.createObjectURL(file)
+      );
       setPreviewOtherImgs((prev) => [...prev, ...newPreviewUrls]);
     }
   };

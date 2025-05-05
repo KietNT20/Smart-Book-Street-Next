@@ -196,9 +196,9 @@ const EventForm = ({ eventEdit }: Props) => {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {nonDeletedZones.map((zone) => (
-                    <SelectItem key={zone.id} value={zone.id}>
-                      {zone.zoneName}
+                  {nonDeletedZones?.map((zone) => (
+                    <SelectItem key={zone?.id} value={zone?.id}>
+                      {zone?.zoneName}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -293,7 +293,7 @@ const EventForm = ({ eventEdit }: Props) => {
 
                   {previewOtherImgs.length > 0 && (
                     <div className='grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4'>
-                      {previewOtherImgs.map((url, index) => (
+                      {previewOtherImgs?.map((url, index) => (
                         <div
                           key={index}
                           className='relative flex aspect-video w-full items-center overflow-hidden rounded-md border'

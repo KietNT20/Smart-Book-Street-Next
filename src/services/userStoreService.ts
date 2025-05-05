@@ -3,7 +3,9 @@ import { UserStorePayload, UserStoreResponse } from '@/types/user-types';
 import axiosInstance from '@/utils/axiosInstance';
 
 export const userStoreService = {
-  registerUserStore: async (payload: UserStorePayload) => {
+  registerUserStore: async (
+    payload: UserStorePayload
+  ): Promise<{ isSuccess: boolean; message: string }> => {
     const res = await axiosInstance.post(
       `${API_URL.USER_STORES.INDEX}`,
       payload

@@ -28,6 +28,7 @@ import {
   Store,
   User,
 } from 'lucide-react';
+import { toast } from 'sonner';
 import LoadingSkeleton from './_components/loading-skeleton';
 import { useUserStoreRegistered } from './_hooks/use-userstore-registered';
 
@@ -59,7 +60,15 @@ const UserStoreRegisteredPage = ({ params }: Props) => {
     user?.fullName
   );
 
-  if (error || !userStore || !store) {
+  if (isLoading) {
+    if (!userStore || !store) {
+      router.replace(PATH.USER_STORES);
+      toast.error('Người dùng chưa có hợp đồng nào!');
+    }
+    return <LoadingSkeleton />;
+  }
+
+  if (error) {
     return (
       <div>
         <BackButton routeTo={PATH.USER_STORES} />
@@ -73,21 +82,17 @@ const UserStoreRegisteredPage = ({ params }: Props) => {
     );
   }
 
-  if (isLoading) {
-    return <LoadingSkeleton />;
-  }
-
   return (
     <div className='container mx-auto'>
       <div className='mb-6 space-y-2'>
         <BackButton routeTo={PATH.USER_STORES} />
         <h1 className='text-3xl font-bold'>Thông Tin Hợp Đồng</h1>
         <div className='flex items-center gap-6'>
-          <p className='text-muted-foreground'>#{contract.contractNumber}</p>
+          <p className='text-muted-foreground'>#{contract?.contractNumber}</p>
           <UIBadge
-            className={`px-3 py-1 text-sm ${getStatusColor(contract.status)}`}
+            className={`px-3 py-1 text-sm ${getStatusColor(contract?.status)}`}
           >
-            {getVietnameseRentLabel(contract.status)}
+            {getVietnameseRentLabel(contract?.status)}
           </UIBadge>
         </div>
       </div>
@@ -98,20 +103,20 @@ const UserStoreRegisteredPage = ({ params }: Props) => {
           <div className='flex flex-wrap gap-2'>
             {userStore.map((contract, index) => (
               <Button
-                key={contract.contractNumber}
+                key={contract?.contractNumber}
                 variant={
                   selectedContractIndex === index ? 'default' : 'outline'
                 }
                 onClick={() => setSelectedContractIndex(index)}
                 className='flex items-center gap-2'
               >
-                <span>#{contract.contractNumber}</span>
+                <span>#{contract?.contractNumber}</span>
                 <UIBadge
                   className={`px-2 py-0.5 text-xs ${getStatusColor(
-                    contract.status
+                    contract?.status
                   )}`}
                 >
-                  {getVietnameseRentLabel(contract.status)}
+                  {getVietnameseRentLabel(contract?.status)}
                 </UIBadge>
               </Button>
             ))}
@@ -143,7 +148,7 @@ const UserStoreRegisteredPage = ({ params }: Props) => {
                       <p className='text-sm font-medium text-muted-foreground'>
                         Số Hợp Đồng
                       </p>
-                      <p className='font-medium'>{contract.contractNumber}</p>
+                      <p className='font-medium'>{contract?.contractNumber}</p>
                     </div>
                   </div>
 
@@ -176,12 +181,12 @@ const UserStoreRegisteredPage = ({ params }: Props) => {
                         Tình Trạng
                       </p>
                       <p className='font-medium'>
-                        {getVietnameseRentLabel(contract.status)}
+                        {getVietnameseRentLabel(contract?.status)}
                       </p>
                     </div>
                   </div>
 
-                  {contract.notes && (
+                  {contract?.notes && (
                     <div className='flex items-start gap-2'>
                       <FileText className='h-5 w-5 text-muted-foreground' />
                       <div>
@@ -189,7 +194,7 @@ const UserStoreRegisteredPage = ({ params }: Props) => {
                           Ghi Chú
                         </p>
                         <p className='font-medium'>
-                          {contract.notes || 'No notes'}
+                          {contract?.notes || 'No notes'}
                         </p>
                       </div>
                     </div>
@@ -201,7 +206,7 @@ const UserStoreRegisteredPage = ({ params }: Props) => {
               <Button
                 variant='destructive'
                 onClick={() =>
-                  handleDeleteUserStore(contract.userId, contract.storeId)
+                  handleDeleteUserStore(contract?.userId, contract?.storeId)
                 }
               >
                 Xóa
@@ -227,7 +232,7 @@ const UserStoreRegisteredPage = ({ params }: Props) => {
                       <p className='text-sm font-medium text-muted-foreground'>
                         Tên Cửa Hàng
                       </p>
-                      <p className='font-medium'>{store.storeName}</p>
+                      <p className='font-medium'>{store?.storeName}</p>
                     </div>
                   </div>
 
@@ -237,7 +242,7 @@ const UserStoreRegisteredPage = ({ params }: Props) => {
                       <p className='text-sm font-medium text-muted-foreground'>
                         Địa Chỉ
                       </p>
-                      <p className='font-medium'>{store.address}</p>
+                      <p className='font-medium'>{store?.address}</p>
                     </div>
                   </div>
 
@@ -247,7 +252,7 @@ const UserStoreRegisteredPage = ({ params }: Props) => {
                       <p className='text-sm font-medium text-muted-foreground'>
                         Số Điện Thoại
                       </p>
-                      <p className='font-medium'>{store.phone}</p>
+                      <p className='font-medium'>{store?.phone}</p>
                     </div>
                   </div>
                 </div>
@@ -259,7 +264,7 @@ const UserStoreRegisteredPage = ({ params }: Props) => {
                       <p className='text-sm font-medium text-muted-foreground'>
                         Email
                       </p>
-                      <p className='font-medium'>{store.email}</p>
+                      <p className='font-medium'>{store?.email}</p>
                     </div>
                   </div>
 
@@ -269,7 +274,7 @@ const UserStoreRegisteredPage = ({ params }: Props) => {
                       <p className='text-sm font-medium text-muted-foreground'>
                         Loại Cửa Hàng
                       </p>
-                      <p className='font-medium'>{store.type}</p>
+                      <p className='font-medium'>{store?.type}</p>
                     </div>
                   </div>
 
@@ -280,7 +285,7 @@ const UserStoreRegisteredPage = ({ params }: Props) => {
                         Tọa độ
                       </p>
                       <p className='font-medium'>
-                        Vĩ độ: {store.latitude}, Kinh độ: {store.longitude}
+                        Vĩ độ: {store?.latitude}, Kinh độ: {store?.longitude}
                       </p>
                     </div>
                   </div>
@@ -290,7 +295,7 @@ const UserStoreRegisteredPage = ({ params }: Props) => {
             <CardFooter className='justify-end'>
               <Button
                 variant='outline'
-                onClick={() => router.push(`${PATH.STORES}/${store.id}`)}
+                onClick={() => router.push(`${PATH.STORES}/${store?.id}`)}
               >
                 Xem Chi Tiết Cửa Hàng
               </Button>
@@ -315,7 +320,7 @@ const UserStoreRegisteredPage = ({ params }: Props) => {
                       <p className='text-sm font-medium text-muted-foreground'>
                         Tên Đăng Nhập
                       </p>
-                      <p className='font-medium'>{user.userName}</p>
+                      <p className='font-medium'>{user?.userName}</p>
                     </div>
                   </div>
 
@@ -325,7 +330,7 @@ const UserStoreRegisteredPage = ({ params }: Props) => {
                       <p className='text-sm font-medium text-muted-foreground'>
                         Họ và Tên
                       </p>
-                      <p className='font-medium'>{user.fullName}</p>
+                      <p className='font-medium'>{user?.fullName}</p>
                     </div>
                   </div>
 
@@ -335,7 +340,7 @@ const UserStoreRegisteredPage = ({ params }: Props) => {
                       <p className='text-sm font-medium text-muted-foreground'>
                         Email
                       </p>
-                      <p className='font-medium'>{user.email}</p>
+                      <p className='font-medium'>{user?.email}</p>
                     </div>
                   </div>
                 </div>
@@ -347,11 +352,11 @@ const UserStoreRegisteredPage = ({ params }: Props) => {
                       <p className='text-sm font-medium text-muted-foreground'>
                         Ngày Sinh
                       </p>
-                      <p className='font-medium'>{formateDateVi(user.dob)}</p>
+                      <p className='font-medium'>{formateDateVi(user?.dob)}</p>
                     </div>
                   </div>
 
-                  {user.phone && (
+                  {user?.phone && (
                     <div className='flex items-center gap-2'>
                       <Phone className='h-5 w-5 text-muted-foreground' />
                       <div>
@@ -359,13 +364,13 @@ const UserStoreRegisteredPage = ({ params }: Props) => {
                           Số Điện Thoại
                         </p>
                         <p className='font-medium'>
-                          {user.phone || 'Không cung cấp'}
+                          {user?.phone || 'Không cung cấp'}
                         </p>
                       </div>
                     </div>
                   )}
 
-                  {user.address && (
+                  {user?.address && (
                     <div className='flex items-center gap-2'>
                       <MapPin className='h-5 w-5 text-muted-foreground' />
                       <div>
@@ -373,7 +378,7 @@ const UserStoreRegisteredPage = ({ params }: Props) => {
                           Địa Chỉ
                         </p>
                         <p className='font-medium'>
-                          {user.address || 'Không cung cấp'}
+                          {user?.address || 'Không cung cấp'}
                         </p>
                       </div>
                     </div>

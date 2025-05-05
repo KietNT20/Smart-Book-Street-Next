@@ -15,10 +15,16 @@ export const useUserStoresMutation = () => {
     mutationKey: ['rent-store'],
     mutationFn: (payload: UserStorePayload) =>
       userStoreService.registerUserStore(payload),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['user-stores'] });
-      toast.success('Đăng ký thành công!');
-      router.replace(PATH.USER_STORES);
+    onSuccess: (data) => {
+      if (data?.isSuccess) {
+        queryClient.invalidateQueries({ queryKey: ['user-stores'] });
+        queryClient.invalidateQueries({ queryKey: ['stores'] });
+        toast.success('Đăng ký thành công!');
+        router.replace(PATH.USER_STORES);
+      } else if (!data.isSuccess) {
+        toast.error(`${data.message}`);
+        router.replace(PATH.USER_STORES);
+      }
     },
     onError: (error) => {
       console.log('Error registering store:', error);
@@ -32,6 +38,7 @@ export const useUserStoresMutation = () => {
       userStoreService.deleteUserStore(userId, storeId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['user-stores'] });
+      queryClient.invalidateQueries({ queryKey: ['stores'] });
       toast.success('Xóa thành công!');
       router.replace(PATH.USER_STORES);
     },

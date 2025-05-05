@@ -30,7 +30,7 @@ export default function RootLayout({
         <AntdRegistry>
           <Provider>{children}</Provider>
         </AntdRegistry>
-        <Toaster richColors expand visibleToasts={3} />
+        <Toaster richColors expand visibleToasts={2} />
         <SpeedInsights />
       </body>
     </html>
