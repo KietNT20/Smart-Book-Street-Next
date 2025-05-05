@@ -166,22 +166,23 @@ const OrderTable = () => {
                   <TableCell className='text-muted-foreground'>
                     {index + 1 + (pageNumber - 1) * pageSize}
                   </TableCell>
-                  <TableCell>{formatPrice(order.totalAmount)}</TableCell>
+                  <TableCell>{formatPrice(order?.totalAmount)}</TableCell>
                   <TableCell>
-                    {PaymentMethodLabel[order.paymentMethod as PaymentMethod] ||
-                      order.paymentMethod}
+                    {PaymentMethodLabel[
+                      order?.paymentMethod as PaymentMethod
+                    ] || order?.paymentMethod}
                   </TableCell>
                   <TableCell>
                     <Badge
                       variant='outline'
-                      className={getStatusColor(order.status)}
+                      className={getStatusColor(order?.status)}
                     >
-                      {OrderStatusLabel[order.status as OrderStatus] ||
-                        order.status}
+                      {OrderStatusLabel[order?.status as OrderStatus] ||
+                        order?.status}
                     </Badge>
                   </TableCell>
                   <TableCell>
-                    {dayjs(new Date(order.createdDate)).format(
+                    {dayjs(new Date(order?.createdDate)).format(
                       'DD/MM/YYYY HH:mm'
                     )}
                   </TableCell>
@@ -195,15 +196,15 @@ const OrderTable = () => {
                       <DropdownMenuContent align='end'>
                         <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
                         <DropdownMenuItem asChild className='cursor-pointer'>
-                          <Link href={`${PATH.ORDERS}/${order.id}`}>
+                          <Link href={`${PATH.ORDERS}/${order?.id}`}>
                             <Eye className='mr-2 h-4 w-4' />
                             Xem chi tiết
                           </Link>
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        {order.status !== OrderStatus.COMPLETED && (
+                        {order?.status !== OrderStatus.COMPLETED && (
                           <DropdownMenuItem
-                            onClick={() => handleUpdateOrderStatus(order.id)}
+                            onClick={() => handleUpdateOrderStatus(order?.id)}
                             disabled={updateOrderStatusPending}
                             className='cursor-pointer'
                           >
@@ -211,9 +212,9 @@ const OrderTable = () => {
                             Hoàn thành đơn hàng
                           </DropdownMenuItem>
                         )}
-                        {order.status === OrderStatus.IN_PROGRESS && (
+                        {order?.status === OrderStatus.IN_PROGRESS && (
                           <DropdownMenuItem
-                            onClick={() => handleCancelOrderStatus(order.id)}
+                            onClick={() => handleCancelOrderStatus(order?.id)}
                             disabled={isOrderCancelPending}
                             className='cursor-pointer'
                           >

@@ -221,16 +221,16 @@ const SouvenirTable = ({
               </TableRow>
             ) : (
               souvenirs.map((souvenir, index) => {
-                const souvenirId = souvenir.id || '';
+                const souvenirId = souvenir?.id || '';
                 return (
                   <TableRow key={souvenirId || index}>
                     <TableCell className='text-muted-foreground'>
                       {index + 1 + (pageNumber - 1) * pageSize}
                     </TableCell>
                     <TableCell className='font-medium'>
-                      {souvenir.souvenirName}
+                      {souvenir?.souvenirName}
                     </TableCell>
-                    <TableCell>{formatPrice(souvenir.price)}</TableCell>
+                    <TableCell>{formatPrice(souvenir?.price)}</TableCell>
                     <TableCell className='text-right'>
                       <Dialog
                         open={openDialog === souvenirId}
