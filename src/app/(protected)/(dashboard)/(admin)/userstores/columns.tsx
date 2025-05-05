@@ -4,11 +4,11 @@ import { Button } from '@/components/ui/button';
 import { Gender } from '@/enums/gender';
 import { PATH } from '@/enums/path';
 import { formateDateVi, formatSummaryAddress } from '@/lib/utils';
-import { User } from '@/types/user-types';
 import { ColumnDef } from '@tanstack/react-table';
 import Link from 'next/link';
+import { UserRentals } from './action/user-stores';
 
-export const columns: ColumnDef<User>[] = [
+export const columns: ColumnDef<UserRentals>[] = [
   {
     accessorKey: 'no',
     header: 'No.',
@@ -72,7 +72,9 @@ export const columns: ColumnDef<User>[] = [
             <Button variant={'darker'}>Tạo đơn</Button>
           </Link>
           <Link href={`${PATH.USER_STORES}/${userStore.id}/registered`}>
-            <Button variant={'outline'}>Xem đơn</Button>
+            <Button variant={'outline'} disabled={!userStore.hasRental}>
+              Xem đơn
+            </Button>
           </Link>
         </div>
       );

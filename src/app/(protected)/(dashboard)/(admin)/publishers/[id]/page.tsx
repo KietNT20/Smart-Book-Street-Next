@@ -40,7 +40,7 @@ export default function PublisherDetailPage({
   }
 
   // Get publisher image
-  const publisherImage = publisher.images?.find(
+  const publisherImage = publisher?.images?.find(
     (image) => image.type === 'publisher_main'
   )?.url;
 
@@ -66,7 +66,7 @@ export default function PublisherDetailPage({
               <div className='relative flex h-full w-full items-center justify-center overflow-hidden rounded-lg'>
                 <Image
                   src={publisherImage}
-                  alt={publisher.publisherName}
+                  alt={publisher?.publisherName}
                   fallback={ImageFallback.SRC}
                 />
               </div>
@@ -90,21 +90,21 @@ export default function PublisherDetailPage({
 
         <TabsContent value='books'>
           <div className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-            {publisher.books &&
-              publisher.books.map((book) => (
+            {publisher?.books &&
+              publisher?.books?.map((book) => (
                 <div
-                  key={book.id}
+                  key={book?.id}
                   className='overflow-hidden rounded-lg border border-ring bg-card shadow'
                 >
                   <div className='flex h-48 items-center justify-center overflow-hidden bg-card'>
-                    {book.images ? (
+                    {book?.images ? (
                       <Image.PreviewGroup
-                        items={book.images?.map((image) => image.url)}
+                        items={book?.images?.map((image) => image.url)}
                       >
                         <Image
                           width={200}
-                          src={book.images?.[0]?.url}
-                          alt={book.images?.[0]?.altText || book.title}
+                          src={book?.images?.[0]?.url}
+                          alt={book?.images?.[0]?.altText || book?.title}
                           fallback={ImageFallback.SRC}
                         />
                       </Image.PreviewGroup>
@@ -118,19 +118,19 @@ export default function PublisherDetailPage({
                   </div>
                   <div className='p-4'>
                     <h3 className='mb-2 line-clamp-2 truncate text-ellipsis font-bold'>
-                      {book.title}
+                      {book?.title}
                     </h3>
                     <p className='mb-2 text-sm text-muted-foreground'>
-                      ISBN: {book.isbn}
+                      ISBN: {book?.isbn}
                     </p>
                     <p className='mb-3 font-semibold text-red-500'>
-                      {book.price.toLocaleString('vi-VN')} đ
+                      {book?.price.toLocaleString('vi-VN')} đ
                     </p>
                   </div>
                 </div>
               ))}
 
-            {(!publisher.books || publisher.books.length === 0) && (
+            {(!publisher?.books || publisher?.books.length === 0) && (
               <div className='col-span-full py-10 text-center'>
                 <p className='text-muted-foreground'>
                   Không có sách nào từ nhà xuất bản này.

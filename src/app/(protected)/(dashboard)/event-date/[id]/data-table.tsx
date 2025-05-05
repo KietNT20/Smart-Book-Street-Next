@@ -21,6 +21,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { useState } from 'react';
+import BatchAttendanceButton from './_components/batch-attendance-button';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -87,6 +88,9 @@ export function DataTable<TData, TValue>({
           }
           className='w-full md:max-w-sm'
         />
+      </div>
+      <div className='mb-4 flex justify-end'>
+        <BatchAttendanceButton data={data as any} />
       </div>
       <div className='rounded-md border'>
         <Table>

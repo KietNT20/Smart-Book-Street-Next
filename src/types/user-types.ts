@@ -2,7 +2,7 @@ import { Sort } from '@/enums/enums';
 import { Gender } from '@/enums/gender';
 import { RoleEnums } from '@/enums/role';
 import { StoreRent } from '@/enums/store-rent';
-import { ApiListResponse, BaseEntity } from './common-types';
+import { ApiListResponse, ApiResponseAll, BaseEntity } from './common-types';
 import { ImageType } from './image-types';
 import { Publisher } from './publisher-types';
 import { StoreData } from './store-types';
@@ -74,12 +74,14 @@ export interface UserProfileResponse {
 }
 
 export interface UsersResponse {
-  results: User[];
+  results: Array<User & { id: string }>;
   totalPages: number;
   totalRecords: number;
   pageNumber: number;
   pageSize: number;
 }
+
+export type UserResponseAll = ApiResponseAll<User & { id: string }>;
 
 export interface UserParams {
   pageNumber: number;
@@ -99,9 +101,9 @@ export interface UserParams {
 
 export interface UserStore extends BaseEntity {
   userId: string;
-  user: User;
+  user: User | null;
   storeId: string;
-  store: StoreData;
+  store: StoreData | null;
   startDate: Date | string | null;
   endDate: Date | string | null;
   status: StoreRent;
@@ -109,4 +111,5 @@ export interface UserStore extends BaseEntity {
   notes: string;
 }
 
-export type UserStoreResponse = ApiListResponse<UserStore>;
+export type UserStoreResponse = ApiListResponse<UserStore & { id: string }>;
+export type UserStoreResponseAll = ApiResponseAll<UserStore & { id: string }>;

@@ -1,5 +1,9 @@
 import { API_URL } from '@/constant/api-url';
-import { UserStorePayload, UserStoreResponse } from '@/types/user-types';
+import {
+  UserStorePayload,
+  UserStoreResponse,
+  UserStoreResponseAll,
+} from '@/types/user-types';
 import axiosInstance from '@/utils/axiosInstance';
 
 export const userStoreService = {
@@ -28,6 +32,10 @@ export const userStoreService = {
     const res = await axiosInstance.patch(
       `${API_URL.USER_STORES.INDEX}/${userId}/${storeId}`
     );
+    return res.data;
+  },
+  getUserStores: async (): Promise<UserStoreResponseAll> => {
+    const res = await axiosInstance.get(`${API_URL.USER_STORES.INDEX}`);
     return res.data;
   },
 };

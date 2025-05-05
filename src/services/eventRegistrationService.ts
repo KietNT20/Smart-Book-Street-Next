@@ -1,5 +1,6 @@
 import { API_URL } from '@/constant/api-url';
 import {
+  CheckedAttendendPayload,
   EventRegistrationsResponse,
   EventRegistrationStatistic,
 } from '@/types/event-registrations-types';
@@ -18,7 +19,7 @@ export const eventRegistrationService = {
     );
     return res.data;
   },
-  checkAttendend: async (payload: { id: string; isAttended: boolean }) => {
+  checkAttendend: async (payload: CheckedAttendendPayload) => {
     const res = await axiosInstance.put(
       `${API_URL.EVENT_REGISTRATIONS.INDEX}/check-attendend`,
       payload

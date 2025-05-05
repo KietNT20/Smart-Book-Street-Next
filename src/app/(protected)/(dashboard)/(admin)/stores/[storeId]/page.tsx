@@ -36,7 +36,7 @@ export default function StorePage({ params }: { params: { storeId: string } }) {
 
   // Get main image if available
   const mainImage =
-    store.images?.find((img) => img.type === 'store_main')?.url ||
+    store?.images?.find((img) => img.type === 'store_main')?.url ||
     (store.images?.length > 0
       ? store.images[0].url
       : '/public/No-Image-Placeholder.png');
@@ -60,7 +60,7 @@ export default function StorePage({ params }: { params: { storeId: string } }) {
             <div className='absolute inset-0'>
               <Image
                 src={mainImage}
-                alt={store.storeName}
+                alt={store?.storeName}
                 className='h-full w-full object-cover'
                 fallback={ImageFallback.SRC}
               />
@@ -68,11 +68,11 @@ export default function StorePage({ params }: { params: { storeId: string } }) {
             </div>
             <div className='absolute bottom-0 left-0 p-6'>
               <h1 className='mb-2 text-3xl font-bold text-white md:text-4xl'>
-                {store.storeName}
+                {store?.storeName}
               </h1>
               <div className='flex items-center text-white'>
                 <span className='rounded bg-primary px-2.5 py-0.5 text-sm font-medium text-white'>
-                  {store.type}
+                  {store?.type}
                 </span>
               </div>
             </div>
@@ -102,35 +102,35 @@ export default function StorePage({ params }: { params: { storeId: string } }) {
                     <MapPin className='mr-3 mt-0.5 h-5 w-5 flex-shrink-0 text-zinc-500' />
                     <div>
                       <h3 className='font-bold'>Địa chỉ</h3>
-                      <p className='text-foreground'>{store.address}</p>
+                      <p className='text-foreground'>{store?.address}</p>
                     </div>
                   </div>
-                  {store.phone && (
+                  {store?.phone && (
                     <div className='flex items-start'>
                       <Phone className='mr-3 mt-0.5 h-5 w-5 flex-shrink-0 text-zinc-500' />
                       <div>
                         <h3 className='font-bold'>Số điện thoại</h3>
-                        <p className='text-foreground'>{store.phone}</p>
+                        <p className='text-foreground'>{store?.phone}</p>
                       </div>
                     </div>
                   )}
-                  {store.email && (
+                  {store?.email && (
                     <div className='flex items-start'>
                       <Mail className='mr-3 mt-0.5 h-5 w-5 flex-shrink-0 text-zinc-500' />
                       <div>
                         <h3 className='font-bold'>Email</h3>
-                        <p className='text-foreground'>{store.email}</p>
+                        <p className='text-foreground'>{store?.email}</p>
                       </div>
                     </div>
                   )}
-                  {(store.openingTime || store.closingTime) && (
+                  {(store?.openingTime || store?.closingTime) && (
                     <div className='flex items-start'>
                       <Clock className='mr-3 mt-0.5 h-5 w-5 flex-shrink-0 text-zinc-500' />
                       <div>
                         <h3 className='font-bold'>Giờ mở cửa</h3>
                         <p className='text-foreground'>
-                          {store.openingTime && store.closingTime
-                            ? `${store.openingTime} - ${store.closingTime}`
+                          {store?.openingTime && store?.closingTime
+                            ? `${store?.openingTime} - ${store?.closingTime}`
                             : 'Liên hệ trực tiếp'}
                         </p>
                       </div>
@@ -138,15 +138,15 @@ export default function StorePage({ params }: { params: { storeId: string } }) {
                   )}
                 </div>
               </div>
-              {store.zone && (
+              {store?.zone && (
                 <div>
                   <h2 className='mb-4 text-xl font-bold'>Khu vực</h2>
                   <div className='rounded-lg border border-ring bg-card p-4'>
                     <h3 className='mb-2 text-lg font-semibold'>
-                      {store.zone.zoneName}
+                      {store?.zone.zoneName}
                     </h3>
                     <p className='text-muted-foreground'>
-                      {store.zone.description}
+                      {store?.zone?.description}
                     </p>
                   </div>
                 </div>
@@ -166,10 +166,10 @@ export default function StorePage({ params }: { params: { storeId: string } }) {
                 <div className='text-center'>
                   <MapIcon className='mx-auto mb-2 h-12 w-12 text-zinc-400' />
                   <p className='text-foreground'>
-                    Vị trí: {store.latitude}, {store.longitude}
+                    Vị trí: {store?.latitude}, {store?.longitude}
                   </p>
                   <a
-                    href={`https://www.google.com/maps?q=${store.latitude},${store.longitude}`}
+                    href={`https://www.google.com/maps?q=${store?.latitude},${store?.longitude}`}
                     target='_blank'
                     rel='noopener noreferrer'
                     className='mt-4 inline-block rounded bg-primary px-4 py-2 text-white hover:bg-primary/90'
@@ -180,7 +180,7 @@ export default function StorePage({ params }: { params: { storeId: string } }) {
               </div>
               <div className='mt-4'>
                 <h3 className='mb-2 font-medium'>Địa chỉ</h3>
-                <p className='text-foreground'>{store.address}</p>
+                <p className='text-foreground'>{store?.address}</p>
               </div>
             </div>
           </TabsContent>
@@ -192,13 +192,13 @@ export default function StorePage({ params }: { params: { storeId: string } }) {
           >
             <div className='space-y-4'>
               <h2 className='mb-4 text-xl font-semibold'>Hình ảnh cửa hàng</h2>
-              {store.images && store.images.length > 0 ? (
+              {store?.images && store?.images.length > 0 ? (
                 <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3'>
-                  {store.images.map((image, index) => (
+                  {store?.images.map((image, index) => (
                     <div key={index}>
                       <Image
-                        src={image.url}
-                        alt={image.altText}
+                        src={image?.url}
+                        alt={image?.altText}
                         width={200}
                         fallback={ImageFallback.SRC}
                       />

@@ -28,7 +28,6 @@ import {
   Store,
   User,
 } from 'lucide-react';
-import { toast } from 'sonner';
 import LoadingSkeleton from './_components/loading-skeleton';
 import { useUserStoreRegistered } from './_hooks/use-userstore-registered';
 
@@ -61,14 +60,11 @@ const UserStoreRegisteredPage = ({ params }: Props) => {
   );
 
   if (isLoading) {
-    if (!userStore || !store) {
-      router.replace(PATH.USER_STORES);
-      toast.error('Người dùng chưa có hợp đồng nào!');
-    }
     return <LoadingSkeleton />;
   }
 
-  if (error) {
+  if (error || !contract || !store) {
+    router.replace(PATH.USER_STORES);
     return (
       <div>
         <BackButton routeTo={PATH.USER_STORES} />
@@ -352,7 +348,9 @@ const UserStoreRegisteredPage = ({ params }: Props) => {
                       <p className='text-sm font-medium text-muted-foreground'>
                         Ngày Sinh
                       </p>
-                      <p className='font-medium'>{formateDateVi(user?.dob)}</p>
+                      <p className='font-medium'>
+                        {formateDateVi(user?.dob || null)}
+                      </p>
                     </div>
                   </div>
 

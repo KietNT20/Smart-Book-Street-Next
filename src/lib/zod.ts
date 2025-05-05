@@ -94,7 +94,7 @@ export const bookSchema = z.object({
   }),
   description: z.string().optional(),
   size: z.string().optional(),
-  status: z.string().optional(),
+  status: z.string().optional().nullable(),
   mainImageFile: z.union([
     z
       .instanceof(File, { message: 'Vui lòng tải lên ảnh chính' })

@@ -189,16 +189,16 @@ const PublisherTable = ({
               </TableRow>
             ) : (
               publishers.map((publisher, index) => (
-                <TableRow key={publisher.id}>
+                <TableRow key={publisher?.id}>
                   <TableCell className='text-muted-foreground'>
                     {index + 1 + (pageNumber - 1) * pageSize}
                   </TableCell>
                   <TableCell className='font-medium'>
-                    {publisher.publisherName}
+                    {publisher?.publisherName}
                   </TableCell>
-                  <TableCell>{publisher.address}</TableCell>
-                  <TableCell>{publisher.phone}</TableCell>
-                  <TableCell>{publisher.email}</TableCell>
+                  <TableCell>{publisher?.address}</TableCell>
+                  <TableCell>{publisher?.phone}</TableCell>
+                  <TableCell>{publisher?.email}</TableCell>
                   <TableCell className='text-right'>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -209,14 +209,14 @@ const PublisherTable = ({
                       <DropdownMenuContent align='end'>
                         <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
                         <DropdownMenuItem asChild className='cursor-pointer'>
-                          <Link href={`${PATH.PUBLISHERS}/${publisher.id}`}>
+                          <Link href={`${PATH.PUBLISHERS}/${publisher?.id}`}>
                             <Eye className='mr-2 h-4 w-4' />
                             Xem chi tiết
                           </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem asChild className='cursor-pointer'>
                           <Link
-                            href={`${PATH.PUBLISHERS}/${publisher.id}/edit`}
+                            href={`${PATH.PUBLISHERS}/${publisher?.id}/edit`}
                           >
                             <FileEdit className='mr-2 h-4 w-4' />
                             Chỉnh sửa
@@ -224,7 +224,7 @@ const PublisherTable = ({
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className='text-destructive'
-                          onClick={() => handleDeleteClick(publisher.id || '')}
+                          onClick={() => handleDeleteClick(publisher?.id || '')}
                         >
                           <Trash2 className='mr-2 h-4 w-4' />
                           Xóa
