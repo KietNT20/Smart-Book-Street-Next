@@ -18,7 +18,6 @@ import { Eye, EyeOff } from 'lucide-react';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import GoogleBtn from '../google-button/google-btn';
 import { Button } from '../ui/button';
 import {
   Form,
@@ -74,7 +73,7 @@ export default function RegisterForm({
         <CardContent>
           <div className='mb-3 grid gap-6'>
             <div className='flex flex-col gap-4'>
-              <GoogleBtn />
+              {/* <GoogleBtn /> */}
               <div className='relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border'>
                 <span className='relative z-10 bg-background px-2 text-muted-foreground'>
                   Hoặc đăng ký bằng thông tin
