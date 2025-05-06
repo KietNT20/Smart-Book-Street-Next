@@ -1,3 +1,4 @@
+import { Language, VietnameseLanguageLabels } from '@/enums/lang';
 import { cn, formatPrice } from '@/lib/utils';
 import { BookNextjs } from '@/types/book-types';
 import { ColumnDef } from '@tanstack/react-table';
@@ -24,6 +25,14 @@ export const columnsBook: ColumnDef<BookNextjs>[] = [
   {
     accessorKey: 'languages',
     header: 'Ngôn ngữ',
+    cell: ({ row }) => {
+      const languages = row.getValue('languages') as Language;
+      return (
+        <p className='text-sm font-medium text-muted-foreground'>
+          {languages ? VietnameseLanguageLabels[languages] : '---'}
+        </p>
+      );
+    },
   },
   {
     id: 'price',
