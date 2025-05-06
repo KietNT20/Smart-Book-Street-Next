@@ -23,6 +23,11 @@ const nextConfig = {
         hostname: 'books.google.com',
         pathname: '**',
       },
+      {
+        protocol: 'https',
+        hostname: 'down-vn.img.susercontent.com',
+        pathname: '**',
+      },
     ],
   },
 };
