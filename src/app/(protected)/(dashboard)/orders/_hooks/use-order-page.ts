@@ -44,12 +44,28 @@ export const useOrderPage = () => {
       loading: 'Đang tạo đơn hàng...',
       success: (data) => {
         const { paymentLink } = data.result;
-        if (paymentLink) {
-          window.open(paymentLink, '_blank');
-        } else {
-          toast.error('Đơn hàng không có liên kết thanh toán');
+        const message = 'Tạo đơn hàng thành công';
+
+        switch (paymentMethod) {
+          case PaymentMethod.TRANSFER:
+            if (paymentLink) {
+              window.open(paymentLink, '_blank');
+            } else {
+              toast.error('Đơn hàng không có liên kết thanh toán');
+            }
+            break;
+
+          case PaymentMethod.CASH:
+            toast.success(message);
+            break;
+
+          default:
+            // Handle any other payment methods if needed
+            toast.success(message);
+            break;
         }
-        return 'Tạo đơn hàng thành công';
+
+        return message;
       },
       error: 'Tạo đơn hàng thất bại',
     });
