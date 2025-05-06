@@ -245,6 +245,8 @@ export const useOrderStatusMuatation = () => {
     onSuccess: (data) => {
       if (data) {
         queryClient.invalidateQueries({ queryKey: ['orders'] });
+        queryClient.invalidateQueries({ queryKey: ['inventories-book'] });
+        queryClient.invalidateQueries({ queryKey: ['inventories-souvenir'] });
         toast.success('Xác nhận đơn hàng thành công');
       }
     },
@@ -261,6 +263,8 @@ export const useOrderStatusMuatation = () => {
       onSuccess: (data) => {
         if (data) {
           queryClient.invalidateQueries({ queryKey: ['orders'] });
+          queryClient.invalidateQueries({ queryKey: ['inventories-book'] });
+          queryClient.invalidateQueries({ queryKey: ['inventories-souvenir'] });
           toast.success('Đơn hàng đã được hủy');
         }
       },
