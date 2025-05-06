@@ -19,6 +19,7 @@ export const useUserStoresMutation = () => {
       if (data?.isSuccess) {
         queryClient.invalidateQueries({ queryKey: ['user-stores'] });
         queryClient.invalidateQueries({ queryKey: ['stores'] });
+        queryClient.invalidateQueries({ queryKey: ['user-rentals'] });
         toast.success('Đăng ký thành công!');
         router.replace(PATH.USER_STORES);
       } else if (!data.isSuccess) {
@@ -39,6 +40,7 @@ export const useUserStoresMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['user-stores'] });
       queryClient.invalidateQueries({ queryKey: ['stores'] });
+      queryClient.invalidateQueries({ queryKey: ['user-rentals'] });
       toast.success('Xóa thành công!');
       router.replace(PATH.USER_STORES);
     },

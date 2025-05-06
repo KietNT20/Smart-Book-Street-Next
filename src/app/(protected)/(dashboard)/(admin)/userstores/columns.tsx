@@ -1,7 +1,6 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Gender } from '@/enums/gender';
 import { PATH } from '@/enums/path';
 import { formateDateVi, formatSummaryAddress } from '@/lib/utils';
 import { ColumnDef } from '@tanstack/react-table';
@@ -53,29 +52,25 @@ export const columns: ColumnDef<UserRentals>[] = [
     },
   },
   {
-    accessorKey: 'gender',
-    header: 'Giới tính',
-    cell: ({ row }) => {
-      const gender = row.getValue('gender') as Gender;
-      if (!gender) return '—';
-      return gender;
-    },
-  },
-  {
     id: 'actions',
     header: 'Thao tác',
     cell: ({ row }) => {
       const userStore = row.original;
       return (
         <div className='flex items-center gap-2'>
-          <Link href={`${PATH.USER_STORES}/${userStore.id}`}>
-            <Button variant={'darker'}>Tạo đơn</Button>
-          </Link>
-          <Link href={`${PATH.USER_STORES}/${userStore.id}/registered`}>
-            <Button variant={'outline'} disabled={!userStore.hasRental}>
-              Xem đơn
-            </Button>
-          </Link>
+          <Button variant={'darker'}>
+            <Link href={`${PATH.USER_STORES}/${userStore.id}`} passHref>
+              Tạo đơn
+            </Link>
+          </Button>
+          <Button variant={'outline'} disabled={!userStore.hasRental}>
+            <Link
+              href={`${PATH.USER_STORES}/${userStore.id}/registered`}
+              passHref
+            >
+              {userStore.hasRental ? 'Xem đơn' : 'Chưa đăng ký'}
+            </Link>
+          </Button>
         </div>
       );
     },
