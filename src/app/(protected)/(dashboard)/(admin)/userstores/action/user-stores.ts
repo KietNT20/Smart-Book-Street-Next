@@ -2,6 +2,7 @@ import { userService } from '@/services/userService';
 import { userStoreService } from '@/services/userStoreService';
 import { ApiResponseAll } from '@/types/common-types';
 import { User } from '@/types/user-types';
+import { useQuery } from '@tanstack/react-query';
 
 export type UserRentals = User & {
   hasRental: boolean;
@@ -48,3 +49,16 @@ export async function getListUserRentals(): Promise<UserWithRentalStatus> {
     };
   }
 }
+
+export const useListUserRentals = () => {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['user-rentals'],
+    queryFn: getListUserRentals,
+  });
+
+  return {
+    userRentals: data?.results || [],
+    isLoadingUserRentals: isLoading,
+    error,
+  };
+};

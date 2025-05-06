@@ -46,8 +46,8 @@ export const useLogin = () => {
         });
       }
     },
-    onError: (error: Error) => {
-      console.log('Error login', error.message);
+    onError: (error) => {
+      console.log('Error login', error);
       toast.error(`Đăng nhập thất bại`);
     },
   });
