@@ -186,7 +186,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         ],
       },
 
-      // PUBLISHER MANAGER MENUS
+      // PUBLISHER & STORE MANAGER MENUS
       {
         title: 'Quản lý sách',
         url: '#',
@@ -262,22 +262,38 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           { url: PATH.STORE_HOURS },
           { url: PATH.INVENTORY },
         ]),
-        roles: [RoleEnums.STORE_OWNER, RoleEnums.STORE_MANAGER],
+        roles: [
+          RoleEnums.STORE_OWNER,
+          RoleEnums.STORE_MANAGER,
+          RoleEnums.PUBLISHER,
+        ],
         items: [
           {
             title: 'Giờ hoạt động',
             url: PATH.STORE_HOURS,
-            roles: [RoleEnums.STORE_OWNER, RoleEnums.STORE_MANAGER],
+            roles: [
+              RoleEnums.STORE_OWNER,
+              RoleEnums.STORE_MANAGER,
+              RoleEnums.PUBLISHER,
+            ],
           },
           {
             title: 'Quản lý tồn kho',
             url: PATH.INVENTORY,
-            roles: [RoleEnums.STORE_OWNER, RoleEnums.STORE_MANAGER],
+            roles: [
+              RoleEnums.STORE_OWNER,
+              RoleEnums.STORE_MANAGER,
+              RoleEnums.PUBLISHER,
+            ],
           },
           {
             title: 'Quản lý đơn hàng',
             url: PATH.ORDERS,
-            roles: [RoleEnums.STORE_OWNER, RoleEnums.STORE_MANAGER],
+            roles: [
+              RoleEnums.STORE_OWNER,
+              RoleEnums.STORE_MANAGER,
+              RoleEnums.PUBLISHER,
+            ],
           },
         ],
       },
@@ -321,6 +337,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           // RoleEnums.ADMIN,
           RoleEnums.STORE_OWNER,
           RoleEnums.STORE_MANAGER,
+          RoleEnums.PUBLISHER,
         ],
       },
       // {
