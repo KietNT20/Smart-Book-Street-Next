@@ -1,12 +1,6 @@
 'use client';
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PATH } from '@/enums/path';
 import { cn } from '@/lib/utils';
 import { Eye, EyeOff } from 'lucide-react';
@@ -36,21 +30,21 @@ export default function LoginForm({
       <Card>
         <CardHeader className='text-center'>
           <CardTitle className='text-xl'>Chào mừng trở lại</CardTitle>
-          <CardDescription>
+          {/* <CardDescription>
             Đăng nhập bằng tài khoản Google của bạn
-          </CardDescription>
+          </CardDescription> */}
         </CardHeader>
         <CardContent>
-          <div className='grid gap-6'>
-            {/* <div className='flex flex-col gap-4'>
+          {/* <div className='grid gap-6'>
+            <div className='flex flex-col gap-4'>
               <GoogleBtn />
-            </div> */}
+            </div>
             <div className='relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border'>
               <span className='relative z-10 bg-background px-2 text-muted-foreground'>
                 Hoặc tiếp tục với email
               </span>
             </div>
-          </div>
+          </div> */}
           <Form {...form}>
             <form
               action='#'

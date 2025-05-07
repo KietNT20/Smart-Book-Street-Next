@@ -88,7 +88,7 @@ export const bookSchema = z.object({
   isbn: z.string().min(1, { message: 'Mã sách không được để trống' }),
   title: z.string().min(1, { message: 'Tên sách không được để trống' }),
   publicationDate: bookPublishedDatedSchema,
-  price: z.number().min(0, { message: 'Giá không được âm' }),
+  price: z.number().min(1000, { message: 'Số tiền không hợp lệ' }),
   languages: z.string().nonempty({
     message: 'Vui lòng chọn ngôn ngữ sách',
   }),
@@ -584,7 +584,7 @@ export const souvenirFormSchema = z.object({
   souvenirName: z
     .string()
     .min(1, { message: 'Tên quà lưu niệm không được để trống' }),
-  price: z.number().min(0, { message: 'Giá không được âm' }),
+  price: z.number().min(1000, { message: 'Số tiền không hợp lệ' }),
   description: z.string().optional(),
   baseImgFile: z.union([
     z

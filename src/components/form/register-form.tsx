@@ -1,12 +1,6 @@
 'use client';
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Gender } from '@/enums/gender';
 import { PATH } from '@/enums/path';
 import { useRegister } from '@/hooks/use-auth';
@@ -68,19 +62,19 @@ export default function RegisterForm({
       <Card>
         <CardHeader className='text-center'>
           <CardTitle className='text-xl'>Đăng ký tài khoản</CardTitle>
-          <CardDescription>Đăng ký bằng tài khoản Google</CardDescription>
+          {/* <CardDescription>Đăng ký bằng tài khoản Google</CardDescription> */}
         </CardHeader>
         <CardContent>
-          <div className='mb-3 grid gap-6'>
+          {/* <div className='mb-3 grid gap-6'>
             <div className='flex flex-col gap-4'>
-              {/* <GoogleBtn /> */}
+              <GoogleBtn />
               <div className='relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border'>
                 <span className='relative z-10 bg-background px-2 text-muted-foreground'>
                   Hoặc đăng ký bằng thông tin
                 </span>
               </div>
             </div>
-          </div>
+          </div> */}
           <Form {...form}>
             <form
               action='#'
