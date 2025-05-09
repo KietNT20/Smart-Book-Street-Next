@@ -1,5 +1,5 @@
 import { Language, VietnameseLanguageLabels } from '@/enums/lang';
-import { formateDateVi, formatPrice } from '@/lib/utils';
+import { formatDateVi, formatPrice } from '@/lib/utils';
 import { Book } from '@/types/book-types';
 import DOMPurify from 'dompurify';
 
@@ -64,10 +64,10 @@ const BookInfo = ({ book }: Props) => {
       </div>
       <div className='space-y-2'>
         <h3 className='text-xl font-semibold'>Thông tin thêm</h3>
-        <p>Ngày xuất bản: {formateDateVi(book?.publicationDate)}</p>
+        <p>Ngày xuất bản: {formatDateVi(book?.publicationDate)}</p>
         <p>
           Lần cập nhật cuối:{' '}
-          {book.lastUpdatedDate ? formateDateVi(book?.lastUpdatedDate) : ''}
+          {book.lastUpdatedDate ? formatDateVi(book?.lastUpdatedDate) : ''}
         </p>
       </div>
     </div>

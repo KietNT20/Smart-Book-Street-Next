@@ -3,7 +3,7 @@ import {
   useGetContractUser,
   useUserStoresMutation,
 } from '@/hooks/use-user-store';
-import { formateDateVi } from '@/lib/utils';
+import { formatDateVi } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -27,8 +27,8 @@ export const useUserStoreRegistered = ({ userId }: Props) => {
   const store = contract?.store;
   const user = contract?.user;
 
-  const startDate = formateDateVi(contract?.startDate);
-  const endDate = formateDateVi(contract?.endDate);
+  const startDate = formatDateVi(contract?.startDate);
+  const endDate = formatDateVi(contract?.endDate);
 
   const getStatusColor = (status: StoreRent) => {
     switch (status) {

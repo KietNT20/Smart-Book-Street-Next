@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { formateDateVi } from '@/lib/utils';
+import { formatDateVi } from '@/lib/utils';
 import { User as UserType } from '@/types/user-types';
 import { Calendar, Mail, MapPin, Phone, User } from 'lucide-react';
 
@@ -35,7 +35,9 @@ const UserDetailsTab = ({ user }: UserDetailsTabProps) => {
                 <p className='text-sm font-medium text-muted-foreground'>
                   Tên Đăng Nhập
                 </p>
-                <p className='font-medium'>{user?.userName}</p>
+                <p className='font-medium'>
+                  {user?.userName || 'Chưa cung cấp'}
+                </p>
               </div>
             </div>
 
@@ -45,7 +47,9 @@ const UserDetailsTab = ({ user }: UserDetailsTabProps) => {
                 <p className='text-sm font-medium text-muted-foreground'>
                   Họ và Tên
                 </p>
-                <p className='font-medium'>{user?.fullName}</p>
+                <p className='font-medium'>
+                  {user?.fullName || 'Chưa cung cấp'}
+                </p>
               </div>
             </div>
 
@@ -55,7 +59,7 @@ const UserDetailsTab = ({ user }: UserDetailsTabProps) => {
                 <p className='text-sm font-medium text-muted-foreground'>
                   Email
                 </p>
-                <p className='font-medium'>{user?.email}</p>
+                <p className='font-medium'>{user?.email || 'Chưa cung cấp'}</p>
               </div>
             </div>
           </div>
@@ -68,7 +72,7 @@ const UserDetailsTab = ({ user }: UserDetailsTabProps) => {
                   Ngày Sinh
                 </p>
                 <p className='font-medium'>
-                  {formateDateVi(user?.dob || null) || 'Chưa cung cấp'}
+                  {formatDateVi(user?.dob || null) || 'Chưa cung cấp'}
                 </p>
               </div>
             </div>

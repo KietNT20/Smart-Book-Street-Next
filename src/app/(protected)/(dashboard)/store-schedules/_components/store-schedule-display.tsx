@@ -21,7 +21,7 @@ import {
 } from '@/components/ui/dialog';
 import { DayOfWeek, DayOfWeekLabels } from '@/enums/day-of-week';
 import { useStoreScheduleMuatation } from '@/hooks/use-store-schedule';
-import { formateDateVi } from '@/lib/utils';
+import { formatDateVi } from '@/lib/utils';
 import { StoreSchedules } from '@/types/store-types';
 import { Calendar, Clock, Loader2, Pencil, Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
@@ -112,7 +112,7 @@ export default function StoreScheduleDisplay({ storeSchedules }: Props) {
   );
   const scheduleToDeleteInfo = scheduleToDelete
     ? scheduleToDelete.specialDate
-      ? `ngày ${formateDateVi(scheduleToDelete.specialDate)}`
+      ? `ngày ${formatDateVi(scheduleToDelete.specialDate)}`
       : `thứ ${getVietnameseDayOfWeek(scheduleToDelete.dayOfWeek)}`
     : '';
 
@@ -208,7 +208,7 @@ export default function StoreScheduleDisplay({ storeSchedules }: Props) {
                   <Calendar className='mr-2 h-4 w-4 text-zinc-500' />
                   <span className='font-medium'>
                     {schedule.specialDate
-                      ? formateDateVi(schedule.specialDate)
+                      ? formatDateVi(schedule.specialDate)
                       : ''}
                   </span>
                 </div>
@@ -276,7 +276,7 @@ export default function StoreScheduleDisplay({ storeSchedules }: Props) {
             {!isAddingNewSchedule && editSchedule && (
               <DialogDescription>
                 {editSchedule.specialDate
-                  ? `Ngày đặc biệt: ${formateDateVi(editSchedule.specialDate)}`
+                  ? `Ngày đặc biệt: ${formatDateVi(editSchedule.specialDate)}`
                   : `Thứ: ${getVietnameseDayOfWeek(editSchedule.dayOfWeek)}`}
               </DialogDescription>
             )}

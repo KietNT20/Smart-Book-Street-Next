@@ -1,6 +1,6 @@
 'use client';
 
-import { formateDateVi } from '@/lib/utils';
+import { formatDateVi } from '@/lib/utils';
 import { Author } from '@/types/author-types';
 import { ColumnDef } from '@tanstack/react-table';
 import AuthorMenuAction from './_components/author-menu-action';
@@ -24,7 +24,7 @@ export const columns: ColumnDef<Author>[] = [
     cell: ({ row }) => {
       const date = row.getValue('dob') as string | Date;
       if (!date) return 'Chưa có thông tin';
-      return formateDateVi(date);
+      return formatDateVi(date);
     },
   },
   {

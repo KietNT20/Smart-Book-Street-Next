@@ -29,7 +29,7 @@ import { Sort } from '@/enums/enums';
 import { PATH } from '@/enums/path';
 import { useRoles } from '@/hooks/use-role';
 import { useUserMutation } from '@/hooks/use-user';
-import { formateDateVi } from '@/lib/utils';
+import { formatDateVi, formatVNPhoneNumber } from '@/lib/utils';
 import { User } from '@/types/user-types';
 import {
   ArrowUpDown,
@@ -214,9 +214,11 @@ const UserTable = ({
                     </TableCell>
                     <TableCell className=''>{user?.fullName}</TableCell>
                     <TableCell className=''>{user?.email}</TableCell>
-                    <TableCell className=''>{user?.phone}</TableCell>
                     <TableCell className=''>
-                      {formateDateVi(user?.dob)}
+                      {formatVNPhoneNumber(user?.phone)}
+                    </TableCell>
+                    <TableCell className=''>
+                      {formatDateVi(user?.dob)}
                     </TableCell>
                     <TableCell>
                       <UserRoleSelector

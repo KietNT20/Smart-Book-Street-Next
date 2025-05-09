@@ -1,5 +1,5 @@
 import { ImageFallback } from '@/constant/storage';
-import { formateDateVi, formatPrice } from '@/lib/utils';
+import { formatDateVi, formatPrice } from '@/lib/utils';
 import { Author } from '@/types/author-types';
 import DOMPurify from 'dompurify';
 import Image from 'next/image';
@@ -34,7 +34,7 @@ const AuthorInfo = ({ author }: Props) => {
 
             <div className='mb-2 flex items-center'>
               <span className='w-32 text-lg font-bold'>Ngày sinh:</span>
-              <span className='font-medium'>{formateDateVi(author.dob)}</span>
+              <span className='font-medium'>{formatDateVi(author.dob)}</span>
             </div>
           </div>
 
@@ -66,7 +66,7 @@ const AuthorInfo = ({ author }: Props) => {
                   <div className='mb-2 text-sm'>
                     <div>Mã sách: {bookAuthor.book.isbn}</div>
                     <div>
-                      Xuất bản: {formateDateVi(bookAuthor.book.publicationDate)}
+                      Xuất bản: {formatDateVi(bookAuthor.book.publicationDate)}
                     </div>
                     <div>Giá: {formatPrice(bookAuthor.book.price)}</div>
                     <div>Trạng thái: {bookAuthor.book.status}</div>

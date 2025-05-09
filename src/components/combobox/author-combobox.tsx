@@ -25,7 +25,7 @@ import {
 } from '@/components/ui/popover';
 import { useSearchAuthorName } from '@/hooks/use-author';
 import useDebounce from '@/hooks/use-debounce';
-import { cn, formateDateVi } from '@/lib/utils';
+import { cn, formatDateVi } from '@/lib/utils';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { useState } from 'react';
 import { Control, FieldValues, Path } from 'react-hook-form';
@@ -158,7 +158,7 @@ const AuthorCombobox = <T extends FieldValues>({
                                   isSelected ? 'opacity-100' : 'opacity-0'
                                 )}
                               />
-                              {author.authorName} ({formateDateVi(author.dob)})
+                              {author.authorName} ({formatDateVi(author.dob)})
                             </CommandItem>
                           );
                         })}

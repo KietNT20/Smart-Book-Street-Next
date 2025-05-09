@@ -27,6 +27,7 @@ import {
 import { Sort } from '@/enums/enums';
 import { PATH } from '@/enums/path';
 import { usePublisherMutation } from '@/hooks/use-publisher';
+import { formatVNPhoneNumber } from '@/lib/utils';
 import { Publisher } from '@/types/publisher-types';
 import {
   ArrowUpDown,
@@ -197,7 +198,7 @@ const PublisherTable = ({
                     {publisher?.publisherName}
                   </TableCell>
                   <TableCell>{publisher?.address}</TableCell>
-                  <TableCell>{publisher?.phone}</TableCell>
+                  <TableCell>{formatVNPhoneNumber(publisher?.phone)}</TableCell>
                   <TableCell>{publisher?.email}</TableCell>
                   <TableCell className='text-right'>
                     <DropdownMenu>
