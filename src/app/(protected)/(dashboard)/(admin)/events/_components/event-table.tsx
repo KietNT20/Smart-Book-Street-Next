@@ -27,7 +27,7 @@ import {
 import { Sort } from '@/enums/enums';
 import { PATH } from '@/enums/path';
 import { useEventMutaton } from '@/hooks/use-event';
-import { formateDateVi } from '@/lib/utils';
+import { formatDateVi } from '@/lib/utils';
 import { Event } from '@/types/event-types';
 import {
   ArrowUpDown,
@@ -192,8 +192,8 @@ const EventTable = ({
                   <TableCell className='font-medium'>
                     {event?.eventName}
                   </TableCell>
-                  <TableCell>{formateDateVi(event?.startDate)}</TableCell>
-                  <TableCell>{formateDateVi(event?.endDate)}</TableCell>
+                  <TableCell>{formatDateVi(event?.startDate)}</TableCell>
+                  <TableCell>{formatDateVi(event?.endDate)}</TableCell>
                   <TableCell className='max-w-52 overflow-hidden text-ellipsis whitespace-nowrap'>
                     {event?.zone?.zoneName}
                   </TableCell>

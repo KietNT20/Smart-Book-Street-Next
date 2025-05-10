@@ -2,7 +2,11 @@
 
 import { Button } from '@/components/ui/button';
 import { PATH } from '@/enums/path';
-import { formateDateVi, formatSummaryAddress } from '@/lib/utils';
+import {
+  formatDateVi,
+  formatSummaryAddress,
+  formatVNPhoneNumber,
+} from '@/lib/utils';
 import { ColumnDef } from '@tanstack/react-table';
 import Link from 'next/link';
 import { UserRentals } from './action/user-stores';
@@ -31,6 +35,11 @@ export const columns: ColumnDef<UserRentals>[] = [
   {
     accessorKey: 'phone',
     header: 'Số điện thoại',
+    cell: ({ row }) => {
+      const phone = row.getValue('phone') as string;
+      if (!phone) return '—';
+      return formatVNPhoneNumber(phone);
+    },
   },
 
   {
@@ -48,7 +57,7 @@ export const columns: ColumnDef<UserRentals>[] = [
     cell: ({ row }) => {
       const dob = row.getValue('dob') as string;
       if (!dob) return '—';
-      return formateDateVi(dob);
+      return formatDateVi(dob);
     },
   },
   {

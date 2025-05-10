@@ -18,7 +18,6 @@ import { DatePicker } from 'antd';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 import { TrendingUp } from 'lucide-react';
-import { useState } from 'react';
 import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
 
 const { RangePicker } = DatePicker;
@@ -57,14 +56,17 @@ type Props = {
     female: { label: string; color: string };
   };
   isLoading?: boolean;
+  dateRange: [Dayjs, Dayjs];
+  onDateRangeChange: (dateRange: [Dayjs, Dayjs]) => void;
 };
 
-const BarchartCard = ({ barData, barConfig, isLoading }: Props) => {
-  const [dateRange, setDateRange] = useState<[Dayjs, Dayjs]>([
-    dayjs().subtract(6, 'days'),
-    dayjs(),
-  ]);
-
+const BarchartCard = ({
+  barData,
+  barConfig,
+  isLoading,
+  dateRange,
+  onDateRangeChange,
+}: Props) => {
   // Format date for display
   const formatDate = (date: string) => {
     return dayjs(date).format('DD/MM');
@@ -88,7 +90,7 @@ const BarchartCard = ({ barData, barConfig, isLoading }: Props) => {
   // Handle date range change
   const handleRangeChange = (dates: [Dayjs | null, Dayjs | null] | null) => {
     if (dates && dates[0] && dates[1]) {
-      setDateRange([dates[0], dates[1]]);
+      onDateRangeChange([dates[0], dates[1]]);
     }
   };
 

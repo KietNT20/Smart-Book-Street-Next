@@ -42,7 +42,7 @@ import { Language, VietnameseLanguageLabels } from '@/enums/lang';
 import { PATH } from '@/enums/path';
 import { useBookMutations } from '@/hooks/use-books';
 import { useInventoryMutation } from '@/hooks/use-inventory';
-import { formateDateVi, formatPrice } from '@/lib/utils';
+import { formatDateVi, formatPrice } from '@/lib/utils';
 import { Book } from '@/types/book-types';
 import { getLocalStorageItem } from '@/utils/token';
 import {
@@ -278,7 +278,7 @@ const BookTable = ({
                   <TableCell>
                     {VietnameseLanguageLabels[book.languages as Language]}
                   </TableCell>
-                  <TableCell>{formateDateVi(book.publicationDate)}</TableCell>
+                  <TableCell>{formatDateVi(book.publicationDate)}</TableCell>
                   <TableCell>{formatPrice(book.price)}</TableCell>
                   <TableCell className='text-right'>
                     <DropdownMenu>

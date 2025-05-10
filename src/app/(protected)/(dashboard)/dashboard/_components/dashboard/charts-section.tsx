@@ -3,6 +3,7 @@
 import { ChartConfig } from '@/components/ui/chart';
 import { useDailyRangeStatistics } from '@/hooks/use-person';
 import dayjs from 'dayjs';
+import { useState } from 'react';
 import BarchartCard from './barchart-card';
 
 const barConfig = {
@@ -52,12 +53,22 @@ const barConfig = {
 // } satisfies ChartConfig;
 
 const ChartsSection = () => {
-  const endDate = dayjs(new Date()).format('YYYY-MM-DD');
-  const startDate = dayjs(new Date()).subtract(6, 'day').format('YYYY-MM-DD');
+  const [dateRange, setDateRange] = useState<[dayjs.Dayjs, dayjs.Dayjs]>([
+    dayjs().subtract(6, 'days'),
+    dayjs(),
+  ]);
+
+  // Format dates for API call
+  const startDate = dateRange[0].format('YYYY-MM-DD');
+  const endDate = dateRange[1].format('YYYY-MM-DD');
   const { barData, isLoading, error } = useDailyRangeStatistics({
     startDate: startDate,
     endDate: endDate,
   });
+
+  const handleDateRangeChange = (newDateRange: [dayjs.Dayjs, dayjs.Dayjs]) => {
+    setDateRange(newDateRange);
+  };
 
   // const totalMale = barData.reduce((sum, item) => sum + item.male, 0);
   // const totalFemale = barData.reduce((sum, item) => sum + item.female, 0);
@@ -81,6 +92,8 @@ const ChartsSection = () => {
         barData={barData}
         barConfig={barConfig}
         isLoading={isLoading}
+        dateRange={dateRange}
+        onDateRangeChange={handleDateRangeChange}
       />
 
       {/* Pie Chart Container */}
