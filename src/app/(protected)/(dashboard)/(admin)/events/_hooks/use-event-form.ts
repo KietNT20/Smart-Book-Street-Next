@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import dayjs from 'dayjs';
 import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useOpenAISuggestions } from './use-openai-suggestions';
 
 type UseEventFormProps = {
   eventEdit?: Event;
@@ -19,6 +20,9 @@ export const useEventForm = ({ eventEdit }: UseEventFormProps) => {
   const [baseImgFile, setBaseImgFile] = useState<File | null>(null);
   const [otherImgFiles, setOtherImgFiles] = useState<File[]>([]);
   const [videoFile, setVideoFile] = useState<File | null>(null);
+
+  // Thêm state cho gợi ý
+  const [promptInput, setPromptInput] = useState<string>('');
 
   const baseImgInputRef = useRef<HTMLInputElement | null>(null);
   const otherImgsInputRef = useRef<HTMLInputElement | null>(null);
@@ -50,6 +54,42 @@ export const useEventForm = ({ eventEdit }: UseEventFormProps) => {
       zoneId: eventEdit?.zone?.id || '',
     },
   });
+
+  // Xử lý khi nhận được gợi ý từ OpenAI
+  const handleSuggestionReceived = (
+    type: 'eventName' | 'description',
+    suggestion: string
+  ) => {
+    form.setValue(type, suggestion);
+  };
+
+  const { isGenerating, generateSuggestion } = useOpenAISuggestions({
+    onSuggestionReceived: handleSuggestionReceived,
+  });
+
+  const generateEventNameSuggestion = () => {
+    const context = promptInput || 'Hãy tạo tên cho một sự kiện';
+    generateSuggestion('eventName', context);
+  };
+
+  const generateDescriptionSuggestion = () => {
+    const eventName = form.getValues('eventName');
+    const startDate = form.getValues('startDate');
+    const endDate = form.getValues('endDate');
+    const zoneId = form.getValues('zoneId');
+
+    const zoneName =
+      nonDeletedZones?.find((zone) => zone.id === zoneId)?.zoneName || '';
+
+    const context = promptInput || eventName || 'Tạo mô tả cho sự kiện';
+
+    generateSuggestion('description', context, {
+      eventName,
+      startDate,
+      endDate,
+      zoneName,
+    });
+  };
 
   // Form submission handler
   const handleSubmit = (values: EventFormValues) => {
@@ -102,7 +142,7 @@ export const useEventForm = ({ eventEdit }: UseEventFormProps) => {
   const handleBaseImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setBaseImgFile(file); // Lưu trữ file
+      setBaseImgFile(file); // Save file
       form.setValue('baseImgFile', file);
       setPreviewBaseImg(URL.createObjectURL(file));
     }
@@ -113,17 +153,17 @@ export const useEventForm = ({ eventEdit }: UseEventFormProps) => {
     if (files && files.length > 0) {
       const fileArray = Array.from(files);
 
-      // Cập nhật state files
+      // Update state files
       const currentStateFiles = [...otherImgFiles];
       const newStateFiles = [...currentStateFiles, ...fileArray];
       setOtherImgFiles(newStateFiles);
 
-      // Cập nhật form
+      // Update form
       const currentFormFiles = form.getValues('otherImgFile') || [];
       const newFormFiles = [...currentFormFiles, ...fileArray];
       form.setValue('otherImgFile', newFormFiles);
 
-      // Cập nhật previews
+      // Update previews
       const newPreviewUrls = fileArray?.map((file) =>
         URL.createObjectURL(file)
       );
@@ -143,37 +183,35 @@ export const useEventForm = ({ eventEdit }: UseEventFormProps) => {
 
   // Remove handlers
   const removeOtherImage = (index: number) => {
-    // Cập nhật state files
+    // Update state files
     const updatedStateFiles = [...otherImgFiles];
     updatedStateFiles.splice(index, 1);
     setOtherImgFiles(updatedStateFiles);
 
-    // Cập nhật form
     const updatedFormFiles = [...(form.getValues('otherImgFile') || [])];
     updatedFormFiles.splice(index, 1);
     form.setValue('otherImgFile', updatedFormFiles);
 
-    // Cập nhật previews
     const updatedPreviews = [...previewOtherImgs];
     updatedPreviews.splice(index, 1);
     setPreviewOtherImgs(updatedPreviews);
   };
 
   const removeBaseImage = () => {
-    // Cập nhật state
+    // Update state
     setBaseImgFile(null);
-    // Cập nhật form
+    // Update form
     form.setValue('baseImgFile', undefined);
-    // Xóa preview
+    // Remove preview
     setPreviewBaseImg(null);
   };
 
   const removeVideo = () => {
-    // Cập nhật state
+    // Update state
     setVideoFile(null);
-    // Cập nhật form
+    // Update form
     form.setValue('videoFile', undefined);
-    // Xóa preview
+    // Remove preview
     setPreviewVideo(null);
   };
 
@@ -235,6 +273,11 @@ export const useEventForm = ({ eventEdit }: UseEventFormProps) => {
     form.setValue('endDate', formattedDate);
   };
 
+  // Handler cho input prompt
+  const handlePromptChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPromptInput(e.target.value);
+  };
+
   // Clean up
   useEffect(() => {
     return () => {
@@ -277,5 +320,11 @@ export const useEventForm = ({ eventEdit }: UseEventFormProps) => {
     handleRemoveBaseImage,
     handleRemoveOtherImage,
     handleRemoveVideo,
+    // OpenAI Helpers
+    promptInput,
+    handlePromptChange,
+    generateEventNameSuggestion,
+    generateDescriptionSuggestion,
+    isGenerating,
   };
 };

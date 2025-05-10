@@ -1,6 +1,7 @@
 import { AppSidebar } from '@/components/app-sidebar';
 import BreadcrumbPath from '@/components/breadcrumb/breadcrumb-path';
 import { ModeToggle } from '@/components/model-toggle';
+import PaymentRedirectHandler from '@/components/payment-redirect-handler';
 import { Separator } from '@/components/ui/separator';
 import {
   SidebarInset,
@@ -16,6 +17,7 @@ export default function DashboardLayout({
 }) {
   return (
     <SidebarProvider>
+      <PaymentRedirectHandler />
       <div className='flex min-h-screen w-full bg-background'>
         <AppSidebar />
         <SidebarInset>
