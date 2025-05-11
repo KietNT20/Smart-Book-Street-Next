@@ -70,6 +70,8 @@
     "motion": "^12.9.2",
     "next": "^14",
     "next-themes": "^0.4.5",
+    "nodemailer": "^7.0.3",
+    "openai": "^4.98.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.56.3",
@@ -79,6 +81,7 @@
     "tailwind-merge": "^3.2.0",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^1.1.2",
+    "xlsx": "^0.18.5",
     "zod": "^3.24.4"
   },
   "devDependencies": {
@@ -86,6 +89,7 @@
     "@types/js-cookie": "^3.0.6",
     "@types/mapbox-gl": "^3.4.1",
     "@types/node": "^20.17.28",
+    "@types/nodemailer": "^6.4.17",
     "@types/react": "^18.3.20",
     "@types/react-dom": "^18.3.5",
     "autoprefixer": "^10.4.21",

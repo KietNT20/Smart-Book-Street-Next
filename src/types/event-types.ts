@@ -25,7 +25,7 @@ export interface Event {
   genderChart: EventStatistics[];
   referenceChart: EventStatistics[];
   addressChart: EventStatistics[];
-  totalRegistrations: number;
+  totalRegistrations?: number;
 }
 
 export interface EventsInMonth {

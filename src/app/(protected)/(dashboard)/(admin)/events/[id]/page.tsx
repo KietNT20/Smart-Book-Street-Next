@@ -1,7 +1,6 @@
 'use client';
 
 import BackButton from '@/components/back-btn/back-button';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -24,6 +23,7 @@ import DOMPurify from 'dompurify';
 import { BarChart4, Calendar, Clock, MapPin, Video } from 'lucide-react';
 import Link from 'next/link';
 import EventChart from './_components/event-statistics-charts';
+import StatisticsExportButton from './_components/export-excel-button';
 
 // Set locale cho dayjs
 dayjs.locale('vi');
@@ -35,24 +35,12 @@ export default function EventDetailPage({
 }) {
   const { eventData, eventLoading } = useGetEventById(params.id);
   const isLoading = eventLoading;
+
   useEntityBreadcrumb(PATH.EVENTS, 'Sự kiện', params.id, eventData?.eventName);
 
   const formatTime = (dateString: string | Date | null): string => {
     return dayjs(dateString).format('HH:mm');
   };
-
-  if (!eventData) {
-    return (
-      <div className='flex min-h-screen items-center justify-center p-4'>
-        <Alert variant='destructive' className='max-w-lg'>
-          <AlertTitle>Không tìm thấy sự kiện</AlertTitle>
-          <AlertDescription>
-            Không thể tìm thấy thông tin sự kiện đã cung cấp.
-          </AlertDescription>
-        </Alert>
-      </div>
-    );
-  }
 
   // Format range dates
   const formatDateRange = () => {
@@ -94,6 +82,7 @@ export default function EventDetailPage({
           <Button variant={'darker'}>Chỉnh sửa</Button>
         </Link>
       </div>
+
       {/* Hero Section */}
       <div className='container relative mx-auto h-96 overflow-hidden px-4'>
         <div className='absolute inset-0 z-10 bg-black/50'></div>
@@ -123,8 +112,8 @@ export default function EventDetailPage({
             <div className='flex items-center gap-2'>
               <Clock className='h-5 w-5' />
               <span>
-                {formatTime(eventData?.startDate)} -{' '}
-                {formatTime(eventData?.endDate)}
+                {formatTime(eventData?.startDate || '')} -{' '}
+                {formatTime(eventData?.endDate || '')}
               </span>
             </div>
             <div className='flex items-center gap-2'>
@@ -148,7 +137,7 @@ export default function EventDetailPage({
               <CardContent>
                 <div
                   dangerouslySetInnerHTML={{
-                    __html: DOMPurify.sanitize(eventData?.description),
+                    __html: DOMPurify.sanitize(eventData?.description || ''),
                   }}
                 />
               </CardContent>
@@ -220,19 +209,32 @@ export default function EventDetailPage({
             )}
 
             {/* Statistics */}
-            {(eventData?.ageChart?.length > 0 ||
-              eventData?.genderChart?.length > 0 ||
-              eventData?.referenceChart?.length > 0 ||
-              eventData?.addressChart?.length > 0) && (
+            {((eventData?.ageChart && eventData.ageChart.length > 0) ||
+              (eventData?.genderChart && eventData.genderChart.length > 0) ||
+              (eventData?.referenceChart &&
+                eventData.referenceChart.length > 0) ||
+              (eventData?.addressChart &&
+                eventData.addressChart.length > 0)) && (
               <Card>
                 <CardHeader>
-                  <CardTitle className='flex items-center gap-2'>
-                    <BarChart4 className='h-5 w-5' />
-                    Thống kê người tham gia
-                  </CardTitle>
-                  <CardDescription>
-                    Tổng số người đăng ký: {eventData?.totalRegistrations || 0}
-                  </CardDescription>
+                  <div className='flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0'>
+                    <div>
+                      <CardTitle className='flex items-center gap-2'>
+                        <BarChart4 className='h-5 w-5' />
+                        Thống kê người tham gia
+                      </CardTitle>
+                      <CardDescription>
+                        Tổng số người đăng ký:{' '}
+                        {eventData?.totalRegistrations || 0}
+                      </CardDescription>
+                    </div>
+                    {!eventData?.isOpen && (
+                      <StatisticsExportButton
+                        eventId={params.id}
+                        eventData={eventData}
+                      />
+                    )}
+                  </div>
                 </CardHeader>
                 <CardContent className='space-y-6'>
                   {/* Age Chart */}

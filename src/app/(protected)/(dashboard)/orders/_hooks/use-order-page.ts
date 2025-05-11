@@ -5,7 +5,10 @@ import {
   useOrderDetailCarts,
   useOrderDetailMutation,
 } from '@/hooks/use-order-detail';
-import { getLocalStorageItem } from '@/utils/token';
+import tokenMethod, {
+  getLocalStorageItem,
+  setLocalStorageItem,
+} from '@/utils/token';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -49,6 +52,13 @@ export const useOrderPage = () => {
         switch (paymentMethod) {
           case PaymentMethod.TRANSFER:
             if (paymentLink) {
+              const currentToken = tokenMethod.get();
+              if (currentToken) {
+                // Save the current token to localStorage
+                setLocalStorageItem('savedPaymentToken', currentToken);
+                // Mark the payment as in progress
+                setLocalStorageItem('paymentInProgress', true);
+              }
               window.open(paymentLink, '_blank');
             } else {
               toast.error('Đơn hàng không có liên kết thanh toán');

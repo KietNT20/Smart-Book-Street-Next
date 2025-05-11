@@ -27,7 +27,7 @@ import { Event } from '@/types/event-types';
 import { DatePicker, Image } from 'antd';
 import dayjs from 'dayjs';
 import 'dayjs/locale/vi';
-import { X } from 'lucide-react';
+import { Loader2, Sparkles, X } from 'lucide-react';
 import { useEventForm } from '../_hooks/use-event-form';
 
 // Set locale cho dayjs
@@ -57,11 +57,78 @@ const EventForm = ({ eventEdit }: Props) => {
     handleRemoveVideo,
     handleStartDateChange,
     handleEndDateChange,
+    // New OpenAI related props
+    promptInput,
+    handlePromptChange,
+    generateEventNameSuggestion,
+    generateDescriptionSuggestion,
+    isGenerating,
   } = useEventForm({ eventEdit });
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className='space-y-6'>
+        {/* AI Prompt Input */}
+        <div className='space-y-3 rounded-lg border bg-muted/30 p-4'>
+          <h3 className='flex items-center gap-2 font-medium'>
+            <Sparkles className='h-4 w-4' />
+            Gợi ý AI
+          </h3>
+          <div className='flex flex-col gap-2'>
+            <div className='flex gap-2'>
+              <Input
+                placeholder='Nhập gợi ý cho AI (ví dụ: triển lãm sách, hội thảo văn học...)'
+                value={promptInput}
+                onChange={handlePromptChange}
+                className='flex-1'
+                disabled={isGenerating.eventName || isGenerating.description}
+              />
+            </div>
+            <div className='flex gap-2'>
+              <Button
+                type='button'
+                variant='outline'
+                size='sm'
+                className='flex-1'
+                disabled={isGenerating.eventName}
+                onClick={generateEventNameSuggestion}
+              >
+                {isGenerating.eventName ? (
+                  <>
+                    <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                    Đang tạo tên...
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className='mr-2 h-4 w-4' />
+                    Gợi ý tên sự kiện
+                  </>
+                )}
+              </Button>
+              <Button
+                type='button'
+                variant='outline'
+                size='sm'
+                className='flex-1'
+                disabled={isGenerating.description}
+                onClick={generateDescriptionSuggestion}
+              >
+                {isGenerating.description ? (
+                  <>
+                    <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                    Đang tạo mô tả...
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className='mr-2 h-4 w-4' />
+                    Gợi ý mô tả
+                  </>
+                )}
+              </Button>
+            </div>
+          </div>
+        </div>
+
         {/* Event name */}
         <FormField
           control={form.control}
@@ -173,8 +240,8 @@ const EventForm = ({ eventEdit }: Props) => {
                   content={field.value || ''}
                   onChange={field.onChange}
                   placeholder='Nhập mô tả sự kiện'
-                  isPending={isSubmitting}
-                  readOnly={isSubmitting}
+                  isPending={isSubmitting || isGenerating.description}
+                  readOnly={isSubmitting || isGenerating.description}
                 />
               </FormControl>
               <FormMessage />

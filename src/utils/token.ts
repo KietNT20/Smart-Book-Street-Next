@@ -1,7 +1,7 @@
 import { STORAGE } from '@/constant/storage';
 import Cookies from 'js-cookie';
 
-type TokenTypes = {
+export type TokenTypes = {
   accessToken: string;
   refreshToken?: string;
 };
