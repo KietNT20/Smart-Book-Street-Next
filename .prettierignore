@@ -29,3 +29,4 @@ tailwind.config.ts
 .env.example
 .env
 *.ico
+.gitignore
