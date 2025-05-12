@@ -16,7 +16,6 @@ import {
   PieChart,
   ResponsiveContainer,
   Tooltip,
-  TooltipProps,
   XAxis,
   YAxis,
 } from 'recharts';
@@ -38,21 +37,6 @@ export interface ChartProps {
   height?: number | string;
 }
 
-const CustomTooltip = ({
-  active,
-  payload,
-  label,
-}: TooltipProps<number, string>) => {
-  if (active && payload && payload.length) {
-    return (
-      <div className='rounded-md border border-gray-200 bg-white p-2 shadow-sm'>
-        <p className='font-medium'>{`${label || payload[0].name}: ${payload[0].value}`}</p>
-      </div>
-    );
-  }
-  return null;
-};
-
 // Default colors for the charts
 const DEFAULT_COLORS = [
   'hsl(var(--chart-1))',
@@ -67,14 +51,6 @@ const DEFAULT_COLORS = [
   'hsl(var(--chart-10))',
   'hsl(var(--chart-11))',
   'hsl(var(--chart-12))',
-  '#0088FE',
-  '#00C49F',
-  '#FFBB28',
-  '#FF8042',
-  '#8884d8',
-  '#82ca9d',
-  '#ffc658',
-  '#8dd1e1',
 ];
 
 /**
@@ -152,7 +128,7 @@ const EventChart = ({
               <CartesianGrid strokeDasharray='3 3' />
               <XAxis type='number' />
               <YAxis dataKey='label' type='category' width={120} />
-              <Tooltip content={<CustomTooltip />} />
+              <Tooltip />
               <Legend />
               <Bar dataKey='value' name='Số lượng' fill={colors[0]} />
             </BarChart>
@@ -170,7 +146,7 @@ const EventChart = ({
               <CartesianGrid strokeDasharray='3 3' />
               <XAxis dataKey='label' />
               <YAxis />
-              <Tooltip content={<CustomTooltip />} />
+              <Tooltip />
               <Legend />
               <Bar dataKey='value' name='Số lượng' fill={colors[0]} />
             </BarChart>

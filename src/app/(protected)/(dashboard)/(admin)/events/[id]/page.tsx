@@ -22,6 +22,7 @@ import 'dayjs/locale/vi';
 import DOMPurify from 'dompurify';
 import { BarChart4, Calendar, Clock, MapPin, Video } from 'lucide-react';
 import Link from 'next/link';
+import EventBarchart from './_components/event-barchart';
 import EventChart from './_components/event-statistics-charts';
 import StatisticsExportButton from './_components/export-excel-button';
 
@@ -76,56 +77,58 @@ export default function EventDetailPage({
 
   return (
     <div className='min-h-screen bg-background pb-16'>
-      <div className='my-4 flex items-center justify-between'>
+      <div className='mx-auto my-4 flex items-center justify-between px-4'>
         <BackButton />
         <Link href={`${PATH.EVENTS}/${params.id}/edit`}>
-          <Button variant={'darker'}>Chỉnh sửa</Button>
+          <Button>Chỉnh sửa</Button>
         </Link>
       </div>
 
       {/* Hero Section */}
-      <div className='container relative mx-auto h-96 overflow-hidden px-4'>
-        <div className='absolute inset-0 z-10 bg-black/50'></div>
-        <div className='flex h-full items-center justify-center'>
-          <Image
-            src={eventData?.baseImgUrl}
-            alt={eventData?.eventName}
-            fallback={ImageFallback.SRC}
-            style={{
-              height: 'auto',
-              maxWidth: '100%',
-            }}
-          />
-        </div>
-        <div className='absolute inset-0 z-20 mx-auto flex max-w-6xl flex-col justify-end p-8 text-white'>
-          <Badge
-            className={`mb-4 w-fit ${eventData?.isOpen ? 'bg-green-500 hover:bg-green-600' : 'bg-red-500 hover:bg-red-600'}`}
-          >
-            {eventData?.isOpen ? 'Đang diễn ra' : 'Đã kết thúc'}
-          </Badge>
-          <h1 className='mb-4 text-4xl font-bold'>{eventData?.eventName}</h1>
-          <div className='flex flex-col gap-4 text-zinc-100 sm:flex-row sm:items-center'>
-            <div className='flex items-center gap-2'>
-              <Calendar className='h-5 w-5' />
-              <span>{formatDateRange()}</span>
-            </div>
-            <div className='flex items-center gap-2'>
-              <Clock className='h-5 w-5' />
-              <span>
-                {formatTime(eventData?.startDate || '')} -{' '}
-                {formatTime(eventData?.endDate || '')}
-              </span>
-            </div>
-            <div className='flex items-center gap-2'>
-              <MapPin className='h-5 w-5' />
-              <span>{eventData?.zone?.zoneName}</span>
+      <div className='mx-auto px-4'>
+        <div className='relative h-96 overflow-hidden'>
+          <div className='absolute inset-0 z-10 bg-black/50'></div>
+          <div className='flex h-full items-center justify-center'>
+            <Image
+              src={eventData?.baseImgUrl}
+              alt={eventData?.eventName}
+              fallback={ImageFallback.SRC}
+              style={{
+                height: 'auto',
+                maxWidth: '100%',
+              }}
+            />
+          </div>
+          <div className='absolute inset-0 z-20 mx-auto flex max-w-6xl flex-col justify-end p-8 text-white'>
+            <Badge
+              className={`mb-4 w-fit ${eventData?.isOpen ? 'bg-green-500 hover:bg-green-600' : 'bg-red-500 hover:bg-red-600'}`}
+            >
+              {eventData?.isOpen ? 'Đang diễn ra' : 'Đã kết thúc'}
+            </Badge>
+            <h1 className='mb-4 text-4xl font-bold'>{eventData?.eventName}</h1>
+            <div className='flex flex-col gap-4 text-zinc-100 sm:flex-row sm:items-center'>
+              <div className='flex items-center gap-2'>
+                <Calendar className='h-5 w-5' />
+                <span>{formatDateRange()}</span>
+              </div>
+              <div className='flex items-center gap-2'>
+                <Clock className='h-5 w-5' />
+                <span>
+                  {formatTime(eventData?.startDate || '')} -{' '}
+                  {formatTime(eventData?.endDate || '')}
+                </span>
+              </div>
+              <div className='flex items-center gap-2'>
+                <MapPin className='h-5 w-5' />
+                <span>{eventData?.zone?.zoneName}</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       {/* Content */}
-      <div className='mx-auto mt-8 max-w-6xl px-4'>
+      <div className='mx-auto mt-8 px-4'>
         <div className='grid grid-cols-1 gap-8 md:grid-cols-3'>
           {/* Main Content */}
           <div className='space-y-8 md:col-span-2'>
@@ -228,23 +231,19 @@ export default function EventDetailPage({
                         {eventData?.totalRegistrations || 0}
                       </CardDescription>
                     </div>
-                    {!eventData?.isOpen && (
-                      <StatisticsExportButton
-                        eventId={params.id}
-                        eventData={eventData}
-                      />
-                    )}
+                    <StatisticsExportButton
+                      eventId={params.id}
+                      eventData={eventData}
+                    />
                   </div>
                 </CardHeader>
                 <CardContent className='space-y-6'>
                   {/* Age Chart */}
                   {eventData?.ageChart?.length > 0 && (
-                    <EventChart
+                    <EventBarchart
                       data={eventData?.ageChart}
                       title='Phân bố độ tuổi'
                       description='Thống kê độ tuổi người tham gia'
-                      type='bar'
-                      height={250}
                     />
                   )}
 
@@ -255,8 +254,7 @@ export default function EventDetailPage({
                       title='Phân bố giới tính'
                       description='Thống kê giới tính người tham gia'
                       type='pie'
-                      height={250}
-                      colors={['hsl(var(--chart-1))', 'hsl(var(--chart-2))']}
+                      height={300}
                     />
                   )}
 
@@ -267,8 +265,8 @@ export default function EventDetailPage({
                       title='Nguồn tham khảo'
                       description='Người tham gia biết về sự kiện qua đâu'
                       type='horizontalBar'
-                      height={250}
-                      colors={['hsl(var(--chart-1))']}
+                      height={300}
+                      colors={['hsl(var(--chart-2))']}
                     />
                   )}
 
@@ -279,7 +277,7 @@ export default function EventDetailPage({
                       title='Phân bố địa điểm'
                       description='Thống kê nơi đến của người tham gia'
                       type='pie'
-                      height={250}
+                      height={300}
                     />
                   )}
                 </CardContent>
@@ -359,15 +357,15 @@ export default function EventDetailPage({
               <CardContent className='space-y-4'>
                 <div>
                   <h4 className='font-semibold'>{eventData?.zone?.zoneName}</h4>
-                  <p className='mt-1 text-sm text-zinc-500'>
+                  <p className='mt-1 text-sm text-muted-foreground'>
                     {eventData?.zone?.street?.address}
                   </p>
                 </div>
 
                 <div className='h-48 overflow-hidden rounded-lg bg-card'>
                   {/* Map placeholder */}
-                  <div className='flex h-full w-full items-center justify-center bg-gray-100'>
-                    <MapPin className='h-8 w-8 text-zinc-400' />
+                  <div className='flex h-full w-full items-center justify-center bg-card'>
+                    <MapPin className='h-8 w-8 text-muted-foreground' />
                   </div>
                 </div>
 
@@ -375,7 +373,7 @@ export default function EventDetailPage({
 
                 <div className='space-y-2'>
                   <h4 className='font-semibold'>Về địa điểm</h4>
-                  <p className='text-sm text-zinc-500'>
+                  <p className='text-sm text-muted-foreground'>
                     {eventData?.zone?.description}
                   </p>
                 </div>
@@ -393,13 +391,15 @@ export default function EventDetailPage({
               <CardContent className='space-y-4'>
                 <div className='flex items-center justify-between'>
                   <div>
-                    <p className='text-sm text-zinc-500'>Ngày bắt đầu</p>
+                    <p className='text-sm text-muted-foreground'>
+                      Ngày bắt đầu
+                    </p>
                     <p className='font-medium'>
                       {dayjs(eventData?.startDate).format('DD/MM/YYYY')}
                     </p>
                   </div>
                   <div>
-                    <p className='text-sm text-zinc-500'>Giờ bắt đầu</p>
+                    <p className='text-sm text-muted-foreground'>Giờ bắt đầu</p>
                     <p className='font-medium'>
                       {dayjs(eventData?.startDate).format('HH:mm')}
                     </p>
@@ -410,13 +410,17 @@ export default function EventDetailPage({
 
                 <div className='flex items-center justify-between'>
                   <div>
-                    <p className='text-sm text-zinc-500'>Ngày kết thúc</p>
+                    <p className='text-sm text-muted-foreground'>
+                      Ngày kết thúc
+                    </p>
                     <p className='font-medium'>
                       {dayjs(eventData?.endDate).format('DD/MM/YYYY')}
                     </p>
                   </div>
                   <div>
-                    <p className='text-sm text-zinc-500'>Giờ kết thúc</p>
+                    <p className='text-sm text-muted-foreground'>
+                      Giờ kết thúc
+                    </p>
                     <p className='font-medium'>
                       {dayjs(eventData?.endDate).format('HH:mm')}
                     </p>
