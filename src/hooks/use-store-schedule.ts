@@ -5,7 +5,7 @@ import { toast } from 'sonner';
 
 export const useStoreScheduleMuatation = () => {
   const queryClient = useQueryClient();
-  const createStoreScheduleMuatation = useMutation({
+  const createStoreScheduleMutation = useMutation({
     mutationFn: (payload: StoreSchedulesPayload) =>
       storeScheduleService.create(payload),
     onSuccess: (data) => {
@@ -22,7 +22,7 @@ export const useStoreScheduleMuatation = () => {
       console.error('Error creating store schedule:', error);
     },
   });
-  const updateStoreScheduleMuatation = useMutation({
+  const updateStoreScheduleMutation = useMutation({
     mutationFn: ({
       id,
       payload,
@@ -36,7 +36,7 @@ export const useStoreScheduleMuatation = () => {
         queryClient.invalidateQueries({
           queryKey: ['store-schedules', data.storeId],
         });
-        toast.success('Tạo lịch làm việc thành công!');
+        toast.success('Cập nhật lịch làm việc thành công!');
       }
     },
     onError: (error) => {
@@ -44,7 +44,7 @@ export const useStoreScheduleMuatation = () => {
       console.error('Error updating store schedule:', error);
     },
   });
-  const deleteStoreScheduleMuatation = useMutation({
+  const deleteStoreScheduleMutation = useMutation({
     mutationFn: (id: string) => storeScheduleService.delete(id),
     onSuccess: (data) => {
       if (data) {
@@ -61,15 +61,15 @@ export const useStoreScheduleMuatation = () => {
     },
   });
   return {
-    createStoreSchedule: createStoreScheduleMuatation.mutate,
-    createStoreSchedulePeding: createStoreScheduleMuatation.isPending,
-    errorCreateStoreSchedule: createStoreScheduleMuatation.error,
-    updateStoreSchedule: updateStoreScheduleMuatation.mutate,
-    updateStoreSchedulePeding: updateStoreScheduleMuatation.isPending,
-    errorUpdateStoreSchedule: updateStoreScheduleMuatation.error,
-    deleteStoreSchedule: deleteStoreScheduleMuatation.mutate,
-    deleteStoreSchedulePeding: deleteStoreScheduleMuatation.isPending,
-    errorDeleteStoreSchedule: deleteStoreScheduleMuatation.error,
+    createStoreSchedule: createStoreScheduleMutation.mutate,
+    createStoreSchedulePeding: createStoreScheduleMutation.isPending,
+    errorCreateStoreSchedule: createStoreScheduleMutation.error,
+    updateStoreSchedule: updateStoreScheduleMutation.mutate,
+    updateStoreSchedulePeding: updateStoreScheduleMutation.isPending,
+    errorUpdateStoreSchedule: updateStoreScheduleMutation.error,
+    deleteStoreSchedule: deleteStoreScheduleMutation.mutate,
+    deleteStoreSchedulePeding: deleteStoreScheduleMutation.isPending,
+    errorDeleteStoreSchedule: deleteStoreScheduleMutation.error,
   };
 };
 

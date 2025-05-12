@@ -10,8 +10,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import {
   Dialog,
   DialogContent,
@@ -127,68 +127,88 @@ export default function StoreScheduleDisplay({ storeSchedules }: Props) {
             Thêm lịch
           </Button>
         </div>
-        <div className='overflow-hidden rounded-lg border'>
+
+        <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7'>
           {daysOfWeek.map((day) => {
             const schedule = scheduleMap.get(Number(day));
             const isToday = adjustedCurrentDay === day;
+            const isOpen = schedule && !schedule.isClosed;
 
             return (
-              <div
+              <Card
                 key={day}
-                className={`flex justify-between border-b p-4 ${
-                  isToday ? 'bg-sidebar opacity-90' : ''
-                } last:border-b-0`}
+                className={`transition-all ${
+                  schedule
+                    ? isOpen
+                      ? 'border-2 border-green-500'
+                      : 'border border-gray-300 bg-gray-50'
+                    : 'border-dashed border-gray-300'
+                }`}
               >
-                <div className='font-medium'>
-                  {getVietnameseDayOfWeek(day)}
-                  {isToday && (
-                    <span className='ml-2 text-xs text-blue-500'>
-                      (Hôm nay)
-                    </span>
-                  )}
-                </div>
-                <div className='flex items-center gap-3'>
-                  {schedule ? (
-                    <>
-                      <div className='flex items-center gap-4 text-sm'>
-                        {schedule.isClosed ? (
-                          <Badge variant='destructive'>Đóng cửa</Badge>
-                        ) : (
-                          <Badge variant={'matcha'}>Đang mở</Badge>
-                        )}
-                        <div className='flex items-center text-sm'>
-                          <Clock className='mr-1 h-4 w-4 text-zinc-500' />
+                <CardContent className='p-4'>
+                  <div className='mb-2'>
+                    <h4 className='flex items-center font-medium'>
+                      {getVietnameseDayOfWeek(day)}
+                      {isToday && (
+                        <span className='ml-2 text-xs text-blue-500'>
+                          (Hôm nay)
+                        </span>
+                      )}
+                    </h4>
+                  </div>
+
+                  <div className='mt-2 text-sm'>
+                    {schedule ? (
+                      schedule.isClosed ? (
+                        <span className='text-gray-500'>Đóng cửa</span>
+                      ) : (
+                        <div className='flex items-center'>
+                          <Clock className='mr-1 h-4 w-4' />
                           {formatTime(schedule.openTime)} -{' '}
                           {formatTime(schedule.closeTime)}
                         </div>
-                      </div>
-                      <div className='flex items-center gap-2'>
-                        <Button
-                          variant='ghost'
-                          size='icon'
-                          onClick={() => handleEdit(schedule)}
-                          className='h-8 w-8 text-zinc-500 hover:text-zinc-900'
-                        >
-                          <Pencil className='h-4 w-4' />
-                        </Button>
-                        <Button
-                          variant='ghost'
-                          size='icon'
-                          onClick={() => handleDelete(schedule.id)}
-                          className='h-8 w-8 text-zinc-500 hover:text-red-600'
-                          disabled={isDeleting}
-                        >
-                          <Trash2 className='h-4 w-4' />
-                        </Button>
-                      </div>
-                    </>
-                  ) : (
-                    <span className='text-sm text-zinc-500'>
-                      Chưa thiết lập
-                    </span>
-                  )}
-                </div>
-              </div>
+                      )
+                    ) : (
+                      <span className='text-zinc-500'>Chưa thiết lập</span>
+                    )}
+                  </div>
+                </CardContent>
+
+                {schedule && (
+                  <CardFooter className='flex justify-end gap-2 p-3 pt-0'>
+                    <Button
+                      variant='ghost'
+                      size='sm'
+                      onClick={() => handleEdit(schedule)}
+                      className='h-8 w-8 p-0 text-zinc-500 hover:text-zinc-900'
+                    >
+                      <Pencil className='h-4 w-4' />
+                    </Button>
+                    <Button
+                      variant='ghost'
+                      size='sm'
+                      onClick={() => handleDelete(schedule.id)}
+                      className='h-8 w-8 p-0 text-zinc-500 hover:text-red-600'
+                      disabled={isDeleting}
+                    >
+                      <Trash2 className='h-4 w-4' />
+                    </Button>
+                  </CardFooter>
+                )}
+
+                {!schedule && (
+                  <CardFooter className='justify-center p-3 pt-0'>
+                    <Button
+                      variant='ghost'
+                      size='sm'
+                      onClick={handleAddNew}
+                      className='text-primary'
+                    >
+                      <Plus className='mr-1 h-4 w-4' /> Thiết lập
+                    </Button>
+                  </CardFooter>
+                )}
+              </Card>
             );
           })}
         </div>
@@ -198,55 +218,66 @@ export default function StoreScheduleDisplay({ storeSchedules }: Props) {
       {specialSchedules.length > 0 && (
         <div className='space-y-3'>
           <h3 className='text-lg font-medium'>Lịch làm việc đặc biệt</h3>
-          <div className='overflow-hidden rounded-lg border'>
-            {specialSchedules.map((schedule, index) => (
-              <div
-                key={index}
-                className='flex justify-between border-b p-4 last:border-b-0'
-              >
-                <div className='flex items-center'>
-                  <Calendar className='mr-2 h-4 w-4 text-zinc-500' />
-                  <span className='font-medium'>
-                    {schedule.specialDate
-                      ? formatDateVi(schedule.specialDate)
-                      : ''}
-                  </span>
-                </div>
-                <div className='flex items-center gap-3'>
-                  <div className='flex items-center gap-4 text-sm'>
-                    {schedule.isClosed ? (
-                      <Badge variant='destructive'>Đóng cửa</Badge>
-                    ) : (
-                      <Badge>Đang mở</Badge>
-                    )}
-                    <div className='flex items-center text-sm'>
-                      <Clock className='mr-1 h-4 w-4 text-zinc-500' />
-                      {formatTime(schedule.openTime)} -{' '}
-                      {formatTime(schedule.closeTime)}
+          <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
+            {specialSchedules.map((schedule, index) => {
+              const isOpen = !schedule.isClosed;
+
+              return (
+                <Card
+                  key={index}
+                  className={`transition-all ${
+                    isOpen
+                      ? 'border-2 border-green-500'
+                      : 'border border-gray-300 bg-gray-50'
+                  }`}
+                >
+                  <CardContent className='p-4'>
+                    <div className='mb-2'>
+                      <h4 className='flex items-center font-medium'>
+                        <Calendar className='mr-2 h-4 w-4 text-zinc-500' />
+                        <span>
+                          {schedule.specialDate
+                            ? formatDateVi(schedule.specialDate)
+                            : ''}
+                        </span>
+                      </h4>
                     </div>
-                  </div>
-                  <div className='flex items-center gap-2'>
+
+                    <div className='mt-2 text-sm'>
+                      {schedule.isClosed ? (
+                        <span className='text-gray-500'>Đóng cửa</span>
+                      ) : (
+                        <div className='flex items-center'>
+                          <Clock className='mr-1 h-4 w-4 text-zinc-500' />
+                          {formatTime(schedule.openTime)} -{' '}
+                          {formatTime(schedule.closeTime)}
+                        </div>
+                      )}
+                    </div>
+                  </CardContent>
+
+                  <CardFooter className='flex justify-end gap-2 p-3 pt-0'>
                     <Button
                       variant='ghost'
-                      size='icon'
+                      size='sm'
                       onClick={() => handleEdit(schedule)}
-                      className='h-8 w-8 text-zinc-500 hover:text-zinc-900'
+                      className='h-8 w-8 p-0 text-zinc-500 hover:text-zinc-900'
                     >
                       <Pencil className='h-4 w-4' />
                     </Button>
                     <Button
                       variant='ghost'
-                      size='icon'
+                      size='sm'
                       onClick={() => handleDelete(schedule.id)}
-                      className='h-8 w-8 text-zinc-500 hover:text-red-600'
+                      className='h-8 w-8 p-0 text-zinc-500 hover:text-red-600'
                       disabled={isDeleting}
                     >
                       <Trash2 className='h-4 w-4' />
                     </Button>
-                  </div>
-                </div>
-              </div>
-            ))}
+                  </CardFooter>
+                </Card>
+              );
+            })}
           </div>
         </div>
       )}

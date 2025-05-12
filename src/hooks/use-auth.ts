@@ -48,7 +48,7 @@ export const useLogin = () => {
     },
     onError: (error) => {
       console.log('Error login', error);
-      toast.error(`Đăng nhập thất bại`);
+      toast.error(`Đăng nhập thất bại, ${error}`);
     },
   });
 };
@@ -70,7 +70,7 @@ export const useRegister = () => {
     },
     onError: (error: Error) => {
       console.log('Error register', error);
-      toast.error('Đăng ký tài khoản thất bại');
+      toast.error(`Đăng ký tài khoản thất bại, ${error}`);
     },
   });
 };
@@ -88,7 +88,6 @@ export const useAuth = () => {
     queryKey: ['user-profile'],
     queryFn: () => userService.getProfile(),
     staleTime: 0,
-    refetchOnWindowFocus: false,
     enabled: !!tokenMethod.get()?.accessToken,
   });
 
