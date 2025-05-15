@@ -324,13 +324,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     projects: [
       // Projects common to all roles
       {
-        name: 'Dashboard',
+        name: 'Bảng điều khiển',
         url: PATH.DASHBOARD,
         icon: PieChart,
         roles: [RoleEnums.ADMIN, RoleEnums.PUBLISHER],
       },
       {
-        name: 'Store Dashboard',
+        name: 'Bảng điều khiển cửa hàng',
         url: PATH.STORE_OWNER_DASHBOARD,
         icon: PieChart,
         roles: [

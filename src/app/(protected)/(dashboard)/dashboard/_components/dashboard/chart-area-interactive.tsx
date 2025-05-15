@@ -24,6 +24,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { NextJS_API } from '@/enums/endpoint';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { DailyPopulationStatistics } from '@/lib/zod';
 
@@ -120,7 +121,7 @@ export function ChartAreaInteractive() {
       setError(null);
 
       const params = getApiParams();
-      const response = await fetch(`/api/population${params}`);
+      const response = await fetch(`${NextJS_API.POPULATION}${params}`);
 
       if (!response.ok) {
         throw new Error(`API request failed with status ${response.status}`);
