@@ -1,6 +1,7 @@
 import { BooksNextResponse } from '@/app/api/stores/[storeId]/books/route';
 import { SouvenirsNextResponse } from '@/app/api/stores/[storeId]/souvenirs/route';
 import { API_URL } from '@/constant/api-url';
+import { NextJS_API } from '@/enums/endpoint';
 import {
   InventoriesResponse,
   InventoryCreate,
@@ -41,17 +42,19 @@ export const inventoryService = {
     return res.data;
   },
   getBookNextByStoreId: async (storeId: string): Promise<BooksNextResponse> => {
-    const res = await axios.get(`/api/stores/${storeId}/books`);
+    const res = await axios.get(`${NextJS_API.STORES}/${storeId}/books`);
     return res.data;
   },
   getSouvenirNextByStoreId: async (
     storeId: string
   ): Promise<SouvenirsNextResponse> => {
-    const res = await axios.get(`/api/stores/${storeId}/souvenirs`);
+    const res = await axios.get(`${NextJS_API.STORES}/${storeId}/souvenirs`);
     return res.data;
   },
   getBookInfoInventory: async (storeId: string, isbn: string) => {
-    const res = await axios.get(`/api/stores/${storeId}/books/${isbn}`);
+    const res = await axios.get(
+      `${NextJS_API.STORES}/${storeId}/books/${isbn}`
+    );
     return res.data;
   },
   create: async (data: InventoryCreate) => {

@@ -1,5 +1,6 @@
 import { API_URL } from '@/constant/api-url';
 import { BASE_URL } from '@/constant/environment';
+import { NextJS_API } from '@/enums/endpoint';
 import { Book, BookNextjs } from '@/types/book-types';
 
 export const fetchBookByISBN = async (
@@ -30,7 +31,9 @@ export async function fetchBookIsbnInventory(
   isbn: string
 ): Promise<BookNextjs> {
   try {
-    const response = await fetch(`/api/stores/${storeId}/books/${isbn}`);
+    const response = await fetch(
+      `${NextJS_API.STORES}/${storeId}/books/${isbn}`
+    );
 
     if (!response.ok) {
       const errorData = await response.json();

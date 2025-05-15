@@ -22,3 +22,11 @@ export enum API_ENDPOINT {
   STORE_SCHEDULES = '/store-schedules',
   EVENT_REGISTRATION = '/event-registrations',
 }
+
+export enum NextJS_API {
+  EVENT = '/api/events',
+  EXPORT_STATISTICS = '/api/events/export-statistics',
+  OPENAI = '/api/openai',
+  STORES = '/api/stores',
+  POPULATION = '/api/population',
+}

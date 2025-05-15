@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { NextJS_API } from '@/enums/endpoint';
 import { Event } from '@/types/event-types';
 import { FileSpreadsheet, Loader2, Mail } from 'lucide-react';
 import { useState } from 'react';
@@ -18,7 +19,7 @@ import { toast } from 'sonner';
 
 interface StatisticsExportButtonProps {
   eventId: string;
-  eventData: Event & { id: string };
+  eventData?: Event;
 }
 
 const StatisticsExportButton = ({
@@ -30,11 +31,9 @@ const StatisticsExportButton = ({
   const [email, setEmail] = useState<string>('');
   const [error, setError] = useState<string>('');
 
-  // Hàm xác thực email đơn giản
   const isValidEmail = (email: string): boolean =>
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  // Hàm gửi thống kê
   const sendStatistics = async (): Promise<void> => {
     if (!isValidEmail(email)) {
       setError('Vui lòng nhập email hợp lệ');
@@ -47,7 +46,7 @@ const StatisticsExportButton = ({
 
     try {
       toast.promise(
-        fetch(`/api/events/export-statistics`, {
+        fetch(NextJS_API.EXPORT_STATISTICS, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

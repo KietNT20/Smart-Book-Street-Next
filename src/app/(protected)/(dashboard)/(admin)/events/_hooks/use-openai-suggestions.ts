@@ -1,3 +1,4 @@
+import { NextJS_API } from '@/enums/endpoint';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -175,7 +176,7 @@ export const useOpenAISuggestions = ({
           Viết mô tả theo đoạn văn dễ đọc, tạo cảm giác hồi hộp và thu hút người đọc.`;
       }
 
-      const response = await fetch('/api/openai', {
+      const response = await fetch(NextJS_API.OPENAI, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

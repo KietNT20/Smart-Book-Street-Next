@@ -23,7 +23,10 @@ interface EventStatisticsData {
     totalRegistrations?: number;
   };
   zoneInfo: Zone;
-  dateRange: any;
+  dateRange: {
+    startDate: string;
+    endDate: string;
+  };
   organizerEmail: string;
   emailSubject: string;
   emailMessage: string;
@@ -763,6 +766,7 @@ export async function POST(req: NextRequest) {
       <p>Trân trọng,<br>Hệ thống quản lý sự kiện</p>
     `;
 
+    // Send email with attachment
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: organizerEmail,
@@ -775,7 +779,7 @@ export async function POST(req: NextRequest) {
         },
       ],
     };
-
+    // Send email
     const info = await transporter.sendMail(mailOptions);
 
     await fs.unlink(filePath);
