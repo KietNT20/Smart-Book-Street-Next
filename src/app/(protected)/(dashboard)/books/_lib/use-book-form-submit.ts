@@ -1,5 +1,5 @@
 import { BookFormValues } from '@/lib/zod';
-import DOMPurify from 'dompurify';
+import DOMPurify from 'isomorphic-dompurify';
 import { useEffect, useState } from 'react';
 
 type FileState = {

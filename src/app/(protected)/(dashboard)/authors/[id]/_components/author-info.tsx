@@ -1,7 +1,7 @@
 import { ImageFallback } from '@/constant/storage';
 import { formatDateVi, formatPrice } from '@/lib/utils';
 import { Author } from '@/types/author-types';
-import DOMPurify from 'dompurify';
+import DOMPurify from 'isomorphic-dompurify';
 import Image from 'next/image';
 import Link from 'next/link';
 

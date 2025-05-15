@@ -1,7 +1,7 @@
 import { Language, VietnameseLanguageLabels } from '@/enums/lang';
 import { formatDateVi, formatPrice } from '@/lib/utils';
 import { Book } from '@/types/book-types';
-import DOMPurify from 'dompurify';
+import DOMPurify from 'isomorphic-dompurify';
 
 type Props = {
   book: Book;
