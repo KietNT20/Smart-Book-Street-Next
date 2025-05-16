@@ -19,6 +19,10 @@ export const zoneService = {
     );
     return res.data;
   },
+  getByStreet: async (streetId: string): Promise<ZonesResponse> => {
+    const res = await axiosInstance.get(`${API_URL.ZONES.STREET}/${streetId}`);
+    return res.data;
+  },
   getById: async (id: string): Promise<ZoneResponse> => {
     const res = await axiosInstance.get(`${API_URL.ZONES.INDEX}/${id}`);
     return res.data;

@@ -8,23 +8,36 @@ export interface EventStatistics {
   value: number;
 }
 
+export interface EventSchedule {
+  id: string;
+  eventDate: string | Date | null;
+  startTime: string;
+  endTime: string;
+  eventId: string;
+}
+
 export interface Event {
   id: string;
   eventName: string;
   description: string;
-  startDate: Date | string | null;
-  endDate: Date | string | null;
+  startDate: string | Date | null;
+  endDate: string | Date | null;
   baseImgUrl: string;
-  videoLink: string;
+  videoLink: string | null;
   isOpen: boolean;
   allowAds: boolean;
   isDeleted: boolean;
+  version: number;
+  isApprove: boolean;
+  message: string | null;
+  updateForEventId: string | null;
   zone: Zone;
   images: ImageType[];
-  ageChart: EventStatistics[];
-  genderChart: EventStatistics[];
-  referenceChart: EventStatistics[];
-  addressChart: EventStatistics[];
+  eventSchedules: EventSchedule[];
+  ageChart: EventStatistics[] | null;
+  genderChart: EventStatistics[] | null;
+  referenceChart: EventStatistics[] | null;
+  addressChart: EventStatistics[] | null;
   totalRegistrations?: number;
 }
 

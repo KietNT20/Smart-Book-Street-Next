@@ -90,6 +90,7 @@ export const API_URL = {
   ZONES: {
     INDEX: `${ZONE}`,
     PAGINATION_SEARCH: `${ZONE}/search/paginated`,
+    STREET: `${ZONE}/street`,
   },
   USERS: {
     INDEX: `${USER}`,

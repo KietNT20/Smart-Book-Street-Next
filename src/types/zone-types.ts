@@ -8,7 +8,7 @@ export interface Zone {
   description: string;
   latitude: number;
   longitude: number;
-  street: Street;
+  street: Street | null;
 }
 
 export type ZoneCreate = Partial<Omit<Zone, 'id'>> & {

@@ -356,30 +356,34 @@ export const dailyPopulationSchema = z.object({
 
 export type DailyPopulationStatistics = z.infer<typeof dailyPopulationSchema>;
 
-export const eventFormSchema = z
-  .object({
-    eventName: z
-      .string()
-      .min(1, { message: 'Tên sự kiện không được để trống' }),
-    startDate: z
-      .string()
-      .refine((val) => dayjs(val, 'YYYY-MM-DD HH:mm', true).isValid(), {
-        message: 'Ngày giờ bắt đầu không hợp lệ',
-      })
-      .nullable(),
-    endDate: z
-      .string()
-      .refine((val) => dayjs(val, 'YYYY-MM-DD HH:mm', true).isValid(), {
-        message: 'Ngày giờ kết thúc không hợp lệ',
-      })
-      .nullable(),
-    description: z.string().optional(),
-    baseImgFile: z
-      .union([
+export const eventFormSchema = z.object({
+  eventName: z.string().min(1, { message: 'Tên sự kiện không được để trống' }),
+  description: z.string().optional(),
+  baseImgFile: z
+    .union([
+      z
+        .instanceof(File)
+        .refine((file) => file.size <= 10 * 1024 * 1024, {
+          message: 'Ảnh chính phải nhỏ hơn 10MB',
+        })
+        .refine(
+          (file) =>
+            ['image/jpeg', 'image/png', 'image/webp'].includes(file.type),
+          {
+            message: 'Chỉ chấp nhận JPG, PNG, WEBP chất lượng cao',
+          }
+        ),
+      z.string(),
+      z.null(),
+    ])
+    .optional(),
+  otherImgFile: z
+    .array(
+      z.union([
         z
           .instanceof(File)
-          .refine((file) => file.size <= 10 * 1024 * 1024, {
-            message: 'Ảnh chính phải nhỏ hơn 10MB',
+          .refine((file) => file.size <= 8 * 1024 * 1024, {
+            message: 'Mỗi ảnh bổ sung phải nhỏ hơn 8MB',
           })
           .refine(
             (file) =>
@@ -389,96 +393,75 @@ export const eventFormSchema = z
             }
           ),
         z.string(),
-        z.null(),
       ])
-      .optional(),
-    otherImgFile: z
-      .array(
-        z.union([
-          z
-            .instanceof(File)
-            .refine((file) => file.size <= 8 * 1024 * 1024, {
-              message: 'Mỗi ảnh bổ sung phải nhỏ hơn 8MB',
-            })
-            .refine(
-              (file) =>
-                ['image/jpeg', 'image/png', 'image/webp'].includes(file.type),
-              {
-                message: 'Chỉ chấp nhận JPG, PNG, WEBP chất lượng cao',
-              }
-            ),
-          z.string(),
-        ])
-      )
-      .default([])
-      .refine((files) => files.length <= 10, {
-        message: 'Chỉ có thể tải lên tối đa 10 ảnh bổ sung',
-      }),
-    videoFile: z
-      .union([
-        z
-          .instanceof(File)
-          .refine((file) => file.size <= 50 * 1024 * 1024, {
-            message: 'Video phải nhỏ hơn 50MB',
-          })
-          .refine(
-            (file) =>
-              ['video/mp4', 'video/webm', 'video/quicktime'].includes(
-                file.type
-              ),
-            {
-              message: 'Chỉ chấp nhận video định dạng MP4, WebM hoặc QuickTime',
-            }
-          )
-          .superRefine(async (file, ctx) => {
-            try {
-              const url = URL.createObjectURL(file);
-              const video = document.createElement('video');
-
-              await new Promise<void>((resolve, reject) => {
-                video.onloadedmetadata = () => {
-                  URL.revokeObjectURL(url);
-                  if (video.videoWidth < 1280 || video.videoHeight < 720) {
-                    ctx.addIssue({
-                      code: z.ZodIssueCode.custom,
-                      message:
-                        'Video phải có độ phân giải tối thiểu 720p (1280x720)',
-                    });
-                  }
-                  resolve();
-                };
-                video.onerror = () =>
-                  reject(new Error('Failed to load video metadata'));
-                video.src = url;
-              });
-            } catch {
-              ctx.addIssue({
-                code: z.ZodIssueCode.custom,
-                message: 'Không thể xác định chất lượng video',
-              });
-            }
-          }),
-        z.string(),
-        z.null(),
-      ])
-      .optional(),
-    isOpen: z.boolean().optional().default(true),
-    allowAds: z.boolean().optional().default(false),
-    zoneId: z.string().min(1, {
-      message: 'Vui lòng chọn khu vực tổ chức sự kiện',
+    )
+    .default([])
+    .refine((files) => files.length <= 10, {
+      message: 'Chỉ có thể tải lên tối đa 10 ảnh bổ sung',
     }),
-  })
-  .superRefine((data, ctx) => {
-    if (data.startDate && data.endDate) {
-      if (!dayjs(data.endDate).isAfter(dayjs(data.startDate))) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: 'Ngày kết thúc phải sau ngày bắt đầu',
-          path: ['endDate'],
-        });
-      }
-    }
-  });
+  videoFile: z
+    .union([
+      z
+        .instanceof(File)
+        .refine((file) => file.size <= 50 * 1024 * 1024, {
+          message: 'Video phải nhỏ hơn 50MB',
+        })
+        .refine(
+          (file) =>
+            ['video/mp4', 'video/webm', 'video/quicktime'].includes(file.type),
+          {
+            message: 'Chỉ chấp nhận video định dạng MP4, WebM hoặc QuickTime',
+          }
+        )
+        .superRefine(async (file, ctx) => {
+          try {
+            const url = URL.createObjectURL(file);
+            const video = document.createElement('video');
+
+            await new Promise<void>((resolve, reject) => {
+              video.onloadedmetadata = () => {
+                URL.revokeObjectURL(url);
+                if (video.videoWidth < 1280 || video.videoHeight < 720) {
+                  ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message:
+                      'Video phải có độ phân giải tối thiểu 720p (1280x720)',
+                  });
+                }
+                resolve();
+              };
+              video.onerror = () =>
+                reject(new Error('Failed to load video metadata'));
+              video.src = url;
+            });
+          } catch {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: 'Không thể xác định chất lượng video',
+            });
+          }
+        }),
+      z.string(),
+      z.null(),
+    ])
+    .optional(),
+  isOpen: z.boolean().optional().default(true),
+  allowAds: z.boolean().optional().default(false),
+  zoneId: z.string().min(1, {
+    message: 'Vui lòng chọn khu vực tổ chức sự kiện',
+  }),
+  eventDates: z.array(z.string().date('Ngày không hợp lệ')),
+  startTimes: z.array(
+    z.string().time({
+      message: 'Giờ bắt đầu không hợp lệ',
+    })
+  ),
+  endTimes: z.array(
+    z.string().time({
+      message: 'Giờ kết thúc không hợp lệ',
+    })
+  ),
+});
 
 export type EventFormValues = z.infer<typeof eventFormSchema>;
 

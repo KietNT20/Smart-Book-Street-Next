@@ -24,10 +24,10 @@ import {
 import { Switch } from '@/components/ui/switch';
 import { PATH } from '@/enums/path';
 import { Event } from '@/types/event-types';
-import { DatePicker, Image } from 'antd';
+import { DatePicker, Image, TimePicker } from 'antd';
 import dayjs from 'dayjs';
 import 'dayjs/locale/vi';
-import { Loader2, Sparkles, X } from 'lucide-react';
+import { Loader2, Plus, Sparkles, Trash2, X } from 'lucide-react';
 import { useEventForm } from '../_hooks/use-event-form';
 
 // Set locale cho dayjs
@@ -44,25 +44,32 @@ const EventForm = ({ eventEdit }: Props) => {
     previewBaseImg,
     previewOtherImgs,
     previewVideo,
-    nonDeletedZones,
-    baseImgInputRef,
-    otherImgsInputRef,
-    videoInputRef,
+    zonesByStreetRes,
     handleSubmit,
     handleBaseImageChange,
     handleOtherImagesChange,
     handleVideoChange,
+    baseImgInputRef,
+    otherImgsInputRef,
+    videoInputRef,
     handleRemoveBaseImage,
     handleRemoveOtherImage,
     handleRemoveVideo,
-    handleStartDateChange,
-    handleEndDateChange,
-    // New OpenAI related props
+    // OpenAI Helpers
     promptInput,
     handlePromptChange,
     generateEventNameSuggestion,
     generateDescriptionSuggestion,
     isGenerating,
+    // Handle Date time Events
+    addDateTimeSet,
+    removeDateTimeSet,
+    handleEventDateChange,
+    handleStartTimeChange,
+    handleEndTimeChange,
+    isDateDisabled,
+    getDisabledHours,
+    getDisabledMinutes,
   } = useEventForm({ eventEdit });
 
   return (
@@ -144,88 +151,190 @@ const EventForm = ({ eventEdit }: Props) => {
           )}
         />
 
-        <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
-          <FormField
-            control={form.control}
-            name='startDate'
-            render={({ field }) => (
-              <FormItem className='flex flex-col'>
-                <FormLabel>Ngày giờ bắt đầu</FormLabel>
-                <FormControl>
-                  <DatePicker
-                    className='h-10 w-full px-3 py-2'
-                    placeholder='Chọn ngày giờ bắt đầu'
-                    format='YYYY-MM-DD HH:mm'
-                    showTime={{
-                      format: 'HH:mm',
-                      defaultValue: dayjs('00:00', 'HH:mm'),
-                    }}
-                    value={field.value ? dayjs(field.value) : null}
-                    onChange={handleStartDateChange}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+        {/* Event Dates, Start Times, End Times */}
+        <div className='space-y-4'>
+          <div className='flex items-center justify-between'>
+            <div>
+              <FormLabel className='text-base'>Thời gian sự kiện</FormLabel>
+              <FormDescription className='text-sm'>
+                Mỗi sự kiện cần có ít nhất một ngày và thời gian kết thúc phải
+                sau thời gian bắt đầu ít nhất 30 phút
+              </FormDescription>
+            </div>
+            <Button
+              type='button'
+              variant='outline'
+              size='sm'
+              onClick={addDateTimeSet}
+              className='flex items-center gap-1'
+            >
+              <Plus className='h-4 w-4' /> Thêm ngày
+            </Button>
+          </div>
+
+          <div className='space-y-3'>
+            {Array.from({ length: form.watch('eventDates')?.length || 1 }).map(
+              (_, index) => (
+                <div
+                  key={`datetime-set-${index}`}
+                  className='flex flex-col space-y-2 rounded-md border p-4 sm:flex-row sm:items-end sm:space-x-4 sm:space-y-0'
+                >
+                  <div className='flex-1'>
+                    <FormField
+                      control={form.control}
+                      name={`eventDates.${index}`}
+                      render={({ field }) => (
+                        <FormItem className='flex flex-col'>
+                          <FormLabel className='mb-1 text-sm'>
+                            Ngày {index + 1}
+                          </FormLabel>
+                          <FormControl>
+                            <DatePicker
+                              className='w-full'
+                              placeholder='Chọn ngày'
+                              format='YYYY-MM-DD'
+                              value={field.value ? dayjs(field.value) : null}
+                              disabledDate={(date) =>
+                                isDateDisabled(date, index)
+                              }
+                              onChange={(date) =>
+                                handleEventDateChange(
+                                  index,
+                                  date ? date.format('YYYY-MM-DD') : ''
+                                )
+                              }
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <div className='flex-1'>
+                    <FormField
+                      control={form.control}
+                      name={`startTimes.${index}`}
+                      render={({ field }) => (
+                        <FormItem className='flex flex-col'>
+                          <FormLabel className='mb-1 text-sm'>
+                            Giờ bắt đầu
+                          </FormLabel>
+                          <FormControl>
+                            <TimePicker
+                              className='w-full'
+                              placeholder='Chọn giờ bắt đầu'
+                              format='HH:mm'
+                              value={
+                                field.value ? dayjs(field.value, 'HH:mm') : null
+                              }
+                              onChange={(time) =>
+                                handleStartTimeChange(
+                                  index,
+                                  time ? time.format('HH:mm') : ''
+                                )
+                              }
+                              // Nếu là ngày hôm nay thì disable giờ trong quá khứ
+                              disabledTime={() => {
+                                const now = dayjs();
+                                const selectedDate =
+                                  form.getValues('eventDates')?.[index];
+
+                                if (
+                                  selectedDate &&
+                                  dayjs(selectedDate).isSame(now, 'day')
+                                ) {
+                                  const currentHour = now.hour();
+                                  const currentMinute = now.minute();
+
+                                  return {
+                                    disabledHours: () =>
+                                      Array.from(
+                                        { length: currentHour },
+                                        (_, i) => i
+                                      ),
+                                    disabledMinutes: (hour) => {
+                                      if (hour === currentHour) {
+                                        return Array.from(
+                                          { length: currentMinute },
+                                          (_, i) => i
+                                        );
+                                      }
+                                      return [];
+                                    },
+                                  };
+                                }
+
+                                return {};
+                              }}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <div className='flex-1'>
+                    <FormField
+                      control={form.control}
+                      name={`endTimes.${index}`}
+                      render={({ field }) => (
+                        <FormItem className='flex flex-col'>
+                          <FormLabel className='mb-1 text-sm'>
+                            Giờ kết thúc
+                          </FormLabel>
+                          <FormControl>
+                            <TimePicker
+                              className='w-full'
+                              placeholder='Chọn giờ kết thúc'
+                              format='HH:mm'
+                              value={
+                                field.value ? dayjs(field.value, 'HH:mm') : null
+                              }
+                              onChange={(time) =>
+                                handleEndTimeChange(
+                                  index,
+                                  time ? time.format('HH:mm') : ''
+                                )
+                              }
+                              disabledTime={() => {
+                                return {
+                                  disabledHours: () =>
+                                    getDisabledHours(index, true)(),
+                                  disabledMinutes: (hour) =>
+                                    getDisabledMinutes(index, hour, true)(),
+                                };
+                              }}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  {form.watch('eventDates')?.length > 1 && (
+                    <Button
+                      type='button'
+                      variant='destructive'
+                      size='icon'
+                      className='h-10 w-10 shrink-0 self-end'
+                      onClick={() => removeDateTimeSet(index)}
+                    >
+                      <Trash2 className='h-4 w-4' />
+                    </Button>
+                  )}
+                </div>
+              )
             )}
-          />
-          <FormField
-            control={form.control}
-            name='endDate'
-            render={({ field }) => (
-              <FormItem className='flex flex-col'>
-                <FormLabel>Ngày giờ kết thúc</FormLabel>
-                <FormControl>
-                  <DatePicker
-                    className='h-10 w-full px-3 py-2'
-                    placeholder='Chọn ngày giờ kết thúc'
-                    format='YYYY-MM-DD HH:mm'
-                    showTime={{
-                      format: 'HH:mm',
-                      defaultValue: dayjs('23:59', 'HH:mm'),
-                    }}
-                    value={field.value ? dayjs(field.value) : null}
-                    disabledDate={(current) => {
-                      const startDate = form.getValues('startDate');
-                      if (!startDate) return false;
-                      return (
-                        current && current < dayjs(startDate).startOf('day')
-                      );
-                    }}
-                    disabledTime={(current) => {
-                      const startDate = form.getValues('startDate');
-                      if (!startDate || !current) return {};
+          </div>
 
-                      const startDateTime = dayjs(startDate);
-                      if (current.isSame(startDateTime, 'day')) {
-                        const startHour = startDateTime.hour();
-                        const startMinute = startDateTime.minute();
-
-                        return {
-                          disabledHours: () =>
-                            Array.from({ length: 24 }, (_, i) => i).filter(
-                              (h) => h < startHour
-                            ),
-                          disabledMinutes: (selectedHour) => {
-                            if (selectedHour === startHour) {
-                              return Array.from(
-                                { length: 60 },
-                                (_, i) => i
-                              ).filter((m) => m < startMinute);
-                            }
-                            return [];
-                          },
-                        };
-                      }
-
-                      return {};
-                    }}
-                    onChange={handleEndDateChange}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {form.formState.errors.eventDates && (
+            <p className='text-sm font-medium text-destructive'>
+              {form.formState.errors.eventDates.message}
+            </p>
+          )}
         </div>
 
         {/* Description */}
@@ -263,7 +372,7 @@ const EventForm = ({ eventEdit }: Props) => {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {nonDeletedZones?.map((zone) => (
+                  {zonesByStreetRes?.map((zone) => (
                     <SelectItem key={zone?.id} value={zone?.id}>
                       {zone?.zoneName}
                     </SelectItem>
@@ -455,7 +564,7 @@ const EventForm = ({ eventEdit }: Props) => {
               <div className='space-y-0.5'>
                 <FormLabel className='text-base'>Trạng thái mở</FormLabel>
                 <FormDescription>
-                  Cho phép người dùng xem sự kiện này
+                  Cho phép người dùng đăng ký sự kiện này
                 </FormDescription>
               </div>
               <FormControl>

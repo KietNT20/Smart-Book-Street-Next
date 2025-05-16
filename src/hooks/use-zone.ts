@@ -1,3 +1,4 @@
+import { STORAGE } from '@/constant/storage';
 import { Sort } from '@/enums/enums';
 import { PATH } from '@/enums/path';
 import { zoneService } from '@/services/zoneService';
@@ -6,6 +7,7 @@ import {
   ZoneParams,
   ZoneSearchStoreParams,
 } from '@/types/zone-types';
+import { getLocalStorageItem } from '@/utils/token';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
@@ -20,6 +22,21 @@ export const useNonDeletedZones = () => {
     nonDeletedZones: data?.results || [],
     isLoadingNonDeletedZones: isLoading,
     errorNonDeletedZones: error,
+  };
+};
+
+export const useZonesByStreet = () => {
+  const streetKey = getLocalStorageItem(STORAGE.SELECTED_STREET_KEY);
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['zones', streetKey],
+    enabled: !!streetKey,
+    queryFn: () => zoneService.getByStreet(streetKey),
+  });
+
+  return {
+    zonesByStreetRes: data?.results || [],
+    isLoadingZonesByStreet: isLoading,
+    errorZonesByStreet: error,
   };
 };
 
