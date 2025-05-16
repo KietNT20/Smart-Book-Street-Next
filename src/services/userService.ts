@@ -5,6 +5,7 @@ import {
   RegisterRequestBody,
 } from '@/types/auth-types';
 import {
+  ChangePassPayload,
   UserParams,
   UserProfileResponse,
   UserResponseAll,
@@ -23,7 +24,7 @@ export const userService = {
     return res.data;
   },
   getProfile: async (): Promise<UserProfileResponse> => {
-    const res = await axiosInstance.get(`${API_URL.USERS.PROFILE}`, {
+    const res = await axiosInstance.get(API_URL.USERS.PROFILE, {
       headers: {
         Authorization: `Bearer ${tokenMethod.get()?.accessToken}`,
       },
@@ -73,6 +74,13 @@ export const userService = {
   },
   getById: async (id: string): Promise<UserProfileResponse> => {
     const res = await axiosInstance.get(`${API_URL.USERS.INDEX}/${id}`);
+    return res.data;
+  },
+  changePassFirstTime: async (payload: ChangePassPayload) => {
+    const res = await axiosInstance.post(
+      `${API_URL.USERS.CHANGE_PASS_FIRST_TIME}`,
+      payload
+    );
     return res.data;
   },
 };

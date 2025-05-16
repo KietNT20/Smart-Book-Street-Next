@@ -63,6 +63,9 @@ export interface EventSearchCriteria {
 export type EventParams = PaginationSchema<EventSearchCriteria>;
 export type EventsResponse = ApiListResponse<Event & { id: string }>;
 export type EventDetailResponse = ApiResponse<Event & { id: string }>;
+export type EventStaffParams = PaginationSchema<{
+  date?: Date | string;
+}>;
 
 export interface EventStaticsInMonth {
   success: boolean;

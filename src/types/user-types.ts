@@ -113,3 +113,9 @@ export interface UserStore extends BaseEntity {
 
 export type UserStoreResponse = ApiListResponse<UserStore & { id: string }>;
 export type UserStoreResponseAll = ApiResponseAll<UserStore & { id: string }>;
+
+export interface ChangePassPayload {
+  usernameOrEmail: string;
+  currentPassword: string;
+  newPassword: string;
+}

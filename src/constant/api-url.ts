@@ -54,6 +54,14 @@ export const API_URL = {
     IN_MONTH: `${EVENT}/event-dates-in-month`,
     IN_DATE: `${EVENT}/events-in-date`,
     PAGINATION_SEARCH: `${EVENT}/search/paginated`,
+    PROCESS_REQUEST: `${EVENT}/process-request`,
+    REQUEST_HISTORY: `${EVENT}/request-history`,
+    REQUEST_CREATE_EVENT: `${EVENT}/request-create-event`,
+    EVENT_OPEN_STATE: `${EVENT}/event-open-state`,
+    STAFF: `${EVENT}/staff`,
+    STATISTICS: `${EVENT}/statistic/total`,
+    EVENT_DATES_IN_MONTH: `${EVENT}/event-dates-in-month`,
+    EVENTS_IN_DATE: `${EVENT}/events-in-date`,
   },
   IMAGES: {
     INDEX: `${IMAGE}`,
@@ -62,7 +70,7 @@ export const API_URL = {
   },
   INVENTORIES: {
     INDEX: `${INVENTORY}`,
-    PAGINATIOHN_SEARCH: `${INVENTORY}/search/paginated`,
+    PAGINATION_SEARCH: `${INVENTORY}/search/paginated`,
     BY_BOOK: `${INVENTORY}/book`,
     BY_STORE: `${INVENTORY}/store`,
     SCAN: `${INVENTORY}/scan`,
@@ -101,6 +109,7 @@ export const API_URL = {
     SEARCH: `${USER}/search`,
     PAGINATION_SEARCH: `${USER}/search/paginated`,
     GET_BY_EMAIL: `${USER}/by-email`,
+    CHANGE_PASS_FIRST_TIME: `${USER}/change-password-first-time`,
   },
   USER_STORES: {
     INDEX: `${USER_STORE}`,
