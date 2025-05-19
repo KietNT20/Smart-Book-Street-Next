@@ -1,10 +1,12 @@
 import { API_URL } from '@/constant/api-url';
 import {
+  EventCreateReqParams,
   EventDetailResponse,
   EventInDateResponse,
   EventParams,
   EventsInMonth,
   EventsResponse,
+  EventStaffParams,
   EventStaticsInMonth,
 } from '@/types/event-types';
 import axiosInstance from '@/utils/axiosInstance';
@@ -59,13 +61,50 @@ export const eventService = {
   },
   getStatisticInMonth: async (month: number): Promise<EventStaticsInMonth> => {
     const res = await axiosInstance.get(
-      `${API_URL.EVENTS.INDEX}/statistic/total?month=${month}`
+      `${API_URL.EVENTS.STATISTICS}?month=${month}`
     );
     return res.data;
   },
   getEventInDate: async (date: string): Promise<EventInDateResponse> => {
     const res = await axiosInstance.get(
-      `${API_URL.EVENTS.INDEX}/events-in-date?date=${date}`
+      `${API_URL.EVENTS.EVENTS_IN_DATE}?date=${date}`
+    );
+    return res.data;
+  },
+  getRequestHistory: async (id: string): Promise<EventsResponse> => {
+    const res = await axiosInstance.get(
+      `${API_URL.EVENTS.REQUEST_HISTORY}/${id}`
+    );
+    return res.data;
+  },
+  eventOpenState: async (id: string) => {
+    const res = await axiosInstance.put(
+      `${API_URL.EVENTS.EVENT_OPEN_STATE}/${id}`
+    );
+    return res.data;
+  },
+  eventProcessRequest: async (id: string, data: FormData) => {
+    const res = await axiosInstance.put(
+      `${API_URL.EVENTS.PROCESS_REQUEST}/${id}`,
+      data,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
+    return res.data;
+  },
+  staff: async (params: EventStaffParams) => {
+    const res = await axiosInstance.post(API_URL.EVENTS.STAFF, params);
+    return res.data;
+  },
+  getAllEventCreateRequest: async (
+    params: EventCreateReqParams
+  ): Promise<EventsResponse> => {
+    const res = await axiosInstance.post(
+      API_URL.EVENTS.GET_ALL_CREATE_EVENT_REQUEST,
+      params
     );
     return res.data;
   },

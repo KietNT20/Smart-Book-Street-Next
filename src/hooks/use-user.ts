@@ -1,6 +1,6 @@
 import { PATH } from '@/enums/path';
 import { userService } from '@/services/userService';
-import { UserParams } from '@/types/user-types';
+import { ChangePassPayload, UserParams } from '@/types/user-types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
@@ -197,5 +197,33 @@ export const useUserById = (userId: string) => {
     user: data?.result || null,
     userLoading: isLoading,
     userError: error,
+  };
+};
+
+export const useChangePassFirstTime = () => {
+  const changePassFirstTimeMutation = useMutation({
+    mutationKey: ['change-pwd-first-time'],
+    mutationFn: ({
+      usernameOrEmail,
+      currentPassword,
+      newPassword,
+    }: ChangePassPayload) =>
+      userService.changePassFirstTime({
+        usernameOrEmail,
+        currentPassword,
+        newPassword,
+      }),
+    onSuccess: () => {
+      toast.success('Đổi mật khẩu thành công!');
+    },
+    onError: (error) => {
+      toast.error(`Đổi mật khẩu thất bại! ${error}`);
+      console.error('Error changing password:', error);
+    },
+  });
+
+  return {
+    changePassFirstTime: changePassFirstTimeMutation.mutate,
+    changePassFirstTimePending: changePassFirstTimeMutation.isPending,
   };
 };

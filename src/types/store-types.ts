@@ -30,10 +30,9 @@ export interface StoreParams {
   result: {
     storeName?: string;
     address?: string;
-    phone?: string;
-    email?: string;
     storeTheme?: string;
     type?: string;
+    zoneId?: string;
   };
 }
 

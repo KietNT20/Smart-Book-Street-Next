@@ -25,8 +25,7 @@ const InventoryPage = () => {
   return (
     <div className='container relative mx-auto py-10'>
       <div className='mb-4 flex items-center justify-end px-3'>
-        {' '}
-        <Link href={PATH.ORDERS}>
+        <Link href={PATH.ORDERS} passHref>
           <Badge count={totalItem}>
             <Button>
               <ShoppingCart className='mr-2 h-4 w-4' /> Đơn hàng

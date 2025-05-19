@@ -4,14 +4,6 @@ import SubmitBtn from '@/components/button/submit-btn';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-import {
   Form,
   FormControl,
   FormField,
@@ -20,12 +12,19 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Skeleton } from '@/components/ui/skeleton';
 import { StoreData } from '@/types/store-types';
 import { Image } from 'antd';
 import { X } from 'lucide-react';
 import { useStoreForm } from '../_lib/use-store-form';
 import AddressSearch from './address-search';
-import ZoneSearch from './zone-search';
 
 type Props = {
   storeToEdit: StoreData & {
@@ -37,12 +36,10 @@ const StoreForm = ({ storeToEdit }: Props) => {
   const {
     form,
     isWorking,
-    zoneDialogOpen,
-    selectedZoneName,
     previewMainImage,
     previewAdditionalImages,
-    handleSelectZone,
-    toggleZoneDialog,
+    isLoadingZonesByStreet,
+    zonesByStreetRes,
     onSubmit,
     handleFileChange,
     removeMainImage,
@@ -101,43 +98,33 @@ const StoreForm = ({ storeToEdit }: Props) => {
                 name='zoneId'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Khu vực</FormLabel>
-                    <div className='flex items-center gap-2'>
-                      <Dialog
-                        open={zoneDialogOpen}
-                        onOpenChange={toggleZoneDialog}
-                      >
-                        <DialogTrigger asChild>
-                          <Button
-                            type='button'
-                            variant='outline'
-                            disabled={isWorking}
-                          >
-                            Tìm khu vực
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent className='sm:max-w-md'>
-                          <DialogHeader>
-                            <DialogTitle>Chọn Khu Vực Cửa Hàng</DialogTitle>
-                            <DialogDescription>
-                              Tìm kiếm khu vực cho cửa hàng của bạn theo tên
-                              Đường Sách
-                            </DialogDescription>
-                          </DialogHeader>
-                          <ZoneSearch
-                            onSelectZone={handleSelectZone}
-                            onClose={toggleZoneDialog}
-                          />
-                        </DialogContent>
-                      </Dialog>
-
-                      {selectedZoneName && (
-                        <div className='ml-2 py-1'>
-                          Đã chọn: {selectedZoneName}
-                        </div>
-                      )}
-                      <input type='hidden' {...field} />
-                    </div>
+                    <FormLabel>Khu vực tổ chức</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder='Chọn khu vực tổ chức' />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {isLoadingZonesByStreet
+                          ? Array.from({ length: 3 }).map((_, index) => (
+                              <SelectItem
+                                key={index}
+                                value={`loading-${index}`}
+                              >
+                                <Skeleton className='h-4 w-full' />
+                              </SelectItem>
+                            ))
+                          : zonesByStreetRes?.map((zone) => (
+                              <SelectItem key={zone?.id} value={zone?.id}>
+                                {zone?.zoneName}
+                              </SelectItem>
+                            ))}
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -217,52 +204,6 @@ const StoreForm = ({ storeToEdit }: Props) => {
                   )}
                 />
               </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Contact */}
-        <Card>
-          <CardHeader>
-            <CardTitle className='text-lg'>Thông tin liên hệ</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
-              <FormField
-                control={form.control}
-                name='email'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder='Email'
-                        disabled={isWorking}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name='phone'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Số điện thoại</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder='Số điện thoại'
-                        disabled={isWorking}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
             </div>
           </CardContent>
         </Card>

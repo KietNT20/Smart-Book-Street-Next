@@ -130,7 +130,7 @@ export default function EventStatistics({
                       Thống kê độ tuổi người tham gia
                     </div>
                     <EventBarchart
-                      data={eventData?.ageChart}
+                      data={eventData.ageChart || []}
                       title='Phân bố độ tuổi'
                       description='Thống kê độ tuổi người tham gia'
                     />
@@ -178,7 +178,7 @@ export default function EventStatistics({
                       Thống kê giới tính người tham gia
                     </div>
                     <EventChart
-                      data={eventData?.genderChart}
+                      data={eventData?.genderChart || []}
                       title='Phân bố giới tính'
                       description='Thống kê giới tính người tham gia'
                       type='pie'
@@ -228,7 +228,7 @@ export default function EventStatistics({
                       Người tham gia biết về sự kiện qua đâu
                     </div>
                     <EventChart
-                      data={eventData?.referenceChart}
+                      data={eventData?.referenceChart || []}
                       title='Nguồn tham khảo'
                       description='Người tham gia biết về sự kiện qua đâu'
                       type='horizontalBar'
@@ -279,7 +279,7 @@ export default function EventStatistics({
                       Thống kê nơi đến của người tham gia
                     </div>
                     <EventChart
-                      data={eventData?.addressChart}
+                      data={eventData?.addressChart || []}
                       title='Phân bố địa điểm'
                       description='Thống kê nơi đến của người tham gia'
                       type='pie'

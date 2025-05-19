@@ -29,46 +29,45 @@ export const loginSchema = z.object({
 export type RegisterFormValues = z.infer<typeof registerSchema>;
 
 // Register form
-export const registerSchema = z.object({
-  userName: z.string().min(1, { message: 'Vui lòng nhập tên tài khoản' }),
-  email: z
-    .string()
-    .min(1, { message: 'Vui lòng nhập email' })
-    .email({ message: 'Email không hợp lệ' }),
-  password: z
-    .string()
-    .min(8, { message: 'Mật khẩu cần ít nhất 8 kí tự' })
-    .max(32, 'Mật khẩu không được quá 32 kí tự')
-    .regex(/[A-Z]/, {
-      message: 'Mật khẩu cần ít nhất 1 chữ hoa',
-    })
-    .regex(/[a-z]/, {
-      message: 'Mật khẩu cần ít nhất 1 chữ thường',
-    })
-    .regex(/[0-9]/, {
-      message: 'Mật khẩu cần ít nhất 1 số',
-    })
-    .regex(REGEX.SPECIAL_CHAR, {
-      message: 'Mật khẩu cần ít nhất 1 kí tự đặc biệt',
-    }),
-  fullName: z
-    .string()
-    .min(1, { message: 'Vui lòng nhập họ và tên' })
-    .optional(),
-  phone: z
-    .string()
-    .min(1, { message: 'Vui lòng nhập số điện thoại' })
-    .refine(
-      (val) => {
-        if (!val) return true;
-        return REGEX.PHONE_VN.test(val);
-      },
-      {
-        message: 'Số điện thoại không hợp lệ',
-      }
-    ),
-  gender: z.enum([Gender.Male, Gender.Female]).optional(),
-});
+export const registerSchema = z
+  .object({
+    userName: z.string().min(1, { message: 'Vui lòng nhập tên tài khoản' }),
+    email: z
+      .string()
+      .min(1, { message: 'Vui lòng nhập email' })
+      .email({ message: 'Email không hợp lệ' }),
+    password: z
+      .string()
+      .min(8, { message: 'Mật khẩu cần ít nhất 8 kí tự' })
+      .max(32, { message: 'Mật khẩu không được quá 32 kí tự' })
+      .regex(/[A-Z]/, { message: 'Mật khẩu cần ít nhất 1 chữ hoa' })
+      .regex(/[a-z]/, { message: 'Mật khẩu cần ít nhất 1 chữ thường' })
+      .regex(/[0-9]/, { message: 'Mật khẩu cần ít nhất 1 số' })
+      .regex(/[^A-Za-z0-9]/, {
+        message: 'Mật khẩu cần ít nhất 1 kí tự đặc biệt',
+      }),
+    fullName: z
+      .string()
+      .min(1, { message: 'Vui lòng nhập họ và tên' })
+      .optional(),
+    phone: z
+      .string()
+      .min(1, { message: 'Vui lòng nhập số điện thoại' })
+      .refine(
+        (val) => {
+          if (!val) return true;
+          return REGEX.PHONE_VN.test(val);
+        },
+        {
+          message: 'Số điện thoại không hợp lệ',
+        }
+      ),
+    gender: z.nativeEnum(Gender).optional(),
+  })
+  .refine((data) => !/[^\x00-\x7F]/.test(data.password), {
+    message: 'Mật khẩu không được chứa emoji hoặc ký tự không hợp lệ',
+    path: ['password'],
+  });
 
 // Book form
 const bookPublishedDatedSchema = z.string().refine(
@@ -186,19 +185,6 @@ export type CategoryFormValues = z.infer<typeof categoryFormSchema>;
 export const storeFormSchema = z.object({
   storeName: z.string().min(1, { message: 'Tên cửa hàng không được để trống' }),
   address: z.string().min(1, { message: 'Địa chỉ không được để trống' }),
-  phone: z
-    .string()
-    .refine(
-      (val) => {
-        if (!val) return true;
-        return REGEX.PHONE_VN.test(val);
-      },
-      {
-        message: 'Số điện thoại không hợp lệ',
-      }
-    )
-    .optional(),
-  email: z.string().email({ message: 'Email không hợp lệ' }).optional(),
   mainImageFile: z
     .union([
       z
@@ -330,7 +316,7 @@ export const userStoreFormSchema = z
         message: 'Ngày giờ kết thúc không hợp lệ',
       })
       .nullable(),
-    status: z.enum([StoreRent.ACTIVE, StoreRent.TERMINATED, StoreRent.EXPIRED]),
+    status: z.nativeEnum(StoreRent),
     notes: z.string().optional(),
   })
   .superRefine((data, ctx) => {
@@ -356,30 +342,34 @@ export const dailyPopulationSchema = z.object({
 
 export type DailyPopulationStatistics = z.infer<typeof dailyPopulationSchema>;
 
-export const eventFormSchema = z
-  .object({
-    eventName: z
-      .string()
-      .min(1, { message: 'Tên sự kiện không được để trống' }),
-    startDate: z
-      .string()
-      .refine((val) => dayjs(val, 'YYYY-MM-DD HH:mm', true).isValid(), {
-        message: 'Ngày giờ bắt đầu không hợp lệ',
-      })
-      .nullable(),
-    endDate: z
-      .string()
-      .refine((val) => dayjs(val, 'YYYY-MM-DD HH:mm', true).isValid(), {
-        message: 'Ngày giờ kết thúc không hợp lệ',
-      })
-      .nullable(),
-    description: z.string().optional(),
-    baseImgFile: z
-      .union([
+export const eventFormSchema = z.object({
+  eventName: z.string().min(1, { message: 'Tên sự kiện không được để trống' }),
+  description: z.string().optional(),
+  baseImgFile: z
+    .union([
+      z
+        .instanceof(File)
+        .refine((file) => file.size <= 10 * 1024 * 1024, {
+          message: 'Ảnh chính phải nhỏ hơn 10MB',
+        })
+        .refine(
+          (file) =>
+            ['image/jpeg', 'image/png', 'image/webp'].includes(file.type),
+          {
+            message: 'Chỉ chấp nhận JPG, PNG, WEBP chất lượng cao',
+          }
+        ),
+      z.string(),
+      z.null(),
+    ])
+    .optional(),
+  otherImgFile: z
+    .array(
+      z.union([
         z
           .instanceof(File)
-          .refine((file) => file.size <= 10 * 1024 * 1024, {
-            message: 'Ảnh chính phải nhỏ hơn 10MB',
+          .refine((file) => file.size <= 8 * 1024 * 1024, {
+            message: 'Mỗi ảnh bổ sung phải nhỏ hơn 8MB',
           })
           .refine(
             (file) =>
@@ -389,96 +379,75 @@ export const eventFormSchema = z
             }
           ),
         z.string(),
-        z.null(),
       ])
-      .optional(),
-    otherImgFile: z
-      .array(
-        z.union([
-          z
-            .instanceof(File)
-            .refine((file) => file.size <= 8 * 1024 * 1024, {
-              message: 'Mỗi ảnh bổ sung phải nhỏ hơn 8MB',
-            })
-            .refine(
-              (file) =>
-                ['image/jpeg', 'image/png', 'image/webp'].includes(file.type),
-              {
-                message: 'Chỉ chấp nhận JPG, PNG, WEBP chất lượng cao',
-              }
-            ),
-          z.string(),
-        ])
-      )
-      .default([])
-      .refine((files) => files.length <= 10, {
-        message: 'Chỉ có thể tải lên tối đa 10 ảnh bổ sung',
-      }),
-    videoFile: z
-      .union([
-        z
-          .instanceof(File)
-          .refine((file) => file.size <= 50 * 1024 * 1024, {
-            message: 'Video phải nhỏ hơn 50MB',
-          })
-          .refine(
-            (file) =>
-              ['video/mp4', 'video/webm', 'video/quicktime'].includes(
-                file.type
-              ),
-            {
-              message: 'Chỉ chấp nhận video định dạng MP4, WebM hoặc QuickTime',
-            }
-          )
-          .superRefine(async (file, ctx) => {
-            try {
-              const url = URL.createObjectURL(file);
-              const video = document.createElement('video');
-
-              await new Promise<void>((resolve, reject) => {
-                video.onloadedmetadata = () => {
-                  URL.revokeObjectURL(url);
-                  if (video.videoWidth < 1280 || video.videoHeight < 720) {
-                    ctx.addIssue({
-                      code: z.ZodIssueCode.custom,
-                      message:
-                        'Video phải có độ phân giải tối thiểu 720p (1280x720)',
-                    });
-                  }
-                  resolve();
-                };
-                video.onerror = () =>
-                  reject(new Error('Failed to load video metadata'));
-                video.src = url;
-              });
-            } catch {
-              ctx.addIssue({
-                code: z.ZodIssueCode.custom,
-                message: 'Không thể xác định chất lượng video',
-              });
-            }
-          }),
-        z.string(),
-        z.null(),
-      ])
-      .optional(),
-    isOpen: z.boolean().optional().default(true),
-    allowAds: z.boolean().optional().default(false),
-    zoneId: z.string().min(1, {
-      message: 'Vui lòng chọn khu vực tổ chức sự kiện',
+    )
+    .default([])
+    .refine((files) => files.length <= 10, {
+      message: 'Chỉ có thể tải lên tối đa 10 ảnh bổ sung',
     }),
-  })
-  .superRefine((data, ctx) => {
-    if (data.startDate && data.endDate) {
-      if (!dayjs(data.endDate).isAfter(dayjs(data.startDate))) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: 'Ngày kết thúc phải sau ngày bắt đầu',
-          path: ['endDate'],
-        });
-      }
-    }
-  });
+  videoFile: z
+    .union([
+      z
+        .instanceof(File)
+        .refine((file) => file.size <= 50 * 1024 * 1024, {
+          message: 'Video phải nhỏ hơn 50MB',
+        })
+        .refine(
+          (file) =>
+            ['video/mp4', 'video/webm', 'video/quicktime'].includes(file.type),
+          {
+            message: 'Chỉ chấp nhận video định dạng MP4, WebM hoặc QuickTime',
+          }
+        )
+        .superRefine(async (file, ctx) => {
+          try {
+            const url = URL.createObjectURL(file);
+            const video = document.createElement('video');
+
+            await new Promise<void>((resolve, reject) => {
+              video.onloadedmetadata = () => {
+                URL.revokeObjectURL(url);
+                if (video.videoWidth < 1280 || video.videoHeight < 720) {
+                  ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message:
+                      'Video phải có độ phân giải tối thiểu 720p (1280x720)',
+                  });
+                }
+                resolve();
+              };
+              video.onerror = () =>
+                reject(new Error('Failed to load video metadata'));
+              video.src = url;
+            });
+          } catch {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: 'Không thể xác định chất lượng video',
+            });
+          }
+        }),
+      z.string(),
+      z.null(),
+    ])
+    .optional(),
+  isOpen: z.boolean().optional().default(true),
+  allowAds: z.boolean().optional().default(false),
+  zoneId: z.string().min(1, {
+    message: 'Vui lòng chọn khu vực tổ chức sự kiện',
+  }),
+  eventDates: z.array(z.string().date('Ngày không hợp lệ')),
+  startTimes: z.array(
+    z.string().time({
+      message: 'Giờ bắt đầu không hợp lệ',
+    })
+  ),
+  endTimes: z.array(
+    z.string().time({
+      message: 'Giờ kết thúc không hợp lệ',
+    })
+  ),
+});
 
 export type EventFormValues = z.infer<typeof eventFormSchema>;
 
@@ -534,7 +503,7 @@ export const userFormSchema = z.object({
     .optional()
     .nullable(),
   address: z.string().optional(),
-  gender: z.enum([Gender.Male, Gender.Female]).optional(),
+  gender: z.nativeEnum(Gender).optional(),
   mainImageFile: z
     .union([
       z

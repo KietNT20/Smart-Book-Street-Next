@@ -1,6 +1,6 @@
 import { PATH } from '@/enums/path';
 import { eventService } from '@/services/eventService';
-import { EventParams } from '@/types/event-types';
+import { EventParams, EventStaffParams } from '@/types/event-types';
 import {
   keepPreviousData,
   useMutation,
@@ -198,5 +198,79 @@ export const useGetEventsInDate = (date: string) => {
     eventsInDateData: data?.results || [],
     eventsInDateError: error,
     eventsInDateLoading: isLoading,
+  };
+};
+
+export const useGetEventDateByStaff = ({
+  result,
+  pageNumber,
+  pageSize,
+  sortField,
+  sortOrder,
+}: EventStaffParams) => {
+  const queryClient = useQueryClient();
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['events', result, sortField, sortOrder, pageSize, pageNumber],
+    queryFn: () =>
+      eventService.staff({
+        result,
+        sortField,
+        sortOrder,
+        pageSize,
+        pageNumber,
+      }),
+    placeholderData: keepPreviousData,
+  });
+
+  // Prefetching data
+  const totalPage = data?.totalPages || 1;
+
+  if (pageNumber < totalPage) {
+    queryClient.prefetchQuery({
+      queryKey: [
+        'events',
+        result,
+        sortField,
+        sortOrder,
+        pageSize,
+        pageNumber + 1,
+      ],
+      queryFn: () =>
+        eventService.staff({
+          result,
+          sortField,
+          sortOrder,
+          pageSize,
+          pageNumber: pageNumber + 1,
+        }),
+    });
+  }
+
+  if (pageNumber > 1) {
+    queryClient.prefetchQuery({
+      queryKey: [
+        'events',
+        result,
+        sortField,
+        sortOrder,
+        pageSize,
+        pageNumber - 1,
+      ],
+      queryFn: () =>
+        eventService.staff({
+          result,
+          sortField,
+          sortOrder,
+          pageSize,
+          pageNumber: pageNumber - 1,
+        }),
+    });
+  }
+
+  return {
+    eventsRes: data?.results || [],
+    isLoadingEvents: isLoading,
+    errorEvents: error,
+    totalPage,
   };
 };

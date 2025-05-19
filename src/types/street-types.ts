@@ -1,4 +1,4 @@
-import { ApiListResponse } from './common-types';
+import { ApiListResponse, ApiResponse, PaginationSchema } from './common-types';
 import { ImageType } from './image-types';
 
 export type Street = {
@@ -10,6 +10,9 @@ export type Street = {
   longitude: number;
   baseImgUrl: string;
   images: ImageType[];
+  isDeleted: boolean;
 };
 
+export type StreetParams = PaginationSchema<{ key?: string }>;
 export type StreetsResponse = ApiListResponse<Street>;
+export type StreetResponse = ApiResponse<Street>;

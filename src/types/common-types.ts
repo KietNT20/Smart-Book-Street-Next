@@ -17,6 +17,13 @@ export type PaginationSchema<T> = {
   result: T;
 };
 
+export type PaginationType = {
+  pageNumber: number;
+  pageSize: number;
+  sortField?: string;
+  sortOrder?: Sort;
+};
+
 export enum StatusBook {
   UPDATED = 'UPDATED',
 }

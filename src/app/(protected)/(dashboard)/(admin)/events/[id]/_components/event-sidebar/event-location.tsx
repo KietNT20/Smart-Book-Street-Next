@@ -1,17 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { Zone } from '@/types/zone-types';
 import { MapPin } from 'lucide-react';
 
 interface EventLocationProps {
-  zone?:
-    | {
-        zoneName?: string;
-        description?: string;
-        street?: {
-          address?: string;
-        };
-      }
-    | undefined;
+  zone?: Zone;
 }
 
 export default function EventLocation({ zone }: EventLocationProps) {
@@ -27,7 +20,7 @@ export default function EventLocation({ zone }: EventLocationProps) {
       </CardHeader>
       <CardContent className='space-y-4'>
         <div>
-          <h4 className='font-semibold'>{zone.zoneName}</h4>
+          <h4 className='font-semibold'>{zone?.zoneName}</h4>
           <p className='mt-1 text-sm text-muted-foreground'>
             {zone.street?.address}
           </p>
@@ -44,7 +37,7 @@ export default function EventLocation({ zone }: EventLocationProps) {
 
         <div className='space-y-2'>
           <h4 className='font-semibold'>Về địa điểm</h4>
-          <p className='text-sm text-muted-foreground'>{zone.description}</p>
+          <p className='text-sm text-muted-foreground'>{zone?.description}</p>
         </div>
       </CardContent>
     </Card>

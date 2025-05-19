@@ -14,10 +14,9 @@ import { StoreTable } from './_components/store-table';
 export interface SearchFilters {
   storeName?: string;
   address?: string;
-  phone?: string;
-  email?: string;
   storeTheme?: string;
   type?: string;
+  zoneId?: string;
 }
 
 export default function StoresPage() {
@@ -27,10 +26,9 @@ export default function StoresPage() {
   const [filters, setFilters] = useState<SearchFilters>({
     storeName: '',
     address: '',
-    phone: '',
-    email: '',
     storeTheme: '',
     type: '',
+    zoneId: '',
   });
   const [isSearching, setIsSearching] = useState(false);
 
@@ -86,10 +84,9 @@ export default function StoresPage() {
     setFilters({
       storeName: '',
       address: '',
-      phone: '',
-      email: '',
       storeTheme: '',
       type: '',
+      zoneId: '',
     });
     setIsSearching(false);
   };
