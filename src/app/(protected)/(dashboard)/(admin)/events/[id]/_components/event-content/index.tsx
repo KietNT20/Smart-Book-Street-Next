@@ -20,7 +20,7 @@ export default function EventContent({
 
       {/* Video Preview */}
       <EventVideo
-        videoLink={eventData?.videoLink}
+        videoLink={eventData?.videoLink ? eventData.videoLink : '#'}
         posterImage={eventData?.baseImgUrl}
       />
 

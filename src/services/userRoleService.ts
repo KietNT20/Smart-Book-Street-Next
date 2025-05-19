@@ -12,7 +12,7 @@ export const userRoleService = {
   },
 
   deleteUserRole: async (userId: string, roleId: string) => {
-    const res = await axiosInstance.delete(
+    const res = await axiosInstance.patch(
       `${API_ENDPOINT.USER_ROLE}/${userId}/${roleId}`
     );
     return res.data;
