@@ -1,5 +1,6 @@
 import { PATH } from '@/enums/path';
 import { useStoreMutation } from '@/hooks/use-store';
+import { useZonesByStreet } from '@/hooks/use-zone';
 import { storeFormSchema, StoreFormValues } from '@/lib/zod';
 import { StoreData } from '@/types/store-types';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -12,8 +13,6 @@ type UseStoreFormProps = {
 };
 
 export const useStoreForm = ({ storeToEdit }: UseStoreFormProps = {}) => {
-  const [zoneDialogOpen, setZoneDialogOpen] = useState(false);
-  const [selectedZoneName, setSelectedZoneName] = useState('');
   const [previewMainImage, setPreviewMainImage] = useState<string | null>(null);
   const [previewAdditionalImages, setPreviewAdditionalImages] = useState<
     string[]
@@ -27,6 +26,7 @@ export const useStoreForm = ({ storeToEdit }: UseStoreFormProps = {}) => {
 
   const { createStore, updateStore, isCreatingStore, isUpdatingStore } =
     useStoreMutation();
+  const { zonesByStreetRes, isLoadingZonesByStreet } = useZonesByStreet();
 
   const isWorking = isCreatingStore || isUpdatingStore;
 
@@ -35,8 +35,6 @@ export const useStoreForm = ({ storeToEdit }: UseStoreFormProps = {}) => {
     defaultValues: storeToEdit || {
       storeName: '',
       address: '',
-      phone: '',
-      email: '',
       mainImageFile: null,
       additionalImageFiles: [],
       latitude: 0,
@@ -46,30 +44,12 @@ export const useStoreForm = ({ storeToEdit }: UseStoreFormProps = {}) => {
     },
   });
 
-  const handleSelectZone = (zoneId: string, zoneName: string) => {
-    form.setValue('zoneId', zoneId, { shouldValidate: true });
-    setSelectedZoneName(zoneName);
-    setZoneDialogOpen(false);
-  };
-
-  const toggleZoneDialog = () => {
-    setZoneDialogOpen((prev) => !prev);
-  };
-
   const onSubmit = (values: StoreFormValues) => {
     const formData = new FormData();
     formData.append('StoreName', values.storeName);
     formData.append('Address', values.address);
 
-    if (values.phone) {
-      formData.append('Phone', values.phone);
-    }
-
-    if (values.email) {
-      formData.append('Email', values.email);
-    }
-
-    if (values.mainImageFile && typeof window !== 'undefined') {
+    if (values.mainImageFile instanceof File && typeof window !== 'undefined') {
       formData.set('MainImageFile', values.mainImageFile);
     }
 
@@ -187,12 +167,8 @@ export const useStoreForm = ({ storeToEdit }: UseStoreFormProps = {}) => {
   return {
     form,
     isWorking,
-    zoneDialogOpen,
-    selectedZoneName,
     previewMainImage,
     previewAdditionalImages,
-    handleSelectZone,
-    toggleZoneDialog,
     onSubmit,
     handleFileChange,
     removeMainImage,
@@ -204,5 +180,7 @@ export const useStoreForm = ({ storeToEdit }: UseStoreFormProps = {}) => {
     additionalImagesInputRef,
     handleRemoveMainImage,
     handleRemoveAdditionalImage,
+    zonesByStreetRes,
+    isLoadingZonesByStreet,
   };
 };

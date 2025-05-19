@@ -1,4 +1,9 @@
-import { ApiListResponse, ApiResponse, PaginationSchema } from './common-types';
+import {
+  ApiListResponse,
+  ApiResponse,
+  PaginationSchema,
+  PaginationType,
+} from './common-types';
 import { ImageType } from './image-types';
 import { Trend } from './person-types';
 import { Zone } from './zone-types';
@@ -66,6 +71,7 @@ export type EventDetailResponse = ApiResponse<Event & { id: string }>;
 export type EventStaffParams = PaginationSchema<{
   date?: Date | string;
 }>;
+export type EventCreateReqParams = PaginationType;
 
 export interface EventStaticsInMonth {
   success: boolean;

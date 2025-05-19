@@ -15,7 +15,11 @@ interface DecodedToken {
   exp: number;
 }
 
-const publicPaths = [PATH.LOGIN, PATH.REGISTER];
+const publicPaths = [
+  PATH.LOGIN,
+  PATH.REGISTER,
+  PATH.CHANGE_PASSWORD_FIRST_TIME,
+];
 
 const roleBasedRoutes: RoleRouteMap = {
   [PATH.DASHBOARD]: [RoleEnums.ADMIN],

@@ -56,7 +56,7 @@ export const API_URL = {
     PAGINATION_SEARCH: `${EVENT}/search/paginated`,
     PROCESS_REQUEST: `${EVENT}/process-request`,
     REQUEST_HISTORY: `${EVENT}/request-history`,
-    REQUEST_CREATE_EVENT: `${EVENT}/request-create-event`,
+    GET_ALL_CREATE_EVENT_REQUEST: `${EVENT}/get-all-create-event-request`,
     EVENT_OPEN_STATE: `${EVENT}/event-open-state`,
     STAFF: `${EVENT}/staff`,
     STATISTICS: `${EVENT}/statistic/total`,

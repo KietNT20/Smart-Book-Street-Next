@@ -21,6 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Skeleton } from '@/components/ui/skeleton';
 import { Switch } from '@/components/ui/switch';
 import { PATH } from '@/enums/path';
 import { Event } from '@/types/event-types';
@@ -45,6 +46,7 @@ const EventForm = ({ eventEdit }: Props) => {
     previewOtherImgs,
     previewVideo,
     zonesByStreetRes,
+    isLoadingZonesByStreet,
     handleSubmit,
     handleBaseImageChange,
     handleOtherImagesChange,
@@ -190,7 +192,7 @@ const EventForm = ({ eventEdit }: Props) => {
                           </FormLabel>
                           <FormControl>
                             <DatePicker
-                              className='w-full'
+                              className='h-10 w-full px-3 py-2'
                               placeholder='Chọn ngày'
                               format='YYYY-MM-DD'
                               value={field.value ? dayjs(field.value) : null}
@@ -222,7 +224,7 @@ const EventForm = ({ eventEdit }: Props) => {
                           </FormLabel>
                           <FormControl>
                             <TimePicker
-                              className='w-full'
+                              className='h-10 w-full px-3 py-2'
                               placeholder='Chọn giờ bắt đầu'
                               format='HH:mm'
                               value={
@@ -286,7 +288,7 @@ const EventForm = ({ eventEdit }: Props) => {
                           </FormLabel>
                           <FormControl>
                             <TimePicker
-                              className='w-full'
+                              className='h-10 w-full px-3 py-2'
                               placeholder='Chọn giờ kết thúc'
                               format='HH:mm'
                               value={
@@ -372,11 +374,17 @@ const EventForm = ({ eventEdit }: Props) => {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {zonesByStreetRes?.map((zone) => (
-                    <SelectItem key={zone?.id} value={zone?.id}>
-                      {zone?.zoneName}
-                    </SelectItem>
-                  ))}
+                  {isLoadingZonesByStreet
+                    ? Array.from({ length: 3 }).map((_, index) => (
+                        <SelectItem key={index} value={`loading-${index}`}>
+                          <Skeleton className='h-4 w-full' />
+                        </SelectItem>
+                      ))
+                    : zonesByStreetRes?.map((zone) => (
+                        <SelectItem key={zone?.id} value={zone?.id}>
+                          {zone?.zoneName}
+                        </SelectItem>
+                      ))}
                 </SelectContent>
               </Select>
               <FormMessage />

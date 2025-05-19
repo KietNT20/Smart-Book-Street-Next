@@ -1,5 +1,6 @@
 import { API_URL } from '@/constant/api-url';
 import {
+  EventCreateReqParams,
   EventDetailResponse,
   EventInDateResponse,
   EventParams,
@@ -96,6 +97,15 @@ export const eventService = {
   },
   staff: async (params: EventStaffParams) => {
     const res = await axiosInstance.post(API_URL.EVENTS.STAFF, params);
+    return res.data;
+  },
+  getAllEventCreateRequest: async (
+    params: EventCreateReqParams
+  ): Promise<EventsResponse> => {
+    const res = await axiosInstance.post(
+      API_URL.EVENTS.GET_ALL_CREATE_EVENT_REQUEST,
+      params
+    );
     return res.data;
   },
 };

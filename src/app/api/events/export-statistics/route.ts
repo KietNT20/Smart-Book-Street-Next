@@ -70,7 +70,7 @@ export async function POST(req: NextRequest) {
     workbook.created = new Date();
     workbook.modified = new Date();
 
-    // ----- TRANG TỔNG QUAN -----
+    // ---------- TRANG TỔNG QUAN ----------
     if (!customOptions || customOptions.includeGeneral) {
       const overviewSheet = workbook.addWorksheet('Tổng quan');
 
@@ -201,7 +201,7 @@ export async function POST(req: NextRequest) {
       timeRow.font = { italic: true };
     }
 
-    // ----- PHÂN BỐ ĐỘ TUỔI -----
+    // ---------- PHÂN BỐ ĐỘ TUỔI ----------
     if (
       (!customOptions || customOptions.includeAge) &&
       statistics.ageChart &&
@@ -284,7 +284,7 @@ export async function POST(req: NextRequest) {
       totalRow.getCell(3).alignment = { horizontal: 'right' };
     }
 
-    // ----- PHÂN BỐ GIỚI TÍNH -----
+    // ---------- PHÂN BỐ GIỚI TÍNH ----------
     if (
       (!customOptions || customOptions.includeGender) &&
       statistics.genderChart &&
@@ -374,7 +374,7 @@ export async function POST(req: NextRequest) {
       totalRow.getCell(3).alignment = { horizontal: 'right' };
     }
 
-    // ----- NGUỒN THAM KHẢO -----
+    // ---------- NGUỒN THAM KHẢO ----------
     if (
       (!customOptions || customOptions.includeReference) &&
       statistics.referenceChart &&
@@ -460,7 +460,7 @@ export async function POST(req: NextRequest) {
       totalRow.getCell(3).alignment = { horizontal: 'right' };
     }
 
-    // ----- PHÂN BỐ ĐỊA ĐIỂM -----
+    // ---------- PHÂN BỐ ĐỊA ĐIỂM ----------
     if (
       (!customOptions || customOptions.includeAddress) &&
       statistics.addressChart &&
@@ -550,7 +550,7 @@ export async function POST(req: NextRequest) {
       totalRow.getCell(3).alignment = { horizontal: 'right' };
     }
 
-    // ----- TRANG TỔNG HỢP -----
+    // ---------- TRANG TỔNG HỢP ----------
     const summarySheet = workbook.addWorksheet('Tổng hợp');
 
     summarySheet.autoFilter = {

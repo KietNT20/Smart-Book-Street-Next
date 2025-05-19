@@ -1,3 +1,5 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import {
@@ -7,7 +9,15 @@ import {
 } from '@/components/ui/collapsible';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import useDebounce from '@/hooks/use-debounce';
+import { useZonesByStreet } from '@/hooks/use-zone';
 import { ChevronDown, ChevronUp, Filter, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { SearchFilters } from '../page';
@@ -28,6 +38,7 @@ const StoreFilter = ({
   onClearSearch,
 }: StoreFilterProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { zonesByStreetRes } = useZonesByStreet();
 
   const debouncedFilters = useDebounce(filters, 700);
 
@@ -83,7 +94,6 @@ const StoreFilter = ({
                   />
                   {filters.storeName && (
                     <Button
-                      variant='ghost'
                       size='icon'
                       className='absolute right-0 top-0 h-full'
                       onClick={() => clearField('storeName')}
@@ -107,7 +117,6 @@ const StoreFilter = ({
                   />
                   {filters.address && (
                     <Button
-                      variant='ghost'
                       size='icon'
                       className='absolute right-0 top-0 h-full'
                       onClick={() => clearField('address')}
@@ -119,42 +128,31 @@ const StoreFilter = ({
               </div>
 
               <div className='space-y-2'>
-                <Label htmlFor='phone'>Số điện thoại</Label>
+                <Label htmlFor='zoneId'>Khu vực</Label>
                 <div className='relative'>
-                  <Input
-                    id='phone'
-                    placeholder='Tìm theo số điện thoại'
-                    value={filters.phone || ''}
-                    onChange={(e) => handleInputChange('phone', e.target.value)}
-                  />
-                  {filters.phone && (
-                    <Button
-                      variant='ghost'
-                      size='icon'
-                      className='absolute right-0 top-0 h-full'
-                      onClick={() => clearField('phone')}
-                    >
-                      <X className='h-4 w-4' />
-                    </Button>
-                  )}
-                </div>
-              </div>
+                  <Select
+                    onValueChange={(value) =>
+                      handleInputChange('zoneId', value)
+                    }
+                    value={filters.zoneId}
+                  >
+                    <SelectTrigger className='w-full'>
+                      <SelectValue placeholder='Chọn khu vực' />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {zonesByStreetRes?.map((zone) => (
+                        <SelectItem key={zone.id} value={zone.id}>
+                          {zone.zoneName}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
 
-              <div className='space-y-2'>
-                <Label htmlFor='email'>Email</Label>
-                <div className='relative'>
-                  <Input
-                    id='email'
-                    placeholder='Tìm theo email'
-                    value={filters.email || ''}
-                    onChange={(e) => handleInputChange('email', e.target.value)}
-                  />
-                  {filters.email && (
+                  {filters.zoneId && (
                     <Button
-                      variant='ghost'
                       size='icon'
                       className='absolute right-0 top-0 h-full'
-                      onClick={() => clearField('email')}
+                      onClick={() => clearField('zoneId')}
                     >
                       <X className='h-4 w-4' />
                     </Button>
@@ -175,7 +173,6 @@ const StoreFilter = ({
                   />
                   {filters.storeTheme && (
                     <Button
-                      variant='ghost'
                       size='icon'
                       className='absolute right-0 top-0 h-full'
                       onClick={() => clearField('storeTheme')}
@@ -197,7 +194,6 @@ const StoreFilter = ({
                   />
                   {filters.type && (
                     <Button
-                      variant='ghost'
                       size='icon'
                       className='absolute right-0 top-0 h-full'
                       onClick={() => clearField('type')}

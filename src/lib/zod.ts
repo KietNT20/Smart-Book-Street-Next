@@ -29,46 +29,45 @@ export const loginSchema = z.object({
 export type RegisterFormValues = z.infer<typeof registerSchema>;
 
 // Register form
-export const registerSchema = z.object({
-  userName: z.string().min(1, { message: 'Vui lòng nhập tên tài khoản' }),
-  email: z
-    .string()
-    .min(1, { message: 'Vui lòng nhập email' })
-    .email({ message: 'Email không hợp lệ' }),
-  password: z
-    .string()
-    .min(8, { message: 'Mật khẩu cần ít nhất 8 kí tự' })
-    .max(32, 'Mật khẩu không được quá 32 kí tự')
-    .regex(/[A-Z]/, {
-      message: 'Mật khẩu cần ít nhất 1 chữ hoa',
-    })
-    .regex(/[a-z]/, {
-      message: 'Mật khẩu cần ít nhất 1 chữ thường',
-    })
-    .regex(/[0-9]/, {
-      message: 'Mật khẩu cần ít nhất 1 số',
-    })
-    .regex(REGEX.SPECIAL_CHAR, {
-      message: 'Mật khẩu cần ít nhất 1 kí tự đặc biệt',
-    }),
-  fullName: z
-    .string()
-    .min(1, { message: 'Vui lòng nhập họ và tên' })
-    .optional(),
-  phone: z
-    .string()
-    .min(1, { message: 'Vui lòng nhập số điện thoại' })
-    .refine(
-      (val) => {
-        if (!val) return true;
-        return REGEX.PHONE_VN.test(val);
-      },
-      {
-        message: 'Số điện thoại không hợp lệ',
-      }
-    ),
-  gender: z.enum([Gender.Male, Gender.Female]).optional(),
-});
+export const registerSchema = z
+  .object({
+    userName: z.string().min(1, { message: 'Vui lòng nhập tên tài khoản' }),
+    email: z
+      .string()
+      .min(1, { message: 'Vui lòng nhập email' })
+      .email({ message: 'Email không hợp lệ' }),
+    password: z
+      .string()
+      .min(8, { message: 'Mật khẩu cần ít nhất 8 kí tự' })
+      .max(32, { message: 'Mật khẩu không được quá 32 kí tự' })
+      .regex(/[A-Z]/, { message: 'Mật khẩu cần ít nhất 1 chữ hoa' })
+      .regex(/[a-z]/, { message: 'Mật khẩu cần ít nhất 1 chữ thường' })
+      .regex(/[0-9]/, { message: 'Mật khẩu cần ít nhất 1 số' })
+      .regex(/[^A-Za-z0-9]/, {
+        message: 'Mật khẩu cần ít nhất 1 kí tự đặc biệt',
+      }),
+    fullName: z
+      .string()
+      .min(1, { message: 'Vui lòng nhập họ và tên' })
+      .optional(),
+    phone: z
+      .string()
+      .min(1, { message: 'Vui lòng nhập số điện thoại' })
+      .refine(
+        (val) => {
+          if (!val) return true;
+          return REGEX.PHONE_VN.test(val);
+        },
+        {
+          message: 'Số điện thoại không hợp lệ',
+        }
+      ),
+    gender: z.nativeEnum(Gender).optional(),
+  })
+  .refine((data) => !/[^\x00-\x7F]/.test(data.password), {
+    message: 'Mật khẩu không được chứa emoji hoặc ký tự không hợp lệ',
+    path: ['password'],
+  });
 
 // Book form
 const bookPublishedDatedSchema = z.string().refine(
@@ -186,19 +185,6 @@ export type CategoryFormValues = z.infer<typeof categoryFormSchema>;
 export const storeFormSchema = z.object({
   storeName: z.string().min(1, { message: 'Tên cửa hàng không được để trống' }),
   address: z.string().min(1, { message: 'Địa chỉ không được để trống' }),
-  phone: z
-    .string()
-    .refine(
-      (val) => {
-        if (!val) return true;
-        return REGEX.PHONE_VN.test(val);
-      },
-      {
-        message: 'Số điện thoại không hợp lệ',
-      }
-    )
-    .optional(),
-  email: z.string().email({ message: 'Email không hợp lệ' }).optional(),
   mainImageFile: z
     .union([
       z
@@ -330,7 +316,7 @@ export const userStoreFormSchema = z
         message: 'Ngày giờ kết thúc không hợp lệ',
       })
       .nullable(),
-    status: z.enum([StoreRent.ACTIVE, StoreRent.TERMINATED, StoreRent.EXPIRED]),
+    status: z.nativeEnum(StoreRent),
     notes: z.string().optional(),
   })
   .superRefine((data, ctx) => {
@@ -517,7 +503,7 @@ export const userFormSchema = z.object({
     .optional()
     .nullable(),
   address: z.string().optional(),
-  gender: z.enum([Gender.Male, Gender.Female]).optional(),
+  gender: z.nativeEnum(Gender).optional(),
   mainImageFile: z
     .union([
       z

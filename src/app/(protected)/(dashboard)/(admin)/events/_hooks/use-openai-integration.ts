@@ -1,12 +1,12 @@
+import { useZonesByStreet } from '@/hooks/use-zone';
 import { EventFormValues } from '@/lib/zod';
 import { useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { useOpenAISuggestions } from './use-openai-suggestions';
-import { useZonesByStreet } from '@/hooks/use-zone';
 
 export const useOpenAIIntegration = (form: UseFormReturn<EventFormValues>) => {
   const [promptInput, setPromptInput] = useState<string>('');
-  const { zonesByStreetRes } = useZonesByStreet();
+  const { zonesByStreetRes, isLoadingZonesByStreet } = useZonesByStreet();
 
   const handleSuggestionReceived = (
     type: 'eventName' | 'description',
@@ -59,5 +59,6 @@ export const useOpenAIIntegration = (form: UseFormReturn<EventFormValues>) => {
     generateDescriptionSuggestion,
     isGenerating,
     zonesByStreetRes,
+    isLoadingZonesByStreet,
   };
 };

@@ -8,6 +8,7 @@ export enum PATH {
   STORE_OWNER_DASHBOARD = '/so-dashboard',
   STORE_MANAGER_DASHBOARD = '/sm-dashboard',
   STATISTICS = '/statistics',
+  CHANGE_PASSWORD_FIRST_TIME = '/change-pass-first',
 
   EVENT_DATE = '/event-date',
 
