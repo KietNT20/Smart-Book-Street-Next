@@ -1,5 +1,6 @@
 import { PATH } from '@/enums/path';
 import { useStoreMutation } from '@/hooks/use-store';
+import { useZonesByStreet } from '@/hooks/use-zone';
 import { storeFormSchema, StoreFormValues } from '@/lib/zod';
 import { StoreData } from '@/types/store-types';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -12,8 +13,6 @@ type UseStoreFormProps = {
 };
 
 export const useStoreForm = ({ storeToEdit }: UseStoreFormProps) => {
-  const [zoneDialogOpen, setZoneDialogOpen] = useState(false);
-  const [selectedZoneName, setSelectedZoneName] = useState('');
   const [previewMainImage, setPreviewMainImage] = useState<string | null>(null);
   const [previewAdditionalImages, setPreviewAdditionalImages] = useState<
     string[]
@@ -22,6 +21,7 @@ export const useStoreForm = ({ storeToEdit }: UseStoreFormProps) => {
   const router = useRouter();
 
   const { updateStore, isUpdatingStore } = useStoreMutation();
+  const { zonesByStreetRes, isLoadingZonesByStreet } = useZonesByStreet();
 
   const isWorking = isUpdatingStore;
 
@@ -30,31 +30,12 @@ export const useStoreForm = ({ storeToEdit }: UseStoreFormProps) => {
     defaultValues: storeToEdit,
   });
 
-  // Zone handlers
-  const handleSelectZone = (zoneId: string, zoneName: string) => {
-    form.setValue('zoneId', zoneId, { shouldValidate: true });
-    setSelectedZoneName(zoneName);
-    setZoneDialogOpen(false);
-  };
-
-  const toggleZoneDialog = () => {
-    setZoneDialogOpen((prev) => !prev);
-  };
-
   // Form submission handler
   const onSubmit = (values: StoreFormValues) => {
     try {
       const formData = new FormData();
       formData.append('StoreName', values.storeName);
       formData.append('Address', values.address);
-
-      if (values.phone) {
-        formData.append('Phone', values.phone);
-      }
-
-      if (values.email) {
-        formData.append('Email', values.email);
-      }
 
       if (values.mainImageFile && typeof window !== 'undefined') {
         formData.set('MainImageFile', values.mainImageFile);
@@ -152,16 +133,14 @@ export const useStoreForm = ({ storeToEdit }: UseStoreFormProps) => {
   return {
     form,
     isWorking,
-    zoneDialogOpen,
-    selectedZoneName,
     previewMainImage,
     previewAdditionalImages,
-    handleSelectZone,
-    toggleZoneDialog,
     onSubmit,
     handleFileChange,
     removeMainImage,
     removeAdditionalImage,
     handleCancel,
+    isLoadingZonesByStreet,
+    zonesByStreetRes,
   };
 };
