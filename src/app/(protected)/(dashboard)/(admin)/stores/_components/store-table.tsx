@@ -184,40 +184,6 @@ export const StoreTable = ({
                   )}
                 </Button>
               </TableHead>
-              <TableHead
-                className='cursor-pointer'
-                onClick={() => handleSort('Phone')}
-              >
-                <Button variant='ghost'>
-                  Số điện thoại
-                  {sortField === 'Phone' ? (
-                    sortOrder === Sort.ASC ? (
-                      <SortAsc className='ml-2 h-4 w-4' />
-                    ) : (
-                      <SortDesc className='ml-2 h-4 w-4' />
-                    )
-                  ) : (
-                    <ArrowUpDown className='ml-2 h-4 w-4' />
-                  )}
-                </Button>
-              </TableHead>
-              <TableHead
-                className='cursor-pointer'
-                onClick={() => handleSort('Email')}
-              >
-                <Button variant='ghost'>
-                  Email
-                  {sortField === 'Email' ? (
-                    sortOrder === Sort.ASC ? (
-                      <SortAsc className='ml-2 h-4 w-4' />
-                    ) : (
-                      <SortDesc className='ml-2 h-4 w-4' />
-                    )
-                  ) : (
-                    <ArrowUpDown className='ml-2 h-4 w-4' />
-                  )}
-                </Button>
-              </TableHead>
               <TableHead className='text-right'>Thao tác</TableHead>
             </TableRow>
           </TableHeader>
@@ -243,8 +209,6 @@ export const StoreTable = ({
                   <TableCell className='overflow-hidden'>
                     <p className='line-clamp-2'>{store?.address}</p>
                   </TableCell>
-                  <TableCell>{store?.phone}</TableCell>
-                  <TableCell>{store?.email}</TableCell>
                   <TableCell className='text-right'>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>

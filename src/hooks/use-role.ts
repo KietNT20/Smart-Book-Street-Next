@@ -18,3 +18,21 @@ export const useRoles = () => {
     isLoading,
   };
 };
+
+export const useRolesAvailable = () => {
+  const { data, isLoading } = useQuery({
+    queryKey: ['roles-available'],
+    queryFn: () => roleService.getAvailableForRequest(),
+    select(data) {
+      return data.results.map((role) => ({
+        label: role.roleName,
+        value: role.id,
+      }));
+    },
+  });
+
+  return {
+    rolesAvailable: data || [],
+    isLoading,
+  };
+};

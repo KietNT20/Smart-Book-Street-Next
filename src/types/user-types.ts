@@ -12,13 +12,6 @@ export interface Role extends BaseEntity {
   description: string;
 }
 
-export type RolesResponse = {
-  results: Role[];
-  totalRecords: number;
-  isSuccess: true;
-  message: string;
-};
-
 export type UserRolePayload = {
   userId: string;
   roleId: string;
@@ -41,12 +34,16 @@ export type RolePayload = {
 };
 
 export interface UserRole extends BaseEntity {
+  id: string;
   userId: string;
   roleId: string;
   assignedAt: string;
+  isApproved: boolean;
   user: User | null;
   role: Role | null;
 }
+
+export type UserRoleAllResponse = ApiResponseAll<UserRole>;
 
 export interface User extends BaseEntity {
   userName: string;

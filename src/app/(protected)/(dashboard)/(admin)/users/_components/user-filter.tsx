@@ -16,9 +16,14 @@ import {
 } from '@/components/ui/select';
 import { Gender } from '@/enums/gender';
 import useDebounce from '@/hooks/use-debounce';
+import { DatePicker } from 'antd';
+import dayjs from 'dayjs';
+import 'dayjs/locale/vi';
 import { ChevronDown, ChevronUp, Filter, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { SearchFilters } from '../page';
+
+dayjs.locale('vi');
 
 type Props = {
   filters: SearchFilters;
@@ -76,7 +81,7 @@ const UserFilter = ({
           </div>
 
           <CollapsibleContent>
-            <div className='grid grid-cols-1 gap-4 pt-2 md:grid-cols-2 lg:grid-cols-5'>
+            <div className='grid grid-cols-1 gap-4 pt-2 md:grid-cols-2 lg:grid-cols-3'>
               <div className='space-y-2'>
                 <Label htmlFor='userName'>Tài khoản</Label>
                 <div className='relative'>
@@ -157,6 +162,34 @@ const UserFilter = ({
                     onChange={(e) => handleInputChange('phone', e.target.value)}
                   />
                   {filters.phone && (
+                    <Button
+                      variant='ghost'
+                      size='icon'
+                      className='absolute right-0 top-0 h-full'
+                      onClick={() => clearField('phone')}
+                    >
+                      <X className='h-4 w-4' />
+                    </Button>
+                  )}
+                </div>
+              </div>
+
+              <div className='space-y-2'>
+                <Label htmlFor='dob'>Ngày sinh</Label>
+                <div className='relative'>
+                  <DatePicker
+                    id='dob'
+                    className='h-10 w-full px-3 py-2'
+                    placeholder='Tìm theo ngày sinh'
+                    value={filters.dob ? dayjs(filters.dob) : null}
+                    onChange={(_date, dateString) =>
+                      handleInputChange(
+                        'dob',
+                        typeof dateString === 'string' ? dateString : null
+                      )
+                    }
+                  />
+                  {filters.dob && (
                     <Button
                       variant='ghost'
                       size='icon'

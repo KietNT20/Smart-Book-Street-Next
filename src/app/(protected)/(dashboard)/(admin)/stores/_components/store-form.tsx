@@ -98,14 +98,14 @@ const StoreForm = ({ storeToEdit }: Props) => {
                 name='zoneId'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Khu vực tổ chức</FormLabel>
+                    <FormLabel>Khu vực cửa hàng</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder='Chọn khu vực tổ chức' />
+                          <SelectValue placeholder='Chọn khu vực cửa hàng' />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>

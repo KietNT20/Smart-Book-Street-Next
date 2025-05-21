@@ -12,19 +12,11 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { Skeleton } from '@/components/ui/skeleton';
+import { Label } from '@/components/ui/label';
 import { StoreData } from '@/types/store-types';
 import { Image } from 'antd';
 import { X } from 'lucide-react';
 import { useStoreForm } from '../_lib/use-store-form';
-import AddressSearch from './address-search';
 
 type Props = {
   storeToEdit: StoreData & {
@@ -38,8 +30,6 @@ const StoreForm = ({ storeToEdit }: Props) => {
     isWorking,
     previewMainImage,
     previewAdditionalImages,
-    isLoadingZonesByStreet,
-    zonesByStreetRes,
     onSubmit,
     handleFileChange,
     removeMainImage,
@@ -56,7 +46,7 @@ const StoreForm = ({ storeToEdit }: Props) => {
             <CardTitle className='text-lg'>Thông tin cơ bản</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+            <div className='grid grid-cols-1 gap-4'>
               <FormField
                 control={form.control}
                 name='storeName'
@@ -93,42 +83,14 @@ const StoreForm = ({ storeToEdit }: Props) => {
                 )}
               />
 
-              <FormField
-                control={form.control}
-                name='zoneId'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Khu vực tổ chức</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder='Chọn khu vực tổ chức' />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {isLoadingZonesByStreet
-                          ? Array.from({ length: 3 }).map((_, index) => (
-                              <SelectItem
-                                key={index}
-                                value={`loading-${index}`}
-                              >
-                                <Skeleton className='h-4 w-full' />
-                              </SelectItem>
-                            ))
-                          : zonesByStreetRes?.map((zone) => (
-                              <SelectItem key={zone?.id} value={zone?.id}>
-                                {zone?.zoneName}
-                              </SelectItem>
-                            ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div>
+                <Label>Khu vực cửa hàng</Label>
+                <Input
+                  placeholder='Khu vực cửa hàng'
+                  disabled
+                  value={storeToEdit?.zone?.zoneName}
+                />
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -149,12 +111,12 @@ const StoreForm = ({ storeToEdit }: Props) => {
                     <FormControl>
                       <Input
                         placeholder='Địa chỉ cửa hàng'
-                        disabled={isWorking}
+                        disabled
                         {...field}
                       />
                     </FormControl>
                     <FormMessage />
-                    <AddressSearch form={form} disabled={isWorking} />
+                    {/* <AddressSearch form={form} disabled={isWorking} /> */}
                   </FormItem>
                 )}
               />
@@ -170,7 +132,7 @@ const StoreForm = ({ storeToEdit }: Props) => {
                         <Input
                           type='number'
                           placeholder='Vĩ độ'
-                          disabled={isWorking}
+                          disabled
                           {...field}
                           onChange={(e) =>
                             field.onChange(parseFloat(e.target.value) || 0)
@@ -192,7 +154,7 @@ const StoreForm = ({ storeToEdit }: Props) => {
                         <Input
                           type='number'
                           placeholder='Kinh độ'
-                          disabled={isWorking}
+                          disabled
                           {...field}
                           onChange={(e) =>
                             field.onChange(parseFloat(e.target.value) || 0)

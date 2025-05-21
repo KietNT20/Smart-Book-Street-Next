@@ -270,7 +270,9 @@ const UserTable = ({
       {/* Pagination and page size controls */}
       <div className='mt-4 flex flex-col items-center justify-between gap-4 sm:flex-row'>
         <div className='flex items-center gap-2'>
-          <span className='text-sm text-muted-foreground'>Số dòng:</span>
+          <span className='text-sm text-muted-foreground md:whitespace-nowrap'>
+            Số dòng:
+          </span>
           <Select
             value={pageSize.toString()}
             onValueChange={handlePageSizeChange}

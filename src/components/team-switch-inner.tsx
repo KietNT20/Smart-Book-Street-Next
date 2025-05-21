@@ -138,12 +138,12 @@ function TeamSwitcherInner({
                   <span
                     className={`truncate font-semibold ${showPleaseSelectStreet ? 'text-primary' : ''}`}
                   >
-                    {activeStreet?.streetName || 'Vui lòng chọn đường sách'}
+                    {activeStreet?.streetName || 'Chọn Đường Sách'}
                   </span>
                   <span className='truncate text-xs'>
                     {activeStreet?.address
                       ? activeStreet.address.split(',')[0]
-                      : 'Chọn đường sách của bạn'}
+                      : '(Click vào đây)'}
                   </span>
                 </div>
                 <ChevronsUpDown className='ml-auto' />

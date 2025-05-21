@@ -13,9 +13,17 @@ export const eventRegistrationService = {
     );
     return res.data;
   },
-  statistic: async (eventId: string): Promise<EventRegistrationStatistic> => {
+  statistic: async (
+    eventId: string,
+    isAttended?: boolean
+  ): Promise<EventRegistrationStatistic> => {
     const res = await axiosInstance.get(
-      `${API_URL.EVENT_REGISTRATIONS.STATISTIC}/${eventId}`
+      `${API_URL.EVENT_REGISTRATIONS.STATISTIC}/${eventId}`,
+      {
+        params: {
+          ...(isAttended && { isAttended }),
+        },
+      }
     );
     return res.data;
   },

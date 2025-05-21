@@ -65,7 +65,7 @@ export default function QueryProvider({
               colorPrimary: 'hsl(var(--primary))',
               colorBgContainer: 'hsl(var(--background))',
               colorBgElevated: 'hsl(var(--background))',
-              colorBorder: 'hsl(var(--primary))',
+              colorBorder: 'hsl(var(--border))',
               colorIcon: 'hsl(var(--darker))',
               colorIconHover: 'hsl(var(--primary))',
               cellHoverBg: 'hsl(var(--darker)/0.1)',
