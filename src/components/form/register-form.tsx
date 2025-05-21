@@ -3,7 +3,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Gender } from '@/enums/gender';
 import { PATH } from '@/enums/path';
+import { RoleEnums, RoleLabels } from '@/enums/role';
 import { useRegister } from '@/hooks/use-auth';
+import { useRolesAvailable } from '@/hooks/use-role';
 import { cn } from '@/lib/utils';
 import { RegisterFormValues, registerSchema } from '@/lib/zod';
 import { RegisterRequestBody } from '@/types/auth-types';
@@ -24,6 +26,14 @@ import {
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../ui/select';
+import { Skeleton } from '../ui/skeleton';
 
 export default function RegisterForm({
   className,
@@ -32,6 +42,8 @@ export default function RegisterForm({
   const [showPassword, setShowPassword] = useState(false);
 
   const registerMutation = useRegister();
+  const { rolesAvailable, isLoading: isLoadingRolesAvailable } =
+    useRolesAvailable();
 
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
@@ -42,6 +54,7 @@ export default function RegisterForm({
       fullName: '',
       phone: '',
       gender: undefined,
+      requestedRoleId: '',
     },
   });
 
@@ -53,6 +66,9 @@ export default function RegisterForm({
       fullName: values.fullName || '',
       ...(values.phone && values.phone !== '' && { phone: values.phone }),
       ...(values.gender && { gender: values.gender }),
+      ...(values.requestedRoleId && {
+        requestedRoleId: values.requestedRoleId,
+      }),
     };
     await registerMutation.mutateAsync(requestData);
   };
@@ -82,7 +98,7 @@ export default function RegisterForm({
               className='space-y-6'
             >
               <div className='grid gap-6'>
-                <div className='grid gap-4'>
+                <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
                   {/* Username input */}
                   <FormField
                     control={form.control}
@@ -216,41 +232,79 @@ export default function RegisterForm({
                     )}
                   />
 
-                  {/* Gender select */}
+                  {/* Role select */}
                   <FormField
                     control={form.control}
-                    name='gender'
+                    name='requestedRoleId'
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Giới tính</FormLabel>
-                        <FormControl>
-                          <RadioGroup
-                            onValueChange={field.onChange}
-                            value={field.value}
-                            className='flex gap-4'
-                          >
-                            <div className='flex items-center space-x-2'>
-                              <RadioGroupItem value={Gender.Male} id='male' />
-                              <Label htmlFor='male'>Nam</Label>
-                            </div>
-                            <div className='flex items-center space-x-2'>
-                              <RadioGroupItem
-                                value={Gender.Female}
-                                id='female'
-                              />
-                              <Label htmlFor='female'>Nữ</Label>
-                            </div>
-                          </RadioGroup>
-                        </FormControl>
+                        <FormLabel>Tôi là</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder='Chọn vị trí của tôi' />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {isLoadingRolesAvailable
+                              ? Array.from({ length: 3 }).map((_, index) => (
+                                  <SelectItem
+                                    key={index}
+                                    value={`loading-${index}`}
+                                  >
+                                    <Skeleton className='h-4 w-full' />
+                                  </SelectItem>
+                                ))
+                              : rolesAvailable?.map((role) => (
+                                  <SelectItem
+                                    key={role?.value}
+                                    value={role?.value}
+                                  >
+                                    {RoleLabels[role?.label as RoleEnums]}
+                                  </SelectItem>
+                                ))}
+                          </SelectContent>
+                        </Select>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
                 </div>
 
+                {/* Gender select */}
+                <FormField
+                  control={form.control}
+                  name='gender'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Giới tính</FormLabel>
+                      <FormControl>
+                        <RadioGroup
+                          onValueChange={field.onChange}
+                          value={field.value}
+                          className='flex gap-4'
+                        >
+                          <div className='flex items-center space-x-2'>
+                            <RadioGroupItem value={Gender.Male} id='male' />
+                            <Label htmlFor='male'>Nam</Label>
+                          </div>
+                          <div className='flex items-center space-x-2'>
+                            <RadioGroupItem value={Gender.Female} id='female' />
+                            <Label htmlFor='female'>Nữ</Label>
+                          </div>
+                        </RadioGroup>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
                 <Button
                   type='submit'
-                  className='w-full'
+                  className='w-full md:w-auto'
                   disabled={registerMutation?.isPending}
                 >
                   {registerMutation?.isPending ? 'Đang xử lý...' : 'Đăng ký'}

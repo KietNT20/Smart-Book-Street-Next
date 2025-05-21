@@ -1,5 +1,6 @@
 import { Gender } from '@/enums/gender';
-import { BaseEntity } from './common-types';
+import { RoleEnums } from '@/enums/role';
+import { ApiResponseAll, BaseEntity } from './common-types';
 import { Role, User } from './user-types';
 
 export interface UserRoles extends BaseEntity {
@@ -55,3 +56,16 @@ export type GoogleLoginResponse = {
   isSuccess: boolean;
   message: string;
 };
+
+export interface RoleType {
+  id: string;
+  roleName: RoleEnums;
+  description: string;
+  createdBy: string;
+  createdDate: string;
+  lastUpdatedBy: string;
+  lastUpdatedDate: string;
+  isDeleted: boolean;
+}
+
+export type RolesResponse = ApiResponseAll<RoleType>;

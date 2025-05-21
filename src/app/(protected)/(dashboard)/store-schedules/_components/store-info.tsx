@@ -15,7 +15,7 @@ const StoreInfo = ({ store }: Props) => {
           <div className='flex items-start'>
             <MapPin className='mr-3 mt-0.5 h-5 w-5 flex-shrink-0 text-zinc-500' />
             <div>
-              <h5 className='font-medium text-muted-foreground'>Địa chỉ</h5>
+              <h5 className='font-medium text-primary'>Địa chỉ</h5>
               <p>{store?.address || 'Không có địa chỉ'}</p>
             </div>
           </div>

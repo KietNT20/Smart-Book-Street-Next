@@ -63,6 +63,9 @@ export const registerSchema = z
         }
       ),
     gender: z.nativeEnum(Gender).optional(),
+    requestedRoleId: z.string().nonempty({
+      message: 'Bạn là ai?',
+    }),
   })
   .refine((data) => !/[^\x00-\x7F]/.test(data.password), {
     message: 'Mật khẩu không được chứa emoji hoặc ký tự không hợp lệ',

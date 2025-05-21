@@ -28,9 +28,11 @@ export default function RootLayout({
     <html lang='en' suppressHydrationWarning={true}>
       <body className={`${roboto.variable} antialiased`}>
         <AntdRegistry>
-          <Provider>{children}</Provider>
+          <Provider>
+            {children}
+            <Toaster richColors expand visibleToasts={2} />
+          </Provider>
         </AntdRegistry>
-        <Toaster richColors expand visibleToasts={2} />
         <SpeedInsights />
       </body>
     </html>

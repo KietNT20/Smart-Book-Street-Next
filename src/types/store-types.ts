@@ -2,7 +2,9 @@ import { DayOfWeek } from '@/enums/day-of-week';
 import { Sort } from '@/enums/enums';
 import { ApiListResponse, ApiResponse, BaseEntity } from './common-types';
 import { ImageType } from './image-types';
+import { Inventory } from './inventory-types';
 import { Trend } from './person-types';
+import { UserStore } from './user-types';
 import { Zone } from './zone-types';
 
 export interface StoreData extends BaseEntity {
@@ -20,6 +22,9 @@ export interface StoreData extends BaseEntity {
   openingTime: string | null;
   closingTime: string | null;
   zone: Zone | null;
+  storeSchedules: StoreSchedules[];
+  userStores: UserStore[];
+  inventories: Inventory[];
 }
 
 export interface StoreParams {

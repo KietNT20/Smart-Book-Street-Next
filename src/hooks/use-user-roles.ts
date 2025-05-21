@@ -1,5 +1,5 @@
 import { userRoleService } from '@/services/userRoleService';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 export const useUserRoleMutation = () => {
@@ -15,6 +15,30 @@ export const useUserRoleMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users'] });
       toast.success('Phân quyền thành công!');
+    },
+    onError: (error: Error) => {
+      console.error('Error approving role:', error);
+      toast.error('Có lỗi xảy ra trong quá trình phân quyền!');
+    },
+  });
+
+  const { mutate: approveUserRole, isPending: isApprovingRole } = useMutation({
+    mutationKey: ['user-role-approval'],
+    mutationFn: ({
+      userId,
+      roleId,
+      approved,
+    }: {
+      userId: string;
+      roleId: string;
+      approved: boolean;
+    }) => userRoleService.approveUserRole(userId, roleId, approved),
+    onSuccess: (data) => {
+      if (data) {
+        queryClient.invalidateQueries({ queryKey: ['users'] });
+        queryClient.invalidateQueries({ queryKey: ['roles-at-pending'] });
+        toast.success(`${data?.message}`);
+      }
     },
     onError: (error: Error) => {
       console.error('Error approving role:', error);
@@ -41,5 +65,19 @@ export const useUserRoleMutation = () => {
     isAddingRole,
     deleteUserRole,
     isDeletingRole,
+    approveUserRole,
+    isApprovingRole,
+  };
+};
+
+export const useRolePending = () => {
+  const { data: rolesAtPending } = useQuery({
+    queryKey: ['roles-at-pending'],
+    queryFn: () => userRoleService.pendingRoles(),
+  });
+
+  return {
+    rolesAtPending: rolesAtPending?.results || [],
+    totalRecords: rolesAtPending?.totalRecords || 0,
   };
 };

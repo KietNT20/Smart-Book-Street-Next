@@ -68,7 +68,7 @@ export const useRegister = () => {
         router.push(PATH.LOGIN);
       }
     },
-    onError: (error: Error) => {
+    onError: (error) => {
       console.log('Error register', error);
       toast.error(`Đăng ký tài khoản thất bại, ${error}`);
     },

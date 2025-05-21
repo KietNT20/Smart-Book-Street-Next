@@ -94,5 +94,6 @@
     "Việt",
     "xuất"
   ],
-  "typescript.tsdk": "node_modules\\typescript\\lib"
+  "typescript.tsdk": "node_modules\\typescript\\lib",
+  "material-icon-theme.activeIconPack": "react_redux"
 }

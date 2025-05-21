@@ -109,8 +109,9 @@ export const useAuthorMutation = () => {
       }
       queryClient.invalidateQueries({ queryKey: ['authors'] });
     },
-    onError: (error: Error) => {
+    onError: (error) => {
       console.error('Error Add Author:', error);
+      toast.error(`Thêm tác giả thất bại`);
     },
   });
 
@@ -125,8 +126,9 @@ export const useAuthorMutation = () => {
       }
       queryClient.invalidateQueries({ queryKey: ['authors'] });
     },
-    onError: (error: Error) => {
+    onError: (error) => {
       console.error('Error Update Author:', error);
+      toast.error(`Cập nhật tác giả thất bại`);
     },
   });
 
@@ -135,9 +137,11 @@ export const useAuthorMutation = () => {
     mutationFn: (id: string) => authorService.delete(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['authors'] });
+      toast.success('Xóa tác giả thành công');
     },
-    onError: (error: Error) => {
+    onError: (error) => {
       console.error('Error Delete Author:', error);
+      toast.error(`Xóa tác giả thất bại`);
     },
   });
 
