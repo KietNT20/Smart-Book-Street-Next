@@ -1,5 +1,6 @@
 import { Gender } from '@/enums/gender';
 import { EventStatistics } from './event-types';
+import { Zone } from './zone-types';
 
 export interface EventRegistrationsResponse {
   results: EventRegistrations[];
@@ -23,14 +24,15 @@ export interface EventRegistrations {
 
 export interface EventRegistrationStatistic {
   success: boolean;
-  ageChart: EventStatistics[];
-  genderChart: EventStatistics[];
-  referenceChart: EventStatistics[];
   addressChart: EventStatistics[];
-  attendedChart: EventStatistics[];
-  totalRegistrations: number;
+  ageChart: EventStatistics[];
+  attendedBeforeChart: EventStatistics[];
+  genderChart: EventStatistics[];
   participation: number;
   participationRate: string;
+  referenceChart: EventStatistics[];
+  attendedChart?: EventStatistics[];
+  totalRegistrations: number;
 }
 
 export type CheckedAttendendPayload = Array<{
@@ -38,3 +40,35 @@ export type CheckedAttendendPayload = Array<{
   isAttended: boolean;
   ticketCode?: string | null;
 }>;
+
+export interface DateRange {
+  startDate: string;
+  endDate: string;
+}
+
+export interface CustomExportOptions {
+  includeGeneral?: boolean;
+  includeAge?: boolean;
+  includeGender?: boolean;
+  includeReference?: boolean;
+  includeAddress?: boolean;
+}
+
+export interface ExportStatisticsRequest {
+  eventId: string;
+  eventName: string;
+  description: string;
+  statistics: EventRegistrationStatistic;
+  zoneInfo: Zone;
+  dateRange: DateRange;
+  organizerEmail: string;
+  emailSubject?: string;
+  emailMessage?: string;
+  customOptions?: CustomExportOptions;
+}
+
+export interface ExportStatisticsResponse {
+  success: boolean;
+  message: string;
+  emailInfo?: string;
+}

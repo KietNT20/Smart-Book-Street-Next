@@ -29,4 +29,5 @@ export enum NextJS_API {
   OPENAI = '/api/openai',
   STORES = '/api/stores',
   POPULATION = '/api/population',
+  EVENT_REPORT = '/api/event-report',
 }

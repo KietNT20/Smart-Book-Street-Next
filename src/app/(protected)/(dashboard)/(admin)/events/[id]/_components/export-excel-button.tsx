@@ -12,24 +12,47 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { NextJS_API } from '@/enums/endpoint';
+import { EventRegistrationStatistic } from '@/types/event-registrations-types';
 import { Event } from '@/types/event-types';
+import { useQuery } from '@tanstack/react-query';
 import { FileSpreadsheet, Loader2, Mail } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
-interface StatisticsExportButtonProps {
-  eventId: string;
-  eventData?: Event;
+export interface EventDetailResponse {
+  event: Event;
+  registrationStats: EventRegistrationStatistic;
 }
 
-const StatisticsExportButton = ({
-  eventId,
-  eventData,
-}: StatisticsExportButtonProps) => {
+export interface EventDetailError {
+  error: string;
+}
+
+type Props = {
+  eventId: string;
+};
+
+const StatisticsExportButton = ({ eventId }: Props) => {
   const [exporting, setExporting] = useState<boolean>(false);
   const [showDialog, setShowDialog] = useState<boolean>(false);
   const [email, setEmail] = useState<string>('');
   const [error, setError] = useState<string>('');
+
+  const {
+    data: eventDetail,
+    isLoading,
+    isError,
+  } = useQuery<EventDetailResponse>({
+    queryKey: ['event-report-detail', eventId],
+    queryFn: async () => {
+      const response = await fetch(`/api/event-report/${eventId}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch event details');
+      }
+      return response.json();
+    },
+    enabled: !!eventId,
+  });
 
   const isValidEmail = (email: string): boolean =>
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -40,50 +63,91 @@ const StatisticsExportButton = ({
       return;
     }
 
+    if (!eventDetail) {
+      toast.error('Không thể lấy thông tin sự kiện');
+      return;
+    }
+
     setError('');
     setShowDialog(false);
     setExporting(true);
 
-    try {
-      toast.promise(
-        fetch(NextJS_API.EXPORT_STATISTICS, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
+    toast.promise(
+      fetch(NextJS_API.EXPORT_STATISTICS, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          eventId,
+          eventName: eventDetail.event.eventName,
+          description: eventDetail.event.description,
+          statistics: {
+            success: eventDetail.registrationStats.success,
+            totalRegistrations:
+              eventDetail.registrationStats.totalRegistrations || 0,
+            ageChart: eventDetail.registrationStats.ageChart || [],
+            genderChart: eventDetail.registrationStats.genderChart || [],
+            referenceChart: eventDetail.registrationStats.referenceChart || [],
+            addressChart: eventDetail.registrationStats.addressChart || [],
+            attendedBeforeChart:
+              eventDetail.registrationStats.attendedBeforeChart || [],
+            participation: eventDetail.registrationStats.participation || 0,
+            participationRate:
+              eventDetail.registrationStats.participationRate || '0%',
+            attendedChart: eventDetail.registrationStats.attendedChart || [],
           },
-          body: JSON.stringify({
-            eventId,
-            eventName: eventData?.eventName,
-            statistics: {
-              totalRegistrations: eventData?.totalRegistrations || 0,
-              ageChart: eventData?.ageChart || [],
-              genderChart: eventData?.genderChart || [],
-              referenceChart: eventData?.referenceChart || [],
-              addressChart: eventData?.addressChart || [],
-            },
-            organizerEmail: email,
-            zoneInfo: eventData?.zone,
-            dateRange: {
-              startDate: eventData?.startDate,
-              endDate: eventData?.endDate,
-            },
-          }),
-        }).then((res) => {
-          if (!res.ok) throw new Error('Có lỗi xảy ra khi xuất thống kê');
-          return res.json();
+          organizerEmail: email,
+          zoneInfo: eventDetail.event.zone,
+          dateRange: {
+            startDate: eventDetail.event.startDate,
+            endDate: eventDetail.event.endDate,
+          },
+          emailSubject: `Thống kê sự kiện: ${eventDetail.event.eventName}`,
+          emailMessage: `Xin chào,\n\nĐây là báo cáo thống kê chi tiết cho sự kiện "${eventDetail.event.eventName}".`,
+          customOptions: {
+            includeGeneral: true,
+            includeAge: true,
+            includeGender: true,
+            includeReference: true,
+            includeAddress: true,
+          },
         }),
-        {
-          loading: 'Đang xuất Excel và gửi email...',
-          success: () => `Đã gửi thống kê qua email ${email} thành công!`,
-          error: 'Không thể xuất thống kê. Vui lòng thử lại sau.',
-        }
-      );
-    } catch (error) {
-      console.error('Export error:', error);
-    } finally {
-      setExporting(false);
-    }
+      }).then((res) => {
+        if (!res.ok) throw new Error('Có lỗi xảy ra khi xuất thống kê');
+        return res.json();
+      }),
+      {
+        loading: 'Đang xuất Excel và gửi email...',
+        success: () => `Đã gửi thống kê qua email ${email} thành công!`,
+        error: 'Không thể xuất thống kê. Vui lòng thử lại sau.',
+        finally: () => setExporting(false),
+      }
+    );
   };
+
+  // Show loading state while fetching data
+  if (isLoading) {
+    return (
+      <Button variant='outline' className='flex items-center gap-2' disabled>
+        <Loader2 className='h-4 w-4 animate-spin' />
+        Đang tải...
+      </Button>
+    );
+  }
+
+  // Show error state if failed to fetch
+  if (isError || !eventDetail) {
+    return (
+      <Button variant='outline' className='flex items-center gap-2' disabled>
+        <FileSpreadsheet className='h-4 w-4' />
+        Không thể tải dữ liệu
+      </Button>
+    );
+  }
+
+  // Disable button if no registrations
+  const hasRegistrations = eventDetail.registrationStats.totalRegistrations > 0;
 
   return (
     <>
@@ -91,7 +155,8 @@ const StatisticsExportButton = ({
         variant='outline'
         className='flex items-center gap-2'
         onClick={() => setShowDialog(true)}
-        disabled={exporting}
+        disabled={exporting || !hasRegistrations}
+        title={!hasRegistrations ? 'Chưa có đăng ký nào' : undefined}
       >
         {exporting ? (
           <Loader2 className='h-4 w-4 animate-spin' />
@@ -109,7 +174,8 @@ const StatisticsExportButton = ({
           <DialogHeader>
             <DialogTitle>Nhập email nhận thống kê</DialogTitle>
             <DialogDescription>
-              Thống kê sự kiện sẽ được gửi đến email này
+              Thống kê sự kiện &quot;{eventDetail.event.eventName}&quot; sẽ được
+              gửi đến email này
             </DialogDescription>
           </DialogHeader>
 

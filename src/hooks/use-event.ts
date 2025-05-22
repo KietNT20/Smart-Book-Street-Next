@@ -426,3 +426,50 @@ export const useGetEventCreationHistory = ({
     totalPage,
   };
 };
+
+export const useProcessEventCreateRequest = () => {
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationKey: ['process-event-create-request'],
+    mutationFn: ({ id, data }: { id: string; data: FormData }) =>
+      eventService.eventProcessRequest(id, data),
+    onSuccess: (data) => {
+      if (data) {
+        queryClient.invalidateQueries({ queryKey: ['events-create-request'] });
+      }
+    },
+    onError: (error) => {
+      console.log('Error processing event create request:', error);
+      toast.error('Xử lý yêu cầu tạo sự kiện không thành công!');
+    },
+  });
+
+  return {
+    processEventCreateRequest: mutation.mutate,
+    isProcessingEventCreateRequest: mutation.isPending,
+    errorProcessingEventCreateRequest: mutation.error,
+  };
+};
+
+export const useEventOpenState = () => {
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationKey: ['event-open-state'],
+    mutationFn: (id: string) => eventService.eventOpenState(id),
+    onSuccess: (data) => {
+      if (data) {
+        queryClient.invalidateQueries({ queryKey: ['events-create-request'] });
+      }
+    },
+    onError: (error) => {
+      console.log('Error getting event open state:', error);
+      toast.error('Cập nhật trạng thái mở sự kiện không thành công!');
+    },
+  });
+
+  return {
+    getEventOpenState: mutation.mutate,
+    isGettingEventOpenState: mutation.isPending,
+    errorGettingEventOpenState: mutation.error,
+  };
+};

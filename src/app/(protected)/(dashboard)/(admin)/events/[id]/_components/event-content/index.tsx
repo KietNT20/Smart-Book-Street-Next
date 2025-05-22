@@ -1,3 +1,5 @@
+'use client';
+
 import { Event } from '@/types/event-types';
 import EventDescription from './event-description';
 import EventGallery from './event-gallery';
@@ -32,7 +34,7 @@ export default function EventContent({
       />
 
       {/* Statistics */}
-      <EventStatistics eventId={eventId} eventData={eventData} />
+      <EventStatistics eventId={eventId} />
     </div>
   );
 }

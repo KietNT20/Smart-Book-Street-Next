@@ -48,11 +48,36 @@ export const useCheckAttendend = () => {
   return { checkedAttendend, isCheckingPending };
 };
 
-export const useGetStatisticEventRegistrations = (eventId: string) => {
+export const useGetStatisticEventRegistrations = (
+  eventId: string,
+  isAttended?: boolean
+) => {
+  const queryClient = useQueryClient();
   const { data, isLoading, error } = useQuery({
-    queryKey: ['event-registrations-statistic', eventId],
-    queryFn: () => eventRegistrationService.statistic(eventId),
+    queryKey: ['event-registrations-statistic', eventId, isAttended],
+    queryFn: () => eventRegistrationService.statistic(eventId, isAttended),
   });
+
+  if (isAttended === undefined) {
+    queryClient.prefetchQuery({
+      queryKey: ['event-registrations-statistic', eventId, undefined],
+      queryFn: () => eventRegistrationService.statistic(eventId),
+    });
+  }
+
+  if (isAttended === true) {
+    queryClient.prefetchQuery({
+      queryKey: ['event-registrations-statistic', eventId, true],
+      queryFn: () => eventRegistrationService.statistic(eventId, true),
+    });
+  }
+
+  if (isAttended === false) {
+    queryClient.prefetchQuery({
+      queryKey: ['event-registrations-statistic', eventId, false],
+      queryFn: () => eventRegistrationService.statistic(eventId, false),
+    });
+  }
 
   return {
     statisticData: data,

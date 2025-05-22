@@ -24,6 +24,7 @@ export interface EventSchedule {
 export interface Event {
   id: string;
   eventName: string;
+  organizerEmail: string;
   description: string;
   startDate: string | Date | null;
   endDate: string | Date | null;
@@ -37,8 +38,8 @@ export interface Event {
   message: string | null;
   updateForEventId: string | null;
   zone: Zone;
-  images: ImageType[];
   eventSchedules: EventSchedule[];
+  images: ImageType[];
   ageChart: EventStatistics[] | null;
   genderChart: EventStatistics[] | null;
   referenceChart: EventStatistics[] | null;

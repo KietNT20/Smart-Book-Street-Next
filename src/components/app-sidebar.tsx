@@ -151,6 +151,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         isActive: checkActive([
           { url: PATH.EVENTS },
           { url: PATH.CALENDAR_EVENT },
+          { url: PATH.EVENT_CREATION_REQUEST },
         ]),
         roles: [RoleEnums.ADMIN],
         items: [
@@ -160,13 +161,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             roles: [RoleEnums.ADMIN],
           },
           {
-            title: 'Lịch sự kiện',
-            url: PATH.CALENDAR_EVENT,
+            title: 'Đang chờ duyệt',
+            url: PATH.EVENT_CREATION_REQUEST,
             roles: [RoleEnums.ADMIN],
           },
           {
-            title: 'Các sự kiện đang chờ duyệt',
-            url: PATH.EVENT_CREATION_REQUEST,
+            title: 'Lịch sự kiện',
+            url: PATH.CALENDAR_EVENT,
             roles: [RoleEnums.ADMIN],
           },
         ],
