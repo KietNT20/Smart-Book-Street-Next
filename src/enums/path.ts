@@ -35,6 +35,7 @@ export enum PATH {
   VISITOR_STATISTICS = '/visitors/statistics',
   VISITOR_PREDICTION = '/visitors/prediction',
   VISITOR_RECOMMENDATION = '/visitors/recommendation',
+  EVENT_CREATION_REQUEST = '/events/creation-request',
 
   USERS = '/users',
   USER_CREATE = '/users/create',

@@ -164,6 +164,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             url: PATH.CALENDAR_EVENT,
             roles: [RoleEnums.ADMIN],
           },
+          {
+            title: 'Các sự kiện đang chờ duyệt',
+            url: PATH.EVENT_CREATION_REQUEST,
+            roles: [RoleEnums.ADMIN],
+          },
         ],
       },
       {

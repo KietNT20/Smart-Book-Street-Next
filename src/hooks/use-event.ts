@@ -1,6 +1,10 @@
 import { PATH } from '@/enums/path';
 import { eventService } from '@/services/eventService';
-import { EventParams, EventStaffParams } from '@/types/event-types';
+import {
+  EventCreateReqParams,
+  EventParams,
+  EventStaffParams,
+} from '@/types/event-types';
 import {
   keepPreviousData,
   useMutation,
@@ -212,7 +216,7 @@ export const useGetEventDateByStaff = ({
   const { data, isLoading, error } = useQuery({
     queryKey: ['events', result, sortField, sortOrder, pageSize, pageNumber],
     queryFn: () =>
-      eventService.staff({
+      eventService.getEventsInDateForCheckin({
         result,
         sortField,
         sortOrder,
@@ -236,7 +240,7 @@ export const useGetEventDateByStaff = ({
         pageNumber + 1,
       ],
       queryFn: () =>
-        eventService.staff({
+        eventService.getEventsInDateForCheckin({
           result,
           sortField,
           sortOrder,
@@ -257,7 +261,7 @@ export const useGetEventDateByStaff = ({
         pageNumber - 1,
       ],
       queryFn: () =>
-        eventService.staff({
+        eventService.getEventsInDateForCheckin({
           result,
           sortField,
           sortOrder,
@@ -271,6 +275,154 @@ export const useGetEventDateByStaff = ({
     eventsRes: data?.results || [],
     isLoadingEvents: isLoading,
     errorEvents: error,
+    totalPage,
+  };
+};
+
+export const useGetEventCreateRequest = ({
+  pageNumber,
+  pageSize,
+  sortField,
+  sortOrder,
+}: EventCreateReqParams) => {
+  const queryClient = useQueryClient();
+  const { data, isLoading, error } = useQuery({
+    queryKey: [
+      'events-create-request',
+      sortField,
+      sortOrder,
+      pageSize,
+      pageNumber,
+    ],
+    queryFn: () =>
+      eventService.getAllEventCreateRequests({
+        sortField,
+        sortOrder,
+        pageSize,
+        pageNumber,
+      }),
+    placeholderData: keepPreviousData,
+  });
+
+  // Prefetching data
+  const totalPage = data?.totalPages || 1;
+
+  if (pageNumber < totalPage) {
+    queryClient.prefetchQuery({
+      queryKey: [
+        'events-create-request',
+        sortField,
+        sortOrder,
+        pageSize,
+        pageNumber + 1,
+      ],
+      queryFn: () =>
+        eventService.getAllEventCreateRequests({
+          sortField,
+          sortOrder,
+          pageSize,
+          pageNumber: pageNumber + 1,
+        }),
+    });
+  }
+
+  if (pageNumber > 1) {
+    queryClient.prefetchQuery({
+      queryKey: [
+        'events-create-request',
+        sortField,
+        sortOrder,
+        pageSize,
+        pageNumber - 1,
+      ],
+      queryFn: () =>
+        eventService.getAllEventCreateRequests({
+          sortField,
+          sortOrder,
+          pageSize,
+          pageNumber: pageNumber - 1,
+        }),
+    });
+  }
+
+  return {
+    eventsCreateRequestRes: data?.results || [],
+    isLoadingEventsCreateRequest: isLoading,
+    errorEventsCreateRequest: error,
+    totalPage,
+  };
+};
+
+export const useGetEventCreationHistory = ({
+  pageNumber,
+  pageSize,
+  sortField,
+  sortOrder,
+}: EventCreateReqParams) => {
+  const queryClient = useQueryClient();
+  const { data, isLoading, error } = useQuery({
+    queryKey: [
+      'events-creation-history',
+      sortField,
+      sortOrder,
+      pageSize,
+      pageNumber,
+    ],
+    queryFn: () =>
+      eventService.getEventCreationsHistory({
+        sortField,
+        sortOrder,
+        pageSize,
+        pageNumber,
+      }),
+    placeholderData: keepPreviousData,
+  });
+
+  // Prefetching data
+  const totalPage = data?.totalPages || 1;
+
+  if (pageNumber < totalPage) {
+    queryClient.prefetchQuery({
+      queryKey: [
+        'events-creation-history',
+        sortField,
+        sortOrder,
+        pageSize,
+        pageNumber + 1,
+      ],
+      queryFn: () =>
+        eventService.getEventCreationsHistory({
+          sortField,
+          sortOrder,
+          pageSize,
+          pageNumber: pageNumber + 1,
+        }),
+    });
+  }
+
+  if (pageNumber > 1) {
+    queryClient.prefetchQuery({
+      queryKey: [
+        'events-creation-history',
+        sortField,
+        sortOrder,
+        pageSize,
+        pageNumber - 1,
+      ],
+      queryFn: () =>
+        eventService.getEventCreationsHistory({
+          sortField,
+          sortOrder,
+          pageSize,
+          pageNumber: pageNumber - 1,
+        }),
+    });
+  }
+
+  return {
+    eventsCreationHistoryRes: data?.results || [],
+    isLoadingEventsCreationHistory: isLoading,
+    errorEventsCreationHistory: error,
     totalPage,
   };
 };
