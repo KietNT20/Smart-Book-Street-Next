@@ -353,6 +353,31 @@ export const useGetEventCreateRequest = ({
   };
 };
 
+export const useApproveEventCreateRequest = () => {
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationKey: ['approve-event-create-request'],
+    mutationFn: ({ id, data }: { id: string; data: FormData }) =>
+      eventService.eventProcessRequest(id, data),
+    onSuccess: (data) => {
+      if (data) {
+        queryClient.invalidateQueries({ queryKey: ['events-create-request'] });
+        queryClient.invalidateQueries({ queryKey: ['events'] });
+      }
+    },
+    onError: (error) => {
+      console.log('Error approving event create request:', error);
+      toast.error(`${error}`);
+    },
+  });
+
+  return {
+    approveEventCreateRequest: mutation.mutate,
+    isApprovingEventCreateRequest: mutation.isPending,
+    errorApprovingEventCreateRequest: mutation.error,
+  };
+};
+
 export const useGetEventCreationHistory = ({
   pageNumber,
   pageSize,

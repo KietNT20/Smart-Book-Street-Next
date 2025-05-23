@@ -32,7 +32,6 @@ import { Event } from '@/types/event-types';
 import {
   ArrowUpDown,
   Eye,
-  FileEdit,
   MoreHorizontal,
   SortAsc,
   SortDesc,
@@ -210,12 +209,6 @@ const EventTable = ({
                             Xem chi tiết
                           </Link>
                         </DropdownMenuItem>
-                        <DropdownMenuItem asChild className='cursor-pointer'>
-                          <Link href={`${PATH.EVENTS}/${event?.id}/edit`}>
-                            <FileEdit className='mr-2 h-4 w-4' />
-                            Chỉnh sửa
-                          </Link>
-                        </DropdownMenuItem>
                         <DropdownMenuItem
                           className='text-destructive'
                           onClick={() => handleDeleteClick(event?.id || '')}
@@ -234,34 +227,36 @@ const EventTable = ({
       </div>
 
       {/* Pagination and page size controls */}
-      <div className='mt-4 flex items-center justify-between'>
-        <div className='flex items-center gap-2'>
-          <span className='whitespace-nowrap text-sm text-muted-foreground'>
-            Số dòng:
-          </span>
-          <Select
-            value={pageSize.toString()}
-            onValueChange={handlePageSizeChange}
-          >
-            <SelectTrigger className='h-8 w-16'>
-              <SelectValue placeholder={pageSize.toString()} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value='10'>10</SelectItem>
-              <SelectItem value='20'>20</SelectItem>
-              <SelectItem value='30'>30</SelectItem>
-              <SelectItem value='40'>40</SelectItem>
-              <SelectItem value='50'>50</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+      {events.length > 0 && (
+        <div className='mt-4 flex items-center justify-between'>
+          <div className='flex items-center gap-2'>
+            <span className='whitespace-nowrap text-sm text-muted-foreground'>
+              Số dòng:
+            </span>
+            <Select
+              value={pageSize.toString()}
+              onValueChange={handlePageSizeChange}
+            >
+              <SelectTrigger className='h-8 w-16'>
+                <SelectValue placeholder={pageSize.toString()} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value='10'>10</SelectItem>
+                <SelectItem value='20'>20</SelectItem>
+                <SelectItem value='30'>30</SelectItem>
+                <SelectItem value='40'>40</SelectItem>
+                <SelectItem value='50'>50</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
 
-        <TablePagination
-          totalPages={totalPages}
-          pageNumber={pageNumber}
-          setPageNumber={setPageNumber}
-        />
-      </div>
+          <TablePagination
+            totalPages={totalPages}
+            pageNumber={pageNumber}
+            setPageNumber={setPageNumber}
+          />
+        </div>
+      )}
 
       {/* Delete Confirmation Dialog */}
       <ConfirmModal

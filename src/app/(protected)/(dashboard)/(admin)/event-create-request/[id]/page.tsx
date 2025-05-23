@@ -16,7 +16,10 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import { PATH } from '@/enums/path';
 import { useEntityBreadcrumb } from '@/hooks/use-breadcrumb-page';
-import { useGetEventById } from '@/hooks/use-event';
+import {
+  useApproveEventCreateRequest,
+  useGetEventById,
+} from '@/hooks/use-event';
 import { formatDateVi } from '@/lib/utils';
 import { Calendar, Clock, Loader2, MapPin } from 'lucide-react';
 import Image from 'next/image';
@@ -27,9 +30,10 @@ export default function EventCreateRequestPage({
 }: {
   params: { id: string };
 }) {
-  const { eventData, eventLoading } = useGetEventById(params.id);
   const [rejectionReason, setRejectionReason] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { eventData, eventLoading } = useGetEventById(params.id);
+  const { approveEventCreateRequest, isApprovingEventCreateRequest } =
+    useApproveEventCreateRequest();
 
   useEntityBreadcrumb(
     PATH.EVENT_CREATION_REQUEST,
@@ -38,17 +42,15 @@ export default function EventCreateRequestPage({
     eventData?.eventName
   );
 
-  const handleApprove = async () => {
-    setIsSubmitting(true);
-    try {
-      // TODO: API call to approve event
-      console.log('Approving event:', eventData?.id);
-      // await approveEvent(eventData?.id);
-    } catch (error) {
-      console.error('Error approving event:', error);
-    } finally {
-      setIsSubmitting(false);
-    }
+  const handleApprove = () => {
+    const formData = new FormData();
+    formData.append('Message', '');
+    formData.append('IsApprove', 'true');
+
+    approveEventCreateRequest({
+      id: params.id,
+      data: formData,
+    });
   };
 
   const handleReject = async () => {
@@ -57,20 +59,17 @@ export default function EventCreateRequestPage({
       return;
     }
 
-    setIsSubmitting(true);
     try {
-      // TODO: API call to reject event
-      console.log(
-        'Rejecting event:',
-        eventData?.id,
-        'Reason:',
-        rejectionReason
-      );
-      // await rejectEvent(eventData?.id, rejectionReason);
+      const formData = new FormData();
+      formData.append('Message', rejectionReason);
+      formData.append('IsApprove', 'false');
+
+      approveEventCreateRequest({
+        id: params.id,
+        data: formData,
+      });
     } catch (error) {
       console.error('Error rejecting event:', error);
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -279,18 +278,24 @@ export default function EventCreateRequestPage({
                     <Button
                       className='w-full'
                       onClick={handleApprove}
-                      disabled={isSubmitting}
+                      disabled={isApprovingEventCreateRequest}
                     >
-                      {isSubmitting ? 'Đang xử lý...' : 'Chấp nhận'}
+                      {isApprovingEventCreateRequest
+                        ? 'Đang xử lý...'
+                        : 'Chấp nhận'}
                     </Button>
 
                     <Button
                       variant='destructive'
                       className='w-full'
                       onClick={handleReject}
-                      disabled={isSubmitting || !rejectionReason.trim()}
+                      disabled={
+                        isApprovingEventCreateRequest || !rejectionReason.trim()
+                      }
                     >
-                      {isSubmitting ? 'Đang xử lý...' : 'Từ chối'}
+                      {isApprovingEventCreateRequest
+                        ? 'Đang xử lý...'
+                        : 'Từ chối'}
                     </Button>
                   </div>
 
@@ -304,6 +309,7 @@ export default function EventCreateRequestPage({
                       value={rejectionReason}
                       onChange={(e) => setRejectionReason(e.target.value)}
                       rows={4}
+                      disabled={isApprovingEventCreateRequest}
                     />
                   </div>
                 </>

@@ -20,6 +20,7 @@ import { Sort } from '@/enums/enums';
 import { PATH } from '@/enums/path';
 import { formatDateVi } from '@/lib/utils';
 import { Event } from '@/types/event-types';
+import { Empty } from 'antd';
 import { ArrowUpDown, Eye, SortAsc, SortDesc } from 'lucide-react';
 import Link from 'next/link';
 
@@ -53,9 +54,11 @@ export default function EventReqTable({
     setPageNumber(1);
   };
 
+  // Check if we should show empty state
+  const showEmptyState = !isLoading && (!events || events.length === 0);
+
   return (
     <>
-      {/* Table */}
       <div className='rounded-md border'>
         <Table className='table-auto'>
           <TableHeader>
@@ -151,9 +154,9 @@ export default function EventReqTable({
           </TableHeader>
           <TableBody>
             {isLoading ? (
-              <TableSkeleton columns={6} rows={pageSize} />
-            ) : (
-              events?.map((event, index) => (
+              <TableSkeleton columns={7} rows={pageSize} />
+            ) : events && events.length > 0 ? (
+              events.map((event, index) => (
                 <TableRow key={event?.id}>
                   <TableCell className='text-muted-foreground'>
                     {index + 1 + (pageNumber - 1) * pageSize}
@@ -173,7 +176,6 @@ export default function EventReqTable({
                     <Button size={'icon'}>
                       <Link
                         href={`${PATH.EVENT_CREATION_REQUEST}/${event?.id}`}
-                        passHref
                       >
                         <Eye className='size-4' />
                       </Link>
@@ -181,40 +183,50 @@ export default function EventReqTable({
                   </TableCell>
                 </TableRow>
               ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={7} className='h-64 p-0 text-center'>
+                  <div className='flex h-full w-full items-center justify-center'>
+                    <Empty description='Không có yêu cầu sự kiện nào được tìm thấy.' />
+                  </div>
+                </TableCell>
+              </TableRow>
             )}
           </TableBody>
         </Table>
       </div>
 
-      {/* Pagination and page size controls */}
-      <div className='mt-4 flex items-center justify-between'>
-        <div className='flex items-center gap-2'>
-          <span className='whitespace-nowrap text-sm text-muted-foreground'>
-            Số dòng:
-          </span>
-          <Select
-            value={pageSize.toString()}
-            onValueChange={handlePageSizeChange}
-          >
-            <SelectTrigger className='h-8 w-16'>
-              <SelectValue placeholder={pageSize.toString()} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value='10'>10</SelectItem>
-              <SelectItem value='20'>20</SelectItem>
-              <SelectItem value='30'>30</SelectItem>
-              <SelectItem value='40'>40</SelectItem>
-              <SelectItem value='50'>50</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+      {/* Pagination and page size controls - Only show when there's data */}
+      {!showEmptyState && (
+        <div className='mt-4 flex items-center justify-between'>
+          <div className='flex items-center gap-2'>
+            <span className='whitespace-nowrap text-sm text-muted-foreground'>
+              Số dòng:
+            </span>
+            <Select
+              value={pageSize.toString()}
+              onValueChange={handlePageSizeChange}
+            >
+              <SelectTrigger className='h-8 w-16'>
+                <SelectValue placeholder={pageSize.toString()} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value='10'>10</SelectItem>
+                <SelectItem value='20'>20</SelectItem>
+                <SelectItem value='30'>30</SelectItem>
+                <SelectItem value='40'>40</SelectItem>
+                <SelectItem value='50'>50</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
 
-        <TablePagination
-          totalPages={totalPages}
-          pageNumber={pageNumber}
-          setPageNumber={setPageNumber}
-        />
-      </div>
+          <TablePagination
+            totalPages={totalPages}
+            pageNumber={pageNumber}
+            setPageNumber={setPageNumber}
+          />
+        </div>
+      )}
     </>
   );
 }

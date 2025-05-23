@@ -6,6 +6,7 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
+import { useEffect } from 'react';
 import { toast } from 'sonner';
 
 export const useGetAllEventRegistrations = (eventId: string) => {
@@ -58,26 +59,26 @@ export const useGetStatisticEventRegistrations = (
     queryFn: () => eventRegistrationService.statistic(eventId, isAttended),
   });
 
-  if (isAttended === undefined) {
-    queryClient.prefetchQuery({
-      queryKey: ['event-registrations-statistic', eventId, undefined],
-      queryFn: () => eventRegistrationService.statistic(eventId),
-    });
-  }
-
-  if (isAttended === true) {
-    queryClient.prefetchQuery({
-      queryKey: ['event-registrations-statistic', eventId, true],
-      queryFn: () => eventRegistrationService.statistic(eventId, true),
-    });
-  }
-
-  if (isAttended === false) {
-    queryClient.prefetchQuery({
-      queryKey: ['event-registrations-statistic', eventId, false],
-      queryFn: () => eventRegistrationService.statistic(eventId, false),
-    });
-  }
+  useEffect(() => {
+    if (isAttended === undefined) {
+      queryClient.prefetchQuery({
+        queryKey: ['event-registrations-statistic', eventId, undefined],
+        queryFn: () => eventRegistrationService.statistic(eventId),
+      });
+    }
+    if (isAttended === true) {
+      queryClient.prefetchQuery({
+        queryKey: ['event-registrations-statistic', eventId, true],
+        queryFn: () => eventRegistrationService.statistic(eventId, true),
+      });
+    }
+    if (isAttended === false) {
+      queryClient.prefetchQuery({
+        queryKey: ['event-registrations-statistic', eventId, false],
+        queryFn: () => eventRegistrationService.statistic(eventId, false),
+      });
+    }
+  }, [queryClient, eventId, isAttended]);
 
   return {
     statisticData: data,
