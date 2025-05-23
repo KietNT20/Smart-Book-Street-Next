@@ -21,3 +21,8 @@ export const formatDateRange = (
 
   return `${start.format('DD/MM/YYYY')} - ${end.format('DD/MM/YYYY')}`;
 };
+
+export const formatTimeString = (time: string | null) => {
+  if (!time) return '';
+  return time.substring(0, 5);
+};

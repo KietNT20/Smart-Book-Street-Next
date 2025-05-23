@@ -54,7 +54,6 @@ export default function EventReqTable({
     setPageNumber(1);
   };
 
-  // Check if we should show empty state
   const showEmptyState = !isLoading && (!events || events.length === 0);
 
   return (
@@ -196,7 +195,6 @@ export default function EventReqTable({
         </Table>
       </div>
 
-      {/* Pagination and page size controls - Only show when there's data */}
       {!showEmptyState && (
         <div className='mt-4 flex items-center justify-between'>
           <div className='flex items-center gap-2'>

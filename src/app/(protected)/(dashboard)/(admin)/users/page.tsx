@@ -63,16 +63,9 @@ export default function UsersPage() {
   });
   const { totalRecords } = useRolePending();
 
-  const filteredUsersData = users
-    .filter((user) =>
-      user.userRoles.some((userRole) => userRole.isApproved === true)
-    )
-    .map((user) => ({
-      ...user,
-      userRoles: user.userRoles.filter(
-        (userRole) => userRole.isApproved === true
-      ),
-    }));
+  const filteredUsersData = users.filter((user) =>
+    user.userRoles.some((userRole) => userRole.isApproved === true)
+  );
 
   const handleSort = (field: string) => {
     if (field === sortField) {
