@@ -1,6 +1,7 @@
 import {
   ApiListResponse,
   ApiResponse,
+  BaseEntity,
   PaginationSchema,
   PaginationType,
 } from './common-types';
@@ -21,7 +22,7 @@ export interface EventSchedule {
   eventId: string;
 }
 
-export interface Event {
+export interface Event extends BaseEntity {
   id: string;
   eventName: string;
   organizerEmail: string;
