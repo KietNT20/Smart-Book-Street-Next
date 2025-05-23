@@ -25,16 +25,7 @@ export default function EventLocation({ zone }: EventLocationProps) {
             {zone.street?.address}
           </p>
         </div>
-
-        <div className='h-48 overflow-hidden rounded-lg bg-card'>
-          {/* Map placeholder */}
-          <div className='flex h-full w-full items-center justify-center bg-card'>
-            <MapPin className='h-8 w-8 text-muted-foreground' />
-          </div>
-        </div>
-
         <Separator />
-
         <div className='space-y-2'>
           <h4 className='font-semibold'>Về địa điểm</h4>
           <p className='text-sm text-muted-foreground'>{zone?.description}</p>

@@ -1,5 +1,4 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
 import dayjs from 'dayjs';
 import { Calendar } from 'lucide-react';
 
@@ -29,21 +28,8 @@ export default function EventTimeInfo({
             </p>
           </div>
           <div>
-            <p className='text-sm text-muted-foreground'>Giờ bắt đầu</p>
-            <p className='font-medium'>{dayjs(startDate).format('HH:mm')}</p>
-          </div>
-        </div>
-
-        <Separator />
-
-        <div className='flex items-center justify-between'>
-          <div>
             <p className='text-sm text-muted-foreground'>Ngày kết thúc</p>
             <p className='font-medium'>{dayjs(endDate).format('DD/MM/YYYY')}</p>
-          </div>
-          <div>
-            <p className='text-sm text-muted-foreground'>Giờ kết thúc</p>
-            <p className='font-medium'>{dayjs(endDate).format('HH:mm')}</p>
           </div>
         </div>
       </CardContent>
