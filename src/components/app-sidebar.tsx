@@ -151,12 +151,18 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         isActive: checkActive([
           { url: PATH.EVENTS },
           { url: PATH.CALENDAR_EVENT },
+          { url: PATH.EVENT_CREATION_REQUEST },
         ]),
         roles: [RoleEnums.ADMIN],
         items: [
           {
             title: 'Quản lý sự kiện',
             url: PATH.EVENTS,
+            roles: [RoleEnums.ADMIN],
+          },
+          {
+            title: 'Đang chờ duyệt',
+            url: PATH.EVENT_CREATION_REQUEST,
             roles: [RoleEnums.ADMIN],
           },
           {

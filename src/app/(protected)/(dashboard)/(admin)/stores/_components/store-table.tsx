@@ -248,87 +248,89 @@ export const StoreTable = ({
       </div>
 
       {/* Pagination and page size controls */}
-      <div className='mt-4 flex items-center justify-between'>
-        <div className='flex items-center gap-2'>
-          <span className='whitespace-nowrap text-sm text-muted-foreground'>
-            Số dòng:
-          </span>
-          <Select
-            value={pageSize.toString()}
-            onValueChange={handlePageSizeChange}
-          >
-            <SelectTrigger className='h-8 w-16'>
-              <SelectValue placeholder={pageSize.toString()} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value='10'>10</SelectItem>
-              <SelectItem value='20'>20</SelectItem>
-              <SelectItem value='30'>30</SelectItem>
-              <SelectItem value='40'>40</SelectItem>
-              <SelectItem value='50'>50</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+      {stores.length > 0 && (
+        <div className='mt-4 flex items-center justify-between'>
+          <div className='flex items-center gap-2'>
+            <span className='whitespace-nowrap text-sm text-muted-foreground'>
+              Số dòng:
+            </span>
+            <Select
+              value={pageSize.toString()}
+              onValueChange={handlePageSizeChange}
+            >
+              <SelectTrigger className='h-8 w-16'>
+                <SelectValue placeholder={pageSize.toString()} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value='10'>10</SelectItem>
+                <SelectItem value='20'>20</SelectItem>
+                <SelectItem value='30'>30</SelectItem>
+                <SelectItem value='40'>40</SelectItem>
+                <SelectItem value='50'>50</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
 
-        {totalPages > 0 && (
-          <Pagination className='m-0 flex items-center justify-end'>
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious
-                  href={
-                    pageNumber > 1
-                      ? pathname +
-                        '?' +
-                        createQueryString('page', (pageNumber - 1).toString())
-                      : '#'
-                  }
-                  className={
-                    pageNumber <= 1 ? 'pointer-events-none opacity-50' : ''
-                  }
-                />
-              </PaginationItem>
-
-              {Array.from({ length: pagesToShow }).map((_, index) => {
-                const page = startPage + index;
-                if (page <= totalPages) {
-                  return (
-                    <PaginationItem key={page}>
-                      <PaginationLink
-                        href={
-                          pathname +
+          {totalPages > 0 && (
+            <Pagination className='m-0 flex items-center justify-end'>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious
+                    href={
+                      pageNumber > 1
+                        ? pathname +
                           '?' +
-                          createQueryString('page', page.toString())
-                        }
-                        isActive={pageNumber === page}
-                      >
-                        {page}
-                      </PaginationLink>
-                    </PaginationItem>
-                  );
-                }
-                return null;
-              })}
+                          createQueryString('page', (pageNumber - 1).toString())
+                        : '#'
+                    }
+                    className={
+                      pageNumber <= 1 ? 'pointer-events-none opacity-50' : ''
+                    }
+                  />
+                </PaginationItem>
 
-              <PaginationItem>
-                <PaginationNext
-                  href={
-                    pageNumber < totalPages
-                      ? pathname +
-                        '?' +
-                        createQueryString('page', (pageNumber + 1).toString())
-                      : '#'
+                {Array.from({ length: pagesToShow }).map((_, index) => {
+                  const page = startPage + index;
+                  if (page <= totalPages) {
+                    return (
+                      <PaginationItem key={page}>
+                        <PaginationLink
+                          href={
+                            pathname +
+                            '?' +
+                            createQueryString('page', page.toString())
+                          }
+                          isActive={pageNumber === page}
+                        >
+                          {page}
+                        </PaginationLink>
+                      </PaginationItem>
+                    );
                   }
-                  className={
-                    pageNumber >= totalPages
-                      ? 'pointer-events-none opacity-50'
-                      : ''
-                  }
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
-        )}
-      </div>
+                  return null;
+                })}
+
+                <PaginationItem>
+                  <PaginationNext
+                    href={
+                      pageNumber < totalPages
+                        ? pathname +
+                          '?' +
+                          createQueryString('page', (pageNumber + 1).toString())
+                        : '#'
+                    }
+                    className={
+                      pageNumber >= totalPages
+                        ? 'pointer-events-none opacity-50'
+                        : ''
+                    }
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          )}
+        </div>
+      )}
 
       {/* Delete Confirmation Dialog */}
       <ConfirmModal

@@ -1,6 +1,10 @@
 import { PATH } from '@/enums/path';
 import { eventService } from '@/services/eventService';
-import { EventParams, EventStaffParams } from '@/types/event-types';
+import {
+  EventCreateReqParams,
+  EventParams,
+  EventStaffParams,
+} from '@/types/event-types';
 import {
   keepPreviousData,
   useMutation,
@@ -212,7 +216,7 @@ export const useGetEventDateByStaff = ({
   const { data, isLoading, error } = useQuery({
     queryKey: ['events', result, sortField, sortOrder, pageSize, pageNumber],
     queryFn: () =>
-      eventService.staff({
+      eventService.getEventsInDateForCheckin({
         result,
         sortField,
         sortOrder,
@@ -236,7 +240,7 @@ export const useGetEventDateByStaff = ({
         pageNumber + 1,
       ],
       queryFn: () =>
-        eventService.staff({
+        eventService.getEventsInDateForCheckin({
           result,
           sortField,
           sortOrder,
@@ -257,7 +261,7 @@ export const useGetEventDateByStaff = ({
         pageNumber - 1,
       ],
       queryFn: () =>
-        eventService.staff({
+        eventService.getEventsInDateForCheckin({
           result,
           sortField,
           sortOrder,
@@ -272,5 +276,225 @@ export const useGetEventDateByStaff = ({
     isLoadingEvents: isLoading,
     errorEvents: error,
     totalPage,
+  };
+};
+
+export const useGetEventCreateRequest = ({
+  pageNumber,
+  pageSize,
+  sortField,
+  sortOrder,
+}: EventCreateReqParams) => {
+  const queryClient = useQueryClient();
+  const { data, isLoading, error } = useQuery({
+    queryKey: [
+      'events-create-request',
+      sortField,
+      sortOrder,
+      pageSize,
+      pageNumber,
+    ],
+    queryFn: () =>
+      eventService.getAllEventCreateRequests({
+        sortField,
+        sortOrder,
+        pageSize,
+        pageNumber,
+      }),
+    placeholderData: keepPreviousData,
+  });
+
+  // Prefetching data
+  const totalPage = data?.totalPages || 1;
+
+  if (pageNumber < totalPage) {
+    queryClient.prefetchQuery({
+      queryKey: [
+        'events-create-request',
+        sortField,
+        sortOrder,
+        pageSize,
+        pageNumber + 1,
+      ],
+      queryFn: () =>
+        eventService.getAllEventCreateRequests({
+          sortField,
+          sortOrder,
+          pageSize,
+          pageNumber: pageNumber + 1,
+        }),
+    });
+  }
+
+  if (pageNumber > 1) {
+    queryClient.prefetchQuery({
+      queryKey: [
+        'events-create-request',
+        sortField,
+        sortOrder,
+        pageSize,
+        pageNumber - 1,
+      ],
+      queryFn: () =>
+        eventService.getAllEventCreateRequests({
+          sortField,
+          sortOrder,
+          pageSize,
+          pageNumber: pageNumber - 1,
+        }),
+    });
+  }
+
+  return {
+    eventsCreateRequestRes: data?.results || [],
+    isLoadingEventsCreateRequest: isLoading,
+    errorEventsCreateRequest: error,
+    totalPage,
+  };
+};
+
+export const useApproveEventCreateRequest = () => {
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationKey: ['approve-event-create-request'],
+    mutationFn: ({ id, data }: { id: string; data: FormData }) =>
+      eventService.eventProcessRequest(id, data),
+    onSuccess: (data) => {
+      if (data) {
+        queryClient.invalidateQueries({ queryKey: ['events-create-request'] });
+        queryClient.invalidateQueries({ queryKey: ['events'] });
+      }
+    },
+    onError: (error) => {
+      console.log('Error approving event create request:', error);
+      toast.error(`${error}`);
+    },
+  });
+
+  return {
+    approveEventCreateRequest: mutation.mutate,
+    isApprovingEventCreateRequest: mutation.isPending,
+    errorApprovingEventCreateRequest: mutation.error,
+  };
+};
+
+export const useGetEventCreationHistory = ({
+  pageNumber,
+  pageSize,
+  sortField,
+  sortOrder,
+}: EventCreateReqParams) => {
+  const queryClient = useQueryClient();
+  const { data, isLoading, error } = useQuery({
+    queryKey: [
+      'events-creation-history',
+      sortField,
+      sortOrder,
+      pageSize,
+      pageNumber,
+    ],
+    queryFn: () =>
+      eventService.getEventCreationsHistory({
+        sortField,
+        sortOrder,
+        pageSize,
+        pageNumber,
+      }),
+    placeholderData: keepPreviousData,
+  });
+
+  // Prefetching data
+  const totalPage = data?.totalPages || 1;
+
+  if (pageNumber < totalPage) {
+    queryClient.prefetchQuery({
+      queryKey: [
+        'events-creation-history',
+        sortField,
+        sortOrder,
+        pageSize,
+        pageNumber + 1,
+      ],
+      queryFn: () =>
+        eventService.getEventCreationsHistory({
+          sortField,
+          sortOrder,
+          pageSize,
+          pageNumber: pageNumber + 1,
+        }),
+    });
+  }
+
+  if (pageNumber > 1) {
+    queryClient.prefetchQuery({
+      queryKey: [
+        'events-creation-history',
+        sortField,
+        sortOrder,
+        pageSize,
+        pageNumber - 1,
+      ],
+      queryFn: () =>
+        eventService.getEventCreationsHistory({
+          sortField,
+          sortOrder,
+          pageSize,
+          pageNumber: pageNumber - 1,
+        }),
+    });
+  }
+
+  return {
+    eventsCreationHistoryRes: data?.results || [],
+    isLoadingEventsCreationHistory: isLoading,
+    errorEventsCreationHistory: error,
+    totalPage,
+  };
+};
+
+export const useProcessEventCreateRequest = () => {
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationKey: ['process-event-create-request'],
+    mutationFn: ({ id, data }: { id: string; data: FormData }) =>
+      eventService.eventProcessRequest(id, data),
+    onSuccess: (data) => {
+      if (data) {
+        queryClient.invalidateQueries({ queryKey: ['events-create-request'] });
+      }
+    },
+    onError: (error) => {
+      console.log('Error processing event create request:', error);
+      toast.error('Xử lý yêu cầu tạo sự kiện không thành công!');
+    },
+  });
+
+  return {
+    processEventCreateRequest: mutation.mutate,
+    isProcessingEventCreateRequest: mutation.isPending,
+    errorProcessingEventCreateRequest: mutation.error,
+  };
+};
+
+export const useEventOpenState = () => {
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationKey: ['event-open-state'],
+    mutationFn: (id: string) => eventService.eventOpenState(id),
+    onSuccess: (data) => {
+      if (data) {
+        queryClient.invalidateQueries({ queryKey: ['events-create-request'] });
+      }
+    },
+    onError: (error) => {
+      console.log('Error getting event open state:', error);
+      toast.error('Cập nhật trạng thái mở sự kiện không thành công!');
+    },
+  });
+
+  return {
+    getEventOpenState: mutation.mutate,
+    isGettingEventOpenState: mutation.isPending,
+    errorGettingEventOpenState: mutation.error,
   };
 };

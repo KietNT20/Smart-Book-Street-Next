@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Card,
   CardContent,
@@ -5,17 +7,20 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from '@/components/ui/chart';
 import { useMemo } from 'react';
 import {
   Bar,
   BarChart,
-  CartesianGrid,
   Cell,
   Legend,
   Pie,
   PieChart,
-  ResponsiveContainer,
-  Tooltip,
   XAxis,
   YAxis,
 } from 'recharts';
@@ -53,9 +58,6 @@ const DEFAULT_COLORS = [
   'hsl(var(--chart-12))',
 ];
 
-/**
- * Chart component that can render different types of charts based on props
- */
 const EventChart = ({
   data,
   title,
@@ -65,8 +67,34 @@ const EventChart = ({
   className = '',
   height = 300,
 }: ChartProps) => {
+  // Transform data to include fill property for each item
+  const transformedData = useMemo(() => {
+    return data.map((item, index) => ({
+      ...item,
+      fill: colors[index % colors.length],
+    }));
+  }, [data, colors]);
+
+  // Create chart config dynamically
+  const chartConfig = useMemo(() => {
+    const config: ChartConfig = {
+      value: {
+        label: 'Số lượng',
+      },
+    };
+
+    data.forEach((item, index) => {
+      config[item.label] = {
+        label: item.label,
+        color: colors[index % colors.length],
+      };
+    });
+
+    return config;
+  }, [data, colors]);
+
   const renderPieLabel = (props: any) => {
-    const { cx, cy, midAngle, outerRadius, name, value } = props;
+    const { cx, cy, midAngle, outerRadius, label, value } = props;
     const RADIAN = Math.PI / 180;
     const radius = outerRadius * 1.1;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
@@ -81,7 +109,7 @@ const EventChart = ({
         dominantBaseline='central'
         fontSize='12'
       >
-        {`${name}: ${value}`}
+        {`${label}: ${value}`}
       </text>
     );
   };
@@ -91,69 +119,72 @@ const EventChart = ({
     switch (type) {
       case 'pie':
         return (
-          <ResponsiveContainer width='100%' height='100%'>
+          <ChartContainer config={chartConfig} style={{ minHeight: height }}>
             <PieChart>
               <Pie
-                data={data}
+                data={transformedData}
                 cx='50%'
                 cy='50%'
                 labelLine={false}
                 label={renderPieLabel}
                 outerRadius={80}
-                fill='#8884d8'
                 dataKey='value'
                 nameKey='label'
               >
-                {data?.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={colors[index % colors.length]}
-                  />
+                {transformedData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.fill} />
                 ))}
               </Pie>
-              <Tooltip />
+              <ChartTooltip content={<ChartTooltipContent />} />
               <Legend />
             </PieChart>
-          </ResponsiveContainer>
+          </ChartContainer>
         );
 
       case 'horizontalBar':
         return (
-          <ResponsiveContainer width='100%' height='100%'>
+          <ChartContainer config={chartConfig} style={{ minHeight: height }}>
             <BarChart
-              data={data}
+              accessibilityLayer
+              data={transformedData}
               layout='vertical'
-              margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+              margin={{ left: 0 }}
             >
-              <CartesianGrid strokeDasharray='3 3' />
-              <XAxis type='number' />
-              <YAxis dataKey='label' type='category' width={120} />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey='value' name='Số lượng' fill={colors[0]} />
+              <YAxis
+                dataKey='label'
+                type='category'
+                tickLine={false}
+                tickMargin={10}
+                axisLine={false}
+              />
+              <XAxis dataKey='value' type='number' hide />
+              <ChartTooltip
+                cursor={false}
+                content={<ChartTooltipContent hideLabel />}
+              />
+              <Bar dataKey='value' layout='vertical' radius={5} />
             </BarChart>
-          </ResponsiveContainer>
+          </ChartContainer>
         );
 
-      // Default bar chart
+      // Default vertical bar chart
       default:
         return (
-          <ResponsiveContainer width='100%' height='100%'>
+          <ChartContainer config={chartConfig} style={{ minHeight: height }}>
             <BarChart
-              data={data}
+              accessibilityLayer
+              data={transformedData}
               margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
             >
-              <CartesianGrid strokeDasharray='3 3' />
-              <XAxis dataKey='label' />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey='value' name='Số lượng' fill={colors[0]} />
+              <XAxis dataKey='label' tickLine={false} axisLine={false} />
+              <YAxis tickLine={false} axisLine={false} />
+              <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+              <Bar dataKey='value' radius={4} />
             </BarChart>
-          </ResponsiveContainer>
+          </ChartContainer>
         );
     }
-  }, [data, type, colors]);
+  }, [transformedData, chartConfig, type, height]);
 
   return (
     <Card className={className}>
@@ -162,7 +193,7 @@ const EventChart = ({
         {description && <CardDescription>{description}</CardDescription>}
       </CardHeader>
       <CardContent>
-        <div style={{ height: height }}>{chartContent}</div>
+        <div>{chartContent}</div>
       </CardContent>
     </Card>
   );

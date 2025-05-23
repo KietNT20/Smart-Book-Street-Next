@@ -31,7 +31,7 @@ export default function Page({ params }: { params: { id: string } }) {
           <DataTable columns={columns} data={eventRegistrationsData} />
         </TabsContent>
         <TabsContent value='statistic'>
-          <EventDetailDashboard data={statisticData} />
+          {statisticData && <EventDetailDashboard data={statisticData} />}
         </TabsContent>
       </Tabs>
     </div>

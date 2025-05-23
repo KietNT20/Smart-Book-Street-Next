@@ -29,28 +29,14 @@ import {
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { EventRegistrationStatistic } from '@/types/event-registrations-types';
+import { EventStatistics } from '@/types/event-types';
 import { AlertCircle, BarChart4, Calendar, Menu, Users } from 'lucide-react';
 import { useState } from 'react';
 import { Label, Pie, PieChart, ResponsiveContainer } from 'recharts';
 
-interface ChartData {
-  label: string;
-  value: number;
-}
-
-interface DashboardData {
-  ageChart: ChartData[];
-  genderChart: ChartData[];
-  referenceChart: ChartData[];
-  addressChart: ChartData[];
-  attendedChart: ChartData[];
-  totalRegistrations: number;
-  participation: number;
-  participationRate: string;
-}
-
 interface DashboardProps {
-  data?: DashboardData;
+  data?: EventRegistrationStatistic;
   isPending?: boolean;
 }
 
@@ -124,7 +110,7 @@ export default function Dashboard({ data, isPending }: DashboardProps) {
     );
   };
 
-  const convertToChartFormat = (chartData: ChartData[]) => {
+  const convertToChartFormat = (chartData: EventStatistics[]) => {
     return chartData.map((item, index) => ({
       name: item.label,
       value: item.value,
@@ -132,7 +118,7 @@ export default function Dashboard({ data, isPending }: DashboardProps) {
     }));
   };
 
-  const createChartConfig = (chartData: ChartData[]): ChartConfig => {
+  const createChartConfig = (chartData: EventStatistics[]): ChartConfig => {
     const config: Record<string, any> = {
       value: {
         label: 'Số lượng',
@@ -150,7 +136,7 @@ export default function Dashboard({ data, isPending }: DashboardProps) {
   };
 
   // Render legend items separately for mobile
-  const renderChartLegend = (chartData: ChartData[]) => {
+  const renderChartLegend = (chartData: EventStatistics[]) => {
     if (!isMobile) return null;
 
     return (
@@ -176,7 +162,7 @@ export default function Dashboard({ data, isPending }: DashboardProps) {
     );
   };
 
-  const renderPieChart = (chartData: ChartData[], title: string) => {
+  const renderPieChart = (chartData: EventStatistics[], title: string) => {
     const formattedData = convertToChartFormat(chartData);
     const chartConfig = createChartConfig(chartData);
     const total = chartData.reduce((acc, curr) => acc + curr.value, 0);

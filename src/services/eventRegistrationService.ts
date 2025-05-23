@@ -17,12 +17,14 @@ export const eventRegistrationService = {
     eventId: string,
     isAttended?: boolean
   ): Promise<EventRegistrationStatistic> => {
+    const params: any = {};
+    if (isAttended !== undefined) {
+      params.isAttended = isAttended;
+    }
     const res = await axiosInstance.get(
       `${API_URL.EVENT_REGISTRATIONS.STATISTIC}/${eventId}`,
       {
-        params: {
-          ...(isAttended && { isAttended }),
-        },
+        params,
       }
     );
     return res.data;

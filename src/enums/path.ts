@@ -25,6 +25,7 @@ export enum PATH {
   ADMIN_AUTHORS = '/authors',
   ADMIN_AUTHOR_CREATE = '/authors/create',
 
+  EVENT_CREATION_REQUEST = '/event-create-request',
   EVENTS = '/events',
   EVENT_CREATE = '/events/create',
   CALENDAR_EVENT = '/events/calendar',

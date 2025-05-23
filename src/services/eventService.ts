@@ -95,15 +95,27 @@ export const eventService = {
     );
     return res.data;
   },
-  staff: async (params: EventStaffParams) => {
-    const res = await axiosInstance.post(API_URL.EVENTS.STAFF, params);
+  getEventsInDateForCheckin: async (params: EventStaffParams) => {
+    const res = await axiosInstance.post(
+      API_URL.EVENTS.EVENTS_IN_DATE_FOR_CHECKIN,
+      params
+    );
     return res.data;
   },
-  getAllEventCreateRequest: async (
+  getEventCreationsHistory: async (
     params: EventCreateReqParams
   ): Promise<EventsResponse> => {
     const res = await axiosInstance.post(
-      API_URL.EVENTS.GET_ALL_CREATE_EVENT_REQUEST,
+      API_URL.EVENTS.GET_EVENT_CREATIONS_HISTORY,
+      params
+    );
+    return res.data;
+  },
+  getAllEventCreateRequests: async (
+    params: EventCreateReqParams
+  ): Promise<EventsResponse> => {
+    const res = await axiosInstance.post(
+      API_URL.EVENTS.GET_ALL_EVENT_CREATE_REQUESTS,
       params
     );
     return res.data;
