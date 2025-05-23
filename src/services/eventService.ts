@@ -4,6 +4,7 @@ import {
   EventDetailResponse,
   EventInDateResponse,
   EventParams,
+  EventResponseAll,
   EventsInMonth,
   EventsResponse,
   EventStaffParams,
@@ -71,12 +72,6 @@ export const eventService = {
     );
     return res.data;
   },
-  getRequestHistory: async (id: string): Promise<EventsResponse> => {
-    const res = await axiosInstance.get(
-      `${API_URL.EVENTS.REQUEST_HISTORY}/${id}`
-    );
-    return res.data;
-  },
   eventOpenState: async (id: string) => {
     const res = await axiosInstance.put(
       `${API_URL.EVENTS.EVENT_OPEN_STATE}/${id}`
@@ -117,6 +112,12 @@ export const eventService = {
     const res = await axiosInstance.post(
       API_URL.EVENTS.GET_ALL_EVENT_CREATE_REQUESTS,
       params
+    );
+    return res.data;
+  },
+  getRequestHistoryDetail: async (id: string): Promise<EventResponseAll> => {
+    const res = await axiosInstance.get(
+      `${API_URL.EVENTS.REQUEST_HISTORY}/${id}`
     );
     return res.data;
   },

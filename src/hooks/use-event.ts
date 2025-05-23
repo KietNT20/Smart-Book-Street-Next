@@ -452,6 +452,19 @@ export const useGetEventCreationHistory = ({
   };
 };
 
+export const useGetEventCreationHistoryDetail = (id: string) => {
+  const { data, error, isLoading } = useQuery({
+    queryKey: ['events-creation-history-detail', id],
+    queryFn: () => eventService.getRequestHistoryDetail(id),
+  });
+
+  return {
+    eventCreationHistoryDetailData: data,
+    eventCreationHistoryDetailError: error,
+    eventCreationHistoryDetailLoading: isLoading,
+  };
+};
+
 export const useProcessEventCreateRequest = () => {
   const queryClient = useQueryClient();
   const mutation = useMutation({
