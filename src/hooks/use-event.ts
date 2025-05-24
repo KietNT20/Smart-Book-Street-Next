@@ -459,7 +459,7 @@ export const useGetEventCreationHistoryDetail = (id: string) => {
   });
 
   return {
-    eventCreationHistoryDetailData: data,
+    eventCreationHistoryDetailData: data?.results || [],
     eventCreationHistoryDetailError: error,
     eventCreationHistoryDetailLoading: isLoading,
   };
