@@ -345,34 +345,18 @@ export const dailyPopulationSchema = z.object({
 
 export type DailyPopulationStatistics = z.infer<typeof dailyPopulationSchema>;
 
-export const eventFormSchema = z.object({
-  eventName: z.string().min(1, { message: 'Tên sự kiện không được để trống' }),
-  description: z.string().optional(),
-  baseImgFile: z
-    .union([
-      z
-        .instanceof(File)
-        .refine((file) => file.size <= 10 * 1024 * 1024, {
-          message: 'Ảnh chính phải nhỏ hơn 10MB',
-        })
-        .refine(
-          (file) =>
-            ['image/jpeg', 'image/png', 'image/webp'].includes(file.type),
-          {
-            message: 'Chỉ chấp nhận JPG, PNG, WEBP chất lượng cao',
-          }
-        ),
-      z.string(),
-      z.null(),
-    ])
-    .optional(),
-  otherImgFile: z
-    .array(
-      z.union([
+export const eventFormSchema = z
+  .object({
+    eventName: z
+      .string()
+      .min(1, { message: 'Tên sự kiện không được để trống' }),
+    description: z.string().optional(),
+    baseImgFile: z
+      .union([
         z
           .instanceof(File)
-          .refine((file) => file.size <= 8 * 1024 * 1024, {
-            message: 'Mỗi ảnh bổ sung phải nhỏ hơn 8MB',
+          .refine((file) => file.size <= 10 * 1024 * 1024, {
+            message: 'Ảnh chính phải nhỏ hơn 10MB',
           })
           .refine(
             (file) =>
@@ -382,75 +366,171 @@ export const eventFormSchema = z.object({
             }
           ),
         z.string(),
+        z.null(),
       ])
-    )
-    .default([])
-    .refine((files) => files.length <= 10, {
-      message: 'Chỉ có thể tải lên tối đa 10 ảnh bổ sung',
-    }),
-  videoFile: z
-    .union([
-      z
-        .instanceof(File)
-        .refine((file) => file.size <= 50 * 1024 * 1024, {
-          message: 'Video phải nhỏ hơn 50MB',
-        })
-        .refine(
-          (file) =>
-            ['video/mp4', 'video/webm', 'video/quicktime'].includes(file.type),
-          {
-            message: 'Chỉ chấp nhận video định dạng MP4, WebM hoặc QuickTime',
-          }
-        )
-        .superRefine(async (file, ctx) => {
-          try {
-            const url = URL.createObjectURL(file);
-            const video = document.createElement('video');
+      .optional(),
+    otherImgFile: z
+      .array(
+        z.union([
+          z
+            .instanceof(File)
+            .refine((file) => file.size <= 8 * 1024 * 1024, {
+              message: 'Mỗi ảnh bổ sung phải nhỏ hơn 8MB',
+            })
+            .refine(
+              (file) =>
+                ['image/jpeg', 'image/png', 'image/webp'].includes(file.type),
+              {
+                message: 'Chỉ chấp nhận JPG, PNG, WEBP chất lượng cao',
+              }
+            ),
+          z.string(),
+        ])
+      )
+      .default([])
+      .refine((files) => files.length <= 10, {
+        message: 'Chỉ có thể tải lên tối đa 10 ảnh bổ sung',
+      }),
+    videoFile: z
+      .union([
+        z
+          .instanceof(File)
+          .refine((file) => file.size <= 50 * 1024 * 1024, {
+            message: 'Video phải nhỏ hơn 50MB',
+          })
+          .refine(
+            (file) =>
+              ['video/mp4', 'video/webm', 'video/quicktime'].includes(
+                file.type
+              ),
+            {
+              message: 'Chỉ chấp nhận video định dạng MP4, WebM hoặc QuickTime',
+            }
+          )
+          .superRefine(async (file, ctx) => {
+            try {
+              const url = URL.createObjectURL(file);
+              const video = document.createElement('video');
 
-            await new Promise<void>((resolve, reject) => {
-              video.onloadedmetadata = () => {
-                URL.revokeObjectURL(url);
-                if (video.videoWidth < 1280 || video.videoHeight < 720) {
-                  ctx.addIssue({
-                    code: z.ZodIssueCode.custom,
-                    message:
-                      'Video phải có độ phân giải tối thiểu 720p (1280x720)',
-                  });
-                }
-                resolve();
-              };
-              video.onerror = () =>
-                reject(new Error('Failed to load video metadata'));
-              video.src = url;
-            });
-          } catch {
-            ctx.addIssue({
-              code: z.ZodIssueCode.custom,
-              message: 'Không thể xác định chất lượng video',
-            });
+              await new Promise<void>((resolve, reject) => {
+                video.onloadedmetadata = () => {
+                  URL.revokeObjectURL(url);
+                  if (video.videoWidth < 1280 || video.videoHeight < 720) {
+                    ctx.addIssue({
+                      code: z.ZodIssueCode.custom,
+                      message:
+                        'Video phải có độ phân giải tối thiểu 720p (1280x720)',
+                    });
+                  }
+                  resolve();
+                };
+                video.onerror = () =>
+                  reject(new Error('Failed to load video metadata'));
+                video.src = url;
+              });
+            } catch {
+              ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                message: 'Không thể xác định chất lượng video',
+              });
+            }
+          }),
+        z.string(),
+        z.null(),
+      ])
+      .optional(),
+    isOpen: z.boolean().optional().default(true),
+    allowAds: z.boolean().optional().default(false),
+    zoneId: z.string().min(1, {
+      message: 'Vui lòng chọn khu vực tổ chức sự kiện',
+    }),
+    eventDates: z.array(z.string().date('Ngày không hợp lệ')),
+    startTimes: z.array(
+      z.string().time({
+        message: 'Giờ bắt đầu không hợp lệ',
+      })
+    ),
+    endTimes: z.array(
+      z.string().time({
+        message: 'Giờ kết thúc không hợp lệ',
+      })
+    ),
+  })
+  .refine(
+    (data) => {
+      // Validate that we have at least one date/time set
+      if (
+        !data.eventDates?.length ||
+        !data.startTimes?.length ||
+        !data.endTimes?.length
+      ) {
+        return false;
+      }
+
+      // Validate that arrays have same length
+      if (
+        data.eventDates.length !== data.startTimes.length ||
+        data.eventDates.length !== data.endTimes.length
+      ) {
+        return false;
+      }
+
+      return true;
+    },
+    {
+      message: 'Cần có ít nhất một ngày và thời gian hoàn chỉnh',
+      path: ['eventDates'],
+    }
+  )
+  .refine(
+    (data) => {
+      // Validate that end times are after start times with minimum 30 minutes
+      for (let i = 0; i < (data.startTimes?.length || 0); i++) {
+        const startTime = data.startTimes?.[i];
+        const endTime = data.endTimes?.[i];
+
+        if (startTime && endTime) {
+          const start = new Date(`1970-01-01T${startTime}:00`);
+          const end = new Date(`1970-01-01T${endTime}:00`);
+
+          if (end <= start) {
+            return false;
           }
-        }),
-      z.string(),
-      z.null(),
-    ])
-    .optional(),
-  isOpen: z.boolean().optional().default(true),
-  allowAds: z.boolean().optional().default(false),
-  zoneId: z.string().min(1, {
-    message: 'Vui lòng chọn khu vực tổ chức sự kiện',
-  }),
-  eventDates: z.array(z.string().date('Ngày không hợp lệ')),
-  startTimes: z.array(
-    z.string().time({
-      message: 'Giờ bắt đầu không hợp lệ',
-    })
-  ),
-  endTimes: z.array(
-    z.string().time({
-      message: 'Giờ kết thúc không hợp lệ',
-    })
-  ),
-});
+
+          // Check minimum 30 minutes difference
+          const diff = end.getTime() - start.getTime();
+          if (diff < 30 * 60 * 1000) {
+            // 30 minutes in milliseconds
+            return false;
+          }
+        }
+      }
+      return true;
+    },
+    {
+      message: 'Thời gian kết thúc phải sau thời gian bắt đầu ít nhất 30 phút',
+      path: ['endTimes'],
+    }
+  )
+  .refine(
+    (data) => {
+      // Validate that event dates are not in the past
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      for (const dateStr of data.eventDates || []) {
+        const eventDate = new Date(dateStr);
+        if (eventDate < today) {
+          return false;
+        }
+      }
+      return true;
+    },
+    {
+      message: 'Ngày sự kiện không được là ngày trong quá khứ',
+      path: ['eventDates'],
+    }
+  );
 
 export type EventFormValues = z.infer<typeof eventFormSchema>;
 
