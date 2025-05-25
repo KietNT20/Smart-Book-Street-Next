@@ -259,7 +259,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             url: PATH.EVENT_DATE,
           },
         ]),
-        roles: [RoleEnums.STAFF],
+        roles: [RoleEnums.STAFF, RoleEnums.ORGANIZER],
         items: [
           {
             title: 'Điểm danh sự kiện',

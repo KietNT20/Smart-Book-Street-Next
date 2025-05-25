@@ -1,39 +1,30 @@
 import { useEventMutaton } from '@/hooks/use-event';
 import { eventFormSchema, EventFormValues } from '@/lib/zod';
-import { Event } from '@/types/event-types';
 import { zodResolver } from '@hookform/resolvers/zod';
-import dayjs from 'dayjs';
 import { useForm } from 'react-hook-form';
 
-export const useFormHandle = (eventEdit?: Event) => {
+export const useFormHandle = () => {
   // Form initialization
   const form = useForm<EventFormValues>({
     resolver: zodResolver(eventFormSchema),
     defaultValues: {
-      eventName: eventEdit?.eventName || '',
-      description: eventEdit?.description || '',
-      baseImgFile: eventEdit?.baseImgUrl || undefined,
+      eventName: '',
+      description: '',
+      baseImgFile: undefined,
       otherImgFile: [],
-      videoFile: eventEdit?.videoLink || undefined,
-      isOpen: eventEdit?.isOpen || false,
-      allowAds: eventEdit?.allowAds || false,
-      zoneId: eventEdit?.zone?.id || '',
-      eventDates: eventEdit?.startDate
-        ? [dayjs(eventEdit.startDate).format('YYYY-MM-DD')]
-        : [''],
-      startTimes: eventEdit?.startDate
-        ? [dayjs(eventEdit.startDate).format('HH:mm')]
-        : [''],
-      endTimes: eventEdit?.endDate
-        ? [dayjs(eventEdit.endDate).format('HH:mm')]
-        : [''],
+      videoFile: undefined,
+      isOpen: false,
+      allowAds: false,
+      zoneId: '',
+      eventDates: [''],
+      startTimes: [''],
+      endTimes: [''],
     },
   });
 
   // Form submission
-  const { createEvent, isEventPending, updateEvent, isEventUpdating } =
-    useEventMutaton();
-  const isSubmitting = isEventPending || isEventUpdating;
+  const { createEvent, isEventPending } = useEventMutaton();
+  const isSubmitting = isEventPending;
 
   const handleSubmit = (values: EventFormValues) => {
     const formData = new FormData();
@@ -81,11 +72,7 @@ export const useFormHandle = (eventEdit?: Event) => {
       formData.append('VideoFile', values.videoFile);
     }
 
-    if (eventEdit?.id) {
-      updateEvent({ id: eventEdit.id, formData });
-    } else {
-      createEvent(formData);
-    }
+    createEvent(formData);
   };
 
   return {

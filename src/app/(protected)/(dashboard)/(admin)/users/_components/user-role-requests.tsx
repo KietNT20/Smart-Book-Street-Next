@@ -5,13 +5,14 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useRolePending, useUserRoleMutation } from '@/hooks/use-user-roles';
 import { UserRole } from '@/types/user-types';
 import { Empty } from 'antd';
+import { Loader } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import RoleRequestItem from './role-req-item';
 
 const PendingRoleRequests = () => {
   const [pendingCount, setPendingCount] = useState<number>(0);
   const { approveUserRole } = useUserRoleMutation();
-  const { rolesAtPending } = useRolePending();
+  const { rolesAtPending, rolesAtPendingLoading } = useRolePending();
 
   useEffect(() => {
     setPendingCount(rolesAtPending?.length || 0);
@@ -32,6 +33,10 @@ const PendingRoleRequests = () => {
       approved: false,
     });
   };
+
+  if (rolesAtPendingLoading) {
+    return <Loader className='size-6 animate-spin' />;
+  }
 
   return (
     <Card className='border-2 border-dashed border-blue-100 bg-blue-50/50'>

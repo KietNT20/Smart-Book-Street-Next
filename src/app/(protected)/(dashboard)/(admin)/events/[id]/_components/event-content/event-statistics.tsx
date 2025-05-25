@@ -14,31 +14,56 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Skeleton } from '@/components/ui/skeleton';
 import { useGetStatisticEventRegistrations } from '@/hooks/use-event-registrations';
+import { useDistricts, useProvinces } from '@/hooks/use-provinces';
+import { EventRegistrationStatisticParams } from '@/types/event-registrations-types';
+import { DatePicker } from 'antd';
+import { Dayjs } from 'dayjs';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   BarChart4,
+  Calendar,
   ChevronDown,
   ChevronUp,
+  Filter,
+  Loader2,
+  MapPin,
   PieChart,
   UserCheck,
   Users,
   UserX,
 } from 'lucide-react';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import EventBarchart from '../event-barchart';
 import EventChart from '../event-statistics-charts';
 import StatisticsExportButton from '../export-excel-button';
 
-interface EventStatisticsProps {
+type Props = {
   eventId: string;
-}
+};
 
 type StatisticFilter = 'all' | 'checkedIn' | 'notCheckedIn';
 
-export default function EventStatistics({ eventId }: EventStatisticsProps) {
+const EventStatistics = ({ eventId }: Props) => {
   const [statisticFilter, setStatisticFilter] =
     useState<StatisticFilter>('all');
+  const [selectedProvinceCode, setSelectedProvinceCode] = useState<
+    number | null
+  >(null);
+  const [selectedDistrictCode, setSelectedDistrictCode] = useState<
+    number | null
+  >(null);
+  const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
   const [openCharts, setOpenCharts] = useState({
     age: false,
     gender: false,
@@ -47,24 +72,72 @@ export default function EventStatistics({ eventId }: EventStatisticsProps) {
     attendedBefore: false,
   });
 
-  // Convert filter to hook parameter
-  const getHookParam = (filter: StatisticFilter): boolean | undefined => {
-    switch (filter) {
-      case 'all':
-        return undefined;
+  const { data: provinces, isLoading: provincesLoading } = useProvinces();
+  const { data: districts, isLoading: districtsLoading } =
+    useDistricts(selectedProvinceCode);
+
+  const getHookParams = (): EventRegistrationStatisticParams | undefined => {
+    const params: EventRegistrationStatisticParams = {};
+
+    // Attendance filter
+    switch (statisticFilter) {
       case 'checkedIn':
-        return true;
+        params.isAttended = true;
+        break;
       case 'notCheckedIn':
-        return false;
+        params.isAttended = false;
+        break;
       default:
-        return undefined;
+        params.isAttended = undefined;
+        break;
     }
+
+    // Location filters - using name for API compatibility
+    if (selectedProvinceCode) {
+      const selectedProvince = provinces?.find(
+        (p) => p.code === selectedProvinceCode
+      );
+      if (selectedProvince) {
+        params.province = selectedProvince.name;
+      }
+    }
+
+    if (selectedDistrictCode) {
+      const selectedDistrict = districts?.find(
+        (d) => d.code === selectedDistrictCode
+      );
+      if (selectedDistrict) {
+        params.district = selectedDistrict.name;
+      }
+    }
+
+    // Date filter
+    if (selectedDate) {
+      params.date = selectedDate.format('YYYY-MM-DD');
+    }
+
+    // Return undefined if no filters are applied
+    const hasFilters =
+      params.isAttended !== undefined ||
+      params.province ||
+      params.district ||
+      params.date;
+    return hasFilters ? params : undefined;
   };
 
   const { statisticData } = useGetStatisticEventRegistrations(
     eventId,
-    getHookParam(statisticFilter)
+    getHookParams()
   );
+
+  // Memoized values for performance
+  const selectedProvinceName = useMemo(() => {
+    return provinces?.find((p) => p.code === selectedProvinceCode)?.name || '';
+  }, [provinces, selectedProvinceCode]);
+
+  const selectedDistrictName = useMemo(() => {
+    return districts?.find((d) => d.code === selectedDistrictCode)?.name || '';
+  }, [districts, selectedDistrictCode]);
 
   const hasAgeChart =
     statisticData?.ageChart && statisticData.ageChart.length > 0;
@@ -90,6 +163,24 @@ export default function EventStatistics({ eventId }: EventStatisticsProps) {
       ...prev,
       [chart]: !prev[chart],
     }));
+  };
+
+  const clearFilters = () => {
+    setSelectedProvinceCode(null);
+    setSelectedDistrictCode(null);
+    setSelectedDate(null);
+    setStatisticFilter('all');
+  };
+
+  const handleProvinceChange = (value: string) => {
+    const provinceCode = value && value !== 'all' ? parseInt(value) : null;
+    setSelectedProvinceCode(provinceCode);
+    setSelectedDistrictCode(null); // Reset district when province changes
+  };
+
+  const handleDistrictChange = (value: string) => {
+    const districtCode = value && value !== 'all' ? parseInt(value) : null;
+    setSelectedDistrictCode(districtCode);
   };
 
   const contentVariants = {
@@ -124,6 +215,25 @@ export default function EventStatistics({ eventId }: EventStatisticsProps) {
     }
   };
 
+  const getActiveFiltersCount = () => {
+    let count = 0;
+    if (statisticFilter !== 'all') count++;
+    if (selectedProvinceCode) count++;
+    if (selectedDistrictCode) count++;
+    if (selectedDate) count++;
+    return count;
+  };
+
+  const getFilterDescription = () => {
+    const filters = [];
+    if (selectedProvinceName) filters.push(selectedProvinceName);
+    if (selectedDistrictName) filters.push(selectedDistrictName);
+    if (selectedDate)
+      filters.push(`Ngày: ${selectedDate.format('DD/MM/YYYY')}`);
+
+    return filters.length > 0 ? ` - ${filters.join(', ')}` : '';
+  };
+
   if (!hasAnyChart) return null;
 
   return (
@@ -139,6 +249,7 @@ export default function EventStatistics({ eventId }: EventStatisticsProps) {
               <CardDescription>
                 {getFilterLabel(statisticFilter)}:{' '}
                 {statisticData?.totalRegistrations || 0}
+                {getFilterDescription()}
               </CardDescription>
               {statisticFilter === 'all' && statisticData?.participation && (
                 <div className='flex items-center gap-2'>
@@ -156,7 +267,7 @@ export default function EventStatistics({ eventId }: EventStatisticsProps) {
           <StatisticsExportButton eventId={eventId} />
         </div>
 
-        {/* Filter Buttons */}
+        {/* Basic Filter Buttons */}
         <div className='flex flex-wrap gap-2 border-t pt-4'>
           <Button
             variant={statisticFilter === 'all' ? 'default' : 'outline'}
@@ -202,7 +313,152 @@ export default function EventStatistics({ eventId }: EventStatisticsProps) {
                 </Badge>
               )}
           </Button>
+
+          {/* Advanced Filters Toggle */}
+          <Button
+            variant={showAdvancedFilters ? 'default' : 'outline'}
+            size='sm'
+            onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
+            className='flex items-center gap-2'
+          >
+            <Filter className='h-4 w-4' />
+            Bộ lọc nâng cao
+            {getActiveFiltersCount() > (statisticFilter !== 'all' ? 1 : 0) && (
+              <Badge variant='secondary' className='ml-1'>
+                {getActiveFiltersCount() - (statisticFilter !== 'all' ? 1 : 0)}
+              </Badge>
+            )}
+          </Button>
         </div>
+
+        {/* Advanced Filters */}
+        <AnimatePresence initial={false}>
+          {showAdvancedFilters && (
+            <motion.div
+              variants={contentVariants}
+              initial='hidden'
+              animate='visible'
+              exit='hidden'
+              className='border-t pt-4'
+            >
+              <div className='grid grid-cols-1 gap-4 md:grid-cols-3'>
+                {/* Province Filter */}
+                <div className='space-y-2'>
+                  <Label className='flex items-center gap-2 text-sm font-medium'>
+                    <MapPin className='h-4 w-4' />
+                    Tỉnh/Thành phố
+                  </Label>
+                  {provincesLoading ? (
+                    <Skeleton className='h-10 w-full' />
+                  ) : (
+                    <Select
+                      value={selectedProvinceCode?.toString() || 'all'}
+                      onValueChange={handleProvinceChange}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder='Chọn tỉnh/thành phố' />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value='all'>Tất cả</SelectItem>
+                        {provinces?.map((province) => (
+                          <SelectItem
+                            key={province.code}
+                            value={province.code.toString()}
+                          >
+                            {province.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                </div>
+
+                {/* District Filter */}
+                <div className='space-y-2'>
+                  <Label className='flex items-center gap-2 text-sm font-medium'>
+                    <MapPin className='h-4 w-4' />
+                    Quận/Huyện
+                  </Label>
+                  {districtsLoading ? (
+                    <Skeleton className='h-10 w-full' />
+                  ) : (
+                    <Select
+                      value={selectedDistrictCode?.toString() || 'all'}
+                      onValueChange={handleDistrictChange}
+                      disabled={!selectedProvinceCode}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder='Chọn quận/huyện' />
+                        {districtsLoading && (
+                          <Loader2 className='h-4 w-4 animate-spin' />
+                        )}
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value='all'>Tất cả</SelectItem>
+                        {districts?.map((district) => (
+                          <SelectItem
+                            key={district.code}
+                            value={district.code.toString()}
+                          >
+                            {district.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                </div>
+
+                {/* Date Filter */}
+                <div className='space-y-2'>
+                  <Label className='flex items-center gap-2 text-sm font-medium'>
+                    <Calendar className='h-4 w-4' />
+                    Ngày đăng ký
+                  </Label>
+                  <DatePicker
+                    value={selectedDate}
+                    onChange={setSelectedDate}
+                    placeholder='Chọn ngày'
+                    format='DD/MM/YYYY'
+                    className='h-10 w-full'
+                    allowClear
+                  />
+                </div>
+              </div>
+
+              {/* Filter Summary */}
+              {getActiveFiltersCount() > 0 && (
+                <div className='mt-4 flex flex-wrap items-center gap-2'>
+                  <span className='text-sm text-muted-foreground'>
+                    Bộ lọc đang áp dụng:
+                  </span>
+                  {selectedProvinceName && (
+                    <Badge variant='secondary' className='text-xs'>
+                      {selectedProvinceName}
+                    </Badge>
+                  )}
+                  {selectedDistrictName && (
+                    <Badge variant='secondary' className='text-xs'>
+                      {selectedDistrictName}
+                    </Badge>
+                  )}
+                  {selectedDate && (
+                    <Badge variant='secondary' className='text-xs'>
+                      {selectedDate.format('DD/MM/YYYY')}
+                    </Badge>
+                  )}
+                  <Button
+                    variant='ghost'
+                    size='sm'
+                    onClick={clearFilters}
+                    className='h-6 px-2 text-xs'
+                  >
+                    Xóa tất cả
+                  </Button>
+                </div>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </CardHeader>
 
       <CardContent className='space-y-4 overflow-hidden'>
@@ -241,6 +497,7 @@ export default function EventStatistics({ eventId }: EventStatisticsProps) {
                   >
                     <div className='mb-4 text-sm text-muted-foreground'>
                       Thống kê độ tuổi - {getFilterLabel(statisticFilter)}
+                      {getFilterDescription()}
                     </div>
                     <div className='w-full'>
                       <EventBarchart
@@ -291,6 +548,7 @@ export default function EventStatistics({ eventId }: EventStatisticsProps) {
                   >
                     <div className='mb-4 text-sm text-muted-foreground'>
                       Thống kê giới tính - {getFilterLabel(statisticFilter)}
+                      {getFilterDescription()}
                     </div>
                     <div className='w-full'>
                       <EventChart
@@ -344,6 +602,7 @@ export default function EventStatistics({ eventId }: EventStatisticsProps) {
                     <div className='mb-4 text-sm text-muted-foreground'>
                       Người tham gia biết về sự kiện qua đâu -{' '}
                       {getFilterLabel(statisticFilter)}
+                      {getFilterDescription()}
                     </div>
                     <div className='w-full'>
                       <EventChart
@@ -397,6 +656,7 @@ export default function EventStatistics({ eventId }: EventStatisticsProps) {
                     <div className='mb-4 text-sm text-muted-foreground'>
                       Thống kê nơi đến của người tham gia -{' '}
                       {getFilterLabel(statisticFilter)}
+                      {getFilterDescription()}
                     </div>
                     <div className='w-full'>
                       <EventChart
@@ -450,6 +710,7 @@ export default function EventStatistics({ eventId }: EventStatisticsProps) {
                     <div className='mb-4 text-sm text-muted-foreground'>
                       Thống kê lịch sử tham gia sự kiện -{' '}
                       {getFilterLabel(statisticFilter)}
+                      {getFilterDescription()}
                     </div>
                     <div className='w-full'>
                       <EventChart
@@ -469,4 +730,6 @@ export default function EventStatistics({ eventId }: EventStatisticsProps) {
       </CardContent>
     </Card>
   );
-}
+};
+
+export default EventStatistics;
