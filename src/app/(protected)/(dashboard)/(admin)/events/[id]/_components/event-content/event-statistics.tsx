@@ -23,11 +23,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useGetStatisticEventRegistrations } from '@/hooks/use-event-registrations';
-import { useDistricts, useProvinces } from '@/hooks/use-provinces';
-import { EventRegistrationStatisticParams } from '@/types/event-registrations-types';
 import { DatePicker } from 'antd';
-import { Dayjs } from 'dayjs';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   BarChart4,
@@ -42,7 +38,7 @@ import {
   Users,
   UserX,
 } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useEventStatistics } from '../../_hooks/use-event-statistics';
 import EventBarchart from '../event-barchart';
 import EventChart from '../event-statistics-charts';
 import StatisticsExportButton from '../export-excel-button';
@@ -51,137 +47,47 @@ type Props = {
   eventId: string;
 };
 
-type StatisticFilter = 'all' | 'checkedIn' | 'notCheckedIn';
-
 const EventStatistics = ({ eventId }: Props) => {
-  const [statisticFilter, setStatisticFilter] =
-    useState<StatisticFilter>('all');
-  const [selectedProvinceCode, setSelectedProvinceCode] = useState<
-    number | null
-  >(null);
-  const [selectedDistrictCode, setSelectedDistrictCode] = useState<
-    number | null
-  >(null);
-  const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
-  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
-  const [openCharts, setOpenCharts] = useState({
-    age: false,
-    gender: false,
-    reference: false,
-    address: false,
-    attendedBefore: false,
-  });
+  const {
+    // States
+    statisticFilter,
+    selectedProvinceCode,
+    selectedDistrictCode,
+    selectedDate,
+    showAdvancedFilters,
+    openCharts,
 
-  const { data: provinces, isLoading: provincesLoading } = useProvinces();
-  const { data: districts, isLoading: districtsLoading } =
-    useDistricts(selectedProvinceCode);
+    // Data
+    provinces,
+    districts,
+    statisticData,
+    provincesLoading,
+    districtsLoading,
 
-  const getHookParams = (): EventRegistrationStatisticParams | undefined => {
-    const params: EventRegistrationStatisticParams = {};
+    // Computed values
+    selectedProvinceName,
+    selectedDistrictName,
+    hasAgeChart,
+    hasGenderChart,
+    hasReferenceChart,
+    hasAddressChart,
+    hasAttendedBeforeChart,
+    hasAnyChart,
 
-    // Attendance filter
-    switch (statisticFilter) {
-      case 'checkedIn':
-        params.isAttended = true;
-        break;
-      case 'notCheckedIn':
-        params.isAttended = false;
-        break;
-      default:
-        params.isAttended = undefined;
-        break;
-    }
+    // Actions
+    setStatisticFilter,
+    setShowAdvancedFilters,
+    setSelectedDate,
+    toggleChart,
+    clearFilters,
+    handleProvinceChange,
+    handleDistrictChange,
 
-    // Location filters - using name for API compatibility
-    if (selectedProvinceCode) {
-      const selectedProvince = provinces?.find(
-        (p) => p.code === selectedProvinceCode
-      );
-      if (selectedProvince) {
-        params.province = selectedProvince.name;
-      }
-    }
-
-    if (selectedDistrictCode) {
-      const selectedDistrict = districts?.find(
-        (d) => d.code === selectedDistrictCode
-      );
-      if (selectedDistrict) {
-        params.district = selectedDistrict.name;
-      }
-    }
-
-    // Date filter
-    if (selectedDate) {
-      params.date = selectedDate.format('YYYY-MM-DD');
-    }
-
-    // Return undefined if no filters are applied
-    const hasFilters =
-      params.isAttended !== undefined ||
-      params.province ||
-      params.district ||
-      params.date;
-    return hasFilters ? params : undefined;
-  };
-
-  const { statisticData } = useGetStatisticEventRegistrations(
-    eventId,
-    getHookParams()
-  );
-
-  // Memoized values for performance
-  const selectedProvinceName = useMemo(() => {
-    return provinces?.find((p) => p.code === selectedProvinceCode)?.name || '';
-  }, [provinces, selectedProvinceCode]);
-
-  const selectedDistrictName = useMemo(() => {
-    return districts?.find((d) => d.code === selectedDistrictCode)?.name || '';
-  }, [districts, selectedDistrictCode]);
-
-  const hasAgeChart =
-    statisticData?.ageChart && statisticData.ageChart.length > 0;
-  const hasGenderChart =
-    statisticData?.genderChart && statisticData.genderChart.length > 0;
-  const hasReferenceChart =
-    statisticData?.referenceChart && statisticData.referenceChart.length > 0;
-  const hasAddressChart =
-    statisticData?.addressChart && statisticData.addressChart.length > 0;
-  const hasAttendedBeforeChart =
-    statisticData?.attendedBeforeChart &&
-    statisticData.attendedBeforeChart.length > 0;
-
-  const hasAnyChart =
-    hasAgeChart ||
-    hasGenderChart ||
-    hasReferenceChart ||
-    hasAddressChart ||
-    hasAttendedBeforeChart;
-
-  const toggleChart = (chart: keyof typeof openCharts) => {
-    setOpenCharts((prev) => ({
-      ...prev,
-      [chart]: !prev[chart],
-    }));
-  };
-
-  const clearFilters = () => {
-    setSelectedProvinceCode(null);
-    setSelectedDistrictCode(null);
-    setSelectedDate(null);
-    setStatisticFilter('all');
-  };
-
-  const handleProvinceChange = (value: string) => {
-    const provinceCode = value && value !== 'all' ? parseInt(value) : null;
-    setSelectedProvinceCode(provinceCode);
-    setSelectedDistrictCode(null); // Reset district when province changes
-  };
-
-  const handleDistrictChange = (value: string) => {
-    const districtCode = value && value !== 'all' ? parseInt(value) : null;
-    setSelectedDistrictCode(districtCode);
-  };
+    // Helper functions
+    getActiveFiltersCount,
+    getFilterDescription,
+    getFilterLabel,
+  } = useEventStatistics(eventId);
 
   const contentVariants = {
     hidden: {
@@ -200,38 +106,6 @@ const EventStatistics = ({ eventId }: Props) => {
         ease: 'easeInOut',
       },
     },
-  };
-
-  const getFilterLabel = (filter: StatisticFilter) => {
-    switch (filter) {
-      case 'all':
-        return 'Tất cả người đăng ký';
-      case 'checkedIn':
-        return 'Đã check-in';
-      case 'notCheckedIn':
-        return 'Chưa check-in';
-      default:
-        return 'Tất cả người đăng ký';
-    }
-  };
-
-  const getActiveFiltersCount = () => {
-    let count = 0;
-    if (statisticFilter !== 'all') count++;
-    if (selectedProvinceCode) count++;
-    if (selectedDistrictCode) count++;
-    if (selectedDate) count++;
-    return count;
-  };
-
-  const getFilterDescription = () => {
-    const filters = [];
-    if (selectedProvinceName) filters.push(selectedProvinceName);
-    if (selectedDistrictName) filters.push(selectedDistrictName);
-    if (selectedDate)
-      filters.push(`Ngày: ${selectedDate.format('DD/MM/YYYY')}`);
-
-    return filters.length > 0 ? ` - ${filters.join(', ')}` : '';
   };
 
   if (!hasAnyChart) return null;
@@ -255,10 +129,10 @@ const EventStatistics = ({ eventId }: Props) => {
                 <div className='flex items-center gap-2'>
                   <Badge variant='secondary' className='text-xs'>
                     <UserCheck className='mr-1 h-3 w-3' />
-                    Đã tham dự: {statisticData.participation}
+                    Đã tham dự: {statisticData?.participation}
                   </Badge>
                   <Badge variant='outline' className='text-xs'>
-                    Tỷ lệ: {statisticData.participationRate}
+                    Tỷ lệ: {statisticData?.participationRate}
                   </Badge>
                 </div>
               )}
@@ -279,7 +153,7 @@ const EventStatistics = ({ eventId }: Props) => {
             Tất cả
             {statisticFilter === 'all' && statisticData?.totalRegistrations && (
               <Badge variant='secondary' className='ml-1'>
-                {statisticData.totalRegistrations}
+                {statisticData?.totalRegistrations}
               </Badge>
             )}
           </Button>
@@ -294,7 +168,7 @@ const EventStatistics = ({ eventId }: Props) => {
             {statisticFilter === 'checkedIn' &&
               statisticData?.totalRegistrations && (
                 <Badge variant='secondary' className='ml-1'>
-                  {statisticData.totalRegistrations}
+                  {statisticData?.totalRegistrations}
                 </Badge>
               )}
           </Button>
@@ -309,7 +183,7 @@ const EventStatistics = ({ eventId }: Props) => {
             {statisticFilter === 'notCheckedIn' &&
               statisticData?.totalRegistrations && (
                 <Badge variant='secondary' className='ml-1'>
-                  {statisticData.totalRegistrations}
+                  {statisticData?.totalRegistrations}
                 </Badge>
               )}
           </Button>
@@ -501,7 +375,7 @@ const EventStatistics = ({ eventId }: Props) => {
                     </div>
                     <div className='w-full'>
                       <EventBarchart
-                        data={statisticData.ageChart || []}
+                        data={statisticData?.ageChart || []}
                         title='Phân bố độ tuổi'
                         description={`Thống kê độ tuổi - ${getFilterLabel(statisticFilter)}`}
                       />
