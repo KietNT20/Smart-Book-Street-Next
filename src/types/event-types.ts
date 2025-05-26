@@ -1,6 +1,7 @@
 import {
   ApiListResponse,
   ApiResponse,
+  ApiResponseAll,
   BaseEntity,
   PaginationSchema,
   PaginationType,
@@ -74,6 +75,7 @@ export type EventStaffParams = PaginationSchema<{
   date?: Date | string;
 }>;
 export type EventCreateReqParams = PaginationType;
+export type EventResponseAll = ApiResponseAll<Event>;
 
 export interface EventStaticsInMonth {
   success: boolean;

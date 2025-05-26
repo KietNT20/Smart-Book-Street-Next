@@ -452,6 +452,19 @@ export const useGetEventCreationHistory = ({
   };
 };
 
+export const useGetEventCreationHistoryDetail = (id: string) => {
+  const { data, error, isLoading } = useQuery({
+    queryKey: ['events-creation-history', id],
+    queryFn: () => eventService.getRequestHistoryDetail(id),
+  });
+
+  return {
+    eventCreationHistoryDetailData: data?.results || [],
+    eventCreationHistoryDetailError: error,
+    eventCreationHistoryDetailLoading: isLoading,
+  };
+};
+
 export const useProcessEventCreateRequest = () => {
   const queryClient = useQueryClient();
   const mutation = useMutation({
@@ -484,11 +497,17 @@ export const useEventOpenState = () => {
     onSuccess: (data) => {
       if (data) {
         queryClient.invalidateQueries({ queryKey: ['events-create-request'] });
+        queryClient.invalidateQueries({ queryKey: ['events'] });
+        queryClient.invalidateQueries({ queryKey: ['events-in-date'] });
+        queryClient.invalidateQueries({
+          queryKey: ['events-creation-history'],
+        });
+        toast.success('Cập nhật trạng thái sự kiện thành công!');
       }
     },
     onError: (error) => {
       console.log('Error getting event open state:', error);
-      toast.error('Cập nhật trạng thái mở sự kiện không thành công!');
+      toast.error('Cập nhật trạng thái sự kiện không thành công!');
     },
   });
 

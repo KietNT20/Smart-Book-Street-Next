@@ -1,6 +1,8 @@
 'use client';
 
 import { Sort } from '@/enums/enums';
+import { PATH } from '@/enums/path';
+import { useEntityBreadcrumb } from '@/hooks/use-breadcrumb-page';
 import { useGetEventCreateRequest } from '@/hooks/use-event';
 import { useState } from 'react';
 import EventReqTable from './_components/event-req-table';
@@ -10,6 +12,13 @@ export default function EventCreateRequestPage() {
   const [pageSize, setPageSize] = useState(10);
   const [sortField, setSortField] = useState<string>('');
   const [sortOrder, setSortOrder] = useState<Sort>(Sort.DESC);
+
+  useEntityBreadcrumb(
+    PATH.EVENT_CREATION_REQUEST,
+    'Các yêu cầu tạo sự kiện',
+    '',
+    'Các yêu cầu tạo sự kiện'
+  );
 
   const { eventsCreateRequestRes, isLoadingEventsCreateRequest, totalPage } =
     useGetEventCreateRequest({

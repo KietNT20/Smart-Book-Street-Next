@@ -40,6 +40,19 @@ export const useZonesByStreet = () => {
   };
 };
 
+export const useZoneByStreetId = (streetId: string) => {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['zones', streetId],
+    queryFn: () => zoneService.getByStreet(streetId),
+  });
+
+  return {
+    zoneByStreetRes: data?.results || [],
+    isLoadingZoneByStreet: isLoading,
+    errorZoneByStreet: error,
+  };
+};
+
 export const useZoneDetail = (id: string) => {
   const { data, isLoading, error } = useQuery({
     queryKey: ['zones', id],

@@ -1,5 +1,8 @@
 import { eventRegistrationService } from '@/services/eventRegistrationService';
-import { CheckedAttendendPayload } from '@/types/event-registrations-types';
+import {
+  CheckedAttendendPayload,
+  EventRegistrationStatisticParams,
+} from '@/types/event-registrations-types';
 import {
   keepPreviousData,
   useMutation,
@@ -51,38 +54,83 @@ export const useCheckAttendend = () => {
 
 export const useGetStatisticEventRegistrations = (
   eventId: string,
-  isAttended?: boolean
+  params?: EventRegistrationStatisticParams
 ) => {
   const queryClient = useQueryClient();
+
   const { data, isLoading, error } = useQuery({
-    queryKey: ['event-registrations-statistic', eventId, isAttended],
-    queryFn: () => eventRegistrationService.statistic(eventId, isAttended),
+    queryKey: ['event-registrations-statistic', eventId, params],
+    queryFn: () => eventRegistrationService.statistic(eventId, params),
+    enabled: !!eventId,
+    retry: 2,
   });
 
   useEffect(() => {
-    if (isAttended === undefined) {
+    if (!params) {
       queryClient.prefetchQuery({
         queryKey: ['event-registrations-statistic', eventId, undefined],
         queryFn: () => eventRegistrationService.statistic(eventId),
       });
     }
-    if (isAttended === true) {
+
+    if (params?.isAttended === undefined) {
       queryClient.prefetchQuery({
-        queryKey: ['event-registrations-statistic', eventId, true],
-        queryFn: () => eventRegistrationService.statistic(eventId, true),
+        queryKey: [
+          'event-registrations-statistic',
+          eventId,
+          { ...params, isAttended: true },
+        ],
+        queryFn: () =>
+          eventRegistrationService.statistic(eventId, {
+            ...params,
+            isAttended: true,
+          }),
+      });
+
+      queryClient.prefetchQuery({
+        queryKey: [
+          'event-registrations-statistic',
+          eventId,
+          { ...params, isAttended: false },
+        ],
+        queryFn: () =>
+          eventRegistrationService.statistic(eventId, {
+            ...params,
+            isAttended: false,
+          }),
       });
     }
-    if (isAttended === false) {
-      queryClient.prefetchQuery({
-        queryKey: ['event-registrations-statistic', eventId, false],
-        queryFn: () => eventRegistrationService.statistic(eventId, false),
-      });
-    }
-  }, [queryClient, eventId, isAttended]);
+  }, [queryClient, eventId, params]);
 
   return {
     statisticData: data,
     isLoading,
     error,
   };
+};
+
+export const useExportStatisticEventRegistrations = () => {
+  const queryClient = useQueryClient();
+
+  const { mutate: exportStatistic, isPending: isExportingPending } =
+    useMutation({
+      mutationKey: ['export-statistic-event-registrations'],
+      mutationFn: ({ eventId, email }: { eventId: string; email: string }) =>
+        eventRegistrationService.exportStatisticEventRegistrations(
+          eventId,
+          email
+        ),
+      onSuccess: (data) => {
+        if (data) {
+          queryClient.invalidateQueries({ queryKey: ['event-registrations'] });
+          toast.success(`Đã gửi thống kê qua email thành công`);
+        }
+      },
+      onError: (error) => {
+        console.error('Error exporting statistic:', error);
+        toast.error(`${error}`);
+      },
+    });
+
+  return { exportStatistic, isExportingPending };
 };

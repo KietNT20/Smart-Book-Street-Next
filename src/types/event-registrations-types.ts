@@ -72,3 +72,10 @@ export interface ExportStatisticsResponse {
   message: string;
   emailInfo?: string;
 }
+
+export interface EventRegistrationStatisticParams {
+  isAttended?: boolean;
+  province?: string;
+  district?: string;
+  date?: string;
+}

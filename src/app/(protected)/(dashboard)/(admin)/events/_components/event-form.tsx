@@ -24,7 +24,6 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import { Switch } from '@/components/ui/switch';
 import { PATH } from '@/enums/path';
-import { Event } from '@/types/event-types';
 import { DatePicker, Image, TimePicker } from 'antd';
 import dayjs from 'dayjs';
 import 'dayjs/locale/vi';
@@ -34,11 +33,7 @@ import { useEventForm } from '../_hooks/use-event-form';
 // Set locale cho dayjs
 dayjs.locale('vi');
 
-type Props = {
-  eventEdit?: Event;
-};
-
-const EventForm = ({ eventEdit }: Props) => {
+const EventForm = () => {
   const {
     form,
     isSubmitting,
@@ -72,7 +67,7 @@ const EventForm = ({ eventEdit }: Props) => {
     isDateDisabled,
     getDisabledHours,
     getDisabledMinutes,
-  } = useEventForm({ eventEdit });
+  } = useEventForm();
 
   return (
     <Form {...form}>
@@ -613,7 +608,7 @@ const EventForm = ({ eventEdit }: Props) => {
             routerReplace
             pathUrl={PATH.EVENTS}
           />
-          <SubmitBtn ID={eventEdit?.id} _onPending={isSubmitting} />
+          <SubmitBtn _onPending={isSubmitting} />
         </div>
       </form>
     </Form>

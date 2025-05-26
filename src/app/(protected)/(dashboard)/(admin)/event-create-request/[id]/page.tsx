@@ -30,7 +30,7 @@ export default function EventCreateRequestPage({
 }: {
   params: { id: string };
 }) {
-  const [rejectionReason, setRejectionReason] = useState('');
+  const [rejectionReason, setRejectionReason] = useState<string>('');
   const { eventData, eventLoading } = useGetEventById(params.id);
   const { approveEventCreateRequest, isApprovingEventCreateRequest } =
     useApproveEventCreateRequest();

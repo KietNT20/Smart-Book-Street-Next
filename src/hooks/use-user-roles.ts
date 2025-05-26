@@ -71,13 +71,14 @@ export const useUserRoleMutation = () => {
 };
 
 export const useRolePending = () => {
-  const { data: rolesAtPending } = useQuery({
-    queryKey: ['roles-at-pending'],
+  const { data: rolesAtPending, isLoading } = useQuery({
+    queryKey: ['user-roles-pending'],
     queryFn: () => userRoleService.pendingRoles(),
   });
 
   return {
     rolesAtPending: rolesAtPending?.results || [],
     totalRecords: rolesAtPending?.totalRecords || 0,
+    rolesAtPendingLoading: isLoading,
   };
 };

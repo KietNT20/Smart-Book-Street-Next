@@ -162,7 +162,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           },
           {
             title: 'Đăng ký tạo sự kiện',
-            url: PATH.EVENT_CREATE,
+            url: PATH.EVENT_CREATION,
             roles: [
               RoleEnums.ADMIN,
               RoleEnums.ORGANIZER,
@@ -259,7 +259,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             url: PATH.EVENT_DATE,
           },
         ]),
-        roles: [RoleEnums.STAFF],
+        roles: [RoleEnums.STAFF, RoleEnums.ORGANIZER],
         items: [
           {
             title: 'Điểm danh sự kiện',

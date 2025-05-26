@@ -3,6 +3,7 @@ import {
   CheckedAttendendPayload,
   EventRegistrationsResponse,
   EventRegistrationStatistic,
+  EventRegistrationStatisticParams,
 } from '@/types/event-registrations-types';
 import axiosInstance from '@/utils/axiosInstance';
 
@@ -15,24 +16,44 @@ export const eventRegistrationService = {
   },
   statistic: async (
     eventId: string,
-    isAttended?: boolean
+    params?: EventRegistrationStatisticParams
   ): Promise<EventRegistrationStatistic> => {
-    const params: any = {};
-    if (isAttended !== undefined) {
-      params.isAttended = isAttended;
+    const queryParams: any = {};
+
+    if (params?.isAttended !== undefined) {
+      queryParams.isAttended = params.isAttended;
     }
+
+    if (params?.province) {
+      queryParams.province = params.province;
+    }
+
+    if (params?.district) {
+      queryParams.district = params.district;
+    }
+
+    if (params?.date) {
+      queryParams.date = params.date;
+    }
+
     const res = await axiosInstance.get(
       `${API_URL.EVENT_REGISTRATIONS.STATISTIC}/${eventId}`,
       {
-        params,
+        params: queryParams,
       }
     );
     return res.data;
   },
   checkAttendend: async (payload: CheckedAttendendPayload) => {
     const res = await axiosInstance.put(
-      `${API_URL.EVENT_REGISTRATIONS.INDEX}/check-attendend`,
+      API_URL.EVENT_REGISTRATIONS.CHECK_ATTENDEND,
       payload
+    );
+    return res.data;
+  },
+  exportStatisticEventRegistrations: async (eventId: string, email: string) => {
+    const res = await axiosInstance.get(
+      `${API_URL.EVENT_REGISTRATIONS.EXPORT_STATISTIC}/${eventId}?email=${email}`
     );
     return res.data;
   },

@@ -20,14 +20,14 @@ export default function EventLocation({ zone }: EventLocationProps) {
       </CardHeader>
       <CardContent className='space-y-4'>
         <div>
-          <h4 className='font-semibold'>{zone?.zoneName}</h4>
+          <h5 className='font-semibold text-primary'>{zone?.zoneName}</h5>
           <p className='mt-1 text-sm text-muted-foreground'>
             {zone.street?.address}
           </p>
         </div>
         <Separator />
         <div className='space-y-2'>
-          <h4 className='font-semibold'>Về địa điểm</h4>
+          <h5 className='font-semibold'>Về địa điểm</h5>
           <p className='text-sm text-muted-foreground'>{zone?.description}</p>
         </div>
       </CardContent>

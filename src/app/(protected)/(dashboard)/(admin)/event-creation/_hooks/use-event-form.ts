@@ -11,11 +11,18 @@ export const useEventForm = () => {
   const openAIIntegration = useOpenAIIntegration(form);
 
   return {
+    // Form handling
     form,
     isSubmitting,
     handleSubmit,
+
+    // Image handling
     ...imageHandling,
+
+    // Date time handling
     ...dateTimeHandling,
+
+    // OpenAI integration & step management
     ...openAIIntegration,
   };
 };

@@ -146,5 +146,7 @@ export const API_URL = {
     INDEX: `${EVENT_REGISTRATION}`,
     GET_ALL: `${EVENT_REGISTRATION}/get-all`,
     STATISTIC: `${EVENT_REGISTRATION}/statistic`,
+    EXPORT_STATISTIC: `${EVENT_REGISTRATION}/export-statistic`,
+    CHECK_ATTENDEND: `${EVENT_REGISTRATION}/check-attendend`,
   },
 } as const;
