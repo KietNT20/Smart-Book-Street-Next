@@ -96,7 +96,7 @@ const EventsPage = () => {
         <h2 className='text-2xl font-bold'>Quản lý sự kiện</h2>
         <Link href={PATH.EVENT_CREATE} passHref>
           <Button>
-            <Plus className='mr-2 h-4 w-4' /> Thêm sự kiện mới
+            <Plus className='mr-2 size-4' /> Thêm sự kiện mới
           </Button>
         </Link>
       </div>

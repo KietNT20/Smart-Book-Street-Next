@@ -123,7 +123,7 @@ export default function StoreScheduleDisplay({ storeSchedules }: Props) {
         <div className='flex items-center justify-between'>
           <h3 className='text-lg font-medium'>Lịch làm việc hàng tuần</h3>
           <Button onClick={handleAddNew}>
-            <Plus className='mr-2 h-4 w-4' />
+            <Plus className='mr-2 size-4' />
             Thêm lịch
           </Button>
         </div>
@@ -163,7 +163,7 @@ export default function StoreScheduleDisplay({ storeSchedules }: Props) {
                         <span className='text-gray-500'>Đóng cửa</span>
                       ) : (
                         <div className='flex items-center'>
-                          <Clock className='mr-1 h-4 w-4' />
+                          <Clock className='mr-1 size-4' />
                           {formatTime(schedule.openTime)} -{' '}
                           {formatTime(schedule.closeTime)}
                         </div>
@@ -182,7 +182,7 @@ export default function StoreScheduleDisplay({ storeSchedules }: Props) {
                       onClick={() => handleEdit(schedule)}
                       className='h-8 w-8 p-0 text-zinc-500 hover:text-zinc-900'
                     >
-                      <Pencil className='h-4 w-4' />
+                      <Pencil className='size-4' />
                     </Button>
                     <Button
                       variant='ghost'
@@ -191,7 +191,7 @@ export default function StoreScheduleDisplay({ storeSchedules }: Props) {
                       className='h-8 w-8 p-0 text-zinc-500 hover:text-red-600'
                       disabled={isDeleting}
                     >
-                      <Trash2 className='h-4 w-4' />
+                      <Trash2 className='size-4' />
                     </Button>
                   </CardFooter>
                 )}
@@ -204,7 +204,7 @@ export default function StoreScheduleDisplay({ storeSchedules }: Props) {
                       onClick={handleAddNew}
                       className='text-primary'
                     >
-                      <Plus className='mr-1 h-4 w-4' /> Thiết lập
+                      <Plus className='mr-1 size-4' /> Thiết lập
                     </Button>
                   </CardFooter>
                 )}
@@ -234,7 +234,7 @@ export default function StoreScheduleDisplay({ storeSchedules }: Props) {
                   <CardContent className='p-4'>
                     <div className='mb-2'>
                       <h4 className='flex items-center font-medium'>
-                        <Calendar className='mr-2 h-4 w-4 text-zinc-500' />
+                        <Calendar className='mr-2 size-4 text-zinc-500' />
                         <span>
                           {schedule.specialDate
                             ? formatDateVi(schedule.specialDate)
@@ -248,7 +248,7 @@ export default function StoreScheduleDisplay({ storeSchedules }: Props) {
                         <span className='text-gray-500'>Đóng cửa</span>
                       ) : (
                         <div className='flex items-center'>
-                          <Clock className='mr-1 h-4 w-4 text-zinc-500' />
+                          <Clock className='mr-1 size-4 text-zinc-500' />
                           {formatTime(schedule.openTime)} -{' '}
                           {formatTime(schedule.closeTime)}
                         </div>
@@ -263,7 +263,7 @@ export default function StoreScheduleDisplay({ storeSchedules }: Props) {
                       onClick={() => handleEdit(schedule)}
                       className='h-8 w-8 p-0 text-zinc-500 hover:text-zinc-900'
                     >
-                      <Pencil className='h-4 w-4' />
+                      <Pencil className='size-4' />
                     </Button>
                     <Button
                       variant='ghost'
@@ -272,7 +272,7 @@ export default function StoreScheduleDisplay({ storeSchedules }: Props) {
                       className='h-8 w-8 p-0 text-zinc-500 hover:text-red-600'
                       disabled={isDeleting}
                     >
-                      <Trash2 className='h-4 w-4' />
+                      <Trash2 className='size-4' />
                     </Button>
                   </CardFooter>
                 </Card>
@@ -289,7 +289,7 @@ export default function StoreScheduleDisplay({ storeSchedules }: Props) {
             Chưa có thông tin giờ làm việc nào được thiết lập.
           </p>
           <Button onClick={handleAddNew} variant='outline' className='mt-4'>
-            <Plus className='mr-2 h-4 w-4' />
+            <Plus className='mr-2 size-4' />
             Thêm lịch làm việc mới
           </Button>
         </div>
@@ -343,7 +343,7 @@ export default function StoreScheduleDisplay({ storeSchedules }: Props) {
             >
               {isDeleting ? (
                 <>
-                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                  <Loader2 className='mr-2 size-4 animate-spin' />
                   Đang xóa...
                 </>
               ) : (

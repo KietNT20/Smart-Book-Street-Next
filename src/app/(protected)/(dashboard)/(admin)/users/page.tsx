@@ -103,7 +103,7 @@ export default function UsersPage() {
         <h2 className='text-2xl font-bold'>Quản lý tài khoản</h2>
         <Link href={PATH.USER_CREATE} passHref>
           <Button>
-            <Plus className='mr-2 h-4 w-4' /> Thêm tài khoản mới
+            <Plus className='mr-2 size-4' /> Thêm tài khoản mới
           </Button>
         </Link>
       </div>
@@ -116,10 +116,10 @@ export default function UsersPage() {
       >
         <TabsList className='mb-6 grid w-full grid-cols-2'>
           <TabsTrigger value='users' className='flex items-center gap-2'>
-            <UserPlus className='h-4 w-4' /> Danh sách tài khoản
+            <UserPlus className='size-4' /> Danh sách tài khoản
           </TabsTrigger>
           <TabsTrigger value='roles' className='flex items-center gap-2'>
-            <ShieldCheck className='h-4 w-4' /> Phân quyền{' '}
+            <ShieldCheck className='size-4' /> Phân quyền{' '}
             <Badge variant={'outline'}>{totalRecords}</Badge>
           </TabsTrigger>
         </TabsList>

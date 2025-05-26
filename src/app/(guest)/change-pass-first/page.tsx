@@ -205,9 +205,9 @@ export default function FirstTimePasswordChangePage() {
                   onClick={() => setShowCurrentPassword(!showCurrentPassword)}
                 >
                   {showCurrentPassword ? (
-                    <Eye className='h-4 w-4' />
+                    <Eye className='size-4' />
                   ) : (
-                    <EyeOff className='h-4 w-4' />
+                    <EyeOff className='size-4' />
                   )}
                 </Button>
               </div>
@@ -237,9 +237,9 @@ export default function FirstTimePasswordChangePage() {
                   onClick={() => setShowNewPassword(!showNewPassword)}
                 >
                   {showNewPassword ? (
-                    <Eye className='h-4 w-4' />
+                    <Eye className='size-4' />
                   ) : (
-                    <EyeOff className='h-4 w-4' />
+                    <EyeOff className='size-4' />
                   )}
                 </Button>
               </div>
@@ -296,9 +296,9 @@ export default function FirstTimePasswordChangePage() {
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 >
                   {showConfirmPassword ? (
-                    <Eye className='h-4 w-4' />
+                    <Eye className='size-4' />
                   ) : (
-                    <EyeOff className='h-4 w-4' />
+                    <EyeOff className='size-4' />
                   )}
                 </Button>
               </div>
@@ -308,7 +308,7 @@ export default function FirstTimePasswordChangePage() {
             </div>
 
             <Alert variant='destructive'>
-              <AlertCircle className='h-4 w-4' />
+              <AlertCircle className='size-4' />
               <AlertTitle>Lưu ý</AlertTitle>
               <AlertDescription>
                 Mật khẩu mới phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ
@@ -350,7 +350,7 @@ export default function FirstTimePasswordChangePage() {
               </div>
             ) : (
               <div className='flex items-center'>
-                <Lock className='mr-2 h-4 w-4' />
+                <Lock className='mr-2 size-4' />
                 Đổi mật khẩu
               </div>
             )}

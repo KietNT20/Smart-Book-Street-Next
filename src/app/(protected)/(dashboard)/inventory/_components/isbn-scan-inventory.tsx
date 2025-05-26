@@ -112,7 +112,7 @@ const ISBNScannerInventory = () => {
           className='gap-2'
           disabled={isLoading}
         >
-          <Camera className='h-4 w-4' />
+          <Camera className='size-4' />
           Quét mã
         </Button>
         <Button
@@ -121,7 +121,7 @@ const ISBNScannerInventory = () => {
           className='gap-2'
           disabled={isLoading}
         >
-          <Keyboard className='h-4 w-4' />
+          <Keyboard className='size-4' />
           Nhập thủ công
         </Button>
       </div>
@@ -159,12 +159,12 @@ const ISBNScannerInventory = () => {
               >
                 {isLoading ? (
                   <>
-                    <Loader2 className='h-4 w-4 animate-spin' />
+                    <Loader2 className='size-4 animate-spin' />
                     Đang xử lý...
                   </>
                 ) : (
                   <>
-                    <Camera className='h-4 w-4' />
+                    <Camera className='size-4' />
                     Quét mã ISBN
                   </>
                 )}
@@ -173,7 +173,7 @@ const ISBNScannerInventory = () => {
           ) : (
             <div className='flex items-center gap-2'>
               <Button disabled variant='outline'>
-                <CameraOff className='mr-2 h-4 w-4' />
+                <CameraOff className='mr-2 size-4' />
                 {cameraError || 'Không tìm thấy camera'}
               </Button>
             </div>
@@ -196,9 +196,9 @@ const ISBNScannerInventory = () => {
           />
           <Button onClick={handleManualSubmit} disabled={isLoading}>
             {isLoading ? (
-              <Loader2 className='h-4 w-4 animate-spin' />
+              <Loader2 className='size-4 animate-spin' />
             ) : (
-              <Search className='h-4 w-4' />
+              <Search className='size-4' />
             )}
           </Button>
         </div>
@@ -239,7 +239,7 @@ const ISBNScannerInventory = () => {
                   className='h-8 w-8 opacity-80'
                   onClick={switchCamera}
                 >
-                  <SwitchCamera className='h-4 w-4' />
+                  <SwitchCamera className='size-4' />
                 </Button>
               )}
               <Button
@@ -248,7 +248,7 @@ const ISBNScannerInventory = () => {
                 className='h-8 w-8 opacity-80'
                 onClick={stopScanning}
               >
-                <XCircle className='h-4 w-4' />
+                <XCircle className='size-4' />
               </Button>
             </div>
           </div>

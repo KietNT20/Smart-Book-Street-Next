@@ -198,7 +198,7 @@ const PublisherForm = ({ publisher }: Props) => {
                             className='absolute right-2 top-2 h-6 w-6 rounded-full'
                             onClick={handleRemoveMainImage}
                           >
-                            <X className='h-4 w-4' />
+                            <X className='size-4' />
                           </Button>
                         </div>
                       )}
@@ -257,7 +257,7 @@ const PublisherForm = ({ publisher }: Props) => {
                                   handleRemoveAdditionalImage(index)
                                 }
                               >
-                                <X className='h-4 w-4' />
+                                <X className='size-4' />
                               </Button>
                             </div>
                           ))}

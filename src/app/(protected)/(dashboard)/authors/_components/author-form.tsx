@@ -162,7 +162,7 @@ export function AuthorForm({ author, isLoadingAuthor }: Props) {
                             onClick={handleRemoveImage}
                             disabled={isSubmitting}
                           >
-                            <X className='h-4 w-4' />
+                            <X className='size-4' />
                           </Button>
                         </div>
                       </div>

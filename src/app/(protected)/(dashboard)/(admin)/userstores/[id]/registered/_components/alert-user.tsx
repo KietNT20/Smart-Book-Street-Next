@@ -5,7 +5,7 @@ const AlertUser = () => {
   return (
     <div className='flex h-[50vh] w-full flex-col items-center justify-center'>
       <Alert variant='destructive'>
-        <AlertCircle className='h-4 w-4' />
+        <AlertCircle className='size-4' />
         <AlertTitle>Không Tìm Thấy Hợp Đồng Này</AlertTitle>
         <AlertDescription>
           Không tìm thấy hợp đồng này. Vui lòng kiểm tra lại hợp đồng hoặc liên

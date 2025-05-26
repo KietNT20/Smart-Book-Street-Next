@@ -97,7 +97,7 @@ export default function StoresPage() {
         <h2 className='text-2xl font-bold'>Quản lý cửa hàng</h2>
         <Link href={PATH.STORE_CREATE} passHref>
           <Button>
-            <Plus className='mr-2 h-4 w-4' /> Thêm cửa hàng mới
+            <Plus className='mr-2 size-4' /> Thêm cửa hàng mới
           </Button>
         </Link>
       </div>

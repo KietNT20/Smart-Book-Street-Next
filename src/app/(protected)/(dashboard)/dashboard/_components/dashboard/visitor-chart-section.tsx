@@ -187,7 +187,7 @@ const VisitorChartSection = () => {
             {stats.peakHour
               ? `${stats.peakHour} (${stats.maxVisitors} người)`
               : 'Không có dữ liệu'}{' '}
-            {stats.peakHour && <TrendingUp className='h-4 w-4' />}
+            {stats.peakHour && <TrendingUp className='size-4' />}
           </div>
           <div className='leading-none text-muted-foreground'>
             Trung bình {stats.avgVisitorsPerHour} khách/giờ{' '}

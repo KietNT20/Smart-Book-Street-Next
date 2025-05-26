@@ -197,9 +197,9 @@ export default function RegisterForm({
                               onClick={() => setShowPassword(!showPassword)}
                             >
                               {showPassword ? (
-                                <Eye className='h-4 w-4' />
+                                <Eye className='size-4' />
                               ) : (
-                                <EyeOff className='h-4 w-4' />
+                                <EyeOff className='size-4' />
                               )}
                             </Button>
                           </div>

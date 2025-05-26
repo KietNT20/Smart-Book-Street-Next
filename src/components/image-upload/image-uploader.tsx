@@ -133,7 +133,7 @@ const ImageUploader = ({ entityId, type }: ImageUploaderProps) => {
     >
       <DialogTrigger asChild>
         <Button>
-          <Upload className='mr-2 h-4 w-4' />
+          <Upload className='mr-2 size-4' />
           Tải Ảnh Lên
         </Button>
       </DialogTrigger>
@@ -214,7 +214,7 @@ const ImageUploader = ({ entityId, type }: ImageUploaderProps) => {
           <Button onClick={handleUpload} disabled={isUploading}>
             {isUploading ? (
               <>
-                <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                <Loader2 className='mr-2 size-4 animate-spin' />
                 Đang tải lên...
               </>
             ) : (

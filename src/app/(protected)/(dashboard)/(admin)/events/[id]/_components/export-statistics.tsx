@@ -1,3 +1,5 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
@@ -93,7 +95,7 @@ const ExportStatisticsComp = ({ eventId, defaultEmail }: Props) => {
           <CardContent className='space-y-4'>
             <div className='space-y-2'>
               <Label htmlFor='export-email' className='flex items-center gap-2'>
-                <Mail className='h-4 w-4' />
+                <Mail className='size-4' />
                 Email nhận thống kê
               </Label>
               <Input

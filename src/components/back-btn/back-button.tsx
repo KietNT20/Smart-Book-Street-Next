@@ -20,7 +20,7 @@ const BackButton = ({ routeTo, namePage = '' }: Props) => {
   };
   return (
     <Button type='button' variant='ghost' className='gap-2' onClick={_onClick}>
-      <ArrowLeft className='h-4 w-4' />
+      <ArrowLeft className='size-4' />
       Quay lại {namePage}
     </Button>
   );

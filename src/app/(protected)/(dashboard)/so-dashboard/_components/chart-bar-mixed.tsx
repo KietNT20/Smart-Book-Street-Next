@@ -214,7 +214,7 @@ export function OrderChartStore({
       <CardFooter className='flex-col items-start gap-2 text-sm'>
         <div className='flex gap-2 font-medium leading-none'>
           Tổng Đơn: {data.totalOrder.toLocaleString()}{' '}
-          <TrendingUp className='h-4 w-4' />
+          <TrendingUp className='size-4' />
         </div>
         <div className='leading-none text-muted-foreground'>
           Tổng Doanh Thu: ${data.totalProfit.toLocaleString()}

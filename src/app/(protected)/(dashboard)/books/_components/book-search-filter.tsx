@@ -168,12 +168,12 @@ const BookSearchFilter = ({
             )}
             <CollapsibleTrigger asChild>
               <Button variant='outline' size='sm'>
-                <Filter className='mr-2 h-4 w-4' />
+                <Filter className='mr-2 size-4' />
                 Bộ lọc{' '}
                 {isOpen ? (
-                  <ChevronUp className='ml-2 h-4 w-4' />
+                  <ChevronUp className='ml-2 size-4' />
                 ) : (
-                  <ChevronDown className='ml-2 h-4 w-4' />
+                  <ChevronDown className='ml-2 size-4' />
                 )}
               </Button>
             </CollapsibleTrigger>
@@ -198,7 +198,7 @@ const BookSearchFilter = ({
                       className='absolute right-0 top-0 h-full'
                       onClick={() => clearField('title')}
                     >
-                      <X className='h-4 w-4' />
+                      <X className='size-4' />
                     </Button>
                   )}
                 </div>
@@ -221,7 +221,7 @@ const BookSearchFilter = ({
                       className='absolute right-0 top-0 h-full'
                       onClick={() => clearField('isbn')}
                     >
-                      <X className='h-4 w-4' />
+                      <X className='size-4' />
                     </Button>
                   )}
                 </div>
@@ -258,7 +258,7 @@ const BookSearchFilter = ({
                           clearField('minPrice');
                         }}
                       >
-                        <X className='h-4 w-4' />
+                        <X className='size-4' />
                       </Button>
                     )}
                 </div>
@@ -301,7 +301,7 @@ const BookSearchFilter = ({
                               {VietnameseLanguageLabels[lang]}
                             </Label>
                             {(filters.languagesList || []).includes(lang) && (
-                              <Check className='h-4 w-4 text-primary' />
+                              <Check className='size-4 text-primary' />
                             )}
                           </div>
                         ))}
@@ -353,7 +353,7 @@ const BookSearchFilter = ({
                               </Label>
                               {(filters.categoryIds || []).includes(
                                 category.id
-                              ) && <Check className='h-4 w-4 text-primary' />}
+                              ) && <Check className='size-4 text-primary' />}
                             </div>
                           ))}
                       </div>

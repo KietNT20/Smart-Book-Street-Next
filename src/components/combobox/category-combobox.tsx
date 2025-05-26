@@ -87,7 +87,7 @@ const CategoryCombobox = <T extends FieldValues>({
                   {field.value?.length
                     ? `${field.value?.length} danh mục được chọn`
                     : 'Chọn danh mục...'}
-                  <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
+                  <ChevronsUpDown className='ml-2 size-4 shrink-0 opacity-50' />
                 </Button>
               </FormControl>
             </PopoverTrigger>
@@ -149,7 +149,7 @@ const CategoryCombobox = <T extends FieldValues>({
                         >
                           <Check
                             className={cn(
-                              'mr-2 h-4 w-4',
+                              'mr-2 size-4',
                               (field.value as string[])?.includes(category.id!)
                                 ? 'opacity-100'
                                 : 'opacity-0'

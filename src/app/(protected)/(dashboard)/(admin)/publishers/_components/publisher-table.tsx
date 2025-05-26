@@ -204,14 +204,14 @@ const PublisherTable = ({
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant='ghost' size='icon'>
-                          <MoreHorizontal className='h-4 w-4' />
+                          <MoreHorizontal className='size-4' />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align='end'>
                         <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
                         <DropdownMenuItem asChild className='cursor-pointer'>
                           <Link href={`${PATH.PUBLISHERS}/${publisher?.id}`}>
-                            <Eye className='mr-2 h-4 w-4' />
+                            <Eye className='mr-2 size-4' />
                             Xem chi tiết
                           </Link>
                         </DropdownMenuItem>
@@ -219,7 +219,7 @@ const PublisherTable = ({
                           <Link
                             href={`${PATH.PUBLISHERS}/${publisher?.id}/edit`}
                           >
-                            <FileEdit className='mr-2 h-4 w-4' />
+                            <FileEdit className='mr-2 size-4' />
                             Chỉnh sửa
                           </Link>
                         </DropdownMenuItem>
@@ -227,7 +227,7 @@ const PublisherTable = ({
                           className='text-destructive'
                           onClick={() => handleDeleteClick(publisher?.id || '')}
                         >
-                          <Trash2 className='mr-2 h-4 w-4' />
+                          <Trash2 className='mr-2 size-4' />
                           Xóa
                         </DropdownMenuItem>
                       </DropdownMenuContent>

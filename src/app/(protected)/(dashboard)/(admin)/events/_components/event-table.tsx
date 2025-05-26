@@ -198,14 +198,14 @@ const EventTable = ({
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant='ghost' size='icon'>
-                          <MoreHorizontal className='h-4 w-4' />
+                          <MoreHorizontal className='size-4' />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align='end'>
                         <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
                         <DropdownMenuItem asChild className='cursor-pointer'>
                           <Link href={`${PATH.EVENTS}/${event?.id}`}>
-                            <Eye className='mr-2 h-4 w-4' />
+                            <Eye className='mr-2 size-4' />
                             Xem chi tiết
                           </Link>
                         </DropdownMenuItem>
@@ -213,7 +213,7 @@ const EventTable = ({
                           className='text-destructive'
                           onClick={() => handleDeleteClick(event?.id || '')}
                         >
-                          <Trash2 className='mr-2 h-4 w-4' />
+                          <Trash2 className='mr-2 size-4' />
                           Xóa
                         </DropdownMenuItem>
                       </DropdownMenuContent>

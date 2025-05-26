@@ -10,7 +10,7 @@ type Props = {
 export function AlertDestructive({ title, description }: Props) {
   return (
     <Alert variant='destructive'>
-      <AlertCircle className='h-4 w-4' />
+      <AlertCircle className='size-4' />
       <AlertTitle>{title}</AlertTitle>
       <AlertDescription>{description}</AlertDescription>
     </Alert>

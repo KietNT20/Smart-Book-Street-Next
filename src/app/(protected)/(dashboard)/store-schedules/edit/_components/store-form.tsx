@@ -207,7 +207,7 @@ const StoreForm = ({ storeToEdit }: Props) => {
                       className='absolute right-2 top-2 h-8 w-8 rounded-full'
                       onClick={removeMainImage}
                     >
-                      <X className='h-4 w-4' />
+                      <X className='size-4' />
                     </Button>
                   </div>
                 )}
@@ -249,7 +249,7 @@ const StoreForm = ({ storeToEdit }: Props) => {
                           className='absolute right-2 top-2 h-8 w-8 rounded-full'
                           onClick={() => removeAdditionalImage(index)}
                         >
-                          <X className='h-4 w-4' />
+                          <X className='size-4' />
                         </Button>
                       </div>
                     ))}

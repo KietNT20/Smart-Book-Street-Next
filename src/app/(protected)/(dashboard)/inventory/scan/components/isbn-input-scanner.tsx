@@ -99,7 +99,7 @@ export const ISBNInputScanner = ({ storeId, onSubmit }: Props) => {
           onClick={() => setInputMode('scan')}
           className='gap-2'
         >
-          <Camera className='h-4 w-4' />
+          <Camera className='size-4' />
           Quét mã
         </Button>
         <Button
@@ -107,7 +107,7 @@ export const ISBNInputScanner = ({ storeId, onSubmit }: Props) => {
           onClick={() => setInputMode('manual')}
           className='gap-2'
         >
-          <Keyboard className='h-4 w-4' />
+          <Keyboard className='size-4' />
           Nhập thủ công
         </Button>
       </div>
@@ -145,7 +145,7 @@ export const ISBNInputScanner = ({ storeId, onSubmit }: Props) => {
               className='absolute right-2 top-2'
               onClick={stopScanning}
             >
-              <XCircle className='h-4 w-4' />
+              <XCircle className='size-4' />
             </Button>
           </div>
           <p className='text-center text-sm text-muted-foreground'>

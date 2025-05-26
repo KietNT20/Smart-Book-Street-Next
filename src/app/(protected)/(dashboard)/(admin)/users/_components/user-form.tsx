@@ -113,7 +113,7 @@ const UserForm = () => {
                               id='useDefaultPassword'
                               checked={useDefaultPassword}
                               onChange={toggleDefaultPassword}
-                              className='h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary'
+                              className='size-4 rounded border-gray-300 text-primary focus:ring-primary'
                             />
                           </div>
                           <div className='ml-2 text-sm'>
@@ -279,7 +279,7 @@ const UserForm = () => {
                       className='absolute right-2 top-2 h-8 w-8 rounded-full'
                       onClick={removeMainImage}
                     >
-                      <X className='h-4 w-4' />
+                      <X className='size-4' />
                     </Button>
                   </div>
                 )}

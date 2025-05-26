@@ -136,7 +136,7 @@ const UserRoleSelector = ({
                 className='h-7 w-7 p-0'
                 disabled={isLoading}
               >
-                <Eye className='h-4 w-4' />
+                <Eye className='size-4' />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className='w-56'>
@@ -164,7 +164,7 @@ const UserRoleSelector = ({
               className='h-7 w-7 p-0'
               disabled={isLoading || isProcessing}
             >
-              <UserCog className='h-4 w-4' />
+              <UserCog className='size-4' />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align='end' className='w-36'>

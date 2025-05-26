@@ -168,7 +168,7 @@ const BarchartCard = ({
             <>
               Tổng lượt tham quan: {totalVisitors} (Nam: {totalMale}, Nữ:{' '}
               {totalFemale})
-              {totalVisitors > 0 && <TrendingUp className='h-4 w-4' />}
+              {totalVisitors > 0 && <TrendingUp className='size-4' />}
             </>
           ) : (
             'Chưa có dữ liệu'

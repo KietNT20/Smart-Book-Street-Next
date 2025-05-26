@@ -71,9 +71,9 @@ const StoreFilter = ({
               <Button variant='outline' size='sm'>
                 <Filter /> Bộ lọc{' '}
                 {isOpen ? (
-                  <ChevronUp className='ml-2 h-4 w-4' />
+                  <ChevronUp className='ml-2 size-4' />
                 ) : (
-                  <ChevronDown className='ml-2 h-4 w-4' />
+                  <ChevronDown className='ml-2 size-4' />
                 )}
               </Button>
             </CollapsibleTrigger>
@@ -98,7 +98,7 @@ const StoreFilter = ({
                       className='absolute right-0 top-0 h-full'
                       onClick={() => clearField('storeName')}
                     >
-                      <X className='h-4 w-4' />
+                      <X className='size-4' />
                     </Button>
                   )}
                 </div>
@@ -121,7 +121,7 @@ const StoreFilter = ({
                       className='absolute right-0 top-0 h-full'
                       onClick={() => clearField('address')}
                     >
-                      <X className='h-4 w-4' />
+                      <X className='size-4' />
                     </Button>
                   )}
                 </div>
@@ -154,7 +154,7 @@ const StoreFilter = ({
                       className='absolute right-0 top-0 h-full'
                       onClick={() => clearField('zoneId')}
                     >
-                      <X className='h-4 w-4' />
+                      <X className='size-4' />
                     </Button>
                   )}
                 </div>
@@ -177,7 +177,7 @@ const StoreFilter = ({
                       className='absolute right-0 top-0 h-full'
                       onClick={() => clearField('storeTheme')}
                     >
-                      <X className='h-4 w-4' />
+                      <X className='size-4' />
                     </Button>
                   )}
                 </div>
@@ -198,7 +198,7 @@ const StoreFilter = ({
                       className='absolute right-0 top-0 h-full'
                       onClick={() => clearField('type')}
                     >
-                      <X className='h-4 w-4' />
+                      <X className='size-4' />
                     </Button>
                   )}
                 </div>

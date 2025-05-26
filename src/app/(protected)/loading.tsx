@@ -52,7 +52,7 @@ export default function Loading() {
           {/* Breadcrumb */}
           <div className='mb-6 flex items-center gap-2'>
             <Skeleton className='h-5 w-16' />
-            <Skeleton className='h-4 w-4' />
+            <Skeleton className='size-4' />
             <Skeleton className='h-5 w-24' />
           </div>
 
@@ -98,7 +98,7 @@ export default function Loading() {
             <div className='rounded-lg border border-gray-200 bg-background p-4 dark:border-gray-800 dark:bg-gray-950'>
               <div className='flex justify-between'>
                 <div>
-                  <Skeleton className='mb-2 h-4 w-40' />
+                  <Skeleton className='mb-2 size-40' />
                   <Skeleton className='mb-1 h-8 w-20' />
                   <Skeleton className='h-3 w-36' />
                 </div>

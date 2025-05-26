@@ -48,7 +48,7 @@ const ZoneFilter = ({ filters, setFilters, onSearch }: Props) => {
             className='absolute right-0 top-0 h-full'
             onClick={() => clearField('zoneName')}
           >
-            <X className='h-4 w-4' />
+            <X className='size-4' />
           </Button>
         )}
       </div>

@@ -79,9 +79,9 @@ const OrderFilter = ({ onFilterChange, initialStoreId }: OrderFilterProps) => {
               <Button variant='outline' size='sm'>
                 Bộ lọc đơn hàng{' '}
                 {isOpen ? (
-                  <ChevronUp className='ml-2 h-4 w-4' />
+                  <ChevronUp className='ml-2 size-4' />
                 ) : (
-                  <ChevronDown className='ml-2 h-4 w-4' />
+                  <ChevronDown className='ml-2 size-4' />
                 )}
               </Button>
             </CollapsibleTrigger>
@@ -111,7 +111,7 @@ const OrderFilter = ({ onFilterChange, initialStoreId }: OrderFilterProps) => {
                       onClick={() => clearField('minAmount')}
                       type='button'
                     >
-                      <X className='h-4 w-4' />
+                      <X className='size-4' />
                     </Button>
                   )}
                 </div>
@@ -139,7 +139,7 @@ const OrderFilter = ({ onFilterChange, initialStoreId }: OrderFilterProps) => {
                       onClick={() => clearField('maxAmount')}
                       type='button'
                     >
-                      <X className='h-4 w-4' />
+                      <X className='size-4' />
                     </Button>
                   )}
                 </div>
@@ -175,7 +175,7 @@ const OrderFilter = ({ onFilterChange, initialStoreId }: OrderFilterProps) => {
                       onClick={() => clearField('paymentMethod')}
                       type='button'
                     >
-                      <X className='h-4 w-4' />
+                      <X className='size-4' />
                     </Button>
                   )}
                 </div>
@@ -211,7 +211,7 @@ const OrderFilter = ({ onFilterChange, initialStoreId }: OrderFilterProps) => {
                       onClick={() => clearField('status')}
                       type='button'
                     >
-                      <X className='h-4 w-4' />
+                      <X className='size-4' />
                     </Button>
                   )}
                 </div>
@@ -236,7 +236,7 @@ const OrderFilter = ({ onFilterChange, initialStoreId }: OrderFilterProps) => {
                       onClick={() => clearField('startDate')}
                       type='button'
                     >
-                      <X className='h-4 w-4' />
+                      <X className='size-4' />
                     </Button>
                   )}
                 </div>
@@ -261,7 +261,7 @@ const OrderFilter = ({ onFilterChange, initialStoreId }: OrderFilterProps) => {
                       onClick={() => clearField('endDate')}
                       type='button'
                     >
-                      <X className='h-4 w-4' />
+                      <X className='size-4' />
                     </Button>
                   )}
                 </div>
