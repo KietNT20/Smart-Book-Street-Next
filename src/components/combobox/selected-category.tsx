@@ -26,7 +26,7 @@ const SelectedCategory = ({ id, onDeselect }: Props) => {
 
   return (
     <CommandItem onSelect={onDeselect}>
-      <Check className='mr-2 h-4 w-4 opacity-100' />
+      <Check className='mr-2 size-4 opacity-100' />
       {categories?.categoryName}
     </CommandItem>
   );

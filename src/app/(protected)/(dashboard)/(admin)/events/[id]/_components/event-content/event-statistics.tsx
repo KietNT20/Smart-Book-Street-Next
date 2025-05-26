@@ -163,7 +163,7 @@ const EventStatistics = ({ eventId, organizerEmail }: Props) => {
             onClick={() => setStatisticFilter('all')}
             className='flex items-center gap-2'
           >
-            <Users className='h-4 w-4' />
+            <Users className='size-4' />
             Tất cả
             {statisticFilter === 'all' && statisticData?.totalRegistrations && (
               <Badge variant='secondary' className='ml-1'>
@@ -177,7 +177,7 @@ const EventStatistics = ({ eventId, organizerEmail }: Props) => {
             onClick={() => setStatisticFilter('checkedIn')}
             className='flex items-center gap-2'
           >
-            <UserCheck className='h-4 w-4' />
+            <UserCheck className='size-4' />
             Đã check-in
             {statisticFilter === 'checkedIn' &&
               statisticData?.totalRegistrations && (
@@ -192,7 +192,7 @@ const EventStatistics = ({ eventId, organizerEmail }: Props) => {
             onClick={() => setStatisticFilter('notCheckedIn')}
             className='flex items-center gap-2'
           >
-            <UserX className='h-4 w-4' />
+            <UserX className='size-4' />
             Chưa check-in
             {statisticFilter === 'notCheckedIn' &&
               statisticData?.totalRegistrations && (
@@ -209,7 +209,7 @@ const EventStatistics = ({ eventId, organizerEmail }: Props) => {
             onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
             className='flex items-center gap-2'
           >
-            <Filter className='h-4 w-4' />
+            <Filter className='size-4' />
             Bộ lọc nâng cao
             {getActiveFiltersCount() > (statisticFilter !== 'all' ? 1 : 0) && (
               <Badge variant='secondary' className='ml-1'>
@@ -233,7 +233,7 @@ const EventStatistics = ({ eventId, organizerEmail }: Props) => {
                 {/* Province Filter */}
                 <div className='space-y-2'>
                   <Label className='flex items-center gap-2 text-sm font-medium'>
-                    <MapPin className='h-4 w-4' />
+                    <MapPin className='size-4' />
                     Tỉnh/Thành phố
                   </Label>
                   {provincesLoading ? (
@@ -264,7 +264,7 @@ const EventStatistics = ({ eventId, organizerEmail }: Props) => {
                 {/* District Filter */}
                 <div className='space-y-2'>
                   <Label className='flex items-center gap-2 text-sm font-medium'>
-                    <MapPin className='h-4 w-4' />
+                    <MapPin className='size-4' />
                     Quận/Huyện
                   </Label>
                   {districtsLoading ? (
@@ -278,7 +278,7 @@ const EventStatistics = ({ eventId, organizerEmail }: Props) => {
                       <SelectTrigger>
                         <SelectValue placeholder='Chọn quận/huyện' />
                         {districtsLoading && (
-                          <Loader2 className='h-4 w-4 animate-spin' />
+                          <Loader2 className='size-4 animate-spin' />
                         )}
                       </SelectTrigger>
                       <SelectContent>
@@ -299,7 +299,7 @@ const EventStatistics = ({ eventId, organizerEmail }: Props) => {
                 {/* Date Filter */}
                 <div className='space-y-2'>
                   <Label className='flex items-center gap-2 text-sm font-medium'>
-                    <Calendar className='h-4 w-4' />
+                    <Calendar className='size-4' />
                     Ngày đăng ký
                   </Label>
                   <DatePicker
@@ -367,13 +367,13 @@ const EventStatistics = ({ eventId, organizerEmail }: Props) => {
                     className='flex w-full items-center justify-between p-4'
                   >
                     <div className='flex items-center font-medium'>
-                      <BarChart4 className='mr-2 h-4 w-4' />
+                      <BarChart4 className='mr-2 size-4' />
                       Phân bố độ tuổi
                     </div>
                     {openCharts.age ? (
-                      <ChevronUp className='h-4 w-4' />
+                      <ChevronUp className='size-4' />
                     ) : (
-                      <ChevronDown className='h-4 w-4' />
+                      <ChevronDown className='size-4' />
                     )}
                   </Button>
                 </CollapsibleTrigger>
@@ -419,13 +419,13 @@ const EventStatistics = ({ eventId, organizerEmail }: Props) => {
                     className='flex w-full items-center justify-between p-4'
                   >
                     <div className='flex items-center font-medium'>
-                      <PieChart className='mr-2 h-4 w-4' />
+                      <PieChart className='mr-2 size-4' />
                       Phân bố giới tính
                     </div>
                     {openCharts.gender ? (
-                      <ChevronUp className='h-4 w-4' />
+                      <ChevronUp className='size-4' />
                     ) : (
-                      <ChevronDown className='h-4 w-4' />
+                      <ChevronDown className='size-4' />
                     )}
                   </Button>
                 </CollapsibleTrigger>
@@ -473,13 +473,13 @@ const EventStatistics = ({ eventId, organizerEmail }: Props) => {
                     className='flex w-full items-center justify-between p-4'
                   >
                     <div className='flex items-center font-medium'>
-                      <PieChart className='mr-2 h-4 w-4' />
+                      <PieChart className='mr-2 size-4' />
                       Nguồn tham khảo
                     </div>
                     {openCharts.reference ? (
-                      <ChevronUp className='h-4 w-4' />
+                      <ChevronUp className='size-4' />
                     ) : (
-                      <ChevronDown className='h-4 w-4' />
+                      <ChevronDown className='size-4' />
                     )}
                   </Button>
                 </CollapsibleTrigger>
@@ -527,13 +527,13 @@ const EventStatistics = ({ eventId, organizerEmail }: Props) => {
                     className='flex w-full items-center justify-between p-4'
                   >
                     <div className='flex items-center font-medium'>
-                      <PieChart className='mr-2 h-4 w-4' />
+                      <PieChart className='mr-2 size-4' />
                       Phân bố địa điểm
                     </div>
                     {openCharts.address ? (
-                      <ChevronUp className='h-4 w-4' />
+                      <ChevronUp className='size-4' />
                     ) : (
-                      <ChevronDown className='h-4 w-4' />
+                      <ChevronDown className='size-4' />
                     )}
                   </Button>
                 </CollapsibleTrigger>
@@ -581,13 +581,13 @@ const EventStatistics = ({ eventId, organizerEmail }: Props) => {
                     className='flex w-full items-center justify-between p-4'
                   >
                     <div className='flex items-center font-medium'>
-                      <PieChart className='mr-2 h-4 w-4' />
+                      <PieChart className='mr-2 size-4' />
                       Lịch sử tham gia
                     </div>
                     {openCharts.attendedBefore ? (
-                      <ChevronUp className='h-4 w-4' />
+                      <ChevronUp className='size-4' />
                     ) : (
-                      <ChevronDown className='h-4 w-4' />
+                      <ChevronDown className='size-4' />
                     )}
                   </Button>
                 </CollapsibleTrigger>

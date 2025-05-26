@@ -100,7 +100,7 @@ const MenuColoumn = ({ book }: Props) => {
         <DropdownMenuTrigger asChild>
           <Button variant='ghost' className='h-8 w-8 p-0'>
             <span className='sr-only'>Open menu</span>
-            <MoreHorizontal className='h-4 w-4' />
+            <MoreHorizontal className='size-4' />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align='end'>
@@ -110,13 +110,13 @@ const MenuColoumn = ({ book }: Props) => {
             onClick={() => handleDelete(book.entityId || '')}
             className='cursor-pointer text-red-600'
           >
-            <Trash className='mr-2 h-4 w-4' />
+            <Trash className='mr-2 size-4' />
             Xóa sản phẩm
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DialogTrigger asChild>
             <DropdownMenuItem>
-              <ShoppingCart className='mr-2 h-4 w-4' />
+              <ShoppingCart className='mr-2 size-4' />
               Thêm vào đơn
             </DropdownMenuItem>
           </DialogTrigger>

@@ -164,7 +164,7 @@ const StatisticsExportButton = ({ eventId, defaultEmail = '' }: Props) => {
   if (isLoading) {
     return (
       <Button variant='outline' className='flex items-center gap-2' disabled>
-        <Loader2 className='h-4 w-4 animate-spin' />
+        <Loader2 className='size-4 animate-spin' />
         Đang tải...
       </Button>
     );
@@ -173,7 +173,7 @@ const StatisticsExportButton = ({ eventId, defaultEmail = '' }: Props) => {
   if (isError || !eventDetail) {
     return (
       <Button variant='outline' className='flex items-center gap-2' disabled>
-        <FileSpreadsheet className='h-4 w-4' />
+        <FileSpreadsheet className='size-4' />
         Không thể tải dữ liệu
       </Button>
     );
@@ -192,11 +192,11 @@ const StatisticsExportButton = ({ eventId, defaultEmail = '' }: Props) => {
         title={!hasRegistrations ? 'Chưa có đăng ký nào' : undefined}
       >
         {exporting ? (
-          <Loader2 className='h-4 w-4 animate-spin' />
+          <Loader2 className='size-4 animate-spin' />
         ) : (
           <>
-            <FileSpreadsheet className='h-4 w-4' />
-            <Mail className='ml-1 h-4 w-4' />
+            <FileSpreadsheet className='size-4' />
+            <Mail className='ml-1 size-4' />
           </>
         )}
         {exporting ? 'Đang xử lý...' : 'Xuất & Gửi Thống Kê'}
@@ -215,7 +215,7 @@ const StatisticsExportButton = ({ eventId, defaultEmail = '' }: Props) => {
           <div className='py-4'>
             <div className='grid items-center gap-2'>
               <Label htmlFor='email' className='flex items-center gap-2'>
-                <Mail className='h-4 w-4' />
+                <Mail className='size-4' />
                 Email nhận thống kê
               </Label>
               <Input

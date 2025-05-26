@@ -114,12 +114,12 @@ const UserTable = ({
                     Tài khoản
                     {sortField === 'UserName' ? (
                       sortOrder === Sort.ASC ? (
-                        <SortAsc className='ml-2 h-4 w-4' />
+                        <SortAsc className='ml-2 size-4' />
                       ) : (
-                        <SortDesc className='ml-2 h-4 w-4' />
+                        <SortDesc className='ml-2 size-4' />
                       )
                     ) : (
-                      <ArrowUpDown className='ml-2 h-4 w-4' />
+                      <ArrowUpDown className='ml-2 size-4' />
                     )}
                   </Button>
                 </TableHead>
@@ -131,12 +131,12 @@ const UserTable = ({
                     Tên nguời dùng
                     {sortField === 'FullName' ? (
                       sortOrder === Sort.ASC ? (
-                        <SortAsc className='ml-2 h-4 w-4' />
+                        <SortAsc className='ml-2 size-4' />
                       ) : (
-                        <SortDesc className='ml-2 h-4 w-4' />
+                        <SortDesc className='ml-2 size-4' />
                       )
                     ) : (
-                      <ArrowUpDown className='ml-2 h-4 w-4' />
+                      <ArrowUpDown className='ml-2 size-4' />
                     )}
                   </Button>
                 </TableHead>
@@ -148,12 +148,12 @@ const UserTable = ({
                     Email
                     {sortField === 'Email' ? (
                       sortOrder === Sort.ASC ? (
-                        <SortAsc className='ml-2 h-4 w-4' />
+                        <SortAsc className='ml-2 size-4' />
                       ) : (
-                        <SortDesc className='ml-2 h-4 w-4' />
+                        <SortDesc className='ml-2 size-4' />
                       )
                     ) : (
-                      <ArrowUpDown className='ml-2 h-4 w-4' />
+                      <ArrowUpDown className='ml-2 size-4' />
                     )}
                   </Button>
                 </TableHead>
@@ -165,12 +165,12 @@ const UserTable = ({
                     Số điện thoại
                     {sortField === 'Phone' ? (
                       sortOrder === Sort.ASC ? (
-                        <SortAsc className='ml-2 h-4 w-4' />
+                        <SortAsc className='ml-2 size-4' />
                       ) : (
-                        <SortDesc className='ml-2 h-4 w-4' />
+                        <SortDesc className='ml-2 size-4' />
                       )
                     ) : (
-                      <ArrowUpDown className='ml-2 h-4 w-4' />
+                      <ArrowUpDown className='ml-2 size-4' />
                     )}
                   </Button>
                 </TableHead>
@@ -180,12 +180,12 @@ const UserTable = ({
                     Ngày sinh
                     {sortField === 'DOB' ? (
                       sortOrder === Sort.ASC ? (
-                        <SortAsc className='ml-2 h-4 w-4' />
+                        <SortAsc className='ml-2 size-4' />
                       ) : (
-                        <SortDesc className='ml-2 h-4 w-4' />
+                        <SortDesc className='ml-2 size-4' />
                       )
                     ) : (
-                      <ArrowUpDown className='ml-2 h-4 w-4' />
+                      <ArrowUpDown className='ml-2 size-4' />
                     )}
                   </Button>
                 </TableHead>
@@ -232,28 +232,28 @@ const UserTable = ({
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button variant='ghost' size='icon'>
-                            <MoreHorizontal className='h-4 w-4' />
+                            <MoreHorizontal className='size-4' />
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align='end'>
                           <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
                           <DropdownMenuItem asChild className='cursor-pointer'>
                             <Link href={`${PATH.USERS}/${user?.id}`}>
-                              <Eye className='mr-2 h-4 w-4' />
+                              <Eye className='mr-2 size-4' />
                               Xem chi tiết
                             </Link>
                           </DropdownMenuItem>
                           {/* <DropdownMenuItem
                             onClick={() => onEditUser(user.id || '')}
                           >
-                            <FileEdit className='mr-2 h-4 w-4' />
+                            <FileEdit className='mr-2 size-4' />
                             Chỉnh sửa
                           </DropdownMenuItem> */}
                           <DropdownMenuItem
                             className='text-destructive'
                             onClick={() => handleDeleteClick(user?.id || '')}
                           >
-                            <Trash2 className='mr-2 h-4 w-4' />
+                            <Trash2 className='mr-2 size-4' />
                             Xóa
                           </DropdownMenuItem>
                         </DropdownMenuContent>

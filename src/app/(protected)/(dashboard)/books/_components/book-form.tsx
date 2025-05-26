@@ -298,7 +298,7 @@ const BookForm = ({ book, mode }: Props) => {
                           }}
                           disabled={isLoading}
                         >
-                          <X className='h-4 w-4' />
+                          <X className='size-4' />
                         </Button>
                       </div>
                     </div>
@@ -437,7 +437,7 @@ const BookForm = ({ book, mode }: Props) => {
           <Button type='submit'>
             {isLoading ? (
               <>
-                <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                <Loader2 className='mr-2 size-4 animate-spin' />
                 Đang xử lý...
               </>
             ) : mode === 'edit' ? (

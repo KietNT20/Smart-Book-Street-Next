@@ -23,10 +23,10 @@ export interface CategoryCol {
 }
 
 const getSortIcon = (isSorted: false | 'asc' | 'desc') => {
-  if (!isSorted) return <ArrowUpDown className='ml-1 h-4 w-4 text-zinc-500' />;
+  if (!isSorted) return <ArrowUpDown className='ml-1 size-4 text-zinc-500' />;
   if (isSorted === 'asc')
-    return <SortAsc className='ml-1 h-4 w-4 text-blue-500' />;
-  return <SortDesc className='ml-1 h-4 w-4 text-blue-500' />;
+    return <SortAsc className='ml-1 size-4 text-blue-500' />;
+  return <SortDesc className='ml-1 size-4 text-blue-500' />;
 };
 
 export const columns = ({
@@ -95,20 +95,20 @@ export const columns = ({
           <DropdownMenuTrigger asChild>
             <Button variant='ghost' className='h-8 w-8 p-0'>
               <span className='sr-only'>Open menu</span>
-              <MoreHorizontal className='h-4 w-4' />
+              <MoreHorizontal className='size-4' />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align='end'>
             <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
             <DropdownMenuItem onClick={() => onEdit(category)}>
-              <Edit className='mr-2 h-4 w-4' />
+              <Edit className='mr-2 size-4' />
               Chỉnh sửa
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => onDelete(category.id)}
               className='text-red-600 focus:text-red-600'
             >
-              <Trash className='mr-2 h-4 w-4' />
+              <Trash className='mr-2 size-4' />
               Xóa
             </DropdownMenuItem>
           </DropdownMenuContent>

@@ -68,7 +68,7 @@ const StoreSearch = ({ onSelectStore, value }: Props) => {
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button variant='outline' size='icon' type='button'>
-              <Search className='h-4 w-4' />
+              <Search className='size-4' />
             </Button>
           </DialogTrigger>
           <DialogContent className='sm:max-w-[600px]'>

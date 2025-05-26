@@ -46,7 +46,7 @@ const ImageCard = ({ id, url, altText }: Props) => {
               className='h-9 w-9 rounded-full bg-background/20 backdrop-blur-sm hover:bg-background/30'
               onClick={() => window.open(url, '_blank')}
             >
-              <ZoomIn className='h-4 w-4 text-white' />
+              <ZoomIn className='size-4 text-white' />
             </Button>
             <Button
               variant='outline'
@@ -56,9 +56,9 @@ const ImageCard = ({ id, url, altText }: Props) => {
               disabled={isDeleting}
             >
               {isDeleting ? (
-                <Loader2 className='h-4 w-4 animate-spin text-white' />
+                <Loader2 className='size-4 animate-spin text-white' />
               ) : (
-                <Trash2 className='h-4 w-4 text-white' />
+                <Trash2 className='size-4 text-white' />
               )}
             </Button>
           </div>

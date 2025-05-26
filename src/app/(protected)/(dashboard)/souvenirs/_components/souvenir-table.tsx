@@ -243,7 +243,7 @@ const SouvenirTable = ({
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
                             <Button variant='ghost' size='icon'>
-                              <MoreHorizontal className='h-4 w-4' />
+                              <MoreHorizontal className='size-4' />
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align='end'>
@@ -253,7 +253,7 @@ const SouvenirTable = ({
                               asChild
                             >
                               <Link href={`${PATH.SOUVENIRS}/${souvenirId}`}>
-                                <FileEdit className='mr-2 h-4 w-4' />
+                                <FileEdit className='mr-2 size-4' />
                                 Chỉnh sửa
                               </Link>
                             </DropdownMenuItem>
@@ -261,12 +261,12 @@ const SouvenirTable = ({
                               className='text-destructive'
                               onClick={() => handleDeleteClick(souvenirId)}
                             >
-                              <Trash2 className='mr-2 h-4 w-4' />
+                              <Trash2 className='mr-2 size-4' />
                               Xóa
                             </DropdownMenuItem>
                             <DialogTrigger asChild>
                               <DropdownMenuItem>
-                                <PackagePlus className='mr-2 h-4 w-4' />
+                                <PackagePlus className='mr-2 size-4' />
                                 <span>Thêm vào kho</span>
                               </DropdownMenuItem>
                             </DialogTrigger>

@@ -45,7 +45,7 @@ const ImageCard = ({ image, bookCode, onClick, onDelete }: Props) => {
                   size='icon'
                   className='h-8 w-8 rounded-full bg-background/20 text-white backdrop-blur-sm hover:bg-background/30'
                 >
-                  <MoreHorizontal className='h-4 w-4' />
+                  <MoreHorizontal className='size-4' />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align='end'>

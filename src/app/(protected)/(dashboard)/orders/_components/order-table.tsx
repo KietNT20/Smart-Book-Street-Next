@@ -94,12 +94,12 @@ const OrderTable = () => {
                   Số tiền
                   {sortField === 'totalAmount' ? (
                     sortOrder === Sort.ASC ? (
-                      <SortAsc className='ml-2 h-4 w-4' />
+                      <SortAsc className='ml-2 size-4' />
                     ) : (
-                      <SortDesc className='ml-2 h-4 w-4' />
+                      <SortDesc className='ml-2 size-4' />
                     )
                   ) : (
-                    <ArrowUpDown className='ml-2 h-4 w-4' />
+                    <ArrowUpDown className='ml-2 size-4' />
                   )}
                 </Button>
               </TableHead>
@@ -111,12 +111,12 @@ const OrderTable = () => {
                   Phương thức thanh toán
                   {sortField === 'paymentMethod' ? (
                     sortOrder === Sort.ASC ? (
-                      <SortAsc className='ml-2 h-4 w-4' />
+                      <SortAsc className='ml-2 size-4' />
                     ) : (
-                      <SortDesc className='ml-2 h-4 w-4' />
+                      <SortDesc className='ml-2 size-4' />
                     )
                   ) : (
-                    <ArrowUpDown className='ml-2 h-4 w-4' />
+                    <ArrowUpDown className='ml-2 size-4' />
                   )}
                 </Button>
               </TableHead>
@@ -128,12 +128,12 @@ const OrderTable = () => {
                   Tình trạng
                   {sortField === 'status' ? (
                     sortOrder === Sort.ASC ? (
-                      <SortAsc className='ml-2 h-4 w-4' />
+                      <SortAsc className='ml-2 size-4' />
                     ) : (
-                      <SortDesc className='ml-2 h-4 w-4' />
+                      <SortDesc className='ml-2 size-4' />
                     )
                   ) : (
-                    <ArrowUpDown className='ml-2 h-4 w-4' />
+                    <ArrowUpDown className='ml-2 size-4' />
                   )}
                 </Button>
               </TableHead>
@@ -145,12 +145,12 @@ const OrderTable = () => {
                   Ngày tạo
                   {sortField === 'createdDate' ? (
                     sortOrder === Sort.ASC ? (
-                      <SortAsc className='ml-2 h-4 w-4' />
+                      <SortAsc className='ml-2 size-4' />
                     ) : (
-                      <SortDesc className='ml-2 h-4 w-4' />
+                      <SortDesc className='ml-2 size-4' />
                     )
                   ) : (
-                    <ArrowUpDown className='ml-2 h-4 w-4' />
+                    <ArrowUpDown className='ml-2 size-4' />
                   )}
                 </Button>
               </TableHead>
@@ -190,14 +190,14 @@ const OrderTable = () => {
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant='ghost' size='icon'>
-                          <MoreHorizontal className='h-4 w-4' />
+                          <MoreHorizontal className='size-4' />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align='end'>
                         <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
                         <DropdownMenuItem asChild className='cursor-pointer'>
                           <Link href={`${PATH.ORDERS}/${order?.id}`}>
-                            <Eye className='mr-2 h-4 w-4' />
+                            <Eye className='mr-2 size-4' />
                             Xem chi tiết
                           </Link>
                         </DropdownMenuItem>
@@ -208,7 +208,7 @@ const OrderTable = () => {
                             disabled={updateOrderStatusPending}
                             className='cursor-pointer'
                           >
-                            <CheckCircle className='mr-2 h-4 w-4 text-green-600' />
+                            <CheckCircle className='mr-2 size-4 text-green-600' />
                             Hoàn thành đơn hàng
                           </DropdownMenuItem>
                         )}
@@ -218,7 +218,7 @@ const OrderTable = () => {
                             disabled={isOrderCancelPending}
                             className='cursor-pointer'
                           >
-                            <XCircle className='mr-2 h-4 w-4 text-red-600' />
+                            <XCircle className='mr-2 size-4 text-red-600' />
                             Hủy đơn hàng
                           </DropdownMenuItem>
                         )}

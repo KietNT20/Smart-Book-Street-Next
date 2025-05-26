@@ -56,7 +56,7 @@ export default function Dashboard({ data, isPending }: DashboardProps) {
   if (!data) {
     return (
       <Alert variant='destructive'>
-        <AlertCircle className='h-4 w-4' />
+        <AlertCircle className='size-4' />
         <AlertTitle>Thông báo</AlertTitle>
         <AlertDescription>
           Không có dữ liệu thống kê cho sự kiện này.
@@ -253,7 +253,7 @@ export default function Dashboard({ data, isPending }: DashboardProps) {
             <CardTitle className='text-sm font-medium'>
               Tổng số đăng ký
             </CardTitle>
-            <Users className='h-4 w-4 text-muted-foreground' />
+            <Users className='size-4 text-muted-foreground' />
           </CardHeader>
           <CardContent>
             <div className='text-2xl font-bold md:text-3xl'>
@@ -269,7 +269,7 @@ export default function Dashboard({ data, isPending }: DashboardProps) {
             <CardTitle className='text-sm font-medium'>
               Số người tham gia
             </CardTitle>
-            <Calendar className='h-4 w-4 text-muted-foreground' />
+            <Calendar className='size-4 text-muted-foreground' />
           </CardHeader>
           <CardContent>
             <div className='text-2xl font-bold md:text-3xl'>
@@ -285,7 +285,7 @@ export default function Dashboard({ data, isPending }: DashboardProps) {
             <CardTitle className='text-sm font-medium'>
               Tỷ lệ tham gia
             </CardTitle>
-            <BarChart4 className='h-4 w-4 text-muted-foreground' />
+            <BarChart4 className='size-4 text-muted-foreground' />
           </CardHeader>
           <CardContent>
             <div className='text-2xl font-bold md:text-3xl'>

@@ -329,7 +329,7 @@ export default function StorePage({ params }: { params: { storeId: string } }) {
                       <CardContent className='pt-4'>
                         <div className='space-y-3'>
                           <div className='flex items-center gap-2'>
-                            <FileText className='h-4 w-4 text-muted-foreground' />
+                            <FileText className='size-4 text-muted-foreground' />
                             <div className='grid w-full grid-cols-2'>
                               <span className='text-sm text-muted-foreground'>
                                 Người thuê:
@@ -341,7 +341,7 @@ export default function StorePage({ params }: { params: { storeId: string } }) {
                           </div>
 
                           <div className='flex items-center gap-2'>
-                            <Clock className='h-4 w-4 text-muted-foreground' />
+                            <Clock className='size-4 text-muted-foreground' />
                             <div className='grid w-full grid-cols-2'>
                               <span className='text-sm text-muted-foreground'>
                                 Thời hạn:

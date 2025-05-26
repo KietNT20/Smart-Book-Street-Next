@@ -75,7 +75,7 @@ const EventForm = () => {
         {/* AI Prompt Input */}
         <div className='space-y-3 rounded-lg border bg-muted/30 p-4'>
           <h3 className='flex items-center gap-2 font-medium'>
-            <Sparkles className='h-4 w-4' />
+            <Sparkles className='size-4' />
             Gợi ý AI
           </h3>
           <div className='flex flex-col gap-2'>
@@ -99,12 +99,12 @@ const EventForm = () => {
               >
                 {isGenerating.eventName ? (
                   <>
-                    <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                    <Loader2 className='mr-2 size-4 animate-spin' />
                     Đang tạo tên...
                   </>
                 ) : (
                   <>
-                    <Sparkles className='mr-2 h-4 w-4' />
+                    <Sparkles className='mr-2 size-4' />
                     Gợi ý tên sự kiện
                   </>
                 )}
@@ -119,12 +119,12 @@ const EventForm = () => {
               >
                 {isGenerating.description ? (
                   <>
-                    <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                    <Loader2 className='mr-2 size-4 animate-spin' />
                     Đang tạo mô tả...
                   </>
                 ) : (
                   <>
-                    <Sparkles className='mr-2 h-4 w-4' />
+                    <Sparkles className='mr-2 size-4' />
                     Gợi ý mô tả
                   </>
                 )}
@@ -165,7 +165,7 @@ const EventForm = () => {
               onClick={addDateTimeSet}
               className='flex items-center gap-1'
             >
-              <Plus className='h-4 w-4' /> Thêm ngày
+              <Plus className='size-4' /> Thêm ngày
             </Button>
           </div>
 
@@ -319,7 +319,7 @@ const EventForm = () => {
                       className='h-10 w-10 shrink-0 self-end'
                       onClick={() => removeDateTimeSet(index)}
                     >
-                      <Trash2 className='h-4 w-4' />
+                      <Trash2 className='size-4' />
                     </Button>
                   )}
                 </div>
@@ -428,7 +428,7 @@ const EventForm = () => {
                         className='absolute right-2 top-2 h-8 w-8 rounded-full'
                         onClick={handleRemoveBaseImage}
                       >
-                        <X className='h-4 w-4' />
+                        <X className='size-4' />
                       </Button>
                     </div>
                   )}
@@ -493,7 +493,7 @@ const EventForm = () => {
                             className='absolute right-2 top-2 h-8 w-8 rounded-full'
                             onClick={() => handleRemoveOtherImage(index)}
                           >
-                            <X className='h-4 w-4' />
+                            <X className='size-4' />
                           </Button>
                         </div>
                       ))}
@@ -547,7 +547,7 @@ const EventForm = () => {
                         className='absolute right-2 top-2 h-8 w-8 rounded-full'
                         onClick={handleRemoveVideo}
                       >
-                        <X className='h-4 w-4' />
+                        <X className='size-4' />
                       </Button>
                     </div>
                   )}

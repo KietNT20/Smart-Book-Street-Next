@@ -12,6 +12,12 @@ import {
   AlignLeft,
   AlignRight,
   Bold,
+  Heading1,
+  Heading2,
+  Heading3,
+  Heading4,
+  Heading5,
+  Heading6,
   Italic,
   List,
   ListOrdered,
@@ -53,17 +59,45 @@ const RichTextToolbar = ({ editor }: RichTextToolbarProps) => {
           }
         }}
       >
-        <SelectTrigger className='h-8 w-[120px]'>
+        <SelectTrigger className='h-8 w-36'>
           <SelectValue placeholder='Kiểu đoạn' />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value='paragraph'>Đoạn văn</SelectItem>
-          <SelectItem value='h1'>Tiêu đề 1</SelectItem>
-          <SelectItem value='h2'>Tiêu đề 2</SelectItem>
-          <SelectItem value='h3'>Tiêu đề 3</SelectItem>
-          <SelectItem value='h4'>Tiêu đề 4</SelectItem>
-          <SelectItem value='h5'>Tiêu đề 5</SelectItem>
-          <SelectItem value='h6'>Tiêu đề 6</SelectItem>
+          <SelectItem value='paragraph'>
+            <p className='flex items-center gap-2'>
+              <span className='size-4'>P</span> Đoạn văn
+            </p>
+          </SelectItem>
+          <SelectItem value='h1'>
+            <p className='flex items-center gap-2'>
+              <Heading1 className='size-4' /> Tiêu đề 1
+            </p>
+          </SelectItem>
+          <SelectItem value='h2'>
+            <p className='flex items-center gap-2'>
+              <Heading2 className='size-4' /> Tiêu đề 2
+            </p>
+          </SelectItem>
+          <SelectItem value='h3'>
+            <p className='flex items-center gap-2'>
+              <Heading3 className='size-4' /> Tiêu đề 3
+            </p>
+          </SelectItem>
+          <SelectItem value='h4'>
+            <p className='flex items-center gap-2'>
+              <Heading4 className='size-4' /> Tiêu đề 4
+            </p>
+          </SelectItem>
+          <SelectItem value='h5'>
+            <p className='flex items-center gap-2'>
+              <Heading5 className='size-4' /> Tiêu đề 5
+            </p>
+          </SelectItem>
+          <SelectItem value='h6'>
+            <p className='flex items-center gap-2'>
+              <Heading6 className='size-4' /> Tiêu đề 6
+            </p>
+          </SelectItem>
         </SelectContent>
       </Select>
 
@@ -76,7 +110,7 @@ const RichTextToolbar = ({ editor }: RichTextToolbarProps) => {
         type='button'
         title='Đậm'
       >
-        <Bold className='h-4 w-4' />
+        <Bold className='size-4' />
       </Button>
       <Button
         variant='ghost'
@@ -86,7 +120,7 @@ const RichTextToolbar = ({ editor }: RichTextToolbarProps) => {
         type='button'
         title='Nghiêng'
       >
-        <Italic className='h-4 w-4' />
+        <Italic className='size-4' />
       </Button>
       <Button
         variant='ghost'
@@ -96,7 +130,7 @@ const RichTextToolbar = ({ editor }: RichTextToolbarProps) => {
         type='button'
         title='Gạch chân'
       >
-        <UnderlineIcon className='h-4 w-4' />
+        <UnderlineIcon className='size-4' />
       </Button>
 
       {/* Chọn màu chữ */}
@@ -111,7 +145,7 @@ const RichTextToolbar = ({ editor }: RichTextToolbarProps) => {
         type='button'
         title='Danh sách không đánh số'
       >
-        <List className='h-4 w-4' />
+        <List className='size-4' />
       </Button>
       <Button
         variant='ghost'
@@ -121,7 +155,7 @@ const RichTextToolbar = ({ editor }: RichTextToolbarProps) => {
         type='button'
         title='Danh sách đánh số'
       >
-        <ListOrdered className='h-4 w-4' />
+        <ListOrdered className='size-4' />
       </Button>
 
       {/* Căn chỉnh văn bản */}
@@ -133,7 +167,7 @@ const RichTextToolbar = ({ editor }: RichTextToolbarProps) => {
         type='button'
         title='Canh trái'
       >
-        <AlignLeft className='h-4 w-4' />
+        <AlignLeft className='size-4' />
       </Button>
       <Button
         variant='ghost'
@@ -143,7 +177,7 @@ const RichTextToolbar = ({ editor }: RichTextToolbarProps) => {
         type='button'
         title='Canh giữa'
       >
-        <AlignCenter className='h-4 w-4' />
+        <AlignCenter className='size-4' />
       </Button>
       <Button
         variant='ghost'
@@ -153,7 +187,7 @@ const RichTextToolbar = ({ editor }: RichTextToolbarProps) => {
         type='button'
         title='Canh phải'
       >
-        <AlignRight className='h-4 w-4' />
+        <AlignRight className='size-4' />
       </Button>
 
       {/* Hoàn tác/làm lại */}
@@ -165,7 +199,7 @@ const RichTextToolbar = ({ editor }: RichTextToolbarProps) => {
         type='button'
         title='Hoàn tác'
       >
-        <Undo className='h-4 w-4' />
+        <Undo className='size-4' />
       </Button>
       <Button
         variant='ghost'
@@ -175,7 +209,7 @@ const RichTextToolbar = ({ editor }: RichTextToolbarProps) => {
         type='button'
         title='Làm lại'
       >
-        <Redo className='h-4 w-4' />
+        <Redo className='size-4' />
       </Button>
     </div>
   );

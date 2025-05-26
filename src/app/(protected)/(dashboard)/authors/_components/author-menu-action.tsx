@@ -56,20 +56,20 @@ const AuthorMenuAction = ({ author }: Props) => {
         <DropdownMenuTrigger asChild>
           <Button variant='ghost' className='h-8 w-8 p-0'>
             <span className='sr-only'>Mở menu</span>
-            <MoreHorizontal className='h-4 w-4' />
+            <MoreHorizontal className='size-4' />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align='end'>
           <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
           <DropdownMenuItem asChild className='cursor-pointer'>
             <Link href={`${PATH.ADMIN_AUTHORS}/${author.id}`}>
-              <Eye className='mr-2 h-4 w-4' />
+              <Eye className='mr-2 size-4' />
               Xem chi tiết
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild className='cursor-pointer'>
             <Link href={`${PATH.ADMIN_AUTHORS}/${author.id}/edit`}>
-              <Edit className='mr-2 h-4 w-4' />
+              <Edit className='mr-2 size-4' />
               Chỉnh sửa
             </Link>
           </DropdownMenuItem>
@@ -80,7 +80,7 @@ const AuthorMenuAction = ({ author }: Props) => {
             }}
             className='cursor-pointer text-red-600'
           >
-            <Trash2 className='mr-2 h-4 w-4' />
+            <Trash2 className='mr-2 size-4' />
             Xóa
           </DropdownMenuItem>
         </DropdownMenuContent>

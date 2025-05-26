@@ -199,9 +199,9 @@ const AddressZone = ({ form, disabled = false }: AddressZoneProps) => {
             size='sm'
           >
             {isSearching ? (
-              <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+              <Loader2 className='mr-2 size-4 animate-spin' />
             ) : (
-              <Search className='mr-2 h-4 w-4' />
+              <Search className='mr-2 size-4' />
             )}
             Tìm tọa độ
           </Button>
@@ -214,15 +214,15 @@ const AddressZone = ({ form, disabled = false }: AddressZoneProps) => {
             size='sm'
           >
             {isGettingLocation ? (
-              <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+              <Loader2 className='mr-2 size-4 animate-spin' />
             ) : (
-              <Navigation className='mr-2 h-4 w-4' />
+              <Navigation className='mr-2 size-4' />
             )}
             Vị trí hiện tại
           </Button>
         </div>
         <div className='flex items-center'>
-          <MapPin className='mr-1 h-4 w-4 text-muted-foreground' />
+          <MapPin className='mr-1 size-4 text-muted-foreground' />
           <span className='text-xs text-muted-foreground'>
             {form.getValues('latitude') && form.getValues('longitude')
               ? `Tọa độ: ${form.getValues('latitude')}, ${form.getValues('longitude')}`

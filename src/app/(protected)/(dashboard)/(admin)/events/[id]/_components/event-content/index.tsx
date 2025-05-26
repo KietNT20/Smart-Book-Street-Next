@@ -38,7 +38,7 @@ export default function EventContent({
         <CardContent className='p-6'>
           <div className='space-y-4'>
             <Label className='flex items-center gap-2 text-base font-semibold'>
-              <Clock className='h-4 w-4' />
+              <Clock className='size-4' />
               Lịch trình sự kiện
             </Label>
             <div className='space-y-2'>

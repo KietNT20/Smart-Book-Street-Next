@@ -54,7 +54,7 @@ export default function ProfilePage() {
       <div className='mb-6 flex items-center'>
         {isEditing && (
           <Button variant='ghost' className='mr-4' onClick={cancelEdit}>
-            <ArrowLeft className='mr-2 h-4 w-4' />
+            <ArrowLeft className='mr-2 size-4' />
             Quay lại
           </Button>
         )}
@@ -197,7 +197,7 @@ export default function ProfilePage() {
 
                 {user?.email && (
                   <div className='mb-2 flex items-center text-muted-foreground'>
-                    <Mail className='mr-2 h-4 w-4' />
+                    <Mail className='mr-2 size-4' />
                     <span>{user.email}</span>
                   </div>
                 )}

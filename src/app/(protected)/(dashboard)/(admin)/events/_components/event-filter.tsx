@@ -67,9 +67,9 @@ const EventFilter = ({
               <Button variant='outline' size='sm'>
                 <Filter /> Bộ lọc{' '}
                 {isOpen ? (
-                  <ChevronUp className='ml-2 h-4 w-4' />
+                  <ChevronUp className='ml-2 size-4' />
                 ) : (
-                  <ChevronDown className='ml-2 h-4 w-4' />
+                  <ChevronDown className='ml-2 size-4' />
                 )}
               </Button>
             </CollapsibleTrigger>
@@ -93,7 +93,7 @@ const EventFilter = ({
                       className='absolute right-0 top-0 h-full'
                       onClick={() => clearField('key')}
                     >
-                      <X className='h-4 w-4' />
+                      <X className='size-4' />
                     </Button>
                   )}
                 </div>
@@ -141,7 +141,7 @@ const EventFilter = ({
                       className='absolute right-0 top-0 h-full'
                       onClick={() => clearField('startDate')}
                     >
-                      <X className='h-4 w-4' />
+                      <X className='size-4' />
                     </Button>
                   )}
                 </div>
@@ -173,7 +173,7 @@ const EventFilter = ({
                       className='absolute right-0 top-0 h-full'
                       onClick={() => clearField('endDate')}
                     >
-                      <X className='h-4 w-4' />
+                      <X className='size-4' />
                     </Button>
                   )}
                 </div>

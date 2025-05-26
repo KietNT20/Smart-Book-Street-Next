@@ -87,7 +87,7 @@ const OrderTablePayment = () => {
                             Number(currentQuantity) <= 1
                           }
                         >
-                          <Minus className='h-4 w-4' />
+                          <Minus className='size-4' />
                         </Button>
                         <Input
                           type='text'
@@ -114,7 +114,7 @@ const OrderTablePayment = () => {
                             handleIncrement(item.id, currentQuantity)
                           }
                         >
-                          <Plus className='h-4 w-4' />
+                          <Plus className='size-4' />
                         </Button>
                       </div>
                     </TableCell>

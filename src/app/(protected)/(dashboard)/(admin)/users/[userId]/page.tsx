@@ -66,7 +66,7 @@ export default function UserDetailPage({
           className='mr-4'
           onClick={() => router.push(PATH.USERS)}
         >
-          <ArrowLeft className='mr-2 h-4 w-4' />
+          <ArrowLeft className='mr-2 size-4' />
           Quay lại
         </Button>
       </div>
@@ -239,7 +239,7 @@ export default function UserDetailPage({
 
               {user.email && (
                 <div className='mb-2 flex items-center text-muted-foreground'>
-                  <Mail className='mr-2 h-4 w-4' />
+                  <Mail className='mr-2 size-4' />
                   <span>{user.email}</span>
                 </div>
               )}

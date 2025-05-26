@@ -6,6 +6,7 @@ import { useEntityBreadcrumb } from '@/hooks/use-breadcrumb-page';
 import { useGetEventById } from '@/hooks/use-event';
 import EventContent from './_components/event-content';
 import EventHero from './_components/event-hero';
+import EventOpenStateButton from './_components/event-open-state-btn';
 import EventSidebar from './_components/event-sidebar';
 
 export default function EventDetailPage({
@@ -19,8 +20,9 @@ export default function EventDetailPage({
 
   return (
     <div className='min-h-screen bg-background pb-16'>
-      <div className='mb-6'>
+      <div className='mb-6 flex items-center justify-between px-4'>
         <BackButton />
+        <EventOpenStateButton eventId={params.id} />
       </div>
 
       {/* Hero Section */}

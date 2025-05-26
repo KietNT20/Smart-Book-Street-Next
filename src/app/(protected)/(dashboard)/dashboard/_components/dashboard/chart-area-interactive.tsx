@@ -337,7 +337,7 @@ export function ChartAreaInteractive() {
       <CardContent className='px-2 pt-4 sm:px-6 sm:pt-6'>
         {loading ? (
           <div className='flex h-[300px] items-center justify-center'>
-            <div className='h-4 w-4 animate-spin rounded-full border-b-4 border-t-4 border-zinc-500'></div>
+            <div className='size-4 animate-spin rounded-full border-b-4 border-t-4 border-zinc-500'></div>
             <div className='text-xl'>Đang tải dữ liệu...</div>
           </div>
         ) : error ? (

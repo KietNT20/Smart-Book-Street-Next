@@ -177,12 +177,12 @@ const BookTable = ({
                   ISBN
                   {sortField === 'ISBN' ? (
                     sortOrder === Sort.ASC ? (
-                      <SortAsc className='ml-2 h-4 w-4' />
+                      <SortAsc className='ml-2 size-4' />
                     ) : (
-                      <SortDesc className='ml-2 h-4 w-4' />
+                      <SortDesc className='ml-2 size-4' />
                     )
                   ) : (
-                    <ArrowUpDown className='ml-2 h-4 w-4' />
+                    <ArrowUpDown className='ml-2 size-4' />
                   )}
                 </Button>
               </TableHead>
@@ -194,12 +194,12 @@ const BookTable = ({
                   Tiêu đề
                   {sortField === 'Title' ? (
                     sortOrder === Sort.ASC ? (
-                      <SortAsc className='ml-2 h-4 w-4' />
+                      <SortAsc className='ml-2 size-4' />
                     ) : (
-                      <SortDesc className='ml-2 h-4 w-4' />
+                      <SortDesc className='ml-2 size-4' />
                     )
                   ) : (
-                    <ArrowUpDown className='ml-2 h-4 w-4' />
+                    <ArrowUpDown className='ml-2 size-4' />
                   )}
                 </Button>
               </TableHead>
@@ -211,12 +211,12 @@ const BookTable = ({
                   Ngôn ngữ
                   {sortField === 'Languages' ? (
                     sortOrder === Sort.ASC ? (
-                      <SortAsc className='ml-2 h-4 w-4' />
+                      <SortAsc className='ml-2 size-4' />
                     ) : (
-                      <SortDesc className='ml-2 h-4 w-4' />
+                      <SortDesc className='ml-2 size-4' />
                     )
                   ) : (
-                    <ArrowUpDown className='ml-2 h-4 w-4' />
+                    <ArrowUpDown className='ml-2 size-4' />
                   )}
                 </Button>
               </TableHead>
@@ -228,12 +228,12 @@ const BookTable = ({
                   Ngày xuất bản
                   {sortField === 'PublicationDate' ? (
                     sortOrder === Sort.ASC ? (
-                      <SortAsc className='ml-2 h-4 w-4' />
+                      <SortAsc className='ml-2 size-4' />
                     ) : (
-                      <SortDesc className='ml-2 h-4 w-4' />
+                      <SortDesc className='ml-2 size-4' />
                     )
                   ) : (
-                    <ArrowUpDown className='ml-2 h-4 w-4' />
+                    <ArrowUpDown className='ml-2 size-4' />
                   )}
                 </Button>
               </TableHead>
@@ -245,12 +245,12 @@ const BookTable = ({
                   Giá
                   {sortField === 'Price' ? (
                     sortOrder === Sort.ASC ? (
-                      <SortAsc className='ml-2 h-4 w-4' />
+                      <SortAsc className='ml-2 size-4' />
                     ) : (
-                      <SortDesc className='ml-2 h-4 w-4' />
+                      <SortDesc className='ml-2 size-4' />
                     )
                   ) : (
-                    <ArrowUpDown className='ml-2 h-4 w-4' />
+                    <ArrowUpDown className='ml-2 size-4' />
                   )}
                 </Button>
               </TableHead>
@@ -284,7 +284,7 @@ const BookTable = ({
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant='ghost' size='icon'>
-                          <MoreHorizontal className='h-4 w-4' />
+                          <MoreHorizontal className='size-4' />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align='end'>
@@ -292,14 +292,14 @@ const BookTable = ({
 
                         <DropdownMenuItem asChild className='cursor-pointer'>
                           <Link href={`${PATH.BOOKS}/${book.id}`}>
-                            <Eye className='mr-2 h-4 w-4' />
+                            <Eye className='mr-2 size-4' />
                             Xem chi tiết
                           </Link>
                         </DropdownMenuItem>
 
                         <DropdownMenuItem asChild className='cursor-pointer'>
                           <Link href={`${PATH.BOOKS}/${book.id}/edit`}>
-                            <Edit className='mr-2 h-4 w-4' />
+                            <Edit className='mr-2 size-4' />
                             Chỉnh sửa
                           </Link>
                         </DropdownMenuItem>
@@ -308,7 +308,7 @@ const BookTable = ({
                           className='cursor-pointer text-destructive'
                           onClick={() => handleDeleteClick(book)}
                         >
-                          <Trash className='mr-2 h-4 w-4' />
+                          <Trash className='mr-2 size-4' />
                           Xóa
                         </DropdownMenuItem>
 
@@ -316,7 +316,7 @@ const BookTable = ({
                           className='cursor-pointer'
                           onClick={() => handleAddToStoreClick(book)}
                         >
-                          <PackagePlus className='mr-2 h-4 w-4' />
+                          <PackagePlus className='mr-2 size-4' />
                           Thêm vào kho
                         </DropdownMenuItem>
                       </DropdownMenuContent>

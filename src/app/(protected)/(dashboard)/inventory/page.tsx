@@ -28,7 +28,7 @@ const InventoryPage = () => {
         <Link href={PATH.ORDERS} passHref>
           <Badge count={totalItem}>
             <Button>
-              <ShoppingCart className='mr-2 h-4 w-4' /> Đơn hàng
+              <ShoppingCart className='mr-2 size-4' /> Đơn hàng
             </Button>
           </Badge>
         </Link>

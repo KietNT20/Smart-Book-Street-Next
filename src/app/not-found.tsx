@@ -45,14 +45,14 @@ export default function NotFound() {
             className='flex items-center gap-2'
             onClick={() => router.back()}
           >
-            <ArrowLeftIcon className='h-4 w-4' />
+            <ArrowLeftIcon className='size-4' />
             Quay lại
           </Button>
           <Button
             className='flex items-center gap-2 bg-primary text-primary-foreground'
             onClick={() => router.push(PATH.HOME)}
           >
-            <HomeIcon className='h-4 w-4' />
+            <HomeIcon className='size-4' />
             Về Dashboard
           </Button>
         </div>

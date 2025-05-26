@@ -21,7 +21,14 @@ import {
   useGetEventById,
 } from '@/hooks/use-event';
 import { formatDateVi } from '@/lib/utils';
-import { Calendar, Clock, Loader2, MapPin } from 'lucide-react';
+import {
+  Calendar,
+  Clock,
+  Loader2,
+  Mail,
+  MapPin,
+  Megaphone,
+} from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
 
@@ -146,7 +153,7 @@ export default function EventCreateRequestPage({
 
                 <div className='grid grid-cols-2 gap-4'>
                   <div className='flex items-center gap-2'>
-                    <Calendar className='h-4 w-4 text-muted-foreground' />
+                    <Calendar className='size-4 text-muted-foreground' />
                     <div>
                       <Label className='text-sm font-semibold'>
                         Ngày bắt đầu
@@ -159,7 +166,7 @@ export default function EventCreateRequestPage({
                     </div>
                   </div>
                   <div className='flex items-center gap-2'>
-                    <Calendar className='h-4 w-4 text-muted-foreground' />
+                    <Calendar className='size-4 text-muted-foreground' />
                     <div>
                       <Label className='text-sm font-semibold'>
                         Ngày kết thúc
@@ -179,7 +186,7 @@ export default function EventCreateRequestPage({
               {/* Location Information */}
               <div className='space-y-4'>
                 <Label className='flex items-center gap-2 text-base font-semibold'>
-                  <MapPin className='h-4 w-4' />
+                  <MapPin className='size-4' />
                   Thông tin địa điểm
                 </Label>
                 <Card>
@@ -217,7 +224,7 @@ export default function EventCreateRequestPage({
               {/* Event Schedules */}
               <div className='space-y-4'>
                 <Label className='flex items-center gap-2 text-base font-semibold'>
-                  <Clock className='h-4 w-4' />
+                  <Clock className='size-4' />
                   Lịch trình sự kiện
                 </Label>
                 <div className='space-y-2'>
@@ -248,18 +255,20 @@ export default function EventCreateRequestPage({
 
               {/* Additional Information */}
               <div className='grid grid-cols-2 gap-4 text-sm'>
-                <div>
-                  <Label className='font-medium'>Email tổ chức</Label>
-                  <p className='text-muted-foreground'>
+                <Card>
+                  <CardContent className='flex items-center gap-2 p-6'>
+                    <Mail className='size-4 text-muted-foreground' />
                     {eventData?.organizerEmail || 'Không có'}
-                  </p>
-                </div>
-                <div>
-                  <Label className='font-medium'>Cho phép quảng cáo</Label>
-                  <p className='text-muted-foreground'>
-                    {eventData?.allowAds ? 'Có' : 'Không'}
-                  </p>
-                </div>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent className='flex items-center gap-2 p-6'>
+                    <Megaphone className='size-4 text-muted-foreground' />
+                    {eventData?.allowAds
+                      ? 'Có quảng cáo'
+                      : 'Không có quảng cáo'}
+                  </CardContent>
+                </Card>
               </div>
             </CardContent>
           </Card>

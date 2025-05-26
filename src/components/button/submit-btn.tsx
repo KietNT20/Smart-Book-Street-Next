@@ -13,7 +13,7 @@ const SubmitBtn = ({ ID, _onPending }: Props) => {
     <Button type='submit' disabled={_onPending} className='px-7'>
       {_onPending ? (
         <>
-          <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+          <Loader2 className='mr-2 size-4 animate-spin' />
           Đang xử lý...
         </>
       ) : ID ? (

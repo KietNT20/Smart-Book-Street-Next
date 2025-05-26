@@ -85,7 +85,7 @@ const AuthorCombobox = <T extends FieldValues>({
                       : description
                         ? description
                         : 'Chọn tác giả...'}
-                    <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
+                    <ChevronsUpDown className='ml-2 size-4 shrink-0 opacity-50' />
                   </Button>
                 </FormControl>
               </PopoverTrigger>
@@ -154,7 +154,7 @@ const AuthorCombobox = <T extends FieldValues>({
                             >
                               <Check
                                 className={cn(
-                                  'mr-2 h-4 w-4',
+                                  'mr-2 size-4',
                                   isSelected ? 'opacity-100' : 'opacity-0'
                                 )}
                               />

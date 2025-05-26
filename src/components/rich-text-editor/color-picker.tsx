@@ -46,7 +46,7 @@ const ColorPicker = ({ editor }: { editor: Editor }) => {
             type='button'
             title='Màu chữ'
           >
-            <Palette className='h-4 w-4' />
+            <Palette className='size-4' />
             {currentColor && (
               <div
                 className='ml-1 h-2 w-2 rounded-full border border-zinc-300'

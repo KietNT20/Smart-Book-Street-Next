@@ -72,9 +72,9 @@ const UserFilter = ({
               <Button variant='outline' size='sm'>
                 <Filter /> Bộ lọc{' '}
                 {isOpen ? (
-                  <ChevronUp className='ml-2 h-4 w-4' />
+                  <ChevronUp className='ml-2 size-4' />
                 ) : (
-                  <ChevronDown className='ml-2 h-4 w-4' />
+                  <ChevronDown className='ml-2 size-4' />
                 )}
               </Button>
             </CollapsibleTrigger>
@@ -100,7 +100,7 @@ const UserFilter = ({
                       className='absolute right-0 top-0 h-full'
                       onClick={() => clearField('userName')}
                     >
-                      <X className='h-4 w-4' />
+                      <X className='size-4' />
                     </Button>
                   )}
                 </div>
@@ -124,7 +124,7 @@ const UserFilter = ({
                       className='absolute right-0 top-0 h-full'
                       onClick={() => clearField('fullName')}
                     >
-                      <X className='h-4 w-4' />
+                      <X className='size-4' />
                     </Button>
                   )}
                 </div>
@@ -146,7 +146,7 @@ const UserFilter = ({
                       className='absolute right-0 top-0 h-full'
                       onClick={() => clearField('email')}
                     >
-                      <X className='h-4 w-4' />
+                      <X className='size-4' />
                     </Button>
                   )}
                 </div>
@@ -168,7 +168,7 @@ const UserFilter = ({
                       className='absolute right-0 top-0 h-full'
                       onClick={() => clearField('phone')}
                     >
-                      <X className='h-4 w-4' />
+                      <X className='size-4' />
                     </Button>
                   )}
                 </div>
@@ -196,7 +196,7 @@ const UserFilter = ({
                       className='absolute right-0 top-0 h-full'
                       onClick={() => clearField('phone')}
                     >
-                      <X className='h-4 w-4' />
+                      <X className='size-4' />
                     </Button>
                   )}
                 </div>
@@ -227,7 +227,7 @@ const UserFilter = ({
                       className='absolute right-0 top-0 h-full'
                       onClick={() => clearField('gender')}
                     >
-                      <X className='h-4 w-4' />
+                      <X className='size-4' />
                     </Button>
                   )}
                 </div>
