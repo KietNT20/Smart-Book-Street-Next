@@ -25,8 +25,8 @@ export const usePublisherForm = ({ publisher }: Props = {}) => {
   const [previewAdditionalFiles, setPreviewAdditionalFiles] = useState<
     string[]
   >([]);
-  const [userEmail, setUserEmail] = useState('');
-  const [shouldCheckEmail, setShouldCheckEmail] = useState(false);
+  const [userEmail, setUserEmail] = useState<string>('');
+  const [shouldCheckEmail, setShouldCheckEmail] = useState<boolean>(false);
   const mainImageInputRef = useRef<HTMLInputElement>(null);
   const additionalImagesInputRef = useRef<HTMLInputElement>(null);
 

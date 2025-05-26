@@ -19,6 +19,9 @@ export enum PATH {
   STORES = '/stores',
   STORE_CREATE = '/stores/create',
 
+  STREETS = '/streets',
+  STREET_CREATE = '/streets/create',
+
   BOOKS = '/books',
   BOOK_CREATE = '/books/create',
 

@@ -69,7 +69,7 @@ const UserTable = ({
   sortOrder,
   handleSort,
 }: Props) => {
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
   const [userToDelete, setUserToDelete] = useState<string | null>(null);
 
   const { deleteUser } = useUserMutation();

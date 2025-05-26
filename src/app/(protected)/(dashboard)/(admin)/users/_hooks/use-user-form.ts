@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 
 export const useUserForm = () => {
   const [previewMainImage, setPreviewMainImage] = useState<string | null>(null);
-  const [useDefaultPassword, setUseDefaultPassword] = useState(true);
+  const [useDefaultPassword, setUseDefaultPassword] = useState<boolean>(true);
   const { createUser, createUserPending } = useUserMutation();
   const fileInputRef = useRef<HTMLInputElement>(null);
 

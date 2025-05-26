@@ -127,6 +127,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         roles: [RoleEnums.ADMIN],
         items: [
           {
+            title: 'Đường sách',
+            url: PATH.STREETS,
+            roles: [RoleEnums.ADMIN],
+          },
+          {
             title: 'Khu vực',
             url: PATH.ZONES,
             roles: [RoleEnums.ADMIN],
@@ -153,24 +158,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           { url: PATH.CALENDAR_EVENT },
           { url: PATH.EVENT_CREATION_REQUEST },
         ]),
-        roles: [RoleEnums.ADMIN],
+        roles: [RoleEnums.ADMIN, RoleEnums.ORGANIZER],
         items: [
           {
             title: 'Quản lý sự kiện',
             url: PATH.EVENTS,
             roles: [RoleEnums.ADMIN],
           },
-          {
-            title: 'Đăng ký tạo sự kiện',
-            url: PATH.EVENT_CREATION,
-            roles: [
-              RoleEnums.ADMIN,
-              RoleEnums.ORGANIZER,
-              RoleEnums.PUBLISHER,
-              RoleEnums.STORE_MANAGER,
-              RoleEnums.STORE_OWNER,
-            ],
-          },
+
           {
             title: 'Đang chờ duyệt',
             url: PATH.EVENT_CREATION_REQUEST,
@@ -350,6 +345,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         url: PATH.DASHBOARD,
         icon: PieChart,
         roles: [RoleEnums.ADMIN, RoleEnums.PUBLISHER],
+      },
+      {
+        name: 'Đăng ký tạo sự kiện',
+        url: PATH.EVENT_CREATION,
+        icon: CalendarIcon,
+        roles: [RoleEnums.ADMIN, RoleEnums.ORGANIZER],
       },
       {
         name: 'Bảng điều khiển cửa hàng',

@@ -19,8 +19,8 @@ export interface SearchFilters {
 }
 
 const PublishersPage = () => {
-  const [pageNumber, setPageNumber] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageNumber, setPageNumber] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(10);
   const [sortField, setSortField] = useState<string>('');
   const [sortOrder, setSortOrder] = useState<Sort>(Sort.DESC);
   const [filters, setFilters] = useState<SearchFilters>({
@@ -30,7 +30,7 @@ const PublishersPage = () => {
     email: '',
     website: '',
   });
-  const [isSearching, setIsSearching] = useState(false);
+  const [isSearching, setIsSearching] = useState<boolean>(false);
 
   const buildResultObject = () => {
     if (!isSearching) return {};

@@ -71,7 +71,7 @@ export const StoreTable = ({
   sortOrder,
   handleSort,
 }: StoreTableProps) => {
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
   const [storeToDelete, setStoreToDelete] = useState<string | null>(null);
   const router = useRouter();
   const pathname = usePathname();

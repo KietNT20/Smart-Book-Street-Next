@@ -90,7 +90,9 @@ export const eventService = {
     );
     return res.data;
   },
-  getEventsInDateForCheckin: async (params: EventStaffParams) => {
+  getEventsInDateForCheckin: async (
+    params: EventStaffParams
+  ): Promise<EventsResponse> => {
     const res = await axiosInstance.post(
       API_URL.EVENTS.EVENTS_IN_DATE_FOR_CHECKIN,
       params

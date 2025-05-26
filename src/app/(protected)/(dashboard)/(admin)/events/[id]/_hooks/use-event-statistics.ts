@@ -24,7 +24,8 @@ export const useEventStatistics = (eventId: string) => {
     number | null
   >(null);
   const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
-  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+  const [showAdvancedFilters, setShowAdvancedFilters] =
+    useState<boolean>(false);
   const [openCharts, setOpenCharts] = useState<ChartState>({
     age: false,
     gender: false,

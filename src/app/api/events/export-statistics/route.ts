@@ -99,6 +99,129 @@ const addDataRowsWithPercentage = (
   }
   totalRow.getCell(2).alignment = { horizontal: 'center' };
   totalRow.getCell(3).alignment = { horizontal: 'right' };
+
+  return sortedData.length + 2; // Return number of data rows + header + total
+};
+
+// Function to create visual data representation using Excel formatting
+const createVisualDataRepresentation = (
+  sheet: ExcelJS.Worksheet,
+  data: EventStatistics[],
+  startColumn: number = 5,
+  title: string = 'Biểu đồ trực quan'
+) => {
+  if (!data || data.length === 0) return;
+
+  const total = data.reduce((sum, item) => sum + item.value, 0);
+
+  // Add title for visual representation
+  const titleCell = sheet.getCell(1, startColumn);
+  titleCell.value = title;
+  titleCell.font = { bold: true, size: 14 };
+  titleCell.fill = {
+    type: 'pattern',
+    pattern: 'solid',
+    fgColor: { argb: 'FFE2EFDA' },
+  };
+
+  // Merge cells for title
+  sheet.mergeCells(1, startColumn, 1, startColumn + 2);
+
+  // Create header for visual data
+  const headerRow = 3;
+  const visualHeaders = ['Mục', 'Số lượng', 'Biểu đồ trực quan'];
+
+  visualHeaders.forEach((header, index) => {
+    const cell = sheet.getCell(headerRow, startColumn + index);
+    cell.value = header;
+    cell.font = { bold: true };
+    cell.fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FF4472C4' },
+    };
+    cell.font = { bold: true, color: { argb: 'FFFFFFFF' } };
+    cell.border = {
+      top: { style: 'thin' },
+      left: { style: 'thin' },
+      bottom: { style: 'thin' },
+      right: { style: 'thin' },
+    };
+  });
+
+  // Add data with visual bars
+  data.forEach((item, index) => {
+    const rowIndex = headerRow + 1 + index;
+    const percentage = (item.value / total) * 100;
+
+    // Label
+    const labelCell = sheet.getCell(rowIndex, startColumn);
+    labelCell.value = item.label;
+    labelCell.border = {
+      top: { style: 'thin' },
+      left: { style: 'thin' },
+      bottom: { style: 'thin' },
+      right: { style: 'thin' },
+    };
+
+    // Value
+    const valueCell = sheet.getCell(rowIndex, startColumn + 1);
+    valueCell.value = item.value;
+    valueCell.alignment = { horizontal: 'center' };
+    valueCell.border = {
+      top: { style: 'thin' },
+      left: { style: 'thin' },
+      bottom: { style: 'thin' },
+      right: { style: 'thin' },
+    };
+
+    // Visual bar using repeated characters and color coding
+    const barCell = sheet.getCell(rowIndex, startColumn + 2);
+    const barLength = Math.round(percentage / 5); // Scale down for display
+    const bar =
+      '█'.repeat(Math.max(1, barLength)) + ` ${percentage.toFixed(1)}%`;
+    barCell.value = bar;
+
+    // Color code based on value
+    const colorIntensity = Math.min(255, Math.round((percentage / 100) * 255));
+    const hexColor = `FF${(255 - colorIntensity).toString(16).padStart(2, '0')}${colorIntensity.toString(16).padStart(2, '0')}${(255 - colorIntensity).toString(16).padStart(2, '0')}`;
+
+    barCell.fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: hexColor },
+    };
+    barCell.border = {
+      top: { style: 'thin' },
+      left: { style: 'thin' },
+      bottom: { style: 'thin' },
+      right: { style: 'thin' },
+    };
+  });
+
+  // Add instructions for creating charts
+  const instructionRow = headerRow + data.length + 3;
+  const instructionCell = sheet.getCell(instructionRow, startColumn);
+  instructionCell.value = 'Hướng dẫn tạo biểu đồ:';
+  instructionCell.font = { bold: true, italic: true };
+
+  const instructions = [
+    '1. Chọn dữ liệu từ cột A đến C (bỏ qua hàng tổng)',
+    '2. Vào Insert > Charts',
+    '3. Chọn loại biểu đồ phù hợp (Pie/Column)',
+    '4. Tùy chỉnh tiêu đề và màu sắc theo ý muốn',
+  ];
+
+  instructions.forEach((instruction, index) => {
+    const cell = sheet.getCell(instructionRow + index + 1, startColumn);
+    cell.value = instruction;
+    cell.font = { italic: true, size: 10 };
+  });
+
+  // Set column widths for better display
+  sheet.getColumn(startColumn).width = 25;
+  sheet.getColumn(startColumn + 1).width = 15;
+  sheet.getColumn(startColumn + 2).width = 30;
 };
 
 const createOverviewSheet = (
@@ -221,6 +344,36 @@ const createOverviewSheet = (
     new Date().toLocaleString('vi-VN'),
   ]);
   timeRow.font = { italic: true };
+
+  // Add summary visual data if available
+  if (data.statistics) {
+    const summaryData: EventStatistics[] = [];
+
+    if (data.statistics.ageChart && data.statistics.ageChart.length > 0) {
+      const ageTotal = data.statistics.ageChart.reduce(
+        (sum, item) => sum + item.value,
+        0
+      );
+      summaryData.push({ label: 'Độ tuổi', value: ageTotal });
+    }
+
+    if (data.statistics.genderChart && data.statistics.genderChart.length > 0) {
+      const genderTotal = data.statistics.genderChart.reduce(
+        (sum, item) => sum + item.value,
+        0
+      );
+      summaryData.push({ label: 'Giới tính', value: genderTotal });
+    }
+
+    if (summaryData.length > 0) {
+      createVisualDataRepresentation(
+        overviewSheet,
+        summaryData,
+        4,
+        'TỔNG QUAN THỐNG KÊ'
+      );
+    }
+  }
 };
 
 const createStatisticsSheet = (
@@ -245,6 +398,14 @@ const createStatisticsSheet = (
 
   // Data rows
   addDataRowsWithPercentage(sheet, data);
+
+  // Add visual representation
+  createVisualDataRepresentation(
+    sheet,
+    data,
+    5,
+    `Biểu đồ trực quan - ${headerLabel}`
+  );
 };
 
 const createSummarySheet = (
@@ -351,6 +512,50 @@ const createSummarySheet = (
   if (!customOptions || customOptions.includeAddress) {
     addCategoryData('Địa điểm', statistics.addressChart);
   }
+
+  // Add comparison visual data
+  const comparisonData: EventStatistics[] = [];
+
+  if (statistics.ageChart && statistics.ageChart.length > 0) {
+    const ageTotal = statistics.ageChart.reduce(
+      (sum, item) => sum + item.value,
+      0
+    );
+    comparisonData.push({ label: 'Độ tuổi', value: ageTotal });
+  }
+
+  if (statistics.genderChart && statistics.genderChart.length > 0) {
+    const genderTotal = statistics.genderChart.reduce(
+      (sum, item) => sum + item.value,
+      0
+    );
+    comparisonData.push({ label: 'Giới tính', value: genderTotal });
+  }
+
+  if (statistics.referenceChart && statistics.referenceChart.length > 0) {
+    const refTotal = statistics.referenceChart.reduce(
+      (sum, item) => sum + item.value,
+      0
+    );
+    comparisonData.push({ label: 'Nguồn tham khảo', value: refTotal });
+  }
+
+  if (statistics.addressChart && statistics.addressChart.length > 0) {
+    const addressTotal = statistics.addressChart.reduce(
+      (sum, item) => sum + item.value,
+      0
+    );
+    comparisonData.push({ label: 'Địa điểm', value: addressTotal });
+  }
+
+  if (comparisonData.length > 0) {
+    createVisualDataRepresentation(
+      summarySheet,
+      comparisonData,
+      6,
+      'SO SÁNH CÁC LOẠI THỐNG KÊ'
+    );
+  }
 };
 
 const generateEmailContent = (data: ExportStatisticsRequest): string => {
@@ -365,6 +570,7 @@ const generateEmailContent = (data: ExportStatisticsRequest): string => {
       <li>Thời gian: ${new Date(data.dateRange.startDate).toLocaleDateString('vi-VN')} - ${new Date(data.dateRange.endDate).toLocaleDateString('vi-VN')}</li>
     </ul>
     <p>Báo cáo được xuất tự động tại thời điểm: ${new Date().toLocaleString('vi-VN')}</p>
+    <p><em>File Excel đính kèm bao gồm dữ liệu trực quan và hướng dẫn tạo biểu đồ chuyên nghiệp.</em></p>
     <p>Trân trọng,<br>Hệ thống quản lý sự kiện</p>
   `;
 };
@@ -460,7 +666,7 @@ export async function POST(
 
     return NextResponse.json({
       success: true,
-      message: 'Xuất thống kê thành công và đã gửi email',
+      message: 'Xuất thống kê thành công và đã gửi email với biểu đồ trực quan',
       emailInfo: info.messageId,
     });
   } catch (error) {

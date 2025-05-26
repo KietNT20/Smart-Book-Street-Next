@@ -62,8 +62,8 @@ const roleBasedRoutes: RoleRouteMap = {
     RoleEnums.STORE_OWNER,
     RoleEnums.STAFF,
   ],
-  '/event-date/*': [RoleEnums.STAFF],
-  [PATH.EVENT_DATE]: [RoleEnums.STAFF],
+  '/event-date/*': [RoleEnums.STAFF, RoleEnums.ORGANIZER],
+  [PATH.EVENT_DATE]: [RoleEnums.STAFF, RoleEnums.ORGANIZER],
 };
 
 const schemasRoleToken =

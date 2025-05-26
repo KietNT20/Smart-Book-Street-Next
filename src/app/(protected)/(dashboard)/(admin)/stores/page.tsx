@@ -20,7 +20,7 @@ export interface SearchFilters {
 }
 
 export default function StoresPage() {
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState<number>(10);
   const [sortField, setSortField] = useState<string>('');
   const [sortOrder, setSortOrder] = useState<Sort>(Sort.DESC);
   const [filters, setFilters] = useState<SearchFilters>({
@@ -30,7 +30,7 @@ export default function StoresPage() {
     type: '',
     zoneId: '',
   });
-  const [isSearching, setIsSearching] = useState(false);
+  const [isSearching, setIsSearching] = useState<boolean>(false);
 
   // const router = useRouter();
   const searchParams = useSearchParams();

@@ -9,7 +9,6 @@ export async function GET(
   try {
     const eventId = params.id;
 
-    // Get event details and registration statistics in parallel
     const [eventDetails, registrationStats] = await Promise.all([
       eventService.getEventById(eventId),
       eventRegistrationService.statistic(eventId),
@@ -17,7 +16,7 @@ export async function GET(
 
     return NextResponse.json({
       event: eventDetails.result,
-      registrationStats: registrationStats,
+      registrationStatistics: registrationStats,
     });
   } catch (error) {
     console.error('Error fetching event details:', error);

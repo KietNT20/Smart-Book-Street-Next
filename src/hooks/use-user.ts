@@ -188,7 +188,7 @@ export const useUserMutation = () => {
 
 export const useUserById = (userId: string) => {
   const { data, isLoading, error } = useQuery({
-    queryKey: ['user', userId],
+    queryKey: ['users', userId],
     queryFn: () => userService.getById(userId),
     enabled: !!userId,
   });

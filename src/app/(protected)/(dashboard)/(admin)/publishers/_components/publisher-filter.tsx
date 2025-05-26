@@ -27,7 +27,7 @@ const PublisherFilter = ({
   onSearch,
   onClearSearch,
 }: Props) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const debouncedFilters = useDebounce(filters, 700);
 
   const handleInputChange = (
@@ -82,7 +82,6 @@ const PublisherFilter = ({
                   />
                   {filters.publisherName && (
                     <Button
-                      variant='ghost'
                       size='icon'
                       className='absolute right-0 top-0 h-full'
                       onClick={() => clearField('publisherName')}
@@ -106,7 +105,6 @@ const PublisherFilter = ({
                   />
                   {filters.address && (
                     <Button
-                      variant='ghost'
                       size='icon'
                       className='absolute right-0 top-0 h-full'
                       onClick={() => clearField('address')}
@@ -128,7 +126,6 @@ const PublisherFilter = ({
                   />
                   {filters.phone && (
                     <Button
-                      variant='ghost'
                       size='icon'
                       className='absolute right-0 top-0 h-full'
                       onClick={() => clearField('phone')}
@@ -150,7 +147,6 @@ const PublisherFilter = ({
                   />
                   {filters.email && (
                     <Button
-                      variant='ghost'
                       size='icon'
                       className='absolute right-0 top-0 h-full'
                       onClick={() => clearField('email')}

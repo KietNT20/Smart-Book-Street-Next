@@ -68,7 +68,7 @@ const PublisherTable = ({
   sortOrder,
   handleSort,
 }: Props) => {
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
   const [publisherToDelete, setPublisherToDelete] = useState<string | null>(
     null
   );

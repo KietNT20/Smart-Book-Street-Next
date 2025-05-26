@@ -25,9 +25,9 @@ export interface SearchFilters {
 }
 
 export default function UsersPage() {
-  const [activeTab, setActiveTab] = useState('users');
-  const [pageNumber, setPageNumber] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [activeTab, setActiveTab] = useState<string>('users');
+  const [pageNumber, setPageNumber] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(10);
   const [sortField, setSortField] = useState<string>('');
   const [sortOrder, setSortOrder] = useState<Sort>(Sort.DESC);
   const [filters, setFilters] = useState<SearchFilters>({
