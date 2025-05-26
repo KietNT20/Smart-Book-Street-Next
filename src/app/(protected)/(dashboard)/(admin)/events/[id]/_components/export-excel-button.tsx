@@ -18,6 +18,7 @@ import { useQuery } from '@tanstack/react-query';
 import { FileSpreadsheet, Loader2, Mail } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import { z } from 'zod';
 
 export interface EventDetailResponse {
   event: Event;
@@ -28,15 +29,23 @@ export interface EventDetailError {
   error: string;
 }
 
+const emailSchema = z.object({
+  email: z
+    .string()
+    .email('Email không hợp lệ')
+    .min(1, 'Email không được để trống'),
+});
+
 type Props = {
   eventId: string;
+  defaultEmail?: string;
 };
 
-const StatisticsExportButton = ({ eventId }: Props) => {
+const StatisticsExportButton = ({ eventId, defaultEmail = '' }: Props) => {
   const [exporting, setExporting] = useState<boolean>(false);
   const [showDialog, setShowDialog] = useState<boolean>(false);
-  const [email, setEmail] = useState<string>('');
-  const [error, setError] = useState<string>('');
+  const [email, setEmail] = useState<string>(defaultEmail);
+  const [emailError, setEmailError] = useState<string>('');
 
   const {
     data: eventDetail,
@@ -54,12 +63,39 @@ const StatisticsExportButton = ({ eventId }: Props) => {
     enabled: !!eventId,
   });
 
-  const isValidEmail = (email: string): boolean =>
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const validateEmail = (emailValue: string) => {
+    const result = emailSchema.safeParse({ email: emailValue.trim() });
+    if (!result.success) {
+      const errorMessage =
+        result.error.errors[0]?.message || 'Email không hợp lệ';
+      setEmailError(errorMessage);
+      return false;
+    }
+    setEmailError('');
+    return true;
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newEmail = e.target.value;
+    setEmail(newEmail);
+
+    if (newEmail.trim()) {
+      validateEmail(newEmail);
+    } else {
+      setEmailError('');
+    }
+  };
+
+  const handleDialogChange = (open: boolean) => {
+    setShowDialog(open);
+    if (open) {
+      setEmail(defaultEmail);
+      setEmailError('');
+    }
+  };
 
   const sendStatistics = async (): Promise<void> => {
-    if (!isValidEmail(email)) {
-      setError('Vui lòng nhập email hợp lệ');
+    if (!validateEmail(email)) {
       return;
     }
 
@@ -68,7 +104,6 @@ const StatisticsExportButton = ({ eventId }: Props) => {
       return;
     }
 
-    setError('');
     setShowDialog(false);
     setExporting(true);
 
@@ -97,7 +132,7 @@ const StatisticsExportButton = ({ eventId }: Props) => {
               eventDetail.registrationStats.participationRate || '0%',
             attendedChart: eventDetail.registrationStats.attendedChart || [],
           },
-          organizerEmail: email,
+          organizerEmail: email.trim(),
           zoneInfo: eventDetail.event.zone,
           dateRange: {
             startDate: eventDetail.event.startDate,
@@ -119,14 +154,13 @@ const StatisticsExportButton = ({ eventId }: Props) => {
       }),
       {
         loading: 'Đang xuất Excel và gửi email...',
-        success: () => `Đã gửi thống kê qua email ${email} thành công!`,
+        success: () => `Đã gửi thống kê qua email ${email.trim()} thành công!`,
         error: 'Không thể xuất thống kê. Vui lòng thử lại sau.',
         finally: () => setExporting(false),
       }
     );
   };
 
-  // Show loading state while fetching data
   if (isLoading) {
     return (
       <Button variant='outline' className='flex items-center gap-2' disabled>
@@ -136,7 +170,6 @@ const StatisticsExportButton = ({ eventId }: Props) => {
     );
   }
 
-  // Show error state if failed to fetch
   if (isError || !eventDetail) {
     return (
       <Button variant='outline' className='flex items-center gap-2' disabled>
@@ -146,15 +179,15 @@ const StatisticsExportButton = ({ eventId }: Props) => {
     );
   }
 
-  // Disable button if no registrations
   const hasRegistrations = eventDetail.registrationStats.totalRegistrations > 0;
+  const canSend = email.trim() && !emailError && !exporting;
 
   return (
     <>
       <Button
         variant='outline'
         className='flex items-center gap-2'
-        onClick={() => setShowDialog(true)}
+        onClick={() => handleDialogChange(true)}
         disabled={exporting || !hasRegistrations}
         title={!hasRegistrations ? 'Chưa có đăng ký nào' : undefined}
       >
@@ -169,7 +202,7 @@ const StatisticsExportButton = ({ eventId }: Props) => {
         {exporting ? 'Đang xử lý...' : 'Xuất & Gửi Thống Kê'}
       </Button>
 
-      <Dialog open={showDialog} onOpenChange={setShowDialog}>
+      <Dialog open={showDialog} onOpenChange={handleDialogChange}>
         <DialogContent className='sm:max-w-[425px]'>
           <DialogHeader>
             <DialogTitle>Nhập email nhận thống kê</DialogTitle>
@@ -181,27 +214,37 @@ const StatisticsExportButton = ({ eventId }: Props) => {
 
           <div className='py-4'>
             <div className='grid items-center gap-2'>
-              <Label htmlFor='email'>Email</Label>
+              <Label htmlFor='email' className='flex items-center gap-2'>
+                <Mail className='h-4 w-4' />
+                Email nhận thống kê
+              </Label>
               <Input
                 id='email'
                 type='email'
-                placeholder='email@example.com'
+                placeholder='Nhập email để nhận thống kê'
                 value={email}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  setEmail(e.target.value);
-                  setError('');
-                }}
+                onChange={handleEmailChange}
                 autoComplete='off'
+                className={emailError ? 'border-destructive' : ''}
               />
-              {error && <p className='text-sm text-red-500'>{error}</p>}
+              {emailError && (
+                <p className='text-sm text-destructive'>{emailError}</p>
+              )}
+              {defaultEmail && (
+                <p className='text-xs text-muted-foreground'>
+                  Email mặc định: {defaultEmail}
+                </p>
+              )}
             </div>
           </div>
 
           <DialogFooter>
-            <Button variant='outline' onClick={() => setShowDialog(false)}>
+            <Button variant='outline' onClick={() => handleDialogChange(false)}>
               Hủy
             </Button>
-            <Button onClick={sendStatistics}>Gửi thống kê</Button>
+            <Button onClick={sendStatistics} disabled={!canSend}>
+              Gửi thống kê
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

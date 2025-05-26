@@ -46,8 +46,14 @@ export const eventRegistrationService = {
   },
   checkAttendend: async (payload: CheckedAttendendPayload) => {
     const res = await axiosInstance.put(
-      `${API_URL.EVENT_REGISTRATIONS.INDEX}/check-attendend`,
+      API_URL.EVENT_REGISTRATIONS.CHECK_ATTENDEND,
       payload
+    );
+    return res.data;
+  },
+  exportStatisticEventRegistrations: async (eventId: string, email: string) => {
+    const res = await axiosInstance.get(
+      `${API_URL.EVENT_REGISTRATIONS.EXPORT_STATISTIC}/${eventId}?email=${email}`
     );
     return res.data;
   },

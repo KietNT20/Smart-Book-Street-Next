@@ -26,6 +26,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { DatePicker } from 'antd';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
+  AlertCircle,
   BarChart4,
   Calendar,
   ChevronDown,
@@ -41,13 +42,14 @@ import {
 import { useEventStatistics } from '../../_hooks/use-event-statistics';
 import EventBarchart from '../event-barchart';
 import EventChart from '../event-statistics-charts';
-import StatisticsExportButton from '../export-excel-button';
+import ExportStatisticsComp from '../export-statistics';
 
 type Props = {
   eventId: string;
+  organizerEmail?: string;
 };
 
-const EventStatistics = ({ eventId }: Props) => {
+const EventStatistics = ({ eventId, organizerEmail }: Props) => {
   const {
     // States
     statisticFilter,
@@ -108,7 +110,16 @@ const EventStatistics = ({ eventId }: Props) => {
     },
   };
 
-  if (!hasAnyChart) return null;
+  // Component hiển thị khi không có dữ liệu
+  const NoDataMessage = ({ message }: { message: string }) => (
+    <div className='flex flex-col items-center justify-center py-8 text-center'>
+      <AlertCircle className='mb-4 h-12 w-12 text-muted-foreground' />
+      <h3 className='mb-2 text-lg font-semibold text-muted-foreground'>
+        Không có dữ liệu
+      </h3>
+      <p className='text-sm text-muted-foreground'>{message}</p>
+    </div>
+  );
 
   return (
     <Card className='overflow-hidden'>
@@ -138,7 +149,10 @@ const EventStatistics = ({ eventId }: Props) => {
               )}
             </div>
           </div>
-          <StatisticsExportButton eventId={eventId} />
+          <ExportStatisticsComp
+            eventId={eventId}
+            defaultEmail={organizerEmail || ''}
+          />
         </div>
 
         {/* Basic Filter Buttons */}
@@ -336,270 +350,278 @@ const EventStatistics = ({ eventId }: Props) => {
       </CardHeader>
 
       <CardContent className='space-y-4 overflow-hidden'>
-        {/* Age Chart Collapsible */}
-        {hasAgeChart && (
-          <Collapsible
-            open={openCharts.age}
-            onOpenChange={() => toggleChart('age')}
-            className='overflow-hidden rounded-md border'
-          >
-            <CollapsibleTrigger asChild>
-              <Button
-                variant='ghost'
-                className='flex w-full items-center justify-between p-4'
+        {!hasAnyChart ? (
+          <NoDataMessage message='Không có dữ liệu biểu đồ cho bộ lọc hiện tại. Vui lòng thử thay đổi bộ lọc.' />
+        ) : (
+          <>
+            {/* Age Chart Collapsible */}
+            {hasAgeChart && (
+              <Collapsible
+                open={openCharts.age}
+                onOpenChange={() => toggleChart('age')}
+                className='overflow-hidden rounded-md border'
               >
-                <div className='flex items-center font-medium'>
-                  <BarChart4 className='mr-2 h-4 w-4' />
-                  Phân bố độ tuổi
-                </div>
-                {openCharts.age ? (
-                  <ChevronUp className='h-4 w-4' />
-                ) : (
-                  <ChevronDown className='h-4 w-4' />
-                )}
-              </Button>
-            </CollapsibleTrigger>
-            <AnimatePresence initial={false}>
-              {openCharts.age && (
-                <CollapsibleContent forceMount className='overflow-hidden'>
-                  <motion.div
-                    variants={contentVariants}
-                    initial='hidden'
-                    animate='visible'
-                    exit='hidden'
-                    className='px-4 pb-4'
+                <CollapsibleTrigger asChild>
+                  <Button
+                    variant='ghost'
+                    className='flex w-full items-center justify-between p-4'
                   >
-                    <div className='mb-4 text-sm text-muted-foreground'>
-                      Thống kê độ tuổi - {getFilterLabel(statisticFilter)}
-                      {getFilterDescription()}
+                    <div className='flex items-center font-medium'>
+                      <BarChart4 className='mr-2 h-4 w-4' />
+                      Phân bố độ tuổi
                     </div>
-                    <div className='w-full'>
-                      <EventBarchart
-                        data={statisticData?.ageChart || []}
-                        title='Phân bố độ tuổi'
-                        description={`Thống kê độ tuổi - ${getFilterLabel(statisticFilter)}`}
-                      />
-                    </div>
-                  </motion.div>
-                </CollapsibleContent>
-              )}
-            </AnimatePresence>
-          </Collapsible>
-        )}
+                    {openCharts.age ? (
+                      <ChevronUp className='h-4 w-4' />
+                    ) : (
+                      <ChevronDown className='h-4 w-4' />
+                    )}
+                  </Button>
+                </CollapsibleTrigger>
+                <AnimatePresence initial={false}>
+                  {openCharts.age && (
+                    <CollapsibleContent forceMount className='overflow-hidden'>
+                      <motion.div
+                        variants={contentVariants}
+                        initial='hidden'
+                        animate='visible'
+                        exit='hidden'
+                        className='px-4 pb-4'
+                      >
+                        <div className='w-full'>
+                          {statisticData?.ageChart &&
+                          statisticData.ageChart.length > 0 ? (
+                            <EventBarchart
+                              data={statisticData.ageChart}
+                              title='Phân bố độ tuổi'
+                              description={`Thống kê độ tuổi - ${getFilterLabel(statisticFilter)}`}
+                            />
+                          ) : (
+                            <NoDataMessage message='Không có dữ liệu phân bố độ tuổi cho bộ lọc hiện tại.' />
+                          )}
+                        </div>
+                      </motion.div>
+                    </CollapsibleContent>
+                  )}
+                </AnimatePresence>
+              </Collapsible>
+            )}
 
-        {/* Gender Chart Collapsible */}
-        {hasGenderChart && (
-          <Collapsible
-            open={openCharts.gender}
-            onOpenChange={() => toggleChart('gender')}
-            className='overflow-hidden rounded-md border'
-          >
-            <CollapsibleTrigger asChild>
-              <Button
-                variant='ghost'
-                className='flex w-full items-center justify-between p-4'
+            {/* Gender Chart Collapsible */}
+            {hasGenderChart && (
+              <Collapsible
+                open={openCharts.gender}
+                onOpenChange={() => toggleChart('gender')}
+                className='overflow-hidden rounded-md border'
               >
-                <div className='flex items-center font-medium'>
-                  <PieChart className='mr-2 h-4 w-4' />
-                  Phân bố giới tính
-                </div>
-                {openCharts.gender ? (
-                  <ChevronUp className='h-4 w-4' />
-                ) : (
-                  <ChevronDown className='h-4 w-4' />
-                )}
-              </Button>
-            </CollapsibleTrigger>
-            <AnimatePresence initial={false}>
-              {openCharts.gender && (
-                <CollapsibleContent forceMount className='overflow-hidden'>
-                  <motion.div
-                    variants={contentVariants}
-                    initial='hidden'
-                    animate='visible'
-                    exit='hidden'
-                    className='px-4 pb-4'
+                <CollapsibleTrigger asChild>
+                  <Button
+                    variant='ghost'
+                    className='flex w-full items-center justify-between p-4'
                   >
-                    <div className='mb-4 text-sm text-muted-foreground'>
-                      Thống kê giới tính - {getFilterLabel(statisticFilter)}
-                      {getFilterDescription()}
+                    <div className='flex items-center font-medium'>
+                      <PieChart className='mr-2 h-4 w-4' />
+                      Phân bố giới tính
                     </div>
-                    <div className='w-full'>
-                      <EventChart
-                        data={statisticData?.genderChart || []}
-                        title='Phân bố giới tính'
-                        description={`Thống kê giới tính - ${getFilterLabel(statisticFilter)}`}
-                        type='pie'
-                        height={300}
-                      />
-                    </div>
-                  </motion.div>
-                </CollapsibleContent>
-              )}
-            </AnimatePresence>
-          </Collapsible>
-        )}
+                    {openCharts.gender ? (
+                      <ChevronUp className='h-4 w-4' />
+                    ) : (
+                      <ChevronDown className='h-4 w-4' />
+                    )}
+                  </Button>
+                </CollapsibleTrigger>
+                <AnimatePresence initial={false}>
+                  {openCharts.gender && (
+                    <CollapsibleContent forceMount className='overflow-hidden'>
+                      <motion.div
+                        variants={contentVariants}
+                        initial='hidden'
+                        animate='visible'
+                        exit='hidden'
+                        className='px-4 pb-4'
+                      >
+                        <div className='w-full'>
+                          {statisticData?.genderChart &&
+                          statisticData.genderChart.length > 0 ? (
+                            <EventChart
+                              data={statisticData.genderChart}
+                              title='Phân bố giới tính'
+                              description={`Thống kê giới tính - ${getFilterLabel(statisticFilter)}`}
+                              type='pie'
+                              height={300}
+                            />
+                          ) : (
+                            <NoDataMessage message='Không có dữ liệu phân bố giới tính cho bộ lọc hiện tại.' />
+                          )}
+                        </div>
+                      </motion.div>
+                    </CollapsibleContent>
+                  )}
+                </AnimatePresence>
+              </Collapsible>
+            )}
 
-        {/* Reference Chart Collapsible */}
-        {hasReferenceChart && (
-          <Collapsible
-            open={openCharts.reference}
-            onOpenChange={() => toggleChart('reference')}
-            className='overflow-hidden rounded-md border'
-          >
-            <CollapsibleTrigger asChild>
-              <Button
-                variant='ghost'
-                className='flex w-full items-center justify-between p-4'
+            {/* Reference Chart Collapsible */}
+            {hasReferenceChart && (
+              <Collapsible
+                open={openCharts.reference}
+                onOpenChange={() => toggleChart('reference')}
+                className='overflow-hidden rounded-md border'
               >
-                <div className='flex items-center font-medium'>
-                  <PieChart className='mr-2 h-4 w-4' />
-                  Nguồn tham khảo
-                </div>
-                {openCharts.reference ? (
-                  <ChevronUp className='h-4 w-4' />
-                ) : (
-                  <ChevronDown className='h-4 w-4' />
-                )}
-              </Button>
-            </CollapsibleTrigger>
-            <AnimatePresence initial={false}>
-              {openCharts.reference && (
-                <CollapsibleContent forceMount className='overflow-hidden'>
-                  <motion.div
-                    variants={contentVariants}
-                    initial='hidden'
-                    animate='visible'
-                    exit='hidden'
-                    className='px-4 pb-4'
+                <CollapsibleTrigger asChild>
+                  <Button
+                    variant='ghost'
+                    className='flex w-full items-center justify-between p-4'
                   >
-                    <div className='mb-4 text-sm text-muted-foreground'>
-                      Người tham gia biết về sự kiện qua đâu -{' '}
-                      {getFilterLabel(statisticFilter)}
-                      {getFilterDescription()}
+                    <div className='flex items-center font-medium'>
+                      <PieChart className='mr-2 h-4 w-4' />
+                      Nguồn tham khảo
                     </div>
-                    <div className='w-full'>
-                      <EventChart
-                        data={statisticData?.referenceChart || []}
-                        title='Nguồn tham khảo'
-                        description={`Người tham gia biết về sự kiện qua đâu - ${getFilterLabel(statisticFilter)}`}
-                        type='pie'
-                        height={300}
-                      />
-                    </div>
-                  </motion.div>
-                </CollapsibleContent>
-              )}
-            </AnimatePresence>
-          </Collapsible>
-        )}
+                    {openCharts.reference ? (
+                      <ChevronUp className='h-4 w-4' />
+                    ) : (
+                      <ChevronDown className='h-4 w-4' />
+                    )}
+                  </Button>
+                </CollapsibleTrigger>
+                <AnimatePresence initial={false}>
+                  {openCharts.reference && (
+                    <CollapsibleContent forceMount className='overflow-hidden'>
+                      <motion.div
+                        variants={contentVariants}
+                        initial='hidden'
+                        animate='visible'
+                        exit='hidden'
+                        className='px-4 pb-4'
+                      >
+                        <div className='w-full'>
+                          {statisticData?.referenceChart &&
+                          statisticData.referenceChart.length > 0 ? (
+                            <EventChart
+                              data={statisticData.referenceChart}
+                              title='Nguồn tham khảo'
+                              description={`Người tham gia biết về sự kiện qua đâu - ${getFilterLabel(statisticFilter)}`}
+                              type='pie'
+                              height={300}
+                            />
+                          ) : (
+                            <NoDataMessage message='Không có dữ liệu nguồn tham khảo cho bộ lọc hiện tại.' />
+                          )}
+                        </div>
+                      </motion.div>
+                    </CollapsibleContent>
+                  )}
+                </AnimatePresence>
+              </Collapsible>
+            )}
 
-        {/* Address Chart Collapsible */}
-        {hasAddressChart && (
-          <Collapsible
-            open={openCharts.address}
-            onOpenChange={() => toggleChart('address')}
-            className='overflow-hidden rounded-md border'
-          >
-            <CollapsibleTrigger asChild>
-              <Button
-                variant='ghost'
-                className='flex w-full items-center justify-between p-4'
+            {/* Address Chart Collapsible */}
+            {hasAddressChart && (
+              <Collapsible
+                open={openCharts.address}
+                onOpenChange={() => toggleChart('address')}
+                className='overflow-hidden rounded-md border'
               >
-                <div className='flex items-center font-medium'>
-                  <PieChart className='mr-2 h-4 w-4' />
-                  Phân bố địa điểm
-                </div>
-                {openCharts.address ? (
-                  <ChevronUp className='h-4 w-4' />
-                ) : (
-                  <ChevronDown className='h-4 w-4' />
-                )}
-              </Button>
-            </CollapsibleTrigger>
-            <AnimatePresence initial={false}>
-              {openCharts.address && (
-                <CollapsibleContent forceMount className='overflow-hidden'>
-                  <motion.div
-                    variants={contentVariants}
-                    initial='hidden'
-                    animate='visible'
-                    exit='hidden'
-                    className='px-4 pb-4'
+                <CollapsibleTrigger asChild>
+                  <Button
+                    variant='ghost'
+                    className='flex w-full items-center justify-between p-4'
                   >
-                    <div className='mb-4 text-sm text-muted-foreground'>
-                      Thống kê nơi đến của người tham gia -{' '}
-                      {getFilterLabel(statisticFilter)}
-                      {getFilterDescription()}
+                    <div className='flex items-center font-medium'>
+                      <PieChart className='mr-2 h-4 w-4' />
+                      Phân bố địa điểm
                     </div>
-                    <div className='w-full'>
-                      <EventChart
-                        data={statisticData?.addressChart || []}
-                        title='Phân bố địa điểm'
-                        description={`Thống kê nơi đến của người tham gia - ${getFilterLabel(statisticFilter)}`}
-                        type='pie'
-                        height={300}
-                      />
-                    </div>
-                  </motion.div>
-                </CollapsibleContent>
-              )}
-            </AnimatePresence>
-          </Collapsible>
-        )}
+                    {openCharts.address ? (
+                      <ChevronUp className='h-4 w-4' />
+                    ) : (
+                      <ChevronDown className='h-4 w-4' />
+                    )}
+                  </Button>
+                </CollapsibleTrigger>
+                <AnimatePresence initial={false}>
+                  {openCharts.address && (
+                    <CollapsibleContent forceMount className='overflow-hidden'>
+                      <motion.div
+                        variants={contentVariants}
+                        initial='hidden'
+                        animate='visible'
+                        exit='hidden'
+                        className='px-4 pb-4'
+                      >
+                        <div className='w-full'>
+                          {statisticData?.addressChart &&
+                          statisticData.addressChart.length > 0 ? (
+                            <EventChart
+                              data={statisticData.addressChart}
+                              title='Phân bố địa điểm'
+                              description={`Thống kê nơi đến của người tham gia - ${getFilterLabel(statisticFilter)}`}
+                              type='pie'
+                              height={300}
+                            />
+                          ) : (
+                            <NoDataMessage message='Không có dữ liệu phân bố địa điểm cho bộ lọc hiện tại.' />
+                          )}
+                        </div>
+                      </motion.div>
+                    </CollapsibleContent>
+                  )}
+                </AnimatePresence>
+              </Collapsible>
+            )}
 
-        {/* Attended Before Chart Collapsible */}
-        {hasAttendedBeforeChart && (
-          <Collapsible
-            open={openCharts.attendedBefore}
-            onOpenChange={() => toggleChart('attendedBefore')}
-            className='overflow-hidden rounded-md border'
-          >
-            <CollapsibleTrigger asChild>
-              <Button
-                variant='ghost'
-                className='flex w-full items-center justify-between p-4'
+            {/* Attended Before Chart Collapsible */}
+            {hasAttendedBeforeChart && (
+              <Collapsible
+                open={openCharts.attendedBefore}
+                onOpenChange={() => toggleChart('attendedBefore')}
+                className='overflow-hidden rounded-md border'
               >
-                <div className='flex items-center font-medium'>
-                  <PieChart className='mr-2 h-4 w-4' />
-                  Lịch sử tham gia
-                </div>
-                {openCharts.attendedBefore ? (
-                  <ChevronUp className='h-4 w-4' />
-                ) : (
-                  <ChevronDown className='h-4 w-4' />
-                )}
-              </Button>
-            </CollapsibleTrigger>
-            <AnimatePresence initial={false}>
-              {openCharts.attendedBefore && (
-                <CollapsibleContent forceMount className='overflow-hidden'>
-                  <motion.div
-                    variants={contentVariants}
-                    initial='hidden'
-                    animate='visible'
-                    exit='hidden'
-                    className='px-4 pb-4'
+                <CollapsibleTrigger asChild>
+                  <Button
+                    variant='ghost'
+                    className='flex w-full items-center justify-between p-4'
                   >
-                    <div className='mb-4 text-sm text-muted-foreground'>
-                      Thống kê lịch sử tham gia sự kiện -{' '}
-                      {getFilterLabel(statisticFilter)}
-                      {getFilterDescription()}
+                    <div className='flex items-center font-medium'>
+                      <PieChart className='mr-2 h-4 w-4' />
+                      Lịch sử tham gia
                     </div>
-                    <div className='w-full'>
-                      <EventChart
-                        data={statisticData?.attendedBeforeChart || []}
-                        title='Lịch sử tham gia'
-                        description={`Thống kê lịch sử tham gia sự kiện - ${getFilterLabel(statisticFilter)}`}
-                        type='pie'
-                        height={300}
-                      />
-                    </div>
-                  </motion.div>
-                </CollapsibleContent>
-              )}
-            </AnimatePresence>
-          </Collapsible>
+                    {openCharts.attendedBefore ? (
+                      <ChevronUp className='h-4 w-4' />
+                    ) : (
+                      <ChevronDown className='h-4 w-4' />
+                    )}
+                  </Button>
+                </CollapsibleTrigger>
+                <AnimatePresence initial={false}>
+                  {openCharts.attendedBefore && (
+                    <CollapsibleContent forceMount className='overflow-hidden'>
+                      <motion.div
+                        variants={contentVariants}
+                        initial='hidden'
+                        animate='visible'
+                        exit='hidden'
+                        className='px-4 pb-4'
+                      >
+                        <div className='w-full'>
+                          {statisticData?.attendedBeforeChart &&
+                          statisticData.attendedBeforeChart.length > 0 ? (
+                            <EventChart
+                              data={statisticData.attendedBeforeChart}
+                              title='Lịch sử tham gia'
+                              description={`Thống kê lịch sử tham gia sự kiện - ${getFilterLabel(statisticFilter)}`}
+                              type='pie'
+                              height={300}
+                            />
+                          ) : (
+                            <NoDataMessage message='Không có dữ liệu lịch sử tham gia cho bộ lọc hiện tại.' />
+                          )}
+                        </div>
+                      </motion.div>
+                    </CollapsibleContent>
+                  )}
+                </AnimatePresence>
+              </Collapsible>
+            )}
+          </>
         )}
       </CardContent>
     </Card>

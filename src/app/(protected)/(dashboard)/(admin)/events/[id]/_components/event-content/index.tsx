@@ -83,7 +83,10 @@ export default function EventContent({
       />
 
       {/* Statistics */}
-      <EventStatistics eventId={eventId} />
+      <EventStatistics
+        eventId={eventId}
+        organizerEmail={eventData?.organizerEmail || ''}
+      />
     </div>
   );
 }

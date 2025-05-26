@@ -26,7 +26,7 @@ export default function EventGallery({
   const totalImages = (baseImgUrl ? 1 : 0) + (images?.length || 0);
 
   return (
-    <Card className='overflow-hidden border-0 bg-gradient-to-br from-white to-gray-50/50 shadow-lg'>
+    <Card className='overflow-hidden'>
       <CardHeader className='pb-4'>
         <div className='flex items-center justify-between'>
           <div className='flex items-center gap-3'>
@@ -34,13 +34,9 @@ export default function EventGallery({
               <GalleryHorizontalEnd className='h-5 w-5' />
             </div>
             <div>
-              <CardTitle className='text-xl font-semibold text-gray-800'>
+              <CardTitle className='text-card-foreground'>
                 Hình ảnh sự kiện
               </CardTitle>
-              <p className='mt-1 text-sm text-gray-500'>
-                {eventName && `${eventName} • `}
-                {totalImages} hình ảnh
-              </p>
             </div>
           </div>
           <Badge variant='secondary' className='bg-blue-50 text-blue-700'>

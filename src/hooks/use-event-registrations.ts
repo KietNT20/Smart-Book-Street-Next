@@ -108,3 +108,29 @@ export const useGetStatisticEventRegistrations = (
     error,
   };
 };
+
+export const useExportStatisticEventRegistrations = () => {
+  const queryClient = useQueryClient();
+
+  const { mutate: exportStatistic, isPending: isExportingPending } =
+    useMutation({
+      mutationKey: ['export-statistic-event-registrations'],
+      mutationFn: ({ eventId, email }: { eventId: string; email: string }) =>
+        eventRegistrationService.exportStatisticEventRegistrations(
+          eventId,
+          email
+        ),
+      onSuccess: (data) => {
+        if (data) {
+          queryClient.invalidateQueries({ queryKey: ['event-registrations'] });
+          toast.success(`Đã gửi thống kê qua email thành công`);
+        }
+      },
+      onError: (error) => {
+        console.error('Error exporting statistic:', error);
+        toast.error(`${error}`);
+      },
+    });
+
+  return { exportStatistic, isExportingPending };
+};
