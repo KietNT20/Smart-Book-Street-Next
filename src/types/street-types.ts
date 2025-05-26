@@ -10,7 +10,7 @@ export type Street = {
   latitude: number;
   longitude: number;
   baseImgUrl: string;
-  zones: Zone[];
+  zones?: Zone[];
   images: ImageType[];
   isDeleted: boolean;
 };

@@ -1,5 +1,5 @@
 import { streetService } from '@/services/streetService';
-import { StreetsResponse } from '@/types/street-types';
+import { StreetParams, StreetsResponse } from '@/types/street-types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
@@ -13,6 +13,73 @@ export const useGetStreetsAll = () => {
     streetsRes: data?.results || [],
     isLoadingStreets: isLoading,
     errorStreets: error,
+  };
+};
+
+export const useGetStreets = ({
+  sortField,
+  sortOrder,
+  pageNumber,
+  pageSize,
+  result,
+}: StreetParams) => {
+  const queryClient = useQueryClient();
+  const { data, isLoading, error } = useQuery<StreetsResponse>({
+    queryKey: [
+      'streets',
+      { sortField, sortOrder, pageNumber, pageSize, result },
+    ],
+    queryFn: () =>
+      streetService.getPagination({
+        sortField,
+        sortOrder,
+        pageNumber,
+        pageSize,
+        result,
+      }),
+  });
+
+  const totalPages = data?.totalPages || 1;
+
+  if (pageNumber < totalPages) {
+    queryClient.prefetchQuery({
+      queryKey: [
+        'streets',
+        { sortField, sortOrder, pageNumber: pageNumber + 1, pageSize, result },
+      ],
+      queryFn: () =>
+        streetService.getPagination({
+          sortField,
+          sortOrder,
+          pageNumber: pageNumber + 1,
+          pageSize,
+          result,
+        }),
+    });
+  }
+
+  if (pageNumber > 1) {
+    queryClient.prefetchQuery({
+      queryKey: [
+        'streets',
+        { sortField, sortOrder, pageNumber: pageNumber - 1, pageSize, result },
+      ],
+      queryFn: () =>
+        streetService.getPagination({
+          sortField,
+          sortOrder,
+          pageNumber: pageNumber - 1,
+          pageSize,
+          result,
+        }),
+    });
+  }
+
+  return {
+    streetsRes: data?.results || [],
+    isLoadingStreets: isLoading,
+    errorStreets: error,
+    totalPages,
   };
 };
 
