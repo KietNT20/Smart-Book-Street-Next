@@ -68,32 +68,28 @@ const PublisherTable = ({
   sortOrder,
   handleSort,
 }: Props) => {
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
   const [publisherToDelete, setPublisherToDelete] = useState<string | null>(
     null
   );
+  const showEmptyState = !isLoading && (!publishers || publishers.length === 0);
 
   const { deletePublisher } = usePublisherMutation();
 
-  // Handle page size change
   const handlePageSizeChange = (value: string) => {
     setPageSize(Number(value));
-    setPageNumber(1); // Reset to first page when changing page size
+    setPageNumber(1);
   };
 
-  // Handle opening delete dialog
   const handleDeleteClick = (publisherId: string) => {
     setPublisherToDelete(publisherId);
     setDeleteDialogOpen(true);
   };
 
-  // Handle delete confirmation
   const handleDeleteConfirm = () => {
     if (publisherToDelete) {
-      // Call API to delete store with the store ID
       deletePublisher(publisherToDelete);
 
-      // Close dialog and reset state
       setDeleteDialogOpen(false);
       setPublisherToDelete(null);
     }
@@ -241,7 +237,7 @@ const PublisherTable = ({
       </div>
 
       {/* Pagination and page size controls */}
-      {publishers.length > 0 && (
+      {!showEmptyState && (
         <div className='mt-4 flex items-center justify-between'>
           <div className='flex items-center gap-2'>
             <span className='whitespace-nowrap text-sm text-muted-foreground'>

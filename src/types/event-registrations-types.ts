@@ -19,6 +19,7 @@ export interface EventRegistrations {
   registrantAddress: string;
   referenceSource: string;
   hasAttendedBefore: boolean;
+  dateToAttend: string;
   isAttended: boolean;
 }
 

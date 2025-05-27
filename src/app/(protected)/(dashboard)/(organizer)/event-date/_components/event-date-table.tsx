@@ -37,7 +37,7 @@ type Props = {
   handleSort: (field: string) => void;
 };
 
-export default function EventHistoryTable({
+export default function EventsInDateTable({
   events,
   isLoading,
   totalPages,
@@ -148,6 +148,7 @@ export default function EventHistoryTable({
                   )}
                 </Button>
               </TableHead>
+              <TableHead>Phiên bản</TableHead>
               <TableHead className='text-right'>Thao tác</TableHead>
             </TableRow>
           </TableHeader>
@@ -171,10 +172,13 @@ export default function EventHistoryTable({
                   <TableCell className='max-w-52 overflow-hidden text-ellipsis whitespace-nowrap'>
                     {event?.zone?.zoneName}
                   </TableCell>
+                  <TableCell className='max-w-52 overflow-hidden text-ellipsis whitespace-nowrap'>
+                    {event?.version}
+                  </TableCell>
                   <TableCell className='text-right'>
                     <Button size={'icon'}>
                       <Link
-                        href={`${PATH.EVENT_CREATION_HISTORY}/${event?.id}`}
+                        href={`${PATH.EVENT_CREATION_REQUEST}/${event?.id}`}
                       >
                         <Eye className='size-4' />
                       </Link>

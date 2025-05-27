@@ -1,14 +1,6 @@
-import { ConfirmModal } from '@/components/confirm-modal';
 import TablePagination from '@/components/pagination/table-pagination';
 import { TableSkeleton } from '@/components/table-skeleton';
 import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import {
   Select,
   SelectContent,
@@ -26,24 +18,16 @@ import {
 } from '@/components/ui/table';
 import { Sort } from '@/enums/enums';
 import { PATH } from '@/enums/path';
-import { useEventMutaton } from '@/hooks/use-event';
 import { formatDateVi } from '@/lib/utils';
 import { Event } from '@/types/event-types';
-import {
-  ArrowUpDown,
-  Eye,
-  MoreHorizontal,
-  SortAsc,
-  SortDesc,
-  Trash2,
-} from 'lucide-react';
+import { Empty } from 'antd';
+import { ArrowUpDown, Eye, SortAsc, SortDesc } from 'lucide-react';
 import Link from 'next/link';
-import { useState } from 'react';
+import EventStatusBadge from './event-status-badge';
 
 type Props = {
   events: Event[];
   isLoading: boolean;
-  isSearching: boolean;
   totalPages: number;
   pageNumber: number;
   setPageNumber: (page: number) => void;
@@ -54,10 +38,9 @@ type Props = {
   handleSort: (field: string) => void;
 };
 
-const EventTable = ({
+export default function EventHistoryTable({
   events,
   isLoading,
-  isSearching,
   totalPages,
   pageNumber,
   setPageNumber,
@@ -66,40 +49,20 @@ const EventTable = ({
   sortField,
   sortOrder,
   handleSort,
-}: Props) => {
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
-  const [eventToDelete, setEventToDelete] = useState<string | null>(null);
-  const showEmptyState = !isLoading && (!events || events.length === 0);
-  const { deleteEvent } = useEventMutaton();
-
+}: Props) {
   const handlePageSizeChange = (value: string) => {
     setPageSize(Number(value));
     setPageNumber(1);
   };
 
-  // Handle opening delete dialog
-  const handleDeleteClick = (eventId: string) => {
-    setEventToDelete(eventId);
-    setDeleteDialogOpen(true);
-  };
-
-  const handleDeleteConfirm = () => {
-    if (eventToDelete) {
-      deleteEvent(eventToDelete);
-
-      setDeleteDialogOpen(false);
-      setEventToDelete(null);
-    }
-  };
+  const showEmptyState = !isLoading && (!events || events.length === 0);
 
   return (
     <>
-      {/* Table */}
       <div className='rounded-md border'>
-        <Table>
+        <Table className='table-auto'>
           <TableHeader>
             <TableRow>
-              <TableHead>No.</TableHead>
               <TableHead
                 className='cursor-pointer'
                 onClick={() => handleSort('EventName')}
@@ -107,6 +70,23 @@ const EventTable = ({
                 <Button variant='ghost'>
                   Tên Sự Kiện
                   {sortField === 'EventName' ? (
+                    sortOrder === Sort.ASC ? (
+                      <SortAsc />
+                    ) : (
+                      <SortDesc />
+                    )
+                  ) : (
+                    <ArrowUpDown />
+                  )}
+                </Button>
+              </TableHead>
+              <TableHead
+                className='cursor-pointer'
+                onClick={() => handleSort('OrganizerEmail')}
+              >
+                <Button variant='ghost'>
+                  Email đăng ký
+                  {sortField === 'OrganizerEmail' ? (
                     sortOrder === Sort.ASC ? (
                       <SortAsc />
                     ) : (
@@ -156,7 +136,7 @@ const EventTable = ({
                 onClick={() => handleSort('Zone')}
               >
                 <Button variant='ghost'>
-                  Khu vực
+                  Khu vực tổ chức
                   {sortField === 'Zone' ? (
                     sortOrder === Sort.ASC ? (
                       <SortAsc />
@@ -168,66 +148,60 @@ const EventTable = ({
                   )}
                 </Button>
               </TableHead>
+              <TableHead>Phiên bản</TableHead>
+              <TableHead>Trạng thái</TableHead>
               <TableHead className='text-right'>Thao tác</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {isLoading ? (
-              <TableSkeleton columns={6} rows={pageSize} />
-            ) : events.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={6} className='py-10 text-center'>
-                  Không tìm thấy sự kiện.{' '}
-                  {isSearching && 'Hãy thử một từ khóa tìm kiếm khác.'}
-                </TableCell>
-              </TableRow>
-            ) : (
-              events?.map((event, index) => (
-                <TableRow key={event?.id}>
-                  <TableCell className='text-muted-foreground'>
-                    {index + 1 + (pageNumber - 1) * pageSize}
-                  </TableCell>
-                  <TableCell className='font-medium'>
+              <TableSkeleton columns={7} rows={pageSize} />
+            ) : events && events.length > 0 ? (
+              events.map((event, index) => (
+                <TableRow key={event?.id || index}>
+                  <TableCell className='text-sm font-medium'>
                     {event?.eventName}
                   </TableCell>
-                  <TableCell>{formatDateVi(event?.startDate)}</TableCell>
-                  <TableCell>{formatDateVi(event?.endDate)}</TableCell>
-                  <TableCell className='max-w-52 overflow-hidden text-ellipsis whitespace-nowrap'>
+                  <TableCell className='text-sm font-medium'>
+                    {event?.organizerEmail || '--'}
+                  </TableCell>
+                  <TableCell className='text-sm'>
+                    {formatDateVi(event?.startDate)}
+                  </TableCell>
+                  <TableCell className='text-sm'>
+                    {formatDateVi(event?.endDate)}
+                  </TableCell>
+                  <TableCell className='max-w-52 overflow-hidden text-ellipsis whitespace-nowrap text-sm'>
                     {event?.zone?.zoneName}
                   </TableCell>
+                  <TableCell className='text-sm'>{event?.version}</TableCell>
+                  <TableCell>
+                    <EventStatusBadge type='approve' value={event?.isApprove} />
+                  </TableCell>
                   <TableCell className='text-right'>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant='ghost' size='icon'>
-                          <MoreHorizontal className='size-4' />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align='end'>
-                        <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
-                        <DropdownMenuItem asChild className='cursor-pointer'>
-                          <Link href={`${PATH.EVENTS}/${event?.id}`}>
-                            <Eye className='mr-2 size-4' />
-                            Xem chi tiết
-                          </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          className='text-destructive'
-                          onClick={() => handleDeleteClick(event?.id || '')}
-                        >
-                          <Trash2 className='mr-2 size-4' />
-                          Xóa
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                    <Button size={'icon'}>
+                      <Link
+                        href={`${PATH.EVENT_CREATION_HISTORY}/${event?.id}`}
+                      >
+                        <Eye className='size-4' />
+                      </Link>
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={7} className='h-64 p-0 text-center'>
+                  <div className='flex h-full w-full items-center justify-center'>
+                    <Empty description='Không có yêu cầu sự kiện nào được tìm thấy.' />
+                  </div>
+                </TableCell>
+              </TableRow>
             )}
           </TableBody>
         </Table>
       </div>
 
-      {/* Pagination and page size controls */}
       {!showEmptyState && (
         <div className='mt-4 flex items-center justify-between'>
           <div className='flex items-center gap-2'>
@@ -258,18 +232,6 @@ const EventTable = ({
           />
         </div>
       )}
-
-      {/* Delete Confirmation Dialog */}
-      <ConfirmModal
-        isOpen={deleteDialogOpen}
-        onClose={() => setDeleteDialogOpen(false)}
-        variant='destructive'
-        title='Xác nhận xóa'
-        description='Bạn có chắc chắn muốn xóa Sự Kiện này không? Hành động này không thể hoàn tác.'
-        onConfirm={handleDeleteConfirm}
-      />
     </>
   );
-};
-
-export default EventTable;
+}

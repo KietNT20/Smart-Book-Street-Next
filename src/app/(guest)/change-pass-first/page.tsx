@@ -61,9 +61,11 @@ export default function FirstTimePasswordChangePage() {
   const [errors, setErrors] = useState<
     Partial<Record<keyof PasswordFormValues, string>>
   >({});
-  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
-  const [showNewPassword, setShowNewPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showCurrentPassword, setShowCurrentPassword] =
+    useState<boolean>(false);
+  const [showNewPassword, setShowNewPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] =
+    useState<boolean>(false);
 
   const router = useRouter();
   const { changePassFirstTime, changePassFirstTimePending } =

@@ -59,7 +59,7 @@ const ZonesPage = () => {
   return (
     <div className='container mx-auto'>
       <div className='mb-4 flex items-center justify-between'>
-        <h2 className='text-2xl font-bold'>Quản lý khu vực</h2>
+        <h2>Quản lý khu vực</h2>
         <Link href={PATH.ZONE_CREATE} passHref>
           <Button>
             <Plus /> Thêm khu vực mới

@@ -1,9 +1,12 @@
+import { PATH } from '@/enums/path';
 import { useEventMutaton } from '@/hooks/use-event';
 import { eventFormSchema, EventFormValues } from '@/lib/zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 
 export const useFormHandle = () => {
+  const router = useRouter();
   // Form initialization
   const form = useForm<EventFormValues>({
     resolver: zodResolver(eventFormSchema),
@@ -72,7 +75,14 @@ export const useFormHandle = () => {
       formData.append('VideoFile', values.videoFile);
     }
 
-    createEvent(formData);
+    createEvent(formData, {
+      onSuccess: (data) => {
+        if (data) {
+          router.replace(PATH.EVENT_CREATION);
+          form.reset();
+        }
+      },
+    });
   };
 
   return {

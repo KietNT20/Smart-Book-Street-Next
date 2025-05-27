@@ -31,8 +31,8 @@ const EventFilter = ({
   onSearch,
   onClearSearch,
 }: Props) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const debouncedFilters = useDebounce(filters, 700);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const debouncedFilters = useDebounce(filters, 500);
 
   const handleInputChange = (field: keyof SearchFilters, value: unknown) => {
     console.log('Value:', value);

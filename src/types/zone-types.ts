@@ -1,8 +1,8 @@
 import { Sort } from '@/enums/enums';
-import { ApiListResponse, ApiResponse } from './common-types';
+import { ApiListResponse, ApiResponse, BaseEntity } from './common-types';
 import { Street } from './street-types';
 
-export interface Zone {
+export interface Zone extends BaseEntity {
   id: string;
   zoneName: string;
   description: string;

@@ -18,9 +18,9 @@ import { Progress } from '@/components/ui/progress';
 import { useEffect, useState } from 'react';
 
 export default function VerifyOTP() {
-  const [otp, setOtp] = useState('');
-  const [timeLeft, setTimeLeft] = useState(120);
-  const [isVerifying, setIsVerifying] = useState(false);
+  const [otp, setOtp] = useState<string>('');
+  const [timeLeft, setTimeLeft] = useState<number>(120);
+  const [isVerifying, setIsVerifying] = useState<boolean>(false);
 
   useEffect(() => {
     if (timeLeft > 0) {

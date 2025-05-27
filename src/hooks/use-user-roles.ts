@@ -36,7 +36,7 @@ export const useUserRoleMutation = () => {
     onSuccess: (data) => {
       if (data) {
         queryClient.invalidateQueries({ queryKey: ['users'] });
-        queryClient.invalidateQueries({ queryKey: ['roles-at-pending'] });
+        queryClient.invalidateQueries({ queryKey: ['user-roles-pending'] });
         toast.success(`${data?.message}`);
       }
     },

@@ -4,6 +4,15 @@ import { StoreRent } from '@/enums/store-rent';
 import dayjs from 'dayjs';
 import * as z from 'zod';
 
+const MAX_BASE_IMAGE_SIZE = 10 * 1024 * 1024; // 10MB
+const MAX_OTHER_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
+const ACCEPTED_IMAGE_TYPES = [
+  'image/jpeg',
+  'image/jpg',
+  'image/png',
+  'image/webp',
+];
+
 // Login form
 export type LoginFormValues = z.infer<typeof loginSchema>;
 
@@ -667,3 +676,45 @@ export const zoneFormSchema = z.object({
 });
 
 export type ZoneFormSchema = z.infer<typeof zoneFormSchema>;
+
+// Street form
+export const streetFormSchema = z.object({
+  streetName: z.string().min(1, 'Tên đường là bắt buộc'),
+  address: z.string().min(1, 'Địa chỉ là bắt buộc'),
+  description: z
+    .string()
+    .min(1, 'Mô tả là bắt buộc')
+    .min(10, 'Mô tả phải có ít nhất 10 ký tự'),
+  latitude: z.number(),
+  longitude: z.number(),
+  baseImgFile: z
+    .instanceof(File)
+    .optional()
+    .nullable()
+    .refine((file) => {
+      if (!file) return true; // Optional field
+      return file.size <= MAX_BASE_IMAGE_SIZE;
+    }, 'Ảnh chính không được vượt quá 10MB')
+    .refine((file) => {
+      if (!file) return true; // Optional field
+      return ACCEPTED_IMAGE_TYPES.includes(file.type);
+    }, 'Ảnh chính chỉ chấp nhận định dạng JPEG, PNG, WebP'),
+  otherImgFiles: z
+    .array(z.instanceof(File))
+    .optional()
+    .default([])
+    .refine((files) => {
+      if (!files || files.length === 0) return true;
+      return files.every((file) => file.size <= MAX_OTHER_IMAGE_SIZE);
+    }, 'Mỗi ảnh khác không được vượt quá 5MB')
+    .refine((files) => {
+      if (!files || files.length === 0) return true;
+      return files.every((file) => ACCEPTED_IMAGE_TYPES.includes(file.type));
+    }, 'Ảnh khác chỉ chấp nhận định dạng JPEG, PNG, WebP')
+    .refine((files) => {
+      if (!files) return true;
+      return files.length <= 10; // Giới hạn số lượng ảnh khác
+    }, 'Chỉ được tải lên tối đa 10 ảnh khác'),
+});
+
+export type StreetFormValues = z.infer<typeof streetFormSchema>;

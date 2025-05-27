@@ -37,10 +37,10 @@ const StoreFilter = ({
   onSearch,
   onClearSearch,
 }: StoreFilterProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const { zonesByStreetRes } = useZonesByStreet();
 
-  const debouncedFilters = useDebounce(filters, 700);
+  const debouncedFilters = useDebounce(filters, 500);
 
   const handleInputChange = (
     field: keyof SearchFilters,

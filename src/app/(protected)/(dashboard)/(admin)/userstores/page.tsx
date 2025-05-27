@@ -13,7 +13,7 @@ export default function UserStoresPage() {
   }
   return (
     <div className='container mx-auto'>
-      <h2 className='text-3xl font-bold'>Quản lý người thuê</h2>
+      <h2>Quản lý người thuê</h2>
       <DataTable columns={columns} data={userRentals} />
     </div>
   );

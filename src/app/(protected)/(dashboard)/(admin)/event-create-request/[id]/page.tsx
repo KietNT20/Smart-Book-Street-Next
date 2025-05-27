@@ -21,6 +21,7 @@ import {
   useGetEventById,
 } from '@/hooks/use-event';
 import { formatDateVi } from '@/lib/utils';
+import DOMPurify from 'isomorphic-dompurify';
 import {
   Calendar,
   Clock,
@@ -146,7 +147,13 @@ export default function EventCreateRequestPage({
                   </Label>
                   <Card>
                     <CardContent className='p-6'>
-                      <p className='text-sm'>{eventData?.description}</p>
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: DOMPurify.sanitize(
+                            eventData?.description || ''
+                          ),
+                        }}
+                      />
                     </CardContent>
                   </Card>
                 </div>

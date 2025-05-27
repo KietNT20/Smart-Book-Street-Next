@@ -19,8 +19,8 @@ export interface SearchFilters {
 }
 
 const PublishersPage = () => {
-  const [pageNumber, setPageNumber] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageNumber, setPageNumber] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(10);
   const [sortField, setSortField] = useState<string>('');
   const [sortOrder, setSortOrder] = useState<Sort>(Sort.DESC);
   const [filters, setFilters] = useState<SearchFilters>({
@@ -30,7 +30,7 @@ const PublishersPage = () => {
     email: '',
     website: '',
   });
-  const [isSearching, setIsSearching] = useState(false);
+  const [isSearching, setIsSearching] = useState<boolean>(false);
 
   const buildResultObject = () => {
     if (!isSearching) return {};
@@ -84,7 +84,7 @@ const PublishersPage = () => {
   return (
     <div className='container mx-auto'>
       <div className='mb-4 flex items-center justify-between'>
-        <h2 className='text-2xl font-bold'>Quản lý nhà xuất bản</h2>
+        <h2>Quản lý nhà xuất bản</h2>
         <Link href={PATH.PUBLISHER_CREATE} passHref>
           <Button>
             <Plus /> Thêm nhà xuất bản mới
