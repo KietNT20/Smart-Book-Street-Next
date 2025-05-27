@@ -19,6 +19,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { PATH } from '@/enums/path';
+import { RoleEnums } from '@/enums/role';
 import { StoreRent } from '@/enums/store-rent';
 import { useStoreById } from '@/hooks/use-store';
 import { useUserEmail } from '@/hooks/use-user';
@@ -89,9 +90,21 @@ const UserStoreForm = () => {
     setIsEmailVerified(true);
   };
 
+  // Kiểm tra user có role StoreOwner và được approve không
+  const canRegisterStore = () => {
+    if (!user?.userRoles || user.userRoles.length === 0) return false;
+
+    return user.userRoles.some(
+      (userRole) =>
+        (userRole.isApproved === true &&
+          userRole.role?.roleName === RoleEnums.STORE_OWNER) ||
+        userRole.role?.roleName === RoleEnums.PUBLISHER
+    );
+  };
+
   // Xử lý confirm user và show form
   const handleConfirmUser = () => {
-    if (user?.id) {
+    if (user?.id && canRegisterStore()) {
       form.setValue('userId', user.id);
       setIsUserConfirmed(true);
     }
@@ -322,12 +335,64 @@ const UserStoreForm = () => {
                     </span>
                     <span className='font-medium'>{user?.phone || 'N/A'}</span>
                   </div>
+
+                  {/* Hiển thị thông tin roles */}
+                  <div className='flex items-start gap-3'>
+                    <span className='min-w-[100px] text-muted-foreground'>
+                      Vai trò:
+                    </span>
+                    <div className='space-y-1'>
+                      {user?.userRoles && user.userRoles.length > 0 ? (
+                        user.userRoles.map((userRole, index) => (
+                          <div key={index} className='flex items-center gap-2'>
+                            <span className='font-medium'>
+                              {userRole.role?.roleName || 'N/A'}
+                            </span>
+                            <span
+                              className={`rounded-full px-2 py-1 text-xs ${
+                                userRole.isApproved
+                                  ? 'bg-matcha/10 text-matcha'
+                                  : 'bg-destructive/10 text-destructive'
+                              }`}
+                            >
+                              {userRole.isApproved ? 'Đã duyệt' : 'Chưa duyệt'}
+                            </span>
+                          </div>
+                        ))
+                      ) : (
+                        <span className='font-medium'>Chưa có vai trò</span>
+                      )}
+                    </div>
+                  </div>
                 </div>
 
                 <div className='pt-4'>
-                  <Button onClick={handleConfirmUser} className='w-full'>
-                    Xác nhận và tiếp tục đăng ký
-                  </Button>
+                  {canRegisterStore() ? (
+                    <Button onClick={handleConfirmUser} className='w-full'>
+                      Xác nhận và tiếp tục đăng ký
+                    </Button>
+                  ) : (
+                    <div className='space-y-3'>
+                      <div className='rounded-lg bg-destructive/10 p-3 text-center'>
+                        <p className='text-sm text-destructive'>
+                          Người dùng này không có quyền đăng ký cửa hàng.
+                          <br />
+                          {`Cần có vai trò "Chủ cửa hàng" hoặc "Nhà xuất bản" và được phê duyệt.`}
+                        </p>
+                      </div>
+                      <Button
+                        variant='outline'
+                        onClick={() => {
+                          setEmail('');
+                          setVerifiedEmail('');
+                          setIsEmailVerified(false);
+                        }}
+                        className='w-full'
+                      >
+                        Thử email khác
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </div>
             ) : (
@@ -383,6 +448,33 @@ const UserStoreForm = () => {
               <div className='flex items-center gap-3'>
                 <span className='text-muted-foreground'>Email:</span>
                 <span className='font-medium'>{user?.email || 'N/A'}</span>
+              </div>
+              <div className='flex items-start gap-3'>
+                <span className='text-muted-foreground'>Vai trò:</span>
+                <div className='space-y-1'>
+                  {user?.userRoles && user.userRoles.length > 0 ? (
+                    user.userRoles
+                      .filter(
+                        (userRole) =>
+                          (userRole.isApproved &&
+                            userRole.role?.roleName ===
+                              RoleEnums.STORE_OWNER) ||
+                          userRole.role?.roleName === RoleEnums.PUBLISHER
+                      )
+                      .map((userRole, index) => (
+                        <div key={index} className='flex items-center gap-2'>
+                          <span className='font-medium'>
+                            {userRole.role?.roleName || 'N/A'}
+                          </span>
+                          <span className='rounded-full bg-matcha/10 px-2 py-1 text-xs text-matcha'>
+                            Đã duyệt
+                          </span>
+                        </div>
+                      ))
+                  ) : (
+                    <span className='font-medium'>N/A</span>
+                  )}
+                </div>
               </div>
             </div>
           </CardContent>
@@ -571,8 +663,8 @@ const UserStoreForm = () => {
                             Xem trước
                           </Button>
                           <Button
-                            variant='outline'
-                            size='icon'
+                            variant='ghost'
+                            size='sm'
                             onClick={handleRemoveFile}
                             type='button'
                             className='h-8 w-8 p-0 text-destructive hover:text-destructive'
