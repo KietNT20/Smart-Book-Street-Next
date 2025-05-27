@@ -148,6 +148,8 @@ export function middleware(request: NextRequest) {
           return NextResponse.redirect(new URL(PATH.BOOKS, request.url));
         case RoleEnums.STAFF:
           return NextResponse.redirect(new URL(PATH.EVENT_DATE, request.url));
+        case RoleEnums.ORGANIZER:
+          return NextResponse.redirect(new URL(PATH.EVENT_DATE, request.url));
         default:
           // Should not reach here due to validation, but handle just in case
           const response = NextResponse.redirect(
@@ -196,6 +198,8 @@ export function middleware(request: NextRequest) {
       case RoleEnums.PUBLISHER:
         return NextResponse.redirect(new URL(PATH.BOOKS, request.url));
       case RoleEnums.STAFF:
+        return NextResponse.redirect(new URL(PATH.EVENT_DATE, request.url));
+      case RoleEnums.ORGANIZER:
         return NextResponse.redirect(new URL(PATH.EVENT_DATE, request.url));
       default:
         // Should not reach here due to validation, but handle just in case

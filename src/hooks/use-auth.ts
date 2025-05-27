@@ -31,13 +31,26 @@ export const useLogin = () => {
         const hasStaffRole = data.result.userRoles.some(
           (role) => role.role?.roleName === RoleEnums.STAFF
         );
+        const hasStoreOwnerRole = data.result.userRoles.some(
+          (role) => role.role?.roleName === RoleEnums.STORE_OWNER
+        );
+        const hasStoreManagerRole = data.result.userRoles.some(
+          (role) => role.role?.roleName === RoleEnums.STORE_MANAGER
+        );
+        const hasOrganizerRole = data.result.userRoles.some(
+          (role) => role.role?.roleName === RoleEnums.ORGANIZER
+        );
         if (hasAdminRole) {
           router.replace(PATH.DASHBOARD);
         } else if (hasPublisherManagerRole) {
           router.replace(PATH.BOOKS);
         } else if (hasStaffRole) {
           router.replace(PATH.EVENT_DATE);
-        } else {
+        } else if (hasOrganizerRole) {
+          router.replace(PATH.EVENT_DATE);
+        } else if (hasStoreOwnerRole) {
+          router.replace(PATH.STORE_OWNER_DASHBOARD);
+        } else if (hasStoreManagerRole) {
           router.replace(PATH.STORE_OWNER_DASHBOARD);
         }
         toast.success('Đăng nhập thành công', {
