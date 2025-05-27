@@ -1,19 +1,12 @@
 import { API_URL } from '@/constant/api-url';
-import {
-  UserStorePayload,
-  UserStoreResponse,
-  UserStoreResponseAll,
-} from '@/types/user-types';
+import { UserStoreResponse, UserStoreResponseAll } from '@/types/user-types';
 import axiosInstance from '@/utils/axiosInstance';
 
 export const userStoreService = {
   registerUserStore: async (
-    payload: UserStorePayload
+    data: FormData
   ): Promise<{ isSuccess: boolean; message: string }> => {
-    const res = await axiosInstance.post(
-      `${API_URL.USER_STORES.INDEX}`,
-      payload
-    );
+    const res = await axiosInstance.post(`${API_URL.USER_STORES.INDEX}`, data);
     return res.data;
   },
   checkUserContract: async (userId: string): Promise<UserStoreResponse> => {

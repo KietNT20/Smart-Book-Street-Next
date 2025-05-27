@@ -116,9 +116,6 @@ const EventOpenStateButton = ({
                 &quot;
                 {eventName}&quot; không?
               </p>
-              <p className='text-sm text-muted-foreground'>
-                {stateInfo.description}
-              </p>
             </AlertDialogDescription>
           </AlertDialogHeader>
 
