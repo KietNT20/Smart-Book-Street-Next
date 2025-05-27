@@ -19,7 +19,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { PATH } from '@/enums/path';
-import { RoleEnums } from '@/enums/role';
+import { RoleEnums, RoleLabels } from '@/enums/role';
 import { StoreRent } from '@/enums/store-rent';
 import { useStoreById } from '@/hooks/use-store';
 import { useUserEmail } from '@/hooks/use-user';
@@ -199,7 +199,7 @@ const UserStoreForm = () => {
     // PDF files
     if (fileType === 'application/pdf' || fileName.endsWith('.pdf')) {
       return (
-        <div className='h-96 w-full rounded border'>
+        <div className='h-screen w-full rounded border'>
           <iframe
             src={filePreviewUrl}
             className='h-full w-full'
@@ -299,8 +299,8 @@ const UserStoreForm = () => {
                 <h3>Thông tin người dùng</h3>
               </div>
               <Button
-                variant='ghost'
-                size='sm'
+                variant='outline'
+                size='icon'
                 onClick={handleResetEmailVerification}
                 className='h-8 w-8 p-0'
               >
@@ -320,20 +320,24 @@ const UserStoreForm = () => {
                       Họ tên:
                     </span>
                     <span className='font-medium'>
-                      {user?.fullName || 'N/A'}
+                      {user?.fullName || 'Chưa cung cấp'}
                     </span>
                   </div>
                   <div className='flex items-center gap-3'>
                     <span className='min-w-[100px] text-muted-foreground'>
                       Email:
                     </span>
-                    <span className='font-medium'>{user?.email || 'N/A'}</span>
+                    <span className='font-medium'>
+                      {user?.email || 'Chưa cung cấp'}
+                    </span>
                   </div>
                   <div className='flex items-center gap-3'>
                     <span className='min-w-[100px] text-muted-foreground'>
                       Số điện thoại:
                     </span>
-                    <span className='font-medium'>{user?.phone || 'N/A'}</span>
+                    <span className='font-medium'>
+                      {user?.phone || 'Chưa cung cấp'}
+                    </span>
                   </div>
 
                   {/* Hiển thị thông tin roles */}
@@ -346,7 +350,9 @@ const UserStoreForm = () => {
                         user.userRoles.map((userRole, index) => (
                           <div key={index} className='flex items-center gap-2'>
                             <span className='font-medium'>
-                              {userRole.role?.roleName || 'N/A'}
+                              {RoleLabels[
+                                userRole.role?.roleName as RoleEnums
+                              ] || 'Chưa cung cấp'}
                             </span>
                             <span
                               className={`rounded-full px-2 py-1 text-xs ${
@@ -431,8 +437,8 @@ const UserStoreForm = () => {
                 <span className='font-medium'>Người đăng ký</span>
               </div>
               <Button
-                variant='ghost'
-                size='sm'
+                variant='outline'
+                size='icon'
                 onClick={handleResetEmailVerification}
                 type='button'
                 className='h-8 w-8 p-0'
@@ -464,7 +470,8 @@ const UserStoreForm = () => {
                       .map((userRole, index) => (
                         <div key={index} className='flex items-center gap-2'>
                           <span className='font-medium'>
-                            {userRole.role?.roleName || 'N/A'}
+                            {RoleLabels[userRole.role?.roleName as RoleEnums] ||
+                              'N/A'}
                           </span>
                           <span className='rounded-full bg-matcha/10 px-2 py-1 text-xs text-matcha'>
                             Đã duyệt
@@ -663,8 +670,8 @@ const UserStoreForm = () => {
                             Xem trước
                           </Button>
                           <Button
-                            variant='ghost'
-                            size='sm'
+                            variant='outline'
+                            size='icon'
                             onClick={handleRemoveFile}
                             type='button'
                             className='h-8 w-8 p-0 text-destructive hover:text-destructive'
