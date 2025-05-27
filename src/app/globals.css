@@ -139,3 +139,11 @@
     @apply bg-background text-foreground;
   }
 }
+
+.ordered-list {
+  list-style-type: decimal;
+}
+
+.bullet-list {
+  list-style-type: disc;
+}

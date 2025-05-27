@@ -350,7 +350,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         name: 'Đăng ký tổ chức sự kiện',
         url: PATH.EVENT_CREATION,
         icon: CalendarIcon,
-        roles: [RoleEnums.ADMIN, RoleEnums.ORGANIZER],
+        roles: [RoleEnums.ORGANIZER],
       },
       {
         name: 'Bảng điều khiển cửa hàng',

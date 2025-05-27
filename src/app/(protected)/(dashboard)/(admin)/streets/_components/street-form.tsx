@@ -351,7 +351,7 @@ const StreetForm = ({ initialData, mode = 'create', onCancel }: Props) => {
                         </div>
                       ) : (
                         <div className='text-center'>
-                          <Upload className='mx-auto h-12 w-12 text-muted-foreground' />
+                          <Upload className='mx-auto size-12 text-muted-foreground' />
                           <div className='mt-4'>
                             <label htmlFor='base-image-upload'>
                               <span className='inline-flex cursor-pointer items-center rounded-md border border-transparent bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90'>
@@ -368,7 +368,7 @@ const StreetForm = ({ initialData, mode = 'create', onCancel }: Props) => {
                             />
                           </div>
                           <p className='mt-2 text-sm text-muted-foreground'>
-                            PNG, JPG, WebP, GIF tối đa 10MB
+                            PNG, JPG, WebP tối đa 10MB
                           </p>
                         </div>
                       )}
@@ -433,7 +433,7 @@ const StreetForm = ({ initialData, mode = 'create', onCancel }: Props) => {
                           />
                         </div>
                         <p className='mt-2 text-center text-xs text-muted-foreground'>
-                          PNG, JPG, WebP, GIF tối đa 5MB/ảnh, tối đa 10 ảnh
+                          PNG, JPG, WebP tối đa 5MB/ảnh, tối đa 10 ảnh
                         </p>
                       </div>
                     </div>

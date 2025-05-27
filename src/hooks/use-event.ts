@@ -26,11 +26,11 @@ export const useEventMutaton = () => {
     },
     onError: (error) => {
       console.log('Error creating event:', error);
-      toast.error('Tạo sự kiện không thành công!');
+      toast.error(`Tạo sự kiện không thành công! ${error.message}`);
     },
   });
 
-  const updatEventMutation = useMutation({
+  const updateEventMutation = useMutation({
     mutationKey: ['update-event'],
     mutationFn: ({ id, formData }: { id: string; formData: FormData }) =>
       eventService.update(id, formData),
@@ -64,8 +64,8 @@ export const useEventMutaton = () => {
   return {
     createEvent: createEventMutation.mutate,
     isEventPending: createEventMutation.isPending,
-    updateEvent: updatEventMutation.mutate,
-    isEventUpdating: updatEventMutation.isPending,
+    updateEvent: updateEventMutation.mutate,
+    isEventUpdating: updateEventMutation.isPending,
     deleteEvent: deleteEventMutation.mutate,
     isEventDeleting: deleteEventMutation.isPending,
   };
