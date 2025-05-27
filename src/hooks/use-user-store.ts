@@ -1,7 +1,6 @@
 import { STORAGE } from '@/constant/storage';
 import { PATH } from '@/enums/path';
 import { userStoreService } from '@/services/userStoreService';
-import { UserStorePayload } from '@/types/user-types';
 import { getLocalStorageItem } from '@/utils/token';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
@@ -13,8 +12,7 @@ export const useUserStoresMutation = () => {
 
   const registerStoreMutation = useMutation({
     mutationKey: ['rent-store'],
-    mutationFn: (payload: UserStorePayload) =>
-      userStoreService.registerUserStore(payload),
+    mutationFn: (data: FormData) => userStoreService.registerUserStore(data),
     onSuccess: (data) => {
       if (data?.isSuccess) {
         queryClient.invalidateQueries({ queryKey: ['user-stores'] });

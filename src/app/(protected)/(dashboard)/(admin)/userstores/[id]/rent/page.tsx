@@ -2,7 +2,7 @@
 import { PATH } from '@/enums/path';
 import { useEntityBreadcrumb } from '@/hooks/use-breadcrumb-page';
 import { useParams } from 'next/navigation';
-import UserStoreForm from '../_components/user-store-form';
+import UserStoreForm from './_components/user-store-form';
 
 const UserStoreRentPage = () => {
   const params = useParams();

@@ -138,11 +138,11 @@ const UserStoresPage = ({ params }: { params: { id: string } }) => {
       {store?.zone && (
         <Card>
           <CardHeader>
-            <CardTitle className='text-xl'>Thông tin khu vực</CardTitle>
+            <CardTitle>Thông tin khu vực</CardTitle>
           </CardHeader>
           <CardContent className='space-y-4'>
             <div>
-              <h3 className='text-lg font-semibold'>{store.zone.zoneName}</h3>
+              <h4 className='text-primary'>{store.zone.zoneName}</h4>
               <p className='mt-2 leading-relaxed text-muted-foreground'>
                 {store.zone.description}
               </p>
