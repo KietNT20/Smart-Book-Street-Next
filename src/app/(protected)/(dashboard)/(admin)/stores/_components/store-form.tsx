@@ -46,7 +46,6 @@ const StoreForm = ({ storeToEdit }: Props) => {
     handleRemoveAdditionalImage,
     handleCancel,
   } = useStoreForm({ storeToEdit });
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
@@ -56,7 +55,7 @@ const StoreForm = ({ storeToEdit }: Props) => {
             <CardTitle className='text-lg'>Thông tin cơ bản</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+            <div className='grid grid-cols-1 gap-4 md:grid-cols-3'>
               <FormField
                 control={form.control}
                 name='storeName'
@@ -104,7 +103,7 @@ const StoreForm = ({ storeToEdit }: Props) => {
                       defaultValue={field.value}
                     >
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger disabled={isWorking}>
                           <SelectValue placeholder='Chọn khu vực cửa hàng' />
                         </SelectTrigger>
                       </FormControl>

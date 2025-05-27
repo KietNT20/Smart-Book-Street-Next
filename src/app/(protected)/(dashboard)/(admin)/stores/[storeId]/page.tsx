@@ -10,20 +10,15 @@ import { ImageFallback } from '@/constant/storage';
 import { PATH } from '@/enums/path';
 import { useEntityBreadcrumb } from '@/hooks/use-breadcrumb-page';
 import { useStoreById } from '@/hooks/use-store';
+import { useUserById } from '@/hooks/use-user';
 import { Image } from 'antd';
 import dayjs from 'dayjs';
-import {
-  Clock,
-  FileText,
-  Mail,
-  Map as MapIcon,
-  MapPin,
-  Phone,
-} from 'lucide-react';
+import { Clock, Mail, Map as MapIcon, MapPin, Phone } from 'lucide-react';
 import Link from 'next/link';
 
 export default function StorePage({ params }: { params: { storeId: string } }) {
-  const { store, isLoading } = useStoreById(params.storeId);
+  const { store, isLoading: storeLoading } = useStoreById(params.storeId);
+  const { user } = useUserById(store?.userStores?.[0]?.userId || '');
 
   useEntityBreadcrumb(
     PATH.STORES,
@@ -32,7 +27,7 @@ export default function StorePage({ params }: { params: { storeId: string } }) {
     store?.storeName
   );
 
-  if (isLoading) {
+  if (storeLoading) {
     return <LoadingSpinner />;
   }
 
@@ -305,7 +300,7 @@ export default function StorePage({ params }: { params: { storeId: string } }) {
               </h2>
 
               {store?.userStores && store?.userStores?.length > 0 ? (
-                <div className='grid grid-cols-1 gap-4 md:grid-cols-3'>
+                <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'>
                   {store?.userStores?.map((contract) => (
                     <Card key={contract.id} className='overflow-hidden'>
                       <CardHeader className='bg-muted/20 pb-2'>
@@ -328,18 +323,51 @@ export default function StorePage({ params }: { params: { storeId: string } }) {
                       </CardHeader>
                       <CardContent className='pt-4'>
                         <div className='space-y-3'>
-                          <div className='flex items-center gap-2'>
-                            <FileText className='size-4 text-muted-foreground' />
-                            <div className='grid w-full grid-cols-2'>
-                              <span className='text-sm text-muted-foreground'>
-                                Người thuê:
-                              </span>
-                              <span className='truncate text-sm font-medium'>
-                                {contract.userId.substring(0, 10)}...
-                              </span>
+                          {/* Thông tin người thuê */}
+                          <div className='border-b pb-3'>
+                            <h4 className='mb-2 text-sm font-medium text-muted-foreground'>
+                              Thông tin người thuê
+                            </h4>
+                            <div className='space-y-2'>
+                              <div className='flex items-center gap-2'>
+                                <span className='min-w-16 text-sm text-muted-foreground'>
+                                  Tên:
+                                </span>
+                                <span className='text-sm font-medium'>
+                                  {user?.fullName || 'Chưa cập nhật'}
+                                </span>
+                              </div>
+
+                              <div className='flex items-center gap-2'>
+                                <span className='min-w-16 text-sm text-muted-foreground'>
+                                  Email:
+                                </span>
+                                <span className='truncate text-sm'>
+                                  {user?.email || 'Chưa cập nhật'}
+                                </span>
+                              </div>
+
+                              <div className='flex items-center gap-2'>
+                                <span className='min-w-16 text-sm text-muted-foreground'>
+                                  SĐT:
+                                </span>
+                                <span className='text-sm'>
+                                  {user?.phone || 'Chưa cập nhật'}
+                                </span>
+                              </div>
+
+                              <div className='flex items-start gap-2'>
+                                <span className='min-w-16 text-sm text-muted-foreground'>
+                                  Địa chỉ:
+                                </span>
+                                <span className='text-sm'>
+                                  {user?.address || 'Chưa cập nhật'}
+                                </span>
+                              </div>
                             </div>
                           </div>
 
+                          {/* Thông tin hợp đồng */}
                           <div className='flex items-center gap-2'>
                             <Clock className='size-4 text-muted-foreground' />
                             <div className='grid w-full grid-cols-2'>
