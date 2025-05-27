@@ -59,7 +59,7 @@ export function NavProjects({ projects }: Props) {
 
   return (
     <SidebarGroup className='group-data-[collapsible=icon]:hidden'>
-      <SidebarGroupLabel>Projects</SidebarGroupLabel>
+      <SidebarGroupLabel>Dự án</SidebarGroupLabel>
       <SidebarMenu>
         {filteredProjects.map((item) => (
           <SidebarMenuItem key={item.name}>

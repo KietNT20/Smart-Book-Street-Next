@@ -1,13 +1,5 @@
-import { ConfirmModal } from '@/components/confirm-modal';
 import { TableSkeleton } from '@/components/table-skeleton';
 import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import {
   Pagination,
   PaginationContent,
@@ -33,22 +25,13 @@ import {
 } from '@/components/ui/table';
 import { Sort } from '@/enums/enums';
 import { PATH } from '@/enums/path';
-import { useStoreMutation } from '@/hooks/use-store';
 import { StoreData } from '@/types/store-types';
-import {
-  ArrowUpDown,
-  Eye,
-  FileEdit,
-  MoreHorizontal,
-  SortAsc,
-  SortDesc,
-  Trash2,
-} from 'lucide-react';
+import { ArrowUpDown, Eye, SortAsc, SortDesc } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 
-interface StoreTableProps {
+interface StoreRentTableProps {
   stores: StoreData[];
   isLoading: boolean;
   isSearching: boolean;
@@ -60,7 +43,7 @@ interface StoreTableProps {
   handleSort: (field: string) => void;
 }
 
-export const StoreTable = ({
+const StoreRentTable = ({
   stores,
   isLoading,
   isSearching,
@@ -70,18 +53,14 @@ export const StoreTable = ({
   sortField,
   sortOrder,
   handleSort,
-}: StoreTableProps) => {
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
-  const [storeToDelete, setStoreToDelete] = useState<string | null>(null);
-  const showEmptyState = !isLoading && (!stores || stores.length === 0);
+}: StoreRentTableProps) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const showEmptyState = !isLoading && (!stores || stores.length === 0);
   const rawPageNumber = searchParams.get('page')
     ? parseInt(searchParams.get('page') as string)
     : 1;
-
-  const { deleteStore } = useStoreMutation();
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
@@ -116,24 +95,6 @@ export const StoreTable = ({
     router.replace(`${pathname}?${createQueryString('page', '1')}`);
   };
 
-  // Handle opening delete dialog
-  const handleDeleteClick = (storeId: string) => {
-    setStoreToDelete(storeId);
-    setDeleteDialogOpen(true);
-  };
-
-  // Handle delete confirmation
-  const handleDeleteConfirm = () => {
-    if (storeToDelete) {
-      // Call API to delete store with the store ID
-      deleteStore(storeToDelete);
-
-      // Close dialog and reset state
-      setDeleteDialogOpen(false);
-      setStoreToDelete(null);
-    }
-  };
-
   const pagesToShow = Math.min(5, totalPages);
   const startPage = Math.max(
     1,
@@ -153,23 +114,6 @@ export const StoreTable = ({
               <TableHead>No.</TableHead>
               <TableHead
                 className='cursor-pointer'
-                onClick={() => handleSort('StoreName')}
-              >
-                <Button variant='ghost'>
-                  Tên cửa hàng
-                  {sortField === 'StoreName' ? (
-                    sortOrder === Sort.ASC ? (
-                      <SortAsc className='ml-2 size-4' />
-                    ) : (
-                      <SortDesc className='ml-2 size-4' />
-                    )
-                  ) : (
-                    <ArrowUpDown className='ml-2 size-4' />
-                  )}
-                </Button>
-              </TableHead>
-              <TableHead
-                className='cursor-pointer'
                 onClick={() => handleSort('Address')}
               >
                 <Button variant='ghost'>
@@ -186,7 +130,7 @@ export const StoreTable = ({
                 </Button>
               </TableHead>
               <TableHead>Tình trạng</TableHead>
-              <TableHead className='text-right'>Thao tác</TableHead>
+              <TableHead className='text-right'>Xem chi tiết</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -204,9 +148,6 @@ export const StoreTable = ({
                 <TableRow key={store?.id}>
                   <TableCell className='text-muted-foreground'>
                     {index + 1}
-                  </TableCell>
-                  <TableCell className='overflow-hidden font-medium'>
-                    <p className='line-clamp-2'>{store?.storeName}</p>
                   </TableCell>
                   <TableCell className='overflow-hidden'>
                     <p className='line-clamp-2'>{store?.address}</p>
@@ -232,35 +173,11 @@ export const StoreTable = ({
                     </span>
                   </TableCell>
                   <TableCell className='text-right'>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant='ghost' size='icon'>
-                          <MoreHorizontal className='size-4' />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align='end'>
-                        <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
-                        <DropdownMenuItem asChild className='cursor-pointer'>
-                          <Link href={`${PATH.STORES}/${store?.id}`}>
-                            <Eye className='mr-2 size-4' />
-                            Xem chi tiết
-                          </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem asChild className='cursor-pointer'>
-                          <Link href={`${PATH.STORES}/${store?.id}/edit`}>
-                            <FileEdit className='mr-2 size-4' />
-                            Chỉnh sửa
-                          </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          className='text-destructive'
-                          onClick={() => handleDeleteClick(store?.id || '')}
-                        >
-                          <Trash2 className='mr-2 size-4' />
-                          Xóa
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                    <Link href={`${PATH.USER_STORES}/${store?.id}`}>
+                      <Button variant={'outline'} size={'icon'}>
+                        <Eye className='size-4' />
+                      </Button>
+                    </Link>
                   </TableCell>
                 </TableRow>
               ))
@@ -353,16 +270,8 @@ export const StoreTable = ({
           )}
         </div>
       )}
-
-      {/* Delete Confirmation Dialog */}
-      <ConfirmModal
-        isOpen={deleteDialogOpen}
-        onClose={() => setDeleteDialogOpen(false)}
-        variant='destructive'
-        title='Xác nhận xóa'
-        description='Bạn có chắc chắn muốn xóa Cửa Hàng này không? Hành động này không thể hoàn tác.'
-        onConfirm={handleDeleteConfirm}
-      />
     </>
   );
 };
+
+export default StoreRentTable;

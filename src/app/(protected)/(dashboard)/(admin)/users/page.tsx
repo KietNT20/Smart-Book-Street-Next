@@ -63,10 +63,6 @@ export default function UsersPage() {
   });
   const { totalRecords } = useRolePending();
 
-  const filteredUsersData = users.filter((user) =>
-    user.userRoles.some((userRole) => userRole.isApproved === true)
-  );
-
   const handleSort = (field: string) => {
     if (field === sortField) {
       setSortOrder(sortOrder === Sort.ASC ? Sort.DESC : Sort.ASC);
@@ -134,7 +130,7 @@ export default function UsersPage() {
           />
 
           <UserTable
-            users={filteredUsersData}
+            users={users}
             isLoading={usersLoading}
             isSearching={isSearching}
             totalPages={totalPage || 1}

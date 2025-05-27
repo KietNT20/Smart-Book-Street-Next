@@ -37,7 +37,6 @@ const UserStoreForm = () => {
   const userId = params.id as string;
 
   const { registerStore, isRegisteringStore } = useUserStoresMutation();
-
   const form = useForm<UserStoreFormValues>({
     resolver: zodResolver(userStoreFormSchema),
     defaultValues: {

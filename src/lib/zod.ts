@@ -314,21 +314,34 @@ export type PublisherFormValues = z.infer<typeof publisherFormSchema>;
 // User Store form
 export const userStoreFormSchema = z
   .object({
+    userId: z.string().min(1, { message: 'UserId là bắt buộc' }),
     storeId: z.string().min(1, { message: 'Vui lòng chọn cửa hàng' }),
     contractNumber: z.string().min(1, { message: 'Số hợp đồng là bắt buộc' }),
     startDate: z
       .string()
-      .refine((val) => dayjs(val, 'YYYY-MM-DD', true).isValid(), {
+      .refine((val) => dayjs(val).isValid(), {
         message: 'Ngày giờ bắt đầu không hợp lệ',
       })
       .nullable(),
     endDate: z
       .string()
-      .refine((val) => dayjs(val, 'YYYY-MM-DD', true).isValid(), {
+      .refine((val) => dayjs(val).isValid(), {
         message: 'Ngày giờ kết thúc không hợp lệ',
       })
       .nullable(),
     status: z.nativeEnum(StoreRent),
+    contractFile: z
+      .instanceof(File, { message: 'Vui lòng chọn file hợp đồng' })
+      .refine((file) => file.size > 0, { message: 'File không được rỗng' })
+      .refine(
+        (file) =>
+          [
+            'application/pdf',
+            'application/msword',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          ].includes(file.type),
+        { message: 'Chỉ chấp nhận file PDF hoặc Word' }
+      ),
     notes: z.string().optional(),
   })
   .superRefine((data, ctx) => {
