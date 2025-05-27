@@ -23,6 +23,7 @@ import { Event } from '@/types/event-types';
 import { Empty } from 'antd';
 import { ArrowUpDown, Eye, SortAsc, SortDesc } from 'lucide-react';
 import Link from 'next/link';
+import EventStatusBadge from './event-status-badge';
 
 type Props = {
   events: Event[];
@@ -62,7 +63,6 @@ export default function EventHistoryTable({
         <Table className='table-auto'>
           <TableHeader>
             <TableRow>
-              <TableHead>No.</TableHead>
               <TableHead
                 className='cursor-pointer'
                 onClick={() => handleSort('EventName')}
@@ -149,6 +149,7 @@ export default function EventHistoryTable({
                 </Button>
               </TableHead>
               <TableHead>Phiên bản</TableHead>
+              <TableHead>Trạng thái</TableHead>
               <TableHead className='text-right'>Thao tác</TableHead>
             </TableRow>
           </TableHeader>
@@ -157,22 +158,26 @@ export default function EventHistoryTable({
               <TableSkeleton columns={7} rows={pageSize} />
             ) : events && events.length > 0 ? (
               events.map((event, index) => (
-                <TableRow key={event?.id}>
-                  <TableCell className='text-muted-foreground'>
-                    {index + 1 + (pageNumber - 1) * pageSize}
-                  </TableCell>
-                  <TableCell className='font-medium'>
+                <TableRow key={event?.id || index}>
+                  <TableCell className='text-sm font-medium'>
                     {event?.eventName}
                   </TableCell>
-                  <TableCell className='font-medium'>
+                  <TableCell className='text-sm font-medium'>
                     {event?.organizerEmail || '--'}
                   </TableCell>
-                  <TableCell>{formatDateVi(event?.startDate)}</TableCell>
-                  <TableCell>{formatDateVi(event?.endDate)}</TableCell>
-                  <TableCell className='max-w-52 overflow-hidden text-ellipsis whitespace-nowrap'>
+                  <TableCell className='text-sm'>
+                    {formatDateVi(event?.startDate)}
+                  </TableCell>
+                  <TableCell className='text-sm'>
+                    {formatDateVi(event?.endDate)}
+                  </TableCell>
+                  <TableCell className='max-w-52 overflow-hidden text-ellipsis whitespace-nowrap text-sm'>
                     {event?.zone?.zoneName}
                   </TableCell>
-                  <TableCell>{event?.version}</TableCell>
+                  <TableCell className='text-sm'>{event?.version}</TableCell>
+                  <TableCell>
+                    <EventStatusBadge type='approve' value={event?.isApprove} />
+                  </TableCell>
                   <TableCell className='text-right'>
                     <Button size={'icon'}>
                       <Link

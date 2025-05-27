@@ -65,7 +65,7 @@ const EventInDatePage = () => {
               onChange={handleDateChange}
               format='DD/MM/YYYY'
               placeholder='Chọn ngày'
-              className='h-10 w-full sm:w-auto'
+              className='h-10 w-full px-3 py-2 sm:w-auto'
               allowClear={false}
             />
           </div>

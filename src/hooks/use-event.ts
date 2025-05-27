@@ -1,4 +1,3 @@
-import { PATH } from '@/enums/path';
 import { eventService } from '@/services/eventService';
 import {
   EventCreateReqParams,
@@ -11,12 +10,10 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
 export const useEventMutaton = () => {
   const queryClient = useQueryClient();
-  const router = useRouter();
 
   const createEventMutation = useMutation({
     mutationKey: ['create-event'],
@@ -25,7 +22,6 @@ export const useEventMutaton = () => {
       if (data) {
         queryClient.invalidateQueries({ queryKey: ['events'] });
         toast.success('Tạo sự kiện thành công!');
-        router.replace(PATH.EVENTS);
       }
     },
     onError: (error) => {
@@ -42,7 +38,6 @@ export const useEventMutaton = () => {
       if (data) {
         queryClient.invalidateQueries({ queryKey: ['events'] });
         toast.success('Cập nhật sự kiện thành công!');
-        router.replace(PATH.EVENTS);
       }
     },
     onError: (error) => {

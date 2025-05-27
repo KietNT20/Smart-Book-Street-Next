@@ -347,7 +347,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         roles: [RoleEnums.ADMIN, RoleEnums.PUBLISHER],
       },
       {
-        name: 'Đăng ký tạo sự kiện',
+        name: 'Đăng ký tổ chức sự kiện',
         url: PATH.EVENT_CREATION,
         icon: CalendarIcon,
         roles: [RoleEnums.ADMIN, RoleEnums.ORGANIZER],
