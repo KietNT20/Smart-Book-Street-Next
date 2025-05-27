@@ -85,12 +85,12 @@ export const useGetStreets = ({
 
 export const useGetStreetById = (id: string) => {
   const { data, isLoading, error } = useQuery({
-    queryKey: ['street', id],
+    queryKey: ['streets', id],
     queryFn: () => streetService.getById(id),
   });
 
   return {
-    streetRes: data?.result || {},
+    streetRes: data?.result,
     isLoadingStreet: isLoading,
     errorStreet: error,
   };

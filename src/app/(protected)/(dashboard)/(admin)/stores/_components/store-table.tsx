@@ -73,6 +73,7 @@ export const StoreTable = ({
 }: StoreTableProps) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
   const [storeToDelete, setStoreToDelete] = useState<string | null>(null);
+  const showEmptyState = !isLoading && (!stores || stores.length === 0);
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -248,7 +249,7 @@ export const StoreTable = ({
       </div>
 
       {/* Pagination and page size controls */}
-      {stores.length > 0 && (
+      {!showEmptyState && (
         <div className='mt-4 flex items-center justify-between'>
           <div className='flex items-center gap-2'>
             <span className='whitespace-nowrap text-sm text-muted-foreground'>

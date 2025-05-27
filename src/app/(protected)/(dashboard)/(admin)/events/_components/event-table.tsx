@@ -69,6 +69,7 @@ const EventTable = ({
 }: Props) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
   const [eventToDelete, setEventToDelete] = useState<string | null>(null);
+  const showEmptyState = !isLoading && (!events || events.length === 0);
   const { deleteEvent } = useEventMutaton();
 
   const handlePageSizeChange = (value: string) => {
@@ -77,8 +78,8 @@ const EventTable = ({
   };
 
   // Handle opening delete dialog
-  const handleDeleteClick = (publisherId: string) => {
-    setEventToDelete(publisherId);
+  const handleDeleteClick = (eventId: string) => {
+    setEventToDelete(eventId);
     setDeleteDialogOpen(true);
   };
 
@@ -227,7 +228,7 @@ const EventTable = ({
       </div>
 
       {/* Pagination and page size controls */}
-      {events.length > 0 && (
+      {!showEmptyState && (
         <div className='mt-4 flex items-center justify-between'>
           <div className='flex items-center gap-2'>
             <span className='whitespace-nowrap text-sm text-muted-foreground'>

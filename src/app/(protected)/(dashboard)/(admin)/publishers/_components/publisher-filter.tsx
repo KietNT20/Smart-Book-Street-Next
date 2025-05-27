@@ -28,7 +28,7 @@ const PublisherFilter = ({
   onClearSearch,
 }: Props) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const debouncedFilters = useDebounce(filters, 700);
+  const debouncedFilters = useDebounce(filters, 500);
 
   const handleInputChange = (
     field: keyof SearchFilters,

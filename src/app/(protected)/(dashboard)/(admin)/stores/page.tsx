@@ -94,7 +94,7 @@ export default function StoresPage() {
   return (
     <div className='container mx-auto'>
       <div className='mb-4 flex items-center justify-between'>
-        <h2 className='text-2xl font-bold'>Quản lý cửa hàng</h2>
+        <h2>Quản lý cửa hàng</h2>
         <Link href={PATH.STORE_CREATE} passHref>
           <Button>
             <Plus className='mr-2 size-4' /> Thêm cửa hàng mới

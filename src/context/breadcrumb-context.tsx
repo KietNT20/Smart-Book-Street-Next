@@ -40,6 +40,10 @@ export const API_MAPPING: Record<string, { singular: string; plural: string }> =
       singular: 'Sự kiện hôm nay',
       plural: 'Sự kiện hôm nay',
     },
+    streets: {
+      singular: 'Đường sách',
+      plural: 'Đường sách',
+    },
   };
 
 export const ACTION_MAPPING: Record<string, string> = {
