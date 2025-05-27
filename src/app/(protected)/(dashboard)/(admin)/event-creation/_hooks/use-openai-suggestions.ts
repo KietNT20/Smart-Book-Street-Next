@@ -17,7 +17,6 @@ const EVENT_EMOJIS = {
   workshop: '🔧',
   concert: '🎵',
   exhibition: '🖼️',
-  sports: '🏆',
   tech: '💻',
   food: '🍽️',
   education: '📚',
@@ -25,8 +24,6 @@ const EVENT_EMOJIS = {
   business: '💼',
   culture: '🏮',
   festival: '🎪',
-  holiday: '🎄',
-  travel: '✈️',
   default: '📅',
 };
 
@@ -41,6 +38,26 @@ export const useOpenAISuggestions = ({
     eventName: false,
     description: false,
   });
+
+  // Helper function to clean event name from unwanted characters
+  const cleanEventName = (eventName: string): string => {
+    // Remove emojis (most common Unicode emoji ranges)
+    let cleaned = eventName.replace(
+      /[\uD83C-\uDBFF][\uDC00-\uDFFF]|[\u2600-\u27FF]|[\uD83C][\uDF00-\uDFFF]|[\uD83D][\uDC00-\uDE4F]|[\uD83D][\uDE80-\uDEFF]/g,
+      ''
+    );
+
+    // Remove ellipsis and dots at the end
+    cleaned = cleaned.replace(/\.{2,}$|…$/, '');
+
+    // Remove quotes if they wrap the entire string
+    cleaned = cleaned.replace(/^["']|["']$/g, '');
+
+    // Clean up extra spaces
+    cleaned = cleaned.replace(/\s+/g, ' ').trim();
+
+    return cleaned;
+  };
 
   // Helper function to detect event type and return appropriate emoji
   const getEventEmoji = (eventName: string): string => {
@@ -74,11 +91,6 @@ export const useOpenAISuggestions = ({
       lowerCaseEventName.includes('exhibition')
     )
       return EVENT_EMOJIS.exhibition;
-    if (
-      lowerCaseEventName.includes('thể thao') ||
-      lowerCaseEventName.includes('sports')
-    )
-      return EVENT_EMOJIS.sports;
     if (
       lowerCaseEventName.includes('tech') ||
       lowerCaseEventName.includes('công nghệ')
@@ -156,7 +168,17 @@ export const useOpenAISuggestions = ({
 
       if (type === 'eventName') {
         content = `Gợi ý một tên sự kiện hấp dẫn, ngắn gọn và thu hút dựa trên thông tin sau: ${prompt}. 
-        Chỉ trả về tên sự kiện không có thêm diễn giải. Đảm bảo tên sự kiện ngắn gọn, dễ nhớ và phù hợp với mục đích sự kiện.`;
+        
+        YÊU CẦU:
+        - Chỉ trả về tên sự kiện, không thêm diễn giải hay giải thích
+        - KHÔNG sử dụng emoji hay biểu tượng cảm xúc
+        - KHÔNG sử dụng dấu ba chấm (...) hay dấu chấm ở cuối
+        - KHÔNG đặt tên trong dấu ngoặc kép
+        - Tên sự kiện phải ngắn gọn (tối đa 100 ký tự), dễ nhớ và phù hợp
+        - Sử dụng tiếng Việt tự nhiên, không cần formal
+        
+        Ví dụ tốt: "Hội thảo khởi nghiệp công nghệ 2024"
+        Ví dụ tránh: "🚀 Hội thảo khởi nghiệp công nghệ 2024..." hoặc "Hội thảo khởi nghiệp công nghệ 2024"`;
       } else if (type === 'description') {
         const eventName = additionalContext?.eventName || prompt;
         const eventEmoji = getEventEmoji(eventName);
@@ -197,12 +219,9 @@ export const useOpenAISuggestions = ({
         // Process the suggestion before passing it back
         let processedSuggestion = data.suggestion;
 
-        // For event names, we may want to add an emoji prefix
+        // For event names, clean up unwanted characters
         if (type === 'eventName') {
-          const emoji = getEventEmoji(processedSuggestion);
-          processedSuggestion = useEmojis
-            ? `${emoji} ${processedSuggestion}`
-            : processedSuggestion;
+          processedSuggestion = cleanEventName(processedSuggestion);
         }
         // For descriptions, enhance the HTML content
         else if (type === 'description') {
