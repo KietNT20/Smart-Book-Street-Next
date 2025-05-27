@@ -17,6 +17,7 @@ export const userRoleService = {
     roleId: string;
     userId: string;
     assignedAt: string;
+    isApproved: boolean;
   }) => {
     const res = await axiosInstance.post(`${API_ENDPOINT.USER_ROLE}`, payload);
     return res.data;

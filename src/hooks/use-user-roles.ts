@@ -11,6 +11,7 @@ export const useUserRoleMutation = () => {
       roleId: string;
       userId: string;
       assignedAt: string;
+      isApproved: boolean;
     }) => userRoleService.addUserRole(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users'] });

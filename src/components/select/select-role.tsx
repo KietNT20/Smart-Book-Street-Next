@@ -84,6 +84,7 @@ const UserRoleSelector = ({
         roleId: selectedRoleId,
         userId: userId,
         assignedAt: new Date().toISOString(),
+        isApproved: true, // Assuming we want to auto-approve roles added this way
       },
       {
         onSuccess: () => {
