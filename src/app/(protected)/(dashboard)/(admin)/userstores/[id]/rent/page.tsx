@@ -2,8 +2,12 @@
 
 import { PATH } from '@/enums/path';
 import { useEntityBreadcrumb } from '@/hooks/use-breadcrumb-page';
+import dynamic from 'next/dynamic';
 import { useParams } from 'next/navigation';
-import UserStoreForm from './_components/user-store-form';
+
+const UserStoreForm = dynamic(() => import('./_components/user-store-form'), {
+  ssr: false,
+});
 
 const UserStoreRentPage = () => {
   const params = useParams();

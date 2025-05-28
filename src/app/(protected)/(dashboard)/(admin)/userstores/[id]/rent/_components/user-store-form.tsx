@@ -1,7 +1,6 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import {
   Form,
   FormControl,
@@ -9,6 +8,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  FormLabel as Label,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import {
@@ -19,7 +19,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { PATH } from '@/enums/path';
-import { RoleEnums, RoleLabels } from '@/enums/role';
+import { RoleEnums } from '@/enums/role';
 import { StoreRent } from '@/enums/store-rent';
 import { useStoreById } from '@/hooks/use-store';
 import { useUserEmail } from '@/hooks/use-user';
@@ -28,37 +28,28 @@ import { userStoreFormSchema, UserStoreFormValues } from '@/lib/zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { DatePicker } from 'antd';
 import dayjs from 'dayjs';
-import {
-  Eye,
-  EyeOff,
-  Mail,
-  Store as StoreIcon,
-  Upload,
-  User,
-  X,
-} from 'lucide-react';
 import Link from 'next/link';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import EmailVerificationStep from './email-verification-step';
+import FileUploadField from './file-upload-field';
+import StoreInfoCard from './store-info-card';
+import UserConfirmationStep from './user-confirmation-step';
+import UserInfoCard from './user-info-card';
 
 type Props = {
   storeIdParam?: string;
 };
 
 const UserStoreForm = ({ storeIdParam }: Props) => {
-  // State cho email verification
-  const [email, setEmail] = useState('');
+  // State management
   const [verifiedEmail, setVerifiedEmail] = useState('');
   const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [isUserConfirmed, setIsUserConfirmed] = useState(false);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [showFilePreview, setShowFilePreview] = useState(false);
-  const [filePreviewUrl, setFilePreviewUrl] = useState<string | null>(null);
 
-  // Ref để tránh cleanup không cần thiết
-  const filePreviewUrlRef = useRef<string | null>(null);
   const isUnmountedRef = useRef(false);
 
+  // Hooks
   const { user, userLoading } = useUserEmail(verifiedEmail);
   const { registerStore, isRegisteringStore } = useUserStoresMutation();
 
@@ -75,32 +66,10 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
     },
   });
 
-  // Sử dụng useMemo để tránh re-computation không cần thiết
   const storeId = useMemo(() => form.getValues('storeId'), [form]);
   const { store, isLoading: isLoadingStore } = useStoreById(storeId);
 
-  // Fixed useEffect - chỉ cleanup khi component unmount
-  useEffect(() => {
-    isUnmountedRef.current = false;
-
-    return () => {
-      isUnmountedRef.current = true;
-      // Cleanup tất cả URLs khi component unmount
-      if (filePreviewUrlRef.current) {
-        URL.revokeObjectURL(filePreviewUrlRef.current);
-        filePreviewUrlRef.current = null;
-      }
-    };
-  }, []); // Empty dependency array
-
-  // Separate useEffect cho file preview URL management
-  useEffect(() => {
-    if (filePreviewUrl) {
-      filePreviewUrlRef.current = filePreviewUrl;
-    }
-  }, [filePreviewUrl]);
-
-  // Memoized function để kiểm tra quyền đăng ký store
+  // Helper functions
   const canRegisterStore = useCallback(() => {
     if (
       !user?.userRoles ||
@@ -120,19 +89,15 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
     );
   }, [user?.userRoles]);
 
-  // Xử lý verify email với useCallback
-  const handleVerifyEmail = useCallback(() => {
-    if (!email.trim() || userLoading) return;
-
-    setVerifiedEmail(email.trim());
+  // Event handlers
+  const handleVerifyEmail = useCallback((email: string) => {
+    setVerifiedEmail(email);
     setIsEmailVerified(true);
-  }, [email, userLoading]);
+  }, []);
 
-  // Xử lý confirm user với useCallback
   const handleConfirmUser = useCallback(() => {
     if (!user?.id || !canRegisterStore()) return;
 
-    // Batch state updates
     Promise.resolve().then(() => {
       if (!isUnmountedRef.current) {
         form.setValue('userId', user.id);
@@ -141,14 +106,11 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
     });
   }, [user?.id, canRegisterStore, form]);
 
-  // Reset email verification với useCallback
   const handleResetEmailVerification = useCallback(() => {
-    // Batch all state updates
     Promise.resolve().then(() => {
       if (!isUnmountedRef.current) {
         setIsEmailVerified(false);
         setIsUserConfirmed(false);
-        setEmail('');
         setVerifiedEmail('');
 
         form.reset({
@@ -164,7 +126,11 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
     });
   }, [form, storeIdParam]);
 
-  // Optimized onSubmit với useCallback
+  const handleTryAnotherEmail = useCallback(() => {
+    setVerifiedEmail('');
+    setIsEmailVerified(false);
+  }, []);
+
   const onSubmit = useCallback(
     (values: UserStoreFormValues) => {
       const formData = new FormData();
@@ -187,7 +153,6 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
         onSuccess: () => {
           if (!isUnmountedRef.current) {
             form.reset();
-            setSelectedFile(null);
             setIsUserConfirmed(false);
             handleResetEmailVerification();
           }
@@ -197,342 +162,28 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
     [registerStore, form, handleResetEmailVerification]
   );
 
-  // Optimized file change handler
-  const handleFileChange = useCallback(
-    (
-      event: React.ChangeEvent<HTMLInputElement>,
-      onChange: (file: File) => void
-    ) => {
-      const file = event.target.files?.[0];
-      if (!file) return;
-
-      // Cleanup previous URL first
-      if (filePreviewUrlRef.current) {
-        URL.revokeObjectURL(filePreviewUrlRef.current);
-        filePreviewUrlRef.current = null;
-      }
-
-      // Batch state updates
-      Promise.resolve().then(() => {
-        if (!isUnmountedRef.current) {
-          setSelectedFile(file);
-          onChange(file);
-
-          // Create new preview URL
-          const url = URL.createObjectURL(file);
-          setFilePreviewUrl(url);
-          filePreviewUrlRef.current = url;
-        }
-      });
-    },
-    []
-  );
-
-  // Optimized remove file handler
-  const handleRemoveFile = useCallback(() => {
-    // Cleanup URL
-    if (filePreviewUrlRef.current) {
-      URL.revokeObjectURL(filePreviewUrlRef.current);
-      filePreviewUrlRef.current = null;
-    }
-
-    // Batch state updates
-    Promise.resolve().then(() => {
-      if (!isUnmountedRef.current) {
-        setSelectedFile(null);
-        setFilePreviewUrl(null);
-        setShowFilePreview(false);
-
-        // Reset input file
-        const fileInput = document.querySelector(
-          'input[type="file"]'
-        ) as HTMLInputElement;
-        if (fileInput) fileInput.value = '';
-      }
-    });
-  }, []);
-
-  const handlePreviewFile = useCallback(() => {
-    setShowFilePreview(true);
-  }, []);
-
-  // Memoized file preview render
-  const renderFilePreview = useCallback(() => {
-    if (!selectedFile || !filePreviewUrl) return null;
-
-    const fileType = selectedFile.type;
-    const fileName = selectedFile.name.toLowerCase();
-
-    // PDF files
-    if (fileType === 'application/pdf' || fileName.endsWith('.pdf')) {
-      return (
-        <div className='h-screen w-full rounded border'>
-          <iframe
-            src={filePreviewUrl}
-            className='h-full w-full'
-            title='File Preview'
-          />
-        </div>
-      );
-    }
-
-    // DOC/DOCX files
-    if (
-      fileName.endsWith('.doc') ||
-      fileName.endsWith('.docx') ||
-      fileType.includes('document') ||
-      fileType.includes('officedocument')
-    ) {
-      return (
-        <div className='flex h-96 w-full items-center justify-center rounded border bg-muted'>
-          <div className='text-center'>
-            <Upload className='mx-auto mb-4 text-muted-foreground' size={48} />
-            <p className='mb-4 text-sm text-muted-foreground'>
-              Xem trước file Word không được hỗ trợ trực tiếp
-            </p>
-            <Button
-              variant='outline'
-              onClick={() => {
-                const link = document.createElement('a');
-                link.href = filePreviewUrl;
-                link.download = selectedFile.name;
-                link.click();
-              }}
-            >
-              Tải xuống để xem
-            </Button>
-          </div>
-        </div>
-      );
-    }
-
-    // Fallback for other file types
-    return (
-      <div className='flex h-96 w-full items-center justify-center rounded border bg-muted'>
-        <div className='text-center'>
-          <Upload className='mx-auto mb-4 text-muted-foreground' size={48} />
-          <p className='text-sm text-muted-foreground'>
-            Không thể xem trước loại file này
-          </p>
-        </div>
-      </div>
-    );
-  }, [selectedFile, filePreviewUrl]);
-
-  // Memoized user roles rendering
-  const renderUserRoles = useCallback(
-    (userRoles: any[], isApprovedOnly = false) => {
-      if (!userRoles || !Array.isArray(userRoles) || userRoles.length === 0) {
-        return (
-          <span className='font-medium'>
-            {isApprovedOnly ? 'N/A' : 'Chưa có vai trò'}
-          </span>
-        );
-      }
-
-      const filteredRoles = isApprovedOnly
-        ? userRoles.filter(
-            (userRole) =>
-              userRole &&
-              userRole.role &&
-              userRole.role.roleName &&
-              userRole.isApproved &&
-              (userRole.role.roleName === RoleEnums.STORE_OWNER ||
-                userRole.role.roleName === RoleEnums.PUBLISHER)
-          )
-        : userRoles.filter((userRole) => userRole && userRole.role);
-
-      if (filteredRoles.length === 0) {
-        return (
-          <span className='font-medium'>
-            {isApprovedOnly ? 'N/A' : 'Chưa có vai trò'}
-          </span>
-        );
-      }
-
-      return filteredRoles.map((userRole, index) => {
-        const roleKey = `${isApprovedOnly ? 'approved-' : ''}role-${index}-${userRole?.role?.roleName || 'unknown'}`;
-        const roleName = userRole?.role?.roleName;
-        const roleLabel =
-          roleName && typeof roleName === 'string'
-            ? RoleLabels[roleName as RoleEnums] ||
-              (isApprovedOnly ? 'N/A' : 'Chưa cung cấp')
-            : isApprovedOnly
-              ? 'N/A'
-              : 'Chưa cung cấp';
-
-        return (
-          <div key={roleKey} className='flex items-center gap-2'>
-            <span className='font-medium'>{roleLabel}</span>
-            <span
-              className={`rounded-full px-2 py-1 text-xs ${
-                isApprovedOnly || userRole?.isApproved
-                  ? 'bg-matcha/10 text-matcha'
-                  : 'bg-destructive/10 text-destructive'
-              }`}
-            >
-              {isApprovedOnly || userRole?.isApproved
-                ? 'Đã duyệt'
-                : 'Chưa duyệt'}
-            </span>
-          </div>
-        );
-      });
-    },
-    []
-  );
-
-  // Step 1: Email verification
+  // Render steps
   if (!isEmailVerified) {
     return (
-      <div className='space-y-6'>
-        <Card className='w-full'>
-          <CardContent className='p-6'>
-            <div className='mb-4 flex items-center'>
-              <Mail className='mr-2 text-primary' size={20} />
-              <h3>Xác thực email người dùng</h3>
-            </div>
-
-            <div className='space-y-4'>
-              <div className='flex gap-2'>
-                <Input
-                  placeholder='Nhập email người dùng'
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  type='email'
-                  disabled={userLoading}
-                />
-                <Button
-                  onClick={handleVerifyEmail}
-                  disabled={!email.trim() || userLoading}
-                  variant='outline'
-                >
-                  {userLoading ? 'Đang tìm...' : 'Xác thực'}
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+      <EmailVerificationStep
+        onVerify={handleVerifyEmail}
+        isLoading={userLoading}
+      />
     );
   }
 
-  // Step 2: User confirmation
   if (isEmailVerified && !isUserConfirmed) {
     return (
-      <div className='space-y-6'>
-        <Card className='w-full'>
-          <CardContent className='p-6'>
-            <div className='mb-4 flex items-center justify-between'>
-              <div className='flex items-center'>
-                <User className='mr-2 text-matcha' size={20} />
-                <h3>Thông tin người dùng</h3>
-              </div>
-              <Button
-                variant='outline'
-                size='icon'
-                onClick={handleResetEmailVerification}
-                className='h-8 w-8 p-0'
-              >
-                <X size={16} />
-              </Button>
-            </div>
-
-            {userLoading ? (
-              <p className='text-sm text-muted-foreground'>
-                Đang tải thông tin người dùng...
-              </p>
-            ) : user ? (
-              <div className='space-y-3'>
-                <div className='space-y-2 text-sm'>
-                  <div className='flex items-center gap-3'>
-                    <span className='min-w-[100px] text-muted-foreground'>
-                      Họ tên:
-                    </span>
-                    <span className='font-medium'>
-                      {user?.fullName || 'Chưa cung cấp'}
-                    </span>
-                  </div>
-                  <div className='flex items-center gap-3'>
-                    <span className='min-w-[100px] text-muted-foreground'>
-                      Email:
-                    </span>
-                    <span className='font-medium'>
-                      {user?.email || 'Chưa cung cấp'}
-                    </span>
-                  </div>
-                  <div className='flex items-center gap-3'>
-                    <span className='min-w-[100px] text-muted-foreground'>
-                      Số điện thoại:
-                    </span>
-                    <span className='font-medium'>
-                      {user?.phone || 'Chưa cung cấp'}
-                    </span>
-                  </div>
-
-                  <div className='flex items-start gap-3'>
-                    <span className='min-w-[100px] text-muted-foreground'>
-                      Vai trò:
-                    </span>
-                    <div className='space-y-1'>
-                      {renderUserRoles(user?.userRoles)}
-                    </div>
-                  </div>
-                </div>
-
-                <div className='pt-4'>
-                  {canRegisterStore() ? (
-                    <Button onClick={handleConfirmUser} className='w-full'>
-                      Xác nhận và tiếp tục đăng ký
-                    </Button>
-                  ) : (
-                    <div className='space-y-3'>
-                      <div className='rounded-lg bg-destructive/10 p-3 text-center'>
-                        <p className='text-sm text-destructive'>
-                          Người dùng này không có quyền đăng ký cửa hàng.
-                          <br />
-                          {`Cần có vai trò "Chủ cửa hàng" hoặc "Nhà xuất bản" và được phê duyệt.`}
-                        </p>
-                      </div>
-                      <Button
-                        variant='outline'
-                        onClick={() => {
-                          setEmail('');
-                          setVerifiedEmail('');
-                          setIsEmailVerified(false);
-                        }}
-                        className='w-full'
-                      >
-                        Thử email khác
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              </div>
-            ) : (
-              <div className='py-4 text-center'>
-                <p className='mb-4 text-sm text-muted-foreground'>
-                  Không tìm thấy người dùng với email này
-                </p>
-                <Button
-                  variant='outline'
-                  onClick={() => {
-                    setEmail('');
-                    setVerifiedEmail('');
-                    setIsEmailVerified(false);
-                  }}
-                >
-                  Thử email khác
-                </Button>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
+      <UserConfirmationStep
+        user={user}
+        isLoading={userLoading}
+        onConfirm={handleConfirmUser}
+        onReset={handleResetEmailVerification}
+        onTryAnotherEmail={handleTryAnotherEmail}
+      />
     );
   }
 
-  // Step 3: Main form - Add loading state check
   if (!user) {
     return (
       <div className='flex items-center justify-center py-8'>
@@ -541,88 +192,22 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
     );
   }
 
+  // Main form
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
         {/* User Info Display */}
-        <Card className='w-full'>
-          <CardContent className='p-4'>
-            <div className='mb-2 flex items-center justify-between'>
-              <div className='flex items-center'>
-                <User className='mr-2 text-matcha' size={18} />
-                <span className='font-medium'>Người đăng ký</span>
-              </div>
-              <Button
-                variant='outline'
-                size='icon'
-                onClick={handleResetEmailVerification}
-                type='button'
-                className='h-8 w-8 p-0'
-              >
-                <X size={16} />
-              </Button>
-            </div>
-            <div className='space-y-1 text-sm'>
-              <div className='flex items-center gap-3'>
-                <span className='text-muted-foreground'>Họ tên:</span>
-                <span className='font-medium'>{user?.fullName || 'N/A'}</span>
-              </div>
-              <div className='flex items-center gap-3'>
-                <span className='text-muted-foreground'>Email:</span>
-                <span className='font-medium'>{user?.email || 'N/A'}</span>
-              </div>
-              <div className='flex items-start gap-3'>
-                <span className='text-muted-foreground'>Vai trò:</span>
-                <div className='space-y-1'>
-                  {renderUserRoles(user?.userRoles, true)}
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <UserInfoCard user={user} onReset={handleResetEmailVerification} />
 
         {/* Store Selection */}
         <div className='space-y-4'>
-          <FormLabel>Cửa hàng</FormLabel>
+          <Label>Cửa hàng</Label>
           {storeId && (
-            <Card className='w-full'>
-              <CardContent className='p-4'>
-                <div className='mb-2 flex items-center'>
-                  <StoreIcon className='mr-2 text-primary' size={18} />
-                  <span className='font-medium'>Thông tin cửa hàng</span>
-                </div>
-
-                {isLoadingStore ? (
-                  <p className='text-sm text-muted-foreground'>
-                    Đang tải thông tin...
-                  </p>
-                ) : store ? (
-                  <div className='space-y-2 text-sm'>
-                    <div className='flex items-center gap-3'>
-                      <span className='text-muted-foreground'>
-                        Tên cửa hàng:
-                      </span>
-                      <span className='font-medium'>
-                        {store.storeName || 'N/A'}
-                      </span>
-                    </div>
-                    <div className='flex items-center gap-3'>
-                      <span className='text-muted-foreground'>Địa chỉ:</span>
-                      <span className='font-medium'>
-                        {store.address || 'N/A'}
-                      </span>
-                    </div>
-                  </div>
-                ) : (
-                  <p className='text-sm text-muted-foreground'>
-                    Không tìm thấy thông tin cửa hàng
-                  </p>
-                )}
-              </CardContent>
-            </Card>
+            <StoreInfoCard store={store} isLoading={isLoadingStore} />
           )}
         </div>
 
+        {/* Contract Number */}
         <FormField
           control={form.control}
           name='contractNumber'
@@ -641,6 +226,7 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
           )}
         />
 
+        {/* Date Fields */}
         <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
           <FormField
             control={form.control}
@@ -689,6 +275,7 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
           />
         </div>
 
+        {/* Status */}
         <FormField
           control={form.control}
           name='status'
@@ -718,6 +305,7 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
           )}
         />
 
+        {/* File Upload */}
         <FormField
           control={form.control}
           name='contractFile'
@@ -725,90 +313,17 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
             <FormItem>
               <FormLabel>File hợp đồng</FormLabel>
               <FormControl>
-                <div className='space-y-4'>
-                  <div className='flex items-center gap-4'>
-                    <Input
-                      type='file'
-                      accept='.pdf,.doc,.docx'
-                      onChange={(e) => handleFileChange(e, field.onChange)}
-                      disabled={isRegisteringStore}
-                      className='flex-1'
-                    />
-                    <Upload className='text-muted-foreground' size={20} />
-                  </div>
-
-                  {selectedFile && (
-                    <div className='space-y-3'>
-                      <div className='flex items-center justify-between rounded-lg bg-muted p-3'>
-                        <div className='flex items-center gap-2 text-sm'>
-                          <span className='text-muted-foreground'>
-                            File đã chọn:
-                          </span>
-                          <span className='font-medium'>
-                            {selectedFile.name}
-                          </span>
-                          <span className='text-xs text-muted-foreground'>
-                            ({(selectedFile.size / 1024 / 1024).toFixed(2)} MB)
-                          </span>
-                        </div>
-
-                        <div className='flex items-center gap-2'>
-                          <Button
-                            variant='outline'
-                            size='sm'
-                            onClick={handlePreviewFile}
-                            type='button'
-                            className='h-8 px-3'
-                          >
-                            <Eye size={14} className='mr-1' />
-                            Xem trước
-                          </Button>
-                          <Button
-                            variant='outline'
-                            size='icon'
-                            onClick={handleRemoveFile}
-                            type='button'
-                            className='h-8 w-8 p-0 text-destructive hover:text-destructive'
-                          >
-                            <X size={14} />
-                          </Button>
-                        </div>
-                      </div>
-
-                      {/* File Preview Modal/Section */}
-                      {showFilePreview && (
-                        <div className='space-y-3'>
-                          <div className='flex items-center justify-between'>
-                            <h4 className='font-medium'>
-                              Xem trước file: {selectedFile.name}
-                            </h4>
-                            <Button
-                              variant='ghost'
-                              size='sm'
-                              onClick={() => setShowFilePreview(false)}
-                              type='button'
-                              className='h-8 w-8 p-0'
-                            >
-                              <EyeOff size={16} />
-                            </Button>
-                          </div>
-
-                          {renderFilePreview()}
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  <p className='text-xs text-muted-foreground'>
-                    Chấp nhận file PDF, DOC, DOCX (Tối đa 10MB)
-                  </p>
-                </div>
+                <FileUploadField
+                  onChange={field.onChange}
+                  disabled={isRegisteringStore}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
+        {/* Notes */}
         <FormField
           control={form.control}
           name='notes'
@@ -828,6 +343,7 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
           )}
         />
 
+        {/* Submit Buttons */}
         <div className='flex items-center justify-end space-x-2'>
           <Button variant='outline'>
             <Link href={PATH.USER_STORES}>Hủy</Link>
