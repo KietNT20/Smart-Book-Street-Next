@@ -38,7 +38,7 @@ import {
   X,
 } from 'lucide-react';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 type Props = {
@@ -54,6 +54,10 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [showFilePreview, setShowFilePreview] = useState(false);
   const [filePreviewUrl, setFilePreviewUrl] = useState<string | null>(null);
+
+  // Ref để tránh cleanup không cần thiết
+  const filePreviewUrlRef = useRef<string | null>(null);
+  const isUnmountedRef = useRef(false);
 
   const { user, userLoading } = useUserEmail(verifiedEmail);
   const { registerStore, isRegisteringStore } = useUserStoresMutation();
@@ -71,27 +75,33 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
     },
   });
 
-  const storeId = form.watch('storeId');
+  // Sử dụng useMemo để tránh re-computation không cần thiết
+  const storeId = useMemo(() => form.getValues('storeId'), [form]);
   const { store, isLoading: isLoadingStore } = useStoreById(storeId);
 
-  // Cleanup URL when component unmounts
+  // Fixed useEffect - chỉ cleanup khi component unmount
   useEffect(() => {
+    isUnmountedRef.current = false;
+
     return () => {
-      if (filePreviewUrl) {
-        URL.revokeObjectURL(filePreviewUrl);
+      isUnmountedRef.current = true;
+      // Cleanup tất cả URLs khi component unmount
+      if (filePreviewUrlRef.current) {
+        URL.revokeObjectURL(filePreviewUrlRef.current);
+        filePreviewUrlRef.current = null;
       }
     };
+  }, []); // Empty dependency array
+
+  // Separate useEffect cho file preview URL management
+  useEffect(() => {
+    if (filePreviewUrl) {
+      filePreviewUrlRef.current = filePreviewUrl;
+    }
   }, [filePreviewUrl]);
 
-  // Xử lý verify email
-  const handleVerifyEmail = () => {
-    if (!email.trim()) return;
-    setVerifiedEmail(email.trim());
-    setIsEmailVerified(true);
-  };
-
-  // Kiểm tra user có role StoreOwner và được approve không
-  const canRegisterStore = () => {
+  // Memoized function để kiểm tra quyền đăng ký store
+  const canRegisterStore = useCallback(() => {
     if (
       !user?.userRoles ||
       !Array.isArray(user.userRoles) ||
@@ -108,97 +118,146 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
         (userRole.role.roleName === RoleEnums.STORE_OWNER ||
           userRole.role.roleName === RoleEnums.PUBLISHER)
     );
-  };
+  }, [user?.userRoles]);
 
-  // Xử lý confirm user và show form
-  const handleConfirmUser = () => {
-    if (user?.id && canRegisterStore()) {
-      form.setValue('userId', user.id);
-      setIsUserConfirmed(true);
-    }
-  };
+  // Xử lý verify email với useCallback
+  const handleVerifyEmail = useCallback(() => {
+    if (!email.trim() || userLoading) return;
 
-  // Reset email verification
-  const handleResetEmailVerification = () => {
-    setIsEmailVerified(false);
-    setIsUserConfirmed(false);
-    setEmail('');
-    setVerifiedEmail('');
-    form.reset({
-      userId: '',
-      storeId: storeIdParam || '',
-      contractNumber: '',
-      startDate: '',
-      endDate: '',
-      status: StoreRent.ACTIVE,
-      notes: '',
+    setVerifiedEmail(email.trim());
+    setIsEmailVerified(true);
+  }, [email, userLoading]);
+
+  // Xử lý confirm user với useCallback
+  const handleConfirmUser = useCallback(() => {
+    if (!user?.id || !canRegisterStore()) return;
+
+    // Batch state updates
+    Promise.resolve().then(() => {
+      if (!isUnmountedRef.current) {
+        form.setValue('userId', user.id);
+        setIsUserConfirmed(true);
+      }
     });
-  };
+  }, [user?.id, canRegisterStore, form]);
 
-  function onSubmit(values: UserStoreFormValues) {
-    const formData = new FormData();
-
-    formData.append('userId', values.userId);
-    formData.append('storeId', values.storeId);
-    formData.append('contractNumber', values.contractNumber);
-    formData.append('startDate', dayjs(values.startDate).format('YYYY-MM-DD'));
-    formData.append('endDate', dayjs(values.endDate).format('YYYY-MM-DD'));
-    formData.append('status', values.status);
-    formData.append('contractFile', values.contractFile);
-    if (values.notes) {
-      formData.append('notes', values.notes);
-    }
-
-    registerStore(formData, {
-      onSuccess: () => {
-        form.reset();
-        setSelectedFile(null);
+  // Reset email verification với useCallback
+  const handleResetEmailVerification = useCallback(() => {
+    // Batch all state updates
+    Promise.resolve().then(() => {
+      if (!isUnmountedRef.current) {
+        setIsEmailVerified(false);
         setIsUserConfirmed(false);
-        handleResetEmailVerification();
-      },
-    });
-  }
+        setEmail('');
+        setVerifiedEmail('');
 
-  const handleFileChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    onChange: (file: File) => void
-  ) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      // Cleanup previous URL
-      if (filePreviewUrl) {
-        URL.revokeObjectURL(filePreviewUrl);
+        form.reset({
+          userId: '',
+          storeId: storeIdParam || '',
+          contractNumber: '',
+          startDate: '',
+          endDate: '',
+          status: StoreRent.ACTIVE,
+          notes: '',
+        });
+      }
+    });
+  }, [form, storeIdParam]);
+
+  // Optimized onSubmit với useCallback
+  const onSubmit = useCallback(
+    (values: UserStoreFormValues) => {
+      const formData = new FormData();
+
+      formData.append('userId', values.userId);
+      formData.append('storeId', values.storeId);
+      formData.append('contractNumber', values.contractNumber);
+      formData.append(
+        'startDate',
+        dayjs(values.startDate).format('YYYY-MM-DD')
+      );
+      formData.append('endDate', dayjs(values.endDate).format('YYYY-MM-DD'));
+      formData.append('status', values.status);
+      formData.append('contractFile', values.contractFile);
+      if (values.notes) {
+        formData.append('notes', values.notes);
       }
 
-      setSelectedFile(file);
-      onChange(file);
+      registerStore(formData, {
+        onSuccess: () => {
+          if (!isUnmountedRef.current) {
+            form.reset();
+            setSelectedFile(null);
+            setIsUserConfirmed(false);
+            handleResetEmailVerification();
+          }
+        },
+      });
+    },
+    [registerStore, form, handleResetEmailVerification]
+  );
 
-      // Create preview URL
-      const url = URL.createObjectURL(file);
-      setFilePreviewUrl(url);
+  // Optimized file change handler
+  const handleFileChange = useCallback(
+    (
+      event: React.ChangeEvent<HTMLInputElement>,
+      onChange: (file: File) => void
+    ) => {
+      const file = event.target.files?.[0];
+      if (!file) return;
+
+      // Cleanup previous URL first
+      if (filePreviewUrlRef.current) {
+        URL.revokeObjectURL(filePreviewUrlRef.current);
+        filePreviewUrlRef.current = null;
+      }
+
+      // Batch state updates
+      Promise.resolve().then(() => {
+        if (!isUnmountedRef.current) {
+          setSelectedFile(file);
+          onChange(file);
+
+          // Create new preview URL
+          const url = URL.createObjectURL(file);
+          setFilePreviewUrl(url);
+          filePreviewUrlRef.current = url;
+        }
+      });
+    },
+    []
+  );
+
+  // Optimized remove file handler
+  const handleRemoveFile = useCallback(() => {
+    // Cleanup URL
+    if (filePreviewUrlRef.current) {
+      URL.revokeObjectURL(filePreviewUrlRef.current);
+      filePreviewUrlRef.current = null;
     }
-  };
 
-  const handleRemoveFile = () => {
-    if (filePreviewUrl) {
-      URL.revokeObjectURL(filePreviewUrl);
-    }
-    setSelectedFile(null);
-    setFilePreviewUrl(null);
-    setShowFilePreview(false);
+    // Batch state updates
+    Promise.resolve().then(() => {
+      if (!isUnmountedRef.current) {
+        setSelectedFile(null);
+        setFilePreviewUrl(null);
+        setShowFilePreview(false);
 
-    // Reset input file
-    const fileInput = document.querySelector(
-      'input[type="file"]'
-    ) as HTMLInputElement;
-    if (fileInput) fileInput.value = '';
-  };
+        // Reset input file
+        const fileInput = document.querySelector(
+          'input[type="file"]'
+        ) as HTMLInputElement;
+        if (fileInput) fileInput.value = '';
+      }
+    });
+  }, []);
 
-  const handlePreviewFile = () => {
+  const handlePreviewFile = useCallback(() => {
     setShowFilePreview(true);
-  };
+  }, []);
 
-  const renderFilePreview = () => {
+  // Memoized file preview render
+  const renderFilePreview = useCallback(() => {
     if (!selectedFile || !filePreviewUrl) return null;
 
     const fileType = selectedFile.type;
@@ -217,7 +276,7 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
       );
     }
 
-    // DOC/DOCX files - browser will try to download or show
+    // DOC/DOCX files
     if (
       fileName.endsWith('.doc') ||
       fileName.endsWith('.docx') ||
@@ -235,8 +294,8 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
               variant='outline'
               onClick={() => {
                 const link = document.createElement('a');
-                link.href = filePreviewUrl!;
-                link.download = selectedFile!.name;
+                link.href = filePreviewUrl;
+                link.download = selectedFile.name;
                 link.click();
               }}
             >
@@ -258,7 +317,70 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
         </div>
       </div>
     );
-  };
+  }, [selectedFile, filePreviewUrl]);
+
+  // Memoized user roles rendering
+  const renderUserRoles = useCallback(
+    (userRoles: any[], isApprovedOnly = false) => {
+      if (!userRoles || !Array.isArray(userRoles) || userRoles.length === 0) {
+        return (
+          <span className='font-medium'>
+            {isApprovedOnly ? 'N/A' : 'Chưa có vai trò'}
+          </span>
+        );
+      }
+
+      const filteredRoles = isApprovedOnly
+        ? userRoles.filter(
+            (userRole) =>
+              userRole &&
+              userRole.role &&
+              userRole.role.roleName &&
+              userRole.isApproved &&
+              (userRole.role.roleName === RoleEnums.STORE_OWNER ||
+                userRole.role.roleName === RoleEnums.PUBLISHER)
+          )
+        : userRoles.filter((userRole) => userRole && userRole.role);
+
+      if (filteredRoles.length === 0) {
+        return (
+          <span className='font-medium'>
+            {isApprovedOnly ? 'N/A' : 'Chưa có vai trò'}
+          </span>
+        );
+      }
+
+      return filteredRoles.map((userRole, index) => {
+        const roleKey = `${isApprovedOnly ? 'approved-' : ''}role-${index}-${userRole?.role?.roleName || 'unknown'}`;
+        const roleName = userRole?.role?.roleName;
+        const roleLabel =
+          roleName && typeof roleName === 'string'
+            ? RoleLabels[roleName as RoleEnums] ||
+              (isApprovedOnly ? 'N/A' : 'Chưa cung cấp')
+            : isApprovedOnly
+              ? 'N/A'
+              : 'Chưa cung cấp';
+
+        return (
+          <div key={roleKey} className='flex items-center gap-2'>
+            <span className='font-medium'>{roleLabel}</span>
+            <span
+              className={`rounded-full px-2 py-1 text-xs ${
+                isApprovedOnly || userRole?.isApproved
+                  ? 'bg-matcha/10 text-matcha'
+                  : 'bg-destructive/10 text-destructive'
+              }`}
+            >
+              {isApprovedOnly || userRole?.isApproved
+                ? 'Đã duyệt'
+                : 'Chưa duyệt'}
+            </span>
+          </div>
+        );
+      });
+    },
+    []
+  );
 
   // Step 1: Email verification
   if (!isEmailVerified) {
@@ -348,50 +470,12 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
                     </span>
                   </div>
 
-                  {/* Hiển thị thông tin roles với null checks - FIXED */}
                   <div className='flex items-start gap-3'>
                     <span className='min-w-[100px] text-muted-foreground'>
                       Vai trò:
                     </span>
                     <div className='space-y-1'>
-                      {user?.userRoles &&
-                      Array.isArray(user.userRoles) &&
-                      user.userRoles.length > 0 ? (
-                        user.userRoles
-                          .filter((userRole) => userRole && userRole.role)
-                          .map((userRole, index) => {
-                            // Safe key generation
-                            const roleKey = `role-${index}-${userRole?.role?.roleName || 'unknown'}`;
-                            const roleName = userRole?.role?.roleName;
-                            const roleLabel =
-                              roleName && typeof roleName === 'string'
-                                ? RoleLabels[roleName as RoleEnums] ||
-                                  'Chưa cung cấp'
-                                : 'Chưa cung cấp';
-
-                            return (
-                              <div
-                                key={roleKey}
-                                className='flex items-center gap-2'
-                              >
-                                <span className='font-medium'>{roleLabel}</span>
-                                <span
-                                  className={`rounded-full px-2 py-1 text-xs ${
-                                    userRole?.isApproved
-                                      ? 'bg-matcha/10 text-matcha'
-                                      : 'bg-destructive/10 text-destructive'
-                                  }`}
-                                >
-                                  {userRole?.isApproved
-                                    ? 'Đã duyệt'
-                                    : 'Chưa duyệt'}
-                                </span>
-                              </div>
-                            );
-                          })
-                      ) : (
-                        <span className='font-medium'>Chưa có vai trò</span>
-                      )}
+                      {renderUserRoles(user?.userRoles)}
                     </div>
                   </div>
                 </div>
@@ -490,43 +574,7 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
               <div className='flex items-start gap-3'>
                 <span className='text-muted-foreground'>Vai trò:</span>
                 <div className='space-y-1'>
-                  {user?.userRoles &&
-                  Array.isArray(user.userRoles) &&
-                  user.userRoles.length > 0 ? (
-                    user.userRoles
-                      .filter(
-                        (userRole) =>
-                          userRole &&
-                          userRole.role &&
-                          userRole.role.roleName &&
-                          userRole.isApproved &&
-                          (userRole.role.roleName === RoleEnums.STORE_OWNER ||
-                            userRole.role.roleName === RoleEnums.PUBLISHER)
-                      )
-                      .map((userRole, index) => {
-                        // Safe key generation for approved roles
-                        const approvedRoleKey = `approved-role-${index}-${userRole?.role?.roleName || 'unknown'}`;
-                        const roleName = userRole?.role?.roleName;
-                        const roleLabel =
-                          roleName && typeof roleName === 'string'
-                            ? RoleLabels[roleName as RoleEnums] || 'N/A'
-                            : 'N/A';
-
-                        return (
-                          <div
-                            key={approvedRoleKey}
-                            className='flex items-center gap-2'
-                          >
-                            <span className='font-medium'>{roleLabel}</span>
-                            <span className='rounded-full bg-matcha/10 px-2 py-1 text-xs text-matcha'>
-                              Đã duyệt
-                            </span>
-                          </div>
-                        );
-                      })
-                  ) : (
-                    <span className='font-medium'>N/A</span>
-                  )}
+                  {renderUserRoles(user?.userRoles, true)}
                 </div>
               </div>
             </div>
