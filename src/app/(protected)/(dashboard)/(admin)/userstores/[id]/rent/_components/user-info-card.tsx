@@ -42,7 +42,7 @@ const UserInfoCard = ({ user, onReset }: Props) => {
             <div className='space-y-1'>
               {user?.userRoles && user.userRoles.length > 0 ? (
                 <UserRoleDisplay
-                  userRoles={user?.userRoles}
+                  userRoles={user?.userRoles || []}
                   isApprovedOnly={true}
                 />
               ) : (

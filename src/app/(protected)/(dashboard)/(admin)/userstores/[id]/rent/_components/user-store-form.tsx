@@ -76,7 +76,7 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
   const canRegisterStore = useCallback(() => {
     if (!user?.userRoles || user.userRoles.length === 0) return false;
 
-    return user.userRoles.some(
+    return user?.userRoles?.some(
       (userRole) =>
         userRole &&
         userRole.role &&
