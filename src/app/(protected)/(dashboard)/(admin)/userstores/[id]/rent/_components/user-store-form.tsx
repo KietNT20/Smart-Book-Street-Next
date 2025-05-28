@@ -65,10 +65,9 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
     },
   });
 
-  const storeId = useMemo(
-    () => form.getValues('storeId') || storeIdParam,
-    [form, storeIdParam]
-  );
+  const storeId = useMemo(() => {
+    return storeIdParam || '';
+  }, [storeIdParam]);
 
   const { store, isLoading: isLoadingStore } = useStoreById(storeId || '');
 
@@ -96,12 +95,10 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
   const handleConfirmUser = useCallback(() => {
     if (!user?.id || !canRegisterStore()) return;
 
-    Promise.resolve().then(() => {
-      if (!isUnmountedRef.current) {
-        form.setValue('userId', user.id);
-        setIsUserConfirmed(true);
-      }
-    });
+    if (!isUnmountedRef.current) {
+      form.setValue('userId', user.id);
+      setIsUserConfirmed(true);
+    }
   }, [user?.id, canRegisterStore, form]);
 
   const handleResetEmailVerification = useCallback(() => {
