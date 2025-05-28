@@ -48,6 +48,10 @@ export const API_MAPPING: Record<string, { singular: string; plural: string }> =
       singular: 'Lịch sử tạo sự kiện',
       plural: 'Lịch sử tạo sự kiện',
     },
+    rent: {
+      singular: 'Đơn đăng ký',
+      plural: 'Đơn đăng ký',
+    },
   };
 
 export const ACTION_MAPPING: Record<string, string> = {
