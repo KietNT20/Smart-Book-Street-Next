@@ -3,7 +3,7 @@ import { StoreData } from '@/types/store-types';
 import { Store as StoreIcon } from 'lucide-react';
 
 type Props = {
-  store: StoreData | null;
+  store?: StoreData | null;
   isLoading: boolean;
 };
 
@@ -22,11 +22,11 @@ const StoreInfoCard = ({ store, isLoading }: Props) => {
           <div className='space-y-2 text-sm'>
             <div className='flex items-center gap-3'>
               <span className='text-muted-foreground'>Tên cửa hàng:</span>
-              <span className='font-medium'>{store.storeName || 'N/A'}</span>
+              <span className='font-medium'>{store?.storeName || 'N/A'}</span>
             </div>
             <div className='flex items-center gap-3'>
               <span className='text-muted-foreground'>Địa chỉ:</span>
-              <span className='font-medium'>{store.address || 'N/A'}</span>
+              <span className='font-medium'>{store?.address || 'N/A'}</span>
             </div>
           </div>
         ) : (

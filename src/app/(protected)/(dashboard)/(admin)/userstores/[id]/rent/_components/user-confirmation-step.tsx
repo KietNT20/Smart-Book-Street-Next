@@ -1,3 +1,5 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { RoleEnums } from '@/enums/role';
@@ -6,7 +8,7 @@ import { User, X } from 'lucide-react';
 import UserRoleDisplay from './user-role-display';
 
 type Props = {
-  user: UserType | null;
+  user?: UserType | null;
   isLoading: boolean;
   onConfirm: () => void;
   onReset: () => void;

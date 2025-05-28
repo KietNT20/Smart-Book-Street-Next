@@ -2,7 +2,7 @@ import { RoleEnums, RoleLabels } from '@/enums/role';
 import { UserRole } from '@/types/user-types';
 
 type Props = {
-  userRoles: UserRole[];
+  userRoles?: UserRole[];
   isApprovedOnly?: boolean;
 };
 
@@ -16,7 +16,7 @@ const UserRoleDisplay = ({ userRoles, isApprovedOnly = false }: Props) => {
   }
 
   const filteredRoles = isApprovedOnly
-    ? userRoles.filter(
+    ? userRoles?.filter(
         (userRole) =>
           userRole &&
           userRole.role &&
@@ -25,7 +25,7 @@ const UserRoleDisplay = ({ userRoles, isApprovedOnly = false }: Props) => {
           (userRole.role.roleName === RoleEnums.STORE_OWNER ||
             userRole.role.roleName === RoleEnums.PUBLISHER)
       )
-    : userRoles.filter((userRole) => userRole && userRole.role);
+    : userRoles?.filter((userRole) => userRole && userRole.role);
 
   if (filteredRoles.length === 0) {
     return (

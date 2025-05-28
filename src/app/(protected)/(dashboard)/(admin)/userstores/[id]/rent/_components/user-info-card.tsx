@@ -1,3 +1,5 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { User as UserType } from '@/types/user-types';
@@ -5,7 +7,7 @@ import { User, X } from 'lucide-react';
 import UserRoleDisplay from './user-role-display';
 
 type Props = {
-  user: UserType | null;
+  user?: UserType | null;
   onReset: () => void;
 };
 
@@ -42,7 +44,7 @@ const UserInfoCard = ({ user, onReset }: Props) => {
             <div className='space-y-1'>
               {user?.userRoles && user.userRoles.length > 0 ? (
                 <UserRoleDisplay
-                  userRoles={user?.userRoles}
+                  userRoles={user?.userRoles || []}
                   isApprovedOnly={true}
                 />
               ) : (
