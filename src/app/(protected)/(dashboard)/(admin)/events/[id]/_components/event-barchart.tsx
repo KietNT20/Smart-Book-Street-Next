@@ -51,12 +51,8 @@ export default function EventBarchart({ data, title, description }: Props) {
         <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}>
-          <BarChart
-            accessibilityLayer
-            data={chartData}
-            className='min-h-56 w-full'
-          >
+        <ChartContainer config={chartConfig} className='min-h-52 w-full'>
+          <BarChart accessibilityLayer data={chartData}>
             <CartesianGrid vertical={false} />
             <XAxis dataKey='name' />
             <YAxis />

@@ -5,6 +5,7 @@ import { PATH } from '@/enums/path';
 import { useEntityBreadcrumb } from '@/hooks/use-breadcrumb-page';
 import { useGetEventById } from '@/hooks/use-event';
 import EventContent from './_components/event-content';
+import EventStatistics from './_components/event-content/event-statistics';
 import EventHero from './_components/event-hero';
 import EventOpenStateButton from './_components/event-open-state-btn';
 import EventSidebar from './_components/event-sidebar';
@@ -20,24 +21,32 @@ export default function EventDetailPage({
 
   return (
     <div className='min-h-screen bg-background pb-16'>
-      <div className='mb-6 flex items-center justify-between px-4'>
+      <div className='mb-6 flex items-center justify-between px-4 md:px-6'>
         <BackButton />
         <EventOpenStateButton eventId={params.id} />
       </div>
 
       {/* Hero Section */}
-      <div className='mx-auto px-4'>
+      <div className='mx-auto px-4 md:px-6'>
         <EventHero eventData={eventData} />
       </div>
 
       {/* Content */}
-      <div className='mx-auto mt-8 px-4'>
+      <div className='mx-auto mt-8 px-4 md:px-6'>
         <div className='grid grid-cols-1 gap-8 md:grid-cols-3'>
           {/* Main Content */}
-          <EventContent eventId={params.id} eventData={eventData} />
+          <EventContent eventData={eventData} />
 
           {/* Sidebar */}
           <EventSidebar eventData={eventData} />
+
+          <div className='md:col-span-3'>
+            {/* Statistics */}
+            <EventStatistics
+              eventId={params.id}
+              organizerEmail={eventData?.organizerEmail || ''}
+            />
+          </div>
         </div>
       </div>
     </div>

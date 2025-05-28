@@ -447,7 +447,7 @@ const EventStatistics = ({ eventId, organizerEmail }: Props) => {
                               title='Phân bố giới tính'
                               description={`Thống kê giới tính - ${getFilterLabel(statisticFilter)}`}
                               type='pie'
-                              height={300}
+                              height={200}
                             />
                           ) : (
                             <NoDataMessage message='Không có dữ liệu phân bố giới tính cho bộ lọc hiện tại.' />
@@ -501,7 +501,7 @@ const EventStatistics = ({ eventId, organizerEmail }: Props) => {
                               title='Nguồn tham khảo'
                               description={`Người tham gia biết về sự kiện qua đâu - ${getFilterLabel(statisticFilter)}`}
                               type='pie'
-                              height={300}
+                              height={200}
                             />
                           ) : (
                             <NoDataMessage message='Không có dữ liệu nguồn tham khảo cho bộ lọc hiện tại.' />
@@ -555,7 +555,7 @@ const EventStatistics = ({ eventId, organizerEmail }: Props) => {
                               title='Phân bố địa điểm'
                               description={`Thống kê nơi đến của người tham gia - ${getFilterLabel(statisticFilter)}`}
                               type='pie'
-                              height={300}
+                              height={200}
                             />
                           ) : (
                             <NoDataMessage message='Không có dữ liệu phân bố địa điểm cho bộ lọc hiện tại.' />
@@ -609,7 +609,7 @@ const EventStatistics = ({ eventId, organizerEmail }: Props) => {
                               title='Lịch sử tham gia'
                               description={`Thống kê lịch sử tham gia sự kiện - ${getFilterLabel(statisticFilter)}`}
                               type='pie'
-                              height={300}
+                              height={200}
                             />
                           ) : (
                             <NoDataMessage message='Không có dữ liệu lịch sử tham gia cho bộ lọc hiện tại.' />

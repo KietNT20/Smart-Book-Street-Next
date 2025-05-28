@@ -1,7 +1,6 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Sort } from '@/enums/enums';
 import { PATH } from '@/enums/path';
@@ -97,28 +96,24 @@ const UserStoresPage = () => {
       </div>
 
       {/* Search Section */}
-      <Card className='shadow-sm'>
-        <CardContent className='pt-6'>
-          <div className='flex gap-2'>
-            <div className='relative flex-1'>
-              <Search className='absolute left-3 top-1/2 size-4 -translate-y-1/2 transform text-muted-foreground' />
-              <Input
-                placeholder='Tìm kiếm theo địa chỉ cửa hàng...'
-                value={filters.address || ''}
-                onChange={(e) => handleFilterChange('address', e.target.value)}
-                onKeyDown={handleKeyDown}
-                className='pl-10'
-              />
-            </div>
-            {isSearching && (
-              <Button variant='outline' onClick={clearSearch}>
-                <X className='mr-2 size-4' />
-                Xóa
-              </Button>
-            )}
-          </div>
-        </CardContent>
-      </Card>
+      <div className='flex w-full gap-2 md:w-96'>
+        <div className='relative flex-1'>
+          <Search className='absolute left-3 top-1/2 size-4 -translate-y-1/2 transform text-muted-foreground' />
+          <Input
+            placeholder='Tìm kiếm theo địa chỉ cửa hàng...'
+            value={filters.address || ''}
+            onChange={(e) => handleFilterChange('address', e.target.value)}
+            onKeyDown={handleKeyDown}
+            className='pl-10'
+          />
+        </div>
+        {isSearching && (
+          <Button variant='outline' onClick={clearSearch}>
+            <X className='mr-2 size-4' />
+            Xóa
+          </Button>
+        )}
+      </div>
 
       {/* Results Summary */}
       {isSearching && (

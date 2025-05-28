@@ -56,12 +56,12 @@ export default function StoreSchedulePage() {
       <div className='container mx-auto p-4 md:px-4 md:py-8'>
         {/* Store Header */}
         <div className='mb-6 overflow-hidden rounded-lg bg-background shadow-md'>
-          <div className='relative flex h-64 items-center justify-center md:h-80'>
+          <div className='relative flex h-64 items-center justify-center md:h-96'>
             <div className='absolute inset-0 flex items-center justify-center'>
               <Image
                 src={mainImage}
                 alt={store?.storeName || 'Tên cửa hàng'}
-                className='h-full w-full object-cover'
+                className='h-auto w-full'
                 fallback={ImageFallback.SRC}
               />
               <div className='absolute inset-0 bg-black bg-opacity-30'></div>
