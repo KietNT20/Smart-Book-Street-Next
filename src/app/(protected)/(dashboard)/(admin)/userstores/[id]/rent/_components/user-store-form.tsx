@@ -99,27 +99,27 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
       form.setValue('userId', user.id);
       setIsUserConfirmed(true);
     }
-  }, [user?.id, canRegisterStore, form]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id, canRegisterStore]);
 
   const handleResetEmailVerification = useCallback(() => {
-    Promise.resolve().then(() => {
-      if (!isUnmountedRef.current) {
-        setIsEmailVerified(false);
-        setIsUserConfirmed(false);
-        setVerifiedEmail('');
+    if (!isUnmountedRef.current) {
+      setIsEmailVerified(false);
+      setIsUserConfirmed(false);
+      setVerifiedEmail('');
 
-        form.reset({
-          userId: '',
-          storeId: storeIdParam || '',
-          contractNumber: '',
-          startDate: '',
-          endDate: '',
-          status: StoreRent.ACTIVE,
-          notes: '',
-        });
-      }
-    });
-  }, [form, storeIdParam]);
+      form.reset({
+        userId: '',
+        storeId: storeIdParam || '',
+        contractNumber: '',
+        startDate: '',
+        endDate: '',
+        status: StoreRent.ACTIVE,
+        notes: '',
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [storeIdParam]);
 
   const handleTryAnotherEmail = useCallback(() => {
     setVerifiedEmail('');
