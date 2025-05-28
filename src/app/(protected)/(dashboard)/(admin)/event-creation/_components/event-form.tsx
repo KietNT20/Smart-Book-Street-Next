@@ -709,28 +709,6 @@ const EventForm = () => {
               )}
             />
 
-            {/* Is Open */}
-            <FormField
-              control={form.control}
-              name='isOpen'
-              render={({ field }) => (
-                <FormItem className='flex flex-row items-center justify-between rounded-lg border p-4'>
-                  <div className='space-y-0.5'>
-                    <FormLabel className='text-base'>Trạng thái mở</FormLabel>
-                    <FormDescription>
-                      Cho phép người dùng đăng ký sự kiện này
-                    </FormDescription>
-                  </div>
-                  <FormControl>
-                    <Switch
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-
             {/* Allow Ads */}
             <FormField
               control={form.control}
