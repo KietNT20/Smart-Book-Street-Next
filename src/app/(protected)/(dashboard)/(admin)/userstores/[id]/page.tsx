@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { ConfirmModal } from '@/components/confirm-modal';
 import { PATH } from '@/enums/path';
 import { StoreRent, StoreRentLabels } from '@/enums/store-rent';
 import { useEntityBreadcrumb } from '@/hooks/use-breadcrumb-page';
@@ -33,12 +34,15 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
 
 type Props = {
   params: { id: string };
 };
 
 const StoreRentalContractPage = ({ params }: Props) => {
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+
   const { userStoreByStore, isLoadingUserStore } = useUserStoreByStoreId(
     params.id
   );
@@ -66,6 +70,11 @@ const StoreRentalContractPage = ({ params }: Props) => {
       userId: rentalContract.userId,
       storeId: params.id,
     });
+    setShowDeleteDialog(false);
+  };
+
+  const handleDeleteClick = () => {
+    setShowDeleteDialog(true);
   };
 
   if (isLoadingUserStore || storeLoading) {
@@ -156,11 +165,11 @@ const StoreRentalContractPage = ({ params }: Props) => {
           {rentalContract && (
             <Button
               variant='destructive'
-              onClick={handleDeleteContract}
+              onClick={handleDeleteClick}
               disabled={isDeletingUserStore}
             >
               <Trash2 className='mr-2 size-4' />
-              {isDeletingUserStore ? 'Đang hủy...' : 'Hủy hợp đồng'}
+              {isDeletingUserStore ? 'Đang hủy...' : 'Chấm dứt hợp đồng'}
             </Button>
           )}
           {canRent ? (
@@ -483,6 +492,18 @@ const StoreRentalContractPage = ({ params }: Props) => {
           </CardContent>
         </Card>
       )}
+
+      {/* Confirm Delete Dialog */}
+      <ConfirmModal
+        isOpen={showDeleteDialog}
+        onClose={() => setShowDeleteDialog(false)}
+        onConfirm={handleDeleteContract}
+        title='Chấm dứt hợp đồng thuê'
+        description={`Bạn có chắc chắn muốn chấm dứt hợp đồng thuê cửa hàng "${storeDetail?.storeName}"? Hành động này không thể hoàn tác và sẽ kết thúc ngay lập tức mối quan hệ thuê giữa bạn và cửa hàng.`}
+        confirmText='Chấm dứt hợp đồng'
+        cancelText='Hủy bỏ'
+        isLoading={isDeletingUserStore}
+      />
     </div>
   );
 };
