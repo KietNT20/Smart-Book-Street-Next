@@ -5,7 +5,7 @@ import { User, X } from 'lucide-react';
 import UserRoleDisplay from './user-role-display';
 
 type Props = {
-  user: UserType;
+  user: UserType | null;
   onReset: () => void;
 };
 
@@ -40,10 +40,14 @@ const UserInfoCard = ({ user, onReset }: Props) => {
           <div className='flex items-start gap-3'>
             <span className='text-muted-foreground'>Vai trò:</span>
             <div className='space-y-1'>
-              <UserRoleDisplay
-                userRoles={user?.userRoles}
-                isApprovedOnly={true}
-              />
+              {user?.userRoles && user.userRoles.length > 0 ? (
+                <UserRoleDisplay
+                  userRoles={user?.userRoles}
+                  isApprovedOnly={true}
+                />
+              ) : (
+                <span className='font-medium'>Chưa có vai trò</span>
+              )}
             </div>
           </div>
         </div>
