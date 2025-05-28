@@ -96,12 +96,10 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
   const handleConfirmUser = useCallback(() => {
     if (!user?.id || !canRegisterStore()) return;
 
-    Promise.resolve().then(() => {
-      if (!isUnmountedRef.current) {
-        form.setValue('userId', user.id);
-        setIsUserConfirmed(true);
-      }
-    });
+    if (!isUnmountedRef.current) {
+      form.setValue('userId', user.id);
+      setIsUserConfirmed(true);
+    }
   }, [user?.id, canRegisterStore, form]);
 
   const handleResetEmailVerification = useCallback(() => {
