@@ -38,14 +38,14 @@ import {
   X,
 } from 'lucide-react';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-const UserStoreForm = () => {
-  const params = useParams();
-  const storeIdParam = params.id as string;
+type Props = {
+  storeIdParam?: string;
+};
 
+const UserStoreForm = ({ storeIdParam }: Props) => {
   // State cho email verification
   const [email, setEmail] = useState('');
   const [verifiedEmail, setVerifiedEmail] = useState('');
@@ -92,11 +92,18 @@ const UserStoreForm = () => {
 
   // Kiểm tra user có role StoreOwner và được approve không
   const canRegisterStore = () => {
-    if (!user?.userRoles || user.userRoles.length === 0) return false;
+    if (
+      !user?.userRoles ||
+      !Array.isArray(user.userRoles) ||
+      user.userRoles.length === 0
+    )
+      return false;
 
     return user.userRoles.some(
       (userRole) =>
-        userRole?.role?.roleName &&
+        userRole &&
+        userRole.role &&
+        userRole.role.roleName &&
         userRole.isApproved === true &&
         (userRole.role.roleName === RoleEnums.STORE_OWNER ||
           userRole.role.roleName === RoleEnums.PUBLISHER)
@@ -347,27 +354,36 @@ const UserStoreForm = () => {
                       Vai trò:
                     </span>
                     <div className='space-y-1'>
-                      {user?.userRoles && user.userRoles.length > 0 ? (
-                        user.userRoles.map((userRole, index) => (
-                          <div key={index} className='flex items-center gap-2'>
-                            <span className='font-medium'>
-                              {userRole?.role?.roleName
-                                ? RoleLabels[
-                                    userRole.role.roleName as RoleEnums
-                                  ] || 'Chưa cung cấp'
-                                : 'Chưa cung cấp'}
-                            </span>
-                            <span
-                              className={`rounded-full px-2 py-1 text-xs ${
-                                userRole?.isApproved
-                                  ? 'bg-matcha/10 text-matcha'
-                                  : 'bg-destructive/10 text-destructive'
-                              }`}
+                      {user?.userRoles &&
+                      Array.isArray(user.userRoles) &&
+                      user.userRoles.length > 0 ? (
+                        user.userRoles
+                          .filter((userRole) => userRole && userRole.role)
+                          .map((userRole, index) => (
+                            <div
+                              key={`${userRole.role?.roleName}-${index}`}
+                              className='flex items-center gap-2'
                             >
-                              {userRole?.isApproved ? 'Đã duyệt' : 'Chưa duyệt'}
-                            </span>
-                          </div>
-                        ))
+                              <span className='font-medium'>
+                                {userRole?.role?.roleName
+                                  ? RoleLabels[
+                                      userRole.role.roleName as RoleEnums
+                                    ] || 'Chưa cung cấp'
+                                  : 'Chưa cung cấp'}
+                              </span>
+                              <span
+                                className={`rounded-full px-2 py-1 text-xs ${
+                                  userRole?.isApproved
+                                    ? 'bg-matcha/10 text-matcha'
+                                    : 'bg-destructive/10 text-destructive'
+                                }`}
+                              >
+                                {userRole?.isApproved
+                                  ? 'Đã duyệt'
+                                  : 'Chưa duyệt'}
+                              </span>
+                            </div>
+                          ))
                       ) : (
                         <span className='font-medium'>Chưa có vai trò</span>
                       )}
@@ -469,17 +485,24 @@ const UserStoreForm = () => {
               <div className='flex items-start gap-3'>
                 <span className='text-muted-foreground'>Vai trò:</span>
                 <div className='space-y-1'>
-                  {user?.userRoles && user.userRoles.length > 0 ? (
+                  {user?.userRoles &&
+                  Array.isArray(user.userRoles) &&
+                  user.userRoles.length > 0 ? (
                     user.userRoles
                       .filter(
                         (userRole) =>
-                          userRole?.role?.roleName &&
+                          userRole &&
+                          userRole.role &&
+                          userRole.role.roleName &&
                           userRole.isApproved &&
                           (userRole.role.roleName === RoleEnums.STORE_OWNER ||
                             userRole.role.roleName === RoleEnums.PUBLISHER)
                       )
                       .map((userRole, index) => (
-                        <div key={index} className='flex items-center gap-2'>
+                        <div
+                          key={`approved-${userRole.role?.roleName}-${index}`}
+                          className='flex items-center gap-2'
+                        >
                           <span className='font-medium'>
                             {userRole?.role?.roleName
                               ? RoleLabels[
