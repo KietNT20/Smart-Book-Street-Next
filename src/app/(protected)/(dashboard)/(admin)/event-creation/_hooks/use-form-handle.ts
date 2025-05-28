@@ -48,7 +48,7 @@ export const useFormHandle = () => {
 
     if (values.description) formData.append('Description', values.description);
     formData.append('ZoneId', values.zoneId);
-    formData.append('IsOpen', String(values.isOpen || false));
+    formData.append('IsOpen', String(false));
     formData.append('AllowAds', String(values.allowAds || false));
 
     if (values.baseImgFile instanceof File && typeof window !== 'undefined') {

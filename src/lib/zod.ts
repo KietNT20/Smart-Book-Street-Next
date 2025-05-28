@@ -461,7 +461,7 @@ export const eventFormSchema = z
         z.null(),
       ])
       .optional(),
-    isOpen: z.boolean().optional().default(true),
+    isOpen: z.boolean().optional().default(false),
     allowAds: z.boolean().optional().default(false),
     zoneId: z.string().min(1, {
       message: 'Vui lòng chọn khu vực tổ chức sự kiện',

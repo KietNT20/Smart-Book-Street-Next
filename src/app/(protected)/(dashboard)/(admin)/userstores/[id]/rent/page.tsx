@@ -1,4 +1,5 @@
 'use client';
+
 import { PATH } from '@/enums/path';
 import { useEntityBreadcrumb } from '@/hooks/use-breadcrumb-page';
 import { useParams } from 'next/navigation';
