@@ -1,5 +1,5 @@
 import { API_URL } from '@/constant/api-url';
-import { UserStoreResponse, UserStoreResponseAll } from '@/types/user-types';
+import { UserStoreResponseAll } from '@/types/user-types';
 import axiosInstance from '@/utils/axiosInstance';
 
 export const userStoreService = {
@@ -9,13 +9,15 @@ export const userStoreService = {
     const res = await axiosInstance.post(`${API_URL.USER_STORES.INDEX}`, data);
     return res.data;
   },
-  checkUserContract: async (userId: string): Promise<UserStoreResponse> => {
+  checkUserContract: async (userId: string): Promise<UserStoreResponseAll> => {
     const res = await axiosInstance.get(
       `${API_URL.USER_STORES.USER}/${userId}`
     );
     return res.data;
   },
-  checkStoreContract: async (storeId: string): Promise<UserStoreResponse> => {
+  checkStoreContract: async (
+    storeId: string
+  ): Promise<UserStoreResponseAll> => {
     const res = await axiosInstance.get(
       `${API_URL.USER_STORES.STORE}/${storeId}`
     );

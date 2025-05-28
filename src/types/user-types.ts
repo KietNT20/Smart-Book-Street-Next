@@ -105,6 +105,8 @@ export interface UserStore extends BaseEntity {
   endDate: Date | string | null;
   status: StoreRent;
   contractNumber: string;
+  contractFile: string | null;
+  contractFileUrl: string | null;
   notes: string;
 }
 

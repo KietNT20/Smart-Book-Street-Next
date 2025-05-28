@@ -39,12 +39,12 @@ export const useUserStoresMutation = () => {
       queryClient.invalidateQueries({ queryKey: ['user-stores'] });
       queryClient.invalidateQueries({ queryKey: ['stores'] });
       queryClient.invalidateQueries({ queryKey: ['user-rentals'] });
-      toast.success('Xóa thành công!');
+      toast.success('Chấm dứt hợp đồng thành công!');
       router.replace(PATH.USER_STORES);
     },
     onError: (error) => {
       console.log('Error deleting store:', error);
-      toast.error('Xóa không thành công!');
+      toast.error('Chấm dứt hợp đồng không thành công!');
     },
   });
 
@@ -80,6 +80,19 @@ export const useGetContractStore = () => {
   return {
     storeContract: data?.results || [],
     isLoadingStoreContract: isLoading,
+    error,
+  };
+};
+
+export const useUserStoreByStoreId = (storeId: string) => {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['user-stores', storeId],
+    queryFn: () => userStoreService.checkStoreContract(storeId),
+    enabled: !!storeId,
+  });
+  return {
+    userStoreByStore: data?.results || [],
+    isLoadingUserStore: isLoading,
     error,
   };
 };
