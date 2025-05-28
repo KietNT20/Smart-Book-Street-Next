@@ -32,7 +32,7 @@ const UserInfoCard = ({ user, onReset }: Props) => {
         </div>
         <div className='space-y-1 text-sm'>
           <div className='flex items-center gap-3'>
-            <span className='text-muted-foreground'>Họ tên:</span>
+            <span className='text-muted-foreground'>Họ và tên:</span>
             <span className='font-medium'>{user?.fullName || 'N/A'}</span>
           </div>
           <div className='flex items-center gap-3'>
