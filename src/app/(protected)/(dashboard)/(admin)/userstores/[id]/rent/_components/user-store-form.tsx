@@ -65,17 +65,16 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
     },
   });
 
-  const storeId = useMemo(() => form.getValues('storeId'), [form]);
-  const { store, isLoading: isLoadingStore } = useStoreById(storeId);
+  const storeId = useMemo(
+    () => form.getValues('storeId') || storeIdParam,
+    [form, storeIdParam]
+  );
+
+  const { store, isLoading: isLoadingStore } = useStoreById(storeId || '');
 
   // Helper functions
   const canRegisterStore = useCallback(() => {
-    if (
-      !user?.userRoles ||
-      !Array.isArray(user.userRoles) ||
-      user.userRoles.length === 0
-    )
-      return false;
+    if (!user?.userRoles || user.userRoles.length === 0) return false;
 
     return user.userRoles.some(
       (userRole) =>
