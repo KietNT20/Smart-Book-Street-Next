@@ -96,9 +96,10 @@ const UserStoreForm = () => {
 
     return user.userRoles.some(
       (userRole) =>
-        (userRole.isApproved === true &&
-          userRole.role?.roleName === RoleEnums.STORE_OWNER) ||
-        userRole.role?.roleName === RoleEnums.PUBLISHER
+        userRole?.role?.roleName &&
+        userRole.isApproved === true &&
+        (userRole.role.roleName === RoleEnums.STORE_OWNER ||
+          userRole.role.roleName === RoleEnums.PUBLISHER)
     );
   };
 
@@ -340,7 +341,7 @@ const UserStoreForm = () => {
                     </span>
                   </div>
 
-                  {/* Hiển thị thông tin roles */}
+                  {/* Hiển thị thông tin roles với null checks */}
                   <div className='flex items-start gap-3'>
                     <span className='min-w-[100px] text-muted-foreground'>
                       Vai trò:
@@ -350,18 +351,20 @@ const UserStoreForm = () => {
                         user.userRoles.map((userRole, index) => (
                           <div key={index} className='flex items-center gap-2'>
                             <span className='font-medium'>
-                              {RoleLabels[
-                                userRole.role?.roleName as RoleEnums
-                              ] || 'Chưa cung cấp'}
+                              {userRole?.role?.roleName
+                                ? RoleLabels[
+                                    userRole.role.roleName as RoleEnums
+                                  ] || 'Chưa cung cấp'
+                                : 'Chưa cung cấp'}
                             </span>
                             <span
                               className={`rounded-full px-2 py-1 text-xs ${
-                                userRole.isApproved
+                                userRole?.isApproved
                                   ? 'bg-matcha/10 text-matcha'
                                   : 'bg-destructive/10 text-destructive'
                               }`}
                             >
-                              {userRole.isApproved ? 'Đã duyệt' : 'Chưa duyệt'}
+                              {userRole?.isApproved ? 'Đã duyệt' : 'Chưa duyệt'}
                             </span>
                           </div>
                         ))
@@ -424,7 +427,15 @@ const UserStoreForm = () => {
     );
   }
 
-  // Step 3: Main form
+  // Step 3: Main form - Add loading state check
+  if (!user) {
+    return (
+      <div className='flex items-center justify-center py-8'>
+        <p className='text-muted-foreground'>Đang tải thông tin...</p>
+      </div>
+    );
+  }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
@@ -462,16 +473,19 @@ const UserStoreForm = () => {
                     user.userRoles
                       .filter(
                         (userRole) =>
-                          (userRole.isApproved &&
-                            userRole.role?.roleName ===
-                              RoleEnums.STORE_OWNER) ||
-                          userRole.role?.roleName === RoleEnums.PUBLISHER
+                          userRole?.role?.roleName &&
+                          userRole.isApproved &&
+                          (userRole.role.roleName === RoleEnums.STORE_OWNER ||
+                            userRole.role.roleName === RoleEnums.PUBLISHER)
                       )
                       .map((userRole, index) => (
                         <div key={index} className='flex items-center gap-2'>
                           <span className='font-medium'>
-                            {RoleLabels[userRole.role?.roleName as RoleEnums] ||
-                              'N/A'}
+                            {userRole?.role?.roleName
+                              ? RoleLabels[
+                                  userRole.role.roleName as RoleEnums
+                                ] || 'N/A'
+                              : 'N/A'}
                           </span>
                           <span className='rounded-full bg-matcha/10 px-2 py-1 text-xs text-matcha'>
                             Đã duyệt
