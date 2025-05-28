@@ -2,6 +2,13 @@ import TablePagination from '@/components/pagination/table-pagination';
 import { TableSkeleton } from '@/components/table-skeleton';
 import { Button } from '@/components/ui/button';
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -21,7 +28,13 @@ import { PATH } from '@/enums/path';
 import { formatDateVi } from '@/lib/utils';
 import { Event } from '@/types/event-types';
 import { Empty } from 'antd';
-import { ArrowUpDown, Eye, SortAsc, SortDesc } from 'lucide-react';
+import {
+  ArrowUpDown,
+  Eye,
+  MoreHorizontal,
+  SortAsc,
+  SortDesc,
+} from 'lucide-react';
 import Link from 'next/link';
 
 type Props = {
@@ -176,13 +189,28 @@ export default function EventsInDateTable({
                     {event?.version}
                   </TableCell>
                   <TableCell className='text-right'>
-                    <Button size={'icon'}>
-                      <Link
-                        href={`${PATH.EVENT_CREATION_REQUEST}/${event?.id}`}
-                      >
-                        <Eye className='size-4' />
-                      </Link>
-                    </Button>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant='ghost' size='icon'>
+                          <MoreHorizontal className='size-4' />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align='end'>
+                        <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
+                        <DropdownMenuItem asChild className='cursor-pointer'>
+                          <Link href={`${PATH.EVENT_DATE}/${event?.id}`}>
+                            <Eye className='mr-2 size-4' />
+                            Điểm danh sự kiện
+                          </Link>
+                        </DropdownMenuItem>
+                        {/* <DropdownMenuItem asChild className='cursor-pointer'>
+                          <Link href={`${PATH.EVENT_DATE}/${event?.id}`}>
+                            <Eye className='mr-2 size-4' />
+                            Xem chi tiết
+                          </Link>
+                        </DropdownMenuItem> */}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </TableCell>
                 </TableRow>
               ))

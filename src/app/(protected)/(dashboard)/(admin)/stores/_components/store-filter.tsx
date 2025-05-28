@@ -80,7 +80,7 @@ const StoreFilter = ({
           </div>
 
           <CollapsibleContent>
-            <div className='grid grid-cols-1 gap-4 pt-2 md:grid-cols-2 lg:grid-cols-3'>
+            <div className='grid grid-cols-1 gap-4 pt-2 md:grid-cols-2'>
               <div className='space-y-2'>
                 <Label htmlFor='storeName'>Tên cửa hàng</Label>
                 <div className='relative'>
@@ -153,29 +153,6 @@ const StoreFilter = ({
                       size='icon'
                       className='absolute right-0 top-0 h-full'
                       onClick={() => clearField('zoneId')}
-                    >
-                      <X className='size-4' />
-                    </Button>
-                  )}
-                </div>
-              </div>
-
-              <div className='space-y-2'>
-                <Label htmlFor='storeTheme'>Chủ đề của cửa hàng</Label>
-                <div className='relative'>
-                  <Input
-                    id='storeTheme'
-                    placeholder='Tìm theo chủ đề cửa hàng'
-                    value={filters.storeTheme || ''}
-                    onChange={(e) =>
-                      handleInputChange('storeTheme', e.target.value)
-                    }
-                  />
-                  {filters.storeTheme && (
-                    <Button
-                      size='icon'
-                      className='absolute right-0 top-0 h-full'
-                      onClick={() => clearField('storeTheme')}
                     >
                       <X className='size-4' />
                     </Button>

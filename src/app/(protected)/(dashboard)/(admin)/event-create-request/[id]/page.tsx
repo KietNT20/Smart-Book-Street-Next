@@ -146,7 +146,7 @@ export default function EventCreateRequestPage({
                     Nội dung sự kiện
                   </Label>
                   <Card>
-                    <CardContent className='p-6'>
+                    <CardContent className='p-4'>
                       <div
                         dangerouslySetInnerHTML={{
                           __html: DOMPurify.sanitize(
@@ -197,7 +197,7 @@ export default function EventCreateRequestPage({
                   Thông tin địa điểm
                 </Label>
                 <Card>
-                  <CardContent className='space-y-4 pt-6'>
+                  <CardContent className='space-y-4 p-4'>
                     <div>
                       <Label className='text-sm font-semibold'>Khu vực</Label>
                       <p className='text-sm'>{eventData?.zone?.zoneName}</p>

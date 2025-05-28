@@ -130,6 +130,7 @@ const EventChart = ({
                 outerRadius={80}
                 dataKey='value'
                 nameKey='label'
+                className='min-h-56'
               >
                 {transformedData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.fill} />
