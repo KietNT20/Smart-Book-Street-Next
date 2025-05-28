@@ -348,7 +348,7 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
                     </span>
                   </div>
 
-                  {/* Hiển thị thông tin roles với null checks */}
+                  {/* Hiển thị thông tin roles với null checks - FIXED */}
                   <div className='flex items-start gap-3'>
                     <span className='min-w-[100px] text-muted-foreground'>
                       Vai trò:
@@ -359,31 +359,36 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
                       user.userRoles.length > 0 ? (
                         user.userRoles
                           .filter((userRole) => userRole && userRole.role)
-                          .map((userRole, index) => (
-                            <div
-                              key={`${userRole.role?.roleName}-${index}`}
-                              className='flex items-center gap-2'
-                            >
-                              <span className='font-medium'>
-                                {userRole?.role?.roleName
-                                  ? RoleLabels[
-                                      userRole.role.roleName as RoleEnums
-                                    ] || 'Chưa cung cấp'
-                                  : 'Chưa cung cấp'}
-                              </span>
-                              <span
-                                className={`rounded-full px-2 py-1 text-xs ${
-                                  userRole?.isApproved
-                                    ? 'bg-matcha/10 text-matcha'
-                                    : 'bg-destructive/10 text-destructive'
-                                }`}
+                          .map((userRole, index) => {
+                            // Safe key generation
+                            const roleKey = `role-${index}-${userRole?.role?.roleName || 'unknown'}`;
+                            const roleName = userRole?.role?.roleName;
+                            const roleLabel =
+                              roleName && typeof roleName === 'string'
+                                ? RoleLabels[roleName as RoleEnums] ||
+                                  'Chưa cung cấp'
+                                : 'Chưa cung cấp';
+
+                            return (
+                              <div
+                                key={roleKey}
+                                className='flex items-center gap-2'
                               >
-                                {userRole?.isApproved
-                                  ? 'Đã duyệt'
-                                  : 'Chưa duyệt'}
-                              </span>
-                            </div>
-                          ))
+                                <span className='font-medium'>{roleLabel}</span>
+                                <span
+                                  className={`rounded-full px-2 py-1 text-xs ${
+                                    userRole?.isApproved
+                                      ? 'bg-matcha/10 text-matcha'
+                                      : 'bg-destructive/10 text-destructive'
+                                  }`}
+                                >
+                                  {userRole?.isApproved
+                                    ? 'Đã duyệt'
+                                    : 'Chưa duyệt'}
+                                </span>
+                              </div>
+                            );
+                          })
                       ) : (
                         <span className='font-medium'>Chưa có vai trò</span>
                       )}
@@ -498,23 +503,27 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
                           (userRole.role.roleName === RoleEnums.STORE_OWNER ||
                             userRole.role.roleName === RoleEnums.PUBLISHER)
                       )
-                      .map((userRole, index) => (
-                        <div
-                          key={`approved-${userRole.role?.roleName}-${index}`}
-                          className='flex items-center gap-2'
-                        >
-                          <span className='font-medium'>
-                            {userRole?.role?.roleName
-                              ? RoleLabels[
-                                  userRole.role.roleName as RoleEnums
-                                ] || 'N/A'
-                              : 'N/A'}
-                          </span>
-                          <span className='rounded-full bg-matcha/10 px-2 py-1 text-xs text-matcha'>
-                            Đã duyệt
-                          </span>
-                        </div>
-                      ))
+                      .map((userRole, index) => {
+                        // Safe key generation for approved roles
+                        const approvedRoleKey = `approved-role-${index}-${userRole?.role?.roleName || 'unknown'}`;
+                        const roleName = userRole?.role?.roleName;
+                        const roleLabel =
+                          roleName && typeof roleName === 'string'
+                            ? RoleLabels[roleName as RoleEnums] || 'N/A'
+                            : 'N/A';
+
+                        return (
+                          <div
+                            key={approvedRoleKey}
+                            className='flex items-center gap-2'
+                          >
+                            <span className='font-medium'>{roleLabel}</span>
+                            <span className='rounded-full bg-matcha/10 px-2 py-1 text-xs text-matcha'>
+                              Đã duyệt
+                            </span>
+                          </div>
+                        );
+                      })
                   ) : (
                     <span className='font-medium'>N/A</span>
                   )}
