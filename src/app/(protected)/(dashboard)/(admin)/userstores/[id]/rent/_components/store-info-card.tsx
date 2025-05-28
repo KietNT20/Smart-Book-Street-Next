@@ -3,7 +3,7 @@ import { StoreData } from '@/types/store-types';
 import { Store as StoreIcon } from 'lucide-react';
 
 type Props = {
-  store: StoreData | null;
+  store?: StoreData | null;
   isLoading: boolean;
 };
 

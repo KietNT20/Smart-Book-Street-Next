@@ -6,7 +6,7 @@ import { User, X } from 'lucide-react';
 import UserRoleDisplay from './user-role-display';
 
 type Props = {
-  user: UserType | null;
+  user?: UserType | null;
   isLoading: boolean;
   onConfirm: () => void;
   onReset: () => void;

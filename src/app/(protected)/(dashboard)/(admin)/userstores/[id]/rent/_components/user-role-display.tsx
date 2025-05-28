@@ -2,7 +2,7 @@ import { RoleEnums, RoleLabels } from '@/enums/role';
 import { UserRole } from '@/types/user-types';
 
 type Props = {
-  userRoles: UserRole[];
+  userRoles?: UserRole[];
   isApprovedOnly?: boolean;
 };
 
