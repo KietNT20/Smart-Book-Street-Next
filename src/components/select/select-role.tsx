@@ -112,7 +112,8 @@ const UserRoleSelector = ({
 
   const isProcessing = isAddingRole || isDeletingRole;
   const hasRoles =
-    userRoles.some((role) => role.isApproved === true) && userRoles.length > 0;
+    userRoles?.some((role) => role.isApproved === true) &&
+    userRoles?.length > 0;
   const canAddRoles = !isLoading && getAvailableRolesToAdd().length > 0;
   const canRemoveRoles = !isLoading && hasRoles;
 
