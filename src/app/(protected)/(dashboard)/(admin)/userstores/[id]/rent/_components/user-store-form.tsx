@@ -10,7 +10,6 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
@@ -36,6 +35,7 @@ import FileUploadField from './file-upload-field';
 import StoreInfoCard from './store-info-card';
 import UserConfirmationStep from './user-confirmation-step';
 import UserInfoCard from './user-info-card';
+
 type Props = {
   storeIdParam?: string;
 };
@@ -130,37 +130,6 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
     setIsEmailVerified(false);
   }, []);
 
-  const onSubmit = useCallback(
-    (values: UserStoreFormValues) => {
-      const formData = new FormData();
-
-      formData.append('userId', values.userId);
-      formData.append('storeId', values.storeId);
-      formData.append('contractNumber', values.contractNumber);
-      formData.append(
-        'startDate',
-        dayjs(values.startDate).format('YYYY-MM-DD')
-      );
-      formData.append('endDate', dayjs(values.endDate).format('YYYY-MM-DD'));
-      formData.append('status', values.status);
-      formData.append('contractFile', values.contractFile);
-      if (values.notes) {
-        formData.append('notes', values.notes);
-      }
-
-      registerStore(formData, {
-        onSuccess: () => {
-          if (!isUnmountedRef.current) {
-            form.reset();
-            setIsUserConfirmed(false);
-            handleResetEmailVerification();
-          }
-        },
-      });
-    },
-    [registerStore, form, handleResetEmailVerification]
-  );
-
   // Render steps
   if (!isEmailVerified) {
     return (
@@ -183,15 +152,23 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
     );
   }
 
-  if (!user) {
-    return (
-      <div className='flex items-center justify-center py-8'>
-        <p className='text-muted-foreground'>Đang tải thông tin...</p>
-      </div>
-    );
-  }
+  const onSubmit = (values: UserStoreFormValues) => {
+    const formData = new FormData();
 
-  // Main form
+    formData.append('userId', values.userId);
+    formData.append('storeId', values.storeId);
+    formData.append('contractNumber', values.contractNumber);
+    formData.append('startDate', dayjs(values.startDate).format('YYYY-MM-DD'));
+    formData.append('endDate', dayjs(values.endDate).format('YYYY-MM-DD'));
+    formData.append('status', values.status);
+    formData.append('contractFile', values.contractFile);
+    if (values.notes) {
+      formData.append('notes', values.notes);
+    }
+
+    registerStore(formData);
+  };
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
@@ -200,7 +177,7 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
 
         {/* Store Selection */}
         <div className='space-y-4'>
-          <Label>Cửa hàng</Label>
+          <h3 className='text-sm font-medium leading-none'>Cửa hàng</h3>
           {storeId && (
             <StoreInfoCard store={store} isLoading={isLoadingStore} />
           )}

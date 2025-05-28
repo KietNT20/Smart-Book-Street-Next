@@ -11,7 +11,7 @@ const UserStoreRentPage = () => {
     PATH.USER_STORES,
     'Cửa hàng của người dùng',
     params.id as string,
-    'Đơn đăng ký'
+    'Cửa hàng'
   );
   return (
     <div className='container mx-auto p-4 md:px-24'>
