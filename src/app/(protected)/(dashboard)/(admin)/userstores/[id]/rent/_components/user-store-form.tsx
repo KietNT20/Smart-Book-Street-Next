@@ -65,10 +65,9 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
     },
   });
 
-  const storeId = useMemo(
-    () => form.getValues('storeId') || storeIdParam,
-    [form, storeIdParam]
-  );
+  const storeId = useMemo(() => {
+    return storeIdParam || '';
+  }, [storeIdParam]);
 
   const { store, isLoading: isLoadingStore } = useStoreById(storeId || '');
 
