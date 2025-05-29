@@ -26,6 +26,7 @@ export const useUserForm = () => {
       address: '',
       gender: undefined,
       mainImageFile: null,
+      requestedRoleId: '',
       additionalImageFiles: [],
     },
   });
@@ -64,6 +65,10 @@ export const useUserForm = () => {
 
       if (values.gender) {
         formData.append('Gender', values.gender);
+      }
+
+      if (values.requestedRoleId) {
+        formData.append('RequestedRoleId', values.requestedRoleId);
       }
 
       if (values.mainImageFile && typeof window !== 'undefined') {
