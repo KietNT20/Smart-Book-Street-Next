@@ -170,9 +170,9 @@ export default function StorePage({ params }: { params: { storeId: string } }) {
             <div className='space-y-4'>
               <h2 className='mb-4 text-xl font-semibold'>Vị trí cửa hàng</h2>
 
-              <div className='relative flex h-96 items-center justify-center rounded-lg bg-gray-100'>
+              <div className='relative flex h-96 items-center justify-center rounded-lg bg-muted-foreground/5'>
                 <div className='text-center'>
-                  <MapIcon className='mx-auto mb-2 h-12 w-12 text-zinc-400' />
+                  <MapIcon className='mx-auto mb-2 h-12 w-12 text-muted-foreground' />
                   <p className='text-foreground'>
                     Vị trí: {store?.latitude}, {store?.longitude}
                   </p>
