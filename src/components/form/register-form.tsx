@@ -69,7 +69,11 @@ export default function RegisterForm({
         requestedRoleId: values.requestedRoleId,
       }),
     };
-    await registerMutation.mutateAsync(requestData);
+    await registerMutation.mutateAsync(requestData, {
+      onSuccess: () => {
+        form.reset();
+      },
+    });
   };
 
   return (
