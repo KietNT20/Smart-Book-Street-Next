@@ -1,3 +1,4 @@
+import { useRolesAvailable } from '@/hooks/use-role';
 import { useUserMutation } from '@/hooks/use-user';
 import { userFormSchema, UserFormValues } from '@/lib/zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -9,6 +10,7 @@ export const useUserForm = () => {
   const [useDefaultPassword, setUseDefaultPassword] = useState<boolean>(true);
   const { createUser, createUserPending } = useUserMutation();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { rolesAvailable, isLoadingRolesAvailable } = useRolesAvailable();
 
   const isWorking = createUserPending;
 
@@ -120,5 +122,7 @@ export const useUserForm = () => {
     fileInputRef,
     toggleDefaultPassword,
     useDefaultPassword,
+    rolesAvailable,
+    isLoadingRolesAvailable,
   };
 };

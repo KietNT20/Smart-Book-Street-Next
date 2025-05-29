@@ -42,8 +42,7 @@ export default function RegisterForm({
   const [showPassword, setShowPassword] = useState(false);
 
   const registerMutation = useRegister();
-  const { rolesAvailable, isLoading: isLoadingRolesAvailable } =
-    useRolesAvailable();
+  const { rolesAvailable, isLoadingRolesAvailable } = useRolesAvailable();
 
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),

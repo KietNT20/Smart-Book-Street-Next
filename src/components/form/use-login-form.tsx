@@ -19,16 +19,7 @@ export const useLoginForm = () => {
 
   const onSubmit = (values: LoginFormValues) => {
     const { usernameOrEmail, password } = values;
-    login.mutate(
-      { usernameOrEmail, password },
-      {
-        onSuccess: (data) => {
-          if (data) {
-            form.reset();
-          }
-        },
-      }
-    );
+    login.mutate({ usernameOrEmail, password });
   };
 
   return {

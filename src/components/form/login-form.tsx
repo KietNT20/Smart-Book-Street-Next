@@ -69,9 +69,6 @@ export default function LoginForm({
                                 form.formState.errors.usernameOrEmail &&
                                   'border-red-500'
                               )}
-                              aria-invalid={
-                                !!form.formState.errors.usernameOrEmail
-                              }
                               {...field}
                             />
                           </FormControl>
@@ -99,7 +96,6 @@ export default function LoginForm({
                                   form.formState.errors.password &&
                                     'border-red-500'
                                 )}
-                                aria-invalid={!!form.formState.errors.password}
                                 {...field}
                               />
                               <Button

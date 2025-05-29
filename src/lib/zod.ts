@@ -556,84 +556,79 @@ export const eventFormSchema = z
 
 export type EventFormValues = z.infer<typeof eventFormSchema>;
 
-export const userFormSchema = z.object({
-  userName: z.string().min(1, { message: 'Tên đăng nhập không được để trống' }),
-  email: z
-    .string()
-    .min(1, { message: 'Email không được để trống' })
-    .email({ message: 'Email không hợp lệ' }),
-  password: z
-    .string()
-    .min(8, { message: 'Mật khẩu phải có ít nhất 8 ký tự' })
-    .default('User@12345'),
-  fullName: z.string().optional(),
-  phone: z
-    .string()
-    .refine(
-      (val) => {
-        if (!val) return true;
-        return REGEX.PHONE_VN.test(val);
-      },
-      {
-        message: 'Số điện thoại không hợp lệ',
-      }
-    )
-    .optional(),
-  dob: z
-    .string()
-    .refine(
-      (val) => {
-        if (!val) return true;
-        const birthDate = new Date(val);
-        const today = new Date();
-
-        // Calculate age
-        let age = today.getFullYear() - birthDate.getFullYear();
-        const monthDiff = today.getMonth() - birthDate.getMonth();
-
-        // Adjust age if birthday hasn't occurred yet this year
-        if (
-          monthDiff < 0 ||
-          (monthDiff === 0 && today.getDate() < birthDate.getDate())
-        ) {
-          age--;
+export const userFormSchema = z
+  .object({
+    userName: z
+      .string()
+      .min(1, { message: 'Tên đăng nhập không được để trống' }),
+    email: z
+      .string()
+      .min(1, { message: 'Email không được để trống' })
+      .email({ message: 'Email không hợp lệ' }),
+    password: z
+      .string()
+      .min(8, { message: 'Mật khẩu phải có ít nhất 8 ký tự' })
+      .max(32, { message: 'Mật khẩu không được quá 32 kí tự' })
+      .regex(/[A-Z]/, { message: 'Mật khẩu cần ít nhất 1 chữ hoa' })
+      .regex(/[a-z]/, { message: 'Mật khẩu cần ít nhất 1 chữ thường' })
+      .regex(/[0-9]/, { message: 'Mật khẩu cần ít nhất 1 số' })
+      .regex(/[^A-Za-z0-9]/, {
+        message: 'Mật khẩu cần ít nhất 1 kí tự đặc biệt',
+      })
+      .default('User@12345'),
+    fullName: z.string().optional(),
+    phone: z
+      .string()
+      .refine(
+        (val) => {
+          if (!val) return true;
+          return REGEX.PHONE_VN.test(val);
+        },
+        {
+          message: 'Số điện thoại không hợp lệ',
         }
+      )
+      .optional(),
+    dob: z
+      .string()
+      .refine(
+        (val) => {
+          if (!val) return true;
+          const birthDate = new Date(val);
+          const today = new Date();
 
-        return age >= 18;
-      },
-      {
-        message: 'Người dùng phải từ 18 tuổi trở lên',
-      }
-    )
-    .optional()
-    .nullable(),
-  address: z.string().optional(),
-  gender: z.nativeEnum(Gender).optional(),
-  mainImageFile: z
-    .union([
-      z
-        .instanceof(File)
-        .refine((file) => file.size <= 2 * 1024 * 1024, {
-          message: 'File phải nhỏ hơn 2MB',
-        })
-        .refine(
-          (file) =>
-            ['image/jpeg', 'image/png', 'image/webp'].includes(file.type),
-          {
-            message: 'Chỉ chấp nhận JPG, PNG, WEBP',
+          // Calculate age
+          let age = today.getFullYear() - birthDate.getFullYear();
+          const monthDiff = today.getMonth() - birthDate.getMonth();
+
+          // Adjust age if birthday hasn't occurred yet this year
+          if (
+            monthDiff < 0 ||
+            (monthDiff === 0 && today.getDate() < birthDate.getDate())
+          ) {
+            age--;
           }
-        ),
-      z.string(),
-      z.null(),
-    ])
-    .optional(),
-  additionalImageFiles: z
-    .array(
-      z.union([
+
+          return age >= 18;
+        },
+        {
+          message: 'Người dùng phải từ 18 tuổi trở lên',
+        }
+      )
+      .optional()
+      .nullable(),
+    address: z.string().optional(),
+    gender: z.nativeEnum(Gender).optional(),
+    requestedRoleId: z.string({
+      required_error: 'Vui lòng chọn vai trò cho người dùng',
+      invalid_type_error: 'Vai trò không hợp lệ',
+    }),
+    mainImageFile: z
+      .union([
         z
           .instanceof(File)
           .refine((file) => file.size <= 2 * 1024 * 1024, {
-            message: 'Mỗi file phải nhỏ hơn 2MB',
+            message: 'File phải nhỏ hơn 2MB',
           })
           .refine(
             (file) =>
@@ -643,13 +638,36 @@ export const userFormSchema = z.object({
             }
           ),
         z.string(),
+        z.null(),
       ])
-    )
-    .default([])
-    .refine((files) => files.length <= 3, {
-      message: 'Chỉ có thể tải lên tối đa 3 hình ảnh bổ sung',
-    }),
-});
+      .optional(),
+    additionalImageFiles: z
+      .array(
+        z.union([
+          z
+            .instanceof(File)
+            .refine((file) => file.size <= 2 * 1024 * 1024, {
+              message: 'Mỗi file phải nhỏ hơn 2MB',
+            })
+            .refine(
+              (file) =>
+                ['image/jpeg', 'image/png', 'image/webp'].includes(file.type),
+              {
+                message: 'Chỉ chấp nhận JPG, PNG, WEBP',
+              }
+            ),
+          z.string(),
+        ])
+      )
+      .default([])
+      .refine((files) => files.length <= 3, {
+        message: 'Chỉ có thể tải lên tối đa 3 hình ảnh bổ sung',
+      }),
+  })
+  .refine((data) => !/[^\x00-\x7F]/.test(data.password), {
+    message: 'Mật khẩu không được chứa emoji hoặc ký tự không hợp lệ',
+    path: ['password'],
+  });
 
 export type UserFormValues = z.infer<typeof userFormSchema>;
 

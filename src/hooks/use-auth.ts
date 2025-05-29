@@ -40,6 +40,7 @@ export const useLogin = () => {
         const hasOrganizerRole = data.result.userRoles.some(
           (role) => role.role?.roleName === RoleEnums.ORGANIZER
         );
+        const hasNoRole = data.result.userRoles.length === 0;
         if (hasAdminRole) {
           router.replace(PATH.DASHBOARD);
         } else if (hasPublisherManagerRole) {
@@ -53,15 +54,32 @@ export const useLogin = () => {
         } else if (hasStoreManagerRole) {
           router.replace(PATH.STORE_OWNER_DASHBOARD);
         }
-        toast.success('Đăng nhập thành công', {
-          id: 'login-success',
-          description: 'Vui lòng chờ trong giây lát',
-        });
+        if (hasNoRole) {
+          toast.error(
+            'Tài khoản của bạn không có quyền truy cập vào hệ thống.'
+          );
+        } else {
+          toast.success('Đăng nhập thành công', {
+            id: 'login-success',
+            description: 'Vui lòng chờ trong giây lát',
+          });
+        }
       }
     },
     onError: (error) => {
       console.log('Error login', error);
-      toast.error(`Đăng nhập thất bại, ${error}`);
+      if (
+        error &&
+        typeof error === 'object' &&
+        'message' in error &&
+        error.message ===
+          'Bạn đang đăng nhập lần đầu bằng tài khoản do Admin cung cấp. Vui lòng đổi mật khẩu trước khi tiếp tục.'
+      ) {
+        toast.error(`Đăng nhập thất bại, ${(error as any).message}`);
+        router.push(PATH.CHANGE_PASSWORD_FIRST_TIME);
+      } else {
+        toast.error(`Đăng nhập thất bại, ${error}`);
+      }
     },
   });
 };
