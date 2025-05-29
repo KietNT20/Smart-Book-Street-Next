@@ -55,9 +55,7 @@ const StoreRentalContractPage = ({ params }: Props) => {
 
   const rentalContract = userStoreByStore?.[0];
   const tenant = rentalContract?.user;
-  const canRent =
-    rentalContract?.status === StoreRent.ACTIVE &&
-    rentalContract?.contractFileUrl !== null;
+  const canRent = !rentalContract?.contractFileUrl;
   const { contractDownload, isPendingContract } =
     useDownloadUserStoreContract();
 
