@@ -26,6 +26,7 @@ export const useUserForm = () => {
       address: '',
       gender: undefined,
       mainImageFile: null,
+      requestedRoleId: '',
       additionalImageFiles: [],
     },
   });
