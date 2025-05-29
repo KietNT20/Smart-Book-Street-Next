@@ -39,7 +39,7 @@ const PendingRoleRequests = () => {
   }
 
   return (
-    <Card className='border-2 border-dashed border-blue-100 bg-blue-50/50'>
+    <Card className='border-2 border-dashed border-blue-100 bg-background/50'>
       <CardHeader className='pb-2'>
         <div className='flex items-center justify-between'>
           <CardTitle className='text-blue-700'>Đang chờ phê duyệt</CardTitle>
