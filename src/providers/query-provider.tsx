@@ -111,6 +111,9 @@ export default function QueryProvider({
             Badge: {
               colorText: 'hsl(var(--matcha))',
             },
+            Empty: {
+              colorTextDescription: 'hsl(var(--text))',
+            },
           },
         }}
       >

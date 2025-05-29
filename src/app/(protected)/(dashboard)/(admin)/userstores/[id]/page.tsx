@@ -1,15 +1,16 @@
 'use client';
 
+import { ConfirmModal } from '@/components/confirm-modal';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { ConfirmModal } from '@/components/confirm-modal';
 import { PATH } from '@/enums/path';
 import { StoreRent, StoreRentLabels } from '@/enums/store-rent';
 import { useEntityBreadcrumb } from '@/hooks/use-breadcrumb-page';
 import { useStoreById } from '@/hooks/use-store';
 import {
+  useDownloadUserStoreContract,
   useUserStoreByStoreId,
   useUserStoresMutation,
 } from '@/hooks/use-user-store';
@@ -23,6 +24,7 @@ import {
   Download,
   FileText,
   HandHeart,
+  Loader2,
   Mail,
   MapPin,
   Navigation,
@@ -52,15 +54,18 @@ const StoreRentalContractPage = ({ params }: Props) => {
   const { deleteUserStore, isDeletingUserStore } = useUserStoresMutation();
 
   const rentalContract = userStoreByStore?.[0];
-  const store = rentalContract?.store;
   const tenant = rentalContract?.user;
-  const canRent = !store?.userStores || store.userStores.length === 0;
+  const canRent =
+    rentalContract?.status === StoreRent.ACTIVE &&
+    rentalContract?.contractFileUrl !== null;
+  const { contractDownload, isPendingContract } =
+    useDownloadUserStoreContract();
 
   useEntityBreadcrumb(
     PATH.USER_STORES,
     'Hợp đồng thuê cửa hàng',
     params.id,
-    store?.storeName || 'Cửa hàng'
+    storeDetail?.storeName || 'Cửa hàng'
   );
 
   const handleDeleteContract = () => {
@@ -75,6 +80,15 @@ const StoreRentalContractPage = ({ params }: Props) => {
 
   const handleDeleteClick = () => {
     setShowDeleteDialog(true);
+  };
+
+  const handleDownloadContract = () => {
+    if (rentalContract?.contractFileUrl) {
+      contractDownload({
+        userId: rentalContract.userId,
+        storeId: params.id,
+      });
+    }
   };
 
   if (isLoadingUserStore || storeLoading) {
@@ -147,42 +161,72 @@ const StoreRentalContractPage = ({ params }: Props) => {
   return (
     <div className='container mx-auto space-y-6 p-4 md:px-24'>
       {/* Header Actions */}
-      <div className='flex items-center justify-between'>
+      <div className='flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
         <Link href={PATH.USER_STORES}>
-          <Button variant='outline'>
+          <Button variant='outline' className='w-full sm:w-auto'>
             <ArrowLeft className='mr-2 size-4' />
-            Quay về danh sách
+            <span className='hidden sm:inline'>Quay về danh sách</span>
+            <span className='sm:hidden'>Quay về</span>
           </Button>
         </Link>
 
-        <div className='flex gap-2'>
+        {/* Action buttons - Stack on mobile, horizontal on desktop */}
+        <div className='flex flex-col gap-2 sm:flex-row sm:gap-2'>
           {rentalContract?.contractFileUrl && (
-            <Button variant='outline'>
-              <Download className='mr-2 size-4' />
-              Tải hợp đồng
+            <Button
+              onClick={handleDownloadContract}
+              variant='outline'
+              disabled={isPendingContract}
+              className={`w-full sm:w-auto ${
+                isPendingContract ? 'cursor-not-allowed opacity-70' : ''
+              }`}
+            >
+              {isPendingContract ? (
+                <>
+                  <Loader2 className='mr-2 size-4 animate-spin' />
+                  <span className='hidden sm:inline'>Đang tải xuống...</span>
+                  <span className='sm:hidden'>Tải...</span>
+                </>
+              ) : (
+                <>
+                  <Download className='mr-2 size-4' />
+                  <span className='hidden sm:inline'>Tải hợp đồng</span>
+                  <span className='sm:hidden'>Tải</span>
+                </>
+              )}
             </Button>
           )}
+
           {rentalContract && (
             <Button
               variant='destructive'
               onClick={handleDeleteClick}
               disabled={isDeletingUserStore}
+              className='w-full sm:w-auto'
             >
               <Trash2 className='mr-2 size-4' />
-              {isDeletingUserStore ? 'Đang hủy...' : 'Chấm dứt hợp đồng'}
+              <span className='hidden sm:inline'>
+                {isDeletingUserStore ? 'Đang hủy...' : 'Chấm dứt hợp đồng'}
+              </span>
+              <span className='sm:hidden'>
+                {isDeletingUserStore ? 'Hủy...' : 'Chấm dứt'}
+              </span>
             </Button>
           )}
+
           {canRent ? (
             <Link href={`${PATH.USER_STORES}/${params.id}/rent`} passHref>
-              <Button>
+              <Button className='w-full sm:w-auto'>
                 <HandHeart className='mr-2 size-4' />
-                Đăng ký thuê
+                <span className='hidden sm:inline'>Đăng ký thuê</span>
+                <span className='sm:hidden'>Thuê</span>
               </Button>
             </Link>
           ) : (
-            <Button disabled variant='secondary'>
+            <Button disabled variant='secondary' className='w-full sm:w-auto'>
               <HandHeart className='mr-2 size-4' />
-              Đã có người thuê
+              <span className='hidden sm:inline'>Đã có người thuê</span>
+              <span className='sm:hidden'>Đã thuê</span>
             </Button>
           )}
         </div>
@@ -253,6 +297,48 @@ const StoreRentalContractPage = ({ params }: Props) => {
             </p>
           </CardHeader>
           <CardContent className='space-y-6'>
+            {/* Contract Status */}
+            <div className='flex items-center justify-center rounded-lg border bg-gradient-to-r from-muted/30 to-muted/10 p-4'>
+              <div className='flex items-center gap-3'>
+                <div
+                  className={`flex size-12 items-center justify-center rounded-full ${
+                    rentalContract.status === StoreRent.ACTIVE
+                      ? 'bg-green-100 dark:bg-green-900'
+                      : rentalContract.status === StoreRent.TERMINATED
+                        ? 'bg-red-100 dark:bg-red-900'
+                        : 'bg-yellow-100 dark:bg-yellow-900'
+                  }`}
+                >
+                  {getStatusIcon(rentalContract.status)}
+                </div>
+                <div className='flex items-center gap-2'>
+                  <Badge
+                    variant={getStatusBadgeVariant(rentalContract.status)}
+                    className='flex items-center gap-1 px-3 py-1 text-sm'
+                  >
+                    {getStatusIcon(rentalContract.status)}
+                    {StoreRentLabels[rentalContract.status as StoreRent] ||
+                      rentalContract.status}
+                  </Badge>
+                  {rentalContract.status === StoreRent.ACTIVE && (
+                    <span className='text-sm font-medium text-green-600 dark:text-green-400'>
+                      • Hợp đồng đang có hiệu lực
+                    </span>
+                  )}
+                  {rentalContract.status === StoreRent.TERMINATED && (
+                    <span className='text-sm font-medium text-red-600 dark:text-red-400'>
+                      • Hợp đồng đã chấm dứt
+                    </span>
+                  )}
+                  {rentalContract.status === StoreRent.EXPIRED && (
+                    <span className='text-sm font-medium text-yellow-600 dark:text-yellow-400'>
+                      • Hợp đồng đã hết hạn
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+
             {/* Contract Timeline */}
             <div className='grid grid-cols-1 gap-4 md:grid-cols-3'>
               <div className='rounded-lg bg-primary/5 p-4 text-center'>
@@ -455,11 +541,91 @@ const StoreRentalContractPage = ({ params }: Props) => {
                   <p className='text-sm text-muted-foreground'>
                     Hợp đồng số: {rentalContract.contractNumber}
                   </p>
+                  <div className='mt-1 flex items-center gap-2 text-xs text-muted-foreground'>
+                    <span>
+                      Được tạo:{' '}
+                      {dayjs(rentalContract.createdDate).format('DD/MM/YYYY')}
+                    </span>
+                    <span>•</span>
+                    <span>PDF Document</span>
+                  </div>
                 </div>
               </div>
-              <Button>
-                <Download className='mr-2 size-4' />
-                Tải xuống
+
+              <div className='flex gap-2'>
+                {/* View Contract Button */}
+                <Button
+                  variant='outline'
+                  size='sm'
+                  onClick={() =>
+                    rentalContract?.contractFileUrl &&
+                    window.open(rentalContract.contractFileUrl, '_blank')
+                  }
+                  className='flex items-center gap-2'
+                >
+                  <FileText className='size-4' />
+                  Xem hợp đồng
+                </Button>
+
+                {/* Download Button */}
+                <Button
+                  onClick={handleDownloadContract}
+                  disabled={isPendingContract}
+                  size='sm'
+                  className={
+                    isPendingContract ? 'cursor-not-allowed opacity-70' : ''
+                  }
+                >
+                  {isPendingContract ? (
+                    <>
+                      <Loader2 className='mr-2 size-4 animate-spin' />
+                      Đang tải...
+                    </>
+                  ) : (
+                    <>
+                      <Download className='mr-2 size-4' />
+                      Tải xuống
+                    </>
+                  )}
+                </Button>
+              </div>
+            </div>
+
+            {/* Contract Preview Actions */}
+            <div className='mt-4 flex items-center justify-center gap-4 rounded-lg bg-muted/20 p-3'>
+              <Button
+                variant='ghost'
+                size='sm'
+                onClick={() =>
+                  rentalContract.contractFileUrl &&
+                  window.open(rentalContract.contractFileUrl, '_blank')
+                }
+                className='flex items-center gap-2 text-sm'
+              >
+                <FileText className='size-4' />
+                Xem toàn màn hình
+              </Button>
+
+              <Separator orientation='vertical' className='h-4' />
+
+              <Button
+                variant='ghost'
+                size='sm'
+                onClick={() =>
+                  navigator.share?.({
+                    title: 'Hợp đồng thuê cửa hàng',
+                    text: `Hợp đồng số: ${rentalContract.contractNumber}`,
+                    url: rentalContract.contractFileUrl || '',
+                  }) ||
+                  window.open(
+                    `mailto:?subject=Hợp đồng thuê cửa hàng&body=Xem hợp đồng tại: ${rentalContract.contractFileUrl}`,
+                    '_blank'
+                  )
+                }
+                className='flex items-center gap-2 text-sm'
+              >
+                <Mail className='size-4' />
+                Chia sẻ
               </Button>
             </div>
           </CardContent>

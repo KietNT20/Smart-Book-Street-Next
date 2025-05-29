@@ -17,7 +17,6 @@ export const useUserStoresMutation = () => {
       if (data?.isSuccess) {
         queryClient.invalidateQueries({ queryKey: ['user-stores'] });
         queryClient.invalidateQueries({ queryKey: ['stores'] });
-        queryClient.invalidateQueries({ queryKey: ['user-rentals'] });
         toast.success('Đăng ký thành công!');
         router.replace(PATH.USER_STORES);
       } else if (!data.isSuccess) {
@@ -38,7 +37,6 @@ export const useUserStoresMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['user-stores'] });
       queryClient.invalidateQueries({ queryKey: ['stores'] });
-      queryClient.invalidateQueries({ queryKey: ['user-rentals'] });
       toast.success('Chấm dứt hợp đồng thành công!');
       router.replace(PATH.USER_STORES);
     },
@@ -58,7 +56,7 @@ export const useUserStoresMutation = () => {
 
 export const useGetContractUser = (userId: string) => {
   const { data, isLoading, error } = useQuery({
-    queryKey: ['user-stores', userId],
+    queryKey: ['userstore-by-user', userId],
     queryFn: () => userStoreService.checkUserContract(userId),
     enabled: !!userId,
   });
@@ -71,9 +69,8 @@ export const useGetContractUser = (userId: string) => {
 
 export const useGetContractStore = () => {
   const storeId = getLocalStorageItem(STORAGE.SELECTED_STORE_KEY);
-
   const { data, isLoading, error } = useQuery({
-    queryKey: ['user-stores', storeId],
+    queryKey: ['userstore-by-store', storeId],
     queryFn: () => userStoreService.checkStoreContract(storeId),
     enabled: !!storeId,
   });
@@ -94,5 +91,17 @@ export const useUserStoreByStoreId = (storeId: string) => {
     userStoreByStore: data?.results || [],
     isLoadingUserStore: isLoading,
     error,
+  };
+};
+
+export const useDownloadUserStoreContract = () => {
+  const { mutate, isPending } = useMutation({
+    mutationKey: ['download-user-store-contract'],
+    mutationFn: ({ userId, storeId }: { userId: string; storeId: string }) =>
+      userStoreService.downloadUserStoreContract(userId, storeId),
+  });
+  return {
+    contractDownload: mutate,
+    isPendingContract: isPending,
   };
 };

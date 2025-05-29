@@ -216,7 +216,7 @@ export default function EventsInDateTable({
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={7} className='h-64 p-0 text-center'>
+                <TableCell colSpan={8} className='h-64 p-0 text-center'>
                   <div className='flex h-full w-full items-center justify-center'>
                     <Empty description='Không có yêu cầu sự kiện nào được tìm thấy.' />
                   </div>

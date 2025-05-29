@@ -119,6 +119,7 @@ export const API_URL = {
     PAGINATED: `${USER_STORE}/paginated`,
     SEARCH: `${USER_STORE}/search`,
     PAGINATION_SEARCH: `${USER_STORE}/search/paginated`,
+    DOWNLOAD_CONTRACT: `${USER_STORE}/download-contract`,
   },
   ORDERS: {
     INDEX: `${ORDER}`,
