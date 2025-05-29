@@ -33,6 +33,6 @@ export const useRolesAvailable = () => {
 
   return {
     rolesAvailable: data || [],
-    isLoading,
+    isLoadingRolesAvailable: isLoading,
   };
 };

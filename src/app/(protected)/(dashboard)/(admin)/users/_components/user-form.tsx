@@ -19,8 +19,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Skeleton } from '@/components/ui/skeleton';
 import { Gender } from '@/enums/gender';
 import { PATH } from '@/enums/path';
+import { RoleEnums, RoleLabels } from '@/enums/role';
 import { DatePicker, Image } from 'antd';
 import dayjs from 'dayjs';
 import 'dayjs/locale/vi';
@@ -40,6 +42,8 @@ const UserForm = () => {
     fileInputRef,
     useDefaultPassword,
     toggleDefaultPassword,
+    rolesAvailable,
+    isLoadingRolesAvailable,
   } = useUserForm();
 
   return (
@@ -133,6 +137,47 @@ const UserForm = () => {
 
                         <FormMessage />
                       </div>
+                    </FormItem>
+                  )}
+                />
+
+                {/* Role select */}
+                <FormField
+                  control={form.control}
+                  name='requestedRoleId'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Vai trò</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder='Chọn vai trò' />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {isLoadingRolesAvailable
+                            ? Array.from({ length: 3 }).map((_, index) => (
+                                <SelectItem
+                                  key={index}
+                                  value={`loading-${index}`}
+                                >
+                                  <Skeleton className='h-4 w-full' />
+                                </SelectItem>
+                              ))
+                            : rolesAvailable?.map((role) => (
+                                <SelectItem
+                                  key={role?.value}
+                                  value={role?.value}
+                                >
+                                  {RoleLabels[role?.label as RoleEnums]}
+                                </SelectItem>
+                              ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
