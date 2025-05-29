@@ -66,6 +66,10 @@ export const useUserForm = () => {
         formData.append('Gender', values.gender);
       }
 
+      if (values.requestedRoleId) {
+        formData.append('RequestedRoleId', values.requestedRoleId);
+      }
+
       if (values.mainImageFile && typeof window !== 'undefined') {
         formData.set('MainImageFile', values.mainImageFile);
       }
