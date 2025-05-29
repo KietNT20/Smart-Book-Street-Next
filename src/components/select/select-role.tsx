@@ -54,6 +54,9 @@ const UserRoleSelector = ({
   const { addUserRole, isAddingRole, deleteUserRole, isDeletingRole } =
     useUserRoleMutation();
 
+  // Get approved roles only
+  const approvedRoles = userRoles.filter((role) => role.isApproved === true);
+
   // Get the roles that the user doesn't have yet
   const getAvailableRolesToAdd = () => {
     const currentRoleIds = userRoles.map((role) => role.roleId);
@@ -71,7 +74,7 @@ const UserRoleSelector = ({
 
   const handleOpenRemoveModal = () => {
     setModalMode('remove');
-    setSelectedRoleId(userRoles.length > 0 ? userRoles[0].roleId : '');
+    setSelectedRoleId(approvedRoles.length > 0 ? approvedRoles[0].roleId : '');
     setIsModalOpen(true);
     setIsActionMenuOpen(false);
   };
@@ -111,11 +114,9 @@ const UserRoleSelector = ({
   };
 
   const isProcessing = isAddingRole || isDeletingRole;
-  const hasRoles =
-    userRoles?.some((role) => role.isApproved === true) &&
-    userRoles?.length > 0;
+  const hasApprovedRoles = approvedRoles.length > 0;
   const canAddRoles = !isLoading && getAvailableRolesToAdd().length > 0;
-  const canRemoveRoles = !isLoading && hasRoles;
+  const canRemoveRoles = !isLoading && hasApprovedRoles;
 
   const getRoleLabel = (roleId: string) => {
     const roleInfo = availableRoles.find((r) => r.value === roleId);
@@ -127,7 +128,8 @@ const UserRoleSelector = ({
   return (
     <div className='flex gap-2'>
       <div className='flex items-center gap-1'>
-        {hasRoles && (
+        {/* Only show Eye icon if user has approved roles */}
+        {hasApprovedRoles && (
           <DropdownMenu
             open={isRolesDropdownOpen}
             onOpenChange={setIsRolesDropdownOpen}
@@ -147,7 +149,8 @@ const UserRoleSelector = ({
                 Quyền của người dùng
               </div>
               <DropdownMenuSeparator />
-              {userRoles.map((role) => (
+              {/* Only show approved roles in dropdown */}
+              {approvedRoles.map((role) => (
                 <DropdownMenuItem key={role.roleId} className='py-2'>
                   <Badge className='mr-2'>{getRoleLabel(role.roleId)}</Badge>
                 </DropdownMenuItem>
@@ -228,7 +231,7 @@ const UserRoleSelector = ({
                 </SelectTrigger>
                 <SelectContent>
                   {modalMode === 'add'
-                    ? getAvailableRolesToAdd().map((role) => (
+                    ? getAvailableRolesToAdd()?.map((role) => (
                         <SelectItem
                           key={role.value || ''}
                           value={role.value || ''}
@@ -237,7 +240,7 @@ const UserRoleSelector = ({
                             role.label}
                         </SelectItem>
                       ))
-                    : userRoles.map((role) => (
+                    : approvedRoles?.map((role) => (
                         <SelectItem key={role.roleId} value={role.roleId}>
                           {getRoleLabel(role.roleId)}
                         </SelectItem>
