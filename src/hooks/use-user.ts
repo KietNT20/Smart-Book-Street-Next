@@ -135,6 +135,8 @@ export const useUserMutation = () => {
     onSuccess: (data) => {
       if (data) {
         queryClient.invalidateQueries({ queryKey: ['users'] });
+        queryClient.invalidateQueries({ queryKey: ['user-profile'] });
+        queryClient.invalidateQueries({ queryKey: ['user-roles-pending'] });
         toast.success('Tạo người dùng thành công!');
         router.replace(PATH.USERS);
       }
