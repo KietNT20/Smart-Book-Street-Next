@@ -19,7 +19,6 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { PATH } from '@/enums/path';
-import { RoleEnums } from '@/enums/role';
 import { StoreRent } from '@/enums/store-rent';
 import { useStoreById } from '@/hooks/use-store';
 import { useUserEmail } from '@/hooks/use-user';
@@ -43,7 +42,6 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
   const emailInputRef = useRef<HTMLInputElement>(null);
   const [emailValue, setEmailValue] = useState('');
   const [verifiedEmail, setVerifiedEmail] = useState('');
-  const [isVerifying, setIsVerifying] = useState(false);
 
   // Hooks
   const { user, userLoading } = useUserEmail(verifiedEmail);
@@ -78,27 +76,6 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
     }
   }, [storeIdParam, form]);
 
-  const canRegisterStore = useMemo(() => {
-    if (!user?.userRoles || user.userRoles.length === 0) return false;
-
-    return user.userRoles.some(
-      (userRole) =>
-        userRole &&
-        userRole.role &&
-        userRole.role.roleName &&
-        userRole.isApproved === true &&
-        (userRole.role.roleName === RoleEnums.STORE_OWNER ||
-          userRole.role.roleName === RoleEnums.PUBLISHER)
-    );
-  }, [user?.userRoles]);
-
-  const emailStatus = useMemo(() => {
-    if (!verifiedEmail) return null;
-    if (userLoading || isVerifying) return 'loading';
-    if (user) return canRegisterStore ? 'valid' : 'invalid';
-    return 'not-found';
-  }, [verifiedEmail, userLoading, isVerifying, user, canRegisterStore]);
-
   const handleEmailChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value;
@@ -112,13 +89,10 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
 
   const handleVerifyEmail = useCallback(() => {
     if (!emailValue.trim()) return;
-
-    setIsVerifying(true);
-    setVerifiedEmail(emailValue.trim());
-
-    // Reset verification state after a delay to sync with API call
+    // Reset user state trước khi search mới
+    setVerifiedEmail('');
     setTimeout(() => {
-      setIsVerifying(false);
+      setVerifiedEmail(emailValue.trim());
     }, 100);
   }, [emailValue]);
 
@@ -134,9 +108,7 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
 
   const onSubmit = useCallback(
     (values: UserStoreFormValues) => {
-      if (!user?.id || !canRegisterStore) {
-        return;
-      }
+      if (!user?.id) return;
 
       const formData = new FormData();
       formData.append('userId', values.userId);
@@ -162,7 +134,7 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
 
       registerStore(formData);
     },
-    [user?.id, canRegisterStore, registerStore]
+    [user?.id, registerStore]
   );
 
   return (
@@ -189,14 +161,13 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
                     className='pr-10'
                   />
                   <div className='absolute right-3 top-1/2 -translate-y-1/2'>
-                    {emailStatus === 'loading' && (
+                    {userLoading && (
                       <div className='h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent' />
                     )}
-                    {emailStatus === 'valid' && (
+                    {!userLoading && user && verifiedEmail && (
                       <CheckCircle className='text-green-500' size={16} />
                     )}
-                    {(emailStatus === 'invalid' ||
-                      emailStatus === 'not-found') && (
+                    {!userLoading && !user && verifiedEmail && (
                       <AlertCircle className='text-red-500' size={16} />
                     )}
                   </div>
@@ -205,10 +176,10 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
                   type='button'
                   variant='outline'
                   onClick={handleVerifyEmail}
-                  disabled={!emailValue.trim() || isVerifying || userLoading}
+                  disabled={!emailValue.trim() || userLoading}
                   className='px-6'
                 >
-                  {isVerifying || userLoading ? (
+                  {userLoading ? (
                     <div className='h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent' />
                   ) : (
                     <>
@@ -219,14 +190,14 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
                 </Button>
               </div>
               <p className='text-xs text-muted-foreground'>
-                {`Nhập email người dùng để tìm kiếm và xác thực thông tin. Nhấn "Xác thực" để kiểm tra quyền đăng ký cửa hàng.`}
+                Nhập email người dùng để tìm kiếm thông tin.
               </p>
             </div>
 
             {/* User Info Display */}
             {verifiedEmail && (
               <div className='mt-4'>
-                {(userLoading || isVerifying) && (
+                {userLoading && (
                   <div className='text-sm text-muted-foreground'>
                     <div className='animate-pulse'>
                       Đang tìm kiếm người dùng...
@@ -234,28 +205,13 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
                   </div>
                 )}
 
-                {!userLoading && !isVerifying && user && (
+                {!userLoading && user && (
                   <div className='rounded-lg bg-muted p-4'>
                     <UserInfo user={user} />
-
-                    {!canRegisterStore && (
-                      <div className='mt-3 rounded-lg border border-red-200 bg-red-50 p-3'>
-                        <div className='flex items-center gap-2'>
-                          <AlertCircle className='text-red-500' size={16} />
-                          <span className='text-sm font-medium text-red-700'>
-                            Người dùng không có quyền đăng ký cửa hàng
-                          </span>
-                        </div>
-                        <p className='mt-1 text-sm text-red-600'>
-                          {`Cần có vai trò "Chủ cửa hàng" hoặc "Nhà xuất bản" và
-                          được phê duyệt.`}
-                        </p>
-                      </div>
-                    )}
                   </div>
                 )}
 
-                {!userLoading && !isVerifying && !user && verifiedEmail && (
+                {!userLoading && !user && verifiedEmail && (
                   <div className='rounded-lg border border-red-200 bg-red-50 p-4'>
                     <div className='flex items-center gap-2'>
                       <AlertCircle className='text-red-500' size={16} />
@@ -310,55 +266,10 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
         </Card>
       )}
 
-      {/* Main Form - Always show */}
+      {/* Main Form */}
       <Card>
         <CardContent className='p-6'>
           <h3 className='mb-6 font-semibold'>Thông tin hợp đồng</h3>
-
-          {/* Form validation status */}
-          {!verifiedEmail && (
-            <div className='mb-4 rounded-lg border border-blue-200 bg-blue-50 p-3'>
-              <div className='flex items-center gap-2'>
-                <AlertCircle className='text-blue-500' size={16} />
-                <span className='text-sm font-medium text-blue-700'>
-                  Vui lòng nhập và xác thực email để tiếp tục
-                </span>
-              </div>
-            </div>
-          )}
-
-          {verifiedEmail && !user && !userLoading && !isVerifying && (
-            <div className='mb-4 rounded-lg border border-amber-200 bg-amber-50 p-3'>
-              <div className='flex items-center gap-2'>
-                <AlertCircle className='text-amber-500' size={16} />
-                <span className='text-sm font-medium text-amber-700'>
-                  Email không hợp lệ hoặc không tồn tại trong hệ thống
-                </span>
-              </div>
-            </div>
-          )}
-
-          {user && !canRegisterStore && (
-            <div className='mb-4 rounded-lg border border-red-200 bg-red-50 p-3'>
-              <div className='flex items-center gap-2'>
-                <AlertCircle className='text-red-500' size={16} />
-                <span className='text-sm font-medium text-red-700'>
-                  Tài khoản không có quyền đăng ký cửa hàng
-                </span>
-              </div>
-            </div>
-          )}
-
-          {user && canRegisterStore && (
-            <div className='mb-4 rounded-lg border border-green-200 bg-green-50 p-3'>
-              <div className='flex items-center gap-2'>
-                <CheckCircle className='text-green-500' size={16} />
-                <span className='text-sm font-medium text-green-700'>
-                  Tài khoản hợp lệ - có thể đăng ký cửa hàng
-                </span>
-              </div>
-            </div>
-          )}
 
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
@@ -515,9 +426,7 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
                 </Button>
                 <Button
                   type='submit'
-                  disabled={
-                    isRegisteringStore || !user?.id || !canRegisterStore
-                  }
+                  disabled={isRegisteringStore || !user?.id}
                 >
                   {isRegisteringStore ? 'Đang đăng ký...' : 'Đăng ký cửa hàng'}
                 </Button>
