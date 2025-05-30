@@ -21,7 +21,6 @@ import {
 import { PATH } from '@/enums/path';
 import { RoleEnums } from '@/enums/role';
 import { StoreRent } from '@/enums/store-rent';
-import useDebounce from '@/hooks/use-debounce';
 import { useStoreById } from '@/hooks/use-store';
 import { useUserEmail } from '@/hooks/use-user';
 import { useUserStoresMutation } from '@/hooks/use-user-store';
@@ -29,7 +28,7 @@ import { userStoreFormSchema, UserStoreFormValues } from '@/lib/zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { DatePicker } from 'antd';
 import dayjs from 'dayjs';
-import { AlertCircle, CheckCircle, Mail, Store } from 'lucide-react';
+import { AlertCircle, CheckCircle, Mail, Search, Store } from 'lucide-react';
 import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -43,10 +42,11 @@ type Props = {
 const UserStoreForm = ({ storeIdParam }: Props) => {
   const emailInputRef = useRef<HTMLInputElement>(null);
   const [emailValue, setEmailValue] = useState('');
-  const debouncedEmail = useDebounce(emailValue, 500);
+  const [verifiedEmail, setVerifiedEmail] = useState('');
+  const [isVerifying, setIsVerifying] = useState(false);
 
   // Hooks
-  const { user, userLoading } = useUserEmail(debouncedEmail);
+  const { user, userLoading } = useUserEmail(verifiedEmail);
   const { registerStore, isRegisteringStore } = useUserStoresMutation();
 
   const storeId = useMemo(() => storeIdParam || '', [storeIdParam]);
@@ -93,11 +93,11 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
   }, [user?.userRoles]);
 
   const emailStatus = useMemo(() => {
-    if (!debouncedEmail) return null;
-    if (userLoading) return 'loading';
+    if (!verifiedEmail) return null;
+    if (userLoading || isVerifying) return 'loading';
     if (user) return canRegisterStore ? 'valid' : 'invalid';
     return 'not-found';
-  }, [debouncedEmail, userLoading, user, canRegisterStore]);
+  }, [verifiedEmail, userLoading, isVerifying, user, canRegisterStore]);
 
   const handleEmailChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -108,6 +108,28 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
       setEmailValue(value);
     },
     []
+  );
+
+  const handleVerifyEmail = useCallback(() => {
+    if (!emailValue.trim()) return;
+
+    setIsVerifying(true);
+    setVerifiedEmail(emailValue.trim());
+
+    // Reset verification state after a delay to sync with API call
+    setTimeout(() => {
+      setIsVerifying(false);
+    }, 100);
+  }, [emailValue]);
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        handleVerifyEmail();
+      }
+    },
+    [handleVerifyEmail]
   );
 
   const onSubmit = useCallback(
@@ -156,33 +178,55 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
           <div className='space-y-4'>
             <div className='space-y-2'>
               <label className='text-sm font-medium'>Email người dùng</label>
-              <div className='relative'>
-                <Input
-                  ref={emailInputRef}
-                  type='email'
-                  placeholder='Nhập email người dùng'
-                  onChange={handleEmailChange}
-                  className='pr-10'
-                />
-                <div className='absolute right-3 top-1/2 -translate-y-1/2'>
-                  {emailStatus === 'loading' && (
-                    <div className='h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent' />
-                  )}
-                  {emailStatus === 'valid' && (
-                    <CheckCircle className='text-green-500' size={16} />
-                  )}
-                  {(emailStatus === 'invalid' ||
-                    emailStatus === 'not-found') && (
-                    <AlertCircle className='text-red-500' size={16} />
-                  )}
+              <div className='flex gap-2'>
+                <div className='relative flex-1'>
+                  <Input
+                    ref={emailInputRef}
+                    type='email'
+                    placeholder='Nhập email người dùng'
+                    onChange={handleEmailChange}
+                    onKeyDown={handleKeyDown}
+                    className='pr-10'
+                  />
+                  <div className='absolute right-3 top-1/2 -translate-y-1/2'>
+                    {emailStatus === 'loading' && (
+                      <div className='h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent' />
+                    )}
+                    {emailStatus === 'valid' && (
+                      <CheckCircle className='text-green-500' size={16} />
+                    )}
+                    {(emailStatus === 'invalid' ||
+                      emailStatus === 'not-found') && (
+                      <AlertCircle className='text-red-500' size={16} />
+                    )}
+                  </div>
                 </div>
+                <Button
+                  type='button'
+                  variant='outline'
+                  onClick={handleVerifyEmail}
+                  disabled={!emailValue.trim() || isVerifying || userLoading}
+                  className='px-6'
+                >
+                  {isVerifying || userLoading ? (
+                    <div className='h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent' />
+                  ) : (
+                    <>
+                      <Search size={16} className='mr-2' />
+                      Xác thực
+                    </>
+                  )}
+                </Button>
               </div>
+              <p className='text-xs text-muted-foreground'>
+                {`Nhập email người dùng để tìm kiếm và xác thực thông tin. Nhấn "Xác thực" để kiểm tra quyền đăng ký cửa hàng.`}
+              </p>
             </div>
 
             {/* User Info Display */}
-            {debouncedEmail && (
+            {verifiedEmail && (
               <div className='mt-4'>
-                {userLoading && (
+                {(userLoading || isVerifying) && (
                   <div className='text-sm text-muted-foreground'>
                     <div className='animate-pulse'>
                       Đang tìm kiếm người dùng...
@@ -190,7 +234,7 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
                   </div>
                 )}
 
-                {!userLoading && user && (
+                {!userLoading && !isVerifying && user && (
                   <div className='rounded-lg bg-muted p-4'>
                     <UserInfo user={user} />
 
@@ -211,7 +255,7 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
                   </div>
                 )}
 
-                {!userLoading && !user && debouncedEmail && (
+                {!userLoading && !isVerifying && !user && verifiedEmail && (
                   <div className='rounded-lg border border-red-200 bg-red-50 p-4'>
                     <div className='flex items-center gap-2'>
                       <AlertCircle className='text-red-500' size={16} />
@@ -272,12 +316,23 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
           <h3 className='mb-6 font-semibold'>Thông tin hợp đồng</h3>
 
           {/* Form validation status */}
-          {debouncedEmail && !user && (
+          {!verifiedEmail && (
+            <div className='mb-4 rounded-lg border border-blue-200 bg-blue-50 p-3'>
+              <div className='flex items-center gap-2'>
+                <AlertCircle className='text-blue-500' size={16} />
+                <span className='text-sm font-medium text-blue-700'>
+                  Vui lòng nhập và xác thực email để tiếp tục
+                </span>
+              </div>
+            </div>
+          )}
+
+          {verifiedEmail && !user && !userLoading && !isVerifying && (
             <div className='mb-4 rounded-lg border border-amber-200 bg-amber-50 p-3'>
               <div className='flex items-center gap-2'>
                 <AlertCircle className='text-amber-500' size={16} />
                 <span className='text-sm font-medium text-amber-700'>
-                  Vui lòng nhập email hợp lệ để có thể đăng ký
+                  Email không hợp lệ hoặc không tồn tại trong hệ thống
                 </span>
               </div>
             </div>
