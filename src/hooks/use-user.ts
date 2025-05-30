@@ -79,20 +79,14 @@ export const useUsersParams = ({
 };
 
 export const useUserEmail = (email: string) => {
-  const queryClient = useQueryClient();
-
   const { data, isLoading, error } = useQuery({
     queryKey: ['user-email', email],
     queryFn: () => userService.getByEmail(email),
     enabled: !!email,
   });
 
-  if (data) {
-    queryClient.setQueryData(['user-email', email], data);
-  }
-
   return {
-    user: data?.result || null,
+    user: data?.result,
     userLoading: isLoading,
     userError: error,
   };
@@ -106,7 +100,7 @@ export const useManagerEmail = (email: string) => {
   });
 
   return {
-    managerId: data?.result.id || null,
+    managerId: data?.result.id,
     managerLoading: isLoading,
     managerError: error,
   };
@@ -196,7 +190,7 @@ export const useUserById = (userId: string) => {
   });
 
   return {
-    user: data?.result || null,
+    user: data?.result,
     userLoading: isLoading,
     userError: error,
   };

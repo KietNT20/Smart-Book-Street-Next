@@ -61,7 +61,7 @@ export const useZoneDetail = (id: string) => {
   });
 
   return {
-    zoneDetail: data?.result || null,
+    zoneDetail: data?.result,
     isLoadingZoneDetail: isLoading,
     errorZoneDetail: error,
   };

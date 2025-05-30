@@ -181,7 +181,7 @@ export const useStoreById = (id: string) => {
   });
 
   return {
-    store: data?.result || null,
+    store: data?.result,
     isLoading,
     error,
   };
@@ -194,7 +194,7 @@ export const useStoreStaticsTotal = () => {
   });
 
   return {
-    staticsStore: data || null,
+    staticsStore: data,
     isLoading,
     error,
   };
@@ -209,7 +209,7 @@ export const useStoreStaticsProduct = () => {
   });
 
   return {
-    staticsStore: data || null,
+    staticsStore: data,
     isLoading,
     error,
   };

@@ -167,7 +167,7 @@ export const useGetEventById = (id: string) => {
   });
 
   return {
-    eventData: data?.result || null,
+    eventData: data?.result,
     eventError: error,
     eventLoading: isLoading,
   };
