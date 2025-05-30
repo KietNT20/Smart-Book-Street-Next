@@ -177,7 +177,7 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
 
           <div className='space-y-4'>
             <div className='space-y-2'>
-              <label className='text-sm font-medium'>Email người dùng</label>
+              <p className='text-sm font-medium'>Email người dùng</p>
               <div className='flex gap-2'>
                 <div className='relative flex-1'>
                   <Input
