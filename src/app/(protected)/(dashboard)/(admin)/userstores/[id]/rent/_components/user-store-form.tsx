@@ -32,7 +32,7 @@ import dayjs from 'dayjs';
 import { AlertCircle, CheckCircle, Mail, Store } from 'lucide-react';
 import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import FileUploadField from './file-upload-field';
 import UserInfo from './user-info';
 
@@ -59,8 +59,8 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
       userId: '',
       storeId: storeIdParam || '',
       contractNumber: '',
-      startDate: '',
-      endDate: '',
+      startDate: null,
+      endDate: null,
       status: StoreRent.ACTIVE,
       notes: '',
     },
@@ -71,6 +71,46 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
       form.setValue('userId', user.id);
     }
   }, [user?.id, form]);
+
+  useEffect(() => {
+    if (storeIdParam) {
+      form.setValue('storeId', storeIdParam);
+    }
+  }, [storeIdParam, form]);
+
+  const watchedValues = useWatch({
+    control: form.control,
+    name: [
+      'userId',
+      'storeId',
+      'contractNumber',
+      'startDate',
+      'endDate',
+      'contractFile',
+      'status',
+    ],
+  });
+
+  const isFormValid = useMemo(() => {
+    const [
+      userId,
+      storeId,
+      contractNumber,
+      startDate,
+      endDate,
+      contractFile,
+      status,
+    ] = watchedValues;
+    return (
+      userId &&
+      storeId &&
+      contractNumber &&
+      startDate &&
+      endDate &&
+      contractFile &&
+      status
+    );
+  }, [watchedValues]);
 
   const canRegisterStore = useCallback(() => {
     if (!user?.userRoles || user.userRoles.length === 0) return false;
@@ -107,11 +147,18 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
       formData.append('userId', values.userId);
       formData.append('storeId', values.storeId);
       formData.append('contractNumber', values.contractNumber);
-      formData.append(
-        'startDate',
-        dayjs(values.startDate).format('YYYY-MM-DD')
-      );
-      formData.append('endDate', dayjs(values.endDate).format('YYYY-MM-DD'));
+
+      if (values.startDate) {
+        formData.append(
+          'startDate',
+          dayjs(values.startDate).format('YYYY-MM-DD')
+        );
+      }
+
+      if (values.endDate) {
+        formData.append('endDate', dayjs(values.endDate).format('YYYY-MM-DD'));
+      }
+
       formData.append('status', values.status);
       formData.append('contractFile', values.contractFile);
       if (values.notes) {
@@ -255,29 +302,86 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
         </Card>
       )}
 
-      {/* Main Form - Only show if user is valid */}
-      {user && canRegisterStore() && (
-        <Card>
-          <CardContent className='p-6'>
-            <h3 className='mb-6 font-semibold'>Thông tin hợp đồng</h3>
+      {/* Main Form - Always show */}
+      <Card>
+        <CardContent className='p-6'>
+          <h3 className='mb-6 font-semibold'>Thông tin hợp đồng</h3>
 
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className='space-y-6'
-              >
-                {/* Contract Number */}
+          {/* Form validation status */}
+          {debouncedEmail && !user && (
+            <div className='mb-4 rounded-lg border border-amber-200 bg-amber-50 p-3'>
+              <div className='flex items-center gap-2'>
+                <AlertCircle className='text-amber-500' size={16} />
+                <span className='text-sm font-medium text-amber-700'>
+                  Vui lòng nhập email hợp lệ để có thể đăng ký
+                </span>
+              </div>
+            </div>
+          )}
+
+          {user && !canRegisterStore() && (
+            <div className='mb-4 rounded-lg border border-red-200 bg-red-50 p-3'>
+              <div className='flex items-center gap-2'>
+                <AlertCircle className='text-red-500' size={16} />
+                <span className='text-sm font-medium text-red-700'>
+                  Tài khoản không có quyền đăng ký cửa hàng
+                </span>
+              </div>
+            </div>
+          )}
+
+          {user && canRegisterStore() && (
+            <div className='mb-4 rounded-lg border border-green-200 bg-green-50 p-3'>
+              <div className='flex items-center gap-2'>
+                <CheckCircle className='text-green-500' size={16} />
+                <span className='text-sm font-medium text-green-700'>
+                  Tài khoản hợp lệ - có thể đăng ký cửa hàng
+                </span>
+              </div>
+            </div>
+          )}
+
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
+              {/* Contract Number */}
+              <FormField
+                control={form.control}
+                name='contractNumber'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Số hợp đồng</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder='Nhập số hợp đồng'
+                        disabled={isRegisteringStore}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Date Fields */}
+              <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
                 <FormField
                   control={form.control}
-                  name='contractNumber'
+                  name='startDate'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Số hợp đồng</FormLabel>
+                      <FormLabel>Ngày bắt đầu</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder='Nhập số hợp đồng'
+                        <DatePicker
+                          className='h-10 w-full px-3 py-2'
+                          format='YYYY-MM-DD'
+                          placeholder='Chọn ngày bắt đầu'
                           disabled={isRegisteringStore}
-                          {...field}
+                          value={field.value ? dayjs(field.value) : null}
+                          onChange={(date) => {
+                            field.onChange(
+                              date ? date.format('YYYY-MM-DD') : null
+                            );
+                          }}
                         />
                       </FormControl>
                       <FormMessage />
@@ -285,151 +389,127 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
                   )}
                 />
 
-                {/* Date Fields */}
-                <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
-                  <FormField
-                    control={form.control}
-                    name='startDate'
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Ngày bắt đầu</FormLabel>
-                        <FormControl>
-                          <DatePicker
-                            className='h-10 w-full px-3 py-2'
-                            format='YYYY-MM-DD'
-                            placeholder='Chọn ngày bắt đầu'
-                            disabled={isRegisteringStore}
-                            value={field.value ? dayjs(field.value) : null}
-                            onChange={(date) => {
-                              field.onChange(
-                                date ? date.format('YYYY-MM-DD') : null
-                              );
-                            }}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name='endDate'
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Ngày kết thúc</FormLabel>
-                        <FormControl>
-                          <DatePicker
-                            className='h-10 w-full px-3 py-2'
-                            format='YYYY-MM-DD'
-                            placeholder='Chọn ngày kết thúc'
-                            disabled={isRegisteringStore}
-                            value={field.value ? dayjs(field.value) : null}
-                            onChange={(date) => {
-                              field.onChange(
-                                date ? date.format('YYYY-MM-DD') : null
-                              );
-                            }}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
-                {/* Status */}
                 <FormField
                   control={form.control}
-                  name='status'
+                  name='endDate'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Tình trạng</FormLabel>
+                      <FormLabel>Ngày kết thúc</FormLabel>
                       <FormControl>
-                        <Select
-                          defaultValue={field.value}
-                          onValueChange={field.onChange}
+                        <DatePicker
+                          className='h-10 w-full px-3 py-2'
+                          format='YYYY-MM-DD'
+                          placeholder='Chọn ngày kết thúc'
                           disabled={isRegisteringStore}
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder='Chọn trạng thái' />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value={StoreRent.ACTIVE}>
-                              Hoạt động
-                            </SelectItem>
-                            <SelectItem value={StoreRent.EXPIRED}>
-                              Hết hạn
-                            </SelectItem>
-                            <SelectItem value={StoreRent.TERMINATED}>
-                              Ngừng hoạt động
-                            </SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                {/* File Upload */}
-                <FormField
-                  control={form.control}
-                  name='contractFile'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>File hợp đồng</FormLabel>
-                      <FormControl>
-                        <FileUploadField
-                          onChange={field.onChange}
-                          disabled={isRegisteringStore}
+                          value={field.value ? dayjs(field.value) : null}
+                          onChange={(date) => {
+                            field.onChange(
+                              date ? date.format('YYYY-MM-DD') : null
+                            );
+                          }}
                         />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+              </div>
 
-                {/* Notes */}
-                <FormField
-                  control={form.control}
-                  name='notes'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Ghi chú</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder='Ghi chú (không bắt buộc)'
-                          disabled={isRegisteringStore}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              {/* Status */}
+              <FormField
+                control={form.control}
+                name='status'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Tình trạng</FormLabel>
+                    <FormControl>
+                      <Select
+                        defaultValue={field.value}
+                        onValueChange={field.onChange}
+                        disabled={isRegisteringStore}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder='Chọn trạng thái' />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value={StoreRent.ACTIVE}>
+                            Hoạt động
+                          </SelectItem>
+                          <SelectItem value={StoreRent.EXPIRED}>
+                            Hết hạn
+                          </SelectItem>
+                          <SelectItem value={StoreRent.TERMINATED}>
+                            Ngừng hoạt động
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-                {/* Submit Buttons */}
-                <div className='flex items-center justify-end gap-4 pt-4'>
-                  <Button variant='outline' type='button'>
-                    <Link href={PATH.USER_STORES}>Hủy</Link>
-                  </Button>
-                  <Button
-                    type='submit'
-                    disabled={
-                      isRegisteringStore || !user?.id || !canRegisterStore()
-                    }
-                  >
-                    {isRegisteringStore
-                      ? 'Đang đăng ký...'
-                      : 'Đăng ký cửa hàng'}
-                  </Button>
-                </div>
-              </form>
-            </Form>
-          </CardContent>
-        </Card>
-      )}
+              {/* File Upload */}
+              <FormField
+                control={form.control}
+                name='contractFile'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>File hợp đồng</FormLabel>
+                    <div className='mb-2 text-sm text-muted-foreground'>
+                      Chấp nhận file PDF, JPEG hoặc PNG
+                    </div>
+                    <FormControl>
+                      <FileUploadField
+                        onChange={field.onChange}
+                        disabled={isRegisteringStore}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Notes */}
+              <FormField
+                control={form.control}
+                name='notes'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Ghi chú</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder='Ghi chú (không bắt buộc)'
+                        disabled={isRegisteringStore}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Submit Buttons */}
+              <div className='flex items-center justify-end gap-4 pt-4'>
+                <Button variant='outline' type='button'>
+                  <Link href={PATH.USER_STORES}>Hủy</Link>
+                </Button>
+                <Button
+                  type='submit'
+                  disabled={
+                    isRegisteringStore ||
+                    !user?.id ||
+                    !canRegisterStore() ||
+                    !isFormValid
+                  }
+                >
+                  {isRegisteringStore ? 'Đang đăng ký...' : 'Đăng ký cửa hàng'}
+                </Button>
+              </div>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
     </div>
   );
 };

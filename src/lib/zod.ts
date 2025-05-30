@@ -335,12 +335,8 @@ export const userStoreFormSchema = z
       .refine((file) => file.size > 0, { message: 'File không được rỗng' })
       .refine(
         (file) =>
-          [
-            'application/pdf',
-            'application/msword',
-            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-          ].includes(file.type),
-        { message: 'Chỉ chấp nhận file PDF hoặc Word' }
+          ['application/pdf', 'image/jpeg', 'image/png'].includes(file.type),
+        { message: 'Chỉ chấp nhận file PDF, JPEG hoặc PNG' }
       ),
     notes: z.string().optional(),
   })
