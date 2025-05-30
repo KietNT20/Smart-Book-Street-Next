@@ -10,7 +10,7 @@ type Props = {
 
 export default function UserInfo({ user }: Props) {
   return (
-    <>
+    <div>
       <div className='mb-3 flex items-center gap-2'>
         <User className='text-green-500' size={16} />
         <span className='font-medium text-green-700'>
@@ -40,6 +40,6 @@ export default function UserInfo({ user }: Props) {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
