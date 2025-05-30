@@ -78,7 +78,7 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
     }
   }, [storeIdParam, form]);
 
-  const canRegisterStore = useCallback(() => {
+  const canRegisterStore = useMemo(() => {
     if (!user?.userRoles || user.userRoles.length === 0) return false;
 
     return user.userRoles.some(
@@ -91,6 +91,13 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
           userRole.role.roleName === RoleEnums.PUBLISHER)
     );
   }, [user?.userRoles]);
+
+  const emailStatus = useMemo(() => {
+    if (!debouncedEmail) return null;
+    if (userLoading) return 'loading';
+    if (user) return canRegisterStore ? 'valid' : 'invalid';
+    return 'not-found';
+  }, [debouncedEmail, userLoading, user, canRegisterStore]);
 
   const handleEmailChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -105,7 +112,7 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
 
   const onSubmit = useCallback(
     (values: UserStoreFormValues) => {
-      if (!user?.id || !canRegisterStore()) {
+      if (!user?.id || !canRegisterStore) {
         return;
       }
 
@@ -135,15 +142,6 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
     },
     [user?.id, canRegisterStore, registerStore]
   );
-
-  const getEmailStatus = () => {
-    if (!debouncedEmail) return null;
-    if (userLoading) return 'loading';
-    if (user) return canRegisterStore() ? 'valid' : 'invalid';
-    return 'not-found';
-  };
-
-  const emailStatus = getEmailStatus();
 
   return (
     <div className='space-y-6'>
@@ -196,7 +194,7 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
                   <div className='rounded-lg bg-muted p-4'>
                     <UserInfo user={user} />
 
-                    {!canRegisterStore() && (
+                    {!canRegisterStore && (
                       <div className='mt-3 rounded-lg border border-red-200 bg-red-50 p-3'>
                         <div className='flex items-center gap-2'>
                           <AlertCircle className='text-red-500' size={16} />
@@ -285,7 +283,7 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
             </div>
           )}
 
-          {user && !canRegisterStore() && (
+          {user && !canRegisterStore && (
             <div className='mb-4 rounded-lg border border-red-200 bg-red-50 p-3'>
               <div className='flex items-center gap-2'>
                 <AlertCircle className='text-red-500' size={16} />
@@ -296,7 +294,7 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
             </div>
           )}
 
-          {user && canRegisterStore() && (
+          {user && canRegisterStore && (
             <div className='mb-4 rounded-lg border border-green-200 bg-green-50 p-3'>
               <div className='flex items-center gap-2'>
                 <CheckCircle className='text-green-500' size={16} />
@@ -463,7 +461,7 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
                 <Button
                   type='submit'
                   disabled={
-                    isRegisteringStore || !user?.id || !canRegisterStore()
+                    isRegisteringStore || !user?.id || !canRegisterStore
                   }
                 >
                   {isRegisteringStore ? 'Đang đăng ký...' : 'Đăng ký cửa hàng'}

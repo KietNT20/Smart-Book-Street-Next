@@ -1,5 +1,8 @@
+'use client';
+
 import { RoleEnums, RoleLabels } from '@/enums/role';
 import { UserRole } from '@/types/user-types';
+import { useMemo } from 'react';
 
 type Props = {
   userRoles?: UserRole[];
@@ -7,16 +10,11 @@ type Props = {
 };
 
 const UserRoleDisplay = ({ userRoles, isApprovedOnly = false }: Props) => {
-  if (!userRoles || !Array.isArray(userRoles) || userRoles.length === 0) {
-    return (
-      <span className='font-medium'>
-        {isApprovedOnly ? 'N/A' : 'Chưa có vai trò'}
-      </span>
-    );
-  }
+  const filteredRoles = useMemo(() => {
+    if (!userRoles || userRoles.length === 0) return [];
 
-  const filteredRoles = isApprovedOnly
-    ? userRoles?.filter(
+    if (isApprovedOnly) {
+      return userRoles.filter(
         (userRole) =>
           userRole &&
           userRole.role &&
@@ -24,8 +22,11 @@ const UserRoleDisplay = ({ userRoles, isApprovedOnly = false }: Props) => {
           userRole.isApproved &&
           (userRole.role.roleName === RoleEnums.STORE_OWNER ||
             userRole.role.roleName === RoleEnums.PUBLISHER)
-      )
-    : userRoles?.filter((userRole) => userRole && userRole.role);
+      );
+    }
+
+    return userRoles.filter((userRole) => userRole && userRole.role);
+  }, [userRoles, isApprovedOnly]);
 
   if (filteredRoles.length === 0) {
     return (
@@ -36,20 +37,17 @@ const UserRoleDisplay = ({ userRoles, isApprovedOnly = false }: Props) => {
   }
 
   return (
-    <>
+    <div className='space-y-2'>
       {filteredRoles.map((userRole, index) => {
-        const roleKey = `${isApprovedOnly ? 'approved-' : ''}role-${index}-${userRole?.role?.roleName || 'unknown'}`;
+        const roleId = userRole?.role?.id || `role-${index}`;
         const roleName = userRole?.role?.roleName;
         const roleLabel =
           roleName && typeof roleName === 'string'
-            ? RoleLabels[roleName as RoleEnums] ||
-              (isApprovedOnly ? 'N/A' : 'Chưa cung cấp')
-            : isApprovedOnly
-              ? 'N/A'
-              : 'Chưa cung cấp';
+            ? RoleLabels[roleName as RoleEnums] || 'Chưa cung cấp'
+            : 'Chưa cung cấp';
 
         return (
-          <div key={roleKey} className='flex items-center gap-2'>
+          <div key={`${roleId}-${index}`} className='flex items-center gap-2'>
             <span className='font-medium'>{roleLabel}</span>
             <span
               className={`rounded-full px-2 py-1 text-xs ${
@@ -65,7 +63,7 @@ const UserRoleDisplay = ({ userRoles, isApprovedOnly = false }: Props) => {
           </div>
         );
       })}
-    </>
+    </div>
   );
 };
 

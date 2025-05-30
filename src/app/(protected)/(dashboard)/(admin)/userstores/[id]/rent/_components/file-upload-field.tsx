@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Eye, EyeOff, Upload, X } from 'lucide-react';
+import Image from 'next/image';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 type Props = {
@@ -15,69 +16,56 @@ const FileUploadField = ({ onChange, disabled = false }: Props) => {
   const [showFilePreview, setShowFilePreview] = useState(false);
   const [filePreviewUrl, setFilePreviewUrl] = useState<string | null>(null);
 
-  const filePreviewUrlRef = useRef<string | null>(null);
-  const isUnmountedRef = useRef(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const currentUrlRef = useRef<string | null>(null);
 
+  // Cleanup on unmount
   useEffect(() => {
-    isUnmountedRef.current = false;
-
     return () => {
-      isUnmountedRef.current = true;
-      if (filePreviewUrlRef.current) {
-        URL.revokeObjectURL(filePreviewUrlRef.current);
-        filePreviewUrlRef.current = null;
+      if (currentUrlRef.current) {
+        URL.revokeObjectURL(currentUrlRef.current);
       }
     };
   }, []);
-
-  useEffect(() => {
-    if (filePreviewUrl) {
-      filePreviewUrlRef.current = filePreviewUrl;
-    }
-  }, [filePreviewUrl]);
 
   const handleFileChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files?.[0];
       if (!file) return;
 
-      if (filePreviewUrlRef.current) {
-        URL.revokeObjectURL(filePreviewUrlRef.current);
-        filePreviewUrlRef.current = null;
+      // Cleanup previous URL
+      if (currentUrlRef.current) {
+        URL.revokeObjectURL(currentUrlRef.current);
+        currentUrlRef.current = null;
       }
 
-      Promise.resolve().then(() => {
-        if (!isUnmountedRef.current) {
-          setSelectedFile(file);
-          onChange(file);
+      // Create new URL
+      const url = URL.createObjectURL(file);
+      currentUrlRef.current = url;
 
-          const url = URL.createObjectURL(file);
-          setFilePreviewUrl(url);
-          filePreviewUrlRef.current = url;
-        }
-      });
+      setSelectedFile(file);
+      setFilePreviewUrl(url);
+      onChange(file);
     },
     [onChange]
   );
 
   const handleRemoveFile = useCallback(() => {
-    if (filePreviewUrlRef.current) {
-      URL.revokeObjectURL(filePreviewUrlRef.current);
-      filePreviewUrlRef.current = null;
+    // Cleanup URL
+    if (currentUrlRef.current) {
+      URL.revokeObjectURL(currentUrlRef.current);
+      currentUrlRef.current = null;
     }
 
-    Promise.resolve().then(() => {
-      if (!isUnmountedRef.current) {
-        setSelectedFile(null);
-        setFilePreviewUrl(null);
-        setShowFilePreview(false);
+    // Reset state
+    setSelectedFile(null);
+    setFilePreviewUrl(null);
+    setShowFilePreview(false);
 
-        const fileInput = document.querySelector(
-          'input[type="file"]'
-        ) as HTMLInputElement;
-        if (fileInput) fileInput.value = '';
-      }
-    });
+    // Clear input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   }, []);
 
   const renderFilePreview = useCallback(() => {
@@ -88,41 +76,26 @@ const FileUploadField = ({ onChange, disabled = false }: Props) => {
 
     if (fileType === 'application/pdf' || fileName.endsWith('.pdf')) {
       return (
-        <div className='h-screen w-full rounded border'>
+        <div className='h-96 w-full overflow-hidden rounded border'>
           <iframe
             src={filePreviewUrl}
             className='h-full w-full'
-            title='File Preview'
+            title='PDF Preview'
           />
         </div>
       );
     }
 
-    if (
-      fileName.endsWith('.doc') ||
-      fileName.endsWith('.docx') ||
-      fileType.includes('document') ||
-      fileType.includes('officedocument')
-    ) {
+    if (fileType.startsWith('image/')) {
       return (
-        <div className='flex h-96 w-full items-center justify-center rounded border bg-muted'>
-          <div className='text-center'>
-            <Upload className='mx-auto mb-4 text-muted-foreground' size={48} />
-            <p className='mb-4 text-sm text-muted-foreground'>
-              Xem trước file Word không được hỗ trợ trực tiếp
-            </p>
-            <Button
-              variant='outline'
-              onClick={() => {
-                const link = document.createElement('a');
-                link.href = filePreviewUrl;
-                link.download = selectedFile.name;
-                link.click();
-              }}
-            >
-              Tải xuống để xem
-            </Button>
-          </div>
+        <div className='relative h-96 w-full overflow-hidden rounded border'>
+          <Image
+            src={filePreviewUrl}
+            alt={selectedFile.name}
+            fill
+            className='object-contain'
+            unoptimized // For blob URLs, optimization isn't needed
+          />
         </div>
       );
     }
@@ -143,8 +116,9 @@ const FileUploadField = ({ onChange, disabled = false }: Props) => {
     <div className='space-y-4'>
       <div className='flex items-center gap-4'>
         <Input
+          ref={fileInputRef}
           type='file'
-          accept='.pdf,.doc,.docx'
+          accept='.pdf,.jpeg,.jpg,.png'
           onChange={handleFileChange}
           disabled={disabled}
           className='flex-1'
@@ -167,12 +141,21 @@ const FileUploadField = ({ onChange, disabled = false }: Props) => {
               <Button
                 variant='outline'
                 size='sm'
-                onClick={() => setShowFilePreview(true)}
+                onClick={() => setShowFilePreview(!showFilePreview)}
                 type='button'
                 className='h-8 px-3'
               >
-                <Eye size={14} className='mr-1' />
-                Xem trước
+                {showFilePreview ? (
+                  <>
+                    <EyeOff size={14} className='mr-1' />
+                    Ẩn
+                  </>
+                ) : (
+                  <>
+                    <Eye size={14} className='mr-1' />
+                    Xem trước
+                  </>
+                )}
               </Button>
               <Button
                 variant='outline'
@@ -188,30 +171,14 @@ const FileUploadField = ({ onChange, disabled = false }: Props) => {
 
           {showFilePreview && (
             <div className='space-y-3'>
-              <div className='flex items-center justify-between'>
-                <h4 className='font-medium'>
-                  Xem trước file: {selectedFile.name}
-                </h4>
-                <Button
-                  variant='ghost'
-                  size='sm'
-                  onClick={() => setShowFilePreview(false)}
-                  type='button'
-                  className='h-8 w-8 p-0'
-                >
-                  <EyeOff size={16} />
-                </Button>
-              </div>
-
+              <h4 className='font-medium'>
+                Xem trước file: {selectedFile.name}
+              </h4>
               {renderFilePreview()}
             </div>
           )}
         </div>
       )}
-
-      <p className='text-xs text-muted-foreground'>
-        Chấp nhận file PDF, DOC, DOCX (Tối đa 10MB)
-      </p>
     </div>
   );
 };
