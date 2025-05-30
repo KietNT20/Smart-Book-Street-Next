@@ -3,9 +3,7 @@ import { UserStoreResponseAll } from '@/types/user-types';
 import axiosInstance from '@/utils/axiosInstance';
 
 export const userStoreService = {
-  registerUserStore: async (
-    data: FormData
-  ): Promise<{ isSuccess: boolean; message: string }> => {
+  registerUserStore: async (data: FormData) => {
     const res = await axiosInstance.post(`${API_URL.USER_STORES.INDEX}`, data, {
       headers: {
         'Content-Type': 'multipart/form-data',

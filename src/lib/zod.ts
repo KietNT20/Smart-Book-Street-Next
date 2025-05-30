@@ -314,8 +314,6 @@ export type PublisherFormValues = z.infer<typeof publisherFormSchema>;
 // User Store form
 export const userStoreFormSchema = z
   .object({
-    userId: z.string().min(1, { message: 'UserId là bắt buộc' }),
-    storeId: z.string().min(1, { message: 'Vui lòng chọn cửa hàng' }),
     contractNumber: z.string().min(1, { message: 'Số hợp đồng là bắt buộc' }),
     startDate: z
       .string()

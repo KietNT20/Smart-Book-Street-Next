@@ -11,16 +11,13 @@ export const useUserStoresMutation = () => {
   const router = useRouter();
 
   const registerStoreMutation = useMutation({
-    mutationKey: ['rent-store'],
+    mutationKey: ['rental-store'],
     mutationFn: (data: FormData) => userStoreService.registerUserStore(data),
     onSuccess: (data) => {
-      if (data?.isSuccess) {
+      if (data) {
         queryClient.invalidateQueries({ queryKey: ['user-stores'] });
         queryClient.invalidateQueries({ queryKey: ['stores'] });
         toast.success('Đăng ký thành công!');
-        router.replace(PATH.USER_STORES);
-      } else if (!data.isSuccess) {
-        toast.error(`${data.message}`);
         router.replace(PATH.USER_STORES);
       }
     },

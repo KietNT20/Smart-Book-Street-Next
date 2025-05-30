@@ -95,6 +95,7 @@ const FileUploadField = ({ onChange, disabled = false }: Props) => {
             fill
             className='object-contain'
             unoptimized // For blob URLs, optimization isn't needed
+            priority
           />
         </div>
       );

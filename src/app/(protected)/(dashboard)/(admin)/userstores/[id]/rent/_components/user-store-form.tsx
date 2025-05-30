@@ -31,6 +31,7 @@ import { AlertCircle, CheckCircle, Mail, Search, Store } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import FileUploadField from './file-upload-field';
 import UserInfo from './user-info';
 
@@ -56,8 +57,6 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
   const form = useForm<UserStoreFormValues>({
     resolver: zodResolver(userStoreFormSchema),
     defaultValues: {
-      userId: user?.id || '',
-      storeId: storeIdParam || '',
       contractNumber: '',
       startDate: null,
       endDate: null,
@@ -67,41 +66,45 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
   });
 
   const onSubmit = (values: UserStoreFormValues) => {
-    if (!user?.id) return;
+    try {
+      if (!user?.id) {
+        toast.error('Vui lòng xác thực email người dùng trước!');
+        return;
+      }
 
-    const formData = new FormData();
-    formData.append('UserId', values.userId || user.id);
-    if (storeIdParam) {
-      formData.append('StoreId', values.storeId || storeIdParam);
-    }
-    if (values.contractNumber) {
-      formData.append('ContractNumber', values.contractNumber);
-    }
+      if (!storeIdParam) {
+        toast.error('Không tìm thấy thông tin cửa hàng!');
+        return;
+      }
 
-    if (values.startDate) {
-      formData.append(
-        'StartDate',
-        dayjs(values.startDate).format('YYYY-MM-DD')
-      );
-    }
+      const formData = new FormData();
+      formData.append('UserId', user.id);
+      formData.append('StoreId', storeIdParam);
+      if (values.contractNumber) {
+        formData.append('ContractNumber', values.contractNumber);
+      }
+      if (values.startDate) {
+        formData.append(
+          'StartDate',
+          dayjs(values.startDate).format('YYYY-MM-DD')
+        );
+      }
 
-    if (values.endDate) {
-      formData.append('EndDate', dayjs(values.endDate).format('YYYY-MM-DD'));
-    }
+      if (values.endDate) {
+        formData.append('EndDate', dayjs(values.endDate).format('YYYY-MM-DD'));
+      }
 
-    formData.append('Status', values.status);
-    if (
-      values.contractFile &&
-      values.contractFile instanceof File &&
-      typeof window !== 'undefined'
-    ) {
-      formData.append('ContractFile', values.contractFile);
+      formData.append('Status', values.status);
+      if (values.contractFile && values.contractFile instanceof File) {
+        formData.append('ContractFile', values.contractFile);
+      }
+      if (values.notes) {
+        formData.append('Notes', values.notes);
+      }
+      registerStore(formData);
+    } catch (error) {
+      console.log('Error during form submission:', error);
     }
-    if (values.notes) {
-      formData.append('Notes', values.notes);
-    }
-
-    registerStore(formData);
   };
 
   return (
@@ -236,9 +239,12 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
       <Card>
         <CardContent className='p-6'>
           <h3 className='mb-6 font-semibold'>Thông tin hợp đồng</h3>
-
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
+            <form
+              action='#'
+              onSubmit={form.handleSubmit(onSubmit)}
+              className='space-y-6'
+            >
               {/* Contract Number */}
               <FormField
                 control={form.control}
@@ -387,11 +393,9 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
 
               {/* Submit Buttons */}
               <div className='flex items-center justify-end gap-4 pt-4'>
-                <Link href={PATH.USER_STORES} passHref>
-                  <Button variant='outline' type='button'>
-                    Hủy
-                  </Button>
-                </Link>
+                <Button variant='outline' type='button'>
+                  <Link href={PATH.USER_STORES}>Hủy</Link>
+                </Button>
                 <Button
                   type='submit'
                   disabled={isRegisteringStore || !user?.id}
