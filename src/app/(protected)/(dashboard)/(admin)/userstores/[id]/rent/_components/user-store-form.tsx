@@ -32,7 +32,7 @@ import dayjs from 'dayjs';
 import { AlertCircle, CheckCircle, Mail, Store } from 'lucide-react';
 import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useForm, useWatch } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import FileUploadField from './file-upload-field';
 import UserInfo from './user-info';
 
@@ -77,40 +77,6 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
       form.setValue('storeId', storeIdParam);
     }
   }, [storeIdParam, form]);
-
-  const watchedValues = useWatch({
-    control: form.control,
-    name: [
-      'userId',
-      'storeId',
-      'contractNumber',
-      'startDate',
-      'endDate',
-      'contractFile',
-      'status',
-    ],
-  });
-
-  const isFormValid = useMemo(() => {
-    const [
-      userId,
-      storeId,
-      contractNumber,
-      startDate,
-      endDate,
-      contractFile,
-      status,
-    ] = watchedValues;
-    return (
-      userId &&
-      storeId &&
-      contractNumber &&
-      startDate &&
-      endDate &&
-      contractFile &&
-      status
-    );
-  }, [watchedValues]);
 
   const canRegisterStore = useCallback(() => {
     if (!user?.userRoles || user.userRoles.length === 0) return false;
@@ -497,10 +463,7 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
                 <Button
                   type='submit'
                   disabled={
-                    isRegisteringStore ||
-                    !user?.id ||
-                    !canRegisterStore() ||
-                    !isFormValid
+                    isRegisteringStore || !user?.id || !canRegisterStore()
                   }
                 >
                   {isRegisteringStore ? 'Đang đăng ký...' : 'Đăng ký cửa hàng'}
