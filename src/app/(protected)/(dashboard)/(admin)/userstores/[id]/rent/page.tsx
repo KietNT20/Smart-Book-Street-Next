@@ -13,12 +13,7 @@ const UserStoreRentPage = () => {
   const params = useParams();
   const storeId = params.id as string;
 
-  useEntityBreadcrumb(
-    PATH.USER_STORES,
-    'Cửa hàng của người dùng',
-    storeId,
-    'Cửa hàng'
-  );
+  useEntityBreadcrumb(PATH.USER_STORES, 'Cửa hàng của người dùng', storeId, '');
 
   return (
     <div className='container mx-auto p-4 md:px-24'>

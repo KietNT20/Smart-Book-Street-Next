@@ -387,9 +387,11 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
 
               {/* Submit Buttons */}
               <div className='flex items-center justify-end gap-4 pt-4'>
-                <Button variant='outline' type='button'>
-                  <Link href={PATH.USER_STORES}>Hủy</Link>
-                </Button>
+                <Link href={PATH.USER_STORES} passHref>
+                  <Button variant='outline' type='button'>
+                    Hủy
+                  </Button>
+                </Link>
                 <Button
                   type='submit'
                   disabled={isRegisteringStore || !user?.id}

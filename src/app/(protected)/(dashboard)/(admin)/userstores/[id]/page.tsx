@@ -160,7 +160,7 @@ const StoreRentalContractPage = ({ params }: Props) => {
     <div className='container mx-auto space-y-6 p-4 md:px-24'>
       {/* Header Actions */}
       <div className='flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
-        <Link href={PATH.USER_STORES}>
+        <Link href={PATH.USER_STORES} passHref>
           <Button variant='outline' className='w-full sm:w-auto'>
             <ArrowLeft className='mr-2 size-4' />
             <span className='hidden sm:inline'>Quay về danh sách</span>
