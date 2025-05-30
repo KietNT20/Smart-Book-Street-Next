@@ -40,19 +40,25 @@ type Props = {
 
 const UserStoreForm = ({ storeIdParam }: Props) => {
   const [emailValue, setEmailValue] = useState('');
+  const [verifiedEmail, setVerifiedEmail] = useState('');
 
   // Hooks
-  const { user, userLoading } = useUserEmail(emailValue);
+  const { user, userLoading } = useUserEmail(verifiedEmail);
   const { registerStore, isRegisteringStore } = useUserStoresMutation();
 
   const storeId = useMemo(() => storeIdParam || '', [storeIdParam]);
   const { store, isLoading: isLoadingStore } = useStoreById(storeId);
 
+  const handleVerifyEmail = () => {
+    if (!emailValue.trim()) return;
+    setVerifiedEmail(emailValue.trim());
+  };
+
   // Form
   const form = useForm<UserStoreFormValues>({
     resolver: zodResolver(userStoreFormSchema),
     defaultValues: {
-      userId: '',
+      userId: user?.id || '',
       storeId: storeIdParam || '',
       contractNumber: '',
       startDate: null,
@@ -69,7 +75,6 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
     formData.append('userId', values.userId);
     formData.append('storeId', values.storeId);
     formData.append('contractNumber', values.contractNumber);
-
     if (values.startDate) {
       formData.append(
         'startDate',
@@ -116,10 +121,10 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
                     {userLoading && (
                       <div className='h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent' />
                     )}
-                    {!userLoading && user && emailValue && (
+                    {!userLoading && user && verifiedEmail && (
                       <CheckCircle className='text-green-500' size={16} />
                     )}
-                    {!userLoading && !user && emailValue && (
+                    {!userLoading && !user && verifiedEmail && (
                       <AlertCircle className='text-red-500' size={16} />
                     )}
                   </div>
@@ -127,6 +132,7 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
                 <Button
                   type='button'
                   variant='outline'
+                  onClick={handleVerifyEmail}
                   disabled={!emailValue.trim() || userLoading}
                   className='px-6'
                 >
@@ -141,12 +147,12 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
                 </Button>
               </div>
               <p className='text-xs text-muted-foreground'>
-                Nhập email người dùng để tìm kiếm thông tin.
+                {`Nhập email người dùng và nhấn "Xác thực" để tìm kiếm thông tin.`}
               </p>
             </div>
 
             {/* User Info Display */}
-            {emailValue && (
+            {verifiedEmail && (
               <div className='mt-4'>
                 {userLoading && (
                   <div className='text-sm text-muted-foreground'>
@@ -162,7 +168,7 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
                   </div>
                 )}
 
-                {!userLoading && !user && emailValue && (
+                {!userLoading && !user && verifiedEmail && (
                   <div className='rounded-lg border border-red-200 bg-red-50 p-4'>
                     <div className='flex items-center gap-2'>
                       <AlertCircle className='text-red-500' size={16} />
