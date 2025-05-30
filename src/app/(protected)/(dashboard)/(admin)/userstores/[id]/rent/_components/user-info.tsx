@@ -34,7 +34,7 @@ export default function UserInfo({ user }: Props) {
           <span className='text-muted-foreground'>Vai trò:</span>
           <div>
             <UserRoleDisplay
-              userRoles={user?.userRoles}
+              userRoles={user?.userRoles || []}
               isApprovedOnly={true}
             />
           </div>
