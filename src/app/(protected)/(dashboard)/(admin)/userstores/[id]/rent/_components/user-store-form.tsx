@@ -29,7 +29,7 @@ import { DatePicker } from 'antd';
 import dayjs from 'dayjs';
 import { AlertCircle, CheckCircle, Mail, Search, Store } from 'lucide-react';
 import Link from 'next/link';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import FileUploadField from './file-upload-field';
 import UserInfo from './user-info';
@@ -39,12 +39,10 @@ type Props = {
 };
 
 const UserStoreForm = ({ storeIdParam }: Props) => {
-  const emailInputRef = useRef<HTMLInputElement>(null);
   const [emailValue, setEmailValue] = useState('');
-  const [verifiedEmail, setVerifiedEmail] = useState('');
 
   // Hooks
-  const { user, userLoading } = useUserEmail(verifiedEmail);
+  const { user, userLoading } = useUserEmail(emailValue);
   const { registerStore, isRegisteringStore } = useUserStoresMutation();
 
   const storeId = useMemo(() => storeIdParam || '', [storeIdParam]);
@@ -64,78 +62,33 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
     },
   });
 
-  useEffect(() => {
-    if (user?.id) {
-      form.setValue('userId', user.id);
+  const onSubmit = (values: UserStoreFormValues) => {
+    if (!user?.id) return;
+
+    const formData = new FormData();
+    formData.append('userId', values.userId);
+    formData.append('storeId', values.storeId);
+    formData.append('contractNumber', values.contractNumber);
+
+    if (values.startDate) {
+      formData.append(
+        'startDate',
+        dayjs(values.startDate).format('YYYY-MM-DD')
+      );
     }
-  }, [user?.id, form]);
 
-  useEffect(() => {
-    if (storeIdParam) {
-      form.setValue('storeId', storeIdParam);
+    if (values.endDate) {
+      formData.append('endDate', dayjs(values.endDate).format('YYYY-MM-DD'));
     }
-  }, [storeIdParam, form]);
 
-  const handleEmailChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value;
-      if (emailInputRef.current) {
-        emailInputRef.current.value = value;
-      }
-      setEmailValue(value);
-    },
-    []
-  );
+    formData.append('status', values.status);
+    formData.append('contractFile', values.contractFile);
+    if (values.notes) {
+      formData.append('notes', values.notes);
+    }
 
-  const handleVerifyEmail = useCallback(() => {
-    if (!emailValue.trim()) return;
-    // Reset user state trước khi search mới
-    setVerifiedEmail('');
-    setTimeout(() => {
-      setVerifiedEmail(emailValue.trim());
-    }, 100);
-  }, [emailValue]);
-
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        handleVerifyEmail();
-      }
-    },
-    [handleVerifyEmail]
-  );
-
-  const onSubmit = useCallback(
-    (values: UserStoreFormValues) => {
-      if (!user?.id) return;
-
-      const formData = new FormData();
-      formData.append('userId', values.userId);
-      formData.append('storeId', values.storeId);
-      formData.append('contractNumber', values.contractNumber);
-
-      if (values.startDate) {
-        formData.append(
-          'startDate',
-          dayjs(values.startDate).format('YYYY-MM-DD')
-        );
-      }
-
-      if (values.endDate) {
-        formData.append('endDate', dayjs(values.endDate).format('YYYY-MM-DD'));
-      }
-
-      formData.append('status', values.status);
-      formData.append('contractFile', values.contractFile);
-      if (values.notes) {
-        formData.append('notes', values.notes);
-      }
-
-      registerStore(formData);
-    },
-    [user?.id, registerStore]
-  );
+    registerStore(formData);
+  };
 
   return (
     <div className='space-y-6'>
@@ -153,21 +106,20 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
               <div className='flex gap-2'>
                 <div className='relative flex-1'>
                   <Input
-                    ref={emailInputRef}
                     type='email'
                     placeholder='Nhập email người dùng'
-                    onChange={handleEmailChange}
-                    onKeyDown={handleKeyDown}
+                    value={emailValue}
+                    onChange={(e) => setEmailValue(e.target.value)}
                     className='pr-10'
                   />
                   <div className='absolute right-3 top-1/2 -translate-y-1/2'>
                     {userLoading && (
                       <div className='h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent' />
                     )}
-                    {!userLoading && user && verifiedEmail && (
+                    {!userLoading && user && emailValue && (
                       <CheckCircle className='text-green-500' size={16} />
                     )}
-                    {!userLoading && !user && verifiedEmail && (
+                    {!userLoading && !user && emailValue && (
                       <AlertCircle className='text-red-500' size={16} />
                     )}
                   </div>
@@ -175,7 +127,6 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
                 <Button
                   type='button'
                   variant='outline'
-                  onClick={handleVerifyEmail}
                   disabled={!emailValue.trim() || userLoading}
                   className='px-6'
                 >
@@ -195,7 +146,7 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
             </div>
 
             {/* User Info Display */}
-            {verifiedEmail && (
+            {emailValue && (
               <div className='mt-4'>
                 {userLoading && (
                   <div className='text-sm text-muted-foreground'>
@@ -211,7 +162,7 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
                   </div>
                 )}
 
-                {!userLoading && !user && verifiedEmail && (
+                {!userLoading && !user && emailValue && (
                   <div className='rounded-lg border border-red-200 bg-red-50 p-4'>
                     <div className='flex items-center gap-2'>
                       <AlertCircle className='text-red-500' size={16} />
