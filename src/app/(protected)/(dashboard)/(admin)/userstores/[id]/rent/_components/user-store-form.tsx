@@ -72,24 +72,33 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
     if (!user?.id) return;
 
     const formData = new FormData();
-    formData.append('userId', values.userId);
-    formData.append('storeId', values.storeId);
-    formData.append('contractNumber', values.contractNumber);
+    formData.append('UserId', values.userId);
+    formData.append('StoreId', values.storeId);
+    if (values.contractNumber) {
+      formData.append('ContractNumber', values.contractNumber);
+    }
+
     if (values.startDate) {
       formData.append(
-        'startDate',
+        'StartDate',
         dayjs(values.startDate).format('YYYY-MM-DD')
       );
     }
 
     if (values.endDate) {
-      formData.append('endDate', dayjs(values.endDate).format('YYYY-MM-DD'));
+      formData.append('EndDate', dayjs(values.endDate).format('YYYY-MM-DD'));
     }
 
-    formData.append('status', values.status);
-    formData.append('contractFile', values.contractFile);
+    formData.append('Status', values.status);
+    if (
+      values.contractFile &&
+      values.contractFile instanceof File &&
+      typeof window !== 'undefined'
+    ) {
+      formData.append('ContractFile', values.contractFile);
+    }
     if (values.notes) {
-      formData.append('notes', values.notes);
+      formData.append('Notes', values.notes);
     }
 
     registerStore(formData);
