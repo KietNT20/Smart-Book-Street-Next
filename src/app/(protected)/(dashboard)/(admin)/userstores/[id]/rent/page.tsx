@@ -1,7 +1,5 @@
 'use client';
 
-import { PATH } from '@/enums/path';
-import { useEntityBreadcrumb } from '@/hooks/use-breadcrumb-page';
 import dynamic from 'next/dynamic';
 import { useParams } from 'next/navigation';
 
@@ -12,8 +10,6 @@ const UserStoreForm = dynamic(() => import('./_components/user-store-form'), {
 const UserStoreRentPage = () => {
   const params = useParams();
   const storeId = params.id as string;
-
-  useEntityBreadcrumb(PATH.USER_STORES, 'Cửa hàng của người dùng', storeId, '');
 
   return (
     <div className='container mx-auto p-4 md:px-24'>
