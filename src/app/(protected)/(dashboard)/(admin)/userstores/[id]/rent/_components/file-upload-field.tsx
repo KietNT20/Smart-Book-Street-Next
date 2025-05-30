@@ -145,6 +145,7 @@ const FileUploadField = ({ onChange, disabled = false }: Props) => {
                 onClick={() => setShowFilePreview(!showFilePreview)}
                 type='button'
                 className='h-8 px-3'
+                disabled={disabled}
               >
                 {showFilePreview ? (
                   <>
@@ -164,6 +165,7 @@ const FileUploadField = ({ onChange, disabled = false }: Props) => {
                 onClick={handleRemoveFile}
                 type='button'
                 className='h-8 w-8 p-0 text-destructive hover:text-destructive'
+                disabled={disabled}
               >
                 <X size={14} />
               </Button>
