@@ -29,7 +29,7 @@ import { DatePicker } from 'antd';
 import dayjs from 'dayjs';
 import { AlertCircle, CheckCircle, Mail, Search, Store } from 'lucide-react';
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import FileUploadField from './file-upload-field';
 import UserInfo from './user-info';
@@ -45,9 +45,7 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
   // Hooks
   const { user, userLoading } = useUserEmail(verifiedEmail);
   const { registerStore, isRegisteringStore } = useUserStoresMutation();
-
-  const storeId = useMemo(() => storeIdParam || '', [storeIdParam]);
-  const { store, isLoading: isLoadingStore } = useStoreById(storeId);
+  const { store, isLoading: isLoadingStore } = useStoreById(storeIdParam || '');
 
   const handleVerifyEmail = () => {
     if (!emailValue.trim()) return;
@@ -194,7 +192,7 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
       </Card>
 
       {/* Store Information */}
-      {storeId && (
+      {storeIdParam && (
         <Card>
           <CardContent className='p-6'>
             <div className='mb-4 flex items-center gap-2'>
