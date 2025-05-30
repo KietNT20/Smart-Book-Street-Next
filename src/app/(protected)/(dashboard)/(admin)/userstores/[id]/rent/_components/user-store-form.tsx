@@ -70,8 +70,10 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
     if (!user?.id) return;
 
     const formData = new FormData();
-    formData.append('UserId', values.userId);
-    formData.append('StoreId', values.storeId);
+    formData.append('UserId', values.userId || user.id);
+    if (storeIdParam) {
+      formData.append('StoreId', values.storeId || storeIdParam);
+    }
     if (values.contractNumber) {
       formData.append('ContractNumber', values.contractNumber);
     }
