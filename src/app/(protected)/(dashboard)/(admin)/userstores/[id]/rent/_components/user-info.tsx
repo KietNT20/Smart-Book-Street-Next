@@ -1,3 +1,5 @@
+'use client';
+
 import { User as UserType } from '@/types/user-types';
 import { User } from 'lucide-react';
 import UserRoleDisplay from './user-role-display';
