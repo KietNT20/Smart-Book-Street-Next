@@ -4,7 +4,11 @@ import axiosInstance from '@/utils/axiosInstance';
 
 export const orderDetailService = {
   create: async (data: FormData) => {
-    const res = await axiosInstance.post(API_URL.ORDER_DETAILS.INDEX, data);
+    const res = await axiosInstance.post(API_URL.ORDER_DETAILS.INDEX, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
     return res.data;
   },
   update: async (id: string, quantity: number) => {

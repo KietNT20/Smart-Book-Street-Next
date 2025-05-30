@@ -6,7 +6,11 @@ export const userStoreService = {
   registerUserStore: async (
     data: FormData
   ): Promise<{ isSuccess: boolean; message: string }> => {
-    const res = await axiosInstance.post(`${API_URL.USER_STORES.INDEX}`, data);
+    const res = await axiosInstance.post(`${API_URL.USER_STORES.INDEX}`, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
     return res.data;
   },
   checkUserContract: async (userId: string): Promise<UserStoreResponseAll> => {

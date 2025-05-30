@@ -64,7 +64,12 @@ export const inventoryService = {
   update: async (entityId: string, storeId: string, data: FormData) => {
     const res = await axiosInstance.put(
       `${API_URL.INVENTORIES.INDEX}/${entityId}/${storeId}`,
-      data
+      data,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
     );
     return res.data;
   },

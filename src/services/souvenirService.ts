@@ -8,13 +8,22 @@ import axiosInstance from '@/utils/axiosInstance';
 
 export const souvenirService = {
   create: async (data: FormData) => {
-    const res = await axiosInstance.post(API_URL.SOUVENIRS.INDEX, data);
+    const res = await axiosInstance.post(API_URL.SOUVENIRS.INDEX, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
     return res.data;
   },
   update: async (id: string, data: FormData) => {
     const res = await axiosInstance.put(
       `${API_URL.SOUVENIRS.INDEX}/${id}`,
-      data
+      data,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
     );
     return res.data;
   },

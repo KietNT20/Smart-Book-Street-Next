@@ -62,7 +62,11 @@ export const orderService = {
     return res.data;
   },
   create: async (data: FormData): Promise<OrderResponse> => {
-    const res = await axiosInstance.post(API_URL.ORDERS.INDEX, data);
+    const res = await axiosInstance.post(API_URL.ORDERS.INDEX, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
     return res.data;
   },
   getById: async (id: string): Promise<OrderResponse> => {
