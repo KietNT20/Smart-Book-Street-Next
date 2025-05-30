@@ -31,7 +31,7 @@ import { DatePicker } from 'antd';
 import dayjs from 'dayjs';
 import { AlertCircle, CheckCircle, Mail, Store } from 'lucide-react';
 import Link from 'next/link';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import FileUploadField from './file-upload-field';
 import UserInfo from './user-info';
@@ -41,8 +41,9 @@ type Props = {
 };
 
 const UserStoreForm = ({ storeIdParam }: Props) => {
-  const [emailInput, setEmailInput] = useState('');
-  const debouncedEmail = useDebounce(emailInput, 500);
+  const emailInputRef = useRef<HTMLInputElement>(null);
+  const [emailValue, setEmailValue] = useState('');
+  const debouncedEmail = useDebounce(emailValue, 500);
 
   // Hooks
   const { user, userLoading } = useUserEmail(debouncedEmail);
@@ -84,6 +85,17 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
           userRole.role.roleName === RoleEnums.PUBLISHER)
     );
   }, [user?.userRoles]);
+
+  const handleEmailChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value;
+      if (emailInputRef.current) {
+        emailInputRef.current.value = value;
+      }
+      setEmailValue(value);
+    },
+    []
+  );
 
   const onSubmit = useCallback(
     (values: UserStoreFormValues) => {
@@ -135,10 +147,10 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
               <label className='text-sm font-medium'>Email người dùng</label>
               <div className='relative'>
                 <Input
+                  ref={emailInputRef}
                   type='email'
                   placeholder='Nhập email người dùng'
-                  value={emailInput}
-                  onChange={(e) => setEmailInput(e.target.value)}
+                  onChange={handleEmailChange}
                   className='pr-10'
                 />
                 <div className='absolute right-3 top-1/2 -translate-y-1/2'>
