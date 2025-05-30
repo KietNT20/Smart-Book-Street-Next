@@ -92,7 +92,7 @@ export default function StoreSchedulePage() {
             value='info'
             className='mt-4 rounded-lg bg-background p-6 shadow-md'
           >
-            <StoreInfo store={store} />
+            {store && <StoreInfo store={store} />}
           </TabsContent>
 
           {/* Working Hours Tab Content */}
