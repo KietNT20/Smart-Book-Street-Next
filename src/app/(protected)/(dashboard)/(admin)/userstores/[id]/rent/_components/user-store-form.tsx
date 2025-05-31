@@ -499,6 +499,7 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
                   type='button'
                   asChild
                   className='w-full sm:w-auto'
+                  disabled={isRegisteringStore}
                 >
                   <Link href={PATH.USER_STORES}>Hủy</Link>
                 </Button>
