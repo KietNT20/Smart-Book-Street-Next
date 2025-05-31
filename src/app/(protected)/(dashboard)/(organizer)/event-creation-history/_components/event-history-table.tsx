@@ -175,8 +175,12 @@ export default function EventHistoryTable({
                     {event?.zone?.zoneName}
                   </TableCell>
                   <TableCell className='text-sm'>{event?.version}</TableCell>
-                  <TableCell>
-                    <EventStatusBadge type='approve' value={event?.isApprove} />
+                  <TableCell className='w-36'>
+                    <EventStatusBadge
+                      type='approve'
+                      value={event?.isApprove}
+                      message={event?.message ? event.message : undefined}
+                    />
                   </TableCell>
                   <TableCell className='text-right'>
                     <Button size={'icon'}>
