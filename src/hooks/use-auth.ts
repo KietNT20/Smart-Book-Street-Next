@@ -67,7 +67,7 @@ export const useLogin = () => {
       }
     },
     onError: (error) => {
-      console.log('Error login', error);
+      // console.log('Error login', error);
       if (
         error &&
         typeof error === 'object' &&
@@ -77,6 +77,13 @@ export const useLogin = () => {
       ) {
         toast.error(`Đăng nhập thất bại, ${(error as any).message}`);
         router.push(PATH.CHANGE_PASSWORD_FIRST_TIME);
+      } else if (
+        error &&
+        typeof error === 'object' &&
+        'message' in error &&
+        error.message === 'Fail'
+      ) {
+        toast.error(`Đăng nhập thất bại, Tài khoản không tồn tại`);
       } else {
         toast.error(`Đăng nhập thất bại, ${error}`);
       }
