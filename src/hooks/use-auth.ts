@@ -101,7 +101,7 @@ export const useRegister = () => {
     },
     onError: (error) => {
       console.log('Error register', error);
-      toast.error(`Đăng ký tài khoản thất bại, ${error}`);
+      toast.error(`Đăng ký tài khoản thất bại, ${error.message}`);
     },
   });
 };

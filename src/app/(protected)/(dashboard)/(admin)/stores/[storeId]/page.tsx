@@ -4,13 +4,11 @@ import BackButton from '@/components/back-btn/back-button';
 import LoadingSpinner from '@/components/spin/loading-spinner';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ImageFallback } from '@/constant/storage';
 import { PATH } from '@/enums/path';
 import { useEntityBreadcrumb } from '@/hooks/use-breadcrumb-page';
 import { useStoreById } from '@/hooks/use-store';
-import { useUserById } from '@/hooks/use-user';
 import { Image } from 'antd';
 import dayjs from 'dayjs';
 import { Clock, Mail, Map as MapIcon, MapPin, Phone } from 'lucide-react';
@@ -18,7 +16,6 @@ import Link from 'next/link';
 
 export default function StorePage({ params }: { params: { storeId: string } }) {
   const { store, isLoading: storeLoading } = useStoreById(params.storeId);
-  const { user } = useUserById(store?.userStores?.[0]?.userId || '');
 
   useEntityBreadcrumb(
     PATH.STORES,
@@ -80,7 +77,6 @@ export default function StorePage({ params }: { params: { storeId: string } }) {
             <TabsTrigger value='map'>Bản đồ</TabsTrigger>
             <TabsTrigger value='photos'>Hình ảnh</TabsTrigger>
             <TabsTrigger value='inventory'>Tồn kho</TabsTrigger>
-            <TabsTrigger value='contracts'>Hợp đồng</TabsTrigger>
           </TabsList>
 
           {/* Info Tab */}
@@ -283,121 +279,6 @@ export default function StorePage({ params }: { params: { storeId: string } }) {
                 <div className='rounded-lg py-12 text-center'>
                   <p className='text-zinc-500'>
                     Hiện chưa có thông tin tồn kho
-                  </p>
-                </div>
-              )}
-            </div>
-          </TabsContent>
-
-          {/* Contracts Tab */}
-          <TabsContent
-            value='contracts'
-            className='mt-4 rounded-lg bg-background p-6 shadow-md'
-          >
-            <div className='space-y-4'>
-              <h2 className='mb-4 text-xl font-semibold'>
-                Thông tin hợp đồng thuê
-              </h2>
-
-              {store?.userStores && store?.userStores?.length > 0 ? (
-                <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'>
-                  {store?.userStores?.map((contract) => (
-                    <Card key={contract.id} className='overflow-hidden'>
-                      <CardHeader className='bg-muted/20 pb-2'>
-                        <div className='flex items-center justify-between'>
-                          <CardTitle className='text-base'>
-                            Hợp đồng #{contract.contractNumber}
-                          </CardTitle>
-                          <Badge
-                            variant={
-                              contract.status === 'Active'
-                                ? 'matcha'
-                                : 'secondary'
-                            }
-                          >
-                            {contract.status === 'Active'
-                              ? 'Đang hoạt động'
-                              : contract.status}
-                          </Badge>
-                        </div>
-                      </CardHeader>
-                      <CardContent className='pt-4'>
-                        <div className='space-y-3'>
-                          {/* Thông tin người thuê */}
-                          <div className='border-b pb-3'>
-                            <h4 className='mb-2 text-sm font-medium text-muted-foreground'>
-                              Thông tin người thuê
-                            </h4>
-                            <div className='space-y-2'>
-                              <div className='flex items-center gap-2'>
-                                <span className='min-w-16 text-sm text-muted-foreground'>
-                                  Tên:
-                                </span>
-                                <span className='text-sm font-medium'>
-                                  {user?.fullName || 'Chưa cập nhật'}
-                                </span>
-                              </div>
-
-                              <div className='flex items-center gap-2'>
-                                <span className='min-w-16 text-sm text-muted-foreground'>
-                                  Email:
-                                </span>
-                                <span className='truncate text-sm'>
-                                  {user?.email || 'Chưa cập nhật'}
-                                </span>
-                              </div>
-
-                              <div className='flex items-center gap-2'>
-                                <span className='min-w-16 text-sm text-muted-foreground'>
-                                  SĐT:
-                                </span>
-                                <span className='text-sm'>
-                                  {user?.phone || 'Chưa cập nhật'}
-                                </span>
-                              </div>
-
-                              <div className='flex items-start gap-2'>
-                                <span className='min-w-16 text-sm text-muted-foreground'>
-                                  Địa chỉ:
-                                </span>
-                                <span className='text-sm'>
-                                  {user?.address || 'Chưa cập nhật'}
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-
-                          {/* Thông tin hợp đồng */}
-                          <div className='flex items-center gap-2'>
-                            <Clock className='size-4 text-muted-foreground' />
-                            <div className='grid w-full grid-cols-2'>
-                              <span className='text-sm text-muted-foreground'>
-                                Thời hạn:
-                              </span>
-                              <span className='text-sm font-medium'>
-                                {dayjs(contract.startDate).format('DD/MM/YYYY')}{' '}
-                                - {dayjs(contract.endDate).format('DD/MM/YYYY')}
-                              </span>
-                            </div>
-                          </div>
-
-                          {contract.notes && (
-                            <div className='mt-2 border-t pt-2'>
-                              <span className='text-sm text-muted-foreground'>
-                                Ghi chú:
-                              </span>
-                              <p className='mt-1 text-sm'>{contract.notes}</p>
-                            </div>
-                          )}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              ) : (
-                <div className='rounded-lg py-12 text-center'>
-                  <p className='text-zinc-500'>
-                    Hiện chưa có thông tin hợp đồng
                   </p>
                 </div>
               )}

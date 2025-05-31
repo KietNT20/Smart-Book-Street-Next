@@ -112,3 +112,41 @@ export const formatVNPhoneNumber = (phoneNumber: string | number): string => {
     return formatted;
   }
 };
+
+export const formatISBN = (isbn: string): string => {
+  // Kiểm tra nếu input rỗng hoặc null
+  if (!isbn) return isbn;
+
+  // Chuyển thành string và loại bỏ khoảng trắng
+  const cleanISBN = isbn.toString().replace(/\s/g, '');
+
+  // Nếu đã có dấu gạch ngang thì return nguyên
+  if (cleanISBN.includes('-')) {
+    return cleanISBN;
+  }
+
+  // Nếu là ISBN-13 (13 số) thì format
+  if (cleanISBN.length === 13 && /^\d{13}$/.test(cleanISBN)) {
+    // Format: 978-xxx-xxx-xxx-x hoặc 979-xxx-xxx-xxx-x
+    const part1 = cleanISBN.substring(0, 3); // 978 hoặc 979
+    const part2 = cleanISBN.substring(3, 6); // 3 số tiếp theo
+    const part3 = cleanISBN.substring(6, 9); // 3 số tiếp theo
+    const part4 = cleanISBN.substring(9, 12); // 3 số tiếp theo
+    const part5 = cleanISBN.substring(12, 13); // số cuối
+
+    return `${part1}-${part2}-${part3}-${part4}-${part5}`;
+  }
+
+  // Nếu là ISBN-10 (10 số) thì format
+  if (cleanISBN.length === 10 && /^\d{9}[\dX]$/.test(cleanISBN)) {
+    const part1 = cleanISBN.substring(0, 1);
+    const part2 = cleanISBN.substring(1, 4);
+    const part3 = cleanISBN.substring(4, 9);
+    const part4 = cleanISBN.substring(9, 10);
+
+    return `${part1}-${part2}-${part3}-${part4}`;
+  }
+
+  // Nếu không phải format chuẩn thì return nguyên
+  return cleanISBN;
+};

@@ -1,5 +1,5 @@
 import { Language, VietnameseLanguageLabels } from '@/enums/lang';
-import { cn, formatPrice } from '@/lib/utils';
+import { cn, formatISBN, formatPrice } from '@/lib/utils';
 import { BookNextjs } from '@/types/book-types';
 import { ColumnDef } from '@tanstack/react-table';
 import { InventoryQuantityCell } from './_components/inventory-quantity-cell';
@@ -17,6 +17,12 @@ export const columnsBook: ColumnDef<BookNextjs>[] = [
   {
     accessorKey: 'isbn',
     header: 'ISBN',
+    cell: ({ row }) => {
+      const isbn = row.getValue('isbn') as string;
+      return (
+        <p className='text-sm font-medium'>{isbn ? formatISBN(isbn) : '---'}</p>
+      );
+    },
   },
   {
     accessorKey: 'title',
@@ -40,7 +46,7 @@ export const columnsBook: ColumnDef<BookNextjs>[] = [
     cell: ({ row }) => {
       const price = row.original?.price;
       return (
-        <p className='text-sm font-medium text-muted-foreground'>
+        <p className='text-sm font-medium'>
           {price ? formatPrice(price as number) : '---'}
         </p>
       );
