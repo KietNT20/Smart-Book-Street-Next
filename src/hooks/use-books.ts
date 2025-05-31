@@ -15,7 +15,7 @@ export const useBookMutations = () => {
       }
     },
     onError: (error) => {
-      toast.error('Đã xảy ra lỗi khi thêm sách');
+      toast.error(`Đã xảy ra lỗi khi thêm sách, ${error.message}`);
       console.error('Error creating book:', error);
     },
   });

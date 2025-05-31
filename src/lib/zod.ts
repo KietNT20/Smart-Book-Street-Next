@@ -366,25 +366,41 @@ export const eventFormSchema = z
     eventName: z
       .string()
       .min(1, { message: 'Tên sự kiện không được để trống' }),
-    description: z.string().optional(),
+    description: z.string().min(10, {
+      message: 'Vui lòng viết nội dung chi tiết cho sự kiện',
+    }),
     baseImgFile: z
-      .union([
-        z
-          .instanceof(File)
-          .refine((file) => file.size <= 10 * 1024 * 1024, {
-            message: 'Ảnh chính phải nhỏ hơn 10MB',
-          })
-          .refine(
-            (file) =>
-              ['image/jpeg', 'image/png', 'image/webp'].includes(file.type),
-            {
-              message: 'Chỉ chấp nhận JPG, PNG, WEBP chất lượng cao',
-            }
-          ),
-        z.string(),
-        z.null(),
-      ])
-      .optional(),
+      .unknown()
+      .refine((value) => value !== null && value !== undefined, {
+        message: 'Ảnh chính là bắt buộc',
+      })
+      .refine((value) => value instanceof File || typeof value === 'string', {
+        message: 'Ảnh chính phải là file hoặc URL',
+      })
+      .refine(
+        (value) => {
+          if (value instanceof File) {
+            return value.size <= 10 * 1024 * 1024;
+          }
+          return true;
+        },
+        {
+          message: 'Ảnh chính phải nhỏ hơn 10MB',
+        }
+      )
+      .refine(
+        (value) => {
+          if (value instanceof File) {
+            return ['image/jpeg', 'image/png', 'image/webp'].includes(
+              value.type
+            );
+          }
+          return true;
+        },
+        {
+          message: 'Chỉ chấp nhận JPG, PNG, WEBP chất lượng cao',
+        }
+      ),
     otherImgFile: z
       .array(
         z.union([
