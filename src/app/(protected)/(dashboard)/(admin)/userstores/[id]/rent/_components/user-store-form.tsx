@@ -19,6 +19,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { PATH } from '@/enums/path';
+import { RoleEnums, RoleLabels } from '@/enums/role';
 import { StoreRent } from '@/enums/store-rent';
 import { useStoreById } from '@/hooks/use-store';
 import { useUserEmail } from '@/hooks/use-user';
@@ -48,6 +49,40 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
   const { registerStore, isRegisteringStore } = useUserStoresMutation();
   const { store, isLoading: isLoadingStore } = useStoreById(storeIdParam || '');
 
+  // Check if user has required role
+  const hasRequiredRole = () => {
+    if (!user?.userRoles || !Array.isArray(user.userRoles)) return false;
+
+    return user.userRoles.some((userRole) => {
+      const roleName = userRole?.role?.roleName;
+      const isApproved = userRole?.isApproved === true;
+
+      return (
+        isApproved && (roleName === 'Publisher' || roleName === 'StoreOwner')
+      );
+    });
+  };
+
+  // Get user's role info for display
+  const getUserRoleInfo = () => {
+    if (!user?.userRoles || !Array.isArray(user.userRoles)) {
+      return { approvedRoles: [], pendingRoles: [] };
+    }
+
+    const approvedRoles = user.userRoles
+      ? user.userRoles
+          .filter((ur) => ur?.isApproved === true && ur?.role?.roleName)
+          .map((ur) => ur.role?.roleName)
+      : [];
+
+    const pendingRoles =
+      user.userRoles
+        .filter((ur) => ur?.isApproved === false && ur?.role?.roleName)
+        .map((ur) => ur.role?.roleName) || [];
+
+    return { approvedRoles, pendingRoles };
+  };
+
   const handleVerifyEmail = () => {
     if (!emailValue.trim()) return;
     setVerifiedEmail(emailValue.trim());
@@ -74,6 +109,17 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
 
       if (!storeIdParam) {
         toast.error('Không tìm thấy thông tin cửa hàng!');
+        return;
+      }
+
+      // Check role requirements
+      if (!hasRequiredRole()) {
+        const roleInfo = getUserRoleInfo();
+        if (roleInfo.pendingRoles.length > 0) {
+          toast.error('Tài khoản của bạn đang chờ phê duyệt vai trò!');
+        } else {
+          toast.error('Chỉ Nhà xuất bản hoặc Chủ cửa hàng được phép đăng ký!');
+        }
         return;
       }
 
@@ -108,19 +154,21 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
   };
 
   return (
-    <div className='space-y-6'>
+    <div className='space-y-4 sm:space-y-6'>
       {/* Email Verification Section */}
       <Card>
-        <CardContent className='p-6'>
+        <CardContent className='p-4 sm:p-6'>
           <div className='mb-4 flex items-center gap-2'>
-            <Mail className='text-primary' size={20} />
-            <h3 className='font-semibold'>Thông tin người đăng ký</h3>
+            <Mail className='h-5 w-5 text-primary' />
+            <h3 className='text-base font-semibold sm:text-lg'>
+              Thông tin người đăng ký
+            </h3>
           </div>
 
           <div className='space-y-4'>
             <div className='space-y-2'>
               <p className='text-sm font-medium'>Email người dùng</p>
-              <div className='flex gap-2'>
+              <div className='flex flex-col gap-2 sm:flex-row'>
                 <div className='relative flex-1'>
                   <Input
                     type='email'
@@ -134,10 +182,10 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
                       <div className='h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent' />
                     )}
                     {!userLoading && user && verifiedEmail && (
-                      <CheckCircle className='text-green-500' size={16} />
+                      <CheckCircle className='h-4 w-4 text-green-500' />
                     )}
                     {!userLoading && !user && verifiedEmail && (
-                      <AlertCircle className='text-red-500' size={16} />
+                      <AlertCircle className='h-4 w-4 text-red-500' />
                     )}
                   </div>
                 </div>
@@ -146,13 +194,13 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
                   variant='outline'
                   onClick={handleVerifyEmail}
                   disabled={!emailValue.trim() || userLoading}
-                  className='px-6'
+                  className='w-full px-4 sm:w-auto sm:px-6'
                 >
                   {userLoading ? (
                     <div className='h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent' />
                   ) : (
                     <>
-                      <Search size={16} className='mr-2' />
+                      <Search className='mr-2 h-4 w-4' />
                       Xác thực
                     </>
                   )}
@@ -175,16 +223,63 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
                 )}
 
                 {!userLoading && user && (
-                  <div className='rounded-lg bg-muted p-4'>
+                  <div className='rounded-lg bg-muted p-3 sm:p-4'>
                     <UserInfo user={user} />
+                    {/* Role Status Display */}
+                    {(() => {
+                      const roleInfo = getUserRoleInfo();
+                      const hasRequired = hasRequiredRole();
+
+                      return (
+                        <div className='mt-3 border-t pt-3'>
+                          <p className='mb-2 text-sm font-medium'>Vai trò:</p>
+                          {roleInfo.approvedRoles.length > 0 && (
+                            <div className='mb-2 flex flex-wrap gap-1.5 sm:gap-2'>
+                              {roleInfo.approvedRoles.map((role, idx) => (
+                                <span
+                                  key={idx}
+                                  className={`rounded px-1.5 py-0.5 text-xs sm:px-2 sm:py-1 ${
+                                    role === 'Publisher' ||
+                                    role === 'StoreOwner'
+                                      ? 'bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400'
+                                      : 'bg-secondary text-secondary-foreground'
+                                  }`}
+                                >
+                                  {RoleLabels[role as RoleEnums] || role} ✓
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                          {roleInfo.pendingRoles.length > 0 && (
+                            <div className='flex flex-wrap gap-1.5 sm:gap-2'>
+                              {roleInfo.pendingRoles.map((role, idx) => (
+                                <span
+                                  key={idx}
+                                  className='rounded bg-yellow-100 px-1.5 py-0.5 text-xs text-yellow-700 dark:bg-yellow-900/20 dark:text-yellow-400 sm:px-2 sm:py-1'
+                                >
+                                  {RoleLabels[role as RoleEnums] || role} (Chờ
+                                  duyệt)
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                          {!hasRequired && (
+                            <p className='mt-2 text-xs text-destructive'>
+                              ⚠️ Cần có vai trò Nhà xuất bản hoặc Chủ cửa hàng
+                              đã được phê duyệt để đăng ký
+                            </p>
+                          )}
+                        </div>
+                      );
+                    })()}
                   </div>
                 )}
 
                 {!userLoading && !user && verifiedEmail && (
-                  <div className='rounded-lg border border-red-200 bg-red-50 p-4'>
+                  <div className='rounded-lg border border-destructive/50 bg-destructive/10 p-3 sm:p-4'>
                     <div className='flex items-center gap-2'>
-                      <AlertCircle className='text-red-500' size={16} />
-                      <span className='text-sm font-medium text-red-700'>
+                      <AlertCircle className='h-4 w-4 text-destructive' />
+                      <span className='text-sm font-medium text-destructive'>
                         Không tìm thấy người dùng với email này
                       </span>
                     </div>
@@ -199,10 +294,12 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
       {/* Store Information */}
       {storeIdParam && (
         <Card>
-          <CardContent className='p-6'>
+          <CardContent className='p-4 sm:p-6'>
             <div className='mb-4 flex items-center gap-2'>
-              <Store className='text-primary' size={20} />
-              <h3 className='font-semibold'>Thông tin cửa hàng</h3>
+              <Store className='h-5 w-5 text-primary' />
+              <h3 className='text-base font-semibold sm:text-lg'>
+                Thông tin cửa hàng
+              </h3>
             </div>
 
             {isLoadingStore ? (
@@ -213,15 +310,15 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
               </div>
             ) : store ? (
               <div className='grid grid-cols-1 gap-3 text-sm md:grid-cols-2'>
-                <div>
+                <div className='flex flex-col sm:flex-row'>
                   <span className='text-muted-foreground'>Tên cửa hàng:</span>
-                  <span className='ml-2 font-medium'>
+                  <span className='font-medium sm:ml-2'>
                     {store.storeName || 'N/A'}
                   </span>
                 </div>
-                <div>
+                <div className='flex flex-col sm:flex-row'>
                   <span className='text-muted-foreground'>Địa chỉ:</span>
-                  <span className='ml-2 font-medium'>
+                  <span className='font-medium sm:ml-2'>
                     {store.address || 'N/A'}
                   </span>
                 </div>
@@ -237,13 +334,17 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
 
       {/* Main Form */}
       <Card>
-        <CardContent className='p-6'>
-          <h3 className='mb-6 font-semibold'>Thông tin hợp đồng</h3>
+        <CardContent className='p-4 sm:p-6'>
+          <h3 className='mb-4 text-base font-semibold sm:mb-6 sm:text-lg'>
+            Thông tin hợp đồng
+          </h3>
           <Form {...form}>
             <form
-              action='#'
-              onSubmit={form.handleSubmit(onSubmit)}
-              className='space-y-6'
+              onSubmit={(e) => {
+                e.preventDefault();
+                form.handleSubmit(onSubmit)(e);
+              }}
+              className='space-y-4 sm:space-y-6'
             >
               {/* Contract Number */}
               <FormField
@@ -265,7 +366,7 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
               />
 
               {/* Date Fields */}
-              <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+              <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
                 <FormField
                   control={form.control}
                   name='startDate'
@@ -274,7 +375,7 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
                       <FormLabel>Ngày bắt đầu</FormLabel>
                       <FormControl>
                         <DatePicker
-                          className='h-10 w-full px-3 py-2'
+                          className='h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
                           format='YYYY-MM-DD'
                           placeholder='Chọn ngày bắt đầu'
                           disabled={isRegisteringStore}
@@ -299,7 +400,7 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
                       <FormLabel>Ngày kết thúc</FormLabel>
                       <FormControl>
                         <DatePicker
-                          className='h-10 w-full px-3 py-2'
+                          className='h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
                           format='YYYY-MM-DD'
                           placeholder='Chọn ngày kết thúc'
                           disabled={isRegisteringStore}
@@ -392,13 +493,21 @@ const UserStoreForm = ({ storeIdParam }: Props) => {
               />
 
               {/* Submit Buttons */}
-              <div className='flex items-center justify-end gap-4 pt-4'>
-                <Button variant='outline' type='button'>
+              <div className='flex flex-col-reverse gap-3 pt-4 sm:flex-row sm:justify-end sm:gap-4'>
+                <Button
+                  variant='outline'
+                  type='button'
+                  asChild
+                  className='w-full sm:w-auto'
+                >
                   <Link href={PATH.USER_STORES}>Hủy</Link>
                 </Button>
                 <Button
                   type='submit'
-                  disabled={isRegisteringStore || !user?.id}
+                  disabled={
+                    isRegisteringStore || !user?.id || !hasRequiredRole()
+                  }
+                  className='w-full sm:w-auto'
                 >
                   {isRegisteringStore ? 'Đang đăng ký...' : 'Đăng ký cửa hàng'}
                 </Button>

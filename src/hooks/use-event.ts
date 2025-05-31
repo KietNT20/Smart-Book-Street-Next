@@ -469,6 +469,10 @@ export const useProcessEventCreateRequest = () => {
     onSuccess: (data) => {
       if (data) {
         queryClient.invalidateQueries({ queryKey: ['events-create-request'] });
+        queryClient.invalidateQueries({ queryKey: ['events'] });
+        queryClient.invalidateQueries({
+          queryKey: ['events-creation-history'],
+        });
       }
     },
     onError: (error) => {

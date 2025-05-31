@@ -20,15 +20,21 @@ export default function UserInfo({ user }: Props) {
       <div className='grid grid-cols-1 gap-3 text-sm md:grid-cols-2'>
         <div>
           <span className='text-muted-foreground'>Họ và tên:</span>
-          <span className='ml-2 font-medium'>{user?.fullName || 'N/A'}</span>
+          <span className='ml-2 font-medium'>
+            {user?.fullName || 'Chưa cung cấp'}
+          </span>
         </div>
         <div>
           <span className='text-muted-foreground'>Email:</span>
-          <span className='ml-2 font-medium'>{user?.email || 'N/A'}</span>
+          <span className='ml-2 font-medium'>
+            {user?.email || 'Chưa cung cấp'}
+          </span>
         </div>
         <div>
           <span className='text-muted-foreground'>SĐT:</span>
-          <span className='ml-2 font-medium'>{user?.phone || 'N/A'}</span>
+          <span className='ml-2 font-medium'>
+            {user?.phone || 'Chưa cung cấp'}
+          </span>
         </div>
         <div className='flex items-start gap-2'>
           <span className='text-muted-foreground'>Vai trò:</span>
