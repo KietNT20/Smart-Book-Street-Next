@@ -78,8 +78,8 @@ export const useFormHandle = () => {
     createEvent(formData, {
       onSuccess: (data) => {
         if (data) {
-          router.replace(PATH.EVENT_CREATION);
           form.reset();
+          router.replace(PATH.EVENT_CREATION_HISTORY);
         }
       },
     });
