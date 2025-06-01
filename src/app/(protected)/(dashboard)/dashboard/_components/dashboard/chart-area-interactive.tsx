@@ -1,8 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
-
+import { useGetAllPopulationCamera } from '@/api/population';
 import {
   Card,
   CardContent,
@@ -24,9 +22,10 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { NextJS_API } from '@/enums/endpoint';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { DailyPopulationStatistics } from '@/lib/zod';
+import { useEffect, useMemo, useState } from 'react';
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 
 // Chart configuration
 const chartConfig = {
@@ -67,13 +66,8 @@ type ApiResponse = {
 export function ChartAreaInteractive() {
   const isMobile = useIsMobile();
   const [timeRange, setTimeRange] = useState<TimeRangeOption>('currentYear');
-  const [year, setYear] = useState(new Date().getFullYear()); // Get current year dynamically
+  const [year, setYear] = useState(new Date().getFullYear());
   const [dataType, setDataType] = useState<'stacked' | 'separate'>('stacked');
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [populationData, setPopulationData] = useState<
-    DailyPopulationStatistics[]
-  >([]);
 
   useEffect(() => {
     if (isMobile) {
@@ -81,7 +75,8 @@ export function ChartAreaInteractive() {
     }
   }, [isMobile]);
 
-  const getApiParams = useCallback(() => {
+  // Generate API params
+  const apiParams = useMemo(() => {
     const currentDate = new Date();
     const currentMonth = currentDate.getMonth() + 1; // 1-12
 
@@ -114,88 +109,63 @@ export function ChartAreaInteractive() {
     }
   }, [timeRange, year]);
 
-  // Fetch data from API
-  const fetchData = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(null);
+  const { populationCamera, isLoading, error } =
+    useGetAllPopulationCamera(apiParams);
 
-      const params = getApiParams();
-      const response = await fetch(`${NextJS_API.POPULATION}${params}`);
+  const populationData = useMemo(() => {
+    if (!populationCamera?.data) return [];
 
-      if (!response.ok) {
-        throw new Error(`API request failed with status ${response.status}`);
+    const monthlyData: Record<string, DailyPopulationStatistics> = {};
+
+    let displayYear = year;
+    if (timeRange === 'prevYear') displayYear = year - 1;
+    else if (timeRange === 'prev3m' || timeRange === 'prev6m') {
+      const currentMonth = new Date().getMonth() + 1;
+      if (
+        (timeRange === 'prev3m' && Math.ceil(currentMonth / 3) === 1) ||
+        (timeRange === 'prev6m' && currentMonth <= 6)
+      ) {
+        displayYear = year - 1;
       }
-
-      const result = await response.json();
-
-      const monthlyData: Record<string, DailyPopulationStatistics> = {};
-
-      let displayYear = year;
-      if (timeRange === 'prevYear') displayYear = year - 1;
-      else if (timeRange === 'prev3m' || timeRange === 'prev6m') {
-        const currentMonth = new Date().getMonth() + 1;
-        if (
-          (timeRange === 'prev3m' && Math.ceil(currentMonth / 3) === 1) ||
-          (timeRange === 'prev6m' && currentMonth <= 6)
-        ) {
-          displayYear = year - 1;
-        }
-      }
-
-      // Filter and process data from API
-      (result.data || []).forEach((item: ApiResponse) => {
-        const monthKey = item.month;
-        const itemYear = item.year || displayYear;
-
-        if (!monthlyData[monthKey]) {
-          monthlyData[monthKey] = {
-            date: `${itemYear}-${monthKey.toString().padStart(2, '0')}-01`,
-            male: 0,
-            female: 0,
-            total: 0,
-          };
-        }
-
-        if (item.gender === 'male') {
-          monthlyData[monthKey].male = item.count;
-        } else if (item.gender === 'female') {
-          monthlyData[monthKey].female = item.count;
-        } else if (item.gender === 'total') {
-          monthlyData[monthKey].total = item.count;
-        }
-      });
-
-      // Convert object to array and sort by date
-      const formattedData = Object.values(monthlyData).sort((a, b) => {
-        return new Date(a.date).getTime() - new Date(b.date).getTime();
-      });
-
-      setPopulationData(formattedData);
-    } catch (err) {
-      console.error('Error fetching population data:', err);
-      setError('Không thể tải dữ liệu dân số. Vui lòng thử lại sau.');
-      // Use fallback data when API fails
-      setPopulationData([]);
-    } finally {
-      setLoading(false);
     }
-  }, [year, getApiParams, timeRange]);
 
-  // Fetch data when dependencies change
-  useEffect(() => {
-    fetchData();
-  }, [fetchData, timeRange]);
+    // Filter and process data from API
+    populationCamera.data.forEach((item: ApiResponse) => {
+      const monthKey = item.month;
+      const itemYear = item.year || displayYear;
 
-  // Apply time-based filtering (mostly handled by API, but we can filter further if needed)
-  const filteredData = populationData;
+      if (!monthlyData[monthKey]) {
+        monthlyData[monthKey] = {
+          date: `${itemYear}-${monthKey.toString().padStart(2, '0')}-01`,
+          male: 0,
+          female: 0,
+          total: 0,
+        };
+      }
+
+      if (item.gender === 'male') {
+        monthlyData[monthKey].male = item.count;
+      } else if (item.gender === 'female') {
+        monthlyData[monthKey].female = item.count;
+      } else if (item.gender === 'total') {
+        monthlyData[monthKey].total = item.count;
+      }
+    });
+
+    // Convert object to array and sort by date
+    return Object.values(monthlyData).sort((a, b) => {
+      return new Date(a.date).getTime() - new Date(b.date).getTime();
+    });
+  }, [populationCamera, year, timeRange]);
 
   // Create data for separate visualization mode
-  const separateData = filteredData.map((item) => ({
-    ...item,
-    maleOnly: dataType === 'separate' ? item.male : 0,
-    femaleOnly: dataType === 'separate' ? item.female : 0,
-  }));
+  const separateData = useMemo(() => {
+    return populationData.map((item) => ({
+      ...item,
+      maleOnly: dataType === 'separate' ? item.male : 0,
+      femaleOnly: dataType === 'separate' ? item.female : 0,
+    }));
+  }, [populationData, dataType]);
 
   const getPeriodLabel = () => {
     switch (timeRange) {
@@ -215,6 +185,11 @@ export function ChartAreaInteractive() {
         return 'Khoảng thời gian tùy chỉnh';
     }
   };
+
+  // Error message handling
+  const errorMessage = error
+    ? 'Không thể tải dữ liệu dân số. Vui lòng thử lại sau.'
+    : null;
 
   return (
     <Card className='@container/card'>
@@ -335,16 +310,16 @@ export function ChartAreaInteractive() {
         </div>
       </CardHeader>
       <CardContent className='px-2 pt-4 sm:px-6 sm:pt-6'>
-        {loading ? (
+        {isLoading ? (
           <div className='flex h-[300px] items-center justify-center'>
             <div className='size-4 animate-spin rounded-full border-b-4 border-t-4 border-zinc-500'></div>
             <div className='text-xl'>Đang tải dữ liệu...</div>
           </div>
-        ) : error ? (
+        ) : errorMessage ? (
           <div className='flex h-[300px] items-center justify-center text-red-500'>
-            <div>{error}</div>
+            <div>{errorMessage}</div>
           </div>
-        ) : filteredData.length === 0 ? (
+        ) : populationData.length === 0 ? (
           <div className='flex h-[300px] items-center justify-center'>
             <div className='text-xl'>Không có dữ liệu cho giai đoạn này</div>
           </div>
@@ -355,7 +330,7 @@ export function ChartAreaInteractive() {
               className='aspect-auto h-[300px] w-full'
             >
               <AreaChart
-                data={dataType === 'stacked' ? filteredData : separateData}
+                data={dataType === 'stacked' ? populationData : separateData}
               >
                 <defs>
                   <linearGradient id='fillMale' x1='0' y1='0' x2='0' y2='1'>
@@ -474,8 +449,8 @@ export function ChartAreaInteractive() {
               <div className='flex items-center gap-2'>
                 <span className='text-base font-medium'>Tổng: </span>
                 <span className='font-bold'>
-                  {filteredData
-                    ? filteredData
+                  {populationData
+                    ? populationData
                         .reduce((sum, item) => sum + item.total!, 0)
                         .toLocaleString('vi-VN')
                     : '0'}

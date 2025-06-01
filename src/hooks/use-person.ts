@@ -14,6 +14,7 @@ export const useSyncPersonData = () => {
         queryClient.invalidateQueries({ queryKey: ['person-total'] });
         queryClient.invalidateQueries({ queryKey: ['person-stats-hours'] });
         queryClient.invalidateQueries({ queryKey: ['daily-range'] });
+        queryClient.invalidateQueries({ queryKey: ['population-camera'] });
       }
     },
     onError: (error: Error) => {
