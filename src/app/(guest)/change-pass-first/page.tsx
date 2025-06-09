@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { PATH } from '@/enums/path';
 import { useChangePassFirstTime } from '@/hooks/use-user';
 import { cn } from '@/lib/utils';
 import { AlertCircle, Eye, EyeOff, Lock } from 'lucide-react';
@@ -120,7 +121,7 @@ export default function FirstTimePasswordChangePage() {
           });
 
           setTimeout(() => {
-            router.push('/login');
+            router.push(PATH.LOGIN);
           }, 2000);
         },
       }
